@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import { Route, Switch } from 'react-router-dom'
-import Login from  './container/Login'
+import Login from  './containers/Login'
+import SignUp from  './containers/Signup'
+import User from  './containers/User'
 
 class Routes extends Component{
     render(){
@@ -9,6 +11,8 @@ class Routes extends Component{
         <main>
           <Switch>
             <Route exact path="/" component={Login} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/user" component={User} />
           </Switch>
         </main>
       </div>
