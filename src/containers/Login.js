@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../assets/css/styles.css";
-import axios from "axios";
+import { login } from "../utils/API"
 
 class Signin extends Component {
   constructor(props) {
@@ -14,30 +14,26 @@ class Signin extends Component {
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value },console.log(this.state));
+    this.setState({ [name]: value });
   };
 
-//   componentDidMount = async () => {
-//     const token = await localStorage.getItem("token");
-//     token !== "undefined" && token !== null ? this.props.history.push("/user") : null;
-//   };
+  componentDidMount = async () => {
+    const token = await localStorage.getItem("token");
+    if(token !== "undefined" && token !== null){
+      return this.props.history.push("/user");
+    }else {
+      return null;
+    }
+  };
 
   login = async () => {
     if (this.emailValidity() && this.state.password) {
-      const headers = {
-        "Content-Type": "application/json"
-      };
       const loginData = {
         email: this.state.email,
         password: this.state.password
       };
       try {
-        const { data } = await axios.post(
-          "https://5d1b281edd81710014e88430.mockapi.io/post",
-          loginData,
-          { headers }
-        );
-        console.log(data);
+        const { data } = await login(loginData)
         localStorage.setItem("token",12345789);
         localStorage.setItem("name", data.name);
         this.props.history.push("/user");

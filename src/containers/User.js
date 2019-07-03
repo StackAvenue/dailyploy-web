@@ -1,18 +1,14 @@
 import React,{ Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../assets/css/styles.css";
-// import axios from "axios"
+import { logout } from "../utils/API"
+
 
 
 class User extends Component{
-    constructor(props){
-        super(props);
-
-    }
-
+  
     logout = async () => {
-        await localStorage.removeItem("token");
-        await localStorage.removeItem("name");
+        await logout();
         alert("User logged out");
         this.props.history.push("/");
       };
