@@ -1,15 +1,21 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+import cookie from 'react-cookies';
 import "../assets/css/styles.css";
 import { login } from "../utils/API"
+import { checkPassword, validateEmail } from "../utils/validation";
 
 class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password: ""
-    };
+      password: "",
+      errors:{
+        emailError:null,
+        passwordError:null
+      }
+    }; 
   }
 
   handleChange = e => {
@@ -17,16 +23,18 @@ class Signin extends Component {
     this.setState({ [name]: value });
   };
 
-  componentDidMount = async () => {
-    const token = await localStorage.getItem("token");
-    if(token !== "undefined" && token !== null){
-      return this.props.history.push("/user");
-    }else {
-      return null;
-    }
-  };
+  // componentDidMount = async () => {
+  //   // const token = await localStorage.getItem("authToken");
+  //   const token = await cookie.load('authToken');
+  //   if(token !== "undefined" && token !== null){
+  //     return this.props.history.push("/user");
+  //   }else {
+  //     return null;
+  //   }
+  // };
 
   login = async () => {
+    this.validateAllInputs();
     if (this.emailValidity() && this.state.password) {
       const loginData = {
         email: this.state.email,
@@ -34,23 +42,34 @@ class Signin extends Component {
       };
       try {
         const { data } = await login(loginData)
-        localStorage.setItem("token",12345789);
-        localStorage.setItem("name", data.name);
+        console.log(data);
+        // localStorage.setItem("authToken",data.auth_token);
+        // localStorage.setItem("refreshToken", data.refresh_token);
+        cookie.save('authToken', data.auth_token, { path: '/' });
+        cookie.save('refreshToken', data.refresh_token, { path: '/' });
         this.props.history.push("/user");
       } catch (e) {
-        console.log(e.message);
-        alert("Email and password did not match");
+        return "Email and password did not match";
       }
     } else {
-      alert("Enter valid email address and password");
+      return "Enter valid email address and password";
     }
+  };
+  validateAllInputs = () => {
+    const errors = {
+        emailError: null,
+        passwordError: null
+    };
+    errors.passwordError = checkPassword(this.state.password);
+    errors.emailError = validateEmail(this.state.email);
+    this.setState({errors});
   };
 
   emailValidity = () => {
     return (
       this.state.email &&
       this.state.email.includes("@") &&
-      this.state.email.includes(".")
+      this.state.email.includes(".") 
     );
   };
 
@@ -76,6 +95,7 @@ class Signin extends Component {
               onChange={this.handleChange}
             />
           </div>
+          {this.state.errors.emailError ? <p style={{color: 'red'}}>{this.state.errors.emailError}</p> : null}
           <div className="form-group input-group">
             <div className="input-group-prepend">
               <span className="input-group-text">
@@ -92,6 +112,7 @@ class Signin extends Component {
               onChange={this.handleChange}
             />
           </div>
+          {this.state.errors.passwordError ? <p style={{color: 'red'}}>{this.state.errors.passwordError}</p> : null}
           <div className="form-group">
             <button onClick={this.login} className="btn btn-primary btn-block">
               {" "}
