@@ -12,25 +12,13 @@ class User extends Component{
     logout = async () => {
         await logout();
         alert("User logged out");
-        this.props.history.push("/");
+        this.props.history.push("/login");
       };
     
       render() {
         
         return (
           <>
-            
-
-            {/* <div className="row no-margin">
-              <div className="col-3 no-padding sidebar-container">
-                <div className="col-12 d-inline-block sidebar-tabs">Dashboard</div>
-                <div className="col-12 d-inline-block sidebar-tabs">Profile</div>
-                <div className="col-12 d-inline-block sidebar-tabs">Home</div>
-                <div className="col-12 d-inline-block sidebar-tabs">Policies</div>
-              </div>
-              <div className="col-9"></div>
-            </div> */}
-
             <div class="sidenav">
               <a href="#about">About</a>
               <a href="#services">Services</a>

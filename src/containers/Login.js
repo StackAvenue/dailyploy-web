@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import cookie from 'react-cookies';
-import "../assets/css/styles.css";
+import "../assets/css/login.css";
 import { login } from "../utils/API"
 import { checkPassword, validateEmail } from "../utils/validation";
 
@@ -23,17 +23,18 @@ class Signin extends Component {
     this.setState({ [name]: value });
   };
 
-  // componentDidMount = async () => {
-  //   // const token = await localStorage.getItem("authToken");
-  //   const token = await cookie.load('authToken');
-  //   if(token !== "undefined" && token !== null){
-  //     return this.props.history.push("/user");
-  //   }else {
-  //     return null;
-  //   }
-  // };
+  componentDidMount = async () => {
+    // const token = await localStorage.getItem("authToken");
+    const token = await cookie.load('authToken');
+    if(token !== "undefined" && token !== null){
+      return this.props.history.push("/login");
+    }else {
+      return null;
+    }
+  };
 
   login = async () => {
+    console.log("enter")
     this.validateAllInputs();
     if (this.emailValidity() && this.state.password) {
       const loginData = {
@@ -76,53 +77,46 @@ class Signin extends Component {
   render() {
     const { email, password } = this.state;
     return (
-      <div className="card bg-light">
-        <article className="card-body mx-auto" style={{ "max-width": "400px" }}>
-          <h4 className="card-title mt-3 text-center">Login</h4>
-          <div className="form-group input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text">
-                {" "}
-                <i className="fa fa-envelope" />{" "}
-              </span>
+      <div className="container-fluid">
+        <div className="row login-container">
+          <div className="col-md-6 login-vertical-border">
+            <div className="col-md-12 login-product-heading">DailyPloy</div>
+            <div className="col-md-12 login-product-text">It is a long established fact that reader will be distracted by the readable content of a page when looking at its layout</div>
+            <div className="col-md-12 text-center">
+              <button type="button" className="btn btn-outline-secondary login-product-btn">GET STARTED</button>
             </div>
-            <input
-              name="email"
-              className="form-control"
-              placeholder="Email address"
-              type="email"
-              value={email}
-              onChange={this.handleChange}
-            />
           </div>
-          {this.state.errors.emailError ? <p style={{color: 'red'}}>{this.state.errors.emailError}</p> : null}
-          <div className="form-group input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text">
-                {" "}
-                <i className="fa fa-lock" />{" "}
-              </span>
+          <div className="col-md-6 login-vertical-border2">
+            <div className="col-md-12 login-heading">SignIn</div>
+            <div className="col-md-12 text-center login-auth-margin">
+              <div className="col-md-4 d-inline">
+                <button type="button" class="btn btn-secondary login-auth-btn"></button>
+              </div>
+              <div className="col-md-4 d-inline">
+                <button type="button" class="btn btn-secondary login-auth-btn"></button>
+              </div>
+              <div className="col-md-4 d-inline">
+                <button type="button" class="btn btn-secondary login-auth-btn"></button>
+              </div>
             </div>
-            <input
-              name="password"
-              className="form-control"
-              placeholder="Create password"
-              type="password"
-              value={password}
-              onChange={this.handleChange}
-            />
+            <div className="col-md-12 text-center">OR</div><br />
+            <div className="col-md-10 offset-1">
+              <div class="form-group">
+                <input type="email" name="email" value={email} onChange={this.handleChange} className="form-control login-form-field" placeholder="Enter email" />
+              </div>
+              {this.state.errors.emailError ? <p style={{color: 'red'}}>{this.state.errors.emailError}</p> : null}
+              <div class="form-group">
+                <input type="password" name="password" value={password} onChange={this.handleChange} className="form-control login-form-field" placeholder="Password" />
+              </div>
+            {this.state.errors.passwordError ? <p style={{color: 'red'}}>{this.state.errors.passwordError}</p> : null}
+            </div>
+            <div className="col-md-10 offset-1 text-right">Forgot Password?</div>
+            <br />
+            <div className="col-md-12 text-center">
+              <button onClick={this.login} className="btn btn-outline-secondary login-btn">Login</button>
+            </div>
           </div>
-          {this.state.errors.passwordError ? <p style={{color: 'red'}}>{this.state.errors.passwordError}</p> : null}
-          <div className="form-group">
-            <button onClick={this.login} className="btn btn-primary btn-block">
-              {" "}
-              Login{" "}
-            </button>
-          </div>
-          <p className="text-center">
-            Not Registered? <Link to={`/signup`}>Create Account</Link>{" "}
-          </p>
-        </article>
+        </div>
       </div>
     );
   }
