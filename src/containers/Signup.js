@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../assets/css/styles.css";
+import "../assets/css/login.css";
 import { signUp } from "../utils/API";
-import { checkPassword } from "../utils/validation";
+import { checkPassword, validateName, validateEmail } from "../utils/validation";
 
 class Signup extends Component {
   constructor(props) {
@@ -11,7 +12,13 @@ class Signup extends Component {
       name:"",  
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      errors:{
+        nameError:null,
+        emailError:null,
+        passwordError:null,
+        confirmPasswordError:null
+      }
     };
   }
 
@@ -21,6 +28,7 @@ class Signup extends Component {
   };
 
   signup = async () => {
+    this.validateAllInputs();
     if (this.validityCheck()) {
       const signupData = {
         name: this.state.name,
@@ -32,23 +40,41 @@ class Signup extends Component {
         alert("user created");
         this.props.history.push("/");
       } catch (e) {
-        alert("User could not be created");
+        return "User could not be created";
       }
     } else {
-      alert("Enter valid email address and password");
+      return "Enter valid email address and password";
     }
+  };
+
+  validatePassword = (password, confirmPassword) =>{
+    if(password === confirmPassword){
+      return;
+    }
+    return "Those password didn't match, Try Again.";
+  }
+
+  validateAllInputs = () => {
+    const errors = {
+        nameError: null,
+        emailError: null,
+        passwordError: null,
+        confirmPasswordError:null
+    };
+    errors.nameError = validateName(this.state.name);
+    errors.passwordError = checkPassword(this.state.password);
+    errors.emailError = validateEmail(this.state.email);
+    errors.confirmPasswordError = this.validatePassword(this.state.password, this.state.confirmPassword)
+    this.setState({errors});
   };
 
   validityCheck = () => {
     return (
       this.state.name &&
       this.state.email &&
-      this.state.email.includes("@") &&
-      this.state.email.includes(".") &&
       this.state.password &&
       this.state.confirmPassword &&
-      this.state.password === this.state.confirmPassword &&
-      checkPassword(this.state.password)
+      this.state.password === this.state.confirmPassword
     );
   };
 
@@ -56,83 +82,41 @@ class Signup extends Component {
     const { name, email, password, confirmPassword } = this.state;
 
     return (
-      <div className="card bg-light">
-        <article className="card-body mx-auto" style={{ "max-width": "400px" }}>
-          <h4 className="card-title mt-3 text-center">Create Account</h4>
-          <div className="form-group input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text">
-                {" "}
-                <i className="fa fa-envelope" />{" "}
-              </span>
+      <div className="container-fluid">
+        <div className="row login-container">
+          <div className="col-md-6 login-vertical-border">
+            <div className="col-md-12 login-product-heading">DailyPloy</div>
+            <div className="col-md-12 login-product-text">It is a long established fact that reader will be distracted by the readable content of a page when looking at its layout</div>
+            <div className="col-md-12 text-center">
+              Already User? <Link to={`/login`}>Sign In</Link>
             </div>
-            <input
-              name="name"
-              className="form-control"
-              placeholder="Full Name"
-              type="text"
-              value={name}
-              onChange={this.changeHandler}
-            />
           </div>
-          <div className="form-group input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text">
-                {" "}
-                <i className="fa fa-envelope" />{" "}
-              </span>
+          <div className="col-md-6 login-vertical-border2">
+            <div className="col-md-12 login-heading">Welcome!</div><br />
+            <div className="col-md-10 offset-1">
+              <div class="form-group">
+                <input type="text" name="name" value={name} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Username" />
+              </div>
+              {this.state.errors.nameError ? <p style={{color: 'red'}}>{this.state.errors.nameError}</p> : null}
+              <div class="form-group">
+                <input type="email" name="email" value={email} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Email Id" />
+              </div>
+              {this.state.errors.emailError ? <p style={{color: 'red'}}>{this.state.errors.emailError}</p> : null}
+              <div class="form-group">
+                <input type="password" name="password" value={password} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Password" />
+              </div>
+              {this.state.errors.passwordError ? <p style={{color: 'red'}}>{this.state.errors.passwordError}</p> : null}
+              <div class="form-group">
+                <input type="password" name="confirmPassword" value={confirmPassword} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Confirm Password" />
+              </div>
+              {this.state.errors.confirmPasswordError ? <p style={{color: 'red'}}>{this.state.errors.confirmPasswordError}</p> : null}
             </div>
-            <input
-              name="email"
-              className="form-control"
-              placeholder="Email address"
-              type="email"
-              value={email}
-              onChange={this.changeHandler}
-            />
-          </div>
-          <div className="form-group input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text">
-                {" "}
-                <i className="fa fa-lock" />{" "}
-              </span>
+            <br />
+            <div className="col-md-12 text-center">
+              <button onClick={this.signup} className="btn btn-outline-secondary login-btn">Signup</button>
             </div>
-            <input
-              name="password"
-              className="form-control"
-              placeholder="Create password"
-              type="password"
-              value={password}
-              onChange={this.changeHandler}
-            />
           </div>
-          <div className="form-group input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text">
-                {" "}
-                <i className="fa fa-lock" />{" "}
-              </span>
-            </div>
-            <input
-              name="confirmPassword"
-              className="form-control"
-              placeholder="Confirm password"
-              type="password"
-              value={confirmPassword}
-              onChange={this.changeHandler}
-            />
-          </div>
-          <div className="form-group">
-            <button onClick={this.signup} className="btn btn-primary btn-block">
-              {" "}
-              Create Account{" "}
-            </button>
-          </div>
-          <p className="text-center">
-            Have an account? <Link to={`/`}>Log In</Link>{" "}
-          </p>
-        </article>
+        </div>
       </div>
     );
   }

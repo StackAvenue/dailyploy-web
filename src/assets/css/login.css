@@ -1,0 +1,70 @@
+.login-container{
+    margin: 5% !important;
+    border: 1px solid grey;
+    height: 100%;
+    padding: 3% 0px 3% 0px;
+}
+
+.login-vertical-border{
+    /* border-right:1px solid #e6e2e278; */
+    padding: 2%;
+}
+
+.login-vertical-border2{
+    border-left:1px solid #e6e2e278;
+    padding: 2%;
+}
+
+.login-product-heading{
+    font-size:50px;
+    /* font-weight:bold; */
+    color:black;
+    text-align: center;
+}
+
+.login-product-text{
+    font-size:18px;
+    color: grey;
+    text-align: justify;
+    padding:50px !important;
+}
+
+.login-product-btn{
+    font-size: 25px !important;
+    border-radius: 35px !important;
+    color:grey ;
+    padding-right:40px !important;
+    padding-left:40px !important;
+}
+
+.login-heading{
+    font-size:40px;
+    /* font-weight:bold; */
+    color:black;
+    text-align: center;
+}
+
+.login-auth-btn{
+    width:70px;
+    height:70px;
+    border-radius: 50% !important;
+    background-color: grey;
+}
+
+.login-form-field{
+    border-width: 0px 0px 2px 0px !important;
+    border-radius:0px !important;
+}
+
+.login-auth-margin{
+    margin-top:5%;
+    margin-bottom:5%;
+}
+
+.login-btn{
+    font-size: 15px !important;
+    border-radius: 35px !important;
+    color:grey ;
+    padding-right:30px !important;
+    padding-left:30px !important;
+}
