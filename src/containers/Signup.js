@@ -3,21 +3,25 @@ import { Link, withRouter } from "react-router-dom";
 import "../assets/css/styles.css";
 import "../assets/css/login.css";
 import { signUp } from "../utils/API";
-import { checkPassword, validateName, validateEmail } from "../utils/validation";
+import {
+  checkPassword,
+  validateName,
+  validateEmail
+} from "../utils/validation";
 
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name:"",  
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      errors:{
-        nameError:null,
-        emailError:null,
-        passwordError:null,
-        confirmPasswordError:null
+      errors: {
+        nameError: null,
+        emailError: null,
+        passwordError: null,
+        confirmPasswordError: null
       }
     };
   }
@@ -47,25 +51,28 @@ class Signup extends Component {
     }
   };
 
-  validatePassword = (password, confirmPassword) =>{
-    if(password === confirmPassword){
+  validatePassword = (password, confirmPassword) => {
+    if (password === confirmPassword) {
       return;
     }
     return "Those password didn't match, Try Again.";
-  }
+  };
 
   validateAllInputs = () => {
     const errors = {
-        nameError: null,
-        emailError: null,
-        passwordError: null,
-        confirmPasswordError:null
+      nameError: null,
+      emailError: null,
+      passwordError: null,
+      confirmPasswordError: null
     };
     errors.nameError = validateName(this.state.name);
     errors.passwordError = checkPassword(this.state.password);
     errors.emailError = validateEmail(this.state.email);
-    errors.confirmPasswordError = this.validatePassword(this.state.password, this.state.confirmPassword)
-    this.setState({errors});
+    errors.confirmPasswordError = this.validatePassword(
+      this.state.password,
+      this.state.confirmPassword
+    );
+    this.setState({ errors });
   };
 
   validityCheck = () => {
@@ -86,34 +93,83 @@ class Signup extends Component {
         <div className="row login-container">
           <div className="col-md-6 login-vertical-border">
             <div className="col-md-12 login-product-heading">DailyPloy</div>
-            <div className="col-md-12 login-product-text">It is a long established fact that reader will be distracted by the readable content of a page when looking at its layout</div>
+            <div className="col-md-12 login-product-text">
+              It is a long established fact that reader will be distracted by
+              the readable content of a page when looking at its layout
+            </div>
             <div className="col-md-12 text-center">
               Already User? <Link to={`/login`}>Sign In</Link>
             </div>
           </div>
           <div className="col-md-6 login-vertical-border2">
-            <div className="col-md-12 login-heading">Welcome!</div><br />
+            <div className="col-md-12 login-heading">Welcome!</div>
+            <br />
             <div className="col-md-10 offset-1">
               <div class="form-group">
-                <input type="text" name="name" value={name} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Username" />
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={this.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Username"
+                />
               </div>
-              {this.state.errors.nameError ? <p style={{color: 'red'}}>{this.state.errors.nameError}</p> : null}
+              {this.state.errors.nameError ? (
+                <p style={{ color: "red" }}>{this.state.errors.nameError}</p>
+              ) : null}
               <div class="form-group">
-                <input type="email" name="email" value={email} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Email Id" />
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={this.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Email Id"
+                />
               </div>
-              {this.state.errors.emailError ? <p style={{color: 'red'}}>{this.state.errors.emailError}</p> : null}
+              {this.state.errors.emailError ? (
+                <p style={{ color: "red" }}>{this.state.errors.emailError}</p>
+              ) : null}
               <div class="form-group">
-                <input type="password" name="password" value={password} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Password" />
+                <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={this.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Password"
+                />
               </div>
-              {this.state.errors.passwordError ? <p style={{color: 'red'}}>{this.state.errors.passwordError}</p> : null}
+              {this.state.errors.passwordError ? (
+                <p style={{ color: "red" }}>
+                  {this.state.errors.passwordError}
+                </p>
+              ) : null}
               <div class="form-group">
-                <input type="password" name="confirmPassword" value={confirmPassword} onChange={this.changeHandler} className="form-control login-form-field" placeholder="Confirm Password" />
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={this.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Confirm Password"
+                />
               </div>
-              {this.state.errors.confirmPasswordError ? <p style={{color: 'red'}}>{this.state.errors.confirmPasswordError}</p> : null}
+              {this.state.errors.confirmPasswordError ? (
+                <p style={{ color: "red" }}>
+                  {this.state.errors.confirmPasswordError}
+                </p>
+              ) : null}
             </div>
             <br />
             <div className="col-md-12 text-center">
-              <button onClick={this.signup} className="btn btn-outline-secondary login-btn">Signup</button>
+              <button
+                onClick={this.signup}
+                className="btn btn-outline-secondary login-btn"
+              >
+                Signup
+              </button>
             </div>
           </div>
         </div>
