@@ -4,22 +4,101 @@
 }
 
 .header-bgcolor{
-    background-color: aliceblue !important;
+    background-color: lightgray !important;
 }
 
-
-.sidebar-container{
-    border-right: 2px solid grey;
+.header-logo-box{
+  border-right: 1px solid #8080806b;
+  padding-right: 1%;
 }
 
-.sidebar-tabs{
-    width:100%;
-    padding:10px !important;
-    text-align: center;
-    height: 50px;
-    background-color: #28a745;
+.header-auth-btn{
+  width:40px;
+  height:40px;
+  border-radius: 50% !important;
+  background-color: #fff !important;
+  border:0 !important;
+  color:grey !important;
+  text-align: center !important;
+  font-size: 15px !important;
 }
 
+.menubar-container{
+  background-color: #fff;
+  /* height:60px; */
+  border-bottom: 1px dashed lightgray !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.menubar-task-btn{
+  width:50px;
+  height:50px;
+  border-radius: 50% !important;
+  background-color: #fff !important;
+  border:0 !important;
+  color:grey !important;
+  text-align: center !important;
+  font-size: 22px !important;
+  /* font-weight: bold !important; */
+  box-shadow: 1px 1px 1px 1px #ada5a5c2;
+}
+
+.menubar-filter{
+  height: 100% !important;
+  border-radius: 14px !important;
+  color:grey !important;
+}
+
+.calender-item{
+    font-size: 13px !important;
+    background: grey !important;
+    border-radius: 15px !important; 
+    height: 25px !important;
+    line-height: 25px !important;
+    border:0 !important
+}
+
+.calender-item :visited{
+  background: yellow !important;
+}
+
+.calender-timelineheader{
+  background-color: #fff !important;
+  /* height: 41px !important; */
+  color: grey !important;
+}
+
+.calender-dateheader{
+  background-color: #fff !important; 
+}
+
+.rct-dateHeader{
+  color:gray !important;
+  background-color: #fff !important;
+  border-bottom: 1px dashed #bbb !important;
+  border-left: 1px dashed #bbb !important;
+  border-right:0 !important;
+}
+
+.rct-sidebar-row{
+  background-color: #fff !important;
+  border-bottom: 1px dashed #bbb !important;
+}
+
+.rct-hl-odd {
+    background: #fff !important;
+}
+
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
+  border-bottom: 1px dashed #bbb !important;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl {
+  border-left: 1px dashed #bbb !important;
+}
 
 
 .footer{
@@ -36,40 +115,3 @@
     font-size: 15px;
     width:100%;
 }
-
-
-
-.sidenav {
-    height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    padding-top: 20px;
-  }
-  
-  .sidenav a {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-  }
-  
-  .sidenav a:hover {
-    color: #f1f1f1;
-  }
-  
-  .main {
-    margin-left: 160px; /* Same as the width of the sidenav */
-    font-size: 28px; /* Increased text to enable scrolling */
-    padding: 0px 10px;
-  }
-  
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-  }

@@ -1,11 +1,9 @@
-import { USER_INFO } from "../actions"
+import { USER_INFO } from "../actions";
 
-const initalState = {
-
-}
+const initalState = {};
 
 const user = (state = initalState, action) => {
-    return state
-}
+  return state;
+};
 
 export default user;
