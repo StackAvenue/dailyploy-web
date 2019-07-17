@@ -23,15 +23,8 @@ class Signin extends Component {
     this.setState({ [name]: value });
   };
 
-  // componentDidMount = async () => {
-  //   // const token = await localStorage.getItem("authToken");
-  //   const token = await cookie.load('authToken');
-  //
-  // };
-
   componentDidMount() {
     const token = cookie.load("authToken");
-    console.log("token", token);
     if (token !== "undefined" && token !== null) {
       return this.props.history.push("/login");
     } else {
@@ -50,8 +43,6 @@ class Signin extends Component {
       try {
         const { data } = await login(loginData);
         console.log(data);
-        // localStorage.setItem("authToken",data.auth_token);
-        // localStorage.setItem("refreshToken", data.refresh_token);
         cookie.save("authToken", data.auth_token, { path: "/" });
         cookie.save("refreshToken", data.refresh_token, { path: "/" });
         this.props.history.push("/user");
@@ -82,6 +73,7 @@ class Signin extends Component {
 
   render() {
     const { email, password } = this.state;
+    const isEnabled = this.emailValidity() && this.state.password;
     return (
       <div className="container-fluid">
         <div className="row login-container">
@@ -160,6 +152,7 @@ class Signin extends Component {
             <br />
             <div className="col-md-12 text-center">
               <button
+                disabled={!isEnabled}
                 onClick={this.login}
                 className="btn btn-outline-secondary login-btn"
               >

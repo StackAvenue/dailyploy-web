@@ -4,6 +4,7 @@ import Timeline, {
   SidebarHeader,
   DateHeader
 } from "react-calendar-timeline";
+import { TimelineStateConsumer } from "react-calendar-timeline/src/lib/timeline/TimelineStateContext";
 import "react-calendar-timeline/lib/Timeline.css";
 import moment from "moment";
 import generateFakeData from "./generate-fake-data";
@@ -102,11 +103,13 @@ export default class Calendar extends Component {
         itemHeightRatio={0.75}
         canMove={true}
         canResize={"both"}
+        itemsSorted
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemSelect={this.handleItemSelect}
+        sidebarWidth={130}
       >
         <TimelineHeaders className="calender-timelineheader">
           <SidebarHeader>
@@ -115,9 +118,15 @@ export default class Calendar extends Component {
             }}
           </SidebarHeader>
           <DateHeader unit="primaryHeader" className="calender-dateheader" />
-          <DateHeader className="calender-dateheader" />
+          <DateHeader
+            timelineUnit={"week"}
+            unit={this.props.sortUnit}
+            className="calender-dateheader"
+          />
         </TimelineHeaders>
       </Timeline>
     );
   }
 }
+
+// const TimelineUpdate

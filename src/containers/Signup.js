@@ -42,7 +42,7 @@ class Signup extends Component {
       try {
         const { data } = await signUp(signupData);
         alert("user created");
-        this.props.history.push("/");
+        this.props.history.push("/login");
       } catch (e) {
         return "User could not be created";
       }
@@ -87,6 +87,7 @@ class Signup extends Component {
 
   render() {
     const { name, email, password, confirmPassword } = this.state;
+    const isEnabled = this.validityCheck();
 
     return (
       <div className="container-fluid">
@@ -164,10 +165,9 @@ class Signup extends Component {
             </div>
             <br />
             <div className="col-md-12 text-center">
-              <button
+              <button disabled={!isEnabled}
                 onClick={this.signup}
-                className="btn btn-outline-secondary login-btn"
-              >
+                className="btn btn-outline-secondary login-btn">
                 Signup
               </button>
             </div>

@@ -19,8 +19,5 @@ export const login = async loginData => {
 };
 
 export const logout = async () => {
-  // await localStorage.removeItem("authToken");
-  // await localStorage.removeItem("refreshToken");
   await cookie.remove("authToken", { path: "/" });
-  // await cookie.remove('refreshToken', { path: '/' })
 };
