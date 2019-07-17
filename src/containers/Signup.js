@@ -31,13 +31,16 @@ class Signup extends Component {
     this.setState({ [name]: value });
   };
 
-  signup = async () => {
+  signupForm = async () => {
     this.validateAllInputs();
     if (this.validityCheck()) {
       const signupData = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
+        user: {
+          name: this.state.name,
+          email: this.state.email,
+          password: this.state.password,
+          password_confirmation: this.state.confirmPassword
+        }
       };
       try {
         const { data } = await signUp(signupData);
@@ -165,9 +168,11 @@ class Signup extends Component {
             </div>
             <br />
             <div className="col-md-12 text-center">
-              <button disabled={!isEnabled}
-                onClick={this.signup}
-                className="btn btn-outline-secondary login-btn">
+              <button
+                disabled={!isEnabled}
+                onClick={this.signupForm}
+                className="btn btn-outline-secondary login-btn"
+              >
                 Signup
               </button>
             </div>

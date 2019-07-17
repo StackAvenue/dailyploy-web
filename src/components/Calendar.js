@@ -4,7 +4,7 @@ import Timeline, {
   SidebarHeader,
   DateHeader
 } from "react-calendar-timeline";
-import { TimelineStateConsumer } from "react-calendar-timeline/src/lib/timeline/TimelineStateContext";
+// import { TimelineStateConsumer } from "react-calendar-timeline/src/lib/timeline/TimelineStateContext";
 import "react-calendar-timeline/lib/Timeline.css";
 import moment from "moment";
 import generateFakeData from "./generate-fake-data";

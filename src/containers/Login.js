@@ -43,8 +43,8 @@ class Signin extends Component {
       try {
         const { data } = await login(loginData);
         console.log(data);
-        cookie.save("authToken", data.auth_token, { path: "/" });
-        cookie.save("refreshToken", data.refresh_token, { path: "/" });
+        cookie.save("accessToken", data.access_token, { path: "/" });
+        cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
         this.props.history.push("/user");
       } catch (e) {
         return "Email and password did not match";
@@ -58,7 +58,7 @@ class Signin extends Component {
       emailError: null,
       passwordError: null
     };
-    errors.passwordError = checkPassword(this.state.password);
+    // errors.passwordError = checkPassword(this.state.password);
     errors.emailError = validateEmail(this.state.email);
     this.setState({ errors });
   };
