@@ -1,14 +1,16 @@
 import axios from "axios";
 import cookie from "react-cookies";
+import { SERVICE_URL, MOCK_URL } from "./Constants";
 
 const headerConfig = {
   "Content-Type": "application/json"
 };
 
-const URL = "http://3afba4b2.ngrok.io";
+const URL = SERVICE_URL;
 
 export const signUp = async signupData => {
-  return await axios.post(`${URL}/api/v1/sign_up`, signupData, headerConfig);
+  console.log("signup", URL);
+  return await axios.post(`${URL}/api/v1/sign_in`, signupData, headerConfig);
 };
 
 export const login = async loginData => {

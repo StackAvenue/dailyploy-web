@@ -24,6 +24,12 @@
   /* content:"" !important; */
 }
 
+.header-dropdown-space{
+  height: 1%;
+  width: 10%;
+  display: inline-block;
+}
+
 .dropdown-toggle::after{
   border:0 !important;
 }

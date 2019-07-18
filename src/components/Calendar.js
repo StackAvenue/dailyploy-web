@@ -4,7 +4,6 @@ import Timeline, {
   SidebarHeader,
   DateHeader
 } from "react-calendar-timeline";
-// import { TimelineStateConsumer } from "react-calendar-timeline/src/lib/timeline/TimelineStateContext";
 import "react-calendar-timeline/lib/Timeline.css";
 import moment from "moment";
 import generateFakeData from "./generate-fake-data";
@@ -42,6 +41,20 @@ export default class Calendar extends Component {
       defaultTimeStart,
       defaultTimeEnd
     };
+  }
+
+  componentDidMount() {
+    let select = this.props.sortUnit;
+    console.log("select", select);
+    this.setState({
+      defaultTimeStart: moment()
+        .startOf(select)
+        .toDate(),
+      defaultTimeEnd: moment()
+        .startOf(select)
+        .add(1, select)
+        .toDate()
+    });
   }
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {

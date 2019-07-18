@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../assets/css/dashboard.css";
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown } from "react-bootstrap";
 
 class Header extends Component {
   constructor(props) {
@@ -48,8 +48,16 @@ class Header extends Component {
               </Dropdown.Toggle>
 
               <Dropdown.Menu className="header-dropdown">
-                <Dropdown.Item href="#/action-1"><i class="fa fa-wrench" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;Settings</Dropdown.Item>
-                <Dropdown.Item onClick={this.props.logout}><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Logout</Dropdown.Item>
+                <Dropdown.Item href="#/action-1">
+                  <i class="fa fa-wrench" aria-hidden="true" />
+                  <span className="header-dropdown-space" />
+                  Settings
+                </Dropdown.Item>
+                <Dropdown.Item onClick={this.props.logout}>
+                  <i class="fa fa-sign-out" aria-hidden="true" />
+                  <span className="header-dropdown-space" />
+                  Logout
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </ul>
