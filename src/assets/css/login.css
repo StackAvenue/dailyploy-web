@@ -32,7 +32,7 @@
 .login-product-btn{
     font-size: 25px !important;
     border-radius: 35px !important;
-    color:grey ;
+    color:grey  ;
     padding-right:40px !important;
     padding-left:40px !important;
 }
@@ -48,7 +48,9 @@
     width:70px;
     height:70px;
     border-radius: 50% !important;
-    background-color: grey;
+    border: 0 !important;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff !important;
 }
 
 .login-form-field{
@@ -67,4 +69,11 @@
     color:grey ;
     padding-right:30px !important;
     padding-left:30px !important;
+}
+
+.nav-tabs .nav-link{
+    width:50% !important;
+    text-align: center !important;
+    padding-right:0 !important;
+    padding-left:0 !important;
 }
