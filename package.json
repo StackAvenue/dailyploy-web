@@ -10,6 +10,7 @@
     "moment": "^2.24.0",
     "randomcolor": "^0.5.4",
     "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.9",
     "react-calendar-timeline": "^0.25.4",
     "react-cookies": "^0.1.1",
     "react-dom": "^16.8.6",

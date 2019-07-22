@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.Toastify__toast {
+  min-height: 50px;
+  padding: 10px;
+  border-radius: 14px;
+  box-shadow: 0 8px 10px 4px rgba(0, 0, 0, 0.1), 0 10px 15px 0 rgba(0, 0, 0, 0.05);
+}
+
+.no-padding{
+  padding:0 !important;
+}

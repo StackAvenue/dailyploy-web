@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../assets/css/dashboard.css";
+import { Dropdown } from "react-bootstrap";
 
 class Header extends Component {
   constructor(props) {
@@ -41,16 +42,24 @@ class Header extends Component {
             <li className="nav-item">
               <a className="nav-link">Help</a>
             </li>
-            <li className="nav-item">
-              <button
-                onClick={this.props.logout}
-                className="btn header-auth-btn"
-              >
+            <Dropdown>
+              <Dropdown.Toggle className="header-auth-btn" id="dropdown-basic">
                 AP
-              </button>
-              &nbsp;&nbsp;&nbsp;
-              <i class="fas fa-angle-down" />
-            </li>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className="header-dropdown">
+                <Dropdown.Item href="#/action-1">
+                  <i class="fa fa-wrench" aria-hidden="true" />
+                  <span className="header-dropdown-space" />
+                  Settings
+                </Dropdown.Item>
+                <Dropdown.Item onClick={this.props.logout}>
+                  <i class="fa fa-sign-out" aria-hidden="true" />
+                  <span className="header-dropdown-space" />
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </ul>
         </div>
       </nav>

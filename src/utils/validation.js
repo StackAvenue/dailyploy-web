@@ -6,17 +6,17 @@ export const checkPassword = sPassword => {
     }
     return null;
   }
-  return "Password cannot be empty";
+  return "cannot be empty";
 };
 
 export const validateName = name => {
   if (name) {
     if (name.toString().length < 3) {
-      return "Name cannot be shorter than 3 characters";
+      return "cannot be shorter than 3 characters";
     }
     return null;
   }
-  return "Name cannot be empty";
+  return "cannot be empty";
 };
 
 export const validateEmail = sEmail => {
@@ -27,5 +27,5 @@ export const validateEmail = sEmail => {
     }
     return null;
   }
-  return "Email address cannot be empty";
+  return "cannot be empty";
 };

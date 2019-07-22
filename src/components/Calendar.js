@@ -43,6 +43,20 @@ export default class Calendar extends Component {
     };
   }
 
+  componentDidMount() {
+    let select = this.props.sortUnit;
+    console.log("select", select);
+    this.setState({
+      defaultTimeStart: moment()
+        .startOf(select)
+        .toDate(),
+      defaultTimeEnd: moment()
+        .startOf(select)
+        .add(1, select)
+        .toDate()
+    });
+  }
+
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
     const { items, groups } = this.state;
 
@@ -102,11 +116,13 @@ export default class Calendar extends Component {
         itemHeightRatio={0.75}
         canMove={true}
         canResize={"both"}
+        itemsSorted
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemSelect={this.handleItemSelect}
+        sidebarWidth={130}
       >
         <TimelineHeaders className="calender-timelineheader">
           <SidebarHeader>
@@ -115,9 +131,15 @@ export default class Calendar extends Component {
             }}
           </SidebarHeader>
           <DateHeader unit="primaryHeader" className="calender-dateheader" />
-          <DateHeader className="calender-dateheader" />
+          <DateHeader
+            timelineUnit={"week"}
+            unit={this.props.sortUnit}
+            className="calender-dateheader"
+          />
         </TimelineHeaders>
       </Timeline>
     );
   }
 }
+
+// const TimelineUpdate
