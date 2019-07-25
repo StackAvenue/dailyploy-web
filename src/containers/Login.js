@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import cookie from "react-cookies";
-import "../assets/css/login.css";
 import { login } from "../utils/API";
 import { validateEmail } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "../components/Landing/Header";
+import signup from "../assets/images/signup.jpg";
+import googleIcon from "../assets/images/google.png";
 
 class Signin extends Component {
   constructor(props) {
@@ -78,88 +80,80 @@ class Signin extends Component {
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         <div className="container-fluid">
-          <div className="row login-container">
-            <div className="col-md-6 login-vertical-border">
-              <div className="col-md-12 login-product-heading">DailyPloy</div>
-              <div className="col-md-12 login-product-text">
-                It is a long established fact that reader will be distracted by
-                the readable content of a page when looking at its layout
+          <div className="main-container">
+            <Header />
+            <div className="row no-margin signup signup-container">
+              <div className="col-md-6 no-padding width">
+                <img
+                  src={signup}
+                  alt="signup"
+                  className="img-responsive image"
+                />
               </div>
-              <div className="col-md-12 text-center">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary login-product-btn"
-                >
-                  GET STARTED
-                </button>
-              </div>
-            </div>
-            <div className="col-md-6 login-vertical-border2">
-              <div className="col-md-12 login-heading">SignIn</div>
-              <div className="col-md-12 text-center login-auth-margin">
-                <div className="col-md-4 d-inline">
-                  <button
-                    type="button"
-                    class="btn btn-secondary login-auth-btn"
-                  />
+              <div className="col-md-5 sub-container">
+                <div className="col-md-12 heading">Sign In</div>
+                <div className="col-md-10 offset-1 no-padding signup-form text-left">
+                  <div class="form-group">
+                    <label>Email</label>
+                    {this.state.errors.emailError ? (
+                      <span className="error-warning">
+                        {this.state.errors.emailError}
+                      </span>
+                    ) : null}
+                    <input
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={this.handleChange}
+                      className="form-control login-form-field"
+                      placeholder="johndoe1234@amazon.com"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    {this.state.errors.passwordError ? (
+                      <span className="error-warning">
+                        {this.state.errors.passwordError}
+                      </span>
+                    ) : null}
+                    <input
+                      type="password"
+                      name="password"
+                      value={password}
+                      onChange={this.handleChange}
+                      className="form-control login-form-field"
+                      placeholder="Password"
+                    />
+                  </div>
+                  <br />
+                  <div className="col-md-12 no-padding text-center">
+                    <button
+                      disabled={!isEnabled}
+                      onClick={this.login}
+                      className="btn form-btn"
+                    >
+                      Sign In
+                    </button>
+                  </div>
                 </div>
-                <div className="col-md-4 d-inline">
-                  <button
-                    type="button"
-                    class="btn btn-secondary login-auth-btn"
+                <br />
+                <div className="col-md-8 offset-2 googleIcon">
+                  <img
+                    alt="Google Icon"
+                    src={googleIcon}
+                    className="img-responsive"
                   />
+                  <Link className="link">Sign In with Google</Link>
                 </div>
-                <div className="col-md-4 d-inline">
-                  <button
-                    type="button"
-                    class="btn btn-secondary login-auth-btn"
-                  />
+                <br />
+                <br />
+                <br />
+                <div className="col-md-8 offset-2 googleIcon">
+                  <span>New to DailyPloy?</span>
+                  <Link to={`/signup`} className="link">
+                    Sign Up
+                  </Link>
                 </div>
-              </div>
-              <div className="col-md-12 text-center">OR</div>
-              <br />
-              <div className="col-md-10 offset-1">
-                <div class="form-group">
-                  <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={this.handleChange}
-                    className="form-control login-form-field"
-                    placeholder="Enter email"
-                  />
-                </div>
-                {this.state.errors.emailError ? (
-                  <p style={{ color: "red" }}>{this.state.errors.emailError}</p>
-                ) : null}
-                <div class="form-group">
-                  <input
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={this.handleChange}
-                    className="form-control login-form-field"
-                    placeholder="Password"
-                  />
-                </div>
-                {this.state.errors.passwordError ? (
-                  <p style={{ color: "red" }}>
-                    {this.state.errors.passwordError}
-                  </p>
-                ) : null}
-              </div>
-              <div className="col-md-10 offset-1 text-right">
-                Forgot Password?
-              </div>
-              <br />
-              <div className="col-md-12 text-center">
-                <button
-                  disabled={!isEnabled}
-                  onClick={this.login}
-                  className="btn btn-outline-secondary login-btn"
-                >
-                  Login
-                </button>
               </div>
             </div>
           </div>

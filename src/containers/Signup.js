@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-import "../assets/css/styles.css";
-import "../assets/css/login.css";
+import "../assets/css/signup.scss";
 import { signUp } from "../utils/API";
 import {
   checkPassword,
@@ -13,6 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { Tabs, Tab } from "react-bootstrap";
 import Company from "../components/Signup/Company";
 import Individual from "../components/Signup/Individual";
+import Header from "../components/Landing/Header";
+import signup from "../assets/images/signup.jpg";
+import googleIcon from "../assets/images/google.png";
 
 class Signup extends Component {
   constructor(props) {
@@ -138,43 +140,62 @@ class Signup extends Component {
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         <div className="container-fluid">
-          <div className="row login-container">
-            <div className="col-md-6 login-vertical-border">
-              <div className="col-md-12 login-product-heading">DailyPloy</div>
-              <div className="col-md-12 login-product-text">
-                It is a long established fact that reader will be distracted by
-                the readable content of a page when looking at its layout
+          <div className="main-container">
+            <Header />
+            <div className="row no-margin signup signup-container">
+              <div className="col-md-6 no-padding width">
+                <img
+                  src={signup}
+                  alt="signup"
+                  className="img-responsive image"
+                />
               </div>
-              <div className="col-md-12 text-center">
-                Already User? <Link to={`/login`}>Sign In</Link>
+              <div className="col-md-5 sub-container">
+                <div className="col-md-12 heading">Sign up</div>
+                <Tabs
+                  defaultActiveKey="individual"
+                  className="col-md-10 offset-1 main-tabs"
+                  id="uncontrolled-tab-example"
+                  onSelect={key => this.companyFlag(key)}
+                >
+                  <Tab eventKey="individual" title="Individual">
+                    <Individual
+                      state={this.state}
+                      enable={isEnabled}
+                      changeHandler={this.changeHandler}
+                      signup={this.signupForm}
+                    />
+                  </Tab>
+                  <Tab
+                    eventKey="company"
+                    title="Company"
+                    style={{ border: "0" }}
+                  >
+                    <Company
+                      state={this.state}
+                      enable={isEnabled}
+                      changeHandler={this.changeHandler}
+                      signup={this.signupForm}
+                    />
+                  </Tab>
+                </Tabs>
+                <br />
+                <div className="col-md-8 offset-2 googleIcon">
+                  <img
+                    alt="Google Icon"
+                    src={googleIcon}
+                    className="img-responsive"
+                  />
+                  <Link className="link">Sign up with your Google account</Link>
+                </div>
+                <br />
+                <div className="col-md-8 offset-2 googleIcon">
+                  <span>Already have DailyPloy account?</span>
+                  <Link to={`/login`} className="link">
+                    Sign in
+                  </Link>
+                </div>
               </div>
-            </div>
-            <div className="col-md-6 login-vertical-border2">
-              <div className="col-md-12 login-heading">Welcome!</div>
-              <Tabs
-                defaultActiveKey="company"
-                className="col-md-10 offset-1"
-                id="uncontrolled-tab-example"
-                onSelect={key => this.companyFlag(key)}
-                style={{ "margin-bottom": "15px", "margin-top": "15px" }}
-              >
-                <Tab eventKey="company" title="Company">
-                  <Company
-                    state={this.state}
-                    enable={isEnabled}
-                    changeHandler={this.changeHandler}
-                    signup={this.signupForm}
-                  />
-                </Tab>
-                <Tab eventKey="individual" title="Individual">
-                  <Individual
-                    state={this.state}
-                    enable={isEnabled}
-                    changeHandler={this.changeHandler}
-                    signup={this.signupForm}
-                  />
-                </Tab>
-              </Tabs>
             </div>
           </div>
         </div>
