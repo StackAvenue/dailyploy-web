@@ -6,16 +6,14 @@
 
 .signup{
     .image{
-        width:100%;
+        width:$wd-100;
         height: 500px;
     }
     .sub-container{
         background-color:$color-fbfbfb;
-        box-sizing: $box-sizing;
         font-family: $font-family-arial;
         color: $color-333333;
         text-align: $text-center;
-        line-height: normal;
         margin-left:1%;
         padding: 1% 3% 1% 3% !important;
     }
@@ -23,14 +21,12 @@
         min-width:56% !important;
     }
     .heading{
-        background-color: rgba(255, 255, 255, 0);
         box-sizing: $box-sizing;
         font-family: $font-family;
         font-weight: $font-weight-900;
         font-size:$font-32;
         color: $color-333333;
         text-align: $text-center;
-        line-height: normal;
         margin-bottom:2%;
     }
     .main-tabs{
@@ -42,13 +38,13 @@
     }
     .form-btn{
         border-radius: 2px;
-        border: 1px solid #33a1ff !important;
-        background-color: #33a1ff !important;
-        font-family: 'Roboto-Medium', 'Roboto Medium', 'Roboto' !important;
+        border: 1px solid $color-brand3 !important;
+        background-color: $color-brand3 !important;
+        font-family: $font-family-robomed !important;
         font-weight: 500 !important;
-        color: #ffffff !important;
+        color: $color-white !important;
         text-align: center !important;
-        width:100% !important;
+        width:$wd-100 !important;
     }
     .googleIcon{
         img{
@@ -57,14 +53,14 @@
         }
         .link{
             margin-left:3%;
-            font-family: 'Roboto-Regular', 'Roboto' !important;
+            font-family:$font-family-roboto !important;
             text-decoration: underline !important;
-            color: #9b9b9b !important;
-            font-size: 12px !important;
+            color: $color-text3 !important;
+            font-size: $font-12 !important;
         }
         span{
-            font-family: 'Roboto-Regular', 'Roboto' !important;
-            color: #9b9b9b !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
             font-size: 12px !important;
         }
     }
@@ -78,44 +74,38 @@
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
-    box-sizing: $box-sizing;
     font-family: $font-family-roboto !important;
     font-weight: $font-weight-900 !important;
     color: $color-333333 !important;
     text-align: $text-center !important;
-    line-height: normal !important;
     background-color:transparent !important;
     border-bottom: 2px solid #10b857 !important;
     border: 0;
 }
 
 a{
-    color:$color-3333339c !important;
-    
+    color:$color-3333339c !important; 
 }
 
 .signup-form{
     label{
-        box-sizing: border-box;
-        font-family: 'Roboto-Regular', 'Roboto';
+        font-family: $font-family-roboto;
         font-weight: bold;
-        color: #9b9b9b;
+        color: $color-text3;
         text-align: left;
-        line-height: normal;
         font-size:15px;
     }
     input{
         height: 32px !important;
-        background-color: #ffffff !important;
-        box-sizing: border-box !important;
-        font-family: 'Roboto-Regular', 'Roboto' !important;
+        background-color: $color-white !important;
+        font-family: $font-family-roboto !important;
         color: #999999 !important;
         text-align: left !important;
-        border:1px solid #cac5c566 !important;
+        border:1px solid $color-borders !important;
         &::placeholder{
             color:#999999 !important;
             font-size: 15px !important;
-            font-family: 'Roboto-Regular', 'Roboto' !important;
+            font-family: $font-family-roboto !important;
         }
     }
 }

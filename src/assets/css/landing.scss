@@ -19,10 +19,9 @@
         font-family: $font-family-arial;
         color: $color-333333;
         text-align: $text-center;
-        line-height: normal;
     }
     .image{
-        width:100%;
+        width:$wd-100;
     }
     .container-margin{
         margin-top:3%;
@@ -30,46 +29,35 @@
     }
     .sub-container{
         .heading{
-            background-color: rgba(255, 255, 255, 0);
-            box-sizing: border-box;
-            font-family: 'Roboto-Medium', 'Roboto Medium', 'Roboto';
+            font-family: $font-family;
             font-weight: bold;
-            font-size:30px;
-            color: #333333;
+            font-size:$font-30;
+            color: $color-heading3;
             text-align: left;
-            line-height: normal;
         }
         .text{
-            background-color: rgba(255, 255, 255, 0);
-            box-sizing: border-box;
-            font-family: 'Roboto-Regular', 'Roboto';
-            font-size:18px;
-            color: #555555;
-            text-align: left;
-            line-height: normal;
+            font-family: $font-family-roboto;
+            font-size:$font-18;
+            color: $color-text2;
+            text-align: $text-left;
             margin-top:5%;
             margin-bottom:7%;
             padding-right:50px !important;
         }
         .button{
             border-radius: 2px;
-            border: 1px solid #33a1ff;
-            background-color: #33a1ff;
-            box-sizing: border-box;
-            font-family: 'Roboto-Regular', 'Roboto';
-            font-size:13px;
-            color: #ffffff !important;
+            border: 1px solid $color-brand3;
+            background-color: $color-brand3;
+            font-family: $font-family-roboto;
+            font-size:$font-13;
+            color: $color-white !important;
             text-align: center;
-            line-height: normal;
         }
         .signin{
-            background-color: rgba(255, 255, 255, 0);
-            box-sizing: border-box;
-            font-family: 'Roboto-Regular', 'Roboto';
-            font-size: 13px;
-            color: #9b9b9b !important;
+            font-family: $font-family-roboto;
+            font-size: $font-13;
+            color: $color-text3 !important;
             text-align: left;
-            line-height: normal;
             margin-top:2%
         }
     }
