@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import "../assets/css/styles.css";
 import { logout } from "../utils/API";
 import Header from "../components/Header";
 import Footer from "../components/Footer";

@@ -1,0 +1,23 @@
+@import "./colors";
+@import "./variables";
+
+.error-warning{
+    color:$red-color;
+    font-family: $font-family-roboto;
+    text-align: $text-left;
+    font-size:$font-14;
+}
+
+.no-margin{
+    margin-left:$mr-0 !important;
+    margin-right:$mr-0 !important;
+}   
+
+.no-padding{
+    padding:$mr-0 !important;
+}
+
+.main-container{
+    width:94% !important;
+    margin:auto !important;
+} 

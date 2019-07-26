@@ -18,5 +18,5 @@ export const login = async loginData => {
 };
 
 export const logout = async () => {
-  await cookie.remove("authToken", { path: "/" });
+  await cookie.remove("accessToken", { path: "/" });
 };
