@@ -107,7 +107,6 @@ class Signup extends Component {
       confirmPasswordError: null
     };
     errors.nameError = validateName(this.state.name);
-    errors.companyNameError = validateName(this.state.companyName);
     errors.passwordError = checkPassword(this.state.password);
     errors.emailError = validateEmail(this.state.email);
     errors.confirmPasswordError = this.validatePassword(
@@ -120,7 +119,6 @@ class Signup extends Component {
   validityCheck = () => {
     return (
       this.state.name &&
-      this.state.companyName &&
       this.state.email &&
       this.state.password &&
       this.state.confirmPassword &&
@@ -131,7 +129,6 @@ class Signup extends Component {
   render() {
     const isEnabled =
       this.state.name &&
-      this.state.companyName &&
       this.state.email &&
       this.state.password &&
       this.state.confirmPassword;

@@ -10,11 +10,11 @@ const URL = SERVICE_URL;
 const URL2 = MOCK_URL;
 
 export const signUp = async signupData => {
-  return await axios.post(`${URL}/api/v1/sign_up`, signupData, headerConfig);
+  return await axios.post(`${URL2}/api/v1/signUp`, signupData, headerConfig);
 };
 
 export const login = async loginData => {
-  return await axios.post(`${URL}/api/v1/sign_in`, loginData);
+  return await axios.post(`${URL2}/api/v1/SignIn`, loginData);
 };
 
 export const logout = async () => {

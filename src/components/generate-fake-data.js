@@ -10,8 +10,8 @@ export default function(groupCount = 20, itemCount = 1000, daysInPast = 30) {
     groups.push({
       id: `${i + 1}`,
       title: faker.name.firstName(),
-      rightTitle: faker.name.lastName()
-      //   bgColor: randomColor({ luminosity: "light", seed: randomSeed + i })
+      rightTitle: faker.name.lastName(),
+      bgColor: randomColor({ luminosity: "light", seed: randomSeed + i })
     });
   }
 

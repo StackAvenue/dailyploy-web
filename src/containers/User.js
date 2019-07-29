@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { logout } from "../utils/API";
-import Header from "../components/Header";
+import Header from "../components/dashboard/Header";
 import Footer from "../components/Footer";
-import "../assets/css/dashboard.css";
-import MenuBar from "../components/MenuBar";
-import Calendar from "../components/Calendar";
+import "../assets/css/dashboard.scss";
+import MenuBar from "../components/dashboard/MenuBar";
+import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sort: ""
+      sort: "week"
     };
   }
   componentDidMount() {

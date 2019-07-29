@@ -1,0 +1,235 @@
+@import "./styles";
+
+.dashboard-container{
+    width:95%;
+    margin:auto;
+}
+
+.dashbaord-header-bg{
+    background-color: $color-header !important;
+}
+
+.dashboard-header-container{
+    .notification{
+        padding-right:15% !important;
+        i{
+            font-size:18px !important;
+        }
+    }
+    .down-key{
+        padding-left:12% !important;
+        i{
+            font-size:18px !important;
+        }
+    }
+}
+
+.dashboard-menubar-container{
+    padding: 1% 0 1% 2% !important;
+    .home{
+        font-size: 16px;
+        font-family:$font-family-roboto;
+        font-weight:bold;
+        color: $color-text1;
+        text-align: center;
+        border-bottom: 2px solid $color-brandheading1;
+    }
+    .analysis{
+        font-size: 16px;
+        font-family:$font-family-roboto;
+        color: $color-text3;
+        text-align: center;
+    }
+    .sort-bar{
+        border: 1px solid $color-brandheading1;
+        height:36px;
+        padding-top:3px !important; 
+        border-radius: 5px !important;
+        .select-bar{
+            height:24px !important;
+            border:0 !important;
+            font-size: 14px !important;
+            color:$color-text2 !important;
+            padding-top:0 !important;
+            padding-bottom: 0 !important;
+            border-right:2px solid $color-borders !important;
+            border-radius:0 !important;
+            font-family: $font-family-robomed !important;
+            font-weight: 700 !important;
+        }
+        input{
+            border:0 !important;
+            height:28px !important;
+            font-size:15px !important;
+            border-radius:0 !important;
+        }
+    }
+    .weekly-sort{
+        padding-right:0 !important;
+        select{
+            height: 36px !important;
+            border-radius:5px !important;
+        }
+    }
+}
+
+.react-calendar-timeline{
+    box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1);
+    .sidebarHeader{
+        padding:12px 0 12px 32px !important ;
+        border-right: 1px solid $color-text3 !important;
+        // button{
+        //     width:93px !important;
+        //     height: 36px !important;
+        //     border-radius: 5px !important;
+        //     font-size: $font-16 !important;
+        //     font-weight: 700 !important;
+        //     background-color:$btn-background-color;
+        //     border-color:$btn-background-color ;
+        //     &:hover{
+        //         background-color:$color-brand4;
+        //         border-color:$color-brand4;
+        //     }
+        //     img{
+        //         padding-right:6%;
+        //     }
+        // }
+        button{
+            font-size:15px !important;
+            font-weight: bold !important;
+            font-family:$font-family-roboto !important;
+            color:$color-heading3 !important;
+            padding:0 !important;
+            &:hover{
+                text-decoration: none !important;
+            }
+            i{
+                padding-left: 7px !important;
+            }
+        }
+        
+
+    }
+    .rct-header-root{
+        background-color:$color-white !important;
+        border-bottom: 2px solid $color-borders !important;
+    }
+    .rct-sidebar{
+        border-right-color:$color-text3 !important; 
+        .rct-sidebar-row{
+            font-size:$font-15 !important;
+            color:$color-text2 !important;
+            font-family: $font-family-robomed !important;
+            font-weight: 700 !important;
+            padding-left: 40px !important;
+        }
+        .rct-sidebar-row-even {
+            background: $color-header !important;
+            border-color:$color-borders !important;
+        }
+        .rct-sidebar-row-odd {
+            background: $color-header !important;
+            border-color:$color-borders !important;
+        }
+    }
+    .rct-calendar-header{
+        border:0 !important;
+    }
+    .rct-dateHeader-primary{
+        font-size: 15px !important;
+        font-weight: bold;
+        color:$color-text2 !important;
+        border-bottom: 2px solid $color-borders !important;
+    }
+    .rct-dateHeader{
+        // height: 30px !important;
+        // padding: 3px 0 5px 0 !important;
+
+    }
+    .rct-horizontal-lines{
+        .rct-hl-odd{
+            background-color: #fff !important;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+        }
+    }
+}
+
+
+.calender-modal{
+    .header{
+        padding:3% !important;
+        background-color: $color-brandheading1;
+        color: $color-white;
+        font-size:20px;
+        font-family: $font-family-roboto;
+        button{
+            color: $color-white !important;
+        }
+    }
+}
+
+
+.header-auth-btn{
+    width:40px;
+    height:40px;
+    border-radius: 50% !important;
+    background-color: #fff !important;
+    border:0 !important;
+    color:grey !important;
+    text-align: center !important;
+    font-size: 15px !important;
+    /* content:"" !important; */
+  }
+
+.header-dropdown-space{
+    height: 1%;
+    width: 10%;
+    display: inline-block;
+  }
+  
+  .dropdown-toggle::after{
+    border:0 !important;
+  }
+  
+  .header-dropdown{
+    right:0 !important;
+    left: -52px !important;
+  }
+  
+  .menubar-task-btn{
+    width:56px;
+    height:56px;
+    border-radius: 50% !important;
+    background-color: #33a1ff !important;
+    border:0 !important;
+    color:$color-white !important;
+    text-align: center !important;
+    font-size: 26px !important;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    position: fixed !important;
+    z-index: 185 !important;
+    right: 16px !important;
+    bottom: 16px !important;
+  
+  }
+  
+  
+
+
+
+
+
+.footer{
+    background-color: aliceblue;
+    position: absolute;
+    bottom:0;
+    padding:20px;
+    width:100%;
+}
+
+.footer-text{
+    color:black;
+    text-align: center;
+    font-size: 15px;
+    width:100%;
+}
+
