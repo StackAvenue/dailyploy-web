@@ -4,13 +4,11 @@ import Timeline, {
   SidebarHeader,
   DateHeader
 } from "react-calendar-timeline";
-import { Modal, Button } from "react-bootstrap";
 import containerResizeDetector from "react-calendar-timeline/lib/resize-detector/container";
 import "react-calendar-timeline/lib/Timeline.css";
 import moment from "moment";
 import generateFakeData from "../generate-fake-data";
 import "../../assets/css/dashboard.scss";
-import Add from "../../assets/images/add.svg";
 
 var keys = {
   groupIdKey: "id",
@@ -31,11 +29,18 @@ export default class Calendar extends Component {
 
     const { groups, items } = generateFakeData();
     const defaultTimeStart = moment()
-      .startOf("month")
+      .startOf("week")
       .toDate();
     const defaultTimeEnd = moment()
-      .startOf("month")
-      .add(1, "month")
+      .endOf("week")
+      .add(1, "week")
+      .toDate();
+    const visibleTimeStart = moment()
+      .startOf("week")
+      .toDate();
+    const visibleTimeEnd = moment()
+      .endOf("week")
+      .add(1, "week")
       .toDate();
 
     this.state = {
@@ -43,8 +48,8 @@ export default class Calendar extends Component {
       items,
       defaultTimeStart,
       defaultTimeEnd,
-      show: false,
-      setShow: false
+      visibleTimeStart,
+      visibleTimeEnd
     };
   }
 
@@ -58,11 +63,11 @@ export default class Calendar extends Component {
     } else {
       this.setState(
         {
-          defaultTimeStart: moment()
+          visibleTimeStart: moment()
             .startOf(select)
             .toDate(),
-          defaultTimeEnd: moment()
-            .startOf(select)
+          visibleTimeEnd: moment()
+            .endOf(select)
             .add(1, select)
             .toDate()
         },
@@ -124,8 +129,6 @@ export default class Calendar extends Component {
     getItemProps,
     getResizeProps
   }) => {
-    // console.log("itemContext", itemContext);
-    // console.log("timelineContext", timelineContext);
     itemContext.dimensions.height = "45px";
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
     const backgroundColor = itemContext.selected
@@ -171,28 +174,15 @@ export default class Calendar extends Component {
     );
   };
 
-  handleClose = () => {
-    this.setState({
-      show: false
-    });
-  };
-  handleShow = () => {
-    this.setState({
-      setShow: true,
-      show: true
-    });
-  };
-
   render() {
     const {
       groups,
       items,
       defaultTimeStart,
       defaultTimeEnd,
-      show
+      visibleTimeStart,
+      visibleTimeEnd
     } = this.state;
-
-    console.log("after update the component", defaultTimeStart);
 
     return (
       <Timeline
@@ -208,6 +198,8 @@ export default class Calendar extends Component {
         itemsSorted
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemSelect={this.handleItemSelect}
@@ -221,47 +213,6 @@ export default class Calendar extends Component {
               return (
                 <>
                   <div className="sidebarHeader" {...getRootProps()}>
-                    {/* <Button
-                      variant="primary"
-                      className="btn btn-primary"
-                      onClick={this.handleShow}
-                    >
-                      <img src={Add} alt="add" />
-                      &nbsp;Add
-                    </Button>
-                    <Modal show={show} onHide={this.handleClose}>
-                      <div className="row no-margin calender-modal">
-                        <div className="col-md-12 header">
-                          <span>Add project</span>
-                          <button
-                            className="btn btn-link float-right"
-                            onClick={this.handleClose}
-                          >
-                            <i class="fas fa-times" />
-                          </button>
-                        </div>
-                        <div className="col-md-12">
-                          <div className="col-md-12 no-padding">
-                            <div className="col-md-8 no-padding">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Project Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-12 no-padding">
-                            <div className="col-md-8 no-padding">
-                              <textarea
-                                type="text"
-                                className="form-control"
-                                placeholder="Project Description"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Modal> */}
                     <button type="button" className="btn btn-link">
                       People
                       <i class="fas fa-sort-down" />
@@ -278,5 +229,3 @@ export default class Calendar extends Component {
     );
   }
 }
-
-// const TimelineUpdate

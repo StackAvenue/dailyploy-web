@@ -8,7 +8,7 @@ import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 
-class User extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +18,7 @@ class User extends Component {
   componentDidMount() {
     const token = cookie.load("authToken");
     if (token !== "undefined") {
-      return this.props.history.push("/user");
+      return this.props.history.push("/dashboard");
     } else {
       return null;
     }
@@ -52,4 +52,4 @@ class User extends Component {
   }
 }
 
-export default withRouter(User);
+export default withRouter(Dashboard);

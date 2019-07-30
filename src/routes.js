@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Login from "./containers/Login";
 import SignUp from "./containers/Signup";
-import User from "./containers/User";
+import Dashboard from "./containers/Dashboard";
 import Landing from "./containers/Landing";
 import NotFound from "./components/NoMatch";
 import cookie from "react-cookies";
@@ -24,10 +24,10 @@ class Routes extends Component {
         title: "login"
       },
       {
-        path: "/user",
+        path: "/dashboard",
         exact: true,
-        component: User,
-        title: "user"
+        component: Dashboard,
+        title: "dashboard"
       },
       {
         path: "/signup",
@@ -43,7 +43,9 @@ class Routes extends Component {
   }
 
   isAllowed = (props, routeComponent, title) => {
-    if (!this.isCurrentUser()) {
+    if (this.isCurrentUser()) {
+      return <Dashboard {...props} />;
+    } else {
       if (title === "login") {
         return <Login {...props} />;
       } else if (title === "signup") {
@@ -51,8 +53,6 @@ class Routes extends Component {
       } else if (title === "landing") {
         return <Landing {...props} />;
       }
-    } else {
-      return <User {...props} />;
     }
   };
 

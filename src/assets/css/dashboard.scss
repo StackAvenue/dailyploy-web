@@ -40,6 +40,36 @@
         color: $color-text3;
         text-align: center;
     }
+    .menubar-button{
+        width:93px !important;
+        height: 36px !important;
+        border-radius: 5px !important;
+        font-size: $font-16 !important;
+        font-weight: 700 !important;
+        background-color:$btn-background-color;
+        border-color:$btn-background-color ;
+        margin-right:2% !important;
+        &:hover{
+            background-color:$color-brand4;
+            border-color:$color-brand4;
+        }
+        img{
+            padding-right:6%;
+        }
+    }
+    .dropdownMenu{
+        padding:0 !important;
+        a{  
+            font-size:14px !important;
+            font-weight: bold !important;
+            height:36px !important;
+            font-family: $font-family-roboto !important;
+            &:hover{
+                background-color: $color-dropdown !important;
+                color:$color-brand4 !important
+            }
+        }
+    }
     .sort-bar{
         border: 1px solid $color-brandheading1;
         height:36px;
@@ -78,22 +108,6 @@
     .sidebarHeader{
         padding:12px 0 12px 32px !important ;
         border-right: 1px solid $color-text3 !important;
-        // button{
-        //     width:93px !important;
-        //     height: 36px !important;
-        //     border-radius: 5px !important;
-        //     font-size: $font-16 !important;
-        //     font-weight: 700 !important;
-        //     background-color:$btn-background-color;
-        //     border-color:$btn-background-color ;
-        //     &:hover{
-        //         background-color:$color-brand4;
-        //         border-color:$color-brand4;
-        //     }
-        //     img{
-        //         padding-right:6%;
-        //     }
-        // }
         button{
             font-size:15px !important;
             font-weight: bold !important;
@@ -154,18 +168,74 @@
 }
 
 
-.calender-modal{
-    .header{
-        padding:3% !important;
-        background-color: $color-brandheading1;
-        color: $color-white;
-        font-size:20px;
-        font-family: $font-family-roboto;
-        button{
-            color: $color-white !important;
+.project-modal{
+    .modal-content{
+        width:658px;
+        .header{
+            padding:17px 0 17px 49px !important;
+            span{
+                font-size: 20px;
+                font-weight: bold;
+                color: $color-text1 !important;
+                font-family: $font-family-roboto !important;
+            }
+            button{
+                padding:0 22px 0 0 !important;
+                img{
+                    width: 15px;
+                    height:15px;
+                }
+            }
+        }
+        .body{
+            padding:5px 49px 10px 49px !important;
+            .input-row{
+                padding-top:20px !important;
+                .label{
+                    font-family: $font-family-roboto;
+                    font-size:15px;
+                    color:$color-text3;
+                }
+                input{
+                    height:40px !important;
+                    border-radius:5px !important;
+                    border:1px solid $color-borders ;
+                    font-size: 15px !important;
+                    font-family: $font-family-roboto !important;
+                    color:$color-text3 !important;
+                    padding: .375rem .75rem;
+                    &::placeholder{
+                        font-size: 15px !important;
+                        font-family: $font-family-roboto !important;
+                        color:$color-text3 !important;
+                    }
+                }
+                .textarea{
+                    height:90px !important
+                }
+            }
         }
     }
 }
+
+.rbt-input-multi{
+    height:90px !important;
+    overflow-y: scroll !important;
+    .rbt-token{
+        background-color: $color-white !important;
+        border-radius: 2px !important;
+        border: 1px solid $color-border2 !important;
+        font-family: $font-family-openSans !important;
+        font-size:13px !important;
+        color:$color-text2 !important;
+    }
+
+}
+
+.react-datepicker-popper{
+    z-index:12 !important;
+}
+
 
 
 .header-auth-btn{
