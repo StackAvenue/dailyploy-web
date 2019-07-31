@@ -6,6 +6,8 @@ import Close from "../../assets/images/close.svg";
 import DatePicker from "react-datepicker";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { TwitterPicker, Twitter } from "react-color";
+import { post } from "../../utils/API";
+import { ToastContainer, toast } from "react-toastify";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
@@ -47,20 +49,49 @@ export default class MenuBar extends Component {
       "#9900EF"
     ];
     this.state = {
+      projectName: "",
+      projectMembers: [],
       sort: "week",
       show: false,
       setShow: false,
       dateFrom: new Date(),
       dateTo: new Date(),
       multiEmail: true,
-      background: "#fff"
+      background: "#000",
+      displayColorPicker: false
     };
   }
 
+  addProject = async () => {
+    const projectData = {
+      project_name: this.state.projectName,
+      project_start_date: this.state.dateFrom,
+      project_end_date: this.state.dateTo,
+      project_members: this.state.projectMembers,
+      project_color: this.state.background
+    };
+    try {
+      const { data } = await post(projectData);
+      toast.success("Project Created");
+      console.log("projectData", data);
+    } catch (e) {
+      console.log("error", e.response);
+    }
+  };
+
+  handleChangeMember = selected => {
+    this.setState({ projectMembers: selected });
+  };
+
   sortHandler = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value }, console.log(this.state.sort));
+    this.setState({ [name]: value });
     this.props.onSelectSort(value);
+  };
+
+  handleChangeInput = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   };
 
   handleDateFrom = date => {
@@ -86,9 +117,16 @@ export default class MenuBar extends Component {
     this.setState({ background: color.hex });
   };
 
+  handleChangeColor = () => {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker });
+  };
+
+  handleColorPickerClose = () => {
+    this.setState({ displayColorPicker: false });
+  };
+
   render() {
     const { sort, show } = this.state;
-    console.log("Child render", this.state.sort);
     return (
       <>
         <div className="container-fluid">
@@ -134,6 +172,9 @@ export default class MenuBar extends Component {
                               <div className="col-md-10 d-inline-block">
                                 <input
                                   type="text"
+                                  name="projectName"
+                                  value={this.state.projectName}
+                                  onChange={this.handleChangeInput}
                                   placeholder="Write Project Name here"
                                   className="form-control"
                                 />
@@ -164,30 +205,64 @@ export default class MenuBar extends Component {
                                 </div>
                               </div>
                             </div>
-                            <div className="col-md-12 no-padding input-row">
-                              <div className="col-md-2 d-inline-block no-padding label">
+                            <div className="col-md-12 row no-margin no-padding input-row">
+                              <div className="col-md-2 no-padding label">
                                 Members
                               </div>
-                              <div className="col-md-10 d-inline-block">
+                              <div className="col-md-10">
                                 <Typeahead
-                                  labelKey="name"
+                                  id="projectMembers"
+                                  onChange={selected =>
+                                    this.handleChangeMember(selected)
+                                  }
                                   multiple={this.state.multiEmail}
                                   options={this.emailOptions}
                                   placeholder="Write Here"
                                 />
                               </div>
                             </div>
-                            <div className="col-md-12 no-padding input-row">
-                              <div className="col-md-2 d-inline-block no-padding label">
+                            <div className="col-md-12 row no-margin no-padding input-row">
+                              <div className="col-md-2 no-padding label">
                                 Select Color
                               </div>
-                              <div className="col-md-10 d-inline-block">
-                                <TwitterPicker
-                                  color={this.state.background}
-                                  onChangeComplete={this.handleChangeComplete}
+                              <div className="col-md-10">
+                                <button
+                                  className="btn btn-default btn-color-picker"
+                                  style={{
+                                    backgroundColor: `${this.state.background}`
+                                  }}
+                                  onClick={this.handleChangeColor}
+                                />
+                                {this.state.displayColorPicker ? (
+                                  <div onClick={this.handleColorPickerClose}>
+                                    <TwitterPicker
+                                      color={this.state.background}
+                                      onChangeComplete={
+                                        this.handleChangeComplete
+                                      }
+                                    >
+                                      <Twitter colors={this.colors} />
+                                    </TwitterPicker>
+                                  </div>
+                                ) : null}
+                              </div>
+                            </div>
+                            <div className="col-md-12 no-padding input-row">
+                              <div className="col-md-4 ml-auto">
+                                <button
+                                  type="button"
+                                  className="btn col-md-5 button1 btn-primary"
+                                  onClick={this.addProject}
                                 >
-                                  <Twitter colors={this.colors} />
-                                </TwitterPicker>
+                                  Add
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn col-md-6 button2 btn-primary"
+                                  onClick={this.handleClose}
+                                >
+                                  Cancel
+                                </button>
                               </div>
                             </div>
                           </div>

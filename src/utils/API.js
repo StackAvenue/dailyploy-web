@@ -20,3 +20,7 @@ export const login = async loginData => {
 export const logout = async () => {
   await cookie.remove("accessToken", { path: "/" });
 };
+
+export const post = async data => {
+  return await axios.post(`${URL2}/api/v1/project`, data, headerConfig);
+};

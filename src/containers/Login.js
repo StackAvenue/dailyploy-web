@@ -48,7 +48,7 @@ class Signin extends Component {
         toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
-        this.props.history.push("/user");
+        this.props.history.push("/dashboard");
       } catch (e) {
         console.log("error", e.response.data.error);
         toast.error(e.response.data.error);

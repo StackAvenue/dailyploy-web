@@ -29,18 +29,17 @@ export default class Calendar extends Component {
 
     const { groups, items } = generateFakeData();
     const defaultTimeStart = moment()
-      .startOf("week")
+      .startOf("day")
       .toDate();
     const defaultTimeEnd = moment()
-      .endOf("week")
-      .add(1, "week")
+      .endOf("day")
+      .add(1, "day")
       .toDate();
     const visibleTimeStart = moment()
-      .startOf("week")
+      .startOf("day")
       .toDate();
     const visibleTimeEnd = moment()
-      .endOf("week")
-      .add(1, "week")
+      .endOf("day")
       .toDate();
 
     this.state = {
@@ -68,7 +67,6 @@ export default class Calendar extends Component {
             .toDate(),
           visibleTimeEnd: moment()
             .endOf(select)
-            .add(1, select)
             .toDate()
         },
         console.log(select)

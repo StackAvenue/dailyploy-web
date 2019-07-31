@@ -7,6 +7,7 @@ import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
+import { ToastContainer, toast } from "react-toastify";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
+        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         <Header logout={this.logout} />
         <MenuBar onSelectSort={this.onSelectSort} />
         <Calendar sortUnit={this.state.sort} />

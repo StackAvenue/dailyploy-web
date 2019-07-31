@@ -1,0 +1,35 @@
+import axios from "axios";
+import { toast } from "react-toastify";
+import { SERVICE_URL, MOCK_URL, AUTH_TOKEN } from "./utils/Constants";
+
+const axiosInitializer = {
+  config: () => {
+    axios.defaults.baseURL = MOCK_URL;
+    // axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+
+    //Request Interceptor
+    axios.interceptors.request.use(
+      config => {
+        return config;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+
+    //Response Interceptor
+    axios.interceptors.response.use(
+      response => {
+        if (response.data && response.data.message) {
+          toast.success(response.data.message);
+        }
+        return response;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+  }
+};
+
+export default axiosInitializer;
