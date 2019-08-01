@@ -210,8 +210,27 @@
                         color:$color-text3 !important;
                     }
                 }
+                select{
+                    height:40px !important;
+                    border-radius:5px !important;
+                    border:1px solid $color-borders ;
+                    font-size: 15px !important;
+                    font-family: $font-family-roboto !important;
+                    color:$color-text3 !important;
+                    padding: .375rem .75rem;
+                }
+                textarea{
+                    font-size: 15px !important;
+                    font-family: $font-family-roboto !important;
+                    color:$color-text3 !important;
+                    &::placeholder{
+                        font-size: 15px !important;
+                        font-family: $font-family-roboto !important;
+                        color:$color-text3 !important;
+                    }
+                }
                 .textarea{
-                    height:90px !important
+                    height:90px !important;
                 }
                 .btn-color-picker{
                     width:35px !important;
