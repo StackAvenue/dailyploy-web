@@ -38,7 +38,7 @@ class Signin extends Component {
 
   login = async () => {
     this.validateAllInputs();
-    if (this.emailValidity() && this.state.password) {
+    if (this.isPresentAllInputs()) {
       const loginData = {
         email: this.state.email,
         password: this.state.password
@@ -65,17 +65,13 @@ class Signin extends Component {
     this.setState({ errors });
   };
 
-  emailValidity = () => {
-    return (
-      this.state.email &&
-      this.state.email.includes("@") &&
-      this.state.email.includes(".")
-    );
+  isPresentAllInputs = () => {
+    return this.state.email && this.state.password;
   };
 
   render() {
     const { email, password } = this.state;
-    const isEnabled = this.emailValidity() && this.state.password;
+    const isEnabled = this.isPresentAllInputs();
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />

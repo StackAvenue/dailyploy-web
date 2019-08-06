@@ -4,8 +4,10 @@ import { SERVICE_URL, MOCK_URL, AUTH_TOKEN } from "./utils/Constants";
 
 const axiosInitializer = {
   config: () => {
-    axios.defaults.baseURL = MOCK_URL;
-    // axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+    axios.defaults.baseURL = SERVICE_URL;
+    axios.defaults.headers.common["Authorization"] = AUTH_TOKEN
+      ? `Bearer ${AUTH_TOKEN}`
+      : "";
 
     //Request Interceptor
     axios.interceptors.request.use(

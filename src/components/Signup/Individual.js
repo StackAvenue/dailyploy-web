@@ -8,7 +8,9 @@ const Individual = props => {
         <div class="form-group">
           <label>Name</label>
           {props.state.errors.nameError ? (
-            <p style={{ color: "red" }}>{props.state.errors.nameError}</p>
+            <span className="error-warning">
+              {props.state.errors.nameError}
+            </span>
           ) : null}
           <input
             type="text"
@@ -23,7 +25,9 @@ const Individual = props => {
         <div class="form-group">
           <label>Email</label>
           {props.state.errors.emailError ? (
-            <p style={{ color: "red" }}>{props.state.errors.emailError}</p>
+            <span className="error-warning">
+              {props.state.errors.emailError}
+            </span>
           ) : null}
           <input
             type="email"
@@ -37,7 +41,9 @@ const Individual = props => {
         <div class="form-group">
           <label>Password</label>
           {props.state.errors.passwordError ? (
-            <p style={{ color: "red" }}>{props.state.errors.passwordError}</p>
+            <span className="error-warning">
+              {props.state.errors.passwordError}
+            </span>
           ) : null}
           <input
             type="password"
@@ -52,9 +58,9 @@ const Individual = props => {
         <div class="form-group">
           <label>Confirm Password</label>
           {props.state.errors.confirmPasswordError ? (
-            <p style={{ color: "red" }}>
+            <span className="error-warning">
               {props.state.errors.confirmPasswordError}
-            </p>
+            </span>
           ) : null}
           <input
             type="password"

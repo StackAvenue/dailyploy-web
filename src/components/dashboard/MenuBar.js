@@ -64,14 +64,16 @@ export default class MenuBar extends Component {
 
   addProject = async () => {
     const projectData = {
-      project_name: this.state.projectName,
-      project_start_date: this.state.dateFrom,
-      project_end_date: this.state.dateTo,
-      project_members: this.state.projectMembers,
-      project_color: this.state.background
+      project: {
+        name: this.state.projectName,
+        start_date: this.state.dateFrom,
+        end_date: this.state.dateTo,
+        members: this.state.projectMembers,
+        color: this.state.background
+      }
     };
     try {
-      const { data } = await post(projectData);
+      const { data } = await post(projectData, "project");
       toast.success("Project Created");
       console.log("projectData", data);
     } catch (e) {

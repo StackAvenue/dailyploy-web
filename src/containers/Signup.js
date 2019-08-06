@@ -32,7 +32,7 @@ class Signup extends Component {
         passwordError: null,
         confirmPasswordError: null
       },
-      isCompany: true
+      isCompany: false
     };
   }
 
@@ -43,6 +43,7 @@ class Signup extends Component {
     } else {
       company = false;
     }
+    console.log("company", word);
     return this.setState({ isCompany: company });
   };
 
@@ -79,15 +80,19 @@ class Signup extends Component {
             is_company_present: this.state.isCompany
           }
         };
+        console.log("is_company_present:", this.state.isCompany);
       }
       try {
         const { signUpData } = await signUp(signupData);
-        toast.success("User Created");
+        toast.success("User Created", { autoClose: 2000 });
+        this.props.history.push("/login");
       } catch (e) {
-        toast.error("email " + e.response.data.errors.email);
+        toast.error("email " + e.response.data.errors.email, {
+          autoClose: 2000
+        });
       }
     } else {
-      toast.error("Enter valid email address and password");
+      console.log("Enter valid email address and password");
     }
   };
 
@@ -95,7 +100,7 @@ class Signup extends Component {
     if (password === confirmPassword) {
       return;
     }
-    return "Those password didn't match, Try Again.";
+    return "Didn't Match, Try Again.";
   };
 
   validateAllInputs = () => {
