@@ -5,6 +5,13 @@ import logo from "../../assets/images/logo.png";
 import "../../assets/css/dashboard.scss";
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      workspaces: []
+    };
+  }
+
   render() {
     return (
       <>
@@ -45,23 +52,35 @@ class Header extends Component {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="header-dropdown">
-                      <Dropdown.Item href="#/action-1">
-                        <i class="fa fa-wrench" aria-hidden="true" />
+                      <Dropdown.Item>
+                        <i className="fa fa-wrench" aria-hidden="true" />
                         <span className="header-dropdown-space" />
                         Settings
                       </Dropdown.Item>
                       <Dropdown.Item onClick={this.props.logout}>
-                        <i class="fa fa-sign-out" aria-hidden="true" />
+                        <i className="fa fa-sign-out" aria-hidden="true" />
                         <span className="header-dropdown-space" />
                         Logout
                       </Dropdown.Item>
+                      <Dropdown.Item>
+                        <i className="fa fa-desktop" aria-hidden="true" />
+                        <span className="header-dropdown-space" />
+                        WorkSpaces
+                      </Dropdown.Item>
+                      {this.props.workspaces.map((workspace, index) => {
+                        return (
+                          <Dropdown.Item
+                            key={index}
+                            href={`/dashboard/${workspace.id}`}
+                          >
+                            <span className="workspace-text">
+                              {workspace.name}
+                            </span>
+                          </Dropdown.Item>
+                        );
+                      })}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <li className="nav-item active down-key">
-                    <a className="nav-link">
-                      <i class="fas fa-chevron-down" />
-                    </a>
-                  </li>
                 </ul>
               </div>
             </nav>

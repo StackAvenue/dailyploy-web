@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { PropTypes } from "prop-types";
-import { get } from "../../utils/API";
+import { get, mockGet } from "../../utils/API";
 import "antd/lib/style/index.less";
 import Scheduler, {
   SchedulerData,
@@ -19,6 +19,20 @@ class App extends Component {
       false,
       false,
       {
+        resourceName: "",
+        nonAgendaOtherCellHeaderFormat: "D ddd",
+        dayResourceTableWidth: "218px",
+        weekResourceTableWidth: "16%",
+        monthResourceTableWidth: "218px",
+        dayCellWidth: "3%",
+        weekCellWidth: "12%",
+        monthCellWidth: "8%",
+        eventItemHeight: 45,
+        eventItemLineHeight: 50,
+        nonWorkingTimeHeadColor: "#5c5c5c",
+        nonWorkingTimeHeadBgColor: "#fff",
+        nonWorkingTimeBodyBgColor: "#e5e5e54f",
+        tableHeaderHeight: 35,
         views: [
           {
             viewName: "Day",
@@ -53,7 +67,7 @@ class App extends Component {
 
   async componentWillMount() {
     try {
-      const { data } = await get("calenderData");
+      const { data } = await mockGet("calenderData");
       this.setState({
         resources: data[0].resources,
         events: data[0].events,
@@ -109,6 +123,13 @@ class App extends Component {
   render() {
     const { viewModel } = this.state;
     this.renderData();
+    let leftCustomHeader = (
+      <div className="leftheader">
+        <span>Team</span>
+      </div>
+    );
+
+    // console.log("schedular Data", this.schedulerData);
     return (
       <div>
         <div>
@@ -119,10 +140,6 @@ class App extends Component {
             onSelectDate={this.onSelectDate}
             onViewChange={this.onViewChange}
             eventItemClick={this.eventClicked}
-            viewEventClick={this.ops1}
-            viewEventText="Ops 1"
-            viewEvent2Text="Ops 2"
-            viewEvent2Click={this.ops2}
             updateEventStart={this.updateEventStart}
             updateEventEnd={this.updateEventEnd}
             moveEvent={this.moveEvent}
@@ -135,8 +152,8 @@ class App extends Component {
               this.nonAgendaCellHeaderTemplateResolver
             }
             toggleExpandFunc={this.toggleExpandFunc}
+            leftCustomHeader={leftCustomHeader}
             eventItemTemplateResolver={this.eventItemTemplateResolver}
-            dayResourceTableWidth={"200px"}
           />
         </div>
       </div>
@@ -309,13 +326,14 @@ class App extends Component {
     mustBeHeight,
     agendaMaxEventWidth
   ) => {
-    let borderWidth = isStart ? "4" : "0";
     let borderColor = "rgba(0,139,236,1)",
-      backgroundColor = "#80C5F6";
+      backgroundColor = bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
       event
     );
+    let start = event.start.split(" ")[1];
+    let end = event.end.split(" ")[1];
     if (!!event.type) {
       borderColor =
         event.type == 1
@@ -327,7 +345,7 @@ class App extends Component {
         event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
     }
     let divStyle = {
-      borderLeft: borderWidth + "px solid " + borderColor,
+      borderRadius: "2px",
       backgroundColor: backgroundColor,
       height: mustBeHeight
     };
@@ -336,9 +354,17 @@ class App extends Component {
 
     return (
       <div key={event.id} className={mustAddCssClass} style={divStyle}>
-        <span style={{ marginLeft: "4px", lineHeight: `${mustBeHeight}px` }}>
-          {titleText}
-        </span>
+        <div className="row item">
+          <div className="col-md-12 item-heading no-padding">{titleText}</div>
+          <div className="col-md-12 no-padding">
+            <div className="col-md-6 no-padding d-inline-block item-time">
+              {`${start} - ${end}`}
+            </div>
+            <div className="col-md-6 no-padding d-inline-block item-time text-right">
+              3h
+            </div>
+          </div>
+        </div>
       </div>
     );
   };

@@ -87,9 +87,9 @@ class Signup extends Component {
         toast.success("User Created", { autoClose: 2000 });
         this.props.history.push("/login");
       } catch (e) {
-        toast.error("email " + e.response.data.errors.email, {
-          autoClose: 2000
-        });
+        // toast.error("email " + e.response.data.errors.email, {
+        //   autoClose: 2000
+        // });
       }
     } else {
       console.log("Enter valid email address and password");

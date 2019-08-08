@@ -2,14 +2,9 @@ import React, { Component } from "react";
 import "../../assets/css/dashboard.scss";
 import { Dropdown, Modal } from "react-bootstrap";
 import Add from "../../assets/images/add.svg";
-import Close from "../../assets/images/close.svg";
-import DatePicker from "react-datepicker";
-import { Typeahead } from "react-bootstrap-typeahead";
-import { TwitterPicker, Twitter } from "react-color";
-import { post } from "../../utils/API";
-import { ToastContainer, toast } from "react-toastify";
-import "react-datepicker/dist/react-datepicker.css";
-import "react-bootstrap-typeahead/css/Typeahead.css";
+import { get, post } from "../../utils/API";
+import { toast } from "react-toastify";
+import AddProjectModal from "./AddProjectModal";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -27,14 +22,6 @@ export default class MenuBar extends Component {
         content: "Monthly",
         value: "month"
       }
-    ];
-    this.emailOptions = [
-      "arpit@stack-avenue.com",
-      "alam@stack-avenue.com",
-      "vikram@stack-avenue.com",
-      "kiran@stack-avenue.com",
-      "siddhanth@stack-avenue.com",
-      "akshay@stack-avenue.com"
     ];
     this.colors = [
       "#FF6900",
@@ -58,8 +45,24 @@ export default class MenuBar extends Component {
       dateTo: new Date(),
       multiEmail: true,
       background: "#000",
-      displayColorPicker: false
+      displayColorPicker: false,
+      emailOptions: [
+        "alam@gmail.com",
+        "arpit@gmail.com",
+        "kiran@gmail.com",
+        "vikram@gmail.com"
+      ]
     };
+  }
+
+  async componentDidMount() {
+    try {
+      const { data } = await get("users");
+      const emailArr = data.user.map(user => user.email);
+      this.setState({ emailOptions: emailArr });
+    } catch (e) {
+      console.log("users Error", e);
+    }
   }
 
   addProject = async () => {
@@ -73,11 +76,16 @@ export default class MenuBar extends Component {
       }
     };
     try {
-      const { data } = await post(projectData, "project");
+      const { data } = await post(
+        projectData,
+        `workspaces/${this.props.workspaceId}/projects`
+      );
       toast.success("Project Created");
+      this.setState({ show: false });
       console.log("projectData", data);
     } catch (e) {
-      console.log("error", e.response);
+      console.log("project error", e.response);
+      this.setState({ show: false });
     }
   };
 
@@ -136,7 +144,7 @@ export default class MenuBar extends Component {
             <div className="row no-margin dashboard-menubar-container">
               <div className="col-md-1 home">Home</div>
               <div className="col-md-1 analysis">Analysis</div>
-              <div className="col-md-8 no-padding ml-auto">
+              <div className="col-md-7 no-padding ml-auto">
                 <div className="col-md-2 d-inline-block">
                   <Dropdown>
                     <Dropdown.Toggle
@@ -151,145 +159,37 @@ export default class MenuBar extends Component {
                       <Dropdown.Item onClick={this.handleShow}>
                         Project
                       </Dropdown.Item>
-                      <Modal
-                        className="project-modal"
-                        show={show}
-                        onHide={this.handleClose}
-                      >
-                        <div className="row no-margin">
-                          <div className="col-md-12 header">
-                            <span>Add New Project</span>
-                            <button
-                              className="btn btn-link float-right"
-                              onClick={this.handleClose}
-                            >
-                              <img src={Close} alt="close" />
-                            </button>
-                          </div>
-                          <div className="col-md-12 body">
-                            <div className="col-md-12 no-padding input-row">
-                              <div className="col-md-2 d-inline-block no-padding label">
-                                Name
-                              </div>
-                              <div className="col-md-10 d-inline-block">
-                                <input
-                                  type="text"
-                                  name="projectName"
-                                  value={this.state.projectName}
-                                  onChange={this.handleChangeInput}
-                                  placeholder="Write Project Name here"
-                                  className="form-control"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-12 no-padding input-row">
-                              <div className="col-md-2 d-inline-block no-padding label">
-                                Duration
-                              </div>
-                              <div className="col-md-10 d-inline-block">
-                                <div
-                                  className="col-md-6 d-inline-block"
-                                  style={{ "padding-left": "0" }}
-                                >
-                                  <DatePicker
-                                    selected={this.state.dateFrom}
-                                    onChange={this.handleDateFrom}
-                                  />
-                                </div>
-                                <div
-                                  className="col-md-6 d-inline-block"
-                                  style={{ "padding-right": "0" }}
-                                >
-                                  <DatePicker
-                                    selected={this.state.dateTo}
-                                    onChange={this.handleDateTo}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-12 row no-margin no-padding input-row">
-                              <div className="col-md-2 no-padding label">
-                                Members
-                              </div>
-                              <div className="col-md-10">
-                                <Typeahead
-                                  id="projectMembers"
-                                  onChange={selected =>
-                                    this.handleChangeMember(selected)
-                                  }
-                                  multiple={this.state.multiEmail}
-                                  options={this.emailOptions}
-                                  placeholder="Write Here"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-12 row no-margin no-padding input-row">
-                              <div className="col-md-2 no-padding label">
-                                Select Color
-                              </div>
-                              <div className="col-md-10">
-                                <button
-                                  className="btn btn-default btn-color-picker"
-                                  style={{
-                                    backgroundColor: `${this.state.background}`
-                                  }}
-                                  onClick={this.handleChangeColor}
-                                />
-                                {this.state.displayColorPicker ? (
-                                  <div onClick={this.handleColorPickerClose}>
-                                    <TwitterPicker
-                                      color={this.state.background}
-                                      onChangeComplete={
-                                        this.handleChangeComplete
-                                      }
-                                    >
-                                      <Twitter colors={this.colors} />
-                                    </TwitterPicker>
-                                  </div>
-                                ) : null}
-                              </div>
-                            </div>
-                            <div className="col-md-12 no-padding input-row">
-                              <div className="col-md-4 ml-auto">
-                                <button
-                                  type="button"
-                                  className="btn col-md-5 button1 btn-primary"
-                                  onClick={this.addProject}
-                                >
-                                  Add
-                                </button>
-                                <button
-                                  type="button"
-                                  className="btn col-md-6 button2 btn-primary"
-                                  onClick={this.handleClose}
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Modal>
+                      <AddProjectModal
+                        state={this.state}
+                        handleClose={this.handleClose}
+                        handleChangeInput={this.handleChangeInput}
+                        handleDateFrom={this.handleDateFrom}
+                        handleDateTo={this.handleDateTo}
+                        handleChangeMember={this.handleChangeMember}
+                        handleChangeColor={this.handleChangeColor}
+                        handleChangeComplete={this.handleChangeComplete}
+                        colors={this.colors}
+                        addProject={this.addProject}
+                      />
                       <Dropdown.Item>People</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
-                <div className="col-md-8 d-inline-block sort-bar no-padding">
-                  <div className="col-md-2 no-padding d-inline-block">
+                <div className="col-md-10 d-inline-block sort-bar no-padding">
+                  {/* <div className="col-md-2 no-padding d-inline-block">
                     <select class="form-control select-bar">
                       <option value="project">Project</option>
                       <option value="user">User</option>
                     </select>
-                  </div>
-                  <div className="col-md-9 no-padding d-inline-block">
-                    <input
-                      type="text"
-                      placeholder="Search Here"
-                      className="form-control"
-                    />
-                  </div>
+                  </div> */}
+
+                  <input
+                    type="text"
+                    placeholder="Search Here"
+                    className="form-control"
+                  />
                 </div>
-                <div className="col-md-2 d-inline-block weekly-sort">
+                {/* <div className="col-md-2 d-inline-block weekly-sort">
                   <select
                     name="sort"
                     class="form-control"
@@ -300,7 +200,7 @@ export default class MenuBar extends Component {
                       return <option value={item.value}>{item.content}</option>;
                     })}
                   </select>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

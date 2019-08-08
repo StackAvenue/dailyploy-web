@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Login from "./containers/Login";
 import SignUp from "./containers/Signup";
 import Dashboard from "./containers/Dashboard";
@@ -24,8 +24,8 @@ class Routes extends Component {
         title: "login"
       },
       {
-        path: "/dashboard",
-        exact: true,
+        path: "/dashboard/:workspaceId",
+        exact: false,
         component: Dashboard,
         title: "dashboard"
       },
@@ -75,7 +75,17 @@ class Routes extends Component {
                 }
               />
             ))}
+            <Route />
           </Switch>
+          {/* <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/login" component={Login} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/dashboard/:id" component={Dashboard} />
+            </Switch>
+          </BrowserRouter> */}
         </main>
       </div>
     );

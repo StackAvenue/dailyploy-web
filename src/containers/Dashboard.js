@@ -1,21 +1,16 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { get, post, logout } from "../utils/API";
-import { Modal } from "react-bootstrap";
 import moment from "moment";
 import Header from "../components/dashboard/Header";
-import Close from "../assets/images/close.svg";
 import Footer from "../components/Footer";
 import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
-import DatePicker from "react-datepicker";
-import TimePicker from "rc-time-picker";
-import "rc-time-picker/assets/index.css";
-import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import AddTaskModal from "../components/dashboard/AddTaskModal";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -45,17 +40,29 @@ class Dashboard extends Component {
       timeFrom: "",
       timeTo: "",
       comments: "",
-      userId: ""
+      userId: "",
+      workspaces: [],
+      workspaceId: ""
     };
   }
   async componentDidMount() {
-    this.auth();
+    // this.auth();
     try {
       const { data } = await get("user");
       this.setState({ userId: data.id });
     } catch (e) {
       console.log("err", e);
     }
+
+    try {
+      const { data } = await get("workspaces");
+      console.log("WorkSpace", data.workspaces);
+      this.setState({ workspaces: data.workspaces });
+    } catch (e) {
+      console.log("err", e);
+    }
+
+    this.getWorkspaceParams();
   }
 
   auth = () => {
@@ -66,24 +73,32 @@ class Dashboard extends Component {
       return this.props.history.push("/login");
     }
   };
+  getWorkspaceParams = () => {
+    const { workspaceId } = this.props.match.params;
+    this.setState({ workspaceId: workspaceId });
+  };
 
   addTask = async () => {
     const taskData = {
-      task_name: this.state.taskName,
-      task_project_name: this.state.projectName,
-      task_user: this.state.taskUser,
-      task_date_from: this.state.dateFrom,
-      task_date_to: this.state.dateTo,
-      task_time_from: this.state.timeFrom,
-      task_time_to: this.state.timeTo,
-      task_comments: this.state.comments
+      task: {
+        name: this.state.taskName,
+        project_name: this.state.projectName,
+        user: this.state.taskUser,
+        date_from: this.state.dateFrom,
+        date_to: this.state.dateTo,
+        time_from: this.state.timeFrom,
+        time_to: this.state.timeTo,
+        comments: this.state.comments
+      }
     };
     try {
       const { data } = await post(taskData, "task");
       toast.success("Task Assigned");
       console.log("Task Data", data);
+      this.setState({ show: false });
     } catch (e) {
       console.log("error", e.response);
+      this.setState({ show: false });
     }
   };
 
@@ -135,179 +150,31 @@ class Dashboard extends Component {
   };
 
   render() {
-    console.log(this.state.userId);
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <Header logout={this.logout} />
-        <MenuBar onSelectSort={this.onSelectSort} />
+        <Header logout={this.logout} workspaces={this.state.workspaces} />
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+        />
         <Calendar sortUnit={this.state.sort} />
         <div>
           <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
             <i class="fas fa-plus" />
           </button>
-          <Modal
-            className="project-modal"
-            show={this.state.show}
-            onHide={this.closeTaskModal}
-          >
-            <div className="row no-margin">
-              <div className="col-md-12 header">
-                <span>Add New Task</span>
-                <button
-                  className="btn btn-link float-right"
-                  onClick={this.closeTaskModal}
-                >
-                  <img src={Close} alt="close" />
-                </button>
-              </div>
-              <div className="col-md-12 body">
-                <div className="col-md-12 no-padding input-row">
-                  <div className="col-md-2 d-inline-block no-padding label">
-                    Task
-                  </div>
-                  <div className="col-md-10 d-inline-block">
-                    <input
-                      type="text"
-                      name="taskName"
-                      value={this.state.taskName}
-                      onChange={this.handleInputChange}
-                      placeholder="Task name..."
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-12 no-padding input-row">
-                  <div className="col-md-2 d-inline-block no-padding label">
-                    Project
-                  </div>
-                  <div className="col-md-10 d-inline-block">
-                    <select
-                      name="projectName"
-                      value={this.state.projectName}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                    >
-                      <option>Select Project...</option>
-                      {this.project.map(project => {
-                        return <option value={project}>{project}</option>;
-                      })}
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-12 no-padding input-row">
-                  <div className="col-md-2 d-inline-block no-padding label">
-                    Users
-                  </div>
-                  <div className="col-md-10 d-inline-block">
-                    <select
-                      name="taskUser"
-                      value={this.state.taskUser}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                    >
-                      <option>Select Users...</option>
-                      {this.user.map(user => {
-                        return <option value={user}>{user}</option>;
-                      })}
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-12 no-padding input-row">
-                  <div className="col-md-2 d-inline-block no-padding label">
-                    Date
-                  </div>
-                  <div className="col-md-10 d-inline-block">
-                    <div
-                      className="col-md-6 d-inline-block"
-                      style={{ "padding-left": "0" }}
-                    >
-                      <DatePicker
-                        selected={this.state.dateFrom}
-                        onChange={this.handleDateFrom}
-                      />
-                    </div>
-                    <div
-                      className="col-md-6 d-inline-block"
-                      style={{ "padding-right": "0" }}
-                    >
-                      <DatePicker
-                        selected={this.state.dateTo}
-                        onChange={this.handleDateTo}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-12 no-padding input-row">
-                  <div className="col-md-2 d-inline-block no-padding label">
-                    Time
-                  </div>
-                  <div className="col-md-10 d-inline-block">
-                    <div
-                      className="col-md-4 d-inline-block"
-                      style={{ "padding-left": "0" }}
-                    >
-                      <TimePicker
-                        placeholder="Time From"
-                        showSecond={false}
-                        className="xxx"
-                        onChange={this.handleTimeFrom}
-                        format={this.format}
-                        use12Hours
-                        inputReadOnly
-                      />
-                    </div>
-                    <div
-                      className="col-md-4 d-inline-block"
-                      style={{ "padding-right": "0" }}
-                    >
-                      <TimePicker
-                        placeholder="Time To"
-                        showSecond={false}
-                        className="xxx"
-                        onChange={this.handleTimeTo}
-                        format={this.format}
-                        use12Hours
-                        inputReadOnly
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-12 row no-margin no-padding input-row">
-                  <div className="col-md-2 no-padding label">Comments</div>
-                  <div className="col-md-10">
-                    <textarea
-                      name="comments"
-                      value={this.state.comments}
-                      onChange={this.handleInputChange}
-                      class="form-control"
-                      rows="3"
-                      placeholder="Write Here"
-                    />
-                  </div>
-                </div>
-
-                <div className="col-md-12 no-padding input-row">
-                  <div className="col-md-4 ml-auto">
-                    <button
-                      type="button"
-                      className="btn col-md-5 button1 btn-primary"
-                      onClick={this.addTask}
-                    >
-                      Add
-                    </button>
-                    <button
-                      type="button"
-                      className="btn col-md-6 button2 btn-primary"
-                      onClick={this.closeTaskModal}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal>
+          <AddTaskModal
+            state={this.state}
+            closeTaskModal={this.closeTaskModal}
+            handleInputChange={this.handleInputChange}
+            project={this.project}
+            handleDateFrom={this.handleDateFrom}
+            handleDateTo={this.handleDateTo}
+            handleTimeFrom={this.handleTimeFrom}
+            handleTimeTo={this.handleTimeTo}
+            user={this.user}
+            addTask={this.addTask}
+          />
         </div>
 
         {/* <Footer />  */}

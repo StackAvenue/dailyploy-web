@@ -22,9 +22,22 @@ export const logout = async () => {
 };
 
 export const post = async (data, basePath) => {
+  return await axios.post(`/${basePath}`, data, headerConfig);
+};
+
+export const mockPost = async (data, basePath) => {
   return await axios.post(`${URL2}/${basePath}`, data, headerConfig);
 };
 
 export const get = async basePath => {
   return await axios.get(`/${basePath}`);
+};
+
+export const mockGet = async basePath => {
+  return await axios.get(`${URL2}/${basePath}`);
+
+  // return await axios({
+  //   url: `${URL2}/${basePath}`,
+  //   withCredentials: false
+  // });
 };
