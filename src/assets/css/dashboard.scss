@@ -632,7 +632,7 @@
   }
 
   .scheduler{
-    margin:15px auto !important;
+    margin:15px auto 0px auto !important;
     thead{
       td{
         border:1px solid $color-borders !important;
@@ -695,4 +695,87 @@
 
 .round-tail {
   border-radius: 2px !important;
+}
+
+.member-modal{
+  margin:10% !important;
+  .modal-content{
+    width:1140px !important;
+  }
+  .heading{
+    margin:15px 35px 17px 35px !important;
+    border:0 !important;
+    thead{
+      tr{
+        th{
+          font-family: $font-family-roboto !important;
+          font-size:15px !important;
+          color:$color-text3 !important;
+          font-weight:500 !important;
+          border-top:0 !important;
+        }
+      }
+    }
+    td{
+      border:0 !important;
+      .name{
+        width:170px !important;
+      }
+      .email{
+        width:220px !important;
+      }
+      .role{
+        width:120px !important;
+      }
+      .project{
+        width:160px !important;
+      }
+      input{
+        border-radius:5px !important;
+        border:solid 1px $color-borders !important;
+        font-size: 15px !important;
+        font-family: $font-family-roboto !important;
+        color: $color-text2 !important;
+      }
+      label{
+        font-size: 15px !important;
+        font-family: $font-family-roboto !important;
+        color: $color-text2 !important;
+      }
+      select{
+        border-radius:5px !important;
+        border:solid 1px $color-borders !important;
+        font-size: 15px !important;
+        font-family: $font-family-roboto !important;
+        color: $color-text2 !important;
+      }
+      
+    }
+  }
+  .bottom-button{
+    margin:20px 0 20px 0px !important;
+    div{
+      padding-right:46px !important;
+    }
+    .button1{
+      height: 40px !important;
+      border-radius: 5px !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size: 17px !important;
+      font-weight: 500 !important;
+      border:0 !important;
+    }
+    .button2{
+        border-radius: 5px !important;
+        border: solid 1px $color-brand3 !important;
+        background-color: $color-white !important;
+        font-family: $font-family-roboto !important;
+        font-size: 17px !important;
+        font-weight: 500 !important;
+        color: $color-text3 !important;
+        margin-left: 7% !important;
+    }
+  }
+
 }

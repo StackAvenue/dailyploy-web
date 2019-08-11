@@ -5,6 +5,7 @@ import Add from "../../assets/images/add.svg";
 import { get, post } from "../../utils/API";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
+import AddMemberModal from "./AddMemberModal";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -41,6 +42,8 @@ export default class MenuBar extends Component {
       sort: "week",
       show: false,
       setShow: false,
+      memberShow: false,
+      memberSetShow: false,
       dateFrom: new Date(),
       dateTo: new Date(),
       multiEmail: true,
@@ -72,7 +75,7 @@ export default class MenuBar extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         members: this.state.projectMembers,
-        color: this.state.background
+        color_code: this.state.background
       }
     };
     try {
@@ -120,6 +123,18 @@ export default class MenuBar extends Component {
     this.setState({
       setShow: true,
       show: true
+    });
+  };
+
+  handleMemberClose = () => {
+    this.setState({
+      memberShow: false
+    });
+  };
+  handleMemberShow = () => {
+    this.setState({
+      memberSetShow: true,
+      memberShow: true
     });
   };
 
@@ -171,7 +186,13 @@ export default class MenuBar extends Component {
                         colors={this.colors}
                         addProject={this.addProject}
                       />
-                      <Dropdown.Item>People</Dropdown.Item>
+                      <Dropdown.Item onClick={this.handleMemberShow}>
+                        People
+                      </Dropdown.Item>
+                      <AddMemberModal
+                        state={this.state}
+                        handleClose={this.handleMemberClose}
+                      />
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
