@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, post, logout } from "../utils/API";
+import { get, post, logout, mockPost } from "../utils/API";
 import moment from "moment";
 import Header from "../components/dashboard/Header";
 import Footer from "../components/Footer";
@@ -26,7 +26,7 @@ class Dashboard extends Component {
       "Kiran",
       "Vikram",
       "siddhanth",
-      "Akshay"
+      "Akshay",
     ];
     this.state = {
       taskName: "",
@@ -41,15 +41,16 @@ class Dashboard extends Component {
       timeTo: "",
       comments: "",
       userId: "",
+      userName: "",
       workspaces: [],
-      workspaceId: ""
+      workspaceId: "",
+      projects: [],
     };
   }
   async componentDidMount() {
-    // this.auth();
     try {
       const { data } = await get("user");
-      this.setState({ userId: data.id });
+      this.setState({ userId: data.id, userName: data.name });
     } catch (e) {
       console.log("err", e);
     }
@@ -61,21 +62,32 @@ class Dashboard extends Component {
     } catch (e) {
       console.log("err", e);
     }
-
     this.getWorkspaceParams();
+    this.auth();
+
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects`
+      );
+      console.log("projects list", data.projects);
+      this.setState({ projects: data.projects });
+    } catch (e) {
+      console.log("err", e);
+    }
   }
+
+  getWorkspaceParams = () => {
+    const { workspaceId } = this.props.match.params;
+    this.setState({ workspaceId: workspaceId });
+  };
 
   auth = () => {
     const token = cookie.load("authToken");
     if (token !== "undefined") {
-      return this.props.history.push("/dashboard");
+      return this.props.history.push(`/dashboard/${this.state.workspaceId}`);
     } else {
       return this.props.history.push("/login");
     }
-  };
-  getWorkspaceParams = () => {
-    const { workspaceId } = this.props.match.params;
-    this.setState({ workspaceId: workspaceId });
   };
 
   addTask = async () => {
@@ -88,11 +100,11 @@ class Dashboard extends Component {
         date_to: this.state.dateTo,
         time_from: this.state.timeFrom,
         time_to: this.state.timeTo,
-        comments: this.state.comments
-      }
+        comments: this.state.comments,
+      },
     };
     try {
-      const { data } = await post(taskData, "task");
+      const { data } = await mockPost(taskData, "task");
       toast.success("Task Assigned");
       console.log("Task Data", data);
       this.setState({ show: false });
@@ -115,13 +127,13 @@ class Dashboard extends Component {
   showTaskModal = () => {
     this.setState({
       setShow: true,
-      show: true
+      show: true,
     });
   };
 
   closeTaskModal = () => {
     this.setState({
-      show: false
+      show: false,
     });
   };
 
@@ -134,13 +146,13 @@ class Dashboard extends Component {
 
   handleTimeFrom = value => {
     this.setState({
-      timeFrom: value
+      timeFrom: value,
     });
   };
 
   handleTimeTo = value => {
     this.setState({
-      timeTo: value
+      timeTo: value,
     });
   };
 
@@ -153,7 +165,11 @@ class Dashboard extends Component {
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <Header logout={this.logout} workspaces={this.state.workspaces} />
+        <Header
+          logout={this.logout}
+          workspaces={this.state.workspaces}
+          userName={this.state.userName}
+        />
         <MenuBar
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}
@@ -167,7 +183,7 @@ class Dashboard extends Component {
             state={this.state}
             closeTaskModal={this.closeTaskModal}
             handleInputChange={this.handleInputChange}
-            project={this.project}
+            project={this.state.projects}
             handleDateFrom={this.handleDateFrom}
             handleDateTo={this.handleDateTo}
             handleTimeFrom={this.handleTimeFrom}

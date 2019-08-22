@@ -84,7 +84,7 @@ const AddProjectModal = props => {
                 <button
                   className="btn btn-default btn-color-picker"
                   style={{
-                    backgroundColor: `${props.state.background}`
+                    backgroundColor: `${props.state.background}`,
                   }}
                   onClick={props.handleChangeColor}
                 />
@@ -101,13 +101,13 @@ const AddProjectModal = props => {
               </div>
             </div>
             <div className="col-md-12 no-padding input-row">
-              <div className="col-md-4 ml-auto">
+              <div className="col-md-5 ml-auto">
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
                   onClick={props.addProject}
                 >
-                  Add
+                  {props.btnText}
                 </button>
                 <button
                   type="button"

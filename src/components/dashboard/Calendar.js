@@ -5,12 +5,12 @@ import "antd/lib/style/index.less";
 import Scheduler, {
   SchedulerData,
   ViewTypes,
-  DATE_FORMAT
+  DATE_FORMAT,
 } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import "../../assets/css/dashboard.scss";
 
-class App extends Component {
+class Calendar extends Component {
   constructor(props) {
     super(props);
     this.schedulerData = new SchedulerData(
@@ -38,21 +38,21 @@ class App extends Component {
             viewName: "Day",
             viewType: ViewTypes.Day,
             showAgenda: false,
-            isEventPerspective: false
+            isEventPerspective: false,
           },
           {
             viewName: "Week",
             viewType: ViewTypes.Week,
             showAgenda: false,
-            isEventPerspective: false
+            isEventPerspective: false,
           },
           {
             viewName: "Month",
             viewType: ViewTypes.Month,
             showAgenda: false,
-            isEventPerspective: false
-          }
-        ]
+            isEventPerspective: false,
+          },
+        ],
       }
     );
 
@@ -61,18 +61,19 @@ class App extends Component {
       resources: [],
       events: [],
       eventsForCustomStyle: [],
-      eventsForTaskView: []
+      eventsForTaskView: [],
     };
   }
 
   async componentWillMount() {
     try {
       const { data } = await mockGet("calenderData");
+      console.log("Calender Data", data);
       this.setState({
         resources: data[0].resources,
         events: data[0].events,
         eventsForCustomStyle: data[0].eventsForCustomStyle,
-        eventsForTaskView: data[0].eventsForTaskView
+        eventsForTaskView: data[0].eventsForTaskView,
       });
     } catch (e) {
       console.log("error", e);
@@ -112,7 +113,7 @@ class App extends Component {
           <div
             key={index}
             dangerouslySetInnerHTML={{
-              __html: formattedItem.replace(/[0-9]/g, "<b>$&</b>")
+              __html: formattedItem.replace(/[0-9]/g, "<b>$&</b>"),
             }}
           />
         ))}
@@ -164,7 +165,7 @@ class App extends Component {
     schedulerData.prev();
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 
@@ -172,7 +173,7 @@ class App extends Component {
     schedulerData.next();
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 
@@ -184,7 +185,7 @@ class App extends Component {
     );
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 
@@ -192,7 +193,7 @@ class App extends Component {
     schedulerData.setDate(date);
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 
@@ -235,11 +236,11 @@ class App extends Component {
         start: start,
         end: end,
         resourceId: slotId,
-        bgColor: "purple"
+        bgColor: "purple",
       };
       schedulerData.addEvent(newEvent);
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
     }
   };
@@ -255,7 +256,7 @@ class App extends Component {
       schedulerData.updateEventStart(event, newStart);
     }
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 
@@ -270,7 +271,7 @@ class App extends Component {
       schedulerData.updateEventEnd(event, newEnd);
     }
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 
@@ -279,7 +280,7 @@ class App extends Component {
     // if(confirm(`Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`)) {
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
     // }
   };
@@ -289,7 +290,7 @@ class App extends Component {
       schedulerData.next();
       schedulerData.setEvents(this.state.events);
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
 
       schedulerContent.scrollLeft = maxScrollLeft - 10;
@@ -301,7 +302,7 @@ class App extends Component {
       schedulerData.prev();
       schedulerData.setEvents(this.state.events);
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
 
       schedulerContent.scrollLeft = 10;
@@ -334,20 +335,10 @@ class App extends Component {
     );
     let start = event.start.split(" ")[1];
     let end = event.end.split(" ")[1];
-    if (!!event.type) {
-      borderColor =
-        event.type == 1
-          ? "rgba(0,139,236,1)"
-          : event.type == 3
-          ? "rgba(245,60,43,1)"
-          : "#999";
-      backgroundColor =
-        event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
-    }
     let divStyle = {
       borderRadius: "2px",
       backgroundColor: backgroundColor,
-      height: mustBeHeight
+      height: mustBeHeight,
     };
     if (!!agendaMaxEventWidth)
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth };
@@ -372,8 +363,8 @@ class App extends Component {
   toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 }
-export default withDragDropContext(App);
+export default withDragDropContext(Calendar);

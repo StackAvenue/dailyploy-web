@@ -53,7 +53,7 @@ const AddTaskModal = props => {
                 >
                   <option>Select Project...</option>
                   {props.project.map(project => {
-                    return <option value={project}>{project}</option>;
+                    return <option value={project.name}>{project.name}</option>;
                   })}
                 </select>
               </div>

@@ -5,7 +5,9 @@ import SignUp from "./containers/Signup";
 import Dashboard from "./containers/Dashboard";
 import Landing from "./containers/Landing";
 import NotFound from "./components/NoMatch";
+import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
+import ProjectsSettings from "./components/dashboard/ProjectsSettings";
 
 class Routes extends Component {
   constructor(props) {
@@ -15,36 +17,54 @@ class Routes extends Component {
         path: "/",
         exact: true,
         component: Landing,
-        title: "landing"
+        title: "landing",
       },
       {
         path: "/login",
         exact: true,
         component: Login,
-        title: "login"
+        title: "login",
       },
       {
         path: "/dashboard/:workspaceId",
         exact: false,
         component: Dashboard,
-        title: "dashboard"
+        title: "dashboard",
       },
       {
         path: "/signup",
         exact: true,
         component: SignUp,
-        title: "signup"
+        title: "signup",
+      },
+      {
+        path: "/settings",
+        exact: true,
+        component: Settings,
+        title: "settings",
+      },
+      {
+        path: "/settings/:workspaceId",
+        exact: true,
+        component: ProjectsSettings,
+        title: "projectsSettings",
       },
       {
         component: NotFound,
-        title: "pageNotFound"
-      }
+        title: "pageNotFound",
+      },
     ];
   }
 
   isAllowed = (props, routeComponent, title) => {
     if (this.isCurrentUser()) {
-      return <Dashboard {...props} />;
+      if (title === "dashboard") {
+        return <Dashboard {...props} />;
+      } else if (title === "settings") {
+        return <Settings {...props} />;
+      } else if (title === "projectsSettings") {
+        return <ProjectsSettings {...props} />;
+      }
     } else {
       if (title === "login") {
         return <Login {...props} />;

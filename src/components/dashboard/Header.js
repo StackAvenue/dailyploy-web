@@ -8,11 +8,16 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      workspaces: []
+      workspaces: [],
+      iconName: [],
     };
   }
 
   render() {
+    const x = this.props.userName
+      .split(" ")
+      .map(x => x[0])
+      .join("");
     return (
       <>
         <div className="container-fluid dashbaord-header-bg no-padding">
@@ -48,11 +53,11 @@ class Header extends Component {
                       className="header-auth-btn"
                       id="dropdown-basic"
                     >
-                      AP
+                      {x}
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="header-dropdown">
-                      <Dropdown.Item>
+                      <Dropdown.Item href={`/settings`}>
                         <i className="fa fa-wrench" aria-hidden="true" />
                         <span className="header-dropdown-space" />
                         Settings

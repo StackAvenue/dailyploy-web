@@ -2,13 +2,41 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
 
+const RadioOptions = ({options, selected, onChange}) =>{
+  return(
+    <div className="form-check form-check-inline">
+      {options.map((choice, index) => (
+        <div key={index}>
+          <input
+            className="form-check-input"
+            type="radio"
+            name="access"
+            value={choice.value}
+            key={index}
+            checked={choice.value}
+            onChange={onChange}
+          />
+          <label className="form-check-label">
+            {choice.text}
+          </label>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 class AddMemberModal extends Component {
   constructor(props) {
     super(props);
+    this.choices = [
+      { text: 'View', value: 'view' },
+      { text: 'Edit', value: 'edit' }
+    ];
     this.state = {
       value: []
     };
   }
+
   render() {
     return (
       <>
@@ -28,14 +56,6 @@ class AddMemberModal extends Component {
                 <img src={Close} alt="close" />
               </button>
             </div>
-            {/* <div className="row col-md-12 heading no-margin">
-            <div className="col-md-3">Name*</div>
-            <div className="col-md-4">Email ID*</div>
-            <div className="col-md-1">Access*</div>
-            <div className="col-md-1">Role</div>
-            <div className="col-md-1">Working Hours</div>
-            <div className="col-md-2">Project</div>
-          </div> */}
             <table class="table heading">
               <thead>
                 <tr>
@@ -52,64 +72,60 @@ class AddMemberModal extends Component {
                   <td>
                     <input
                       className="form-control name"
-                      name="name"
+                      name="memberName"
                       type="text"
                       placeholder="Name"
+                      value={this.props.state.memberName}
+                      onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
                   <td>
                     <input
                       className="form-control email"
-                      name="email"
+                      name="memberEmail"
                       type="text"
                       placeholder="Email ID"
+                      value={this.props.state.memberEmail}
+                      onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
                   <td style={{ "padding-top": "20px" }}>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="inlineRadioOptions"
-                        id="inlineRadio1"
-                        value="option1"
-                      />
-                      <label class="form-check-label" for="inlineRadio1">
-                        View
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="inlineRadioOptions"
-                        id="inlineRadio2"
-                        value="option2"
-                      />
-                      <label class="form-check-label" for="inlineRadio2">
-                        Edit
-                      </label>
-                    </div>
+                    <RadioOptions 
+                      options={this.choices}
+                      onChange={this.props.handleChangeMemberRadio}
+                      selected={this.props.state.memberAccess} />
                   </td>
                   <td>
-                    <select className="form-control role" name="role">
+                    <select 
+                      className="form-control role" 
+                      name="memberRole"
+                      value={this.props.state.memberRole}
+                      onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select</option>
                       <option value="admin">Admin</option>
                       <option value="member">Member</option>
                     </select>
                   </td>
                   <td>
-                    <select className="form-control role" name="workingHours">
+                    <select 
+                      className="form-control role" 
+                      name="memberWorkingHours"
+                      value={this.props.state.memberWorkingHours}
+                      onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select</option>
                       <option value="8">8hr</option>
                       <option value="9">9hr</option>
                     </select>
                   </td>
                   <td>
-                    <select className="form-control project" name="project">
+                    <select 
+                      className="form-control project" 
+                      name="memberProject"
+                      value={this.props.state.memberProject}
+                      onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select</option>
-                      <option value="8">Dailyploy</option>
-                      <option value="9">DealSignal</option>
+                      <option value="Dailyploy">Dailyploy</option>
+                      <option value="DealSignal">DealSignal</option>
                     </select>
                   </td>
                 </tr>
@@ -120,13 +136,14 @@ class AddMemberModal extends Component {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
+                  onClick={this.props.addMember}
                 >
                   Add
                 </button>
                 <button
                   type="button"
                   className="btn col-md-6 button2 btn-primary"
-                  onClick={this.props.closeTaskModal}
+                  onClick={this.props.handleClose}
                 >
                   Cancel
                 </button>

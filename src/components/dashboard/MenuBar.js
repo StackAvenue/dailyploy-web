@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "../../assets/css/dashboard.scss";
-import { Dropdown, Modal } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import Add from "../../assets/images/add.svg";
-import { get, post } from "../../utils/API";
+import { get, post, mockPost } from "../../utils/API";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
@@ -13,16 +13,16 @@ export default class MenuBar extends Component {
     this.sortValues = [
       {
         content: "Daily",
-        value: "day"
+        value: "day",
       },
       {
         content: "Weekly",
-        value: "week"
+        value: "week",
       },
       {
         content: "Monthly",
-        value: "month"
-      }
+        value: "month",
+      },
     ];
     this.colors = [
       "#FF6900",
@@ -34,7 +34,7 @@ export default class MenuBar extends Component {
       "#ABB8C3",
       "#EB144C",
       "#F78DA7",
-      "#9900EF"
+      "#9900EF",
     ];
     this.state = {
       projectName: "",
@@ -49,12 +49,13 @@ export default class MenuBar extends Component {
       multiEmail: true,
       background: "#000",
       displayColorPicker: false,
-      emailOptions: [
-        "alam@gmail.com",
-        "arpit@gmail.com",
-        "kiran@gmail.com",
-        "vikram@gmail.com"
-      ]
+      emailOptions: [],
+      memberName: "",
+      memberEmail: "",
+      memberAccess: "",
+      memberRole: "",
+      memberWorkingHours: "",
+      memberProject: "",
     };
   }
 
@@ -75,8 +76,8 @@ export default class MenuBar extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         members: this.state.projectMembers,
-        color_code: this.state.background
-      }
+        color_code: this.state.background,
+      },
     };
     try {
       const { data } = await post(
@@ -89,6 +90,27 @@ export default class MenuBar extends Component {
     } catch (e) {
       console.log("project error", e.response);
       this.setState({ show: false });
+    }
+  };
+
+  addMember = async () => {
+    const memberData = {
+      member: {
+        member_name: this.state.memberName,
+        member_email: this.state.memberEmail,
+        member_access: this.state.memberAccess,
+        member_role: this.state.memberRole,
+        member_workingHours: this.state.memberWorkingHours,
+        member_project: this.state.memberProject,
+      },
+    };
+    try {
+      const { data } = await mockPost(memberData, "members");
+      toast.success("Member Invited");
+      this.setState({ memberShow: false });
+    } catch (e) {
+      console.log("error", e.response);
+      this.setState({ memberShow: false });
     }
   };
 
@@ -107,6 +129,16 @@ export default class MenuBar extends Component {
     this.setState({ [name]: value });
   };
 
+  handleChangeMemberInput = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  handleChangeMemberRadio = e => {
+    console.log("radio", e.target.value);
+    this.setState({ memberAccess: e.target.value });
+  };
+
   handleDateFrom = date => {
     this.setState({ dateFrom: date });
   };
@@ -116,25 +148,25 @@ export default class MenuBar extends Component {
 
   handleClose = () => {
     this.setState({
-      show: false
+      show: false,
     });
   };
   handleShow = () => {
     this.setState({
       setShow: true,
-      show: true
+      show: true,
     });
   };
 
   handleMemberClose = () => {
     this.setState({
-      memberShow: false
+      memberShow: false,
     });
   };
   handleMemberShow = () => {
     this.setState({
       memberSetShow: true,
-      memberShow: true
+      memberShow: true,
     });
   };
 
@@ -152,6 +184,7 @@ export default class MenuBar extends Component {
 
   render() {
     const { sort, show } = this.state;
+    console.log("MEMBER", this.state);
     return (
       <>
         <div className="container-fluid">
@@ -185,6 +218,7 @@ export default class MenuBar extends Component {
                         handleChangeComplete={this.handleChangeComplete}
                         colors={this.colors}
                         addProject={this.addProject}
+                        btnText={"Add"}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People
@@ -192,36 +226,19 @@ export default class MenuBar extends Component {
                       <AddMemberModal
                         state={this.state}
                         handleClose={this.handleMemberClose}
+                        handleChangeMemberInput={this.handleChangeMemberInput}
+                        addMember={this.addMember}
                       />
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
                 <div className="col-md-10 d-inline-block sort-bar no-padding">
-                  {/* <div className="col-md-2 no-padding d-inline-block">
-                    <select class="form-control select-bar">
-                      <option value="project">Project</option>
-                      <option value="user">User</option>
-                    </select>
-                  </div> */}
-
                   <input
                     type="text"
                     placeholder="Search Here"
                     className="form-control"
                   />
                 </div>
-                {/* <div className="col-md-2 d-inline-block weekly-sort">
-                  <select
-                    name="sort"
-                    class="form-control"
-                    value={sort}
-                    onChange={this.sortHandler}
-                  >
-                    {this.sortValues.map(item => {
-                      return <option value={item.value}>{item.content}</option>;
-                    })}
-                  </select>
-                </div> */}
               </div>
             </div>
           </div>

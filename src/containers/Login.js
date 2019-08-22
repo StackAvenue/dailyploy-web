@@ -17,8 +17,8 @@ class Signin extends Component {
       password: "",
       errors: {
         emailError: null,
-        passwordError: null
-      }
+        passwordError: null,
+      },
     };
   }
 
@@ -41,7 +41,7 @@ class Signin extends Component {
     if (this.isPresentAllInputs()) {
       const loginData = {
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       };
       try {
         const { data } = await login(loginData);
@@ -59,7 +59,7 @@ class Signin extends Component {
   };
   validateAllInputs = () => {
     const errors = {
-      passwordError: null
+      passwordError: null,
     };
     errors.emailError = validateEmail(this.state.email);
     this.setState({ errors });

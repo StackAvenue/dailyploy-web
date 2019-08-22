@@ -31,7 +31,7 @@ const axiosInitializer = {
         return Promise.reject(error);
       }
     );
-  }
+  },
 };
 
 export default axiosInitializer;
