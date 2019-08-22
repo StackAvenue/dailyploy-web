@@ -17,8 +17,8 @@ class Signin extends Component {
       password: "",
       errors: {
         emailError: null,
-        passwordError: null
-      }
+        passwordError: null,
+      },
     };
   }
 
@@ -38,17 +38,17 @@ class Signin extends Component {
 
   login = async () => {
     this.validateAllInputs();
-    if (this.emailValidity() && this.state.password) {
+    if (this.isPresentAllInputs()) {
       const loginData = {
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       };
       try {
         const { data } = await login(loginData);
         toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
-        this.props.history.push("/user");
+        this.props.history.push("/dashboard");
       } catch (e) {
         console.log("error", e.response.data.error);
         toast.error(e.response.data.error);
@@ -59,23 +59,19 @@ class Signin extends Component {
   };
   validateAllInputs = () => {
     const errors = {
-      passwordError: null
+      passwordError: null,
     };
     errors.emailError = validateEmail(this.state.email);
     this.setState({ errors });
   };
 
-  emailValidity = () => {
-    return (
-      this.state.email &&
-      this.state.email.includes("@") &&
-      this.state.email.includes(".")
-    );
+  isPresentAllInputs = () => {
+    return this.state.email && this.state.password;
   };
 
   render() {
     const { email, password } = this.state;
-    const isEnabled = this.emailValidity() && this.state.password;
+    const isEnabled = this.isPresentAllInputs();
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />

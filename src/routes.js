@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Login from "./containers/Login";
 import SignUp from "./containers/Signup";
-import User from "./containers/User";
+import Dashboard from "./containers/Dashboard";
 import Landing from "./containers/Landing";
 import NotFound from "./components/NoMatch";
+import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
+import ProjectsSettings from "./components/dashboard/ProjectsSettings";
 
 class Routes extends Component {
   constructor(props) {
@@ -15,35 +17,55 @@ class Routes extends Component {
         path: "/",
         exact: true,
         component: Landing,
-        title: "landing"
+        title: "landing",
       },
       {
         path: "/login",
         exact: true,
         component: Login,
-        title: "login"
+        title: "login",
       },
       {
-        path: "/user",
-        exact: true,
-        component: User,
-        title: "user"
+        path: "/dashboard/:workspaceId",
+        exact: false,
+        component: Dashboard,
+        title: "dashboard",
       },
       {
         path: "/signup",
         exact: true,
         component: SignUp,
-        title: "signup"
+        title: "signup",
+      },
+      {
+        path: "/settings",
+        exact: true,
+        component: Settings,
+        title: "settings",
+      },
+      {
+        path: "/settings/:workspaceId",
+        exact: true,
+        component: ProjectsSettings,
+        title: "projectsSettings",
       },
       {
         component: NotFound,
-        title: "pageNotFound"
-      }
+        title: "pageNotFound",
+      },
     ];
   }
 
   isAllowed = (props, routeComponent, title) => {
-    if (!this.isCurrentUser()) {
+    if (this.isCurrentUser()) {
+      if (title === "dashboard") {
+        return <Dashboard {...props} />;
+      } else if (title === "settings") {
+        return <Settings {...props} />;
+      } else if (title === "projectsSettings") {
+        return <ProjectsSettings {...props} />;
+      }
+    } else {
       if (title === "login") {
         return <Login {...props} />;
       } else if (title === "signup") {
@@ -51,8 +73,6 @@ class Routes extends Component {
       } else if (title === "landing") {
         return <Landing {...props} />;
       }
-    } else {
-      return <User {...props} />;
     }
   };
 
@@ -75,7 +95,17 @@ class Routes extends Component {
                 }
               />
             ))}
+            <Route />
           </Switch>
+          {/* <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/login" component={Login} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/dashboard/:id" component={Dashboard} />
+            </Switch>
+          </BrowserRouter> */}
         </main>
       </div>
     );

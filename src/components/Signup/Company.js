@@ -8,7 +8,9 @@ const Company = props => {
         <div class="form-group">
           <label>Name</label>
           {props.state.errors.nameError ? (
-            <p className="error-warning">{props.state.errors.nameError}</p>
+            <span className="error-warning">
+              {props.state.errors.nameError}
+            </span>
           ) : null}
           <input
             type="text"
@@ -22,7 +24,9 @@ const Company = props => {
         <div class="form-group">
           <label>Email</label>
           {props.state.errors.emailError ? (
-            <p className="error-warning">{props.state.errors.emailError}</p>
+            <span className="error-warning">
+              {props.state.errors.emailError}
+            </span>
           ) : null}
           <input
             type="email"
@@ -36,9 +40,9 @@ const Company = props => {
         <div class="form-group">
           <label>Organization Name</label>
           {props.state.errors.companyNameError ? (
-            <p className="error-warning">
+            <span className="error-warning">
               {props.state.errors.companyNameError}
-            </p>
+            </span>
           ) : null}
           <input
             type="text"
@@ -52,7 +56,9 @@ const Company = props => {
         <div class="form-group">
           <label>Password</label>
           {props.state.errors.passwordError ? (
-            <p className="error-warning">{props.state.errors.passwordError}</p>
+            <span className="error-warning">
+              {props.state.errors.passwordError}
+            </span>
           ) : null}
           <input
             type="password"
@@ -66,9 +72,9 @@ const Company = props => {
         <div class="form-group">
           <label>Confirm Password</label>
           {props.state.errors.confirmPasswordError ? (
-            <p className="error-warning">
+            <span className="error-warning">
               {props.state.errors.confirmPasswordError}
-            </p>
+            </span>
           ) : null}
           <input
             type="password"
