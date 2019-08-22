@@ -28,12 +28,7 @@ class UpdateProjectModal extends Component {
       dateFrom: new Date(),
       dateTo: new Date(),
       multiEmail: true,
-      emailOptions: [
-        "alam@gmail.com",
-        "arpit@gmail.com",
-        "kiran@gmail.com",
-        "vikram@gmail.com",
-      ],
+      emailOptions: [],
       background: "#000",
       displayColorPicker: false,
     };

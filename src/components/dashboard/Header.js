@@ -3,18 +3,28 @@ import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import "../../assets/css/dashboard.scss";
+import { get } from "../../utils/API";
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
       workspaces: [],
-      iconName: [],
+      userName: "",
     };
   }
 
+  async componentDidMount() {
+    try {
+      const { data } = await get("user");
+      this.setState({ userName: data.name });
+    } catch (e) {
+      console.log("err", e);
+    }
+  }
+
   render() {
-    const x = this.props.userName
+    const x = this.state.userName
       .split(" ")
       .map(x => x[0])
       .join("");

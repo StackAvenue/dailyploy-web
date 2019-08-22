@@ -19,15 +19,6 @@ class Dashboard extends Component {
     this.now = moment()
       .hour(0)
       .minute(0);
-    this.project = ["DailyPloy", "Screen Magic", "Deal Signal", "Sms Magic"];
-    this.user = [
-      "Arpit Jain",
-      "Alam",
-      "Kiran",
-      "Vikram",
-      "siddhanth",
-      "Akshay",
-    ];
     this.state = {
       taskName: "",
       projectName: "",
@@ -45,6 +36,7 @@ class Dashboard extends Component {
       workspaces: [],
       workspaceId: "",
       projects: [],
+      users: [],
     };
   }
   async componentDidMount() {
@@ -53,6 +45,15 @@ class Dashboard extends Component {
       this.setState({ userId: data.id, userName: data.name });
     } catch (e) {
       console.log("err", e);
+    }
+
+    try {
+      const { data } = await get("users");
+      const nameArr = data.user.map(user => user.name);
+      console.log("usersss", nameArr);
+      this.setState({ users: nameArr });
+    } catch (e) {
+      console.log("users Error", e);
     }
 
     try {
@@ -165,11 +166,7 @@ class Dashboard extends Component {
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <Header
-          logout={this.logout}
-          workspaces={this.state.workspaces}
-          userName={this.state.userName}
-        />
+        <Header logout={this.logout} workspaces={this.state.workspaces} />
         <MenuBar
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}
@@ -188,7 +185,7 @@ class Dashboard extends Component {
             handleDateTo={this.handleDateTo}
             handleTimeFrom={this.handleTimeFrom}
             handleTimeTo={this.handleTimeTo}
-            user={this.user}
+            user={this.state.users}
             addTask={this.addTask}
           />
         </div>
