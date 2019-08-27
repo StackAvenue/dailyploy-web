@@ -8,6 +8,9 @@ import NotFound from "./components/NoMatch";
 import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
 import ProjectsSettings from "./components/dashboard/ProjectsSettings";
+import Analysis from "./components/dashboard/Analysis";
+import ShowProjects from "./components/dashboard/ShowProjects";
+import ShowMembers from "./components/dashboard/ShowMembers";
 
 class Routes extends Component {
   constructor(props) {
@@ -50,6 +53,24 @@ class Routes extends Component {
         title: "projectsSettings",
       },
       {
+        path: "/analysis/:workspaceId",
+        exact: true,
+        component: Analysis,
+        title: "analysis",
+      },
+      {
+        path: "/projects/:workspaceId",
+        exact: true,
+        component: ShowProjects,
+        title: "showProjects",
+      },
+      {
+        path: "/members/:workspaceId",
+        exact: true,
+        component: ShowMembers,
+        title: "showMembers",
+      },
+      {
         component: NotFound,
         title: "pageNotFound",
       },
@@ -64,6 +85,12 @@ class Routes extends Component {
         return <Settings {...props} />;
       } else if (title === "projectsSettings") {
         return <ProjectsSettings {...props} />;
+      } else if (title === "analysis") {
+        return <Analysis {...props} />;
+      } else if (title === "showProjects") {
+        return <ShowProjects {...props} />;
+      } else if (title === "showMembers") {
+        return <ShowMembers {...props} />;
       }
     } else {
       if (title === "login") {

@@ -166,7 +166,11 @@ class Dashboard extends Component {
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <Header logout={this.logout} workspaces={this.state.workspaces} />
+        <Header
+          logout={this.logout}
+          workspaces={this.state.workspaces}
+          workspaceId={this.state.workspaceId}
+        />
         <MenuBar
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}

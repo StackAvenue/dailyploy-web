@@ -37,19 +37,39 @@
 
 .dashboard-menubar-container{
     padding: 1% 0 1% 2% !important;
-    .home{
-        font-size: 16px;
-        font-family:$font-family-roboto;
-        font-weight:bold;
-        color: $color-text1;
-        text-align: center;
-        border-bottom: 2px solid $color-brandheading1;
+    .active{
+      font-size: 16px;
+      font-family:$font-family-roboto;
+      font-weight:bold;
+      color: $color-text1;
+      text-align: center;
+      border-bottom: 2px solid $color-brandheading1;
+      a{
+        color:$color-text1 !important;
+        &:hover{
+          text-decoration: none !important;
+        }
+      }
     }
     .analysis{
         font-size: 16px;
         font-family:$font-family-roboto;
         color: $color-text3;
         text-align: center;
+        a{
+          color: $color-text3 !important;
+          &:hover{
+            text-decoration: none !important;
+          }
+        }
+        &:hover{
+          font-size: 16px;
+          font-family:$font-family-roboto;
+          font-weight:bold;
+          color: $color-text1 !important;
+          text-align: center;
+          border-bottom: 2px solid $color-brandheading1;
+        }
     }
     .menubar-button{
         width:93px !important;
@@ -80,6 +100,9 @@
                 color:$color-brand4 !important
             }
         }
+    }
+    .dropdown-menu.show{
+      left:-16px !important;
     }
     .sort-bar{
         border: 1px solid $color-brandheading1;
@@ -778,4 +801,181 @@
     }
   }
 
+}
+
+
+.show-projects{
+  margin-top:10px;
+  box-shadow: 0 -16px 20px 0 rgba(0, 0, 0, 0.1);
+  .views{
+    padding: 10px 0px 10px 0px; 
+    border-bottom: 2px solid $color-borders;
+  }
+  .grid-view{
+    padding:40px 30px 30px 40px !important;
+    .grid-div{
+      height: 160px;
+      width:240px !important;
+      border-radius: 3px !important;
+      border:solid 1px $color-borders !important;
+      background-color: $color-projectGrid !important;
+      padding: 10px !important;
+      margin-right:20px !important;
+      .id{
+        font-family: $font-family-roboto !important;
+        font-size:14px !important;
+        color:$color-text3 !important;
+        padding: 5px 0px 5px 0px !important;
+      }
+      .name{
+        font-family: $font-family-roboto !important;
+        font-size:14px !important;
+        color:$color-text2 !important;
+        padding: 5px 0px 5px 0px !important;
+      }
+      .date{
+        font-family: $font-family-roboto !important;
+        font-size:12px !important;
+        color:$color-text3 !important;
+        padding: 5px 0px 5px 0px !important;
+      }
+      .duration{
+        font-family: $font-family-roboto !important;
+        font-size:12px !important;
+        color:$color-text3 !important;
+        padding: 5px 0px 5px 0px !important;
+        text-align: right !important;
+      }
+      .grid-color{
+        width: 27px;
+        height: 27px;
+        border-radius: 5px;
+        background-color: #ffc6ac;
+      }
+      .user-block{
+        width: 27px;
+        height: 27px;
+        border-radius: 50%;
+        border: solid 2px #fffcfc;
+        color: #fff;
+        font-size:10px;
+        background-color: $color-projectList;
+        display: inline-block;
+        text-align: center;
+        padding-top:4px;
+        margin-left: -6px;
+        font-weight: bold;
+      }
+    }
+  }
+  table{
+    width:94% !important;
+    margin:auto !important;
+    th{
+      font-size:13px !important;
+      font-weight: bold !important;
+      font-family: $font-family-roboto !important;
+      color: $color-projectList !important;
+      border:0 !important;
+    }
+    td{
+      font-size:13px !important;
+      font-family: $font-family-roboto !important;
+      color: $color-brandheading2 !important;
+      .color-block{
+        width: 50px;
+        height: 18px;
+        border-radius: 3px;
+      }
+      .user-block{
+        width: 27px;
+        height: 27px;
+        border-radius: 50%;
+        border: solid 2px #fffcfc;
+        color: #fff;
+        font-size:10px;
+        background-color: $color-projectList;
+        display: inline-block;
+        text-align: center;
+        padding-top:4px;
+        margin-left: -6px;
+        font-weight: bold;
+      }
+    }
+    .checkbox {
+      width: 100%;
+      position: relative;
+      display: block;
+  }
+  
+  .checkbox input[type="checkbox"] {
+      width: auto;
+      opacity: 0.00000001;
+      position: absolute;
+      left: 0;
+      margin-left: -20px;
+  }
+  .checkbox label {
+      position: relative;
+  }
+  .checkbox label:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 4px;
+      width: 13px;
+      height: 13px;
+      transition: transform 0.28s ease;
+      border-radius: 0px;
+      opacity: 0.5;
+      border: solid 1px #505050;
+  }
+  .checkbox label:after {
+    content: '';
+      display: block;
+      opacity:0.5;
+      width: 8px;
+      height: 5px;
+      // background-color:#33a1ff;
+      border-bottom: 2px solid #33a1ff;
+      border-left: 2px solid #33a1ff;
+      -webkit-transform: rotate(-45deg) scale(0);
+      -moz-transform: rotate(-45deg) scale(0);
+      -ms-transform: rotate(-45deg) scale(0);
+      transform: rotate(-45deg) scale(0);
+      position: absolute;
+      top: 7px;
+      left: 7px;
+  }
+  .checkbox input[type="checkbox"]:checked ~ label::before {
+      color: #33a1ff;
+  }
+  
+  .checkbox input[type="checkbox"]:checked ~ label::after {
+      -webkit-transform: rotate(-45deg) scale(1);
+      -moz-transform: rotate(-45deg) scale(1);
+      -ms-transform: rotate(-45deg) scale(1);
+      transform: rotate(-45deg) scale(1);
+  }
+  
+  .checkbox label {
+      min-height: 19px;
+      display: block;
+      // padding-left: 40px;
+      margin-bottom: 0;
+      font-weight: normal;
+      cursor: pointer;
+      vertical-align: sub;
+  }
+  .checkbox label span {
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+  }
+  .checkbox input[type="checkbox"]:focus + label::before {
+      outline: 0;
+  }
+  }
 }

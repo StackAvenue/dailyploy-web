@@ -44,7 +44,10 @@ class Header extends Component {
               >
                 <span className="navbar-toggler-icon" />
               </button>
-              <a className="navbar-brand logo" href="#">
+              <a
+                className="navbar-brand logo"
+                href={`/dashboard/${this.props.workspaceId}`}
+              >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
 
