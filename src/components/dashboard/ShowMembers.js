@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import Header from "./Header";
-import { get, post, logout, mockPost } from "../../utils/API";
+import { get, post, logout, mockPost, mockGet } from "../../utils/API";
 import MenuBar from "./MenuBar";
 
 class ShowMembers extends Component {
@@ -12,6 +12,7 @@ class ShowMembers extends Component {
       workspaceId: "",
       projectNames: [],
       sort: "week",
+      members: [],
     };
   }
   logout = async () => {
@@ -27,6 +28,14 @@ class ShowMembers extends Component {
     }
 
     this.getWorkspaceParams();
+
+    try {
+      const { data } = await mockGet("members");
+      // console.log(data);
+      this.setState({ members: data });
+    } catch (e) {
+      console.log("err", e);
+    }
   }
 
   getWorkspaceParams = () => {
@@ -40,6 +49,7 @@ class ShowMembers extends Component {
   };
 
   render() {
+    console.log("members", this.state.members);
     return (
       <>
         <Header
@@ -52,7 +62,7 @@ class ShowMembers extends Component {
           workspaceId={this.state.workspaceId}
         />
         <div className="show-projects">
-          <div className="views"></div>
+          <div className="members"></div>
           <table class="table">
             <thead>
               <tr>
@@ -72,7 +82,34 @@ class ShowMembers extends Component {
               </tr>
             </thead>
             <tbody>
-              <td>
+              {this.state.members.map((member, index) => {
+                return (
+                  <tr>
+                    <td>
+                      <div class="checkbox">
+                        <input
+                          type="checkbox"
+                          id={`checkbox${index}`}
+                          name=""
+                          value=""
+                        />
+                        <label for={`checkbox${index}`}></label>
+                      </div>
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{member.member.member_name}</td>
+                    <td>{member.member.member_email}</td>
+                    <td>Edit</td>
+                    <td>{member.member.member_role}</td>
+                    <td>{member.member.member_workingHours} hours</td>
+                    <td>{member.member.member_project}</td>
+                    <td>
+                      <i class="fas fa-pencil-alt"></i>
+                    </td>
+                  </tr>
+                );
+              })}
+              {/* <td>
                 <div class="checkbox">
                   <input type="checkbox" id={`checkbox1`} name="" value="" />
                   <label for={`checkbox1`}></label>
@@ -84,7 +121,7 @@ class ShowMembers extends Component {
               <td>View</td>
               <td>Admin</td>
               <td>8 hours</td>
-              <td>Dailyploy</td>
+              <td>Dailyploy</td> */}
             </tbody>
           </table>
         </div>

@@ -33,6 +33,48 @@
         white-space: normal; 
       }
     }
+
+    .dropdown-position{
+      left:-110px !important;
+      width:300px !important;
+      border-radius: 6px !important;
+      box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17) !important;
+      border: solid 1px #d1d1d1 !important;
+      background-color: $color-white !important;
+      a{
+        padding:12px 5px 10px 35px !important;
+      }
+      .workspace-name{
+        font-size: 15px !important;
+        font-family:$font-family-roboto !important;
+        font-weight:bold !important;
+        color: $color-text2 !important;
+        margin-left:20px !important;
+      }
+      .workspace-setting{
+        font-size: 15px !important;
+        font-family:$font-family-roboto !important;
+        color: $color-workspace !important;
+      }
+      .invite{
+        font-size: 15px !important;
+        font-family:$font-family-roboto !important;
+        color: $color-workspace !important;
+      }
+      .workspace-circle{
+        width: 41.3px !important;
+        height: 41.3px !important;
+        border-radius:50% !important;
+        border: solid 2px $color-background !important;
+        background-color: $color-brand3 !important;
+        color: $color-white !important;
+        font-family: $font-family-roboto !important;
+        font-size: 12px !important;
+        padding:10px 0px 0px 0px !important;
+        text-align:center !important;
+      }
+      
+    }
 }
 
 .dashboard-menubar-container{
@@ -807,20 +849,39 @@
 .show-projects{
   margin-top:10px;
   box-shadow: 0 -16px 20px 0 rgba(0, 0, 0, 0.1);
+  .members{
+    height: 60px !important;
+    border-bottom: solid 2px $color-borders !important;
+  }
   .views{
     padding: 10px 0px 10px 0px; 
-    border-bottom: 2px solid $color-borders;
+    // border-bottom: 2px solid $color-borders;
+    .hr{
+      background-color: $color-borders !important;
+      height:2px !important;
+    }
+  }
+  .react-tabs__tab-list{
+    border:0 !important;
+  }
+  .react-tabs__tab--selected{
+    border:0 !important;
+    color: $color-brand3 !important;
   }
   .grid-view{
-    padding:40px 30px 30px 40px !important;
+    padding:40px 30px 30px 60px !important;
     .grid-div{
       height: 160px;
-      width:240px !important;
+      width:18% !important;
       border-radius: 3px !important;
       border:solid 1px $color-borders !important;
       background-color: $color-projectGrid !important;
       padding: 10px !important;
       margin-right:20px !important;
+      margin-bottom:25px !important;
+      &:hover{
+        box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.25) !important;
+      }
       .id{
         font-family: $font-family-roboto !important;
         font-size:14px !important;
@@ -837,13 +898,13 @@
         font-family: $font-family-roboto !important;
         font-size:12px !important;
         color:$color-text3 !important;
-        padding: 5px 0px 5px 0px !important;
+        padding: 15px 0px 5px 0px !important;
       }
       .duration{
         font-family: $font-family-roboto !important;
         font-size:12px !important;
         color:$color-text3 !important;
-        padding: 5px 0px 5px 0px !important;
+        padding: 15px 0px 5px 0px !important;
         text-align: right !important;
       }
       .grid-color{

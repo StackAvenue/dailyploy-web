@@ -185,7 +185,6 @@ export default class MenuBar extends Component {
 
   render() {
     const { sort, show } = this.state;
-    console.log("MEMBER", this.state);
     return (
       <>
         <div className="container-fluid">

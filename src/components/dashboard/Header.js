@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
+import setting from "../../assets/images/setting.png";
+import invite from "../../assets/images/invite.png";
 import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
 
@@ -61,6 +63,34 @@ class Header extends Component {
                       <i class="fas fa-bell" />
                     </a>
                   </li>
+                  <Dropdown>
+                    <Dropdown.Toggle variant="link" id="dropdown-basic">
+                      <i class="fa fa-bars"></i>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="dropdown-position">
+                      <Dropdown.Item>
+                        <div className="workspace-circle d-inline-block">
+                          {"Gaurav Gandhi"
+                            .split(" ")
+                            .map(x => x[0])
+                            .join("")}
+                        </div>
+                        <div className="workspace-name d-inline-block">
+                          Gaurav Gandhi
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item className="workspace-setting">
+                        <img src={setting} className="img-responsive" />
+                        &nbsp;&nbsp;Workspace Settings
+                      </Dropdown.Item>
+                      <Dropdown.Item className="invite">
+                        <img src={invite} className="img-responsive" />
+                        &nbsp;&nbsp;Invite to Workspace
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+
                   <Dropdown>
                     <Dropdown.Toggle
                       className="header-auth-btn"

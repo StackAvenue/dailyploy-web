@@ -5,6 +5,7 @@ import { get, post, logout, mockPost } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import GridBlock from "./ProjectViews/GridBlock";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -15,7 +16,6 @@ class ShowProjects extends Component {
       "Vikram Jadon",
       "Alam Khan",
       "Kiran Chaudahry",
-      "Akshay Malta",
     ];
     this.state = {
       workspaces: [],
@@ -43,7 +43,6 @@ class ShowProjects extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects`
       );
-      console.log("projects list", data.projects);
       this.setState({ projects: data.projects });
     } catch (e) {
       console.log("err", e);
@@ -74,14 +73,9 @@ class ShowProjects extends Component {
     return months <= 0 ? 0 : months;
   };
 
-  projectView = view => {
-    console.log("view", view);
-  };
-
   render() {
     var x = "2024-08-04";
     var y = x.split("-");
-    console.log("date projects", y);
 
     return (
       <div>
@@ -96,20 +90,6 @@ class ShowProjects extends Component {
         />
         <div className="show-projects">
           <div className="views">
-            {/* <div className="col-md-2 ml-auto">
-              <button
-                className="btn btn-link"
-                onClick={this.projectView("list")}
-              >
-                <i class="fa fa-bars"></i>
-              </button>
-              <button
-                className="btn btn-link"
-                onClick={this.projectView("grid")}
-              >
-                <i class="fas fa-th"></i>
-              </button>
-            </div> */}
             <Tabs>
               <div className="col-md-2 ml-auto">
                 <TabList>
@@ -121,6 +101,7 @@ class ShowProjects extends Component {
                   </Tab>
                 </TabList>
               </div>
+              <div className="col-md-12 no-padding hr"></div>
 
               <TabPanel>
                 <table className="table">
@@ -206,29 +187,13 @@ class ShowProjects extends Component {
                 <div className="row grid-view no-margin">
                   {this.state.projects.map((project, index) => {
                     return (
-                      <div className="col-md-2 grid-div">
-                        <div className="col-md-12 id">1</div>
-                        <div className="col-md-12 name">Project Name</div>
-                        <div className="col-md-12 no-padding">
-                          <div className="col-md-2 d-inline-block no-padding">
-                            <div className="user-block">AJ</div>
-                          </div>
-                          <div className="col-md-8 d-inline-block no-padding">
-                            <div className="user-block">AJ</div>
-                          </div>
-                          <div className="col-md-2 d-inline-block no-padding">
-                            <div className="grid-color"></div>
-                          </div>
-                        </div>
-                        <div className="col-md-12 no-padding">
-                          <div className="col-md-8 d-inline-block date">
-                            25 Jul 2019 - Undefined
-                          </div>
-                          <div className="col-md-4 d-inline-block duration">
-                            10 Months
-                          </div>
-                        </div>
-                      </div>
+                      <GridBlock
+                        project={project}
+                        index={index}
+                        projectUser={this.projectUser}
+                        monthDiff={this.monthDiff}
+                        getDate={this.getDate}
+                      />
                     );
                   })}
                 </div>
