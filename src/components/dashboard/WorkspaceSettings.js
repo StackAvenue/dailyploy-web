@@ -4,10 +4,11 @@ import Header from "./Header";
 import { get, post, logout, mockPost, mockGet } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Row, Col, Nav } from "react-bootstrap";
-import GeneralSettings from "./UserSettings/GeneralSettings";
-import PrivacySettings from "./UserSettings/PrivacySettings";
+import GeneralSettings from "./WorkspaceSettings/GeneralSettings";
+import PrefrencesSettings from "./WorkspaceSettings/PrefrencesSettings";
+import EmailConfiguration from "./WorkspaceSettings/EmailConfiguration";
 
-class Settings extends Component {
+class WorkspaceSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +73,10 @@ class Settings extends Component {
                   <Nav.Link eventKey="first">General</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="second">Privacy</Nav.Link>
+                  <Nav.Link eventKey="second">Prefrences</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="third">Email Configuration</Nav.Link>
                 </Nav.Item>
               </Nav>
             </div>
@@ -83,7 +87,10 @@ class Settings extends Component {
                     <GeneralSettings />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <PrivacySettings />
+                    <PrefrencesSettings />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="third">
+                    <EmailConfiguration />
                   </Tab.Pane>
                 </Tab.Content>
               </div>
@@ -95,4 +102,4 @@ class Settings extends Component {
   }
 }
 
-export default withRouter(Settings);
+export default withRouter(WorkspaceSettings);

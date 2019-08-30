@@ -11,6 +11,7 @@ import ProjectsSettings from "./components/dashboard/ProjectsSettings";
 import Analysis from "./components/dashboard/Analysis";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
+import WorkspaceSettings from "./components/dashboard/WorkspaceSettings";
 
 class Routes extends Component {
   constructor(props) {
@@ -41,17 +42,17 @@ class Routes extends Component {
         title: "signup",
       },
       {
-        path: "/settings",
+        path: "/settings/:workspaceId",
         exact: true,
         component: Settings,
         title: "settings",
       },
-      {
-        path: "/settings/:workspaceId",
-        exact: true,
-        component: ProjectsSettings,
-        title: "projectsSettings",
-      },
+      // {
+      //   path: "/settings/:workspaceId",
+      //   exact: true,
+      //   component: ProjectsSettings,
+      //   title: "projectsSettings",
+      // },
       {
         path: "/analysis/:workspaceId",
         exact: true,
@@ -71,6 +72,12 @@ class Routes extends Component {
         title: "showMembers",
       },
       {
+        path: "/workspace/:workspaceId/settings",
+        exact: true,
+        component: WorkspaceSettings,
+        title: "workspaceSettings",
+      },
+      {
         component: NotFound,
         title: "pageNotFound",
       },
@@ -83,14 +90,14 @@ class Routes extends Component {
         return <Dashboard {...props} />;
       } else if (title === "settings") {
         return <Settings {...props} />;
-      } else if (title === "projectsSettings") {
-        return <ProjectsSettings {...props} />;
       } else if (title === "analysis") {
         return <Analysis {...props} />;
       } else if (title === "showProjects") {
         return <ShowProjects {...props} />;
       } else if (title === "showMembers") {
         return <ShowMembers {...props} />;
+      } else if (title === "workspaceSettings") {
+        return <WorkspaceSettings {...props} />;
       }
     } else {
       if (title === "login") {

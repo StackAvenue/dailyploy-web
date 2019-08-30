@@ -16,6 +16,9 @@ class ShowProjects extends Component {
       "Vikram Jadon",
       "Alam Khan",
       "Kiran Chaudahry",
+      "Kiran Chaudahry",
+      "Kiran Chaudahry",
+      "Kiran Chaudahry",
     ];
     this.state = {
       workspaces: [],
@@ -25,6 +28,14 @@ class ShowProjects extends Component {
       projects: [],
     };
   }
+  countIncrese = projectUser => {
+    let arr = projectUser;
+    let count;
+    if (arr.length >= 4) {
+      count = arr.length - 4;
+    }
+    return count;
+  };
   logout = async () => {
     await logout();
     this.props.history.push("/login");
@@ -164,18 +175,33 @@ class ShowProjects extends Component {
                             &nbsp; months
                           </td>
                           <td>
-                            {this.projectUser.map((user, index) => {
-                              return (
-                                <div key={index} className="user-block">
-                                  <span>
-                                    {user
-                                      .split(" ")
-                                      .map(x => x[0])
-                                      .join("")}
-                                  </span>
-                                </div>
-                              );
-                            })}
+                            <span>
+                              {this.projectUser
+                                .slice(0, 4)
+                                .map((user, index) => {
+                                  return (
+                                    <div key={index} className="user-block">
+                                      <span>
+                                        {user
+                                          .split(" ")
+                                          .map(x => x[0])
+                                          .join("")}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                            </span>
+                            <span>
+                              <div
+                                key={index}
+                                className="user-block"
+                                style={{ backgroundColor: "#33a1ff" }}
+                              >
+                                <span>
+                                  +{this.countIncrese(this.projectUser)}
+                                </span>
+                              </div>
+                            </span>
                           </td>
                         </tr>
                       );
@@ -193,6 +219,7 @@ class ShowProjects extends Component {
                         projectUser={this.projectUser}
                         monthDiff={this.monthDiff}
                         getDate={this.getDate}
+                        countIncrese={this.countIncrese}
                       />
                     );
                   })}

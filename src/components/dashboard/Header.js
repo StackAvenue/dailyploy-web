@@ -6,6 +6,7 @@ import setting from "../../assets/images/setting.png";
 import invite from "../../assets/images/invite.png";
 import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
+import userImg from "../../assets/images/profile.png";
 
 class Header extends Component {
   constructor(props) {
@@ -58,11 +59,65 @@ class Header extends Component {
                 id="navbarTogglerDemo03"
               >
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-                  <li className="nav-item active notification">
-                    <a className="nav-link">
+                  <Dropdown>
+                    <Dropdown.Toggle variant="link" id="dropdown-basic">
                       <i class="fas fa-bell" />
-                    </a>
-                  </li>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="dropdown-notification">
+                      <div className="col-md-12">
+                        <div className="col-md-6 notification-heading">
+                          Notifications
+                        </div>
+                      </div>
+                      <Dropdown.Item className="notification-box">
+                        <div className="row">
+                          <div className="col-md-1 no-padding">
+                            <div className="notification-img">
+                              <img src={userImg} className="img-responsive" />
+                            </div>
+                          </div>
+                          <div className="col-md-11">
+                            <div className="notification-text">
+                              Amit Shah added you to the project{" "}
+                              <span>
+                                Aviabird
+                                <br />
+                                Technologies
+                              </span>
+                            </div>
+                            <div className="col-md-12 no-padding notification-text text-right">
+                              <span>4h </span>
+                              Jan 19, 2019
+                            </div>
+                          </div>
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item className="notification-box">
+                        <div className="row">
+                          <div className="col-md-1 no-padding">
+                            <div className="notification-img">
+                              <img src={userImg} className="img-responsive" />
+                            </div>
+                          </div>
+                          <div className="col-md-11">
+                            <div className="notification-text">
+                              Amit Shah added you to the project{" "}
+                              <span>
+                                Aviabird
+                                <br />
+                                Technologies
+                              </span>
+                            </div>
+                            <div className="col-md-12 no-padding notification-text text-right">
+                              <span>4h </span>
+                              Jan 19, 2019
+                            </div>
+                          </div>
+                        </div>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                   <Dropdown>
                     <Dropdown.Toggle variant="link" id="dropdown-basic">
                       <i class="fa fa-bars"></i>
@@ -80,7 +135,10 @@ class Header extends Component {
                           Gaurav Gandhi
                         </div>
                       </Dropdown.Item>
-                      <Dropdown.Item className="workspace-setting">
+                      <Dropdown.Item
+                        className="workspace-setting"
+                        href={`/workspace/${this.props.workspaceId}/settings`}
+                      >
                         <img src={setting} className="img-responsive" />
                         &nbsp;&nbsp;Workspace Settings
                       </Dropdown.Item>
@@ -100,7 +158,9 @@ class Header extends Component {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="header-dropdown">
-                      <Dropdown.Item href={`/settings`}>
+                      <Dropdown.Item
+                        href={`/settings/${this.props.workspaceId}`}
+                      >
                         <i className="fa fa-wrench" aria-hidden="true" />
                         <span className="header-dropdown-space" />
                         Settings

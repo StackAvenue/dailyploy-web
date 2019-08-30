@@ -75,6 +75,47 @@
       }
       
     }
+
+    .dropdown-notification{
+      left:-160px !important;
+      width: 400px !important;
+      height: 500px !important;
+      border-radius: 6px !important;
+      box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17) !important;
+      border: solid 1px #d1d1d1 !important;
+      background-color: $color-white !important;
+      .notification-heading{
+        color: $color-text2 !important;
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        font-weight:bold;
+        display: inline-block !important;
+      }
+      .notification-box{
+        height: 61px;
+        background-color: $color-background;
+        border-bottom:1px solid $color-borders;
+      }
+      .notification-img{
+        width: 27px;
+        height: 27px;
+        border: solid 2px #fffcfc;
+        border-radius: 50%;
+        img{
+          max-width:100% !important;
+          max-height:100% !important;
+          border-radius: 50%;
+        }
+      }
+      .notification-text{
+        color: $color-text2 !important;
+        font-family: $font-family-roboto !important;
+        font-size: 13px !important;
+        span{
+          font-weight: bold !important;
+        }
+      }
+    }
 }
 
 .dashboard-menubar-container{
@@ -1039,4 +1080,255 @@
       outline: 0;
   }
   }
+}
+
+
+.workspace1-setting{
+  box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1) !important;
+  background-color: $color-white !important;
+  padding-top:20px !important;
+  padding-bottom:20px !important;
+  .side-tabs{
+    background-color: #f9f9f9 !important;
+    height:650px !important;
+    padding-top: 42px !important;
+    .nav-link{
+      font-family: $font-family-roboto !important;
+      font-size:15px !important;
+      color: $color-workspace !important;
+      padding-bottom:30px !important;
+    }
+    .nav-link .active{
+      font-family: $font-family-roboto !important;
+      font-size:15px !important;
+      font-weight: bold !important;
+      color: $color-brand4 !important;
+    }
+  }
+  .body-tabs{
+    background-color: #f9f9f9 !important;
+    height:650px !important;
+    padding-top: 37px !important;
+    padding-left: 60px !important;
+    padding-right: 60px !important;
+    .heading{
+      font-family: $font-family-roboto !important;
+      font-size:20px !important;
+      font-weight: bold !important;
+      color: $color-text2 !important;
+      .alert{
+        color: $color-failure !important;
+        font-family: $font-family-roboto !important;
+        font-size:15px !important;
+        font-weight: 500 !important;
+      }
+      .resume-btn{
+        width: 93px !important;
+        height: 35px !important;
+        border-radius: 5px !important;
+        background-color: $color-brand3 !important;
+        border:0 !important;
+      }
+    }
+
+    .box{
+      padding-top: 50px !important;
+      .time-desc{
+        font-family: $font-family-roboto !important;
+        font-size:15px !important;
+        color: $color-text3 !important;
+      }
+      .inner-container{
+        padding-top: 20px !important;
+        .email-box{
+          width:auto;
+          white-space: nowrap;
+          display: inline-block;
+          height: 24px;
+          border-radius: 20px;
+          border: solid 1px $color-borders;
+          background-color: $color-white;
+          font-family: $font-family-roboto !important;
+          font-size:13px !important;
+          color: $color-heading3 !important;
+          span{
+            padding-left:10px;
+            padding-right:10px;
+          }
+          .email-icon{
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            border-radius: 50%;
+            background-color: $color-background;
+            font-family: $font-family-roboto !important;
+            font-size:12px !important;
+            color: $color-heading3 !important;
+            padding-top:1px;
+            padding-left:1px;
+          }
+        }
+        .email-format{
+          font-family: $font-family-roboto !important;
+          font-size:14px !important;
+          color: $color-heading3 !important;
+        }
+       
+      }
+      .email-btn{
+        height: 40px !important;
+        width: 150px !important; 
+        border-radius: 5px !important;
+        background-color: $color-brand3 !important;
+        font-family: $font-family-roboto !important;
+        font-size:17px !important;
+        color: $color-white !important;
+        border:0 !important;
+      }
+      .user-icon{
+        width: 92px;
+        height: 92px;
+        border: solid 2px $color-orangeYellow;
+        border-radius:50% !important;
+        position: relative;
+        img{
+          max-width: 100% !important;
+          max-height: 100% !important;
+          border-radius: 50% !important;
+        }
+        .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0);
+          transition: background 0.5s ease;
+          border-radius: 50%;
+        }
+        button{
+          display:none;
+        }
+        &:hover .overlay {
+          display: block;
+          background: rgba(0, 0, 0, .3);
+        }
+        &:hover button {
+          position: absolute;
+          display: block;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          // border: 1px solid $color-white !important;
+          // border-radius:2px !important;
+          transition: background 0.5s ease;
+          i{
+            color:$color-white;
+          }
+        }
+      }
+      .inner-box{
+        padding-top: 20px !important;
+        .name{
+          font-family: $font-family-roboto !important;
+          font-size:15px !important;
+          color: $color-text3 !important;
+          p{
+            font-weight:bold !important;
+            color: $color-text2 !important;
+          }
+          span{
+            color: $color-failure !important;
+          }
+        }
+        .input{
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+          background-color: $color-white !important;
+        }
+      }
+      .box-btn{
+        padding: 50px 0px 0px 190px !important;
+        button{
+          height: 40px !important;
+          width: auto !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size:17px !important;
+          color: $color-text3 !important;
+          white-space: nowrap !important;
+          padding-right:20px !important;
+          padding-left:20px !important;
+
+        }
+      }
+    }
+    .hr{
+      background-color: $color-borders !important;
+      height:1px !important;
+      margin: 30px 0px 30px 0px !important;
+    }
+    .delete-text{
+      padding-top: 30px !important;
+      font-family: $font-family-roboto !important;
+      font-size:15px !important;
+      color: $color-text3 !important;
+      button{
+        color: $color-failure !important;
+        font-family: $font-family-roboto !important;
+        font-size:15px !important;
+      }
+    }
+  }
+}
+
+.modal-box{
+  padding-left: 30px !important;
+  .heading{
+    font-family: $font-family-roboto !important;
+    font-size:20px !important;
+    font-weight: bold !important;
+    color: $color-brand4 !important;
+    padding-top: 20px !important;
+  }
+  .body{
+    font-family: $font-family-roboto !important;
+    font-size:15px !important;
+    color: #707070 !important;
+    padding-top:50px !important;
+    padding-bottom:50px !important;
+    span{
+      font-weight: bold !important;
+    }
+  }
+  .btn-box{
+    padding-top:30px !important;
+    padding-bottom:21px !important;
+    .ok{
+      width: 93px !important;
+      height: 40px !important;
+      border-radius: 5px !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size:17px !important;
+      color: $color-white !important;
+    }
+    .cancel{
+      width: 93px !important;
+      height: 40px !important;
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size:17px !important;
+      color: $color-text2 !important;
+      margin-left:10px !important;
+    }
+  }
+  
+
 }

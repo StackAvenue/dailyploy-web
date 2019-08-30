@@ -16,18 +16,25 @@ const GridBlock = props => {
           </div>
         </div>
         <div className="col-md-8 d-inline-block no-padding">
-          {props.projectUser.map((user, index) => {
-            return (
-              <div key={index} className="user-block">
-                <span>
-                  {user
-                    .split(" ")
-                    .map(x => x[0])
-                    .join("")}
-                </span>
-              </div>
-            );
-          })}
+          <span>
+            {props.projectUser.slice(0, 4).map((user, index) => {
+              return (
+                <div key={index} className="user-block">
+                  <span>
+                    {user
+                      .split(" ")
+                      .map(x => x[0])
+                      .join("")}
+                  </span>
+                </div>
+              );
+            })}
+          </span>
+          <span>
+            <div className="user-block" style={{ backgroundColor: "#33a1ff" }}>
+              <span>+{props.countIncrese(props.projectUser)}</span>
+            </div>
+          </span>
         </div>
         <div className="col-md-2 d-inline-block no-padding">
           <div
