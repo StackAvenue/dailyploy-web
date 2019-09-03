@@ -6,6 +6,7 @@ import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
+import Sidebar from "./Sidebar";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -90,142 +91,147 @@ class ShowProjects extends Component {
 
     return (
       <div>
-        <Header
-          logout={this.logout}
-          workspaces={this.state.workspaces}
-          workspaceId={this.state.workspaceId}
-        />
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-        />
-        <div className="show-projects">
-          <div className="views">
-            <Tabs>
-              <div className="col-md-2 ml-auto">
-                <TabList>
-                  <Tab>
-                    <i class="fa fa-bars"></i>
-                  </Tab>
-                  <Tab>
-                    <i class="fas fa-th"></i>
-                  </Tab>
-                </TabList>
-              </div>
-              <div className="col-md-12 no-padding hr"></div>
+        <div className="row no-margin">
+          <Sidebar workspaces={this.state.workspaces} />
+          <div className="dashboard-main no-padding">
+            <Header
+              logout={this.logout}
+              workspaces={this.state.workspaces}
+              workspaceId={this.state.workspaceId}
+            />
+            <MenuBar
+              onSelectSort={this.onSelectSort}
+              workspaceId={this.state.workspaceId}
+            />
+            <div className="show-projects">
+              <div className="views">
+                <Tabs>
+                  <div className="col-md-2 ml-auto">
+                    <TabList>
+                      <Tab>
+                        <i class="fa fa-bars"></i>
+                      </Tab>
+                      <Tab>
+                        <i class="fas fa-th"></i>
+                      </Tab>
+                    </TabList>
+                  </div>
+                  <div className="col-md-12 no-padding hr"></div>
 
-              <TabPanel>
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">
-                        <div class="checkbox">
-                          <input
-                            type="checkbox"
-                            id="checkbox"
-                            name=""
-                            value=""
-                          />
-                          <label for="checkbox"></label>
-                        </div>
-                      </th>
-                      <th scope="col">ID</th>
-                      <th scope="col">Project Name</th>
-                      <th scope="col">Colour</th>
-                      <th scope="col">Project Owner</th>
-                      <th scope="col">Start Date</th>
-                      <th scope="col">End Date</th>
-                      <th scope="col">Duration</th>
-                      <th scope="col">Project Members</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.projects.map((project, index) => {
-                      return (
+                  <TabPanel>
+                    <table className="table">
+                      <thead>
                         <tr>
-                          <td>
+                          <th scope="col">
                             <div class="checkbox">
                               <input
                                 type="checkbox"
-                                id={`checkbox${index}`}
+                                id="checkbox"
                                 name=""
                                 value=""
                               />
-                              <label for={`checkbox${index}`}></label>
+                              <label for="checkbox"></label>
                             </div>
-                          </td>
-                          <td>{index + 1}</td>
-                          <td>{project.name}</td>
-                          <td>
-                            <div
-                              className="color-block"
-                              style={{
-                                "background-color": `${project.color_code}`,
-                              }}
-                            ></div>
-                          </td>
-                          <td>{project.name}</td>
-                          <td>{project.start_date}</td>
-                          <td>2024-08-04</td>
-                          <td>
-                            {this.monthDiff(
-                              this.getDate(project.start_date),
-                              this.getDate("2024-08-04")
-                            )}
-                            &nbsp; months
-                          </td>
-                          <td>
-                            <span>
-                              {this.projectUser
-                                .slice(0, 4)
-                                .map((user, index) => {
-                                  return (
-                                    <div key={index} className="user-block">
-                                      <span>
-                                        {user
-                                          .split(" ")
-                                          .map(x => x[0])
-                                          .join("")}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                            </span>
-                            <span>
-                              <div
-                                key={index}
-                                className="user-block"
-                                style={{ backgroundColor: "#33a1ff" }}
-                              >
-                                <span>
-                                  +{this.countIncrese(this.projectUser)}
-                                </span>
-                              </div>
-                            </span>
-                          </td>
+                          </th>
+                          <th scope="col">ID</th>
+                          <th scope="col">Project Name</th>
+                          <th scope="col">Colour</th>
+                          <th scope="col">Project Owner</th>
+                          <th scope="col">Start Date</th>
+                          <th scope="col">End Date</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Project Members</th>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </TabPanel>
-              <TabPanel>
-                <div className="row grid-view no-margin">
-                  {this.state.projects.map((project, index) => {
-                    return (
-                      <GridBlock
-                        project={project}
-                        index={index}
-                        projectUser={this.projectUser}
-                        monthDiff={this.monthDiff}
-                        getDate={this.getDate}
-                        countIncrese={this.countIncrese}
-                      />
-                    );
-                  })}
-                </div>
-              </TabPanel>
-            </Tabs>
+                      </thead>
+                      <tbody>
+                        {this.state.projects.map((project, index) => {
+                          return (
+                            <tr>
+                              <td>
+                                <div class="checkbox">
+                                  <input
+                                    type="checkbox"
+                                    id={`checkbox${index}`}
+                                    name=""
+                                    value=""
+                                  />
+                                  <label for={`checkbox${index}`}></label>
+                                </div>
+                              </td>
+                              <td>{index + 1}</td>
+                              <td>{project.name}</td>
+                              <td>
+                                <div
+                                  className="color-block"
+                                  style={{
+                                    "background-color": `${project.color_code}`,
+                                  }}
+                                ></div>
+                              </td>
+                              <td>{project.name}</td>
+                              <td>{project.start_date}</td>
+                              <td>2024-08-04</td>
+                              <td>
+                                {this.monthDiff(
+                                  this.getDate(project.start_date),
+                                  this.getDate("2024-08-04")
+                                )}
+                                &nbsp; months
+                              </td>
+                              <td>
+                                <span>
+                                  {this.projectUser
+                                    .slice(0, 4)
+                                    .map((user, index) => {
+                                      return (
+                                        <div key={index} className="user-block">
+                                          <span>
+                                            {user
+                                              .split(" ")
+                                              .map(x => x[0])
+                                              .join("")}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                </span>
+                                <span>
+                                  <div
+                                    key={index}
+                                    className="user-block"
+                                    style={{ backgroundColor: "#33a1ff" }}
+                                  >
+                                    <span>
+                                      +{this.countIncrese(this.projectUser)}
+                                    </span>
+                                  </div>
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </TabPanel>
+                  <TabPanel>
+                    <div className="row grid-view no-margin">
+                      {this.state.projects.map((project, index) => {
+                        return (
+                          <GridBlock
+                            project={project}
+                            index={index}
+                            projectUser={this.projectUser}
+                            monthDiff={this.monthDiff}
+                            getDate={this.getDate}
+                            countIncrese={this.countIncrese}
+                          />
+                        );
+                      })}
+                    </div>
+                  </TabPanel>
+                </Tabs>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import Header from "./Header";
 import { get, post, logout, mockPost } from "../../utils/API";
 import MenuBar from "./MenuBar";
+import Sidebar from "./Sidebar";
 
 class Analysis extends Component {
   constructor(props) {
@@ -42,17 +43,22 @@ class Analysis extends Component {
   render() {
     return (
       <>
-        <Header
-          logout={this.logout}
-          workspaces={this.state.workspaces}
-          workspaceId={this.state.workspaceId}
-        />
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-        />
-        <br />
-        <h1>Analysis</h1>
+        <div className="row no-margin">
+          <Sidebar workspaces={this.state.workspaces} />
+          <div className="dashboard-main no-padding">
+            <Header
+              logout={this.logout}
+              workspaces={this.state.workspaces}
+              workspaceId={this.state.workspaceId}
+            />
+            <MenuBar
+              onSelectSort={this.onSelectSort}
+              workspaceId={this.state.workspaceId}
+            />
+            <br />
+            <h1>Analysis</h1>
+          </div>
+        </div>
       </>
     );
   }

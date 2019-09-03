@@ -24,15 +24,16 @@ class Calendar extends Component {
         dayResourceTableWidth: "218px",
         weekResourceTableWidth: "16%",
         monthResourceTableWidth: "218px",
-        dayCellWidth: "3%",
+        dayCellWidth: "5%",
         weekCellWidth: "12%",
-        monthCellWidth: "8%",
+        monthCellWidth: "4%",
         eventItemHeight: 45,
         eventItemLineHeight: 50,
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#e5e5e54f",
         tableHeaderHeight: 35,
+        schedulerWidth: "96%",
         views: [
           {
             viewName: "Day",
@@ -205,17 +206,13 @@ class Calendar extends Component {
 
   ops1 = (schedulerData, event) => {
     alert(
-      `You just executed ops1 to event: {id: ${event.id}, title: ${
-        event.title
-      }}`
+      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`
     );
   };
 
   ops2 = (schedulerData, event) => {
     alert(
-      `You just executed ops2 to event: {id: ${event.id}, title: ${
-        event.title
-      }}`
+      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`
     );
   };
 
@@ -248,9 +245,7 @@ class Calendar extends Component {
   updateEventStart = (schedulerData, event, newStart) => {
     if (
       window.confirm(
-        `Do you want to adjust the start of the event? {eventId: ${
-          event.id
-        }, eventTitle: ${event.title}, newStart: ${newStart}}`
+        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
       )
     ) {
       schedulerData.updateEventStart(event, newStart);
@@ -263,9 +258,7 @@ class Calendar extends Component {
   updateEventEnd = (schedulerData, event, newEnd) => {
     if (
       window.confirm(
-        `Do you want to adjust the end of the event? {eventId: ${
-          event.id
-        }, eventTitle: ${event.title}, newEnd: ${newEnd}}`
+        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
       )
     ) {
       schedulerData.updateEventEnd(event, newEnd);

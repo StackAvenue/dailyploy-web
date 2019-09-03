@@ -11,6 +11,7 @@ import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
+import Sidebar from "../components/dashboard/Sidebar";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -166,34 +167,41 @@ class Dashboard extends Component {
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <Header
-          logout={this.logout}
-          workspaces={this.state.workspaces}
-          workspaceId={this.state.workspaceId}
-        />
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-        />
-        <Calendar sortUnit={this.state.sort} />
-        <div>
-          <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
-            <i class="fas fa-plus" />
-          </button>
-          <AddTaskModal
-            state={this.state}
-            closeTaskModal={this.closeTaskModal}
-            handleInputChange={this.handleInputChange}
-            project={this.state.projects}
-            handleDateFrom={this.handleDateFrom}
-            handleDateTo={this.handleDateTo}
-            handleTimeFrom={this.handleTimeFrom}
-            handleTimeTo={this.handleTimeTo}
-            user={this.state.users}
-            addTask={this.addTask}
-          />
+        <div className="row no-margin">
+          <Sidebar workspaces={this.state.workspaces} />
+          <div className="dashboard-main no-padding">
+            <Header
+              logout={this.logout}
+              workspaces={this.state.workspaces}
+              workspaceId={this.state.workspaceId}
+            />
+            <MenuBar
+              onSelectSort={this.onSelectSort}
+              workspaceId={this.state.workspaceId}
+            />
+            <Calendar sortUnit={this.state.sort} />
+            <div>
+              <button
+                className="btn menubar-task-btn"
+                onClick={this.showTaskModal}
+              >
+                <i class="fas fa-plus" />
+              </button>
+              <AddTaskModal
+                state={this.state}
+                closeTaskModal={this.closeTaskModal}
+                handleInputChange={this.handleInputChange}
+                project={this.state.projects}
+                handleDateFrom={this.handleDateFrom}
+                handleDateTo={this.handleDateTo}
+                handleTimeFrom={this.handleTimeFrom}
+                handleTimeTo={this.handleTimeTo}
+                user={this.state.users}
+                addTask={this.addTask}
+              />
+            </div>
+          </div>
         </div>
-
         {/* <Footer />  */}
       </>
     );

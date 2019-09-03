@@ -7,6 +7,7 @@ import invite from "../../assets/images/invite.png";
 import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
 import userImg from "../../assets/images/profile.png";
+import Member from "../../assets/images/member.png";
 
 class Header extends Component {
   constructor(props) {
@@ -157,7 +158,7 @@ class Header extends Component {
                       {x}
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className="header-dropdown">
+                    {/* <Dropdown.Menu className="header-dropdown">
                       <Dropdown.Item
                         href={`/settings/${this.props.workspaceId}`}
                       >
@@ -187,6 +188,42 @@ class Header extends Component {
                           </Dropdown.Item>
                         );
                       })}
+                    </Dropdown.Menu> */}
+                    <Dropdown.Menu className="dropdown-position">
+                      <Dropdown.Item>
+                        <div className="workspace-circle d-inline-block">
+                          {"Gaurav Gandhi"
+                            .split(" ")
+                            .map(x => x[0])
+                            .join("")}
+                        </div>
+                        <div className="workspace-name d-inline-block">
+                          Gaurav Gandhi
+                          <br />
+                          <span>chandanaishwarya@gmail.com</span>
+                          <br />
+                          <img src={Member} className="img-responsive" />
+                          <span>Member</span>
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        className="workspace-setting"
+                        href={`/settings/${this.props.workspaceId}`}
+                      >
+                        <img src={setting} className="img-responsive" />
+                        &nbsp;&nbsp;Settings
+                      </Dropdown.Item>
+                      <div className="col-md-12 logout-user">
+                        <span>
+                          Not Gaurav Gandhi ?{" "}
+                          <button
+                            className="btn btn-link"
+                            onClick={this.props.logout}
+                          >
+                            Logout
+                          </button>
+                        </span>
+                      </div>
                     </Dropdown.Menu>
                   </Dropdown>
                 </ul>

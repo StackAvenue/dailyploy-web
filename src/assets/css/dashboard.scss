@@ -50,6 +50,11 @@
         font-weight:bold !important;
         color: $color-text2 !important;
         margin-left:20px !important;
+        span{
+          font-size: 12px !important;
+          font-weight:normal !important;
+          color:$color-workspace !important;
+        }
       }
       .workspace-setting{
         font-size: 15px !important;
@@ -60,6 +65,20 @@
         font-size: 15px !important;
         font-family:$font-family-roboto !important;
         color: $color-workspace !important;
+        span{
+          font-size: 14px !important;
+        }
+      }
+      .logout-user{
+        font-size: 15px !important;
+        font-family:$font-family-roboto !important;
+        color: $color-workspace !important;
+        padding-left: 35px !important;
+        span{
+          button{
+          font-size: 14px !important;
+          }
+        }
       }
       .workspace-circle{
         width: 41.3px !important;
@@ -499,7 +518,7 @@
   }
   
   .scheduler {
-    margin: 20px auto;
+    margin: 0px !important;
     border-spacing: 0;
   }
   
@@ -738,7 +757,7 @@
   }
 
   .scheduler{
-    margin:15px auto 0px auto !important;
+    margin:0px !important;
     thead{
       td{
         border:1px solid $color-borders !important;
@@ -757,7 +776,7 @@
             }
           }
           .leftheader{
-            width: 218px !important;
+            width: 16% !important;
             height: 35px !important;
             border-right: 1px solid $color-borders !important;
             span{
@@ -1329,6 +1348,113 @@
       margin-left:10px !important;
     }
   }
-  
+}
 
+.workspace-list{
+  width: 5%;
+  box-shadow: 0 -3px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: $color-white;
+  border-right: 1px solid $color-borders;
+  display: inline-flex;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100%;
+  ul{
+    list-style-type: none !important;
+    padding:0 !important;
+    li{
+      margin:25% !important;
+      .workspace-box{
+        padding-top:8px;
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        background-color: $color-background;
+        float: left;
+        text-align:center;
+        a{
+          font-family: $font-family-roboto !important;
+          font-size:16px !important;
+          color: $color-text1 !important;
+        }
+        button{
+          font-family: $font-family-roboto !important;
+          font-size:16px !important;
+          color: $color-text1 !important;
+          padding-top:0px !important;
+        }
+      }
+      .workspace-text{
+        width:40px;
+        font-family: $font-family-roboto !important;
+        font-size:9px !important;
+        color: $color-text2 !important;
+        text-align:center !important;
+      }
+    }
+  }
+}
+.dashboard-main{
+  width: 95%;
+  margin-left:5%;
+}
+
+.workspace-modal{
+  .modal-dialog{
+    max-width: 432px !important;
+    .modal-content{
+      border: solid 1px $color-white !important;
+      border-radius: 0px !important;
+      padding-left:35px !important;
+      padding-right:35px !important;
+      padding-bottom:35px !important;
+      .modal-header{
+        border:0 !important;
+        .modal-title{
+          font-family: $font-family-roboto !important;
+          font-size:20px !important;
+          color: $color-text1  !important;
+          font-weight: bold !important;
+        }
+      }
+      .worksapce-tab{
+       .name{
+          font-family: $font-family-roboto !important;
+          font-size:15px !important;
+          color: $color-text3  !important;
+          padding: 33px 0px 8px 0px !important;
+          span{
+            font-size:12px !important;
+          } 
+       }
+       .input{
+         padding:0 !important;
+       }
+       .create-btn{
+          width: 93px;
+          height: 40px;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size:17px !important;
+          color: $color-white  !important;
+          margin-top:30px !important;
+       }
+       .cancel-btn{
+        width: 93px;
+        height: 40px;
+        border-radius: 5px !important;
+        background-color: $color-white !important;
+        font-family: $font-family-roboto !important;
+        font-size:17px !important;
+        color: $color-text2  !important;
+        border: solid 1px $color-brand3 !important;
+        margin-left: 20px !important;
+        margin-top:30px !important;
+       }
+      }
+    }
+  }
 }
