@@ -53,7 +53,7 @@ const AddTaskModal = props => {
                 >
                   <option>Select Project...</option>
                   {props.project.map(project => {
-                    return <option value={project.name}>{project.name}</option>;
+                    return <option value={project.id}>{project.name}</option>;
                   })}
                 </select>
               </div>
@@ -66,12 +66,12 @@ const AddTaskModal = props => {
                 <select
                   name="taskUser"
                   value={props.state.taskUser}
-                  onChange={props.handleInputChange}
+                  onChange={props.handleUserSelect}
                   className="form-control"
                 >
                   <option>Select Users...</option>
                   {props.user.map(user => {
-                    return <option value={user}>{user}</option>;
+                    return <option value={user.id}>{user.name}</option>;
                   })}
                 </select>
               </div>

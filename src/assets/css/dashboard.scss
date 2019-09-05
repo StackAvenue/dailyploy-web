@@ -135,6 +135,28 @@
         }
       }
     }
+    .header-search-bar{
+      margin-left:12% !important;
+      border-radius: 5px !important;
+      border: solid 1px $color-brandheading1 !important;
+      background-color: $color-white !important;
+      input{
+        height: 36px !important;
+        background-color: $color-white !important;
+        border:0 !important;
+        font-size: 15px !important;
+        font-family: $font-family-roboto !important;
+        color:$color-text3 !important;
+        &::placeholder{
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color:$color-text3 !important;
+        }
+        &:focus{
+          border:0 !important;
+        }
+      }
+    }
 }
 
 .dashboard-menubar-container{
@@ -929,7 +951,7 @@
     color: $color-brand3 !important;
   }
   .grid-view{
-    padding:40px 30px 30px 60px !important;
+    padding:40px 0px 30px 40px !important;
     .grid-div{
       height: 160px;
       width:18% !important;

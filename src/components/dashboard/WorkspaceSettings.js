@@ -53,6 +53,16 @@ class WorkspaceSettings extends Component {
     this.setState({ sort: value });
   };
 
+  classNameRoute = () => {
+    let route = this.props.history.location.pathname;
+    let routeName = route.split("/")[1];
+    if (routeName === "workspace") {
+      return "workspaceTrue";
+    } else {
+      return false;
+    }
+  };
+
   render() {
     console.log("members", this.state.members);
     return (
@@ -68,6 +78,7 @@ class WorkspaceSettings extends Component {
             <MenuBar
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
+              classNameRoute={this.classNameRoute}
             />
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
               <div className="row no-margin workspace1-setting">

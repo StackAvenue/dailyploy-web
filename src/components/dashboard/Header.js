@@ -8,6 +8,7 @@ import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
+import Search from "../../assets/images/search.png";
 
 class Header extends Component {
   constructor(props) {
@@ -15,13 +16,14 @@ class Header extends Component {
     this.state = {
       workspaces: [],
       userName: "",
+      userEmail: "",
     };
   }
 
   async componentDidMount() {
     try {
       const { data } = await get("user");
-      this.setState({ userName: data.name });
+      this.setState({ userName: data.name, userEmail: data.email });
     } catch (e) {
       console.log("err", e);
     }
@@ -30,6 +32,7 @@ class Header extends Component {
   render() {
     const x = this.state.userName
       .split(" ")
+      .splice(0, 2)
       .map(x => x[0])
       .join("");
     return (
@@ -54,6 +57,18 @@ class Header extends Component {
               >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
+              <div className="col-md-6 no-padding header-search-bar">
+                <div className="col-md-11 no-padding d-inline-block">
+                  <input
+                    type="text"
+                    placeholder="Search by project/people"
+                    className="form-control"
+                  />
+                </div>
+                <div className="col-md-1 d-inline-block">
+                  <img src={Search} />
+                </div>
+              </div>
 
               <div
                 className="collapse navbar-collapse"
@@ -157,50 +172,15 @@ class Header extends Component {
                     >
                       {x}
                     </Dropdown.Toggle>
-
-                    {/* <Dropdown.Menu className="header-dropdown">
-                      <Dropdown.Item
-                        href={`/settings/${this.props.workspaceId}`}
-                      >
-                        <i className="fa fa-wrench" aria-hidden="true" />
-                        <span className="header-dropdown-space" />
-                        Settings
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={this.props.logout}>
-                        <i className="fa fa-sign-out" aria-hidden="true" />
-                        <span className="header-dropdown-space" />
-                        Logout
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <i className="fa fa-desktop" aria-hidden="true" />
-                        <span className="header-dropdown-space" />
-                        WorkSpaces
-                      </Dropdown.Item>
-                      {this.props.workspaces.map((workspace, index) => {
-                        return (
-                          <Dropdown.Item
-                            key={index}
-                            href={`/dashboard/${workspace.id}`}
-                          >
-                            <span className="workspace-text">
-                              {workspace.name}
-                            </span>
-                          </Dropdown.Item>
-                        );
-                      })}
-                    </Dropdown.Menu> */}
                     <Dropdown.Menu className="dropdown-position">
                       <Dropdown.Item>
                         <div className="workspace-circle d-inline-block">
-                          {"Gaurav Gandhi"
-                            .split(" ")
-                            .map(x => x[0])
-                            .join("")}
+                          {x}
                         </div>
                         <div className="workspace-name d-inline-block">
-                          Gaurav Gandhi
+                          {this.state.userName}
                           <br />
-                          <span>chandanaishwarya@gmail.com</span>
+                          <span>{this.state.userEmail}</span>
                           <br />
                           <img src={Member} className="img-responsive" />
                           <span>Member</span>
@@ -215,7 +195,7 @@ class Header extends Component {
                       </Dropdown.Item>
                       <div className="col-md-12 logout-user">
                         <span>
-                          Not Gaurav Gandhi ?{" "}
+                          Not {this.state.userName} ?{" "}
                           <button
                             className="btn btn-link"
                             onClick={this.props.logout}

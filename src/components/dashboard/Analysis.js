@@ -40,6 +40,16 @@ class Analysis extends Component {
     this.setState({ sort: value });
   };
 
+  classNameRoute = () => {
+    let route = this.props.history.location.pathname;
+    let routeName = route.split("/")[1];
+    if (routeName === "analysis") {
+      return "analysisTrue";
+    } else {
+      return false;
+    }
+  };
+
   render() {
     return (
       <>
@@ -54,6 +64,7 @@ class Analysis extends Component {
             <MenuBar
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
+              classNameRoute={this.classNameRoute}
             />
             <br />
             <h1>Analysis</h1>

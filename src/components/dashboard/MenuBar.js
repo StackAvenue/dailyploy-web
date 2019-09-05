@@ -7,6 +7,8 @@ import { get, post, mockPost } from "../../utils/API";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
+import Tabs from "./MenuBar/Tabs";
+import ConditionalElements from "./MenuBar/ConditionalElements";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -190,26 +192,14 @@ export default class MenuBar extends Component {
         <div className="container-fluid">
           <div className="dashboard-container">
             <div className="row no-margin dashboard-menubar-container">
-              <div className="col-md-1 active">
-                <Link to={`/dashboard/${this.props.workspaceId}`}>Home</Link>
-              </div>
-              <div className="col-md-1 analysis">
-                <Link to={`/analysis/${this.props.workspaceId}`}>Analysis</Link>
-              </div>
-              <div className="col-md-1 analysis">
-                <Link to={`/projects/${this.props.workspaceId}`}>Projects</Link>
-              </div>
-              <div className="col-md-1 analysis">
-                <Link to={`/members/${this.props.workspaceId}`}>Members</Link>
-              </div>
-              <div className="col-md-7 no-padding ml-auto">
-                <div className="col-md-10 d-inline-block sort-bar no-padding">
-                  <input
-                    type="text"
-                    placeholder="Search Here"
-                    className="form-control"
-                  />
-                </div>
+              <Tabs
+                classNameRoute={this.props.classNameRoute}
+                workspaceId={this.props.workspaceId}
+              />
+              <div className="col-md-7 ml-auto text-right">
+                <ConditionalElements
+                  classNameRoute={this.props.classNameRoute}
+                />
                 <div className="col-md-2 d-inline-block">
                   <Dropdown>
                     <Dropdown.Toggle

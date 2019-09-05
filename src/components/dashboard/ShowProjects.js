@@ -85,6 +85,16 @@ class ShowProjects extends Component {
     return months <= 0 ? 0 : months;
   };
 
+  classNameRoute = () => {
+    let route = this.props.history.location.pathname;
+    let routeName = route.split("/")[1];
+    if (routeName === "projects") {
+      return "projectsTrue";
+    } else {
+      return false;
+    }
+  };
+
   render() {
     var x = "2024-08-04";
     var y = x.split("-");
@@ -102,6 +112,7 @@ class ShowProjects extends Component {
             <MenuBar
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
+              classNameRoute={this.classNameRoute}
             />
             <div className="show-projects">
               <div className="views">
@@ -123,14 +134,16 @@ class ShowProjects extends Component {
                       <thead>
                         <tr>
                           <th scope="col">
-                            <div class="checkbox">
+                            <div class="custom-control custom-checkbox">
                               <input
                                 type="checkbox"
-                                id="checkbox"
-                                name=""
-                                value=""
+                                class="custom-control-input"
+                                id={`customCheck`}
                               />
-                              <label for="checkbox"></label>
+                              <label
+                                class="custom-control-label"
+                                for={`customCheck`}
+                              ></label>
                             </div>
                           </th>
                           <th scope="col">ID</th>
@@ -148,7 +161,7 @@ class ShowProjects extends Component {
                           return (
                             <tr>
                               <td>
-                                <div class="checkbox">
+                                {/* <div class="checkbox">
                                   <input
                                     type="checkbox"
                                     id={`checkbox${index}`}
@@ -156,6 +169,17 @@ class ShowProjects extends Component {
                                     value=""
                                   />
                                   <label for={`checkbox${index}`}></label>
+                                </div> */}
+                                <div class="custom-control custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    class="custom-control-input"
+                                    id={`customCheck${index}`}
+                                  />
+                                  <label
+                                    class="custom-control-label"
+                                    for={`customCheck${index}`}
+                                  ></label>
                                 </div>
                               </td>
                               <td>{index + 1}</td>

@@ -23,7 +23,7 @@ class Dashboard extends Component {
     this.state = {
       taskName: "",
       projectName: "",
-      taskUser: "",
+      taskUser: [],
       sort: "week",
       show: false,
       setShow: false,
@@ -50,16 +50,14 @@ class Dashboard extends Component {
 
     try {
       const { data } = await get("users");
-      const nameArr = data.user.map(user => user.name);
-      console.log("usersss", nameArr);
-      this.setState({ users: nameArr });
+      const userArr = data.user.map(user => user);
+      this.setState({ users: userArr });
     } catch (e) {
       console.log("users Error", e);
     }
 
     try {
       const { data } = await get("workspaces");
-      console.log("WorkSpace", data.workspaces);
       this.setState({ workspaces: data.workspaces });
     } catch (e) {
       console.log("err", e);
@@ -71,7 +69,6 @@ class Dashboard extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects`
       );
-      console.log("projects list", data.projects);
       this.setState({ projects: data.projects });
     } catch (e) {
       console.log("err", e);
@@ -96,17 +93,23 @@ class Dashboard extends Component {
     const taskData = {
       task: {
         name: this.state.taskName,
-        project_name: this.state.projectName,
-        user: this.state.taskUser,
-        date_from: this.state.dateFrom,
-        date_to: this.state.dateTo,
-        time_from: this.state.timeFrom,
-        time_to: this.state.timeTo,
+        member_ids: this.state.taskUser,
+        start_datetime:
+          moment(this.state.dateFrom).format("YYYY-MM-DD") +
+          " " +
+          this.state.timeFrom,
+        end_datetime:
+          moment(this.state.dateTo).format("YYYY-MM-DD") +
+          " " +
+          this.state.timeTo,
         comments: this.state.comments,
       },
     };
     try {
-      const { data } = await mockPost(taskData, "task");
+      const { data } = await post(
+        taskData,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectName}/tasks`
+      );
       toast.success("Task Assigned");
       console.log("Task Data", data);
       this.setState({ show: false });
@@ -148,19 +151,36 @@ class Dashboard extends Component {
 
   handleTimeFrom = value => {
     this.setState({
-      timeFrom: value,
+      timeFrom: value.format("HH:mm:ss"),
     });
   };
 
   handleTimeTo = value => {
     this.setState({
-      timeTo: value,
+      timeTo: value.format("HH:mm:ss"),
     });
+  };
+
+  handleUserSelect = e => {
+    const { name, value } = e.target;
+    let userIdArr = [];
+    userIdArr.push(value);
+    this.setState({ [name]: userIdArr });
   };
 
   handleInputChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  };
+
+  classNameRoute = () => {
+    let route = this.props.history.location.pathname;
+    let routeName = route.split("/")[1];
+    if (routeName === "dashboard") {
+      return "dashboardTrue";
+    } else {
+      return false;
+    }
   };
 
   render() {
@@ -178,8 +198,20 @@ class Dashboard extends Component {
             <MenuBar
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
+              classNameRoute={this.classNameRoute}
             />
-            <Calendar sortUnit={this.state.sort} />
+            <Calendar
+              sortUnit={this.state.sort}
+              state={this.state}
+              handleInputChange={this.handleInputChange}
+              project={this.state.projects}
+              handleDateFrom={this.handleDateFrom}
+              handleDateTo={this.handleDateTo}
+              handleTimeFrom={this.handleTimeFrom}
+              handleTimeTo={this.handleTimeTo}
+              user={this.state.users}
+              addTask={this.addTask}
+            />
             <div>
               <button
                 className="btn menubar-task-btn"
@@ -198,6 +230,7 @@ class Dashboard extends Component {
                 handleTimeTo={this.handleTimeTo}
                 user={this.state.users}
                 addTask={this.addTask}
+                handleUserSelect={this.handleUserSelect}
               />
             </div>
           </div>

@@ -9,6 +9,7 @@ import Scheduler, {
 } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import "../../assets/css/dashboard.scss";
+import AddTaskModal from "./AddTaskModal";
 
 class Calendar extends Component {
   constructor(props) {
@@ -63,6 +64,8 @@ class Calendar extends Component {
       events: [],
       eventsForCustomStyle: [],
       eventsForTaskView: [],
+      show: false,
+      setShow: false,
     };
   }
 
@@ -82,6 +85,19 @@ class Calendar extends Component {
     this.schedulerData.setResources(this.state.resources);
     this.schedulerData.setEvents(this.state.events);
   }
+
+  showTaskModal = () => {
+    this.setState({
+      setShow: true,
+      show: true,
+    });
+  };
+
+  closeTaskModal = () => {
+    this.setState({
+      show: false,
+    });
+  };
 
   renderData = () => {
     this.schedulerData.setResources(this.state.resources);
@@ -222,6 +238,22 @@ class Calendar extends Component {
         `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
       )
     ) {
+      // if (
+
+      //     <AddTaskModal
+      //       state={this.props.state}
+      //       closeTaskModal={this.closeTaskModal}
+      //       handleInputChange={this.props.handleInputChange}
+      //       project={this.props.state.projects}
+      //       handleDateFrom={this.props.handleDateFrom}
+      //       handleDateTo={this.props.handleDateTo}
+      //       handleTimeFrom={this.props.handleTimeFrom}
+      //       handleTimeTo={this.props.handleTimeTo}
+      //       user={this.props.state.users}
+      //       addTask={this.props.addTask}
+      //     />
+
+      // ) {
       let newFreshId = 0;
       schedulerData.events.forEach(item => {
         if (item.id >= newFreshId) newFreshId = item.id + 1;

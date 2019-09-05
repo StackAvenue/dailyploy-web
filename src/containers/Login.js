@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import cookie from "react-cookies";
-import { login } from "../utils/API";
+import { login, get } from "../utils/API";
 import { validateEmail } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,6 +48,13 @@ class Signin extends Component {
         toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
+        // try {
+        //   const { data } = await get("user");
+        //   console.log("data user", data);
+
+        // } catch (e) {
+        //   console.log("error user", e);
+        // }
         this.props.history.push("/dashboard");
       } catch (e) {
         console.log("error", e.response.data.error);

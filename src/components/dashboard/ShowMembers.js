@@ -49,8 +49,17 @@ class ShowMembers extends Component {
     this.setState({ sort: value });
   };
 
+  classNameRoute = () => {
+    let route = this.props.history.location.pathname;
+    let routeName = route.split("/")[1];
+    if (routeName === "members") {
+      return "membersTrue";
+    } else {
+      return false;
+    }
+  };
+
   render() {
-    console.log("members", this.state.members);
     return (
       <>
         <div className="row no-margin">
@@ -64,6 +73,7 @@ class ShowMembers extends Component {
             <MenuBar
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
+              classNameRoute={this.classNameRoute}
             />
             <div className="show-projects">
               <div className="members"></div>
