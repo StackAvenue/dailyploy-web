@@ -78,7 +78,11 @@ class ProjectsSettings extends Component {
   render() {
     return (
       <div>
-        <Header logout={this.logout} workspaces={this.state.workspaces} />
+        <Header
+          logout={this.logout}
+          workspaces={this.state.workspaces}
+          workspaceId={this.state.workspaceId}
+        />
         <table class="table">
           <thead>
             <tr>

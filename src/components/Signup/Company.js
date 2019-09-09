@@ -5,7 +5,7 @@ const Company = props => {
   return (
     <>
       <div className="col-md-10 offset-1 no-padding signup-form text-left">
-        <div class="form-group">
+        <div className="form-group">
           <label>Name</label>
           {props.state.errors.nameError ? (
             <span className="error-warning">
@@ -21,7 +21,7 @@ const Company = props => {
             placeholder="John Doe"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label>Email</label>
           {props.state.errors.emailError ? (
             <span className="error-warning">
@@ -37,7 +37,7 @@ const Company = props => {
             placeholder="johndoe1234@amazon.com"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label>Organization Name</label>
           {props.state.errors.companyNameError ? (
             <span className="error-warning">
@@ -53,7 +53,7 @@ const Company = props => {
             placeholder="Amazon"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label>Password</label>
           {props.state.errors.passwordError ? (
             <span className="error-warning">
@@ -69,7 +69,7 @@ const Company = props => {
             placeholder="Password"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label>Confirm Password</label>
           {props.state.errors.confirmPasswordError ? (
             <span className="error-warning">

@@ -53,7 +53,11 @@ const AddTaskModal = props => {
                 >
                   <option>Select Project...</option>
                   {props.project.map(project => {
-                    return <option value={project.name}>{project.name}</option>;
+                    return (
+                      <option key={project.id} value={project.id}>
+                        {project.name}
+                      </option>
+                    );
                   })}
                 </select>
               </div>
@@ -66,12 +70,16 @@ const AddTaskModal = props => {
                 <select
                   name="taskUser"
                   value={props.state.taskUser}
-                  onChange={props.handleInputChange}
+                  onChange={props.handleUserSelect}
                   className="form-control"
                 >
                   <option>Select Users...</option>
                   {props.user.map(user => {
-                    return <option value={user}>{user}</option>;
+                    return (
+                      <option key={user.id} value={user.id}>
+                        {user.name}
+                      </option>
+                    );
                   })}
                 </select>
               </div>
@@ -83,7 +91,7 @@ const AddTaskModal = props => {
               <div className="col-md-10 d-inline-block">
                 <div
                   className="col-md-6 d-inline-block"
-                  style={{ "padding-left": "0" }}
+                  style={{ paddingLeft: "0" }}
                 >
                   <DatePicker
                     selected={props.state.dateFrom}
@@ -92,7 +100,7 @@ const AddTaskModal = props => {
                 </div>
                 <div
                   className="col-md-6 d-inline-block"
-                  style={{ "padding-right": "0" }}
+                  style={{ paddingRight: "0" }}
                 >
                   <DatePicker
                     selected={props.state.dateTo}
@@ -108,7 +116,7 @@ const AddTaskModal = props => {
               <div className="col-md-10 d-inline-block">
                 <div
                   className="col-md-4 d-inline-block"
-                  style={{ "padding-left": "0" }}
+                  style={{ paddingLeft: "0" }}
                 >
                   <TimePicker
                     placeholder="Time From"
@@ -122,7 +130,7 @@ const AddTaskModal = props => {
                 </div>
                 <div
                   className="col-md-4 d-inline-block"
-                  style={{ "padding-right": "0" }}
+                  style={{ paddingRight: "0" }}
                 >
                   <TimePicker
                     placeholder="Time To"
@@ -143,7 +151,7 @@ const AddTaskModal = props => {
                   name="comments"
                   value={props.state.comments}
                   onChange={props.handleInputChange}
-                  class="form-control"
+                  className="form-control"
                   rows="3"
                   placeholder="Write Here"
                 />

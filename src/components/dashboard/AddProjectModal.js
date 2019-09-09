@@ -48,7 +48,7 @@ const AddProjectModal = props => {
               <div className="col-md-10 d-inline-block">
                 <div
                   className="col-md-6 d-inline-block"
-                  style={{ "padding-left": "0" }}
+                  style={{ paddingLeft: "0" }}
                 >
                   <DatePicker
                     selected={props.state.dateFrom}
@@ -57,7 +57,7 @@ const AddProjectModal = props => {
                 </div>
                 <div
                   className="col-md-6 d-inline-block"
-                  style={{ "padding-right": "0" }}
+                  style={{ paddingRight: "0" }}
                 >
                   <DatePicker
                     selected={props.state.dateTo}

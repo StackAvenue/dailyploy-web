@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 16 15">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #33a1ff;
+      }
+    </style>
+  </defs>
+  <g id="three-columns-layout" transform="translate(-47.664 15.462) rotate(-90)">
+    <g id="view-column" transform="translate(0 47.4)">
+      <rect id="Rectangle_204" data-name="Rectangle 204" class="cls-1" width="3" height="16" transform="translate(0.462 0.264)"/>
+      <rect id="Rectangle_205" data-name="Rectangle 205" class="cls-1" width="3" height="16" transform="translate(6.462 0.264)"/>
+      <rect id="Rectangle_206" data-name="Rectangle 206" class="cls-1" width="3" height="16" transform="translate(12.462 0.264)"/>
+    </g>
+  </g>
+</svg>

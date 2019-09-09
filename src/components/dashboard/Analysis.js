@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import Header from "./Header";
-import { get, post, logout, mockPost, mockGet } from "../../utils/API";
+import { get, post, logout, mockPost } from "../../utils/API";
 import MenuBar from "./MenuBar";
-import { Tab, Row, Col, Nav } from "react-bootstrap";
-import GeneralSettings from "./UserSettings/GeneralSettings";
-import PrivacySettings from "./UserSettings/PrivacySettings";
 import Sidebar from "./Sidebar";
 
-class Settings extends Component {
+class Analysis extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +13,6 @@ class Settings extends Component {
       workspaceId: "",
       projectNames: [],
       sort: "week",
-      members: [],
     };
   }
   logout = async () => {
@@ -32,14 +28,6 @@ class Settings extends Component {
     }
 
     this.getWorkspaceParams();
-
-    try {
-      const { data } = await mockGet("members");
-      // console.log(data);
-      this.setState({ members: data });
-    } catch (e) {
-      console.log("err", e);
-    }
   }
 
   getWorkspaceParams = () => {
@@ -55,8 +43,8 @@ class Settings extends Component {
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
     let routeName = route.split("/")[1];
-    if (routeName === "settings") {
-      return "settingsTrue";
+    if (routeName === "analysis") {
+      return "analysisTrue";
     } else {
       return false;
     }
@@ -78,32 +66,8 @@ class Settings extends Component {
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
             />
-            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-              <div className="row no-margin workspace1-setting">
-                <div className="col-md-2 side-tabs">
-                  <Nav variant="link" className="flex-column">
-                    <Nav.Item>
-                      <Nav.Link eventKey="first">General</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="second">Privacy</Nav.Link>
-                    </Nav.Item>
-                  </Nav>
-                </div>
-                <div className="col-md-10">
-                  <div className="col-md-12 body-tabs">
-                    <Tab.Content>
-                      <Tab.Pane eventKey="first">
-                        <GeneralSettings />
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="second">
-                        <PrivacySettings />
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </div>
-                </div>
-              </div>
-            </Tab.Container>
+            <br />
+            <h1>Analysis</h1>
           </div>
         </div>
       </>
@@ -111,4 +75,4 @@ class Settings extends Component {
   }
 }
 
-export default withRouter(Settings);
+export default withRouter(Analysis);

@@ -1,6 +1,6 @@
 export const checkPassword = sPassword => {
   if (sPassword) {
-    let regPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+    let regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     if (!sPassword.match(regPassword)) {
       // return "Password has to be at least 8 chars long including one small, one capital and one special character";
       return "Min 8 characters with at least one number";
@@ -22,7 +22,7 @@ export const validateName = name => {
 
 export const validateEmail = sEmail => {
   if (sEmail) {
-    let reEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    let reEmail = /^([a-zA-Z0-9_]+)@([a-zA-Z0-9_]+)\.([a-zA-Z]{2,5})$/;
     if (!sEmail.match(reEmail)) {
       return "Must be Valid";
     }

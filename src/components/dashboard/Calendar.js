@@ -9,6 +9,8 @@ import Scheduler, {
 } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import "../../assets/css/dashboard.scss";
+import AddTaskModal from "./AddTaskModal";
+import moment from "moment";
 
 class Calendar extends Component {
   constructor(props) {
@@ -24,15 +26,16 @@ class Calendar extends Component {
         dayResourceTableWidth: "218px",
         weekResourceTableWidth: "16%",
         monthResourceTableWidth: "218px",
-        dayCellWidth: "3%",
+        dayCellWidth: "5%",
         weekCellWidth: "12%",
-        monthCellWidth: "8%",
+        monthCellWidth: "4%",
         eventItemHeight: 45,
         eventItemLineHeight: 50,
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#e5e5e54f",
         tableHeaderHeight: 35,
+        schedulerWidth: "96%",
         views: [
           {
             viewName: "Day",
@@ -62,6 +65,8 @@ class Calendar extends Component {
       events: [],
       eventsForCustomStyle: [],
       eventsForTaskView: [],
+      show: false,
+      setShow: false,
     };
   }
 
@@ -78,13 +83,26 @@ class Calendar extends Component {
     } catch (e) {
       console.log("error", e);
     }
-    this.schedulerData.setResources(this.state.resources);
-    this.schedulerData.setEvents(this.state.events);
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   }
 
+  showTaskModal = () => {
+    this.setState({
+      setShow: true,
+      show: true,
+    });
+  };
+
+  closeTaskModal = () => {
+    this.setState({
+      show: false,
+    });
+  };
+
   renderData = () => {
-    this.schedulerData.setResources(this.state.resources);
-    this.schedulerData.setEvents(this.state.events);
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   };
 
   nonAgendaCellHeaderTemplateResolver = (
@@ -205,17 +223,13 @@ class Calendar extends Component {
 
   ops1 = (schedulerData, event) => {
     alert(
-      `You just executed ops1 to event: {id: ${event.id}, title: ${
-        event.title
-      }}`
+      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`
     );
   };
 
   ops2 = (schedulerData, event) => {
     alert(
-      `You just executed ops2 to event: {id: ${event.id}, title: ${
-        event.title
-      }}`
+      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`
     );
   };
 
@@ -225,6 +239,22 @@ class Calendar extends Component {
         `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
       )
     ) {
+      // if (
+
+      //     <AddTaskModal
+      //       state={this.props.state}
+      //       closeTaskModal={this.closeTaskModal}
+      //       handleInputChange={this.props.handleInputChange}
+      //       project={this.props.state.projects}
+      //       handleDateFrom={this.props.handleDateFrom}
+      //       handleDateTo={this.props.handleDateTo}
+      //       handleTimeFrom={this.props.handleTimeFrom}
+      //       handleTimeTo={this.props.handleTimeTo}
+      //       user={this.props.state.users}
+      //       addTask={this.props.addTask}
+      //     />
+
+      // ) {
       let newFreshId = 0;
       schedulerData.events.forEach(item => {
         if (item.id >= newFreshId) newFreshId = item.id + 1;
@@ -248,9 +278,7 @@ class Calendar extends Component {
   updateEventStart = (schedulerData, event, newStart) => {
     if (
       window.confirm(
-        `Do you want to adjust the start of the event? {eventId: ${
-          event.id
-        }, eventTitle: ${event.title}, newStart: ${newStart}}`
+        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
       )
     ) {
       schedulerData.updateEventStart(event, newStart);
@@ -263,9 +291,7 @@ class Calendar extends Component {
   updateEventEnd = (schedulerData, event, newEnd) => {
     if (
       window.confirm(
-        `Do you want to adjust the end of the event? {eventId: ${
-          event.id
-        }, eventTitle: ${event.title}, newEnd: ${newEnd}}`
+        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
       )
     ) {
       schedulerData.updateEventEnd(event, newEnd);
@@ -333,8 +359,8 @@ class Calendar extends Component {
       schedulerData,
       event
     );
-    let start = event.start.split(" ")[1];
-    let end = event.end.split(" ")[1];
+    var start = moment(event.start).format("HH:mm");
+    var end = moment(event.end).format("HH:mm");
     let divStyle = {
       borderRadius: "2px",
       backgroundColor: backgroundColor,
@@ -352,7 +378,7 @@ class Calendar extends Component {
               {`${start} - ${end}`}
             </div>
             <div className="col-md-6 no-padding d-inline-block item-time text-right">
-              3h
+              {moment(event.end).diff(moment(event.start), "hours")}&nbsp;h
             </div>
           </div>
         </div>

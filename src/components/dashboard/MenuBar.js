@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import "../../assets/css/dashboard.scss";
 import { Dropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Add from "../../assets/images/add.svg";
 import { get, post, mockPost } from "../../utils/API";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
+import Tabs from "./MenuBar/Tabs";
+import ConditionalElements from "./MenuBar/ConditionalElements";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -184,15 +187,19 @@ export default class MenuBar extends Component {
 
   render() {
     const { sort, show } = this.state;
-    console.log("MEMBER", this.state);
     return (
       <>
         <div className="container-fluid">
           <div className="dashboard-container">
             <div className="row no-margin dashboard-menubar-container">
-              <div className="col-md-1 home">Home</div>
-              <div className="col-md-1 analysis">Analysis</div>
-              <div className="col-md-7 no-padding ml-auto">
+              <Tabs
+                classNameRoute={this.props.classNameRoute}
+                workspaceId={this.props.workspaceId}
+              />
+              <div className="col-md-7 ml-auto text-right">
+                <ConditionalElements
+                  classNameRoute={this.props.classNameRoute}
+                />
                 <div className="col-md-2 d-inline-block">
                   <Dropdown>
                     <Dropdown.Toggle
@@ -231,13 +238,6 @@ export default class MenuBar extends Component {
                       />
                     </Dropdown.Menu>
                   </Dropdown>
-                </div>
-                <div className="col-md-10 d-inline-block sort-bar no-padding">
-                  <input
-                    type="text"
-                    placeholder="Search Here"
-                    className="form-control"
-                  />
                 </div>
               </div>
             </div>

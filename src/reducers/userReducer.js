@@ -1,4 +1,4 @@
-import { USER_INFO } from "../actions";
+// import { USER_INFO } from "../actions";
 
 const initalState = {};
 
