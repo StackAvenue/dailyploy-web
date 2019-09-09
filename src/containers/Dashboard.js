@@ -38,6 +38,8 @@ class Dashboard extends Component {
       workspaceId: "",
       projects: [],
       users: [],
+      resources: [],
+      events: [],
     };
   }
   async componentDidMount() {
@@ -72,6 +74,41 @@ class Dashboard extends Component {
       this.setState({ projects: data.projects });
     } catch (e) {
       console.log("err", e);
+    }
+
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/project_tasks`
+      );
+      console.log("Calender Data", data.tasks);
+      let tasksResources = data.tasks
+        .map(task => task.user)
+        .reduce((prev, current) => {
+          if (prev.length === 0) {
+            prev.push(current);
+          } else {
+            if (prev.every(el => el.id !== current.id)) {
+              prev.push(current);
+            }
+          }
+          return prev;
+        }, []);
+      let taskEvents = data.tasks.map(task => {
+        console.log("start");
+        var obj = {
+          id: task.id,
+          start: task.start_datetime,
+          end: task.end_datetime,
+          resourceId: task.user.id,
+          title: task.name,
+          bgColor: "#D9D9D9",
+        };
+        return obj;
+      });
+      console.log("Calender Data", taskEvents);
+      this.setState({ resources: tasksResources, events: taskEvents });
+    } catch (e) {
+      console.log("error", e);
     }
   }
 
@@ -202,22 +239,16 @@ class Dashboard extends Component {
             />
             <Calendar
               sortUnit={this.state.sort}
-              state={this.state}
-              handleInputChange={this.handleInputChange}
-              project={this.state.projects}
-              handleDateFrom={this.handleDateFrom}
-              handleDateTo={this.handleDateTo}
-              handleTimeFrom={this.handleTimeFrom}
-              handleTimeTo={this.handleTimeTo}
-              user={this.state.users}
-              addTask={this.addTask}
+              workspaceId={this.state.workspaceId}
+              resources={this.state.resources}
+              events={this.state.events}
             />
             <div>
               <button
                 className="btn menubar-task-btn"
                 onClick={this.showTaskModal}
               >
-                <i class="fas fa-plus" />
+                <i className="fas fa-plus" />
               </button>
               <AddTaskModal
                 state={this.state}

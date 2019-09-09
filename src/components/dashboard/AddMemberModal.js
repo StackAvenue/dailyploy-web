@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
 
-const RadioOptions = ({options, selected, onChange}) =>{
-  return(
+const RadioOptions = ({ options, selected, onChange }) => {
+  return (
     <div className="form-check form-check-inline">
       {options.map((choice, index) => (
         <div key={index}>
@@ -16,24 +16,22 @@ const RadioOptions = ({options, selected, onChange}) =>{
             checked={choice.value}
             onChange={onChange}
           />
-          <label className="form-check-label">
-            {choice.text}
-          </label>
+          <label className="form-check-label">{choice.text}</label>
         </div>
       ))}
     </div>
   );
-}
+};
 
 class AddMemberModal extends Component {
   constructor(props) {
     super(props);
     this.choices = [
-      { text: 'View', value: 'view' },
-      { text: 'Edit', value: 'edit' }
+      { text: "View", value: "view" },
+      { text: "Edit", value: "edit" },
     ];
     this.state = {
-      value: []
+      value: [],
     };
   }
 
@@ -56,7 +54,7 @@ class AddMemberModal extends Component {
                 <img src={Close} alt="close" />
               </button>
             </div>
-            <table class="table heading">
+            <table className="table heading">
               <thead>
                 <tr>
                   <th scope="col">Name*</th>
@@ -89,40 +87,44 @@ class AddMemberModal extends Component {
                       onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
-                  <td style={{ "padding-top": "20px" }}>
-                    <RadioOptions 
+                  <td style={{ paddingTop: "20px" }}>
+                    <RadioOptions
                       options={this.choices}
                       onChange={this.props.handleChangeMemberRadio}
-                      selected={this.props.state.memberAccess} />
+                      selected={this.props.state.memberAccess}
+                    />
                   </td>
                   <td>
-                    <select 
-                      className="form-control role" 
+                    <select
+                      className="form-control role"
                       name="memberRole"
                       value={this.props.state.memberRole}
-                      onChange={this.props.handleChangeMemberInput}>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
                       <option value="">Select</option>
                       <option value="admin">Admin</option>
                       <option value="member">Member</option>
                     </select>
                   </td>
                   <td>
-                    <select 
-                      className="form-control role" 
+                    <select
+                      className="form-control role"
                       name="memberWorkingHours"
                       value={this.props.state.memberWorkingHours}
-                      onChange={this.props.handleChangeMemberInput}>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
                       <option value="">Select</option>
                       <option value="8">8hr</option>
                       <option value="9">9hr</option>
                     </select>
                   </td>
                   <td>
-                    <select 
-                      className="form-control project" 
+                    <select
+                      className="form-control project"
                       name="memberProject"
                       value={this.props.state.memberProject}
-                      onChange={this.props.handleChangeMemberInput}>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
                       <option value="">Select</option>
                       <option value="Dailyploy">Dailyploy</option>
                       <option value="DealSignal">DealSignal</option>

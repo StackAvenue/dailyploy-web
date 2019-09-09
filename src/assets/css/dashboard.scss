@@ -160,7 +160,7 @@
 }
 
 .dashboard-menubar-container{
-    padding: 1% 0 1% 2% !important;
+    padding: 1% 0 1% 0% !important;
     .active{
       font-size: 16px;
       font-family:$font-family-roboto;
@@ -1015,7 +1015,7 @@
     width:94% !important;
     margin:auto !important;
     th{
-      font-size:13px !important;
+      font-size:14px !important;
       font-weight: bold !important;
       font-family: $font-family-roboto !important;
       color: $color-projectList !important;

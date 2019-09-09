@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Login from "./containers/Login";
 import SignUp from "./containers/Signup";
 import Dashboard from "./containers/Dashboard";
@@ -7,7 +7,6 @@ import Landing from "./containers/Landing";
 import NotFound from "./components/NoMatch";
 import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
-import ProjectsSettings from "./components/dashboard/ProjectsSettings";
 import Analysis from "./components/dashboard/Analysis";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
@@ -47,12 +46,6 @@ class Routes extends Component {
         component: Settings,
         title: "settings",
       },
-      // {
-      //   path: "/settings/:workspaceId",
-      //   exact: true,
-      //   component: ProjectsSettings,
-      //   title: "projectsSettings",
-      // },
       {
         path: "/analysis/:workspaceId",
         exact: true,
@@ -84,20 +77,10 @@ class Routes extends Component {
     ];
   }
 
-  isAllowed = (props, routeComponent, title) => {
+  isAllowed = (props, RouteComponent, title) => {
     if (this.isCurrentUser()) {
-      if (title === "dashboard") {
-        return <Dashboard {...props} />;
-      } else if (title === "settings") {
-        return <Settings {...props} />;
-      } else if (title === "analysis") {
-        return <Analysis {...props} />;
-      } else if (title === "showProjects") {
-        return <ShowProjects {...props} />;
-      } else if (title === "showMembers") {
-        return <ShowMembers {...props} />;
-      } else if (title === "workspaceSettings") {
-        return <WorkspaceSettings {...props} />;
+      if (title !== "login" && title !== "signup" && title !== "landing") {
+        return <RouteComponent {...props} />;
       }
     } else {
       if (title === "login") {
@@ -131,15 +114,6 @@ class Routes extends Component {
             ))}
             <Route />
           </Switch>
-          {/* <BrowserRouter>
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/login" component={Login} />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/dashboard/:id" component={Dashboard} />
-            </Switch>
-          </BrowserRouter> */}
         </main>
       </div>
     );

@@ -64,7 +64,6 @@ class WorkspaceSettings extends Component {
   };
 
   render() {
-    console.log("members", this.state.members);
     return (
       <>
         <div className="row no-margin">

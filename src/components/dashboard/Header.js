@@ -77,7 +77,7 @@ class Header extends Component {
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                   <Dropdown>
                     <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      <i class="fas fa-bell" />
+                      <i className="fas fa-bell" />
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="dropdown-notification">
@@ -136,7 +136,7 @@ class Header extends Component {
                   </Dropdown>
                   <Dropdown>
                     <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      <i class="fa fa-bars"></i>
+                      <i className="fa fa-bars"></i>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="dropdown-position">

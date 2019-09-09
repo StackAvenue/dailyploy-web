@@ -31,7 +31,7 @@ class GeneralSettings extends Component {
                 <img src={Profile} className="img-responsive" />
                 <div className="overlay"></div>
                 <button className="btn btn-link">
-                  <i class="fas fa-pencil-alt"></i>
+                  <i className="fas fa-pencil-alt"></i>
                 </button>
               </div>
             </div>

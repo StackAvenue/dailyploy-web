@@ -77,13 +77,13 @@ class ShowMembers extends Component {
             />
             <div className="show-projects">
               <div className="members"></div>
-              <table class="table">
+              <table className="table">
                 <thead>
                   <tr>
                     <th scope="col">
-                      <div class="checkbox">
+                      <div className="checkbox">
                         <input type="checkbox" id="checkbox" name="" value="" />
-                        <label for="checkbox"></label>
+                        <label htmlFor="checkbox"></label>
                       </div>
                     </th>
                     <th scope="col">ID</th>
@@ -100,14 +100,14 @@ class ShowMembers extends Component {
                     return (
                       <tr>
                         <td>
-                          <div class="checkbox">
+                          <div className="checkbox">
                             <input
                               type="checkbox"
                               id={`checkbox${index}`}
                               name=""
                               value=""
                             />
-                            <label for={`checkbox${index}`}></label>
+                            <label htmlFor={`checkbox${index}`}></label>
                           </div>
                         </td>
                         <td>{index + 1}</td>
@@ -118,24 +118,11 @@ class ShowMembers extends Component {
                         <td>{member.member.member_workingHours} hours</td>
                         <td>{member.member.member_project}</td>
                         <td>
-                          <i class="fas fa-pencil-alt"></i>
+                          <i className="fas fa-pencil-alt"></i>
                         </td>
                       </tr>
                     );
                   })}
-                  {/* <td>
-                <div class="checkbox">
-                  <input type="checkbox" id={`checkbox1`} name="" value="" />
-                  <label for={`checkbox1`}></label>
-                </div>
-              </td>
-              <td>1</td>
-              <td>Arpit Jain</td>
-              <td>jarpit1298@gmail.com</td>
-              <td>View</td>
-              <td>Admin</td>
-              <td>8 hours</td>
-              <td>Dailyploy</td> */}
                 </tbody>
               </table>
             </div>

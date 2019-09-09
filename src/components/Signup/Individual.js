@@ -5,7 +5,7 @@ const Individual = props => {
   return (
     <>
       <div className="col-md-10 offset-1 no-padding signup-form text-left">
-        <div class="form-group">
+        <div className="form-group">
           <label>Name</label>
           {props.state.errors.nameError ? (
             <span className="error-warning">
@@ -22,7 +22,7 @@ const Individual = props => {
           />
         </div>
 
-        <div class="form-group">
+        <div className="form-group">
           <label>Email</label>
           {props.state.errors.emailError ? (
             <span className="error-warning">
@@ -38,7 +38,7 @@ const Individual = props => {
             placeholder="johndoe123@example.com"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label>Password</label>
           {props.state.errors.passwordError ? (
             <span className="error-warning">
@@ -55,7 +55,7 @@ const Individual = props => {
           />
         </div>
 
-        <div class="form-group">
+        <div className="form-group">
           <label>Confirm Password</label>
           {props.state.errors.confirmPasswordError ? (
             <span className="error-warning">

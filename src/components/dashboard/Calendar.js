@@ -10,6 +10,7 @@ import Scheduler, {
 import withDragDropContext from "./withDnDContext";
 import "../../assets/css/dashboard.scss";
 import AddTaskModal from "./AddTaskModal";
+import moment from "moment";
 
 class Calendar extends Component {
   constructor(props) {
@@ -82,8 +83,8 @@ class Calendar extends Component {
     } catch (e) {
       console.log("error", e);
     }
-    this.schedulerData.setResources(this.state.resources);
-    this.schedulerData.setEvents(this.state.events);
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   }
 
   showTaskModal = () => {
@@ -100,8 +101,8 @@ class Calendar extends Component {
   };
 
   renderData = () => {
-    this.schedulerData.setResources(this.state.resources);
-    this.schedulerData.setEvents(this.state.events);
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   };
 
   nonAgendaCellHeaderTemplateResolver = (
@@ -358,8 +359,8 @@ class Calendar extends Component {
       schedulerData,
       event
     );
-    let start = event.start.split(" ")[1];
-    let end = event.end.split(" ")[1];
+    var start = moment(event.start).format("HH:mm");
+    var end = moment(event.end).format("HH:mm");
     let divStyle = {
       borderRadius: "2px",
       backgroundColor: backgroundColor,
@@ -377,7 +378,7 @@ class Calendar extends Component {
               {`${start} - ${end}`}
             </div>
             <div className="col-md-6 no-padding d-inline-block item-time text-right">
-              3h
+              {moment(event.end).diff(moment(event.start), "hours")}&nbsp;h
             </div>
           </div>
         </div>

@@ -96,7 +96,7 @@ class Signin extends Component {
               <div className="col-md-5 sub-container">
                 <div className="col-md-12 heading">Sign In</div>
                 <div className="col-md-10 offset-1 no-padding signup-form text-left">
-                  <div class="form-group">
+                  <div className="form-group">
                     <label>Email</label>
                     {this.state.errors.emailError ? (
                       <span className="error-warning">
@@ -112,7 +112,7 @@ class Signin extends Component {
                       placeholder="johndoe1234@amazon.com"
                     />
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <label>Password</label>
                     {this.state.errors.passwordError ? (
                       <span className="error-warning">
@@ -146,7 +146,9 @@ class Signin extends Component {
                     src={googleIcon}
                     className="img-responsive"
                   />
-                  <Link className="link">Sign In with Google</Link>
+                  <Link to={"/login"} className="link">
+                    Sign In with Google
+                  </Link>
                 </div>
                 <br />
                 <br />

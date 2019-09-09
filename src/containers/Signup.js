@@ -5,7 +5,7 @@ import { signUp } from "../utils/API";
 import {
   checkPassword,
   validateName,
-  validateEmail
+  validateEmail,
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,9 +30,9 @@ class Signup extends Component {
         companyNameError: null,
         emailError: null,
         passwordError: null,
-        confirmPasswordError: null
+        confirmPasswordError: null,
       },
-      isCompany: false
+      isCompany: false,
     };
   }
 
@@ -66,9 +66,9 @@ class Signup extends Component {
             is_company_present: this.state.isCompany,
             company: {
               name: this.state.companyName,
-              email: this.state.email
-            }
-          }
+              email: this.state.email,
+            },
+          },
         };
       } else {
         signupData = {
@@ -77,19 +77,19 @@ class Signup extends Component {
             email: this.state.email,
             password: this.state.password,
             password_confirmation: this.state.confirmPassword,
-            is_company_present: this.state.isCompany
-          }
+            is_company_present: this.state.isCompany,
+          },
         };
         console.log("is_company_present:", this.state.isCompany);
       }
       try {
         const { signUpData } = await signUp(signupData);
         toast.success("User Created", { autoClose: 2000 });
-        this.props.history.push("/login");
+        setTimeout(() => this.props.history.push("/login"), 3000);
       } catch (e) {
-        // toast.error("email " + e.response.data.errors.email, {
-        //   autoClose: 2000
-        // });
+        toast.error("email " + e.response.data.errors.email, {
+          autoClose: 2000,
+        });
       }
     } else {
       console.log("Enter valid email address and password");
@@ -109,7 +109,7 @@ class Signup extends Component {
       companyNameError: null,
       emailError: null,
       passwordError: null,
-      confirmPasswordError: null
+      confirmPasswordError: null,
     };
     errors.nameError = validateName(this.state.name);
     errors.passwordError = checkPassword(this.state.password);
@@ -188,7 +188,9 @@ class Signup extends Component {
                     src={googleIcon}
                     className="img-responsive"
                   />
-                  <Link className="link">Sign up with your Google account</Link>
+                  <Link to={"/signup"} className="link">
+                    Sign up with your Google account
+                  </Link>
                 </div>
                 <br />
                 <div className="col-md-8 offset-2 googleIcon">

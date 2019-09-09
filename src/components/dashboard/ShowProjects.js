@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Header from "./Header";
 import { get, post, logout, mockPost } from "../../utils/API";
 import MenuBar from "./MenuBar";
@@ -27,6 +27,7 @@ class ShowProjects extends Component {
       projectNames: [],
       sort: "week",
       projects: [],
+      isChecked: true,
     };
   }
   countIncrese = projectUser => {
@@ -95,6 +96,29 @@ class ShowProjects extends Component {
     }
   };
 
+  checkAll = e => {
+    const allCheckboxChecked = e.target.checked;
+    var checkboxes = document.getElementsByName("isChecked");
+    if (allCheckboxChecked) {
+      for (var i in checkboxes) {
+        if (checkboxes[i].checked == false) {
+          checkboxes[i].checked = true;
+        }
+      }
+    } else {
+      for (var i in checkboxes) {
+        if (checkboxes[i].checked == true) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+  };
+
+  handleCheck = e => {
+    const value = e.target.checked;
+    console.log("value", value);
+  };
+
   render() {
     var x = "2024-08-04";
     var y = x.split("-");
@@ -117,36 +141,43 @@ class ShowProjects extends Component {
             <div className="show-projects">
               <div className="views">
                 <Tabs>
-                  <div className="col-md-2 ml-auto">
-                    <TabList>
-                      <Tab>
-                        <i class="fa fa-bars"></i>
-                      </Tab>
-                      <Tab>
-                        <i class="fas fa-th"></i>
-                      </Tab>
-                    </TabList>
+                  <div className="col-md-12 text-center">
+                    <div
+                      className="col-md-2 offset-5"
+                      style={{ position: "relative", top: "-74px" }}
+                    >
+                      <TabList>
+                        <Tab>
+                          <i className="fa fa-bars"></i>
+                        </Tab>
+                        <Tab>
+                          <i className="fas fa-th"></i>
+                        </Tab>
+                      </TabList>
+                    </div>
                   </div>
-                  <div className="col-md-12 no-padding hr"></div>
+                  {/* <div className="col-md-12 no-padding hr"></div> */}
 
                   <TabPanel>
                     <table className="table">
                       <thead>
                         <tr>
                           <th scope="col">
-                            <div class="custom-control custom-checkbox">
+                            <div className="custom-control custom-checkbox">
                               <input
                                 type="checkbox"
-                                class="custom-control-input"
+                                className="custom-control-input"
                                 id={`customCheck`}
+                                onChange={this.checkAll}
+                                name="chk[]"
                               />
                               <label
-                                class="custom-control-label"
-                                for={`customCheck`}
+                                className="custom-control-label"
+                                htmlFor={`customCheck`}
                               ></label>
                             </div>
                           </th>
-                          <th scope="col">ID</th>
+                          <th scope="col">Project ID</th>
                           <th scope="col">Project Name</th>
                           <th scope="col">Colour</th>
                           <th scope="col">Project Owner</th>
@@ -159,9 +190,9 @@ class ShowProjects extends Component {
                       <tbody>
                         {this.state.projects.map((project, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td>
-                                {/* <div class="checkbox">
+                                {/* <div className="checkbox">
                                   <input
                                     type="checkbox"
                                     id={`checkbox${index}`}
@@ -170,15 +201,17 @@ class ShowProjects extends Component {
                                   />
                                   <label for={`checkbox${index}`}></label>
                                 </div> */}
-                                <div class="custom-control custom-checkbox">
+                                <div className="custom-control custom-checkbox">
                                   <input
                                     type="checkbox"
-                                    class="custom-control-input"
+                                    className="custom-control-input"
                                     id={`customCheck${index}`}
+                                    name="isChecked"
+                                    onChange={this.handleCheck}
                                   />
                                   <label
-                                    class="custom-control-label"
-                                    for={`customCheck${index}`}
+                                    className="custom-control-label"
+                                    htmlFor={`customCheck${index}`}
                                   ></label>
                                 </div>
                               </td>
@@ -188,7 +221,7 @@ class ShowProjects extends Component {
                                 <div
                                   className="color-block"
                                   style={{
-                                    "background-color": `${project.color_code}`,
+                                    backgroundColor: `${project.color_code}`,
                                   }}
                                 ></div>
                               </td>
@@ -242,6 +275,7 @@ class ShowProjects extends Component {
                       {this.state.projects.map((project, index) => {
                         return (
                           <GridBlock
+                            key={index}
                             project={project}
                             index={index}
                             projectUser={this.projectUser}
