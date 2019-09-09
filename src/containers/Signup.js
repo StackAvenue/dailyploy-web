@@ -13,7 +13,7 @@ import { Tabs, Tab } from "react-bootstrap";
 import Company from "../components/Signup/Company";
 import Individual from "../components/Signup/Individual";
 import Header from "../components/Landing/Header";
-import signup from "../assets/images/signup.jpg";
+import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
 
 class Signup extends Component {
@@ -170,7 +170,7 @@ class Signup extends Component {
                   </Tab>
                   <Tab
                     eventKey="company"
-                    title="Company"
+                    title="Organization"
                     style={{ border: "0" }}
                   >
                     <Company

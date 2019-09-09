@@ -7,6 +7,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
 import Sidebar from "./Sidebar";
+import { Router } from "react-router";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class ShowProjects extends Component {
       sort: "week",
       projects: [],
       isChecked: true,
+      isLoading: false,
     };
   }
   countIncrese = projectUser => {
@@ -43,6 +45,7 @@ class ShowProjects extends Component {
     this.props.history.push("/login");
   };
   async componentDidMount() {
+    this.setState({ isLoading: true });
     try {
       const { data } = await get("workspaces");
       this.setState({ workspaces: data.workspaces });
@@ -56,7 +59,7 @@ class ShowProjects extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects`
       );
-      this.setState({ projects: data.projects });
+      this.setState({ projects: data.projects, isLoading: false });
     } catch (e) {
       console.log("err", e);
     }
@@ -119,6 +122,11 @@ class ShowProjects extends Component {
     console.log("value", value);
   };
 
+  handleLoad = value => {
+    window.location.reload();
+    this.setState({ isLoading: value });
+  };
+
   render() {
     var x = "2024-08-04";
     var y = x.split("-");
@@ -137,6 +145,7 @@ class ShowProjects extends Component {
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
+              handleLoad={this.handleLoad}
             />
             <div className="show-projects">
               <div className="views">

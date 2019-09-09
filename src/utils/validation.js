@@ -22,7 +22,7 @@ export const validateName = name => {
 
 export const validateEmail = sEmail => {
   if (sEmail) {
-    let reEmail = /^([a-zA-Z0-9_]+)@([a-zA-Z0-9_]+)\.([a-zA-Z]{2,5})$/;
+    let reEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
     if (!sEmail.match(reEmail)) {
       return "Must be Valid";
     }

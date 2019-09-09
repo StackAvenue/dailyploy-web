@@ -59,6 +59,7 @@ export default class MenuBar extends Component {
       memberRole: "",
       memberWorkingHours: "",
       memberProject: "",
+      isLoading: false,
     };
   }
 
@@ -73,6 +74,7 @@ export default class MenuBar extends Component {
   }
 
   addProject = async () => {
+    console.log("loading", this.state.isLoading);
     const projectData = {
       project: {
         name: this.state.projectName,
@@ -87,8 +89,11 @@ export default class MenuBar extends Component {
         projectData,
         `workspaces/${this.props.workspaceId}/projects`
       );
-      toast.success("Project Created");
-      this.setState({ show: false });
+      this.setState({ show: false, isLoading: true });
+      console.log("loading", this.state.isLoading);
+      this.props.handleLoad(this.state.isLoading);
+      toast.success("Project Created", { autoClose: 2000 });
+
       console.log("projectData", data);
     } catch (e) {
       console.log("project error", e.response);
