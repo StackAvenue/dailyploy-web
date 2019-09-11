@@ -28,14 +28,25 @@ const Company = props => {
               {props.state.errors.emailError}
             </span>
           ) : null}
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={props.changeHandler}
-            className="form-control login-form-field"
-            placeholder="johndoe1234@amazon.com"
-          />
+          {props.state.errors.emailError ? (
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={props.changeHandler}
+              className="form-control login-form-field error"
+              placeholder="johndoe1234@amazon.com"
+            />
+          ) : (
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="johndoe1234@amazon.com"
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Organization Name</label>
@@ -60,14 +71,25 @@ const Company = props => {
               {props.state.errors.passwordError}
             </span>
           ) : null}
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={props.changeHandler}
-            className="form-control login-form-field"
-            placeholder="Password"
-          />
+          {props.state.errors.passwordError ? (
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={props.changeHandler}
+              className="form-control login-form-field error"
+              placeholder="Password"
+            />
+          ) : (
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="Password"
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Confirm Password</label>
@@ -76,14 +98,25 @@ const Company = props => {
               {props.state.errors.confirmPasswordError}
             </span>
           ) : null}
-          <input
-            type="password"
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={props.changeHandler}
-            className="form-control login-form-field"
-            placeholder="Confirm Password"
-          />
+          {props.state.errors.confirmPasswordError ? (
+            <input
+              type="password"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={props.changeHandler}
+              className="form-control login-form-field error"
+              placeholder="Confirm Password"
+            />
+          ) : (
+            <input
+              type="password"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="Confirm Password"
+            />
+          )}
         </div>
         <div className="col-md-12 no-padding text-center">
           <button

@@ -6,7 +6,7 @@ import { validateEmail } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Landing/Header";
-import signup from "../assets/images/signup.jpg";
+import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
 
 class Signin extends Component {
@@ -19,6 +19,7 @@ class Signin extends Component {
         emailError: null,
         passwordError: null,
       },
+      error: "",
     };
   }
 
@@ -48,17 +49,11 @@ class Signin extends Component {
         toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
-        // try {
-        //   const { data } = await get("user");
-        //   console.log("data user", data);
-
-        // } catch (e) {
-        //   console.log("error user", e);
-        // }
-        this.props.history.push("/dashboard");
+        this.props.history.push(`/dashboard/${data.workspace_id}`);
+        window.location.reload();
       } catch (e) {
         console.log("error", e.response.data.error);
-        toast.error(e.response.data.error);
+        this.setState({ error: e.response.data.error });
       }
     } else {
       return "Enter valid email address and password";
@@ -95,6 +90,11 @@ class Signin extends Component {
               </div>
               <div className="col-md-5 sub-container">
                 <div className="col-md-12 heading">Sign In</div>
+                {this.state.error ? (
+                  <div className="invalid-error">
+                    Invalid Email or Password!
+                  </div>
+                ) : null}
                 <div className="col-md-10 offset-1 no-padding signup-form text-left">
                   <div className="form-group">
                     <label>Email</label>
@@ -127,6 +127,12 @@ class Signin extends Component {
                       className="form-control login-form-field"
                       placeholder="Password"
                     />
+                  </div>
+                  <div className="text-right forgot-pass">
+                    Forgot Password?{" "}
+                    <button className="btn btn-link no-padding">
+                      Click here
+                    </button>
                   </div>
                   <br />
                   <div className="col-md-12 no-padding text-center">

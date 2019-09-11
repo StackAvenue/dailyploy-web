@@ -40,6 +40,7 @@ class Dashboard extends Component {
       users: [],
       resources: [],
       events: [],
+      isLoading: false,
     };
   }
   async componentDidMount() {
@@ -147,7 +148,9 @@ class Dashboard extends Component {
         taskData,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectName}/tasks`
       );
-      toast.success("Task Assigned");
+      toast.success("Task Assigned", { autoClose: 2000 });
+      setTimeout(() => window.location.reload(), 3000);
+
       console.log("Task Data", data);
       this.setState({ show: false });
     } catch (e) {
@@ -159,6 +162,10 @@ class Dashboard extends Component {
   onSelectSort = value => {
     console.log("selected value ", value);
     this.setState({ sort: value });
+  };
+
+  handleLoad = value => {
+    this.setState({ isLoading: value });
   };
 
   logout = async () => {
@@ -236,6 +243,7 @@ class Dashboard extends Component {
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
+              handleLoad={this.handleLoad}
             />
             <Calendar
               sortUnit={this.state.sort}
