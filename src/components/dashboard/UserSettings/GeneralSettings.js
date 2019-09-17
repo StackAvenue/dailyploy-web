@@ -28,7 +28,7 @@ class GeneralSettings extends Component {
           <div className="col-md-12">
             <div className="col-md-2 d-inline-block no-padding">
               <div className="user-icon">
-                <img src={Profile} className="img-responsive" />
+                <img alt={"profile"} src={Profile} className="img-responsive" />
                 <div className="overlay"></div>
                 <button className="btn btn-link">
                   <i className="fas fa-pencil-alt"></i>

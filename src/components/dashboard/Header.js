@@ -66,7 +66,7 @@ class Header extends Component {
                   />
                 </div>
                 <div className="col-md-1 d-inline-block">
-                  <img src={Search} />
+                  <img alt={"search"} src={Search} />
                 </div>
               </div>
 
@@ -90,7 +90,11 @@ class Header extends Component {
                         <div className="row">
                           <div className="col-md-1 no-padding">
                             <div className="notification-img">
-                              <img src={userImg} className="img-responsive" />
+                              <img
+                                alt={"userImg"}
+                                src={userImg}
+                                className="img-responsive"
+                              />
                             </div>
                           </div>
                           <div className="col-md-11">
@@ -113,7 +117,11 @@ class Header extends Component {
                         <div className="row">
                           <div className="col-md-1 no-padding">
                             <div className="notification-img">
-                              <img src={userImg} className="img-responsive" />
+                              <img
+                                alt={"userImg"}
+                                src={userImg}
+                                className="img-responsive"
+                              />
                             </div>
                           </div>
                           <div className="col-md-11">
@@ -155,11 +163,19 @@ class Header extends Component {
                         className="workspace-setting"
                         href={`/workspace/${this.props.workspaceId}/settings`}
                       >
-                        <img src={setting} className="img-responsive" />
+                        <img
+                          alt={"setting"}
+                          src={setting}
+                          className="img-responsive"
+                        />
                         &nbsp;&nbsp;Workspace Settings
                       </Dropdown.Item>
                       <Dropdown.Item className="invite">
-                        <img src={invite} className="img-responsive" />
+                        <img
+                          alt={"invite"}
+                          src={invite}
+                          className="img-responsive"
+                        />
                         &nbsp;&nbsp;Invite to Workspace
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -182,7 +198,11 @@ class Header extends Component {
                           <br />
                           <span>{this.state.userEmail}</span>
                           <br />
-                          <img src={Member} className="img-responsive" />
+                          <img
+                            alt={"member"}
+                            src={Member}
+                            className="img-responsive"
+                          />
                           <span>Member</span>
                         </div>
                       </Dropdown.Item>
@@ -190,7 +210,11 @@ class Header extends Component {
                         className="workspace-setting"
                         href={`/settings/${this.props.workspaceId}`}
                       >
-                        <img src={setting} className="img-responsive" />
+                        <img
+                          alt={"settings"}
+                          src={setting}
+                          className="img-responsive"
+                        />
                         &nbsp;&nbsp;Settings
                       </Dropdown.Item>
                       <div className="col-md-12 logout-user">

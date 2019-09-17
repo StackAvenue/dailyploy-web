@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { SERVICE_URL, MOCK_URL, AUTH_TOKEN } from "./utils/Constants";
+import { SERVICE_URL, AUTH_TOKEN } from "./utils/Constants";
 
 const axiosInitializer = {
   config: () => {

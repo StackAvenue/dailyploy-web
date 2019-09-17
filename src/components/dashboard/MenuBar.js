@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "../../assets/css/dashboard.scss";
 import { Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import Add from "../../assets/images/add.svg";
 import { get, post, mockPost } from "../../utils/API";
 import { toast } from "react-toastify";
@@ -60,13 +59,22 @@ export default class MenuBar extends Component {
       memberWorkingHours: "",
       memberProject: "",
       isLoading: false,
+      logedInUserEmail: "",
     };
   }
 
   async componentDidMount() {
     try {
+      const { data } = await get("user");
+      this.setState({ logedInUserEmail: data.email });
+    } catch (e) {
+      console.log("err", e);
+    }
+    try {
       const { data } = await get("users");
-      const emailArr = data.user.map(user => user.email);
+      const emailArr = data.user
+        .filter(user => user.email !== this.state.logedInUserEmail)
+        .map(user => user.email);
       this.setState({ emailOptions: emailArr });
     } catch (e) {
       console.log("users Error", e);
@@ -90,11 +98,8 @@ export default class MenuBar extends Component {
         `workspaces/${this.props.workspaceId}/projects`
       );
       this.setState({ show: false, isLoading: true });
-      console.log("loading", this.state.isLoading);
       this.props.handleLoad(this.state.isLoading);
       toast.success("Project Created", { autoClose: 2000 });
-
-      console.log("projectData", data);
     } catch (e) {
       console.log("project error", e.response);
       this.setState({ show: false });

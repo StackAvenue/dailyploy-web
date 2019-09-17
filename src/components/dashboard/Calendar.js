@@ -1,15 +1,8 @@
 import React, { Component } from "react";
-import { PropTypes } from "prop-types";
-import { get, mockGet } from "../../utils/API";
 import "antd/lib/style/index.less";
-import Scheduler, {
-  SchedulerData,
-  ViewTypes,
-  DATE_FORMAT,
-} from "react-big-scheduler";
+import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import "../../assets/css/dashboard.scss";
-import AddTaskModal from "./AddTaskModal";
 import moment from "moment";
 
 class Calendar extends Component {
@@ -71,18 +64,6 @@ class Calendar extends Component {
   }
 
   async componentWillMount() {
-    try {
-      const { data } = await mockGet("calenderData");
-      console.log("Calender Data", data);
-      this.setState({
-        resources: data[0].resources,
-        events: data[0].events,
-        eventsForCustomStyle: data[0].eventsForCustomStyle,
-        eventsForTaskView: data[0].eventsForTaskView,
-      });
-    } catch (e) {
-      console.log("error", e);
-    }
     this.schedulerData.setResources(this.props.resources);
     this.schedulerData.setEvents(this.props.events);
   }
@@ -239,22 +220,6 @@ class Calendar extends Component {
         `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
       )
     ) {
-      // if (
-
-      //     <AddTaskModal
-      //       state={this.props.state}
-      //       closeTaskModal={this.closeTaskModal}
-      //       handleInputChange={this.props.handleInputChange}
-      //       project={this.props.state.projects}
-      //       handleDateFrom={this.props.handleDateFrom}
-      //       handleDateTo={this.props.handleDateTo}
-      //       handleTimeFrom={this.props.handleTimeFrom}
-      //       handleTimeTo={this.props.handleTimeTo}
-      //       user={this.props.state.users}
-      //       addTask={this.props.addTask}
-      //     />
-
-      // ) {
       let newFreshId = 0;
       schedulerData.events.forEach(item => {
         if (item.id >= newFreshId) newFreshId = item.id + 1;
@@ -353,8 +318,7 @@ class Calendar extends Component {
     mustBeHeight,
     agendaMaxEventWidth
   ) => {
-    let borderColor = "rgba(0,139,236,1)",
-      backgroundColor = bgColor;
+    let backgroundColor = bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
       event
