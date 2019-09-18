@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, post, logout, mockPost } from "../../utils/API";
+import { get, logout } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
 import Sidebar from "./Sidebar";
-import { Router } from "react-router";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -103,14 +102,14 @@ class ShowProjects extends Component {
     const allCheckboxChecked = e.target.checked;
     var checkboxes = document.getElementsByName("isChecked");
     if (allCheckboxChecked) {
-      for (var i in checkboxes) {
-        if (checkboxes[i].checked == false) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === false) {
           checkboxes[i].checked = true;
         }
       }
     } else {
-      for (var i in checkboxes) {
-        if (checkboxes[i].checked == true) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === true) {
           checkboxes[i].checked = false;
         }
       }
@@ -128,9 +127,6 @@ class ShowProjects extends Component {
   };
 
   render() {
-    var x = "2024-08-04";
-    var y = x.split("-");
-
     return (
       <div>
         <div className="row no-margin">

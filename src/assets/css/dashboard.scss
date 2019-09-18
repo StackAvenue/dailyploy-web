@@ -1397,6 +1397,7 @@
         float: left;
         text-align:center;
         a{
+          padding:0px 2px 2px 2px;
           font-family: $font-family-roboto !important;
           font-size:16px !important;
           color: $color-text1 !important;
@@ -1406,6 +1407,9 @@
           font-size:16px !important;
           color: $color-text1 !important;
           padding-top:0px !important;
+        }
+        &:hover{
+          background-color:$color-brand3 !important;
         }
       }
       .workspace-text{
@@ -1477,6 +1481,45 @@
         margin-top:30px !important;
        }
       }
+    }
+  }
+}
+
+
+.analysis-box{
+  background-color:$color-white !important;
+  margin-top:10px;
+  box-shadow: 0 -16px 20px 0 rgba(0, 0, 0, 0.1) !important;
+  height:100px;
+  .analysis-top{
+    margin-top:20px;
+    .react-tabs__tab{
+      border:0 !important;
+      border-radius:0 !important;
+      font-family: $font-family-roboto !important;
+      font-size:13px !important;
+      color: $color-text2  !important;
+      font-weight: bold;
+      margin-right:30px !important;
+      padding:0 !important;
+    }
+    .react-tabs__tab--selected{
+      border:0 !important;
+      border-bottom: 2px solid $color-brand3 !important;
+      border-radius:0 !important;
+      font-family: $font-family-roboto !important;
+      font-size:13px !important;
+      color: $color-text2  !important;
+      font-weight: bold;
+    }
+    .react-tabs__tab-list{
+      border:0 !important;
+      padding-left:24px;
+    }
+    .head-box{
+      background-color: $color-brandheading1;
+      height: 131px;
+      opacity:0.1;
     }
   }
 }

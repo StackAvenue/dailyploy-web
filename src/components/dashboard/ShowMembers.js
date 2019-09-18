@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, post, logout, mockPost, mockGet } from "../../utils/API";
+import { get, logout, mockGet } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 

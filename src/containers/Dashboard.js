@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, post, logout, mockPost } from "../utils/API";
+import { get, post, logout } from "../utils/API";
 import moment from "moment";
 import Header from "../components/dashboard/Header";
-import Footer from "../components/Footer";
 import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
 
@@ -81,7 +79,6 @@ class Dashboard extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/project_tasks`
       );
-      console.log("Calender Data", data.tasks);
       let tasksResources = data.tasks
         .map(task => task.user)
         .reduce((prev, current) => {
@@ -95,7 +92,6 @@ class Dashboard extends Component {
           return prev;
         }, []);
       let taskEvents = data.tasks.map(task => {
-        console.log("start");
         var obj = {
           id: task.id,
           start: task.start_datetime,
@@ -106,7 +102,6 @@ class Dashboard extends Component {
         };
         return obj;
       });
-      console.log("Calender Data", taskEvents);
       this.setState({ resources: tasksResources, events: taskEvents });
     } catch (e) {
       console.log("error", e);
@@ -250,6 +245,7 @@ class Dashboard extends Component {
               workspaceId={this.state.workspaceId}
               resources={this.state.resources}
               events={this.state.events}
+              alam={"alam"}
             />
             <div>
               <button

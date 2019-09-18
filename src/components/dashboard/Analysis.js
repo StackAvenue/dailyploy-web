@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, post, logout, mockPost } from "../../utils/API";
+import { get, logout } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import MemberAnalysis from "./Analysis/MemberAnalysis";
+import ProjectAnalysis from "./Analysis/ProjectAnalysis";
 
 class Analysis extends Component {
   constructor(props) {
@@ -66,8 +70,23 @@ class Analysis extends Component {
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
             />
-            <br />
-            <h1>Analysis</h1>
+            <div className="analysis-box row no-margin">
+              <div className="col-md-12 no-padding analysis-top">
+                <Tabs>
+                  <TabList>
+                    <Tab>Members</Tab>
+                    <Tab>Projects</Tab>
+                  </TabList>
+
+                  <TabPanel>
+                    <MemberAnalysis />
+                  </TabPanel>
+                  <TabPanel>
+                    <ProjectAnalysis />
+                  </TabPanel>
+                </Tabs>
+              </div>
+            </div>
           </div>
         </div>
       </>

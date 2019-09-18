@@ -1,5 +1,4 @@
 import React from "react";
-import AddProjectModal from "../AddProjectModal";
 
 const GridBlock = props => {
   return (

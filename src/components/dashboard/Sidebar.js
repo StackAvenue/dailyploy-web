@@ -50,7 +50,10 @@ class Sidebar extends Component {
               return (
                 <li key={index}>
                   <div className="workspace-box">
-                    <a href={`/dashboard/${item.id}`}>
+                    <a
+                      className="btn btn-default"
+                      href={`/dashboard/${item.id}`}
+                    >
                       {this.nameFirstLetters(item.name)}
                     </a>
                   </div>

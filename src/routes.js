@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Login from "./containers/Login";
 import SignUp from "./containers/Signup";
 import Dashboard from "./containers/Dashboard";
@@ -11,6 +11,7 @@ import Analysis from "./components/dashboard/Analysis";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import WorkspaceSettings from "./components/dashboard/WorkspaceSettings";
+import { WORKSPACE_ID } from "./utils/Constants";
 
 class Routes extends Component {
   constructor(props) {
@@ -82,6 +83,7 @@ class Routes extends Component {
       if (title !== "login" && title !== "signup" && title !== "landing") {
         return <RouteComponent {...props} />;
       }
+      return <Redirect to={`/dashboard/${WORKSPACE_ID}`} />;
     } else {
       if (title === "login") {
         return <Login {...props} />;
