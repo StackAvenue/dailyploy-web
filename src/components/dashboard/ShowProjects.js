@@ -29,6 +29,10 @@ class ShowProjects extends Component {
       projects: [],
       isChecked: true,
       isLoading: false,
+      isLogedInUserEmailArr: [],
+      projects: [],
+      userId: "",
+      users: [],
     };
   }
   countIncrese = projectUser => {
@@ -46,22 +50,55 @@ class ShowProjects extends Component {
   async componentDidMount() {
     this.setState({ isLoading: true });
     try {
-      const { data } = await get("workspaces");
-      this.setState({ workspaces: data.workspaces });
+      const { data } = await get("logged_in_user");
+      var loggedInData = data;
     } catch (e) {
       console.log("err", e);
     }
 
+    // workspace Listing
+    try {
+      const { data } = await get("workspaces");
+      var workspacesData = data.workspaces;
+    } catch (e) {
+      console.log("err", e);
+    }
+
+    //get workspace Id
     this.getWorkspaceParams();
 
+    // worksapce project Listing
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects`
       );
-      this.setState({ projects: data.projects, isLoading: false });
+      var projectsData = data.projects;
     } catch (e) {
       console.log("err", e);
     }
+
+    // workspace Member Listing
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/members`
+      );
+      var userArr = data.members.map(user => user.email);
+      var emailArr = data.members
+        .filter(user => user.email !== loggedInData.email)
+        .map(user => user.email);
+    } catch (e) {
+      console.log("users Error", e);
+    }
+
+    this.setState({
+      userId: loggedInData.id,
+      userName: loggedInData.name,
+      userEmail: loggedInData.email,
+      workspaces: workspacesData,
+      projects: projectsData,
+      users: userArr,
+      isLogedInUserEmailArr: emailArr,
+    });
   }
 
   getWorkspaceParams = () => {
@@ -142,6 +179,7 @@ class ShowProjects extends Component {
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
               handleLoad={this.handleLoad}
+              state={this.state}
             />
             <div className="show-projects">
               <div className="views">
@@ -230,25 +268,25 @@ class ShowProjects extends Component {
                                   }}
                                 ></div>
                               </td>
-                              <td>{project.name}</td>
+                              <td>{project.owner.name}</td>
                               <td>{project.start_date}</td>
-                              <td>2024-08-04</td>
+                              <td>{project.end_date}</td>
                               <td>
                                 {this.monthDiff(
                                   this.getDate(project.start_date),
-                                  this.getDate("2024-08-04")
+                                  this.getDate(project.end_date)
                                 )}
                                 &nbsp; months
                               </td>
                               <td>
                                 <span>
-                                  {this.projectUser
+                                  {project.members
                                     .slice(0, 4)
                                     .map((user, index) => {
                                       return (
                                         <div key={index} className="user-block">
                                           <span>
-                                            {user
+                                            {user.name
                                               .split(" ")
                                               .map(x => x[0])
                                               .join("")}
@@ -264,7 +302,10 @@ class ShowProjects extends Component {
                                     style={{ backgroundColor: "#33a1ff" }}
                                   >
                                     <span>
-                                      +{this.countIncrese(this.projectUser)}
+                                      +
+                                      {this.countIncrese(
+                                        project.members.map(user => user.name)
+                                      )}
                                     </span>
                                   </div>
                                 </span>

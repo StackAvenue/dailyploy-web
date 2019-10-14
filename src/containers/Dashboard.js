@@ -39,47 +39,59 @@ class Dashboard extends Component {
       resources: [],
       events: [],
       isLoading: false,
+      userEmail: "",
+      isLogedInUserEmailArr: [],
     };
   }
   async componentDidMount() {
+    // Logged In User Info
     try {
-      const { data } = await get("user");
-      this.setState({ userId: data.id, userName: data.name });
+      const { data } = await get("logged_in_user");
+      var loggedInData = data;
     } catch (e) {
       console.log("err", e);
     }
 
-    try {
-      const { data } = await get("users");
-      const userArr = data.user.map(user => user);
-      this.setState({ users: userArr });
-    } catch (e) {
-      console.log("users Error", e);
-    }
-
+    // workspace Listing
     try {
       const { data } = await get("workspaces");
-      this.setState({ workspaces: data.workspaces });
+      var workspacesData = data.workspaces;
     } catch (e) {
       console.log("err", e);
     }
+
+    //get workspace Id
     this.getWorkspaceParams();
     this.auth();
 
+    // worksapce project Listing
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects`
       );
-      this.setState({ projects: data.projects });
+      var projectsData = data.projects;
     } catch (e) {
       console.log("err", e);
+    }
+
+    // workspace Member Listing
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/members`
+      );
+      var userArr = data.members.map(user => user.email);
+      var emailArr = data.members
+        .filter(user => user.email !== loggedInData.email)
+        .map(user => user.email);
+    } catch (e) {
+      console.log("users Error", e);
     }
 
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/project_tasks`
       );
-      let tasksResources = data.tasks
+      var tasksResources = data.tasks
         .map(task => task.user)
         .reduce((prev, current) => {
           if (prev.length === 0) {
@@ -91,7 +103,7 @@ class Dashboard extends Component {
           }
           return prev;
         }, []);
-      let taskEvents = data.tasks.map(task => {
+      var taskEvents = data.tasks.map(task => {
         var obj = {
           id: task.id,
           start: task.start_datetime,
@@ -102,10 +114,21 @@ class Dashboard extends Component {
         };
         return obj;
       });
-      this.setState({ resources: tasksResources, events: taskEvents });
     } catch (e) {
       console.log("error", e);
     }
+
+    this.setState({
+      userId: loggedInData.id,
+      userName: loggedInData.name,
+      userEmail: loggedInData.email,
+      workspaces: workspacesData,
+      projects: projectsData,
+      users: userArr,
+      isLogedInUserEmailArr: emailArr,
+      resources: tasksResources,
+      events: taskEvents,
+    });
   }
 
   getWorkspaceParams = () => {
@@ -239,6 +262,7 @@ class Dashboard extends Component {
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
               handleLoad={this.handleLoad}
+              state={this.state}
             />
             <Calendar
               sortUnit={this.state.sort}

@@ -65,21 +65,38 @@ export default class MenuBar extends Component {
 
   async componentDidMount() {
     try {
-      const { data } = await get("user");
+      const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
     } catch (e) {
       console.log("err", e);
     }
-    try {
-      const { data } = await get("users");
-      const emailArr = data.user
-        .filter(user => user.email !== this.state.logedInUserEmail)
-        .map(user => user.email);
-      this.setState({ emailOptions: emailArr });
-    } catch (e) {
-      console.log("users Error", e);
-    }
+    // try {
+    //   const { data } = await get(
+    //     `workspaces/${this.props.workspaceId}/members`
+    //   );
+    //   console.log("data", data);
+    //   const emailArr = data.members
+    //     .filter(user => user.email !== this.state.logedInUserEmail)
+    //     .map(user => user.email);
+    //   console.log("emailArr", emailArr);
+    //   this.setState({ emailOptions: emailArr });
+    // } catch (e) {
+    //   console.log("users Error", e);
+    // }
+
+    // try {
+    //   const { data } = await get(
+    //     `workspaces/${this.props.workspaceId}/projects`
+    //   );
+    //   console.log("project listing data", data);
+    // } catch (e) {
+    //   console.log("project listing Error", e);
+    // }
   }
+
+  // componentDidUpdate() {
+  //   console.log("update props", this.props);
+  // }
 
   addProject = async () => {
     console.log("loading", this.state.isLoading);
@@ -107,20 +124,31 @@ export default class MenuBar extends Component {
   };
 
   addMember = async () => {
+    // const memberData = {
+    //   member: {
+    //     member_name: this.state.memberName,
+    //     member_email: this.state.memberEmail,
+    //     member_access: this.state.memberAccess,
+    //     member_role: this.state.memberRole,
+    //     member_workingHours: this.state.memberWorkingHours,
+    //     member_project: this.state.memberProject,
+    //   },
+    // };
+
     const memberData = {
-      member: {
-        member_name: this.state.memberName,
-        member_email: this.state.memberEmail,
-        member_access: this.state.memberAccess,
-        member_role: this.state.memberRole,
-        member_workingHours: this.state.memberWorkingHours,
-        member_project: this.state.memberProject,
+      invitation: {
+        email: `${this.state.memberEmail}`,
+        status: "Pending",
+        project_id: `${this.state.memberProject}`,
+        workspace_id: `${this.props.workspaceId}`,
       },
     };
     try {
-      const { data } = await mockPost(memberData, "members");
-      toast.success("Member Invited");
-      this.setState({ memberShow: false });
+      // const { data } = await mockPost(memberData, "members");
+      const { data } = await post(memberData, "invitations");
+      // toast.success("Member Invited");
+      // this.setState({ memberShow: false });
+      console.log("member Data", data);
     } catch (e) {
       console.log("error", e.response);
       this.setState({ memberShow: false });
@@ -236,6 +264,7 @@ export default class MenuBar extends Component {
                         colors={this.colors}
                         addProject={this.addProject}
                         btnText={"Add"}
+                        emailOptions={this.props.state.isLogedInUserEmailArr}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People
@@ -245,6 +274,7 @@ export default class MenuBar extends Component {
                         handleClose={this.handleMemberClose}
                         handleChangeMemberInput={this.handleChangeMemberInput}
                         addMember={this.addMember}
+                        projects={this.props.state.projects}
                       />
                     </Dropdown.Menu>
                   </Dropdown>

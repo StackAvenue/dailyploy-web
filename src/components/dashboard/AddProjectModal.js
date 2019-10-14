@@ -73,7 +73,7 @@ const AddProjectModal = props => {
                   id="projectMembers"
                   onChange={selected => props.handleChangeMember(selected)}
                   multiple={props.state.multiEmail}
-                  options={props.state.emailOptions}
+                  options={props.emailOptions}
                   placeholder="Write Here"
                 />
               </div>

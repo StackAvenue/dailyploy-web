@@ -33,6 +33,7 @@ class Signup extends Component {
         confirmPasswordError: null,
       },
       isCompany: false,
+      tokenId: "",
     };
   }
 
@@ -51,6 +52,11 @@ class Signup extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
+
+  componentDidMount() {
+    const { tokenId } = this.props.match.params;
+    this.setState({ tokenId: tokenId });
+  }
 
   signupForm = async () => {
     this.validateAllInputs();
@@ -71,15 +77,32 @@ class Signup extends Component {
           },
         };
       } else {
-        signupData = {
-          user: {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
-            password_confirmation: this.state.confirmPassword,
-            is_company_present: this.state.isCompany,
-          },
-        };
+        if (this.state.tokenId !== "undefined") {
+          signupData = {
+            user: {
+              name: this.state.name,
+              email: this.state.email,
+              password: this.state.password,
+              password_confirmation: this.state.confirmPassword,
+              is_company_present: this.state.isCompany,
+              invitation_status: true,
+              invitee_details: {
+                token_id: this.state.tokenId,
+              },
+            },
+          };
+        } else {
+          signupData = {
+            user: {
+              name: this.state.name,
+              email: this.state.email,
+              password: this.state.password,
+              password_confirmation: this.state.confirmPassword,
+              is_company_present: this.state.isCompany,
+              invitation_status: false,
+            },
+          };
+        }
         console.log("is_company_present:", this.state.isCompany);
       }
       try {
@@ -137,6 +160,8 @@ class Signup extends Component {
       this.state.email &&
       this.state.password &&
       this.state.confirmPassword;
+
+    console.log("tokenId", this.state.tokenId);
 
     return (
       <>

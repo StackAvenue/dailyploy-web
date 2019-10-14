@@ -22,7 +22,7 @@ class Header extends Component {
 
   async componentDidMount() {
     try {
-      const { data } = await get("user");
+      const { data } = await get("logged_in_user");
       this.setState({ userName: data.name, userEmail: data.email });
     } catch (e) {
       console.log("err", e);

@@ -125,9 +125,10 @@ class AddMemberModal extends Component {
                       value={this.props.state.memberProject}
                       onChange={this.props.handleChangeMemberInput}
                     >
-                      <option value="">Select</option>
-                      <option value="Dailyploy">Dailyploy</option>
-                      <option value="DealSignal">DealSignal</option>
+                      <option value="">Select Project</option>
+                      {this.props.projects.map(project => (
+                        <option value={project.id}>{project.name}</option>
+                      ))}
                     </select>
                   </td>
                 </tr>

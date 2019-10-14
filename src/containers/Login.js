@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import cookie from "react-cookies";
-import { login } from "../utils/API";
+import { login, get } from "../utils/API";
 import { validateEmail } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Landing/Header";
 import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
+import axios from "axios";
 
 class Signin extends Component {
   constructor(props) {
@@ -46,11 +47,22 @@ class Signin extends Component {
       };
       try {
         const { data } = await login(loginData);
+        console.log("data login", data);
         toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
-        cookie.save("workspaceId", data.workspace_id, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
-        this.props.history.push(`/dashboard/${data.workspace_id}`);
+        axios.defaults.headers.common["Authorization"] = data.access_token
+          ? `Bearer ${data.access_token}`
+          : "";
+        try {
+          const { data } = await get("workspaces");
+          console.log("data workspacesss", data);
+          cookie.save("workspaceId", data.workspaces[0].id, { path: "/" });
+          this.props.history.push(`/dashboard/${data.workspaces[0].id}`);
+        } catch (e) {
+          console.log("error", e);
+        }
+
         window.location.reload();
       } catch (e) {
         console.log("error", e.response.data.error);
