@@ -34,7 +34,6 @@ const AddProjectModal = props => {
                 <input
                   type="text"
                   name="projectName"
-                  value={props.state.projectName}
                   onChange={props.handleChangeInput}
                   placeholder="Write Project Name here"
                   className="form-control"
@@ -53,6 +52,7 @@ const AddProjectModal = props => {
                   <DatePicker
                     selected={props.state.dateFrom}
                     onChange={props.handleDateFrom}
+                    placeholderText="Select From Date"
                   />
                 </div>
                 <div
@@ -62,6 +62,7 @@ const AddProjectModal = props => {
                   <DatePicker
                     selected={props.state.dateTo}
                     onChange={props.handleDateTo}
+                    placeholderText="Select To Date"
                   />
                 </div>
               </div>

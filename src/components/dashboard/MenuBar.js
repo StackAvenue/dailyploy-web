@@ -146,8 +146,8 @@ export default class MenuBar extends Component {
     try {
       // const { data } = await mockPost(memberData, "members");
       const { data } = await post(memberData, "invitations");
-      // toast.success("Member Invited");
-      // this.setState({ memberShow: false });
+      toast.success("Member Invited");
+      this.setState({ memberShow: false });
       console.log("member Data", data);
     } catch (e) {
       console.log("error", e.response);
@@ -273,6 +273,7 @@ export default class MenuBar extends Component {
                         state={this.state}
                         handleClose={this.handleMemberClose}
                         handleChangeMemberInput={this.handleChangeMemberInput}
+                        handleChangeMemberRadio={this.handleChangeMemberRadio}
                         addMember={this.addMember}
                         projects={this.props.state.projects}
                       />
