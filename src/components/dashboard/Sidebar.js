@@ -25,9 +25,8 @@ class Sidebar extends Component {
 
   nameSplit = name => {
     let nameArr = name;
-    let nameSplit = nameArr.split(" ");
-    let showName = nameSplit[2] + " " + nameSplit[3];
-    return showName;
+    let nameSplit = nameArr.split(" ").slice(2);
+    return nameSplit.join(" ");
   };
 
   nameFirstLetters = name => {

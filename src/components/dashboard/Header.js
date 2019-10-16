@@ -189,7 +189,7 @@ class Header extends Component {
                       {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item>
+                      <Dropdown.Item className="display-flex">
                         <div className="workspace-circle d-inline-block">
                           {x}
                         </div>

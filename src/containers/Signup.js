@@ -76,34 +76,31 @@ class Signup extends Component {
             },
           },
         };
+      } else if (!this.state.tokenId) {
+        signupData = {
+          user: {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password,
+            password_confirmation: this.state.confirmPassword,
+            is_company_present: this.state.isCompany,
+            invitation_status: false,
+          },
+        };
       } else {
-        if (this.state.tokenId !== "undefined") {
-          signupData = {
-            user: {
-              name: this.state.name,
-              email: this.state.email,
-              password: this.state.password,
-              password_confirmation: this.state.confirmPassword,
-              is_company_present: this.state.isCompany,
-              invitation_status: true,
-              invitee_details: {
-                token_id: this.state.tokenId,
-              },
+        signupData = {
+          user: {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password,
+            password_confirmation: this.state.confirmPassword,
+            is_company_present: this.state.isCompany,
+            invitation_status: true,
+            invitee_details: {
+              token_id: this.state.tokenId,
             },
-          };
-        } else {
-          signupData = {
-            user: {
-              name: this.state.name,
-              email: this.state.email,
-              password: this.state.password,
-              password_confirmation: this.state.confirmPassword,
-              is_company_present: this.state.isCompany,
-              invitation_status: false,
-            },
-          };
-        }
-        console.log("is_company_present:", this.state.isCompany);
+          },
+        };
       }
       try {
         const { signUpData } = await signUp(signupData);
@@ -113,6 +110,7 @@ class Signup extends Component {
         toast.error("email " + e.response.data.errors.email, {
           autoClose: 2000,
         });
+        console.log("error", e.response)
       }
     } else {
       console.log("Enter valid email address and password");

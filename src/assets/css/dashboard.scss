@@ -5,6 +5,10 @@
     margin:auto;
 }
 
+.display-flex{
+  display: flex !important;
+}
+
 .dashbaord-header-bg{
     background-color: $color-header !important;
 }
@@ -91,6 +95,7 @@
         font-size: 12px !important;
         padding:10px 0px 0px 0px !important;
         text-align:center !important;
+        margin-top: 10px;
       }
       
     }
@@ -571,6 +576,7 @@
   .scheduler-view {
     border: 1px solid $color-borders;
     margin: 0 0 0 -1px;
+    // margin: -1px 0 0 -2px;
     padding: 0;
   }
   
@@ -1377,6 +1383,7 @@
 }
 
 .workspace-list{
+  // width: 73px;
   width: 5%;
   box-shadow: 0 -3px 2px 0 rgba(0, 0, 0, 0.05);
   background-color: $color-white;
