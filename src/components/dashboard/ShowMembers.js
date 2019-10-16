@@ -59,9 +59,8 @@ class ShowMembers extends Component {
         `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
+      var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== loggedInData.email)
+      var emailArr = worksapceMembersExceptLogedUser.map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -74,15 +73,8 @@ class ShowMembers extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
+      members: worksapceMembersExceptLogedUser,
     });
-
-    try {
-      const { data } = await mockGet("members");
-      // console.log(data);
-      this.setState({ members: data });
-    } catch (e) {
-      console.log("err", e);
-    }
   }
 
   getWorkspaceParams = () => {
@@ -103,6 +95,28 @@ class ShowMembers extends Component {
     } else {
       return false;
     }
+  };
+
+  checkAll = e => {
+    const allCheckboxChecked = e.target.checked;
+    var checkboxes = document.getElementsByName("isChecked");
+    if (allCheckboxChecked) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === false) {
+          checkboxes[i].checked = true;
+        }
+      }
+    } else {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === true) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+  };
+
+  handleCheck = e => {
+    const value = e.target.checked;
   };
 
   render() {
@@ -128,9 +142,18 @@ class ShowMembers extends Component {
                 <thead>
                   <tr>
                     <th scope="col">
-                      <div className="checkbox">
-                        <input type="checkbox" id="checkbox" name="" value="" />
-                        <label htmlFor="checkbox"></label>
+                      <div className="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          className="custom-control-input"
+                          id={`customCheck`}
+                          onChange={this.checkAll}
+                          name="chk[]"
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor={`customCheck`}
+                        ></label>
                       </div>
                     </th>
                     <th scope="col">ID</th>
@@ -145,25 +168,29 @@ class ShowMembers extends Component {
                 <tbody>
                   {this.state.members.map((member, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         <td>
-                          <div className="checkbox">
+                          <div className="custom-control custom-checkbox">
                             <input
                               type="checkbox"
-                              id={`checkbox${index}`}
-                              name=""
-                              value=""
+                              className="custom-control-input"
+                              id={`customCheck${index}`}
+                              name="isChecked"
+                              onChange={this.handleCheck}
                             />
-                            <label htmlFor={`checkbox${index}`}></label>
+                            <label
+                              className="custom-control-label"
+                              htmlFor={`customCheck${index}`}
+                            ></label>
                           </div>
                         </td>
                         <td>{index + 1}</td>
-                        <td>{member.member.member_name}</td>
-                        <td>{member.member.member_email}</td>
+                        <td>{member.name}</td>
+                        <td>{member.email}</td>
                         <td>Edit</td>
-                        <td>{member.member.member_role}</td>
-                        <td>{member.member.member_workingHours} hours</td>
-                        <td>{member.member.member_project}</td>
+                        <td>{member.role ? member.role : "Member"}</td>
+                        <td>{member.workingHours ? member.workingHours : ""} hours</td>
+                        <td>{member.member_project ? member.member_project : ""}</td>
                         <td>
                           <i className="fas fa-pencil-alt"></i>
                         </td>
