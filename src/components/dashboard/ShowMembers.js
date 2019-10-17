@@ -185,12 +185,12 @@ class ShowMembers extends Component {
                           </div>
                         </td>
                         <td>{index + 1}</td>
-                        <td>{member.name}</td>
+                        <td className="text-titlize">{member.name}</td>
                         <td>{member.email}</td>
-                        <td>Edit</td>
-                        <td>{member.role ? member.role : "Member"}</td>
-                        <td>{member.workingHours ? member.workingHours : ""} hours</td>
-                        <td>{member.member_project ? member.member_project : ""}</td>
+                        <td className="text-titlize">Edit</td>
+                        <td className="text-titlize">{member.role ? member.role : "Member"}</td>
+                        <td className="text-titlize">{member.workingHours ? member.workingHours : ""} hours</td>
+                        <td className="text-titlize">{member.member_project ? member.member_project : ""}</td>
                         <td>
                           <i className="fas fa-pencil-alt"></i>
                         </td>

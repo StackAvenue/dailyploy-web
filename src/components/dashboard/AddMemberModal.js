@@ -116,7 +116,7 @@ class AddMemberModal extends Component {
                   </td>
                   <td>
                     <select
-                      className="form-control project"
+                      className="form-control text-titlize project"
                       name="memberProject"
                       onChange={this.props.handleChangeMemberInput}
                     >

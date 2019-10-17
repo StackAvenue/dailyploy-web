@@ -230,7 +230,7 @@ class ShowProjects extends Component {
                           <th scope="col">Project Members</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="text-titlize">
                         {this.state.projects.map((project, index) => {
                           return (
                             <tr key={index}>
