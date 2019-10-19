@@ -14,7 +14,8 @@ import "react-tabs/style/react-tabs.css";
 class Reports extends Component {
   constructor(props) {
     super(props);
-    this.format = "h:mm a";
+    // this.format = "h:mm a";
+    this.format = "MM-DD-YYYY"
     this.calenderArr = ['daily', 'weekly', 'monthly']
     this.now = moment()
       .hour(0)
@@ -161,11 +162,16 @@ class Reports extends Component {
     newCalenderArr.map(item => {
       self.setState({ [item]: false })
     })
+    if (name == 'monthly') {
+      this.handleMonthlyDateFrom(new Date())
+    }
+    if (name == 'weekly') {
+      this.handleDayChange(new Date())
+    }
   }
 
   handleDayChange = date => {
     const week = moment(date, "MM-DD-YYYY").week();
-    console.log("weekkkk", week)
     const weekdays = this.getWeekDays(this.getWeekRange(date).from)
     const fm = 'DD MMM'
     this.setState({
@@ -322,7 +328,7 @@ class Reports extends Component {
 
   handleMonthlyDateFrom = date => {
     const output = moment(date);
-    var endDate = output.endOf('month').format('YYYY-MM-DD hh:mm')
+    var endDate = output.endOf('month').format(this.format)
     this.setState({
       dateFrom: date,
       dateTo: new Date(endDate)
@@ -333,19 +339,87 @@ class Reports extends Component {
     this.setState({ dateTo: date });
   };
 
+  setPreviousDate = () => {
+    const dateFrom = this.state.dateFrom
+    const startOfDate = moment(dateFrom, this.format).startOf('day')
+    const endOfDate = moment(dateFrom, this.format).endOf('day')
+    if (this.state.daily) {
+      const prevDate = startOfDate.subtract(1, 'days').format(this.format)
+      this.setState({
+        dateFrom: new Date(prevDate),
+        dateTo: new Date(endOfDate)
+      })
+    } else if (this.state.weekly) {
+      const format = 'DD MMM'
+      var weekDay = startOfDate.subtract(1, 'days').format(this.format)
+      var weekDay = moment(weekDay, this.format)
+      var weekStart = weekDay.startOf('week').format(this.format)
+      var weekEnd = weekDay.endOf('week').format(this.format)
+      var weekNumber = weekDay.week()
+      this.setState({
+        dateFrom: new Date(weekStart),
+        dateTo: new Date(weekEnd),
+        weekNumber: weekNumber,
+        selectedDays: this.getWeekDays(new Date(weekStart)),
+        displayWeek: moment(weekStart).format(format) + " - " + moment(weekEnd).format(format) + " (Week " + weekNumber + ")"
+      })
+    } else if (this.state.monthly) {
+      const output = startOfDate.subtract(1, 'days').format(this.format)
+      var startDate = moment(output).startOf('month').format(this.format)
+      var endDate = moment(output).endOf('month').format(this.format)
+      this.setState({
+        dateFrom: new Date(startDate),
+        dateTo: new Date(endDate)
+      })
+    }
+  }
+
+  setNextDate = () => {
+    const dateFrom = this.state.dateFrom
+    const dateTo = this.state.dateTo
+    const startOfDate = moment(dateFrom, this.format).startOf('day')
+    const endOfDate = moment(dateTo, this.format).startOf('day')
+    if (this.state.daily) {
+      const nextDate = startOfDate.add(1, 'days').format(this.format)
+      this.setState({ dateFrom: new Date(nextDate) })
+    } else if (this.state.weekly) {
+      const format = 'DD MMM'
+      var weekDay = endOfDate.add(1, 'days').format(this.format)
+      var weekDay = moment(weekDay, this.format)
+      var weekStart = weekDay.startOf('week').format(this.format)
+      var weekEnd = weekDay.endOf('week').format(this.format)
+      var weekNumber = weekDay.week()
+      this.setState({
+        dateFrom: new Date(weekStart),
+        dateTo: new Date(weekEnd),
+        weekNumber: weekNumber,
+        selectedDays: this.getWeekDays(new Date(weekStart)),
+        displayWeek: moment(weekStart).format(format) + " - " + moment(weekEnd).format(format) + " (Week " + weekNumber + ")"
+      })
+    } else if (this.state.monthly) {
+      const output = endOfDate.add(1, 'days').format(this.format)
+      var startDate = moment(output).startOf('month').format(this.format)
+      var endDate = moment(output).endOf('month').format(this.format)
+      this.setState({
+        dateFrom: new Date(startDate),
+        dateTo: new Date(endDate)
+      })
+    }
+  }
+
   render() {
 
     const Daily = (props) => {
       return (
         <>
-          <button className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+          <button onClick={this.setPreviousDate} className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
           <DatePicker
             selected={this.state.dateFrom}
             onChange={this.handleDateFrom}
             startDate={this.state.dateFrom}
             dateFormat="dd MMMM, yyyy"
           />
-          <button className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+          <button onClick={this.setNextDate} className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </>
       )
     }
@@ -353,14 +427,14 @@ class Reports extends Component {
     const Monthly = (props) => {
       return (
         <>
-          <button className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+          <button onClick={this.setPreviousDate} className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
           <DatePicker
             selected={this.state.dateFrom}
             onChange={this.handleMonthlyDateFrom}
             dateFormat="MMMM yyyy"
             showMonthYearPicker
           />
-          <button className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+          <button onClick={this.setNextDate} className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </>
       )
     }
@@ -369,7 +443,7 @@ class Reports extends Component {
       return (
         <>
           <div className="SelectedWeekExample">
-            <button className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            <button onClick={this.setPreviousDate} className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
             <DatePicker
               showWeekNumbers
               onChange={this.handleDayChange}
@@ -379,7 +453,7 @@ class Reports extends Component {
               value={this.state.displayWeek}
               showWeekNumbers
             />
-            <button className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+            <button onClick={this.setNextDate} className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
           </div>
         </>
       )
