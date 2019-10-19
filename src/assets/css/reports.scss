@@ -1,0 +1,84 @@
+@import "./styles";
+
+.SelectedWeekExample .react-datepicker__week:hover .react-datepicker__day {
+  background-color:#f0f0f0;
+  border-radius: 5px;
+}
+  
+.reports-container {
+  width: 70%;
+  margin: auto;
+}
+
+.reports-btns{
+  button{
+      width: auto;
+      height: 30px;
+      border-radius: 5px;
+      border: solid 1px $color-borders;
+      background-color: $color-white;
+      margin-right: 20px;
+      box-shadow: none !important;
+      color: #212529;
+      background-color: white;
+      &:hover{
+          background-color: #33a1ff !important;
+          color: #fff !important;
+          font-weight: bold !important;
+      }
+      
+  }
+  .active{
+      background-color: #33a1ff !important;
+      color: #fff !important;
+      font-weight: bold !important;
+  }
+}
+
+.btn-bg-change {
+  background-color: #33a1ff;
+  color: white;
+}
+
+.react-datepicker-wrapper {
+  .react-datepicker__input-container input{
+    border: none;
+    padding: 5px 0 0 5px;
+  }::after {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    content: "\f073" !important;
+    color: #555 !important;
+    padding: 0 5px !important;
+  }
+  border-radius: 5px;
+  width: auto;
+  height: auto;
+  border: solid 1px #d6d6d6;
+  background-color: #ffffff;
+}
+
+.reports-table-container {
+  width: auto;
+  height: auto;
+  border: solid 1px #10b857;
+  background-color: #ffffff;
+  margin-top: 20px;
+  .report-header{
+    width: auto;
+    height: 60px;
+    padding: 20px;
+    background-color: rgba(229, 229, 229, 0.6);
+  }
+  .report-table-date{
+    width: auto;
+    height: 40px;
+    background-color: rgba(229, 229, 229, 0.5);
+  }
+}
+.arrow-button{
+  padding: 0px 15px 0px 15px;
+  border: none;
+  background: none;
+  font-size: 26px;
+}

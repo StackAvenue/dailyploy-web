@@ -8,6 +8,7 @@ import NotFound from "./components/NoMatch";
 import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
 import Analysis from "./components/dashboard/Analysis";
+import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import WorkspaceSettings from "./components/dashboard/WorkspaceSettings";
@@ -70,6 +71,12 @@ class Routes extends Component {
         exact: true,
         component: WorkspaceSettings,
         title: "workspaceSettings",
+      },
+      {
+        path: "/reports/:workspaceId",
+        exact: true,
+        component: Reports,
+        title: "reports",
       },
       {
         component: NotFound,
