@@ -14,7 +14,6 @@ import "react-tabs/style/react-tabs.css";
 class Reports extends Component {
   constructor(props) {
     super(props);
-    // this.format = "h:mm a";
     this.format = "MM-DD-YYYY"
     this.calenderArr = ['daily', 'weekly', 'monthly']
     this.now = moment()
@@ -40,6 +39,8 @@ class Reports extends Component {
       hoverRange: undefined,
       weekNumber: "",
       displayWeek: "",
+      searchOptions: [],
+      worksapceUsers: '',
       taskDetails: [
         {
           "date": "2019-10-06",
@@ -206,21 +207,6 @@ class Reports extends Component {
     };
   }
 
-  handleDayEnter = date => {
-    console.log("handleDayEnter", date)
-    console.log("handleDayEnter", this.getWeekRange(date))
-    this.setState({
-      hoverRange: this.getWeekRange(date),
-    });
-    console.log(this.state.hoverRange)
-  };
-
-  handleDayLeave = () => {
-    this.setState({
-      hoverRange: undefined,
-    });
-  };
-
   handleWeekClick = (days, weekNumber) => {
     const weekdays = this.getWeekDays(this.getWeekRange(days).from)
     const format = 'DD MMM'
@@ -273,6 +259,7 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
+      var worksapceUsers = data.members
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
         .map(user => user.email);
@@ -299,7 +286,42 @@ class Reports extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
+      worksapceUsers: worksapceUsers
     });
+
+    this.createUserProjectList();
+  }
+
+
+  createUserProjectList = () => {
+    var searchOptions = []
+    if (this.state.projects) {
+      {
+        this.state.projects.map((project, index) => {
+          searchOptions.push({
+            value: project.name,
+            project_id: project.id,
+            type: "project",
+            id: index += 1
+          })
+        })
+      }
+    }
+
+    var index = searchOptions.length
+    if (this.state.worksapceUsers) {
+      {
+        this.state.worksapceUsers.map((member, idx) => {
+          searchOptions.push({
+            value: member.name,
+            id: index += 1,
+            member_id: member.id,
+            type: 'member'
+          })
+        })
+      }
+    }
+    this.setState({ searchOptions: searchOptions })
   }
 
   getWorkspaceParams = () => {
@@ -335,9 +357,6 @@ class Reports extends Component {
     })
   }
 
-  handleDateTo = date => {
-    this.setState({ dateTo: date });
-  };
 
   setPreviousDate = () => {
     const dateFrom = this.state.dateFrom
@@ -412,14 +431,12 @@ class Reports extends Component {
     const Daily = (props) => {
       return (
         <>
-          <button onClick={this.setPreviousDate} className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
           <DatePicker
             selected={this.state.dateFrom}
             onChange={this.handleDateFrom}
             startDate={this.state.dateFrom}
             dateFormat="dd MMMM, yyyy"
           />
-          <button onClick={this.setNextDate} className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </>
       )
     }
@@ -427,34 +444,29 @@ class Reports extends Component {
     const Monthly = (props) => {
       return (
         <>
-          <button onClick={this.setPreviousDate} className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
           <DatePicker
             selected={this.state.dateFrom}
             onChange={this.handleMonthlyDateFrom}
             dateFormat="MMMM yyyy"
             showMonthYearPicker
           />
-          <button onClick={this.setNextDate} className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </>
+
       )
     }
 
     const Weekly = (props) => {
       return (
         <>
-          <div className="SelectedWeekExample">
-            <button onClick={this.setPreviousDate} className="arrow-button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
-            <DatePicker
-              showWeekNumbers
-              onChange={this.handleDayChange}
-              startDate={this.state.selectedDays[0]}
-              endDate={this.state.selectedDays[6]}
-              onWeekSelect={this.handleWeekClick}
-              value={this.state.displayWeek}
-              showWeekNumbers
-            />
-            <button onClick={this.setNextDate} className="arrow-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
-          </div>
+          <DatePicker
+            showWeekNumbers
+            onChange={this.handleDayChange}
+            startDate={this.state.selectedDays[0]}
+            endDate={this.state.selectedDays[6]}
+            onWeekSelect={this.handleWeekClick}
+            value={this.state.displayWeek}
+            showWeekNumbers
+          />
         </>
       )
     }
@@ -468,6 +480,7 @@ class Reports extends Component {
               logout={this.logout}
               workspaces={this.state.workspaces}
               workspaceId={this.state.workspaceId}
+              searchOptions={this.state.searchOptions}
             />
             <MenuBar
               onSelectSort={this.onSelectSort}
@@ -504,9 +517,21 @@ class Reports extends Component {
                     </button>
                   </div>
 
-                  {this.state.daily ? <Daily /> : null}
-                  {this.state.weekly ? <Weekly /> : null}
-                  {this.state.monthly ? <Monthly /> : null}
+                  <div className="SelectedWeekExample">
+                    <button
+                      onClick={this.setPreviousDate}
+                      className="arrow-button">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    {this.state.daily ? <Daily /> : null}
+                    {this.state.weekly ? <Weekly /> : null}
+                    {this.state.monthly ? <Monthly /> : null}
+                    <button
+                      onClick={this.setNextDate}
+                      className="arrow-button">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
 
                   <ReportTable taskDetails={this.state.taskDetails} />
                 </div>

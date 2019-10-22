@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import Search from 'react-search'
+import Select from "react-select";
 import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
+import ReactTags from 'react-tag-autocomplete'
 import logo from "../../assets/images/logo.png";
 import setting from "../../assets/images/setting.png";
 import invite from "../../assets/images/invite.png";
@@ -8,7 +11,7 @@ import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
-import Search from "../../assets/images/search.png";
+import SearchImg from "../../assets/images/search.png";
 
 class Header extends Component {
   constructor(props) {
@@ -17,6 +20,9 @@ class Header extends Component {
       workspaces: [],
       userName: "",
       userEmail: "",
+      value: "",
+      suggestions: [],
+      selectedTags: [],
     };
   }
 
@@ -29,7 +35,87 @@ class Header extends Component {
     }
   }
 
+  onSearchTextChange = (e) => {
+    const value = e.target.value
+    let suggestions = []
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, 'i');
+      suggestions = this.props.searchOptions.sort().filter(v => regex.test(v.value))
+    }
+    this.setState({ suggestions: suggestions, value: value });
+  }
+
+  selectSuggestion = (option) => {
+    var selectedTags = this.state.selectedTags
+    selectedTags.push(option)
+    this.setState({ selectedTags: selectedTags, suggestions: [], value: '' })
+  }
+
+  removeSelectedTag = (index) => {
+    var selectedTags = this.state.selectedTags
+    selectedTags = selectedTags.filter((item, i) => i !== index)
+    this.setState({ selectedTags: selectedTags })
+  }
+
+  renderSearchSuggestion = () => {
+    return (
+      <>
+        {this.state.suggestions ?
+          <ul>
+            {this.state.suggestions.map((option) => {
+              if (option.type == 'member') {
+                return (
+                  <li onClick={() => this.selectSuggestion(option)}>
+                    <i className="fa fa-user" ></i>
+                    <span className="right-left-space-10">{option.value}</span>
+                  </li>
+                )
+              } else {
+                return (
+                  <li onClick={() => this.selectSuggestion(option)}>
+                    <i className="fa fa-list-alt" ></i>
+                    <span className="right-left-space-10">{option.value}</span>
+                  </li>
+                )
+              }
+            })}
+          </ul>
+          : null}
+      </>
+    )
+  }
+
+  renderSelectedTags = () => {
+    return (
+      <>
+        {
+          this.state.selectedTags.map((option, index) => {
+            if (option.type == 'member') {
+              return (
+                <div className={`search-icon-${option.type}`} key={index}>
+                  <i className="fa fa-user right-left-space-5" ></i>
+                  <span className="right-left-space-5">{option.value}</span>
+                  <a className="remove-tag right-left-space-5" onClick={() => this.removeSelectedTag(index)}><i className="fa fa-close"></i></a>
+                </div>
+              )
+            } else {
+              return (
+                <div className={`search-icon-${option.type}`} key={index}>
+                  <i className="fa fa-list-alt right-left-space-5" ></i>
+                  <span className="right-left-space-5">{option.value}</span>
+                  <a className="remove-tag right-left-space-5" onClick={() => this.removeSelectedTag(index)}><i className="fa fa-close"></i></a>
+                </div>
+              )
+            }
+
+          })
+        }
+      </>
+    )
+  }
+
   render() {
+    const { value } = this.state;
     const x = this.state.userName
       .split(" ")
       .splice(0, 2)
@@ -59,17 +145,22 @@ class Header extends Component {
               </a>
               <div className="col-md-6 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
-                  <input
-                    type="text"
-                    placeholder="Search by project/people"
-                    className="form-control"
-                  />
+                  <div className="user-project-search">
+                    <div className="selected-tags">
+                      {this.renderSelectedTags()}
+                    </div>
+                    <input type="text" value={value} placeholder="Search by people/projects" onChange={this.onSearchTextChange} />
+
+                    <div className="suggestion-holder">
+                      {this.renderSearchSuggestion()}
+                    </div>
+                  </div>
+
                 </div>
                 <div className="col-md-1 d-inline-block">
-                  <img alt={"search"} src={Search} />
+                  <img alt={"search"} src={SearchImg} />
                 </div>
               </div>
-
               <div
                 className="collapse navbar-collapse"
                 id="navbarTogglerDemo03"

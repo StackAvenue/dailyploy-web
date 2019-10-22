@@ -40,22 +40,24 @@
   color: white;
 }
 
-.react-datepicker-wrapper {
-  .react-datepicker__input-container input{
-    border: none;
-    padding: 5px 0 0 5px;
-  }::after {
-    font-family: "Font Awesome 5 Free" !important;
-    font-weight: 900 !important;
-    content: "\f073" !important;
-    color: #555 !important;
-    padding: 0 5px !important;
+.SelectedWeekExample {
+  .react-datepicker-wrapper {
+    .react-datepicker__input-container input{
+      border: none;
+      padding: 5px 0 0 5px;
+    }::after {
+      font-family: "Font Awesome 5 Free" !important;
+      font-weight: 900 !important;
+      content: "\f073" !important;
+      color: #555 !important;
+      padding: 0 5px !important;
+    }
+    border-radius: 5px;
+    width: auto;
+    height: auto;
+    border: solid 1px #d6d6d6;
+    background-color: #ffffff;
   }
-  border-radius: 5px;
-  width: auto;
-  height: auto;
-  border: solid 1px #d6d6d6;
-  background-color: #ffffff;
 }
 
 .reports-table-container {
@@ -81,4 +83,65 @@
   border: none;
   background: none;
   font-size: 26px;
+}
+.right-left-space-5{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.user-project-search{
+  width: 100%;
+  border: 1px solid gray;
+  box-shadow: #d6d6d6;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #000000;
+  border: none;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  input{
+    width: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #33a1ff;
+    padding: 10px 5px;
+  }
+  ul{
+    list-style-type: none;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+  }
+  li{
+    padding: 10px 5px;
+  }
+  .suggestion-holder{
+    position: absolute;
+    left: 0;
+    width: 109%;
+    height: auto;
+    z-index: 1;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+
+  }
+  .selected-tags{
+    display: inline-block;
+    div{
+      width: auto;
+      height: 26px;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: solid 1px #bfbfbf;
+      background-color: #ffffff;
+      display:inline-block !important;
+    }
+  }
+  .remove-tag:hover{
+    cursor: pointer;
+    background: #ad2020;
+  }
+  .remove-tag{
+    cursor: pointer;
+  }
 }
