@@ -14,7 +14,7 @@ import "react-tabs/style/react-tabs.css";
 class Reports extends Component {
   constructor(props) {
     super(props);
-    this.format = "MM-DD-YYYY"
+    this.format = "YYYY-MM-DD"
     this.calenderArr = ['daily', 'weekly', 'monthly']
     this.now = moment()
       .hour(0)
@@ -29,6 +29,7 @@ class Reports extends Component {
       isLogedInUserEmailArr: [],
       projects: [],
       userId: "",
+      userRole: "",
       users: [],
       resources: [],
       events: [],
@@ -41,118 +42,21 @@ class Reports extends Component {
       displayWeek: "",
       searchOptions: [],
       worksapceUsers: '',
-      taskDetails: [
-        {
-          "date": "2019-10-06",
-          "tasks": [
-            {
-              "comments": "Test Comments",
-              "start_time": "2019-10-20T11:00:00Z",
-              "end_time": "2019-10-20T11:00:00Z",
-              "id": 2,
-              "task_name": "MIS Reports",
-              "project_name": "Dailyploy",
-              "categary": "normal",
-              "user": {
-                "id": 1,
-                "name": "Arpit Jain",
-              },
-              "project_details": {
-                "color_code": "#ff6900",
-                "description": null,
-                "name": "Dailyploy",
-                "start_date": "2019-10-06",
-                "end_date": "2019-10-16",
-                "id": 1,
-                "members": [
-                  {
-                    "email": "ravindra@stack-avenue.com",
-                    "id": 1,
-                    "name": "ravi",
-                  },
-                  {
-                    "email": "arpit@stack-avenue.com",
-                    "id": 2,
-                    "name": "arpit",
-                  }
-                ],
-              },
-            }
-          ]
-        },
-        {
-          "date": "2019-10-06",
-          "tasks": [
-            {
-              "comments": "Test Comments",
-              "start_time": "2019-10-20T11:00:00Z",
-              "end_time": "2019-10-20T11:00:00Z",
-              "id": 2,
-              "task_name": "MIS Reports",
-              "project_name": "Dailyploy",
-              "categary": "normal",
-              "user": {
-                "id": 1,
-                "name": "Arpit Jain",
-              },
-              "project_details": {
-                "color_code": "#ff6900",
-                "description": null,
-                "name": "Dailyploy",
-                "start_date": "2019-10-06",
-                "end_date": "2019-10-16",
-                "id": 1,
-                "members": [
-                  {
-                    "email": "ravindra@stack-avenue.com",
-                    "id": 1,
-                    "name": "ravi",
-                  },
-                  {
-                    "email": "arpit@stack-avenue.com",
-                    "id": 2,
-                    "name": "arpit",
-                  }
-                ],
-              },
-            },
-            {
-              "comments": "Test Comments",
-              "start_time": "2019-10-20T11:00:00Z",
-              "end_time": "2019-10-20T11:00:00Z",
-              "id": 2,
-              "task_name": "MIS Reports",
-              "project_name": "Dailyploy",
-              "categary": "normal",
-              "user": {
-                "id": 1,
-                "name": "Arpit Jain",
-              },
-              "project_details": {
-                "color_code": "#ff6900",
-                "description": null,
-                "name": "Dailyploy",
-                "start_date": "2019-10-06",
-                "end_date": "2019-10-16",
-                "id": 1,
-                "members": [
-                  {
-                    "email": "ravindra@stack-avenue.com",
-                    "id": 1,
-                    "name": "ravi",
-                  },
-                  {
-                    "email": "arpit@stack-avenue.com",
-                    "id": 2,
-                    "name": "arpit",
-                  }
-                ],
-              },
-            },
-          ]
-        },
-      ]
+      worksapceUser: [],
+      searchUserId: "",
+      searchProjectIds: [],
+      taskDetails: [],
     };
+  }
+
+  returnFrequency = () => {
+    if (this.state.daily) {
+      return "daily"
+    } else if (this.state.monthly) {
+      return "monthly"
+    } else if (this.state.weekly) {
+      return "weekly"
+    }
   }
 
   calenderButtonHandle = (e) => {
@@ -260,6 +164,7 @@ class Reports extends Component {
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members
+      var worksapceUser = data.members.filter(user => user.email === loggedInData.email)
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
         .map(user => user.email);
@@ -270,10 +175,12 @@ class Reports extends Component {
     // MIS report listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/reports`
+        `workspaces/${this.state.workspaceId}/reports`,
+        { frequency: 'daily', user_id: loggedInData.id, start_date: moment(this.state.dateFrom).format('YYYY-MM-DD') }
       );
-      console.log(data)
-      var projectsData = data.projects;
+      var taskDetails = data.reports
+      console.log("mis report did mount", taskDetails)
+
     } catch (e) {
 
     }
@@ -286,12 +193,59 @@ class Reports extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
-      worksapceUsers: worksapceUsers
+      worksapceUsers: worksapceUsers,
+      worksapceUser: worksapceUser,
+      taskDetails: taskDetails,
+      userRole: worksapceUser[0].role
     });
 
     this.createUserProjectList();
   }
 
+  async componentDidUpdate(prevProps, prevState) {
+    console.log("at componet did update")
+    console.log(prevState.searchProjectIds)
+    console.log(this.state.searchProjectIds)
+    var taskDetails = []
+    if (prevState.dateFrom !== this.state.dateFrom
+      || prevState.dateTo !== this.state.dateTo
+      || prevState.searchProjectIds !== this.state.searchProjectIds
+      || prevState.searchUserId !== this.state.searchUserId
+    ) {
+      var searchData = {
+        start_date: moment(this.state.dateFrom).format('YYYY-MM-DD'),
+        user_id: this.state.searchUserId ? this.state.searchUserId : this.state.userId,
+        frequency: this.returnFrequency(),
+        project_ids: this.state.projectIds
+      }
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/reports`, searchData
+        );
+        console.log("at compo did update", data)
+        var taskDetails = data.reports
+      } catch (e) {
+      }
+      this.setState({ taskDetails: taskDetails })
+    }
+  }
+
+  handleSearchFilterResult = (data) => {
+    console.log("handleSearchFilterResult at reports", data)
+    var userId = ""
+    var projectIds = []
+    {
+      data.map((item, i) => {
+        if (item.type === "member") {
+          userId = item.member_id
+        }
+        else if (item.type === "project") {
+          projectIds.push(item.project_id)
+        }
+      })
+    }
+    this.setState({ searchProjectIds: projectIds, searchUserId: userId })
+  }
 
   createUserProjectList = () => {
     var searchOptions = []
@@ -309,18 +263,21 @@ class Reports extends Component {
     }
 
     var index = searchOptions.length
-    if (this.state.worksapceUsers) {
+    if (this.state.userRole === 'admin' && this.state.worksapceUsers) {
+      var otherMembers = this.state.worksapceUsers.filter(user => user.email !== this.state.userEmail)
       {
-        this.state.worksapceUsers.map((member, idx) => {
+        otherMembers.map((member, idx) => {
           searchOptions.push({
             value: member.name,
             id: index += 1,
             member_id: member.id,
-            type: 'member'
+            type: 'member',
+            role: member.role
           })
         })
       }
     }
+    console.log("searchOptions searchOptions searchOptions", searchOptions)
     this.setState({ searchOptions: searchOptions })
   }
 
@@ -481,6 +438,8 @@ class Reports extends Component {
               workspaces={this.state.workspaces}
               workspaceId={this.state.workspaceId}
               searchOptions={this.state.searchOptions}
+              role={this.state.userRole}
+              handleSearchFilterResult={this.handleSearchFilterResult}
             />
             <MenuBar
               onSelectSort={this.onSelectSort}
@@ -491,49 +450,52 @@ class Reports extends Component {
             <div className="analysis-box row no-margin">
               <div className="col-md-12 no-padding analysis-top">
                 <div className="reports-container col-sm-offset-2">
-                  <div className="reports-btns pull-right">
-                    <button
-                      name="daily"
-                      onClick={this.calenderButtonHandle}
-                      className={this.state.daily ? 'active' : ''}
-                    >Daily
-                    </button>
-                    <button
-                      name="weekly"
-                      className={this.state.weekly ? 'active' : ''}
-                      onClick={this.calenderButtonHandle}
-                    >Weekly
-                    </button>
-                    <button
-                      name="monthly"
-                      onClick={this.calenderButtonHandle}
-                      className={this.state.monthly ? 'active' : ''}
-                    > Monthly
-                    </button>
-                    <button
-                      className="btn btn-sm btn-default"
-                      onClick={this.showTaskModal}
-                    ><i className="fas fa-download">Download </i>
-                    </button>
+                  <div className="reports-btns ">
+                    <div className="SelectedWeekExample">
+                      <button
+                        onClick={this.setPreviousDate}
+                        className="arrow-button">
+                        <i className="fa fa-angle-left"></i>
+                      </button>
+                      {this.state.daily ? <Daily /> : null}
+                      {this.state.weekly ? <Weekly /> : null}
+                      {this.state.monthly ? <Monthly /> : null}
+                      <button
+                        onClick={this.setNextDate}
+                        className="arrow-button">
+                        <i className="fa fa-angle-right"></i>
+                      </button>
+                    </div>
+                    <div className="report-caleneder-btn">
+                      <button
+                        name="daily"
+                        onClick={this.calenderButtonHandle}
+                        className={this.state.daily ? 'active' : ''}
+                      >Daily
+                      </button>
+                      <button
+                        name="weekly"
+                        className={this.state.weekly ? 'active' : ''}
+                        onClick={this.calenderButtonHandle}
+                      >Weekly
+                      </button>
+                      <button
+                        name="monthly"
+                        onClick={this.calenderButtonHandle}
+                        className={this.state.monthly ? 'active' : ''}
+                      > Monthly
+                      </button>
+                    </div>
+                    <div className="report-download">
+                      <button
+                        className="btn btn-sm btn-default"
+                        onClick={this.showTaskModal}>
+                        <i className="fas fa-download right-left-space-5"></i>Download
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="SelectedWeekExample">
-                    <button
-                      onClick={this.setPreviousDate}
-                      className="arrow-button">
-                      <i class="fa fa-angle-left"></i>
-                    </button>
-                    {this.state.daily ? <Daily /> : null}
-                    {this.state.weekly ? <Weekly /> : null}
-                    {this.state.monthly ? <Monthly /> : null}
-                    <button
-                      onClick={this.setNextDate}
-                      className="arrow-button">
-                      <i class="fa fa-angle-right"></i>
-                    </button>
-                  </div>
-
-                  <ReportTable taskDetails={this.state.taskDetails} />
+                  <ReportTable taskDetails={this.state.taskDetails} state={this.state} frequency={this.returnFrequency} />
                 </div>
 
               </div>

@@ -23,6 +23,7 @@ class Header extends Component {
       value: "",
       suggestions: [],
       selectedTags: [],
+      // searchOptions: this.props.searchOptions.filter((obj, i) => obj.role !== 'index'))
     };
   }
 
@@ -35,20 +36,26 @@ class Header extends Component {
     }
   }
 
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevState.selectedTags !== this.state.selectedTags) {
+      this.props.handleSearchFilterResult(this.state.selectedTags)
+    }
+  }
+
   onSearchTextChange = (e) => {
     const value = e.target.value
     let suggestions = []
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
-      suggestions = this.props.searchOptions.sort().filter(v => regex.test(v.value))
+      suggestions = this.props.searchOptions.sort().filter(v => regex.test(v.value) && !(this.state.selectedTags.includes(v)))
     }
     this.setState({ suggestions: suggestions, value: value });
   }
 
   selectSuggestion = (option) => {
-    var selectedTags = this.state.selectedTags
-    selectedTags.push(option)
-    this.setState({ selectedTags: selectedTags, suggestions: [], value: '' })
+    var newSelectedTags = new Array(...this.state.selectedTags)
+    newSelectedTags.push(option)
+    this.setState({ selectedTags: newSelectedTags, suggestions: [], value: '' })
   }
 
   removeSelectedTag = (index) => {
@@ -62,19 +69,19 @@ class Header extends Component {
       <>
         {this.state.suggestions ?
           <ul>
-            {this.state.suggestions.map((option) => {
+            {this.state.suggestions.map((option, idx) => {
               if (option.type == 'member') {
                 return (
-                  <li onClick={() => this.selectSuggestion(option)}>
+                  <li key={idx} onClick={() => this.selectSuggestion(option)}>
                     <i className="fa fa-user" ></i>
-                    <span className="right-left-space-10">{option.value}</span>
+                    <span className="right-left-space-5">{option.value}</span>
                   </li>
                 )
               } else {
                 return (
-                  <li onClick={() => this.selectSuggestion(option)}>
+                  <li key={idx} onClick={() => this.selectSuggestion(option)}>
                     <i className="fa fa-list-alt" ></i>
-                    <span className="right-left-space-10">{option.value}</span>
+                    <span className="right-left-space-5">{option.value}</span>
                   </li>
                 )
               }
@@ -145,7 +152,7 @@ class Header extends Component {
               </a>
               <div className="col-md-6 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
-                  <div className="user-project-search">
+                  <div className="user-project-search text-titlize">
                     <div className="selected-tags">
                       {this.renderSelectedTags()}
                     </div>
