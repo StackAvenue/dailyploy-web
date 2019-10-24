@@ -10,6 +10,7 @@ import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
+import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -41,8 +42,86 @@ class Dashboard extends Component {
       isLoading: false,
       userEmail: "",
       isLogedInUserEmailArr: [],
+      taskFrequency: "weekly",
+      taskStartDate: new Date(),
     };
   }
+
+  taskView = view => {
+    var viewType;
+    var type;
+    if (view == 0) {
+      viewType = "daily";
+      type = "day";
+    } else if (view == 1) {
+      viewType = "weekly";
+      type = "week";
+    } else if (view == 2) {
+      viewType = "monthly";
+      type = "month";
+    }
+    console.log("taskFrequency", viewType, view, this.state.taskStartDate);
+    this.setState({
+      taskFrequency: viewType,
+      taskStartDate: getFisrtDate(new Date(), type),
+    });
+  };
+
+  taskDate = date => {
+    console.log("date", date);
+    const { taskFrequency } = this.state;
+    var type;
+    if (taskFrequency === "daily") {
+      type = "day";
+    } else if (taskFrequency === "weekly") {
+      type = "week";
+    } else if (taskFrequency === "monthly") {
+      type = "month";
+    }
+    console.log("type", type, date);
+    this.setState({
+      taskStartDate: getFisrtDate(date, type),
+    });
+  };
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.taskStartDate !== this.state.taskStartDate ||
+      prevState.taskFrequency !== this.state.taskFrequency
+    ) {
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/user_tasks?frequency=${this.state.taskFrequency}&start_date=${this.state.taskStartDate}`,
+        );
+        console.log("dta task", data.users);
+        var tasksUser = data.users.map(user => {
+          var usersObj = {
+            id: user.id,
+            name: user.name,
+          };
+          var tasks = user.tasks.map(task => {
+            var tasksObj = {
+              id: task.id,
+              start: task.start_datetime,
+              end: task.end_datetime,
+              resourceId: user.id,
+              title: task.name,
+              bgColor: task.project.color_code,
+            };
+            return tasksObj;
+          });
+          return { usersObj, tasks };
+        });
+        var tasksResources = tasksUser.map(user => user.usersObj);
+        var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+        this.setState({ resources: tasksResources, events: taskEvents });
+        console.log("taskEvents", taskEvents);
+      } catch (e) {
+        console.log("error", e);
+      }
+    }
+  }
+
   async componentDidMount() {
     // Logged In User Info
     try {
@@ -67,7 +146,7 @@ class Dashboard extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -77,9 +156,9 @@ class Dashboard extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
-      var userArr = data.members.map(user => user.email);
+      var userArr = data.members.map(user => user);
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
         .map(user => user.email);
@@ -87,33 +166,42 @@ class Dashboard extends Component {
       console.log("users Error", e);
     }
 
+    // workspace Tasks Listing
+    console.log(
+      "frequency",
+      this.state.taskFrequency,
+      "start_date",
+      getWeekFisrtDate(this.state.taskStartDate),
+    );
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/project_tasks`
+        `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
+          this.state.taskFrequency
+        }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
-      var tasksResources = data.tasks
-        .map(task => task.user)
-        .reduce((prev, current) => {
-          if (prev.length === 0) {
-            prev.push(current);
-          } else {
-            if (prev.every(el => el.id !== current.id)) {
-              prev.push(current);
-            }
-          }
-          return prev;
-        }, []);
-      var taskEvents = data.tasks.map(task => {
-        var obj = {
-          id: task.id,
-          start: task.start_datetime,
-          end: task.end_datetime,
-          resourceId: task.user.id,
-          title: task.name,
-          bgColor: "#D9D9D9",
+
+      console.log("dta task", data.users);
+      var tasksUser = data.users.map(user => {
+        var usersObj = {
+          id: user.id,
+          name: user.name,
         };
-        return obj;
+        var tasks = user.tasks.map(task => {
+          var tasksObj = {
+            id: task.id,
+            start: task.start_datetime,
+            end: task.end_datetime,
+            resourceId: user.id,
+            title: task.name,
+            bgColor: task.project.color_code,
+          };
+          return tasksObj;
+        });
+        return { usersObj, tasks };
       });
+      var tasksResources = tasksUser.map(user => user.usersObj);
+      var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+      console.log("taskEvents", taskEvents);
     } catch (e) {
       console.log("error", e);
     }
@@ -164,7 +252,7 @@ class Dashboard extends Component {
     try {
       const { data } = await post(
         taskData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.projectName}/tasks`
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectName}/tasks`,
       );
       toast.success("Task Assigned", { autoClose: 2000 });
       setTimeout(() => window.location.reload(), 3000);
@@ -246,6 +334,12 @@ class Dashboard extends Component {
   };
 
   render() {
+    console.log(
+      "datwwwww",
+      moment()
+        .startOf("week")
+        .format("YYYY-MM-DD"),
+    );
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
@@ -270,12 +364,13 @@ class Dashboard extends Component {
               resources={this.state.resources}
               events={this.state.events}
               alam={"alam"}
+              taskView={this.taskView}
+              taskDate={this.taskDate}
             />
             <div>
               <button
                 className="btn menubar-task-btn"
-                onClick={this.showTaskModal}
-              >
+                onClick={this.showTaskModal}>
                 <i className="fas fa-plus" />
               </button>
               <AddTaskModal

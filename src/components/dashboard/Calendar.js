@@ -49,7 +49,7 @@ class Calendar extends Component {
             isEventPerspective: false,
           },
         ],
-      }
+      },
     );
 
     this.state = {
@@ -90,7 +90,7 @@ class Calendar extends Component {
     schedulerData,
     item,
     formattedDateItems,
-    style
+    style,
   ) => {
     let datetime = schedulerData.localeMoment(item.time);
     let isCurrentDate = false;
@@ -166,6 +166,8 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
+    this.props.taskView(schedulerData.viewType);
+    this.props.taskDate(schedulerData.startDate);
   };
 
   nextClick = schedulerData => {
@@ -174,18 +176,21 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
+    this.props.taskView(schedulerData.viewType);
+    this.props.taskDate(schedulerData.startDate);
   };
 
   onViewChange = (schedulerData, view) => {
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
-      view.isEventPerspective
+      view.isEventPerspective,
     );
     schedulerData.setEvents(this.state.events);
     this.setState({
       viewModel: schedulerData,
     });
+    this.props.taskView(view.viewType);
   };
 
   onSelectDate = (schedulerData, date) => {
@@ -194,30 +199,31 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
+    this.props.taskDate(date);
   };
 
   eventClicked = (schedulerData, event) => {
     alert(
-      `You just clicked an event: {id: ${event.id}, title: ${event.title}}`
+      `You just clicked an event: {id: ${event.id}, title: ${event.title}}`,
     );
   };
 
   ops1 = (schedulerData, event) => {
     alert(
-      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`
+      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`,
     );
   };
 
   ops2 = (schedulerData, event) => {
     alert(
-      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`
+      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`,
     );
   };
 
   newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
     if (
       window.confirm(
-        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
+        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`,
       )
     ) {
       let newFreshId = 0;
@@ -243,7 +249,7 @@ class Calendar extends Component {
   updateEventStart = (schedulerData, event, newStart) => {
     if (
       window.confirm(
-        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
+        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`,
       )
     ) {
       schedulerData.updateEventStart(event, newStart);
@@ -256,7 +262,7 @@ class Calendar extends Component {
   updateEventEnd = (schedulerData, event, newEnd) => {
     if (
       window.confirm(
-        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
+        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`,
       )
     ) {
       schedulerData.updateEventEnd(event, newEnd);
@@ -316,12 +322,12 @@ class Calendar extends Component {
     isEnd,
     mustAddCssClass,
     mustBeHeight,
-    agendaMaxEventWidth
+    agendaMaxEventWidth,
   ) => {
     let backgroundColor = bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
-      event
+      event,
     );
     var start = moment(event.start).format("HH:mm");
     var end = moment(event.end).format("HH:mm");
