@@ -37,7 +37,10 @@ class ReportTable2Row extends Component {
   }
 
   displayDate = (date) => {
-    return moment(date).format("DD MMM YYYY")
+    if (this.props.frequency !== 'daily') {
+      return moment(date).format("DD MMM YYYY")
+    }
+    return ""
   }
 
   taskNotFound = () => {
@@ -57,7 +60,7 @@ class ReportTable2Row extends Component {
         <tr key={index}>
           <td>{}</td>
           <td className="text-titlize">{task.name}</td>
-          <td className={"text-titlize " + task.category} >{task.category}</td>
+          <td className={"text-titlize catergory2 " + task.category} >{"category 2"}</td>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
           <td >{this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}</td>
         </tr>

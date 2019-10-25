@@ -8,6 +8,7 @@ class ReportTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      totalTime: 0
     }
   }
 
@@ -42,7 +43,7 @@ class ReportTable extends Component {
       this.props.state.selectedDays.map((date, index) => {
         var date = moment(date).format("YYYY-MM-DD")
         var tasks = this.props.taskDetails[date] !== undefined ? this.props.taskDetails[date] : []
-        return <ReportTableRow tasks={tasks} date={date} />
+        return <ReportTableRow tasks={tasks} date={date} frequency={this.props.frequency} />
       })
     )
   }
@@ -52,12 +53,12 @@ class ReportTable extends Component {
       this.props.state.selectedDays.map((date, index) => {
         var date = moment(date).format("YYYY-MM-DD")
         var tasks = this.props.taskDetails[date] !== undefined ? this.props.taskDetails[date] : []
-        return <ReportTable2Row tasks={tasks} date={date} />
+        return <ReportTable2Row tasks={tasks} date={date} frequency={this.props.frequency} />
       })
     )
   }
 
-  tableHeade = () => {
+  tableHeader = () => {
     return (
       <>
         <th scope="col">Time</th>
@@ -91,7 +92,7 @@ class ReportTable extends Component {
       <>
         <thead>
           <tr className="r-l-space-20">
-            {this.tableHeade()}
+            {this.tableHeader()}
           </tr>
         </thead>
         <tbody>
@@ -130,18 +131,10 @@ class ReportTable extends Component {
           <div className="reports-table-container">
             <div className="report-header">
               <span className="pull-left">Capacity </span>
-              <span className="pull-right">Total Time: 200.00 h</span>
+              <span className="pull-right">{"Total Time: " + `${this.props.state.totalTime}` + " h"}</span>
             </div>
             <table className="table">
               {!this.checkProject() ? this.table1() : this.table2()}
-              {/* <thead>
-                <tr className="r-l-space-20">
-                  {this.tableHeade()}
-                </tr>
-              </thead>
-              <tbody>
-                {this.renderTableData()}
-              </tbody> */}
             </table>
           </div>
         </div>

@@ -187,3 +187,10 @@
   height: 18px;
   padding-top: 10px;
 }
+.catergory2::before{
+  width: 10px;
+  content: "\2022";
+  font-size: 33px;
+  height: 10px;
+  color: #ff7f00;
+}

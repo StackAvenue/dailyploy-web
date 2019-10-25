@@ -199,8 +199,9 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/reports`,
         { frequency: 'daily', user_id: loggedInData.id, start_date: moment(this.state.dateFrom).format('YYYY-MM-DD') }
       );
-      // var taskDetails = data.reports
-      var taskDetails = this.makeDatesHash(data.reports)
+      var details = this.makeDatesHash(data.reports)
+      var taskDetails = details.taskReports
+      var totalTime = details.totalTime
     } catch (e) {
 
     }
@@ -216,7 +217,8 @@ class Reports extends Component {
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
       taskDetails: taskDetails,
-      userRole: worksapceUser[0].role
+      userRole: worksapceUser[0].role,
+      totalTime: totalTime
     });
 
     this.createUserProjectList();
@@ -246,23 +248,36 @@ class Reports extends Component {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/reports`, searchData
         );
-        var taskDetails = this.makeDatesHash(data.reports)
+        var details = this.makeDatesHash(data.reports)
+        var taskDetails = details.taskReports
+        var totalTime = details.totalTime
       } catch (e) {
       }
       var message = this.displayMessage()
 
-      this.setState({ taskDetails: taskDetails, message: message })
+      this.setState({ taskDetails: taskDetails, message: message, totalTime: totalTime })
     }
   }
 
   makeDatesHash = (reports) => {
     var taskReports = {}
+    var totalSecond = 0
     {
       reports.map((report, i) => {
         taskReports[report.date] = report.tasks
+        totalSecond += this.calculateTotalSecond(report.tasks)
       })
     }
-    return taskReports
+    var hours = (totalSecond / (1000 * 60 * 60)).toFixed(1);
+    return { taskReports: taskReports, totalTime: hours }
+  }
+
+  calculateTotalSecond = (tasks) => {
+    var totalSec = 0;
+    tasks.map((task, idx) => {
+      totalSec += Math.abs(new Date(task.start_datetime) - new Date(task.end_datetime));
+    })
+    return totalSec
   }
 
 

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import TaskNotFound from "./../Reports/TaskNotFound";
 import moment from "moment";
 
 
@@ -38,7 +37,10 @@ class ReportTableRow extends Component {
   }
 
   displayDate = (date) => {
-    return moment(date).format("DD MMM YYYY")
+    if (this.props.frequency !== 'daily') {
+      return moment(date).format("DD MMM YYYY")
+    }
+    return ""
   }
 
   taskNotFound = () => {
