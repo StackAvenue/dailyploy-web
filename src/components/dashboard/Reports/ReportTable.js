@@ -1,17 +1,13 @@
 import React, { Component } from "react";
+import ReportTableRow from "./../Reports/ReportTableRow";
+import ReportTable2Row from "./../Reports/ReportTable2Row";
 import { withRouter } from "react-router-dom";
+import moment from "moment";
 
 class ReportTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: ""
-    }
-  }
-
-  displayMessage = () => {
-    if (this.props.state.searchUserId == "" && this.props.state.searchProjectIds.length == 0) {
-      return ""
     }
   }
 
@@ -28,73 +24,127 @@ class ReportTable extends Component {
   }
 
   getTotalHours = (tasks) => {
-    var totalSec = ""
-    {
-      tasks.map((task, idx) => {
-        totalSec += Math.abs(new Date(task.start_datetime) - new Date(task.end_datetime));
-      })
+    if (tasks !== undefined) {
+      var totalSec = ""
+      {
+        tasks.map((task, idx) => {
+          totalSec += Math.abs(new Date(task.start_datetime) - new Date(task.end_datetime));
+        })
+      }
+      var hours = (totalSec / (1000 * 60 * 60)).toFixed(1);
+      return hours + " h"
     }
-    var hours = (totalSec / (1000 * 60 * 60)).toFixed(1);
-    return hours + " h"
+    return "0 h"
+  }
+
+  renderTableData = () => {
+    return (
+      this.props.state.selectedDays.map((date, index) => {
+        var date = moment(date).format("YYYY-MM-DD")
+        var tasks = this.props.taskDetails[date] !== undefined ? this.props.taskDetails[date] : []
+        return <ReportTableRow tasks={tasks} date={date} />
+      })
+    )
+  }
+
+  renderTable2Data = () => {
+    return (
+      this.props.state.selectedDays.map((date, index) => {
+        var date = moment(date).format("YYYY-MM-DD")
+        var tasks = this.props.taskDetails[date] !== undefined ? this.props.taskDetails[date] : []
+        return <ReportTable2Row tasks={tasks} date={date} />
+      })
+    )
+  }
+
+  tableHeade = () => {
+    return (
+      <>
+        <th scope="col">Time</th>
+        <th scope="col">Task Name</th>
+        <th scope="col">Project Name</th>
+        <th scope="col">Duration</th>
+      </>
+    )
+  }
+
+  dateHeader = (tasks, date) => {
+    return (
+      <>
+        <tr className="report-table-date">
+          <th>{date}</th>
+          <th></th>
+          <th></th>
+          <th>{this.getTotalHours(tasks)}</th>
+        </tr>
+      </>
+    )
+  }
+
+  checkProject = () => {
+    console.log(this.props.state.searchProjectIds, this.props.state.searchUserDetail, this.props.state.userRole)
+    return this.props.state.searchProjectIds.length > 0 && this.props.state.userRole === 'admin' && this.props.state.searchUserDetail.length == 0
+  }
+
+  table1 = () => {
+    return (
+      <>
+        <thead>
+          <tr className="r-l-space-20">
+            {this.tableHeade()}
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderTableData()}
+        </tbody>
+      </>
+    )
+  }
+
+  table2 = () => {
+    return (
+      <>
+        <thead>
+          <tr className="r-l-space-20">
+            <th scope="col">Employee Name</th>
+            <th scope="col">Task Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Time</th>
+            <th scope="col">Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderTable2Data()}
+        </tbody>
+      </>
+    )
   }
 
   render() {
-    const TableRow = props => {
-      return (
-        <>
-          <tr className="report-table-date">
-            <th>{props.state.date}</th>
-            <th></th>
-            <th></th>
-            <th>{this.getTotalHours(props.state.tasks)}</th>
-          </tr>
-          {props.state.tasks.map((task, idx) => {
-            return (
-              <tr className="text-titlize" key={idx}>
-                <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
-                <td>{task.name}</td>
-                <td>{task.project.name}</td>
-                <td >{this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}</td>
-              </tr>
-            );
-          })}
-        </>
-      );
-    }
 
-    const TaskNotFound = () => {
-      return (
-        <>
-          <div className="task-error">Task Not Found</div>
-        </>
-      )
-    }
-
+    console.log("at report table render", this.checkProject())
     return (
       <>
-        {this.props.taskDetails.length > 0 ?
+        <div>
+          <div className="report-message text-titlize">{this.props.state.message} </div>
           <div className="reports-table-container">
             <div className="report-header">
               <span className="pull-left">Capacity </span>
               <span className="pull-right">Total Time: 200.00 h</span>
             </div>
             <table className="table">
-              <thead>
+              {!this.checkProject() ? this.table1() : this.table2()}
+              {/* <thead>
                 <tr className="r-l-space-20">
-                  <th scope="col">Time</th>
-                  <th scope="col">Task Name</th>
-                  <th scope="col">Project Name</th>
-                  <th scope="col">Duration</th>
+                  {this.tableHeade()}
                 </tr>
               </thead>
               <tbody>
-                {this.props.taskDetails.map((tasks, index) => {
-                  return (<TableRow key={index} state={tasks} />)
-                })}
-              </tbody>
+                {this.renderTableData()}
+              </tbody> */}
             </table>
           </div>
-          : <TaskNotFound />}
+        </div>
       </>
     );
   }

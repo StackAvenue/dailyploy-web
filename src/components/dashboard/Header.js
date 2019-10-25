@@ -23,7 +23,6 @@ class Header extends Component {
       value: "",
       suggestions: [],
       selectedTags: [],
-      // searchOptions: this.props.searchOptions.filter((obj, i) => obj.role !== 'index'))
     };
   }
 

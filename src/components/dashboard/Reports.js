@@ -36,16 +36,17 @@ class Reports extends Component {
       daily: true,
       weekly: false,
       monthly: false,
-      selectedDays: [],
+      selectedDays: [new Date()],
       hoverRange: undefined,
       weekNumber: "",
       displayWeek: "",
       searchOptions: [],
       worksapceUsers: '',
       worksapceUser: [],
-      searchUserId: "",
+      searchUserDetail: "",
       searchProjectIds: [],
-      taskDetails: [],
+      taskDetails: {},
+      message: "My Daily Report",
     };
   }
 
@@ -59,6 +60,23 @@ class Reports extends Component {
     }
   }
 
+  fetchProjectName = () => {
+    var project = this.state.projects.filter(project => project.id === this.state.searchProjectIds[0])
+    return project[0].name
+  }
+
+  displayMessage = () => {
+    var role = this.state.userRole
+    var frequency = this.returnFrequency()
+    if (role == 'admin' && this.state.searchProjectIds.length !== 0 && this.state.searchUserDetail == "") {
+      return "Showing " + `${frequency}` + " Report for " + `${this.fetchProjectName()}`
+    } else if (role === "member" || (role == "admin" && this.state.searchUserDetail === "")) {
+      return "My " + `${frequency}` + " Report"
+    } else if (role == 'admin' && this.state.searchUserDetail !== "") {
+      return "Showing " + `${frequency}` + " Report for " + `${this.state.searchUserDetail.value}` + "(" + `${this.state.searchUserDetail.email}` + ")"
+    }
+  }
+
   calenderButtonHandle = (e) => {
     const name = e.target.name
     const newCalenderArr = this.calenderArr.filter(item => item !== name)
@@ -67,6 +85,9 @@ class Reports extends Component {
     newCalenderArr.map(item => {
       self.setState({ [item]: false })
     })
+    if (name == 'daily') {
+      self.setState({ selectedDays: [new Date()] })
+    }
     if (name == 'monthly') {
       this.handleMonthlyDateFrom(new Date())
     }
@@ -178,9 +199,8 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/reports`,
         { frequency: 'daily', user_id: loggedInData.id, start_date: moment(this.state.dateFrom).format('YYYY-MM-DD') }
       );
-      var taskDetails = data.reports
-      console.log("mis report did mount", taskDetails)
-
+      // var taskDetails = data.reports
+      var taskDetails = this.makeDatesHash(data.reports)
     } catch (e) {
 
     }
@@ -202,49 +222,64 @@ class Reports extends Component {
     this.createUserProjectList();
   }
 
+
+  checkProject = () => {
+    console.log(this.state.searchProjectIds, this.state.searchUserDetail, this.state.userRole)
+    return this.state.searchProjectIds.length > 0 && this.state.userRole === 'admin' && this.state.searchUserDetail.length == 0
+  }
+
   async componentDidUpdate(prevProps, prevState) {
-    console.log("at componet did update")
-    console.log(prevState.searchProjectIds)
-    console.log(this.state.searchProjectIds)
     var taskDetails = []
     if (prevState.dateFrom !== this.state.dateFrom
       || prevState.dateTo !== this.state.dateTo
       || prevState.searchProjectIds !== this.state.searchProjectIds
-      || prevState.searchUserId !== this.state.searchUserId
+      || prevState.searchUserDetail !== this.state.searchUserDetail
     ) {
       var searchData = {
         start_date: moment(this.state.dateFrom).format('YYYY-MM-DD'),
-        user_id: this.state.searchUserId ? this.state.searchUserId : this.state.userId,
+        user_id: this.state.searchUserDetail ? this.state.searchUserDetail.member_id : this.state.userId,
         frequency: this.returnFrequency(),
-        project_ids: this.state.projectIds
+        project_ids: this.state.searchProjectIds
       }
+
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/reports`, searchData
         );
-        console.log("at compo did update", data)
-        var taskDetails = data.reports
+        var taskDetails = this.makeDatesHash(data.reports)
       } catch (e) {
       }
-      this.setState({ taskDetails: taskDetails })
+      var message = this.displayMessage()
+
+      this.setState({ taskDetails: taskDetails, message: message })
     }
   }
 
+  makeDatesHash = (reports) => {
+    var taskReports = {}
+    {
+      reports.map((report, i) => {
+        taskReports[report.date] = report.tasks
+      })
+    }
+    return taskReports
+  }
+
+
   handleSearchFilterResult = (data) => {
-    console.log("handleSearchFilterResult at reports", data)
-    var userId = ""
+    var searchUserDetail = ""
     var projectIds = []
     {
       data.map((item, i) => {
         if (item.type === "member") {
-          userId = item.member_id
+          searchUserDetail = item
         }
         else if (item.type === "project") {
           projectIds.push(item.project_id)
         }
       })
     }
-    this.setState({ searchProjectIds: projectIds, searchUserId: userId })
+    this.setState({ searchProjectIds: projectIds, searchUserDetail: searchUserDetail })
   }
 
   createUserProjectList = () => {
@@ -271,13 +306,13 @@ class Reports extends Component {
             value: member.name,
             id: index += 1,
             member_id: member.id,
+            email: member.email,
             type: 'member',
             role: member.role
           })
         })
       }
     }
-    console.log("searchOptions searchOptions searchOptions", searchOptions)
     this.setState({ searchOptions: searchOptions })
   }
 
@@ -287,7 +322,6 @@ class Reports extends Component {
   };
 
   onSelectSort = value => {
-    console.log("selected value ", value);
     this.setState({ sort: value });
   };
 
@@ -302,16 +336,32 @@ class Reports extends Component {
   };
 
   handleDateFrom = date => {
-    this.setState({ dateFrom: date });
+    this.setState({ dateFrom: date, selectedDays: [new Date(date)] });
   };
 
   handleMonthlyDateFrom = date => {
-    const output = moment(date);
+    const output = moment(date, this.format);
+    var startDate = output.startOf('month').format(this.format)
     var endDate = output.endOf('month').format(this.format)
+    var days = this.getMonthDates(startDate, endDate)
     this.setState({
-      dateFrom: date,
-      dateTo: new Date(endDate)
+      dateFrom: new Date(startDate),
+      dateTo: new Date(endDate),
+      selectedDays: days
     })
+  }
+
+  getMonthDates = (start, end) => {
+    var startDate = new Date(start)
+    var endDate = new Date(end)
+    var daysArr = new Array();
+    var currentDate = startDate;
+    while (currentDate <= endDate) {
+      daysArr.push(currentDate);
+      var date = moment(currentDate, this.format).add(1, 'days').format(this.format)
+      currentDate = new Date(date)
+    }
+    return daysArr;
   }
 
 
@@ -323,7 +373,8 @@ class Reports extends Component {
       const prevDate = startOfDate.subtract(1, 'days').format(this.format)
       this.setState({
         dateFrom: new Date(prevDate),
-        dateTo: new Date(endOfDate)
+        dateTo: new Date(prevDate),
+        selectedDays: [new Date(prevDate)]
       })
     } else if (this.state.weekly) {
       const format = 'DD MMM'
@@ -343,9 +394,11 @@ class Reports extends Component {
       const output = startOfDate.subtract(1, 'days').format(this.format)
       var startDate = moment(output).startOf('month').format(this.format)
       var endDate = moment(output).endOf('month').format(this.format)
+      var monthDays = this.getMonthDates(startDate, endDate);
       this.setState({
         dateFrom: new Date(startDate),
-        dateTo: new Date(endDate)
+        dateTo: new Date(endDate),
+        selectedDays: monthDays
       })
     }
   }
@@ -357,7 +410,11 @@ class Reports extends Component {
     const endOfDate = moment(dateTo, this.format).startOf('day')
     if (this.state.daily) {
       const nextDate = startOfDate.add(1, 'days').format(this.format)
-      this.setState({ dateFrom: new Date(nextDate) })
+      this.setState({
+        dateFrom: new Date(nextDate),
+        dateTo: new Date(nextDate),
+        selectedDays: [new Date(nextDate)]
+      })
     } else if (this.state.weekly) {
       const format = 'DD MMM'
       var weekDay = endOfDate.add(1, 'days').format(this.format)
@@ -376,9 +433,11 @@ class Reports extends Component {
       const output = endOfDate.add(1, 'days').format(this.format)
       var startDate = moment(output).startOf('month').format(this.format)
       var endDate = moment(output).endOf('month').format(this.format)
+      var monthDays = this.getMonthDates(startDate, endDate)
       this.setState({
         dateFrom: new Date(startDate),
-        dateTo: new Date(endDate)
+        dateTo: new Date(endDate),
+        selectedDays: monthDays
       })
     }
   }
@@ -495,7 +554,7 @@ class Reports extends Component {
                     </div>
                   </div>
 
-                  <ReportTable taskDetails={this.state.taskDetails} state={this.state} frequency={this.returnFrequency} />
+                  <ReportTable taskDetails={this.state.taskDetails} state={this.state} frequency={this.returnFrequency()} />
                 </div>
 
               </div>
