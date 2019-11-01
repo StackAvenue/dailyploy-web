@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
+import { DATE_FORMAT2 } from "./../../../utils/Constants"
 
 
 class ReportTableRow extends Component {
@@ -38,7 +39,7 @@ class ReportTableRow extends Component {
 
   displayDate = (date) => {
     if (this.props.frequency !== 'daily') {
-      return moment(date).format("DD MMM YYYY")
+      return moment(date).format(DATE_FORMAT2)
     }
     return ""
   }

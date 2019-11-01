@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
 import { get, logout, mockGet } from "../../utils/API";
+import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import moment from "moment";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
@@ -14,7 +15,6 @@ import "react-tabs/style/react-tabs.css";
 class Reports extends Component {
   constructor(props) {
     super(props);
-    this.format = "YYYY-MM-DD"
     this.calenderArr = ['daily', 'weekly', 'monthly']
     this.now = moment()
       .hour(0)
@@ -67,14 +67,18 @@ class Reports extends Component {
 
   displayMessage = () => {
     var role = this.state.userRole
-    var frequency = this.returnFrequency()
+    var frequency = this.textTitlize(this.returnFrequency())
     if (role == 'admin' && this.state.searchProjectIds.length !== 0 && this.state.searchUserDetail == "") {
       return "Showing " + `${frequency}` + " Report for " + `${this.fetchProjectName()}`
     } else if (role === "member" || (role == "admin" && this.state.searchUserDetail === "")) {
       return "My " + `${frequency}` + " Report"
     } else if (role == 'admin' && this.state.searchUserDetail !== "") {
-      return "Showing " + `${frequency}` + " Report for " + `${this.state.searchUserDetail.value}` + "(" + `${this.state.searchUserDetail.email}` + ")"
+      return "Showing " + `${frequency}` + " Report for " + this.textTitlize(this.state.searchUserDetail.value) + "(" + `${this.state.searchUserDetail.email}` + ")"
     }
+  }
+
+  textTitlize = (text) => {
+    return text.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
   }
 
   calenderButtonHandle = (e) => {
@@ -134,13 +138,12 @@ class Reports extends Component {
 
   handleWeekClick = (days, weekNumber) => {
     const weekdays = this.getWeekDays(this.getWeekRange(days).from)
-    const format = 'DD MMM'
     this.setState({
       selectedDays: weekdays,
       dateFrom: weekdays[0],
       dateTo: weekdays[weekdays.length - 1],
       weekNumber: weekNumber,
-      displayWeek: moment(weekdays[0]).format(format) + " - " + moment(weekdays[6]).format(format) + "(Week" + this.state.weekNumber + ")"
+      displayWeek: moment(weekdays[0]).format(MONTH_FORMAT) + " - " + moment(weekdays[6]).format(MONTH_FORMAT) + "(Week" + this.state.weekNumber + ")"
     });
   };
 
@@ -197,7 +200,7 @@ class Reports extends Component {
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/reports`,
-        { frequency: 'daily', user_id: loggedInData.id, start_date: moment(this.state.dateFrom).format('YYYY-MM-DD') }
+        { frequency: 'daily', user_id: loggedInData.id, start_date: moment(this.state.dateFrom).format(DATE_FORMAT1) }
       );
       var details = this.makeDatesHash(data.reports)
       var taskDetails = details.taskReports
@@ -232,13 +235,17 @@ class Reports extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     var taskDetails = []
+    if (this.state.daily !== prevState.daily) {
+      var message = this.displayMessage()
+      this.setState({ message: message })
+    }
     if (prevState.dateFrom !== this.state.dateFrom
       || prevState.dateTo !== this.state.dateTo
       || prevState.searchProjectIds !== this.state.searchProjectIds
       || prevState.searchUserDetail !== this.state.searchUserDetail
     ) {
       var searchData = {
-        start_date: moment(this.state.dateFrom).format('YYYY-MM-DD'),
+        start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
         user_id: this.state.searchUserDetail ? this.state.searchUserDetail.member_id : this.state.userId,
         frequency: this.returnFrequency(),
         project_ids: this.state.searchProjectIds
@@ -355,9 +362,9 @@ class Reports extends Component {
   };
 
   handleMonthlyDateFrom = date => {
-    const output = moment(date, this.format);
-    var startDate = output.startOf('month').format(this.format)
-    var endDate = output.endOf('month').format(this.format)
+    const output = moment(date, DATE_FORMAT1);
+    var startDate = output.startOf('month').format(DATE_FORMAT1)
+    var endDate = output.endOf('month').format(DATE_FORMAT1)
     var days = this.getMonthDates(startDate, endDate)
     this.setState({
       dateFrom: new Date(startDate),
@@ -373,7 +380,7 @@ class Reports extends Component {
     var currentDate = startDate;
     while (currentDate <= endDate) {
       daysArr.push(currentDate);
-      var date = moment(currentDate, this.format).add(1, 'days').format(this.format)
+      var date = moment(currentDate, DATE_FORMAT1).add(1, 'days').format(DATE_FORMAT1)
       currentDate = new Date(date)
     }
     return daysArr;
@@ -382,10 +389,10 @@ class Reports extends Component {
 
   setPreviousDate = () => {
     const dateFrom = this.state.dateFrom
-    const startOfDate = moment(dateFrom, this.format).startOf('day')
-    const endOfDate = moment(dateFrom, this.format).endOf('day')
+    const startOfDate = moment(dateFrom, DATE_FORMAT1).startOf('day')
+    const endOfDate = moment(dateFrom, DATE_FORMAT1).endOf('day')
     if (this.state.daily) {
-      const prevDate = startOfDate.subtract(1, 'days').format(this.format)
+      const prevDate = startOfDate.subtract(1, 'days').format(DATE_FORMAT1)
       this.setState({
         dateFrom: new Date(prevDate),
         dateTo: new Date(prevDate),
@@ -393,10 +400,10 @@ class Reports extends Component {
       })
     } else if (this.state.weekly) {
       const format = 'DD MMM'
-      var weekDay = startOfDate.subtract(1, 'days').format(this.format)
-      var weekDay = moment(weekDay, this.format)
-      var weekStart = weekDay.startOf('week').format(this.format)
-      var weekEnd = weekDay.endOf('week').format(this.format)
+      var weekDay = startOfDate.subtract(1, 'days').format(DATE_FORMAT1)
+      var weekDay = moment(weekDay, DATE_FORMAT1)
+      var weekStart = weekDay.startOf('week').format(DATE_FORMAT1)
+      var weekEnd = weekDay.endOf('week').format(DATE_FORMAT1)
       var weekNumber = weekDay.week()
       this.setState({
         dateFrom: new Date(weekStart),
@@ -406,9 +413,9 @@ class Reports extends Component {
         displayWeek: moment(weekStart).format(format) + " - " + moment(weekEnd).format(format) + " (Week " + weekNumber + ")"
       })
     } else if (this.state.monthly) {
-      const output = startOfDate.subtract(1, 'days').format(this.format)
-      var startDate = moment(output).startOf('month').format(this.format)
-      var endDate = moment(output).endOf('month').format(this.format)
+      const output = startOfDate.subtract(1, 'days').format(DATE_FORMAT1)
+      var startDate = moment(output).startOf('month').format(DATE_FORMAT1)
+      var endDate = moment(output).endOf('month').format(DATE_FORMAT1)
       var monthDays = this.getMonthDates(startDate, endDate);
       this.setState({
         dateFrom: new Date(startDate),
@@ -421,10 +428,10 @@ class Reports extends Component {
   setNextDate = () => {
     const dateFrom = this.state.dateFrom
     const dateTo = this.state.dateTo
-    const startOfDate = moment(dateFrom, this.format).startOf('day')
-    const endOfDate = moment(dateTo, this.format).startOf('day')
+    const startOfDate = moment(dateFrom, DATE_FORMAT1).startOf('day')
+    const endOfDate = moment(dateTo, DATE_FORMAT1).startOf('day')
     if (this.state.daily) {
-      const nextDate = startOfDate.add(1, 'days').format(this.format)
+      const nextDate = startOfDate.add(1, 'days').format(DATE_FORMAT1)
       this.setState({
         dateFrom: new Date(nextDate),
         dateTo: new Date(nextDate),
@@ -432,10 +439,10 @@ class Reports extends Component {
       })
     } else if (this.state.weekly) {
       const format = 'DD MMM'
-      var weekDay = endOfDate.add(1, 'days').format(this.format)
-      var weekDay = moment(weekDay, this.format)
-      var weekStart = weekDay.startOf('week').format(this.format)
-      var weekEnd = weekDay.endOf('week').format(this.format)
+      var weekDay = endOfDate.add(1, 'days').format(DATE_FORMAT1)
+      var weekDay = moment(weekDay, DATE_FORMAT1)
+      var weekStart = weekDay.startOf('week').format(DATE_FORMAT1)
+      var weekEnd = weekDay.endOf('week').format(DATE_FORMAT1)
       var weekNumber = weekDay.week()
       this.setState({
         dateFrom: new Date(weekStart),
@@ -445,9 +452,9 @@ class Reports extends Component {
         displayWeek: moment(weekStart).format(format) + " - " + moment(weekEnd).format(format) + " (Week " + weekNumber + ")"
       })
     } else if (this.state.monthly) {
-      const output = endOfDate.add(1, 'days').format(this.format)
-      var startDate = moment(output).startOf('month').format(this.format)
-      var endDate = moment(output).endOf('month').format(this.format)
+      const output = endOfDate.add(1, 'days').format(DATE_FORMAT1)
+      var startDate = moment(output).startOf('month').format(DATE_FORMAT1)
+      var endDate = moment(output).endOf('month').format(DATE_FORMAT1)
       var monthDays = this.getMonthDates(startDate, endDate)
       this.setState({
         dateFrom: new Date(startDate),

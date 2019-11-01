@@ -3,6 +3,7 @@ import ReportTableRow from "./../Reports/ReportTableRow";
 import ReportTable2Row from "./../Reports/ReportTable2Row";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
+import { DATE_FORMAT1 } from "./../../../utils/Constants"
 
 class ReportTable extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class ReportTable extends Component {
   renderTableData = () => {
     return (
       this.props.state.selectedDays.map((date, index) => {
-        var date = moment(date).format("YYYY-MM-DD")
+        var date = moment(date).format(DATE_FORMAT1)
         var tasks = this.props.taskDetails[date] !== undefined ? this.props.taskDetails[date] : []
         return <ReportTableRow tasks={tasks} date={date} frequency={this.props.frequency} />
       })
@@ -51,7 +52,7 @@ class ReportTable extends Component {
   renderTable2Data = () => {
     return (
       this.props.state.selectedDays.map((date, index) => {
-        var date = moment(date).format("YYYY-MM-DD")
+        var date = moment(date).format(DATE_FORMAT1)
         var tasks = this.props.taskDetails[date] !== undefined ? this.props.taskDetails[date] : []
         return <ReportTable2Row tasks={tasks} date={date} frequency={this.props.frequency} />
       })
@@ -127,7 +128,7 @@ class ReportTable extends Component {
     return (
       <>
         <div>
-          <div className="report-message text-titlize">{this.props.state.message} </div>
+          <div className="report-message">{this.props.state.message} </div>
           <div className="reports-table-container">
             <div className="report-header">
               <span className="pull-left">Capacity </span>
