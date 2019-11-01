@@ -18,6 +18,10 @@ class WorkspaceSettings extends Component {
       projectNames: [],
       sort: "week",
       members: [],
+      isLogedInUserEmailArr: [],
+      projects: [],
+      userId: "",
+      users: [],
     };
   }
   logout = async () => {
@@ -26,21 +30,55 @@ class WorkspaceSettings extends Component {
   };
   async componentDidMount() {
     try {
-      const { data } = await get("workspaces");
-      this.setState({ workspaces: data.workspaces });
+      const { data } = await get("logged_in_user");
+      var loggedInData = data;
     } catch (e) {
       console.log("err", e);
     }
 
+    // workspace Listing
+    try {
+      const { data } = await get("workspaces");
+      var workspacesData = data.workspaces;
+    } catch (e) {
+      console.log("err", e);
+    }
+
+    //get workspace Id
     this.getWorkspaceParams();
 
+    // worksapce project Listing
     try {
-      const { data } = await mockGet("members");
-      // console.log(data);
-      this.setState({ members: data });
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects`,
+      );
+      var projectsData = data.projects;
     } catch (e) {
       console.log("err", e);
     }
+
+    // workspace Member Listing
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/members`,
+      );
+      var userArr = data.members.map(user => user.email);
+      var emailArr = data.members
+        .filter(user => user.email !== loggedInData.email)
+        .map(user => user.email);
+    } catch (e) {
+      console.log("users Error", e);
+    }
+
+    this.setState({
+      userId: loggedInData.id,
+      userName: loggedInData.name,
+      userEmail: loggedInData.email,
+      workspaces: workspacesData,
+      projects: projectsData,
+      users: userArr,
+      isLogedInUserEmailArr: emailArr,
+    });
   }
 
   getWorkspaceParams = () => {
@@ -78,6 +116,7 @@ class WorkspaceSettings extends Component {
               onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
               classNameRoute={this.classNameRoute}
+              state={this.state}
             />
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
               <div className="row no-margin workspace1-setting">
