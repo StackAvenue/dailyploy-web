@@ -60,6 +60,8 @@ export default class MenuBar extends Component {
       memberProject: "",
       isLoading: false,
       logedInUserEmail: "",
+      disabledDateTo: false,
+      disableColor: "#fff"
     };
   }
 
@@ -223,6 +225,15 @@ export default class MenuBar extends Component {
     this.setState({ displayColorPicker: false });
   };
 
+  handleUndefinedToDate = () => {
+    if (this.state.disabledDateTo) {
+      var disableColor = "#fff"
+    } else {
+      var disableColor = "#eaeaed"
+    }
+    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor })
+  }
+
   render() {
     const { sort, show } = this.state;
     return (
@@ -265,6 +276,7 @@ export default class MenuBar extends Component {
                         addProject={this.addProject}
                         btnText={"Add"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}
+                        handleUndefinedToDate={this.handleUndefinedToDate}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People

@@ -64,12 +64,13 @@ const AddProjectModal = props => {
                 End Date
               </div>
               <div className="col-md-10 d-inline-block no-padding">
-                <div className="col-md-6 d-inline-block date-picker-container no-padding">
+                <div className="col-md-6 d-inline-block date-picker-container no-padding" style={{ backgroundColor: props.state.disableColor }}>
                   <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                   <div className="col-md-9 d-inline-block">
                     <DatePicker
                       onChange={props.handleDateTo}
                       placeholderText="Select Date"
+                      disabled={props.state.disabledDateTo}
                     />
                   </div>
                 </div>
@@ -79,6 +80,7 @@ const AddProjectModal = props => {
                     type="checkbox"
                     className="custom-control-input d-inline-block"
                     id="endDateUndefined"
+                    onChange={props.handleUndefinedToDate}
                   />
                   <label
                     className="custom-control-label d-inline-block"

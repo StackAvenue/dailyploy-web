@@ -8,25 +8,33 @@ import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
+import Admin from "../../assets/images/admin.png";
 import Search from "../../assets/images/search.png";
 
 class Header extends Component {
   constructor(props) {
     super(props);
+    this.clickClose = React.createRef();
+    this.closeSettingModal = this.closeSettingModal.bind(this);
     this.state = {
       workspaces: [],
       userName: "",
       userEmail: "",
+      userRole: "",
     };
   }
 
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
-      this.setState({ userName: data.name, userEmail: data.email });
+      this.setState({ userName: data.name, userEmail: data.email, userRole: data.role });
     } catch (e) {
       console.log("err", e);
     }
+  }
+
+  closeSettingModal = () => {
+    // this.clickClose.click()
   }
 
   render() {
@@ -189,8 +197,8 @@ class Header extends Component {
                     >
                       {x}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item className="display-flex">
+                    <Dropdown.Menu className="dropdown-position" ref={this.clickClose} >
+                      <div className="display-flex">
                         <div className="workspace-circle d-inline-block text-titlize">
                           {x}
                         </div>
@@ -198,15 +206,16 @@ class Header extends Component {
                           <span className="text-titlize">{this.state.userName}</span>
                           <br />
                           <span>{this.state.userEmail}</span>
+                          <span className="pull-right close-span" onClick={this.closeSettingModal}><i class="fa fa-close" aria-hidden="true"></i></span>
                           <br />
                           <img
-                            alt={"member"}
-                            src={Member}
+                            alt={this.state.userRole === "admin" ? 'Admin' : 'Member'}
+                            src={this.state.userRole === "admin" ? Admin : Member}
                             className="img-responsive"
                           />
-                          <span>Member</span>
+                          <span className="text-titlize padding-10px">{this.state.userRole}</span>
                         </div>
-                      </Dropdown.Item>
+                      </div>
                       <Dropdown.Item
                         className="workspace-setting"
                         href={`/settings/${this.props.workspaceId}`}
