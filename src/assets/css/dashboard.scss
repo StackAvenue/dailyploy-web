@@ -1495,6 +1495,9 @@
     }
   }
 }
+.change-ws-bg-color {
+  background-color: #33a1ff !important;
+}
 
 
 .analysis-box{
@@ -1577,6 +1580,28 @@
         color: $color-text2  !important;
         font-weight: bold;
       }
+    }
+  }
+}
+.date-picker-container{
+  width: 210px  !important;
+  height: auto;
+  border-radius: 5px;
+  border: solid 1px #d6d6d6;
+  background-color: #ffffff;
+  margin-left: 15px;
+  .react-datepicker-wrapper {
+    .react-datepicker__input-container input{
+      border: none !important;
+      padding: 0 0 0 0px !important;
+      width: 81%;
+    }::after {
+      font-family: "Font Awesome 5 Free" !important;
+      font-weight: 900 !important;
+      content: "\f073" !important;
+      color: #555 !important;
+      padding-top: 10px;
+      float: right;
     }
   }
 }

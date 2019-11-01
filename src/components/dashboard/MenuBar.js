@@ -212,7 +212,7 @@ export default class MenuBar extends Component {
   };
 
   handleChangeComplete = (color, event) => {
-    this.setState({ background: color.hex });
+    this.setState({ background: color.hex, displayColorPicker: !this.state.displayColorPicker });
   };
 
   handleChangeColor = () => {

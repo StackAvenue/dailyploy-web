@@ -26,3 +26,21 @@
 .text-titlize {
     text-transform: capitalize;
 }
+
+.left-padding-50px {
+    padding-left: 50px !important;
+}
+.date-text-light{
+    width: 24px;
+    height: 18px;
+    opacity: 0.5;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #555555 !important;
+}

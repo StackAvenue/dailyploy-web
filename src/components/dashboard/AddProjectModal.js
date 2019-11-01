@@ -40,30 +40,50 @@ const AddProjectModal = props => {
                 />
               </div>
             </div>
+
             <div className="col-md-12 no-padding input-row">
               <div className="col-md-2 d-inline-block no-padding label">
-                Duration
+                Start Date
               </div>
-              <div className="col-md-10 d-inline-block">
-                <div
-                  className="col-md-6 d-inline-block"
-                  style={{ paddingLeft: "0" }}
-                >
+              <div
+                className="col-md-6 d-inline-block date-picker-container no-padding"
+              >
+                <div className="col-md-3 d-inline-block date-text-light"><span>From:</span></div>
+                <div className="col-md-9 d-inline-block">
                   <DatePicker
                     selected={props.state.dateFrom}
                     onChange={props.handleDateFrom}
-                    placeholderText="Select From Date"
+                    placeholderText="Select Date"
                   />
                 </div>
-                <div
-                  className="col-md-6 d-inline-block"
-                  style={{ paddingRight: "0" }}
-                >
-                  <DatePicker
-                    selected={props.state.dateTo}
-                    onChange={props.handleDateTo}
-                    placeholderText="Select To Date"
+              </div>
+            </div>
+
+            <div className="col-md-12 no-padding input-row">
+              <div className="col-md-2 d-inline-block no-padding label">
+                End Date
+              </div>
+              <div className="col-md-10 d-inline-block no-padding">
+                <div className="col-md-6 d-inline-block date-picker-container no-padding">
+                  <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
+                  <div className="col-md-9 d-inline-block">
+                    <DatePicker
+                      onChange={props.handleDateTo}
+                      placeholderText="Select Date"
+                    />
+                  </div>
+                </div>
+
+                <div className="col-md-6 d-inline-block left-padding-50px custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input d-inline-block"
+                    id="endDateUndefined"
                   />
+                  <label
+                    className="custom-control-label d-inline-block"
+                    htmlFor="endDateUndefined"
+                  >Undefined</label>
                 </div>
               </div>
             </div>
