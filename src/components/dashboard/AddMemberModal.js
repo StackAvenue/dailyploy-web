@@ -99,8 +99,8 @@ class AddMemberModal extends Component {
                       onChange={this.props.handleChangeMemberInput}
                     >
                       <option value="">Select</option>
-                      <option value="admin">Admin</option>
-                      <option value="member">Member</option>
+                      <option value="1">Admin</option>
+                      <option value="2">Member</option>
                     </select>
                   </td>
                   <td>

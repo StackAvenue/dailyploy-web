@@ -176,7 +176,7 @@ class Dashboard extends Component {
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
-          this.state.taskFrequency
+        this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
 
@@ -184,7 +184,7 @@ class Dashboard extends Component {
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
-          name: user.name,
+          name: user.email === loggedInData.email ? user.name + " (Me)" : user.name,
         };
         var tasks = user.tasks.map(task => {
           var tasksObj = {
