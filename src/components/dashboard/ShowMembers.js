@@ -121,6 +121,23 @@ class ShowMembers extends Component {
     const value = e.target.checked;
   };
 
+  displayProjects = projects => {
+    var names = "";
+    var projectLength = projects.length;
+    if (projectLength == 1) {
+      names = names + projects[0].name;
+    } else if (projectLength >= 2) {
+      for (let i in projects) {
+        if (i == 0) {
+          names = names + projects[i].name + ", ";
+        } else if (i == 1) {
+          names = names + projects[i].name;
+        }
+      }
+    }
+    return names;
+  };
+
   render() {
     return (
       <>
@@ -167,6 +184,8 @@ class ShowMembers extends Component {
                     <th scope="col">Role</th>
                     <th scope="col">Working Hours</th>
                     <th scope="col">Projects</th>
+                    <th scope="col">Invitation</th>
+                    <th scope="col">Created Date</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -191,15 +210,23 @@ class ShowMembers extends Component {
                         <td className="text-titlize">{member.name}</td>
                         <td>{member.email}</td>
                         <td className="text-titlize">Edit</td>
-                        <td className="text-titlize">
-                          {member.role ? member.role : "Member"}
-                        </td>
+                        <td className="text-titlize">{member.role}</td>
                         <td className="text-titlize">
                           {member.workingHours ? member.workingHours : ""} hours
                         </td>
                         <td className="text-titlize">
-                          {member.member_project ? member.member_project : ""}
+                          {this.displayProjects(member.projects)}
                         </td>
+                        <td className={"text-titlize"}>
+                          <p
+                            className={
+                              member.invited ? "text-blue" : "text-green"
+                            }>
+                            Accepted
+                          </p>
+                        </td>
+                        <td>12 Mar 19</td>
+                        <td></td>
                         <td>
                           <i className="fas fa-pencil-alt"></i>
                         </td>

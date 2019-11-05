@@ -139,10 +139,13 @@ export default class MenuBar extends Component {
 
     const memberData = {
       invitation: {
+        name: `${this.state.memberName}`,
         email: `${this.state.memberEmail}`,
         status: "Pending",
         project_id: `${this.state.memberProject}`,
         workspace_id: `${this.props.workspaceId}`,
+        role_id: `${this.state.memberRole}`,
+        working_hours: `${this.state.memberWorkingHours}`,
       },
     };
     try {
