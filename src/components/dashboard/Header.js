@@ -34,7 +34,7 @@ class Header extends Component {
   }
 
   closeSettingModal = () => {
-    // this.clickClose.click()
+    this.clickClose.current.click()
   }
 
   render() {
@@ -190,14 +190,14 @@ class Header extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <Dropdown>
+                  <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className="header-auth-btn text-titlize"
                       id="dropdown-basic"
                     >
                       {x}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-position" ref={this.clickClose} >
+                    <Dropdown.Menu className="dropdown-position" >
                       <div className="display-flex">
                         <div className="workspace-circle d-inline-block text-titlize">
                           {x}

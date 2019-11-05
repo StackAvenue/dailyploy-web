@@ -26,10 +26,6 @@ const RadioOptions = ({ options, selected, onChange }) => {
 class AddMemberModal extends Component {
   constructor(props) {
     super(props);
-    this.choices = [
-      { text: "View", value: "view" },
-      { text: "Edit", value: "edit" },
-    ];
     this.state = {
       value: [],
     };
@@ -59,7 +55,6 @@ class AddMemberModal extends Component {
                 <tr>
                   <th scope="col">Name*</th>
                   <th scope="col">Email ID*</th>
-                  <th scope="col">Access*</th>
                   <th scope="col">Role</th>
                   <th scope="col">Working Hours</th>
                   <th scope="col">Project</th>
@@ -83,13 +78,6 @@ class AddMemberModal extends Component {
                       type="text"
                       placeholder="Email ID"
                       onChange={this.props.handleChangeMemberInput}
-                    />
-                  </td>
-                  <td style={{ paddingTop: "20px" }}>
-                    <RadioOptions
-                      options={this.choices}
-                      onChange={this.props.handleChangeMemberRadio}
-                      selected={this.props.state.memberAccess}
                     />
                   </td>
                   <td>

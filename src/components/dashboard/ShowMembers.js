@@ -176,7 +176,6 @@ class ShowMembers extends Component {
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Access</th>
                     <th scope="col">Role</th>
                     <th scope="col">Working Hours</th>
                     <th scope="col">Projects</th>
@@ -206,7 +205,6 @@ class ShowMembers extends Component {
                         <td>{index + 1}</td>
                         <td className="text-titlize">{member.name}</td>
                         <td>{member.email}</td>
-                        <td className="text-titlize">Edit</td>
                         <td className="text-titlize">{member.role}</td>
                         <td className="text-titlize">{member.workingHours ? member.workingHours : ""} hours</td>
                         <td className="text-titlize">{this.displayProjects(member.projects)}</td>
