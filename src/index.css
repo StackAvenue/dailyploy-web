@@ -1,8 +1,28 @@
 .Toastify__toast {
-  min-height: 50px;
+  min-height: 0px;
+  padding: 0px;
+  margin-bottom: none;
+}
+.Toastify__progress-bar--default {
+  height: 0px;
+}
+.Toastify__close-button{
   padding: 10px;
-  border-radius: 14px;
-  box-shadow: 0 8px 10px 4px rgba(0, 0, 0, 0.1), 0 10px 15px 0 rgba(0, 0, 0, 0.05);
+}
+
+.Toastify__toast-container{
+  width:auto !important;
+  min-width: 270px !important;
+}
+
+.dailyploy-toast{
+  width: 6px;
+  height: 40px;
+  vertical-align: middle;
+}
+.dailyploy-toast-message{
+ padding-left: 10px;
+ color: #424242;
 }
 
 .no-padding{

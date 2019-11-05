@@ -68,6 +68,7 @@ const AddProjectModal = props => {
                   <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                   <div className="col-md-9 d-inline-block">
                     <DatePicker
+                      selected={props.state.dateTo}
                       onChange={props.handleDateTo}
                       placeholderText="Select Date"
                       disabled={props.state.disabledDateTo}

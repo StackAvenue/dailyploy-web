@@ -112,17 +112,25 @@ class ShowProjects extends Component {
   };
 
   getDate = date => {
-    var d = date.split("-");
-    var date1 = new Date(d[0], d[1], d[2]);
-    return date1;
+    if (!date) {
+      return undefined
+    } else {
+      var d = date.split("-");
+      var date1 = new Date(d[0], d[1], d[2]);
+      return date1;
+    }
   };
 
   monthDiff = (d1, d2) => {
-    var months;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth() + 1;
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months;
+    if (d2 === undefined) {
+      return 0
+    } else {
+      var months;
+      months = (d2.getFullYear() - d1.getFullYear()) * 12;
+      months -= d1.getMonth() + 1;
+      months += d2.getMonth();
+      return months <= 0 ? 0 : months;
+    }
   };
 
   classNameRoute = () => {
@@ -270,7 +278,7 @@ class ShowProjects extends Component {
                               </td>
                               <td>{project.owner.name}</td>
                               <td>{project.start_date}</td>
-                              <td>{project.end_date}</td>
+                              <td>{project.end_date ? project.end_date : 'undefined'}</td>
                               <td>
                                 {this.monthDiff(
                                   this.getDate(project.start_date),

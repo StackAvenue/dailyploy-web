@@ -9,6 +9,7 @@ import {
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DailyPloyToast from "./../../src/components/DailyPloyToast";
 import { Tabs, Tab } from "react-bootstrap";
 import Company from "../components/Signup/Company";
 import Individual from "../components/Signup/Individual";
@@ -115,12 +116,10 @@ class Signup extends Component {
       }
       try {
         const { signUpData } = await signUp(signupData);
-        toast.success("User Created", { autoClose: 2000 });
+        toast(<DailyPloyToast message="User Created" status="success" />, { autoClose: 2000 })
         setTimeout(() => this.props.history.push("/login"), 3000);
       } catch (e) {
-        toast.error("email " + e.response.data.errors.email, {
-          autoClose: 2000,
-        });
+        toast(<DailyPloyToast message={"email " + `${e.response.data.errors.email}`} status="error" />, { autoClose: 2000 })
         console.log("error", e.response)
       }
     } else {

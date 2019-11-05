@@ -8,6 +8,7 @@ import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
 import Tabs from "./MenuBar/Tabs";
 import ConditionalElements from "./MenuBar/ConditionalElements";
+import DailyPloyToast from "./../DailyPloyToast";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ export default class MenuBar extends Component {
       memberShow: false,
       memberSetShow: false,
       dateFrom: new Date(),
-      dateTo: new Date(),
+      dateTo: "",
       multiEmail: true,
       background: "#000",
       displayColorPicker: false,
@@ -72,33 +73,7 @@ export default class MenuBar extends Component {
     } catch (e) {
       console.log("err", e);
     }
-    // try {
-    //   const { data } = await get(
-    //     `workspaces/${this.props.workspaceId}/members`
-    //   );
-    //   console.log("data", data);
-    //   const emailArr = data.members
-    //     .filter(user => user.email !== this.state.logedInUserEmail)
-    //     .map(user => user.email);
-    //   console.log("emailArr", emailArr);
-    //   this.setState({ emailOptions: emailArr });
-    // } catch (e) {
-    //   console.log("users Error", e);
-    // }
-
-    // try {
-    //   const { data } = await get(
-    //     `workspaces/${this.props.workspaceId}/projects`
-    //   );
-    //   console.log("project listing data", data);
-    // } catch (e) {
-    //   console.log("project listing Error", e);
-    // }
   }
-
-  // componentDidUpdate() {
-  //   console.log("update props", this.props);
-  // }
 
   addProject = async () => {
     console.log("loading", this.state.isLoading);
@@ -117,8 +92,7 @@ export default class MenuBar extends Component {
         `workspaces/${this.props.workspaceId}/projects`
       );
       this.setState({ show: false, isLoading: true });
-      this.props.handleLoad(this.state.isLoading);
-      toast.success("Project Created", { autoClose: 2000 });
+      toast(<DailyPloyToast message="Project added successfully!" status="success" />, { autoClose: 2000 })
     } catch (e) {
       console.log("project error", e.response);
       this.setState({ show: false });
@@ -126,17 +100,6 @@ export default class MenuBar extends Component {
   };
 
   addMember = async () => {
-    // const memberData = {
-    //   member: {
-    //     member_name: this.state.memberName,
-    //     member_email: this.state.memberEmail,
-    //     member_access: this.state.memberAccess,
-    //     member_role: this.state.memberRole,
-    //     member_workingHours: this.state.memberWorkingHours,
-    //     member_project: this.state.memberProject,
-    //   },
-    // };
-
     const memberData = {
       invitation: {
         name: `${this.state.memberName}`,
@@ -149,9 +112,8 @@ export default class MenuBar extends Component {
       },
     };
     try {
-      // const { data } = await mockPost(memberData, "members");
       const { data } = await post(memberData, "invitations");
-      toast.success("Member Invited");
+      toast(<DailyPloyToast message="Member added successfully!" status="success" />, { autoClose: 2000 })
       this.setState({ memberShow: false });
       console.log("member Data", data);
     } catch (e) {
@@ -234,7 +196,7 @@ export default class MenuBar extends Component {
     } else {
       var disableColor = "#eaeaed"
     }
-    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor })
+    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor, dateTo: null })
   }
 
   render() {
