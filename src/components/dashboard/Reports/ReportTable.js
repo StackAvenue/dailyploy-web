@@ -124,7 +124,6 @@ class ReportTable extends Component {
 
   render() {
 
-    console.log("at report table render", this.checkProject())
     return (
       <>
         <div>

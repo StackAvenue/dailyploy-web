@@ -62,7 +62,7 @@ class Reports extends Component {
 
   fetchProjectName = () => {
     var project = this.state.projects.filter(project => project.id === this.state.searchProjectIds[0])
-    return project[0].name
+    return project.length > 0 ? project[0].name : ""
   }
 
   displayMessage = () => {
@@ -197,16 +197,20 @@ class Reports extends Component {
     }
 
     // MIS report listing
+    var searchData = {
+      start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+      user_id: loggedInData.id, frequency: 'daily',
+      project_ids: JSON.stringify(this.state.searchProjectIds)
+    }
+
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/reports`,
-        { frequency: 'daily', user_id: loggedInData.id, start_date: moment(this.state.dateFrom).format(DATE_FORMAT1) }
+        `workspaces/${this.state.workspaceId}/reports`, searchData
       );
       var details = this.makeDatesHash(data.reports)
       var taskDetails = details.taskReports
       var totalTime = details.totalTime
     } catch (e) {
-
     }
 
     this.setState({
@@ -248,7 +252,7 @@ class Reports extends Component {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
         user_id: this.state.searchUserDetail ? this.state.searchUserDetail.member_id : this.state.userId,
         frequency: this.returnFrequency(),
-        project_ids: this.state.searchProjectIds
+        project_ids: JSON.stringify(this.state.searchProjectIds)
       }
 
       try {
