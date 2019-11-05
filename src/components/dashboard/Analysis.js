@@ -51,7 +51,7 @@ class Analysis extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -61,7 +61,7 @@ class Analysis extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
       var emailArr = data.members
@@ -113,7 +113,10 @@ class Analysis extends Component {
     return (
       <>
         <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} />
+          <Sidebar
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}

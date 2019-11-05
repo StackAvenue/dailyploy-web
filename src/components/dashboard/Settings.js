@@ -104,7 +104,10 @@ class Settings extends Component {
     return (
       <>
         <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} />
+          <Sidebar
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}

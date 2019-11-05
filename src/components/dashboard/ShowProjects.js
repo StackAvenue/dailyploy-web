@@ -70,7 +70,7 @@ class ShowProjects extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -80,7 +80,7 @@ class ShowProjects extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
       var emailArr = data.members
@@ -167,7 +167,10 @@ class ShowProjects extends Component {
     return (
       <div>
         <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} />
+          <Sidebar
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}
@@ -187,8 +190,7 @@ class ShowProjects extends Component {
                   <div className="col-md-12 text-center">
                     <div
                       className="col-md-2 offset-5"
-                      style={{ position: "relative", top: "-74px" }}
-                    >
+                      style={{ position: "relative", top: "-74px" }}>
                       <TabList>
                         <Tab>
                           <i className="fa fa-bars"></i>
@@ -216,8 +218,7 @@ class ShowProjects extends Component {
                               />
                               <label
                                 className="custom-control-label"
-                                htmlFor={`customCheck`}
-                              ></label>
+                                htmlFor={`customCheck`}></label>
                             </div>
                           </th>
                           <th scope="col">Project ID</th>
@@ -254,8 +255,7 @@ class ShowProjects extends Component {
                                   />
                                   <label
                                     className="custom-control-label"
-                                    htmlFor={`customCheck${index}`}
-                                  ></label>
+                                    htmlFor={`customCheck${index}`}></label>
                                 </div>
                               </td>
                               <td>{index + 1}</td>
@@ -265,8 +265,7 @@ class ShowProjects extends Component {
                                   className="color-block"
                                   style={{
                                     backgroundColor: `${project.color_code}`,
-                                  }}
-                                ></div>
+                                  }}></div>
                               </td>
                               <td>{project.owner.name}</td>
                               <td>{project.start_date}</td>
@@ -274,7 +273,7 @@ class ShowProjects extends Component {
                               <td>
                                 {this.monthDiff(
                                   this.getDate(project.start_date),
-                                  this.getDate(project.end_date)
+                                  this.getDate(project.end_date),
                                 )}
                                 &nbsp; months
                               </td>
@@ -299,12 +298,11 @@ class ShowProjects extends Component {
                                   <div
                                     key={index}
                                     className="user-block"
-                                    style={{ backgroundColor: "#33a1ff" }}
-                                  >
+                                    style={{ backgroundColor: "#33a1ff" }}>
                                     <span>
                                       +
                                       {this.countIncrese(
-                                        project.members.map(user => user.name)
+                                        project.members.map(user => user.name),
                                       )}
                                     </span>
                                   </div>

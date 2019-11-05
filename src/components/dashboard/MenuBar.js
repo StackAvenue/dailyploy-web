@@ -61,7 +61,7 @@ export default class MenuBar extends Component {
       isLoading: false,
       logedInUserEmail: "",
       disabledDateTo: false,
-      disableColor: "#fff"
+      disableColor: "#fff",
     };
   }
 
@@ -114,7 +114,7 @@ export default class MenuBar extends Component {
     try {
       const { data } = await post(
         projectData,
-        `workspaces/${this.props.workspaceId}/projects`
+        `workspaces/${this.props.workspaceId}/projects`,
       );
       this.setState({ show: false, isLoading: true });
       this.props.handleLoad(this.state.isLoading);
@@ -214,7 +214,10 @@ export default class MenuBar extends Component {
   };
 
   handleChangeComplete = (color, event) => {
-    this.setState({ background: color.hex, displayColorPicker: !this.state.displayColorPicker });
+    this.setState({
+      background: color.hex,
+      displayColorPicker: !this.state.displayColorPicker,
+    });
   };
 
   handleChangeColor = () => {
@@ -227,12 +230,15 @@ export default class MenuBar extends Component {
 
   handleUndefinedToDate = () => {
     if (this.state.disabledDateTo) {
-      var disableColor = "#fff"
+      var disableColor = "#fff";
     } else {
-      var disableColor = "#eaeaed"
+      var disableColor = "#eaeaed";
     }
-    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor })
-  }
+    this.setState({
+      disabledDateTo: !this.state.disabledDateTo,
+      disableColor: disableColor,
+    });
+  };
 
   render() {
     const { sort, show } = this.state;
@@ -253,8 +259,7 @@ export default class MenuBar extends Component {
                   <Dropdown>
                     <Dropdown.Toggle
                       className="menubar-button"
-                      id="dropdown-basic"
-                    >
+                      id="dropdown-basic">
                       <img src={Add} alt="add" />
                       &nbsp;Add
                     </Dropdown.Toggle>
@@ -281,14 +286,16 @@ export default class MenuBar extends Component {
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People
                       </Dropdown.Item>
-                      <AddMemberModal
-                        state={this.state}
-                        handleClose={this.handleMemberClose}
-                        handleChangeMemberInput={this.handleChangeMemberInput}
-                        handleChangeMemberRadio={this.handleChangeMemberRadio}
-                        addMember={this.addMember}
-                        projects={this.props.state.projects}
-                      />
+                      {this.state.memberShow ? (
+                        <AddMemberModal
+                          state={this.state}
+                          handleClose={this.handleMemberClose}
+                          handleChangeMemberInput={this.handleChangeMemberInput}
+                          handleChangeMemberRadio={this.handleChangeMemberRadio}
+                          addMember={this.addMember}
+                          projects={this.props.state.projects}
+                        />
+                      ) : null}
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>

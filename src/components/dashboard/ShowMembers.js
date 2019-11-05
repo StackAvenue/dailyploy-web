@@ -46,7 +46,7 @@ class ShowMembers extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -56,10 +56,12 @@ class ShowMembers extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
-      var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== loggedInData.email)
+      var worksapceMembersExceptLogedUser = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
       var emailArr = worksapceMembersExceptLogedUser.map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
@@ -123,7 +125,10 @@ class ShowMembers extends Component {
     return (
       <>
         <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} />
+          <Sidebar
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}
@@ -152,8 +157,7 @@ class ShowMembers extends Component {
                         />
                         <label
                           className="custom-control-label"
-                          htmlFor={`customCheck`}
-                        ></label>
+                          htmlFor={`customCheck`}></label>
                       </div>
                     </th>
                     <th scope="col">ID</th>
@@ -180,17 +184,22 @@ class ShowMembers extends Component {
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor={`customCheck${index}`}
-                            ></label>
+                              htmlFor={`customCheck${index}`}></label>
                           </div>
                         </td>
                         <td>{index + 1}</td>
                         <td className="text-titlize">{member.name}</td>
                         <td>{member.email}</td>
                         <td className="text-titlize">Edit</td>
-                        <td className="text-titlize">{member.role ? member.role : "Member"}</td>
-                        <td className="text-titlize">{member.workingHours ? member.workingHours : ""} hours</td>
-                        <td className="text-titlize">{member.member_project ? member.member_project : ""}</td>
+                        <td className="text-titlize">
+                          {member.role ? member.role : "Member"}
+                        </td>
+                        <td className="text-titlize">
+                          {member.workingHours ? member.workingHours : ""} hours
+                        </td>
+                        <td className="text-titlize">
+                          {member.member_project ? member.member_project : ""}
+                        </td>
                         <td>
                           <i className="fas fa-pencil-alt"></i>
                         </td>

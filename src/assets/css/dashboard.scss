@@ -280,7 +280,7 @@
 
 .react-calendar-timeline{
     box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1);
-    .sidebarHeader{
+    .sidebarHeader{ 
         padding:12px 0 12px 32px !important ;
         border-right: 1px solid $color-text3 !important;
         button{
@@ -1428,6 +1428,9 @@
           padding-top:0px !important;
         }
         &:hover{
+          background-color:$color-brand3 !important;
+        }
+        &:active{
           background-color:$color-brand3 !important;
         }
       }
