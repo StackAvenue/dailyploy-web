@@ -18,6 +18,11 @@ class ShowMembers extends Component {
       projects: [],
       userId: "",
       users: [],
+      searchUserDetail: "",
+      searchProjectIds: [],
+      searchOptions: [],
+      worksapceUsers: '',
+      worksapceUser: [],
     };
   }
   logout = async () => {
@@ -53,16 +58,17 @@ class ShowMembers extends Component {
       console.log("err", e);
     }
 
-    // workspace Member Listing
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
-      var worksapceMembersExceptLogedUser = data.members.filter(
-        user => user.email !== loggedInData.email,
-      );
-      var emailArr = worksapceMembersExceptLogedUser.map(user => user.email);
+      var worksapceUsers = data.members
+      var worksapceUser = data.members.filter(user => user.email === loggedInData.email)
+      var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== loggedInData.email)
+      var emailArr = data.members
+        .filter(user => user.email !== loggedInData.email)
+        .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -75,8 +81,40 @@ class ShowMembers extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
+      userRole: worksapceUser[0].role,
+      worksapceUsers: worksapceUsers,
+      worksapceUser: worksapceUser,
       members: worksapceMembersExceptLogedUser,
     });
+    this.createUserProjectList();
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchProjectIds !== this.state.searchProjectIds
+      || prevState.searchUserDetail !== this.state.searchUserDetail
+    ) {
+      var searchData = {
+        user_id: this.state.searchUserDetail ? this.state.searchUserDetail.member_id : this.state.userId,
+        project_ids: JSON.stringify(this.state.searchProjectIds)
+      }
+
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/members`
+        );
+        var userArr = data.members.map(user => user.email);
+        var worksapceUsers = data.members
+        var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== this.state.userEmail)
+      } catch (e) {
+        console.log("users Error", e);
+      }
+
+      this.setState({
+        users: userArr,
+        worksapceUsers: worksapceUsers,
+        members: worksapceMembersExceptLogedUser,
+      })
+    }
   }
 
   getWorkspaceParams = () => {
@@ -138,6 +176,56 @@ class ShowMembers extends Component {
     return names;
   };
 
+  handleSearchFilterResult = (data) => {
+    var searchUserDetail = ""
+    var projectIds = []
+    {
+      data.map((item, i) => {
+        if (item.type === "member") {
+          searchUserDetail = item
+        }
+        else if (item.type === "project") {
+          projectIds.push(item.project_id)
+        }
+      })
+    }
+    this.setState({ searchProjectIds: projectIds, searchUserDetail: searchUserDetail })
+  }
+
+  createUserProjectList = () => {
+    var searchOptions = []
+    if (this.state.projects) {
+      {
+        this.state.projects.map((project, index) => {
+          searchOptions.push({
+            value: project.name,
+            project_id: project.id,
+            type: "project",
+            id: index += 1
+          })
+        })
+      }
+    }
+
+    var index = searchOptions.length
+    if (this.state.userRole === 'admin' && this.state.worksapceUsers) {
+      var otherMembers = this.state.worksapceUsers.filter(user => user.email !== this.state.userEmail)
+      {
+        otherMembers.map((member, idx) => {
+          searchOptions.push({
+            value: member.name,
+            id: index += 1,
+            member_id: member.id,
+            email: member.email,
+            type: 'member',
+            role: member.role
+          })
+        })
+      }
+    }
+    this.setState({ searchOptions: searchOptions })
+  }
+
   render() {
     return (
       <>
@@ -151,6 +239,9 @@ class ShowMembers extends Component {
               logout={this.logout}
               workspaces={this.state.workspaces}
               workspaceId={this.state.workspaceId}
+              searchOptions={this.state.searchOptions}
+              role={this.state.userRole}
+              handleSearchFilterResult={this.handleSearchFilterResult}
             />
             <MenuBar
               onSelectSort={this.onSelectSort}
