@@ -29,8 +29,8 @@ export const mockPost = async (data, basePath) => {
   return await axios.post(`${URL2}/${basePath}`, data, headerConfig);
 };
 
-export const get = async basePath => {
-  return await axios.get(`/${basePath}`);
+export const get = async (basePath, data) => {
+  return await axios.get(`/${basePath}`, { params: data ? data : {} });
 };
 
 export const mockGet = async basePath => {

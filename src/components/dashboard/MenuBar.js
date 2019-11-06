@@ -234,7 +234,7 @@ export default class MenuBar extends Component {
                 classNameRoute={this.props.classNameRoute}
                 workspaceId={this.props.workspaceId}
               />
-              <div className="col-md-7 ml-auto text-right">
+              <div className="col-md-6 ml-auto text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
                 />

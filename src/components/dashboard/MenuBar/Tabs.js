@@ -19,6 +19,9 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/members/${props.workspaceId}`}>Members</Link>
         </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/reports/${props.workspaceId}`}>Reports</Link>
+        </div>
       </>
     );
   } else if (routeName === "analysisTrue") {
@@ -35,6 +38,9 @@ const Tabs = props => {
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/members/${props.workspaceId}`}>Members</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/reports/${props.workspaceId}`}>Reports</Link>
         </div>
       </>
     );
@@ -53,6 +59,9 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/members/${props.workspaceId}`}>Members</Link>
         </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/reports/${props.workspaceId}`}>Reports</Link>
+        </div>
       </>
     );
   } else if (routeName === "membersTrue") {
@@ -70,8 +79,31 @@ const Tabs = props => {
         <div className="col-md-1 active">
           <Link to={`/members/${props.workspaceId}`}>Members</Link>
         </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/reports/${props.workspaceId}`}>Reports</Link>
+        </div>
       </>
     );
+  } else if (routeName === 'reportsTrue') {
+    classNameRoute = (
+      <>
+        <div className="col-md-1 analysis">
+          <Link to={`/dashboard/${props.workspaceId}`}>Home</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/analysis/${props.workspaceId}`}>Analysis</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/projects/${props.workspaceId}`}>Projects</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/members/${props.workspaceId}`}>Members</Link>
+        </div>
+        <div className="col-md-1 active">
+          <Link to={`/reports/${props.workspaceId}`}>Reports</Link>
+        </div>
+      </>
+    )
   } else {
     classNameRoute = (
       <>
@@ -86,6 +118,9 @@ const Tabs = props => {
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/members/${props.workspaceId}`}>Members</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/reports/${props.workspaceId}`}>Reports</Link>
         </div>
       </>
     );
