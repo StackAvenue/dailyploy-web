@@ -96,7 +96,6 @@
         width: 41.3px !important;
         height: 41.3px !important;
         border-radius:50% !important;
-        border: solid 2px $color-background !important;
         background-color: $color-brand3 !important;
         color: $color-white !important;
         font-family: $font-family-roboto !important;
@@ -104,8 +103,7 @@
         padding:10px 0px 0px 0px !important;
         text-align:center !important;
         margin-top: 10px;
-      }
-      
+      }      
     }
 
     .dropdown-notification{
@@ -466,7 +464,12 @@
     color:grey !important;
     text-align: center !important;
     font-size: 15px !important;
-    /* content:"" !important; */
+  }
+  .admin-circle{
+    border: solid 2px $color-alert !important;
+  }
+  .member-circle{
+    border: solid 2px $color-background !important;
   }
 
 .header-dropdown-space{
@@ -477,6 +480,9 @@
   
   .dropdown-toggle::after{
     border:0 !important;
+  }
+  .dropdown-toggle:focus{
+    box-shadow: none !important;
   }
   
   .header-dropdown{

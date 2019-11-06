@@ -21,15 +21,27 @@ class Header extends Component {
       userName: "",
       userEmail: "",
       userRole: "",
+      userId: ""
     };
   }
 
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
-      this.setState({ userName: data.name, userEmail: data.email, userRole: data.role });
+      this.setState({ userId: data.id, userName: data.name, userEmail: data.email });
     } catch (e) {
       console.log("err", e);
+    }
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.props.workspaceId !== prevProps.workspaceId) {
+      try {
+        const { data } = await get(`workspaces/${this.props.workspaceId}/members/${this.state.userId}`);
+        this.setState({ userRole: data.role })
+      } catch (e) {
+        console.log("err", e);
+      }
     }
   }
 
@@ -38,6 +50,7 @@ class Header extends Component {
   }
 
   render() {
+
     const x = this.state.userName
       .split(" ")
       .splice(0, 2)
@@ -192,14 +205,14 @@ class Header extends Component {
 
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
-                      className="header-auth-btn text-titlize"
+                      className={`header-auth-btn text-titlize ${this.state.userRole === 'admin' ? 'admin-circle' : 'member-circle'} `}
                       id="dropdown-basic"
                     >
                       {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position" >
                       <div className="display-flex">
-                        <div className="workspace-circle d-inline-block text-titlize">
+                        <div className={`workspace-circle d-inline-block text-titlize ${this.state.userRole === 'admin' ? 'admin-circle' : 'member-circle'} `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
@@ -244,7 +257,7 @@ class Header extends Component {
               </div>
             </nav>
           </div>
-        </div>
+        </div >
       </>
     );
   }
