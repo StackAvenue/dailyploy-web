@@ -38,15 +38,13 @@ class AddMemberModal extends Component {
           dialogClassName="modal-90w project-modal member-modal"
           aria-labelledby="example-custom-modal-styling-title"
           show={this.props.state.memberShow}
-          onHide={this.props.handleClose}
-        >
+          onHide={this.props.handleClose}>
           <div className="row no-margin">
             <div className="col-md-12 header">
               <span>Add New Member</span>
               <button
                 className="btn btn-link float-right"
-                onClick={this.props.handleClose}
-              >
+                onClick={this.props.handleClose}>
                 <img src={Close} alt="close" />
               </button>
             </div>
@@ -68,6 +66,7 @@ class AddMemberModal extends Component {
                       name="memberName"
                       type="text"
                       placeholder="Name"
+                      value={this.props.state.memberName}
                       onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
@@ -77,6 +76,7 @@ class AddMemberModal extends Component {
                       name="memberEmail"
                       type="text"
                       placeholder="Email ID"
+                      value={this.props.state.memberEmail}
                       onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
@@ -84,8 +84,8 @@ class AddMemberModal extends Component {
                     <select
                       className="form-control role"
                       name="memberRole"
-                      onChange={this.props.handleChangeMemberInput}
-                    >
+                      value={this.props.state.memberRole}
+                      onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select</option>
                       <option value="1">Admin</option>
                       <option value="2">Member</option>
@@ -95,8 +95,8 @@ class AddMemberModal extends Component {
                     <select
                       className="form-control role"
                       name="memberWorkingHours"
-                      onChange={this.props.handleChangeMemberInput}
-                    >
+                      value={this.props.state.memberWorkingHours}
+                      onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select</option>
                       <option value="8">8hr</option>
                       <option value="9">9hr</option>
@@ -104,10 +104,10 @@ class AddMemberModal extends Component {
                   </td>
                   <td>
                     <select
-                      className="form-control text-titlize project"
+                      className="form-control project"
                       name="memberProject"
-                      onChange={this.props.handleChangeMemberInput}
-                    >
+                      value={this.props.state.memberProject}
+                      onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select Project</option>
                       {this.props.projects.map(project => (
                         <option value={project.id}>{project.name}</option>
@@ -122,15 +122,13 @@ class AddMemberModal extends Component {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
-                  onClick={this.props.addMember}
-                >
+                  onClick={this.props.addMember}>
                   Add
                 </button>
                 <button
                   type="button"
                   className="btn col-md-6 button2 btn-primary"
-                  onClick={this.props.handleClose}
-                >
+                  onClick={this.props.handleClose}>
                   Cancel
                 </button>
               </div>

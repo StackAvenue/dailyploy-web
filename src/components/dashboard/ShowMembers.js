@@ -46,7 +46,7 @@ class ShowMembers extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -56,10 +56,12 @@ class ShowMembers extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
-      var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== loggedInData.email)
+      var worksapceMembersExceptLogedUser = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
       var emailArr = worksapceMembersExceptLogedUser.map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
@@ -119,28 +121,31 @@ class ShowMembers extends Component {
     const value = e.target.checked;
   };
 
-  displayProjects = (projects) => {
-    var names = ""
-    var projectLength = projects.length
+  displayProjects = projects => {
+    var names = "";
+    var projectLength = projects.length;
     if (projectLength == 1) {
-      names = names + projects[0].name
+      names = names + projects[0].name;
     } else if (projectLength >= 2) {
       for (let i in projects) {
         if (i == 0) {
-          names = names + projects[i].name + ", "
+          names = names + projects[i].name + ", ";
         } else if (i == 1) {
-          names = names + projects[i].name
+          names = names + projects[i].name;
         }
       }
     }
-    return names
-  }
+    return names;
+  };
 
   render() {
     return (
       <>
         <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} />
+          <Sidebar
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}
@@ -169,8 +174,7 @@ class ShowMembers extends Component {
                         />
                         <label
                           className="custom-control-label"
-                          htmlFor={`customCheck`}
-                        ></label>
+                          htmlFor={`customCheck`}></label>
                       </div>
                     </th>
                     <th scope="col">ID</th>
@@ -198,17 +202,27 @@ class ShowMembers extends Component {
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor={`customCheck${index}`}
-                            ></label>
+                              htmlFor={`customCheck${index}`}></label>
                           </div>
                         </td>
                         <td>{index + 1}</td>
                         <td className="text-titlize">{member.name}</td>
                         <td>{member.email}</td>
                         <td className="text-titlize">{member.role}</td>
-                        <td className="text-titlize">{member.workingHours ? member.workingHours : ""} hours</td>
-                        <td className="text-titlize">{this.displayProjects(member.projects)}</td>
-                        <td className={"text-titlize"}><p className={member.invited ? 'text-blue' : 'text-green'}>Accepted</p></td>
+                        <td className="text-titlize">
+                          {member.workingHours ? member.workingHours : ""} hours
+                        </td>
+                        <td className="text-titlize">
+                          {this.displayProjects(member.projects)}
+                        </td>
+                        <td className={"text-titlize"}>
+                          <p
+                            className={
+                              member.invited ? "text-blue" : "text-green"
+                            }>
+                            Accepted
+                          </p>
+                        </td>
                         <td>12 Mar 19</td>
                         <td></td>
                         <td>

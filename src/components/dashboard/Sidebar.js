@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AddWorkspaceModal from "./Sidebar/AddWorkspaceModal";
+import SelectWorkspace from "./Sidebar/SelectWorkspace";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -45,23 +46,16 @@ class Sidebar extends Component {
       <>
         <div className="workspace-list no-padding">
           <ul>
-            {divideArr.map((item, index) => {
-              return (
-                <li key={index}>
-                  <div className="workspace-box text-titlize">
-                    <a
-                      className="btn btn-default"
-                      href={`/dashboard/${item.id}`}
-                    >
-                      {this.nameFirstLetters(item.name)}
-                    </a>
-                  </div>
-                  <div className="workspace-text text-titlize">
-                    {this.nameSplit(item.name)}
-                  </div>
-                </li>
-              );
-            })}
+            {divideArr.map((item, index) => (
+              <SelectWorkspace
+                item={item}
+                index={index}
+                key={index}
+                nameFirstLetters={this.nameFirstLetters}
+                nameSplit={this.nameSplit}
+                workspaceId={this.props.workspaceId}
+              />
+            ))}
             <li>
               <div className="workspace-box">
                 <button className="btn btn-link" onClick={this.showTaskModal}>

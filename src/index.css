@@ -25,8 +25,8 @@
  color: #424242;
 }
 
-.no-padding{
-  padding:0 !important;
+.no-padding {
+  padding: 0 !important;
 }
 
 /* width */
@@ -36,27 +36,24 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1 !important; 
+  background: #f1f1f1 !important;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888 !important; 
+  background: #888 !important;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555 !important; 
+  background: #555 !important;
 }
 
-.form-control{
-
+.form-control {
   transition: none !important;
 }
 
-
-
-textarea:hover, 
+/* textarea:hover, 
 input:hover,
 textarea:active, 
 input:active, 
@@ -72,4 +69,4 @@ label:focus,
     outline:0px !important;
     -webkit-appearance:none;
     box-shadow: none !important;
-}
+} */
