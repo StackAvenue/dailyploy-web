@@ -301,7 +301,7 @@ class ShowMembers extends Component {
                         <td>{member.email}</td>
                         <td className="text-titlize">{member.role}</td>
                         <td className="text-titlize">
-                          {member.workingHours ? member.workingHours : ""} hours
+                          {member.workingHours ? member.workingHours : "8"} hours
                         </td>
                         <td className="text-titlize">
                           {this.displayProjects(member.projects)}
