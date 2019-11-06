@@ -8,6 +8,7 @@ import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
 import Tabs from "./MenuBar/Tabs";
 import ConditionalElements from "./MenuBar/ConditionalElements";
+import DailyPloyToast from "./../DailyPloyToast";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ export default class MenuBar extends Component {
       memberShow: false,
       memberSetShow: false,
       dateFrom: new Date(),
-      dateTo: new Date(),
+      dateTo: "",
       multiEmail: true,
       background: "#000",
       displayColorPicker: false,
@@ -60,6 +61,8 @@ export default class MenuBar extends Component {
       memberProject: "",
       isLoading: false,
       logedInUserEmail: "",
+      disabledDateTo: false,
+      disableColor: "#fff",
     };
   }
 
@@ -70,33 +73,7 @@ export default class MenuBar extends Component {
     } catch (e) {
       console.log("err", e);
     }
-    // try {
-    //   const { data } = await get(
-    //     `workspaces/${this.props.workspaceId}/members`
-    //   );
-    //   console.log("data", data);
-    //   const emailArr = data.members
-    //     .filter(user => user.email !== this.state.logedInUserEmail)
-    //     .map(user => user.email);
-    //   console.log("emailArr", emailArr);
-    //   this.setState({ emailOptions: emailArr });
-    // } catch (e) {
-    //   console.log("users Error", e);
-    // }
-
-    // try {
-    //   const { data } = await get(
-    //     `workspaces/${this.props.workspaceId}/projects`
-    //   );
-    //   console.log("project listing data", data);
-    // } catch (e) {
-    //   console.log("project listing Error", e);
-    // }
   }
-
-  // componentDidUpdate() {
-  //   console.log("update props", this.props);
-  // }
 
   addProject = async () => {
     console.log("loading", this.state.isLoading);
@@ -112,11 +89,10 @@ export default class MenuBar extends Component {
     try {
       const { data } = await post(
         projectData,
-        `workspaces/${this.props.workspaceId}/projects`
+        `workspaces/${this.props.workspaceId}/projects`,
       );
       this.setState({ show: false, isLoading: true });
-      this.props.handleLoad(this.state.isLoading);
-      toast.success("Project Created", { autoClose: 2000 });
+      toast(<DailyPloyToast message="Project added successfully!" status="success" />, { autoClose: 2000 })
     } catch (e) {
       console.log("project error", e.response);
       this.setState({ show: false });
@@ -124,29 +100,20 @@ export default class MenuBar extends Component {
   };
 
   addMember = async () => {
-    // const memberData = {
-    //   member: {
-    //     member_name: this.state.memberName,
-    //     member_email: this.state.memberEmail,
-    //     member_access: this.state.memberAccess,
-    //     member_role: this.state.memberRole,
-    //     member_workingHours: this.state.memberWorkingHours,
-    //     member_project: this.state.memberProject,
-    //   },
-    // };
-
     const memberData = {
       invitation: {
+        name: `${this.state.memberName}`,
         email: `${this.state.memberEmail}`,
         status: "Pending",
         project_id: `${this.state.memberProject}`,
         workspace_id: `${this.props.workspaceId}`,
+        role_id: `${this.state.memberRole}`,
+        working_hours: `${this.state.memberWorkingHours}`,
       },
     };
     try {
-      // const { data } = await mockPost(memberData, "members");
       const { data } = await post(memberData, "invitations");
-      toast.success("Member Invited");
+      toast(<DailyPloyToast message="Member added successfully!" status="success" />, { autoClose: 2000 })
       this.setState({ memberShow: false });
       console.log("member Data", data);
     } catch (e) {
@@ -212,7 +179,10 @@ export default class MenuBar extends Component {
   };
 
   handleChangeComplete = (color, event) => {
-    this.setState({ background: color.hex });
+    this.setState({
+      background: color.hex,
+      displayColorPicker: !this.state.displayColorPicker,
+    });
   };
 
   handleChangeColor = () => {
@@ -222,6 +192,15 @@ export default class MenuBar extends Component {
   handleColorPickerClose = () => {
     this.setState({ displayColorPicker: false });
   };
+
+  handleUndefinedToDate = () => {
+    if (this.state.disabledDateTo) {
+      var disableColor = "#fff";
+    } else {
+      var disableColor = "#eaeaed";
+    }
+    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor, dateTo: null })
+  }
 
   render() {
     const { sort, show } = this.state;
@@ -242,8 +221,7 @@ export default class MenuBar extends Component {
                   <Dropdown>
                     <Dropdown.Toggle
                       className="menubar-button"
-                      id="dropdown-basic"
-                    >
+                      id="dropdown-basic">
                       <img src={Add} alt="add" />
                       &nbsp;Add
                     </Dropdown.Toggle>
@@ -265,18 +243,22 @@ export default class MenuBar extends Component {
                         addProject={this.addProject}
                         btnText={"Add"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}
+                        handleUndefinedToDate={this.handleUndefinedToDate}
+                        workspaceId={this.props.workspaceId}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People
                       </Dropdown.Item>
-                      <AddMemberModal
-                        state={this.state}
-                        handleClose={this.handleMemberClose}
-                        handleChangeMemberInput={this.handleChangeMemberInput}
-                        handleChangeMemberRadio={this.handleChangeMemberRadio}
-                        addMember={this.addMember}
-                        projects={this.props.state.projects}
-                      />
+                      {this.state.memberShow ? (
+                        <AddMemberModal
+                          state={this.state}
+                          handleClose={this.handleMemberClose}
+                          handleChangeMemberInput={this.handleChangeMemberInput}
+                          handleChangeMemberRadio={this.handleChangeMemberRadio}
+                          addMember={this.addMember}
+                          projects={this.props.state.projects}
+                        />
+                      ) : null}
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>

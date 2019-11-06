@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Search from 'react-search'
+// import Search from 'react-search'
 import Select from "react-select";
 import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
@@ -11,15 +11,21 @@ import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
+import Admin from "../../assets/images/admin.png";
+import Search from "../../assets/images/search.png";
 import SearchImg from "../../assets/images/search.png";
 
 class Header extends Component {
   constructor(props) {
     super(props);
+    this.clickClose = React.createRef();
+    this.closeSettingModal = this.closeSettingModal.bind(this);
     this.state = {
       workspaces: [],
       userName: "",
       userEmail: "",
+      userRole: "",
+      userId: "",
       value: "",
       suggestions: [],
       selectedTags: [],
@@ -29,7 +35,7 @@ class Header extends Component {
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
-      this.setState({ userName: data.name, userEmail: data.email });
+      this.setState({ userId: data.id, userName: data.name, userEmail: data.email });
     } catch (e) {
       console.log("err", e);
     }
@@ -39,6 +45,19 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags)
     }
+
+    if (this.props.workspaceId !== prevProps.workspaceId) {
+      try {
+        const { data } = await get(`workspaces/${this.props.workspaceId}/members/${this.state.userId}`);
+        this.setState({ userRole: data.role })
+      } catch (e) {
+        console.log("err", e);
+      }
+    }
+  }
+
+  closeSettingModal = () => {
+    this.clickClose.current.click()
   }
 
   onSearchTextChange = (e) => {
@@ -279,31 +298,32 @@ class Header extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <Dropdown>
+                  <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
-                      className="header-auth-btn text-titlize"
+                      className={`header-auth-btn text-titlize ${this.state.userRole === 'admin' ? 'admin-circle' : 'member-circle'} `}
                       id="dropdown-basic"
                     >
                       {x}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item className="display-flex">
-                        <div className="workspace-circle d-inline-block text-titlize">
+                    <Dropdown.Menu className="dropdown-position" >
+                      <div className="display-flex">
+                        <div className={`workspace-circle d-inline-block text-titlize ${this.state.userRole === 'admin' ? 'admin-circle' : 'member-circle'} `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
                           <span className="text-titlize">{this.state.userName}</span>
                           <br />
                           <span>{this.state.userEmail}</span>
+                          <span className="pull-right close-span" onClick={this.closeSettingModal}><i class="fa fa-close" aria-hidden="true"></i></span>
                           <br />
                           <img
-                            alt={"member"}
-                            src={Member}
+                            alt={this.state.userRole === "admin" ? 'Admin' : 'Member'}
+                            src={this.state.userRole === "admin" ? Admin : Member}
                             className="img-responsive"
                           />
-                          <span>Member</span>
+                          <span className="text-titlize padding-10px">{this.state.userRole}</span>
                         </div>
-                      </Dropdown.Item>
+                      </div>
                       <Dropdown.Item
                         className="workspace-setting"
                         href={`/settings/${this.props.workspaceId}`}
@@ -332,7 +352,7 @@ class Header extends Component {
               </div>
             </nav>
           </div>
-        </div>
+        </div >
       </>
     );
   }

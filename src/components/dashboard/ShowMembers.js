@@ -51,7 +51,7 @@ class ShowMembers extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -60,7 +60,7 @@ class ShowMembers extends Component {
 
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members
@@ -159,6 +159,23 @@ class ShowMembers extends Component {
     const value = e.target.checked;
   };
 
+  displayProjects = projects => {
+    var names = "";
+    var projectLength = projects.length;
+    if (projectLength == 1) {
+      names = names + projects[0].name;
+    } else if (projectLength >= 2) {
+      for (let i in projects) {
+        if (i == 0) {
+          names = names + projects[i].name + ", ";
+        } else if (i == 1) {
+          names = names + projects[i].name;
+        }
+      }
+    }
+    return names;
+  };
+
   handleSearchFilterResult = (data) => {
     var searchUserDetail = ""
     var projectIds = []
@@ -213,7 +230,10 @@ class ShowMembers extends Component {
     return (
       <>
         <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} />
+          <Sidebar
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}
@@ -245,17 +265,17 @@ class ShowMembers extends Component {
                         />
                         <label
                           className="custom-control-label"
-                          htmlFor={`customCheck`}
-                        ></label>
+                          htmlFor={`customCheck`}></label>
                       </div>
                     </th>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Access</th>
                     <th scope="col">Role</th>
                     <th scope="col">Working Hours</th>
                     <th scope="col">Projects</th>
+                    <th scope="col">Invitation</th>
+                    <th scope="col">Created Date</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -273,17 +293,29 @@ class ShowMembers extends Component {
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor={`customCheck${index}`}
-                            ></label>
+                              htmlFor={`customCheck${index}`}></label>
                           </div>
                         </td>
                         <td>{index + 1}</td>
                         <td className="text-titlize">{member.name}</td>
                         <td>{member.email}</td>
-                        <td className="text-titlize">Edit</td>
-                        <td className="text-titlize">{member.role ? member.role : "Member"}</td>
-                        <td className="text-titlize">{member.workingHours ? member.workingHours : ""} hours</td>
-                        <td className="text-titlize">{member.member_project ? member.member_project : ""}</td>
+                        <td className="text-titlize">{member.role}</td>
+                        <td className="text-titlize">
+                          {member.workingHours ? member.workingHours : "8"} hours
+                        </td>
+                        <td className="text-titlize">
+                          {this.displayProjects(member.projects)}
+                        </td>
+                        <td className={"text-titlize"}>
+                          <p
+                            className={
+                              member.invited ? "text-blue" : "text-green"
+                            }>
+                            Accepted
+                          </p>
+                        </td>
+                        <td>12 Mar 19</td>
+                        <td></td>
                         <td>
                           <i className="fas fa-pencil-alt"></i>
                         </td>

@@ -1,40 +1,57 @@
 .Toastify__toast {
-  min-height: 50px;
+  min-height: 0px;
+  padding: 0px;
+  margin-bottom: none;
+}
+.Toastify__progress-bar--default {
+  height: 0px;
+}
+.Toastify__close-button{
   padding: 10px;
-  border-radius: 14px;
-  box-shadow: 0 8px 10px 4px rgba(0, 0, 0, 0.1), 0 10px 15px 0 rgba(0, 0, 0, 0.05);
 }
 
-.no-padding{
-  padding:0 !important;
+.Toastify__toast-container{
+  width:auto !important;
+  min-width: 270px !important;
+}
+
+.dailyploy-toast{
+  width: 6px;
+  height: 40px;
+  vertical-align: middle;
+}
+.dailyploy-toast-message{
+ padding-left: 10px;
+ color: #424242;
+}
+
+.no-padding {
+  padding: 0 !important;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px !important;
+  width: 7px !important;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1 !important; 
+  background: #f1f1f1 !important;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888 !important; 
+  background: #888 !important;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555 !important; 
+  background: #555 !important;
 }
 
-.form-control{
-
+.form-control {
   transition: none !important;
 }
-
-
 
 textarea:hover, 
 input:hover,
@@ -49,7 +66,7 @@ label:focus,
 .btn:active,
 .btn.active
 {
-    outline:0px !important;
-    -webkit-appearance:none;
-    box-shadow: none !important;
+  outline:0px !important;
+  -webkit-appearance:none;
+  box-shadow: none !important;
 }
