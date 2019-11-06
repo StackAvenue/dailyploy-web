@@ -244,6 +244,7 @@ export default class MenuBar extends Component {
                         btnText={"Add"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}
                         handleUndefinedToDate={this.handleUndefinedToDate}
+                        workspaceId={this.props.workspaceId}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People

@@ -161,7 +161,6 @@ class Dashboard extends Component {
       var userArr = data.members.map(user => user);
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
