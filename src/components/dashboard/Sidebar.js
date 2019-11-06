@@ -25,9 +25,8 @@ class Sidebar extends Component {
 
   nameSplit = name => {
     let nameArr = name;
-    let nameSplit = nameArr.split(" ");
-    let showName = nameSplit[2] + " " + nameSplit[3];
-    return showName;
+    let nameSplit = nameArr.split(" ").slice(2);
+    return nameSplit.join(" ");
   };
 
   nameFirstLetters = name => {
@@ -49,7 +48,7 @@ class Sidebar extends Component {
             {divideArr.map((item, index) => {
               return (
                 <li key={index}>
-                  <div className="workspace-box">
+                  <div className="workspace-box text-titlize">
                     <a
                       className="btn btn-default"
                       href={`/dashboard/${item.id}`}
@@ -57,7 +56,7 @@ class Sidebar extends Component {
                       {this.nameFirstLetters(item.name)}
                     </a>
                   </div>
-                  <div className="workspace-text">
+                  <div className="workspace-text text-titlize">
                     {this.nameSplit(item.name)}
                   </div>
                 </li>

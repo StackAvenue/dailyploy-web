@@ -73,7 +73,6 @@ class AddMemberModal extends Component {
                       name="memberName"
                       type="text"
                       placeholder="Name"
-                      value={this.props.state.memberName}
                       onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
@@ -83,7 +82,6 @@ class AddMemberModal extends Component {
                       name="memberEmail"
                       type="text"
                       placeholder="Email ID"
-                      value={this.props.state.memberEmail}
                       onChange={this.props.handleChangeMemberInput}
                     />
                   </td>
@@ -98,7 +96,6 @@ class AddMemberModal extends Component {
                     <select
                       className="form-control role"
                       name="memberRole"
-                      value={this.props.state.memberRole}
                       onChange={this.props.handleChangeMemberInput}
                     >
                       <option value="">Select</option>
@@ -110,7 +107,6 @@ class AddMemberModal extends Component {
                     <select
                       className="form-control role"
                       name="memberWorkingHours"
-                      value={this.props.state.memberWorkingHours}
                       onChange={this.props.handleChangeMemberInput}
                     >
                       <option value="">Select</option>
@@ -120,9 +116,8 @@ class AddMemberModal extends Component {
                   </td>
                   <td>
                     <select
-                      className="form-control project"
+                      className="form-control text-titlize project"
                       name="memberProject"
-                      value={this.props.state.memberProject}
                       onChange={this.props.handleChangeMemberInput}
                     >
                       <option value="">Select Project</option>

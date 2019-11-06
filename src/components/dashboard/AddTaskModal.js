@@ -33,7 +33,7 @@ const AddTaskModal = props => {
                 <input
                   type="text"
                   name="taskName"
-                  value={props.state.taskName}
+                  // value={props.state.taskName}
                   onChange={props.handleInputChange}
                   placeholder="Task name..."
                   className="form-control"
@@ -47,7 +47,7 @@ const AddTaskModal = props => {
               <div className="col-md-10 d-inline-block">
                 <select
                   name="projectName"
-                  value={props.state.projectName}
+                  // value={props.state.projectName}
                   onChange={props.handleInputChange}
                   className="form-control"
                 >
@@ -69,7 +69,7 @@ const AddTaskModal = props => {
               <div className="col-md-10 d-inline-block">
                 <select
                   name="taskUser"
-                  value={props.state.taskUser}
+                  // value={props.state.taskUser}
                   onChange={props.handleUserSelect}
                   className="form-control"
                 >
@@ -96,6 +96,7 @@ const AddTaskModal = props => {
                   <DatePicker
                     selected={props.state.dateFrom}
                     onChange={props.handleDateFrom}
+                    placeholderText="Select From Date"
                   />
                 </div>
                 <div
@@ -105,6 +106,7 @@ const AddTaskModal = props => {
                   <DatePicker
                     selected={props.state.dateTo}
                     onChange={props.handleDateTo}
+                    placeholderText="Select To Date"
                   />
                 </div>
               </div>
@@ -149,7 +151,7 @@ const AddTaskModal = props => {
               <div className="col-md-10">
                 <textarea
                   name="comments"
-                  value={props.state.comments}
+                  // value={props.state.comments}
                   onChange={props.handleInputChange}
                   className="form-control"
                   rows="3"

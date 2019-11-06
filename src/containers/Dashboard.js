@@ -301,13 +301,13 @@ class Dashboard extends Component {
 
   handleTimeFrom = value => {
     this.setState({
-      timeFrom: value.format("HH:mm:ss"),
+      timeFrom: value != null ? value.format("HH:mm:ss") : null,
     });
   };
 
   handleTimeTo = value => {
     this.setState({
-      timeTo: value.format("HH:mm:ss"),
+      timeTo: value != null ? value.format("HH:mm:ss") : null,
     });
   };
 

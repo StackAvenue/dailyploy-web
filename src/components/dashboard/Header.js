@@ -142,6 +142,7 @@ class Header extends Component {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
+
                   <Dropdown>
                     <Dropdown.Toggle variant="link" id="dropdown-basic">
                       <i className="fa fa-bars"></i>
@@ -183,18 +184,18 @@ class Header extends Component {
 
                   <Dropdown>
                     <Dropdown.Toggle
-                      className="header-auth-btn"
+                      className="header-auth-btn text-titlize"
                       id="dropdown-basic"
                     >
                       {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item>
-                        <div className="workspace-circle d-inline-block">
+                      <Dropdown.Item className="display-flex">
+                        <div className="workspace-circle d-inline-block text-titlize">
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
-                          {this.state.userName}
+                          <span className="text-titlize">{this.state.userName}</span>
                           <br />
                           <span>{this.state.userEmail}</span>
                           <br />
@@ -218,7 +219,7 @@ class Header extends Component {
                         &nbsp;&nbsp;Settings
                       </Dropdown.Item>
                       <div className="col-md-12 logout-user">
-                        <span>
+                        <span className="text-titlize">
                           Not {this.state.userName} ?{" "}
                           <button
                             className="btn btn-link"
