@@ -64,8 +64,8 @@ class Calendar extends Component {
   }
 
   async componentWillMount() {
-    // this.schedulerData.setResources(this.props.resources);
-    // this.schedulerData.setEvents(this.props.events);
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   }
 
   showTaskModal = () => {
@@ -82,8 +82,8 @@ class Calendar extends Component {
   };
 
   renderData = () => {
-    // this.schedulerData.setResources(this.props.resources);
-    // this.schedulerData.setEvents(this.props.events);
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   };
 
   nonAgendaCellHeaderTemplateResolver = (
