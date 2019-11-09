@@ -56,18 +56,19 @@ class Signup extends Component {
 
   async componentDidMount() {
     const { tokenId } = this.props.match.params;
+    if (tokenId !== undefined) {
+      try {
+        const { data } = await get(`token_details/${tokenId}`);
+        var userName = data.name
+        var userEmail = data.email
+      } catch (e) {
+        console.log("error", e.response);
+      }
 
-    try {
-      const { data } = await get(`token_details/${tokenId}`);
-      var userName = data.name
-      var userEmail = data.email
-    } catch (e) {
-      console.log("error", e.response);
+      this.setState({
+        tokenId: tokenId, name: userName, email: userEmail
+      });
     }
-
-    this.setState({
-      tokenId: tokenId, name: userName, email: userEmail
-    });
   }
 
   signupForm = async () => {
