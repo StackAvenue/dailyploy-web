@@ -1,7 +1,14 @@
 import React from "react";
 
 const Company = props => {
-  const { name, companyName, email, password, confirmPassword } = props.state;
+  const {
+    name,
+    companyName,
+    email,
+    password,
+    confirmPassword,
+    isDisabled,
+  } = props.state;
   return (
     <>
       <div className="col-md-10 offset-1 no-padding signup-form text-left">
@@ -33,22 +40,22 @@ const Company = props => {
               type="email"
               name="email"
               value={email}
-              disabled={email !== undefined && email.length > 0 ? "disabled" : ""}
+              disabled={isDisabled}
               onChange={props.changeHandler}
               className="form-control login-form-field error"
               placeholder="johndoe1234@amazon.com"
             />
           ) : (
-              <input
-                type="email"
-                name="email"
-                value={email}
-                disabled={email !== undefined && email.length > 0 ? "disabled" : ""}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="johndoe1234@amazon.com"
-              />
-            )}
+            <input
+              type="email"
+              name="email"
+              value={email}
+              disabled={isDisabled}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="johndoe1234@amazon.com"
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Organization Name</label>
@@ -83,15 +90,15 @@ const Company = props => {
               placeholder="Password"
             />
           ) : (
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="Password"
-              />
-            )}
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="Password"
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Confirm Password</label>
@@ -110,22 +117,21 @@ const Company = props => {
               placeholder="Confirm Password"
             />
           ) : (
-              <input
-                type="password"
-                name="confirmPassword"
-                value={confirmPassword}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="Confirm Password"
-              />
-            )}
+            <input
+              type="password"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="Confirm Password"
+            />
+          )}
         </div>
         <div className="col-md-12 no-padding text-center">
           <button
             disabled={!props.enable}
             onClick={props.signup}
-            className="btn form-btn"
-          >
+            className="btn form-btn">
             Signup
           </button>
         </div>

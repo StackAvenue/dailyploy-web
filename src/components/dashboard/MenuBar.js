@@ -28,16 +28,21 @@ export default class MenuBar extends Component {
       },
     ];
     this.colors = [
-      "#FF6900",
-      "#FCB900",
-      "#7BDCB5",
+      "#4fefde",
+      "#b9e1ff",
+      "#ffc6ac",
       "#00D084",
-      "#8ED1FC",
+      "#c7d0ff",
       "#0693E3",
-      "#ABB8C3",
-      "#EB144C",
-      "#F78DA7",
-      "#9900EF",
+      "#ffc1de",
+      "#00D084",
+      "#c7d0ff",
+      "#0693E3",
+      "#ffc1de",
+      "#00D084",
+      "#c7d0ff",
+      "#0693E3",
+      "#ffc1de",
     ];
     this.state = {
       projectName: "",
@@ -92,7 +97,13 @@ export default class MenuBar extends Component {
         `workspaces/${this.props.workspaceId}/projects`,
       );
       this.setState({ show: false, isLoading: true });
-      toast(<DailyPloyToast message="Project added successfully!" status="success" />, { autoClose: 2000 })
+      toast(
+        <DailyPloyToast
+          message="Project added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
     } catch (e) {
       console.log("project error", e.response);
       this.setState({ show: false });
@@ -113,7 +124,13 @@ export default class MenuBar extends Component {
     };
     try {
       const { data } = await post(memberData, "invitations");
-      toast(<DailyPloyToast message="Member added successfully!" status="success" />, { autoClose: 2000 })
+      toast(
+        <DailyPloyToast
+          message="Member added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
       this.setState({ memberShow: false });
       console.log("member Data", data);
     } catch (e) {
@@ -199,8 +216,12 @@ export default class MenuBar extends Component {
     } else {
       var disableColor = "#eaeaed";
     }
-    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor, dateTo: null })
-  }
+    this.setState({
+      disabledDateTo: !this.state.disabledDateTo,
+      disableColor: disableColor,
+      dateTo: null,
+    });
+  };
 
   render() {
     const { sort, show } = this.state;

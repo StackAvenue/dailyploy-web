@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
 import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
+import DailyPloyToast from "../components/DailyPloyToast";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -159,8 +160,9 @@ class Dashboard extends Component {
         `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user);
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
     } catch (e) {
       console.log("users Error", e);
     }
@@ -175,7 +177,7 @@ class Dashboard extends Component {
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
-        this.state.taskFrequency
+          this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
 
@@ -183,7 +185,8 @@ class Dashboard extends Component {
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
-          name: user.email === loggedInData.email ? user.name + " (Me)" : user.name,
+          name:
+            user.email === loggedInData.email ? user.name + " (Me)" : user.name,
         };
         var tasks = user.tasks.map(task => {
           var tasksObj = {
@@ -253,7 +256,14 @@ class Dashboard extends Component {
         taskData,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectName}/tasks`,
       );
-      toast.success("Task Assigned", { autoClose: 2000 });
+
+      toast(
+        <DailyPloyToast
+          message="Member added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
       setTimeout(() => window.location.reload(), 3000);
 
       console.log("Task Data", data);
@@ -341,7 +351,7 @@ class Dashboard extends Component {
     );
     return (
       <>
-        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+        <ToastContainer position={toast.POSITION.TOP_CENTER} />
         <div className="row no-margin">
           <Sidebar
             workspaces={this.state.workspaces}

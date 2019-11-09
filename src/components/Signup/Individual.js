@@ -1,7 +1,14 @@
 import React from "react";
 
 const Individual = props => {
-  const { name, email, password, confirmPassword } = props.state;
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    tokenId,
+    isDisabled,
+  } = props.state;
   return (
     <>
       <div className="col-md-10 offset-1 no-padding signup-form text-left">
@@ -33,23 +40,23 @@ const Individual = props => {
             <input
               type="email"
               name="email"
-              disabled={email !== undefined && email.length > 0 ? "disabled" : ""}
+              disabled={isDisabled}
               value={email}
               onChange={props.changeHandler}
               className="form-control login-form-field error"
               placeholder="johndoe123@example.com"
             />
           ) : (
-              <input
-                type="email"
-                name="email"
-                disabled={email !== undefined && email.length > 0 ? "disabled" : ""}
-                value={email}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="johndoe123@example.com"
-              />
-            )}
+            <input
+              type="email"
+              name="email"
+              disabled={isDisabled}
+              value={email}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="johndoe123@example.com"
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Password</label>
@@ -68,15 +75,15 @@ const Individual = props => {
               placeholder="Password"
             />
           ) : (
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="Password"
-              />
-            )}
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="Password"
+            />
+          )}
         </div>
         <div className="form-group">
           <label>Confirm Password</label>
@@ -95,23 +102,22 @@ const Individual = props => {
               placeholder="Confirm Password"
             />
           ) : (
-              <input
-                type="password"
-                name="confirmPassword"
-                value={confirmPassword}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="Confirm Password"
-              />
-            )}
+            <input
+              type="password"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={props.changeHandler}
+              className="form-control login-form-field"
+              placeholder="Confirm Password"
+            />
+          )}
         </div>
         {/* <br /> */}
         <div className="col-md-12 no-padding text-center">
           <button
             disabled={!props.enable}
             onClick={props.signup}
-            className="btn form-btn"
-          >
+            className="btn form-btn">
             Signup
           </button>
         </div>
