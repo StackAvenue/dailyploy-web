@@ -216,6 +216,7 @@ export default class MenuBar extends Component {
               <div className="col-md-6 ml-auto text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
+                  handleTaskView={this.props.handleTaskView}
                 />
                 <div className="col-md-2 d-inline-block">
                   <Dropdown>

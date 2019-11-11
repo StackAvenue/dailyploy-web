@@ -44,6 +44,7 @@ class Dashboard extends Component {
       isLogedInUserEmailArr: [],
       taskFrequency: "weekly",
       taskStartDate: new Date(),
+      calenderTab: ""
     };
   }
 
@@ -60,7 +61,6 @@ class Dashboard extends Component {
       viewType = "monthly";
       type = "month";
     }
-    console.log("taskFrequency", viewType, view, this.state.taskStartDate);
     this.setState({
       taskFrequency: viewType,
       taskStartDate: getFisrtDate(new Date(), type),
@@ -68,7 +68,6 @@ class Dashboard extends Component {
   };
 
   taskDate = date => {
-    console.log("date", date);
     const { taskFrequency } = this.state;
     var type;
     if (taskFrequency === "daily") {
@@ -78,7 +77,6 @@ class Dashboard extends Component {
     } else if (taskFrequency === "monthly") {
       type = "month";
     }
-    console.log("type", type, date);
     this.setState({
       taskStartDate: getFisrtDate(date, type),
     });
@@ -93,7 +91,6 @@ class Dashboard extends Component {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks?frequency=${this.state.taskFrequency}&start_date=${this.state.taskStartDate}`,
         );
-        console.log("dta task", data.users);
         var tasksUser = data.users.map(user => {
           var usersObj = {
             id: user.id,
@@ -115,11 +112,15 @@ class Dashboard extends Component {
         var tasksResources = tasksUser.map(user => user.usersObj);
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
         this.setState({ resources: tasksResources, events: taskEvents });
-        console.log("taskEvents", taskEvents);
       } catch (e) {
         console.log("error", e);
       }
     }
+  }
+
+  handleTaskView = (e) => {
+    console.log("at handleTaskView", e.target.value)
+    this.setState({ calenderTab: e.target.value });
   }
 
   async componentDidMount() {
@@ -166,12 +167,6 @@ class Dashboard extends Component {
     }
 
     // workspace Tasks Listing
-    console.log(
-      "frequency",
-      this.state.taskFrequency,
-      "start_date",
-      getWeekFisrtDate(this.state.taskStartDate),
-    );
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
@@ -179,7 +174,6 @@ class Dashboard extends Component {
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
 
-      console.log("dta task", data.users);
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
@@ -200,7 +194,6 @@ class Dashboard extends Component {
       });
       var tasksResources = tasksUser.map(user => user.usersObj);
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-      console.log("taskEvents", taskEvents);
     } catch (e) {
       console.log("error", e);
     }
@@ -214,7 +207,7 @@ class Dashboard extends Component {
       users: userArr,
       isLogedInUserEmailArr: emailArr,
       resources: tasksResources,
-      events: taskEvents,
+      events: taskEvents
     });
   }
 
@@ -332,13 +325,22 @@ class Dashboard extends Component {
     }
   };
 
-  render() {
-    console.log(
-      "datwwwww",
-      moment()
-        .startOf("week")
-        .format("YYYY-MM-DD"),
+  myViewChange = (schedulerData, view) => {
+    console.log("yoyoyoyoy on view change ", schedulerData === this.state.viewModel)
+    console.log("calenderTab", view)
+    schedulerData.setViewType(
+      this.props.calenderTab,
+      view.showAgenda,
+      view.isEventPerspective,
     );
+    schedulerData.setEvents(this.state.events);
+    this.setState({
+      viewModel: schedulerData,
+    });
+    this.props.taskView(view.viewType);
+  };
+
+  render() {
     return (
       <>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
@@ -359,15 +361,16 @@ class Dashboard extends Component {
               classNameRoute={this.classNameRoute}
               handleLoad={this.handleLoad}
               state={this.state}
+              handleTaskView={this.handleTaskView}
             />
             <Calendar
               sortUnit={this.state.sort}
               workspaceId={this.state.workspaceId}
               resources={this.state.resources}
               events={this.state.events}
-              alam={"alam"}
               taskView={this.taskView}
               taskDate={this.taskDate}
+              calenderTab={this.state.calenderTab}
             />
             <div>
               <button

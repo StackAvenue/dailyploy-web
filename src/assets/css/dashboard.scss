@@ -340,6 +340,17 @@
     }
 }
 
+.RBS-Scheduler-root tbody tr:last-child td {
+  border-bottom-style: none !important; 
+  border-bottom-style: none !important; 
+}
+// .scheduler-bg-table tbody tr:last-child td{
+//   border-bottom-style: none !important;
+// }
+
+// .scheduler-content-table tbody tr:last-child td{
+//   border-bottom-style: none !important;
+// }
 
 .project-modal{
     .modal-content{
@@ -504,7 +515,17 @@
     z-index: 185 !important;
     right: 16px !important;
     bottom: 16px !important;
-  
+  }
+  .menubar-dropdown {
+    width: 93px;
+    height: 36px;
+    font-size: 15px;
+    border-radius: 5px !important;
+    border: solid 1px $color-border2 !important ;
+    background-color: $color-white !important;
+    font-family: Roboto;
+    font-size: 15px;
+    color: #5c5c5c !important;
   }
   
   
@@ -592,6 +613,8 @@
     margin: 0 0 0 -1px;
     // margin: -1px 0 0 -2px;
     padding: 0;
+    border-bottom-style: none !important;
+    border-right-style: none !important;
   }
   
   .scheduler-content {
@@ -626,16 +649,17 @@
     border: 0 solid $color-borders;
     border-spacing: 0;
   }
-  
-  table.resource-table tr, table.scheduler-bg-table tr, table.scheduler-table tr {border-bottom: 1px solid $color-borders}
-  
-  table.resource-table th, table.scheduler-table th, table.resource-table td, table.scheduler-bg-table td, table.scheduler-table td{
-    border-right: 1px solid $color-borders;
+ 
+  table.resource-table tr, table.scheduler-bg-table tr, table.scheduler-table tr {
     border-bottom: 1px solid $color-borders;
   }
   
+  table.resource-table th, table.scheduler-table th, table.resource-table td, table.scheduler-bg-table td, table.scheduler-table td{
+    border-right: 1px dashed $color-borders;
+  }
+  
   table.scheduler-bg-table th {
-    border-right: 1px solid $color-borders;
+    border-right: 1px dashed $color-borders;
   }
   
   table.resource-table tr th:last-child, /*table.scheduler-bg-table tr th:last-child, */table.scheduler-table tr th:last-child,
@@ -651,7 +675,6 @@
     display: inline-block;
     margin: 0px 5px;
   }
-  
   .day-event-container {
     text-align: left;
     padding: 5px 5px 0 5px;
@@ -765,8 +788,7 @@
   .resource-table{
     tbody{
       background-color: $color-background;
-      // opacity:0.4;
-      border: 1px solid $color-borders;
+      // border: 1px solid $color-borders;
       .header2-text{
         color:$color-text2 !important;
         font-family: $font-family-roboto !important;
@@ -825,9 +847,9 @@
             }
           }
           .leftheader{
-            width: 16% !important;
+            width: 219px !important;
             height: 35px !important;
-            border-right: 1px solid $color-borders !important;
+            border-right: 1.3px solid $color-borders !important;
             span{
               color:$color-text2 !important;
               font-family: $font-family-roboto !important;
@@ -1694,4 +1716,27 @@
     margin-right: 10px;
     text-align: center;
   }
+}
+.menubar-taskview-btn select{
+  width: 93px;
+  height: 36px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 15px;
+  border: solid 1px $color-border2;
+  background-color: $color-fafafa;
+  color: #5c5c5c;
+  option{
+    margin: 10px;
+  }
+  // option:hover{
+  //   content: attr(title);
+  //   background: #666;
+  //   color: #fff;
+  //   position: absolute;
+  //   width: 100%;
+  //   left: 0;
+  //   border: none;
+  // }
+
 }

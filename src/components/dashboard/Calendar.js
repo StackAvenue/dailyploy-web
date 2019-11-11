@@ -14,41 +14,105 @@ class Calendar extends Component {
       false,
       false,
       {
-        resourceName: "",
-        nonAgendaOtherCellHeaderFormat: "D ddd",
-        dayResourceTableWidth: "218px",
-        weekResourceTableWidth: "16%",
-        monthResourceTableWidth: "218px",
-        dayCellWidth: "5%",
-        weekCellWidth: "12%",
-        monthCellWidth: "4%",
+        schedulerWidth: '96%',
+        besidesWidth: 20,
+        schedulerMaxHeight: 0,
+        tableHeaderHeight: 34,
+
+        agendaResourceTableWidth: 160,
+        agendaMaxEventWidth: 100,
+
+        dayResourceTableWidth: 218,
+        weekResourceTableWidth: '16%',
+        monthResourceTableWidth: 218,
+        customResourceTableWidth: 160,
+
+        dayCellWidth: 30,
+        weekCellWidth: '12%',
+        monthCellWidth: 80,
+        customCellWidth: 80,
+
+        dayMaxEvents: 99,
+        weekMaxEvents: 99,
+        monthMaxEvents: 99,
+        customMaxEvents: 99,
+
         eventItemHeight: 45,
-        eventItemLineHeight: 50,
+        eventItemLineHeight: this.calculateResouceHeight(),
+        nonAgendaSlotMinHeight: 0,
+        dayStartFrom: 0,
+        dayStopTo: 23,
+        defaultEventBgColor: '#80C5F6',
+        selectedAreaColor: '#7EC2F3',
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#e5e5e54f",
-        tableHeaderHeight: 35,
-        schedulerWidth: "96%",
+        summaryColor: '#666',
+        groupOnlySlotColor: '#F8F8F8',
+
+        startResizable: true,
+        endResizable: true,
+        movable: true,
+        creatable: true,
+        crossResourceMove: true,
+        checkConflict: false,
+        scrollToSpecialMomentEnabled: true,
+        eventItemPopoverEnabled: true,
+        calendarPopoverEnabled: true,
+        recurringEventsEnabled: true,
+        headerEnabled: true,
+        displayWeekend: true,
+        relativeMove: true,
+        defaultExpanded: true,
+
+        resourceName: '',
+        taskName: 'Task Name',
+        agendaViewHeader: 'Agenda',
+        nonAgendaDayCellHeaderFormat: 'ha',
+        nonAgendaOtherCellHeaderFormat: "D ddd",
+        eventItemPopoverDateFormat: 'MMM D',
+        minuteStep: 30,
+
         views: [
-          {
-            viewName: "Day",
-            viewType: ViewTypes.Day,
-            showAgenda: false,
-            isEventPerspective: false,
-          },
-          {
-            viewName: "Week",
-            viewType: ViewTypes.Week,
-            showAgenda: false,
-            isEventPerspective: false,
-          },
-          {
-            viewName: "Month",
-            viewType: ViewTypes.Month,
-            showAgenda: false,
-            isEventPerspective: false,
-          },
+          { viewName: 'Day', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false },
+          { viewName: 'Week', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
+          { viewName: 'Month', viewType: ViewTypes.Month, showAgenda: false, isEventPerspective: false },
         ],
+        // resourceName: "",
+        // nonAgendaOtherCellHeaderFormat: "D ddd",
+        // dayResourceTableWidth: "218px",
+        // weekResourceTableWidth: "16%",
+        // monthResourceTableWidth: "218px",
+        // dayCellWidth: "5%",
+        // weekCellWidth: "12%",
+        // monthCellWidth: "4%",
+        // eventItemHeight: 45,
+        // eventItemLineHeight: this.calculateResouceHeight(),
+        // nonWorkingTimeHeadColor: "#5c5c5c",
+        // nonWorkingTimeHeadBgColor: "#fff",
+        // nonWorkingTimeBodyBgColor: "#e5e5e54f",
+        // tableHeaderHeight: 35,
+        // schedulerWidth: "96%",
+        // views: [
+        //   {
+        //     viewName: "Day",
+        //     viewType: ViewTypes.Day,
+        //     showAgenda: false,
+        //     isEventPerspective: false,
+        //   },
+        //   {
+        //     viewName: "Week",
+        //     viewType: ViewTypes.Week,
+        //     showAgenda: false,
+        //     isEventPerspective: false,
+        //   },
+        //   {
+        //     viewName: "Month",
+        //     viewType: ViewTypes.Month,
+        //     showAgenda: false,
+        //     isEventPerspective: false,
+        //   },
+        // ],
       },
     );
 
@@ -63,9 +127,35 @@ class Calendar extends Component {
     };
   }
 
-  async componentWillMount() {
-    // this.schedulerData.setResources(this.props.resources);
-    // this.schedulerData.setEvents(this.props.events);
+  calculateResouceHeight = () => {
+    let resourcesLength = this.props.resources.length
+    let sceenHeight = window.screen.height;
+    let finalSceenHeight = sceenHeight - (((sceenHeight / 10) * 30) / 10)
+    let heights = new Map()
+    heights.set(0, finalSceenHeight)
+    heights.set(1, finalSceenHeight)
+    heights.set(2, finalSceenHeight / 2)
+    heights.set(3, finalSceenHeight / 3)
+    heights.set(4, finalSceenHeight / 4)
+    heights.set(5, finalSceenHeight / 5)
+    heights.set(6, finalSceenHeight / 6)
+    let height = heights.get(resourcesLength)
+    if (height === undefined) {
+      return 50
+    }
+    return height
+  }
+
+  async componentDidMount() {
+    this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.props.calenderTab != prevProps.calenderTab) {
+      this.myViewChange(this.props.calenderTab)
+    }
   }
 
   showTaskModal = () => {
@@ -82,8 +172,9 @@ class Calendar extends Component {
   };
 
   renderData = () => {
-    // this.schedulerData.setResources(this.props.resources);
-    // this.schedulerData.setEvents(this.props.events);
+    this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   };
 
   nonAgendaCellHeaderTemplateResolver = (
@@ -102,8 +193,7 @@ class Calendar extends Component {
     }
 
     if (isCurrentDate) {
-      style.backgroundColor = "#118dea";
-      style.color = "white";
+      style.borderTop = "4px solid #33a1ff"
     }
 
     return (
@@ -181,6 +271,8 @@ class Calendar extends Component {
   };
 
   onViewChange = (schedulerData, view) => {
+    var newSchedulerData = new SchedulerData(schedulerData)
+    console.log(schedulerData, newSchedulerData)
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
@@ -193,7 +285,22 @@ class Calendar extends Component {
     this.props.taskView(view.viewType);
   };
 
+  myViewChange = (viewType) => {
+    var newSchedulerData = new SchedulerData(this.schedulerData)
+    this.schedulerData.setViewType(
+      viewType,
+      false,
+      false,
+    );
+    this.schedulerData.setEvents(this.state.events);
+    this.setState({
+      viewModel: this.schedulerData,
+    });
+    this.props.taskView(viewType);
+  };
+
   onSelectDate = (schedulerData, date) => {
+    console.log("yoyoyoyoy on select date ")
     schedulerData.setDate(date);
     schedulerData.setEvents(this.state.events);
     this.setState({
