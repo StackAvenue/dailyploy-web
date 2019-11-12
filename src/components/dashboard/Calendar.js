@@ -72,47 +72,13 @@ class Calendar extends Component {
         nonAgendaOtherCellHeaderFormat: "D ddd",
         eventItemPopoverDateFormat: 'MMM D',
         minuteStep: 30,
+        calenderViewType: "dropdown",
 
         views: [
           { viewName: 'Day', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false },
           { viewName: 'Week', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
           { viewName: 'Month', viewType: ViewTypes.Month, showAgenda: false, isEventPerspective: false },
         ],
-        // resourceName: "",
-        // nonAgendaOtherCellHeaderFormat: "D ddd",
-        // dayResourceTableWidth: "218px",
-        // weekResourceTableWidth: "16%",
-        // monthResourceTableWidth: "218px",
-        // dayCellWidth: "5%",
-        // weekCellWidth: "12%",
-        // monthCellWidth: "4%",
-        // eventItemHeight: 45,
-        // eventItemLineHeight: this.calculateResouceHeight(),
-        // nonWorkingTimeHeadColor: "#5c5c5c",
-        // nonWorkingTimeHeadBgColor: "#fff",
-        // nonWorkingTimeBodyBgColor: "#e5e5e54f",
-        // tableHeaderHeight: 35,
-        // schedulerWidth: "96%",
-        // views: [
-        //   {
-        //     viewName: "Day",
-        //     viewType: ViewTypes.Day,
-        //     showAgenda: false,
-        //     isEventPerspective: false,
-        //   },
-        //   {
-        //     viewName: "Week",
-        //     viewType: ViewTypes.Week,
-        //     showAgenda: false,
-        //     isEventPerspective: false,
-        //   },
-        //   {
-        //     viewName: "Month",
-        //     viewType: ViewTypes.Month,
-        //     showAgenda: false,
-        //     isEventPerspective: false,
-        //   },
-        // ],
       },
     );
 
@@ -152,10 +118,9 @@ class Calendar extends Component {
     this.schedulerData.setEvents(this.props.events);
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    if (this.props.calenderTab != prevProps.calenderTab) {
-      this.myViewChange(this.props.calenderTab)
-    }
+  async componentWillMount() {
+    this.schedulerData.setResources(this.props.resources);
+    this.schedulerData.setEvents(this.props.events);
   }
 
   showTaskModal = () => {
@@ -285,22 +250,7 @@ class Calendar extends Component {
     this.props.taskView(view.viewType);
   };
 
-  myViewChange = (viewType) => {
-    var newSchedulerData = new SchedulerData(this.schedulerData)
-    this.schedulerData.setViewType(
-      viewType,
-      false,
-      false,
-    );
-    this.schedulerData.setEvents(this.state.events);
-    this.setState({
-      viewModel: this.schedulerData,
-    });
-    this.props.taskView(viewType);
-  };
-
   onSelectDate = (schedulerData, date) => {
-    console.log("yoyoyoyoy on select date ")
     schedulerData.setDate(date);
     schedulerData.setEvents(this.state.events);
     this.setState({

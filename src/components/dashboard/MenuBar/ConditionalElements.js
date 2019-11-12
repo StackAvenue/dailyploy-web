@@ -8,13 +8,6 @@ const ConditionalElements = props => {
   if (routeName === "dashboardTrue") {
     classNameRoute = (
       <>
-        <div className="menubar-taskview-btn d-inline-block">
-          <select onChange={(e) => props.handleTaskView(e)}>
-            <option value="0">Daily</option>
-            <option selected value="1">Weekly</option>
-            <option value="2">Monthly</option>
-          </select>
-        </div>
       </>
     );
   } else if (routeName === "analysisTrue") {

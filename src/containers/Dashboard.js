@@ -44,7 +44,6 @@ class Dashboard extends Component {
       isLogedInUserEmailArr: [],
       taskFrequency: "weekly",
       taskStartDate: new Date(),
-      calenderTab: ""
     };
   }
 
@@ -116,11 +115,6 @@ class Dashboard extends Component {
         console.log("error", e);
       }
     }
-  }
-
-  handleTaskView = (e) => {
-    console.log("at handleTaskView", e.target.value)
-    this.setState({ calenderTab: e.target.value });
   }
 
   async componentDidMount() {
@@ -361,7 +355,6 @@ class Dashboard extends Component {
               classNameRoute={this.classNameRoute}
               handleLoad={this.handleLoad}
               state={this.state}
-              handleTaskView={this.handleTaskView}
             />
             <Calendar
               sortUnit={this.state.sort}
@@ -370,7 +363,6 @@ class Dashboard extends Component {
               events={this.state.events}
               taskView={this.taskView}
               taskDate={this.taskDate}
-              calenderTab={this.state.calenderTab}
             />
             <div>
               <button

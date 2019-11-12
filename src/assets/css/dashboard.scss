@@ -1717,26 +1717,31 @@
     text-align: center;
   }
 }
-.menubar-taskview-btn select{
-  width: 93px;
-  height: 36px;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 15px;
-  border: solid 1px $color-border2;
-  background-color: $color-fafafa;
-  color: #5c5c5c;
-  option{
-    margin: 10px;
-  }
-  // option:hover{
-  //   content: attr(title);
-  //   background: #666;
-  //   color: #fff;
-  //   position: absolute;
-  //   width: 100%;
-  //   left: 0;
-  //   border: none;
-  // }
 
+.taskview-type {
+  top: -49px;
+  margin-right: 166px;
+  position: relative;
+  select{
+    display: none;
+  }
+  select {
+    width: 93px;
+    height: 36px;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 15px;
+    border: solid 1px $color-border2;
+    background-color: $color-fafafa;
+    color: #5c5c5c;
+    outline: none;
+    option{
+      width: 118px !important;
+      height: 36px;
+      background-color: #fff;
+      &:hover{
+        background-color: none;
+      }
+    }
+  }
 }
