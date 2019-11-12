@@ -79,7 +79,8 @@ class Signup extends Component {
     }
   }
 
-  signupForm = async () => {
+  signupForm = async e => {
+    e.preventDefault();
     this.validateAllInputs();
     if (this.validityCheck()) {
       var signupData;
@@ -127,6 +128,7 @@ class Signup extends Component {
         const { signUpData } = await signUp(signupData);
         toast(<DailyPloyToast message="User Created" status="success" />, {
           autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
         });
         setTimeout(() => this.props.history.push("/login"), 3000);
       } catch (e) {
@@ -190,7 +192,7 @@ class Signup extends Component {
 
     return (
       <>
-        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+        <ToastContainer position={toast.POSITION.TOP_CENTER} />
         <div className="container-fluid">
           <div className="main-container">
             <Header />
@@ -220,7 +222,8 @@ class Signup extends Component {
                   <Tab
                     eventKey="company"
                     title="Organization"
-                    style={{ border: "0" }}>
+                    style={{ border: "0" }}
+                    disabled={this.state.isDisabled}>
                     <Company
                       state={this.state}
                       enable={isEnabled}

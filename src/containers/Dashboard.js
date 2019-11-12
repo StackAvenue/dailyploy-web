@@ -259,7 +259,7 @@ class Dashboard extends Component {
 
       toast(
         <DailyPloyToast
-          message="Member added successfully!"
+          message="Task Created successfully!"
           status="success"
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
@@ -351,54 +351,47 @@ class Dashboard extends Component {
     );
     return (
       <>
-        <ToastContainer position={toast.POSITION.TOP_CENTER} />
-        <div className="row no-margin">
-          <Sidebar
+        <div className="dashboard-main no-padding">
+          <Header
+            logout={this.logout}
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
           />
-          <div className="dashboard-main no-padding">
-            <Header
-              logout={this.logout}
-              workspaces={this.state.workspaces}
-              workspaceId={this.state.workspaceId}
-            />
-            <MenuBar
-              onSelectSort={this.onSelectSort}
-              workspaceId={this.state.workspaceId}
-              classNameRoute={this.classNameRoute}
-              handleLoad={this.handleLoad}
+          <MenuBar
+            onSelectSort={this.onSelectSort}
+            workspaceId={this.state.workspaceId}
+            classNameRoute={this.classNameRoute}
+            handleLoad={this.handleLoad}
+            state={this.state}
+          />
+          <Calendar
+            sortUnit={this.state.sort}
+            workspaceId={this.state.workspaceId}
+            resources={this.state.resources}
+            events={this.state.events}
+            alam={"alam"}
+            taskView={this.taskView}
+            taskDate={this.taskDate}
+          />
+          <div>
+            <button
+              className="btn menubar-task-btn"
+              onClick={this.showTaskModal}>
+              <i className="fas fa-plus" />
+            </button>
+            <AddTaskModal
               state={this.state}
+              closeTaskModal={this.closeTaskModal}
+              handleInputChange={this.handleInputChange}
+              project={this.state.projects}
+              handleDateFrom={this.handleDateFrom}
+              handleDateTo={this.handleDateTo}
+              handleTimeFrom={this.handleTimeFrom}
+              handleTimeTo={this.handleTimeTo}
+              user={this.state.users}
+              addTask={this.addTask}
+              handleUserSelect={this.handleUserSelect}
             />
-            <Calendar
-              sortUnit={this.state.sort}
-              workspaceId={this.state.workspaceId}
-              resources={this.state.resources}
-              events={this.state.events}
-              alam={"alam"}
-              taskView={this.taskView}
-              taskDate={this.taskDate}
-            />
-            <div>
-              <button
-                className="btn menubar-task-btn"
-                onClick={this.showTaskModal}>
-                <i className="fas fa-plus" />
-              </button>
-              <AddTaskModal
-                state={this.state}
-                closeTaskModal={this.closeTaskModal}
-                handleInputChange={this.handleInputChange}
-                project={this.state.projects}
-                handleDateFrom={this.handleDateFrom}
-                handleDateTo={this.handleDateTo}
-                handleTimeFrom={this.handleTimeFrom}
-                handleTimeTo={this.handleTimeTo}
-                user={this.state.users}
-                addTask={this.addTask}
-                handleUserSelect={this.handleUserSelect}
-              />
-            </div>
           </div>
         </div>
         {/* <Footer />  */}

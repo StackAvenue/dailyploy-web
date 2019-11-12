@@ -4,6 +4,7 @@ import Header from "./Header";
 import { get, logout, mockGet } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
+import moment from "moment";
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class ShowMembers extends Component {
       searchUserDetail: "",
       searchProjectIds: [],
       searchOptions: [],
-      worksapceUsers: '',
+      worksapceUsers: "",
       worksapceUser: [],
     };
   }
@@ -63,9 +64,13 @@ class ShowMembers extends Component {
         `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
-      var worksapceUsers = data.members
-      var worksapceUser = data.members.filter(user => user.email === loggedInData.email)
-      var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== loggedInData.email)
+      var worksapceUsers = data.members;
+      var worksapceUser = data.members.filter(
+        user => user.email === loggedInData.email,
+      );
+      var worksapceMembersExceptLogedUser = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
         .map(user => user.email);
@@ -90,21 +95,26 @@ class ShowMembers extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchProjectIds !== this.state.searchProjectIds
-      || prevState.searchUserDetail !== this.state.searchUserDetail
+    if (
+      prevState.searchProjectIds !== this.state.searchProjectIds ||
+      prevState.searchUserDetail !== this.state.searchUserDetail
     ) {
       var searchData = {
-        user_id: this.state.searchUserDetail ? this.state.searchUserDetail.member_id : this.state.userId,
-        project_ids: JSON.stringify(this.state.searchProjectIds)
-      }
+        user_id: this.state.searchUserDetail
+          ? this.state.searchUserDetail.member_id
+          : this.state.userId,
+        project_ids: JSON.stringify(this.state.searchProjectIds),
+      };
 
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/members`
+          `workspaces/${this.state.workspaceId}/members`,
         );
         var userArr = data.members.map(user => user.email);
-        var worksapceUsers = data.members
-        var worksapceMembersExceptLogedUser = data.members.filter(user => user.email !== this.state.userEmail)
+        var worksapceUsers = data.members;
+        var worksapceMembersExceptLogedUser = data.members.filter(
+          user => user.email !== this.state.userEmail,
+        );
       } catch (e) {
         console.log("users Error", e);
       }
@@ -113,7 +123,7 @@ class ShowMembers extends Component {
         users: userArr,
         worksapceUsers: worksapceUsers,
         members: worksapceMembersExceptLogedUser,
-      })
+      });
     }
   }
 
@@ -160,40 +170,64 @@ class ShowMembers extends Component {
   };
 
   displayProjects = projects => {
-    var names = "";
-    var projectLength = projects.length;
-    if (projectLength == 1) {
-      names = names + projects[0].name;
-    } else if (projectLength >= 2) {
-      for (let i in projects) {
-        if (i == 0) {
-          names = names + projects[i].name + ", ";
-        } else if (i == 1) {
-          names = names + projects[i].name;
-        }
-      }
+    // console.log("Display Pr")
+    // var names = "";
+    // var projectLength = projects.length;
+    // if (projectLength == 1) {
+    //   names = names + projects[0].name;
+    // } else if (projectLength >= 2) {
+    //   for (let i in projects) {
+    //     if (i == 0) {
+    //       names = names + projects[i].name + ", ";
+    //     } else if (i == 1) {
+    //       names = names + projects[i].name;
+    //     }
+    //   }
+    // }
+    // return names;
+    // let arr = [
+    //   "DailyPloy",
+    //   "Leadsquared",
+    //   "DealSignal",
+    //   "LocusNine",
+    //   "DealSignal",
+    // ];
+    let arr = projects.map(project => project.name);
+    var projectShow;
+    let count;
+    if (arr.length > 2) {
+      count = arr.length - 2;
     }
-    return names;
+    console.log("count", count);
+    if (arr.length > 2) {
+      projectShow =
+        arr.length > 1 ? arr[0] + "," + arr[1] + " +" + count : arr[0];
+    } else {
+      projectShow = arr.length > 1 ? arr[0] + "," + arr[1] : arr[0];
+    }
+    return projectShow;
   };
 
-  handleSearchFilterResult = (data) => {
-    var searchUserDetail = ""
-    var projectIds = []
+  handleSearchFilterResult = data => {
+    var searchUserDetail = "";
+    var projectIds = [];
     {
       data.map((item, i) => {
         if (item.type === "member") {
-          searchUserDetail = item
+          searchUserDetail = item;
+        } else if (item.type === "project") {
+          projectIds.push(item.project_id);
         }
-        else if (item.type === "project") {
-          projectIds.push(item.project_id)
-        }
-      })
+      });
     }
-    this.setState({ searchProjectIds: projectIds, searchUserDetail: searchUserDetail })
-  }
+    this.setState({
+      searchProjectIds: projectIds,
+      searchUserDetail: searchUserDetail,
+    });
+  };
 
   createUserProjectList = () => {
-    var searchOptions = []
+    var searchOptions = [];
     if (this.state.projects) {
       {
         this.state.projects.map((project, index) => {
@@ -201,130 +235,131 @@ class ShowMembers extends Component {
             value: project.name,
             project_id: project.id,
             type: "project",
-            id: index += 1
-          })
-        })
+            id: (index += 1),
+          });
+        });
       }
     }
 
-    var index = searchOptions.length
-    if (this.state.userRole === 'admin' && this.state.worksapceUsers) {
-      var otherMembers = this.state.worksapceUsers.filter(user => user.email !== this.state.userEmail)
+    var index = searchOptions.length;
+    if (this.state.userRole === "admin" && this.state.worksapceUsers) {
+      var otherMembers = this.state.worksapceUsers.filter(
+        user => user.email !== this.state.userEmail,
+      );
       {
         otherMembers.map((member, idx) => {
           searchOptions.push({
             value: member.name,
-            id: index += 1,
+            id: (index += 1),
             member_id: member.id,
             email: member.email,
-            type: 'member',
-            role: member.role
-          })
-        })
+            type: "member",
+            role: member.role,
+          });
+        });
       }
     }
-    this.setState({ searchOptions: searchOptions })
-  }
+    this.setState({ searchOptions: searchOptions });
+  };
 
   render() {
     return (
       <>
-        <div className="row no-margin">
-          <Sidebar
+        <div className="dashboard-main no-padding">
+          <Header
+            logout={this.logout}
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
+            searchOptions={this.state.searchOptions}
+            role={this.state.userRole}
+            handleSearchFilterResult={this.handleSearchFilterResult}
           />
-          <div className="dashboard-main no-padding">
-            <Header
-              logout={this.logout}
-              workspaces={this.state.workspaces}
-              workspaceId={this.state.workspaceId}
-              searchOptions={this.state.searchOptions}
-              role={this.state.userRole}
-              handleSearchFilterResult={this.handleSearchFilterResult}
-            />
-            <MenuBar
-              onSelectSort={this.onSelectSort}
-              workspaceId={this.state.workspaceId}
-              classNameRoute={this.classNameRoute}
-              state={this.state}
-            />
-            <div className="show-projects">
-              <div className="members"></div>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">
-                      <div className="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id={`customCheck`}
-                          onChange={this.checkAll}
-                          name="chk[]"
-                        />
-                        <label
-                          className="custom-control-label"
-                          htmlFor={`customCheck`}></label>
-                      </div>
-                    </th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Working Hours</th>
-                    <th scope="col">Projects</th>
-                    <th scope="col">Invitation</th>
-                    <th scope="col">Created Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.members.map((member, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id={`customCheck${index}`}
-                              name="isChecked"
-                              onChange={this.handleCheck}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor={`customCheck${index}`}></label>
-                          </div>
-                        </td>
-                        <td>{index + 1}</td>
-                        <td className="text-titlize">{member.name}</td>
-                        <td>{member.email}</td>
-                        <td className="text-titlize">{member.role}</td>
-                        <td className="text-titlize">
-                          {member.workingHours ? member.workingHours : "8"} hours
-                        </td>
-                        <td className="text-titlize">
-                          {this.displayProjects(member.projects)}
-                        </td>
-                        <td className={"text-titlize"}>
-                          <p
+          <MenuBar
+            onSelectSort={this.onSelectSort}
+            workspaceId={this.state.workspaceId}
+            classNameRoute={this.classNameRoute}
+            state={this.state}
+          />
+          <div className="show-projects">
+            <div className="members"></div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <div className="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        className="custom-control-input"
+                        id={`customCheck`}
+                        onChange={this.checkAll}
+                        name="chk[]"
+                      />
+                      <label
+                        className="custom-control-label"
+                        htmlFor={`customCheck`}></label>
+                    </div>
+                  </th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Working Hours</th>
+                  <th scope="col">Projects</th>
+                  <th scope="col">Invitation</th>
+                  <th scope="col">Created Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.members.map((member, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <div className="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            className="custom-control-input"
+                            id={`customCheck${index}`}
+                            name="isChecked"
+                            onChange={this.handleCheck}
+                          />
+                          <label
+                            className="custom-control-label"
+                            htmlFor={`customCheck${index}`}></label>
+                        </div>
+                      </td>
+                      <td>{index + 1}</td>
+                      <td className="text-titlize">{member.name}</td>
+                      <td>{member.email}</td>
+                      <td className="text-titlize">{member.role}</td>
+                      <td className="text-titlize">
+                        {member.workingHours ? member.workingHours : "8"} hours
+                      </td>
+                      <td className="text-titlize">
+                        {this.displayProjects(member.projects)}
+                      </td>
+                      <td className={"text-titlize"}>
+                        {/* <p
                             className={
                               member.invited ? "text-blue" : "text-green"
                             }>
-                            Accepted
-                          </p>
-                        </td>
-                        <td>12 Mar 19</td>
-                        <td></td>
-                        <td>
-                          <i className="fas fa-pencil-alt"></i>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                            {}
+                          </p> */}
+                        {!member.is_invited ? (
+                          <p className="text-green">Accepted</p>
+                        ) : (
+                          <p className="text-blue">Invited</p>
+                        )}
+                      </td>
+                      <td>{moment(member.created_at).format("DD MMM YY")}</td>
+                      <td></td>
+                      <td>
+                        <i className="fas fa-pencil-alt"></i>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </>

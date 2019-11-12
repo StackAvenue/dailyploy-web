@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Select from "react-select";
 import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
-import ReactTags from 'react-tag-autocomplete'
+import ReactTags from "react-tag-autocomplete";
 import logo from "../../assets/images/logo.png";
 import setting from "../../assets/images/setting.png";
 import invite from "../../assets/images/invite.png";
@@ -35,7 +35,11 @@ class Header extends Component {
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
-      this.setState({ userId: data.id, userName: data.name, userEmail: data.email });
+      this.setState({
+        userId: data.id,
+        userName: data.name,
+        userEmail: data.email,
+      });
     } catch (e) {
       console.log("err", e);
     }
@@ -43,13 +47,15 @@ class Header extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedTags !== this.state.selectedTags) {
-      this.props.handleSearchFilterResult(this.state.selectedTags)
+      this.props.handleSearchFilterResult(this.state.selectedTags);
     }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
       try {
-        const { data } = await get(`workspaces/${this.props.workspaceId}/members/${this.state.userId}`);
-        this.setState({ userRole: data.role })
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/members/${this.state.userId}`,
+        );
+        this.setState({ userRole: data.role });
       } catch (e) {
         console.log("err", e);
       }
@@ -57,87 +63,100 @@ class Header extends Component {
   }
 
   closeSettingModal = () => {
-    this.clickClose.current.click()
-  }
+    this.clickClose.current.click();
+  };
 
-  onSearchTextChange = (e) => {
-    const value = e.target.value
-    let suggestions = []
+  onSearchTextChange = e => {
+    const value = e.target.value;
+    let suggestions = [];
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, 'i');
-      suggestions = this.props.searchOptions.sort().filter(v => regex.test(v.value) && !(this.state.selectedTags.includes(v)))
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = this.props.searchOptions
+        .sort()
+        .filter(
+          v => regex.test(v.value) && !this.state.selectedTags.includes(v),
+        );
     }
     this.setState({ suggestions: suggestions, value: value });
-  }
+  };
 
-  selectSuggestion = (option) => {
-    var newSelectedTags = new Array(...this.state.selectedTags)
-    newSelectedTags.push(option)
-    this.setState({ selectedTags: newSelectedTags, suggestions: [], value: '' })
-  }
+  selectSuggestion = option => {
+    var newSelectedTags = new Array(...this.state.selectedTags);
+    newSelectedTags.push(option);
+    this.setState({
+      selectedTags: newSelectedTags,
+      suggestions: [],
+      value: "",
+    });
+  };
 
-  removeSelectedTag = (index) => {
-    var selectedTags = this.state.selectedTags
-    selectedTags = selectedTags.filter((item, i) => i !== index)
-    this.setState({ selectedTags: selectedTags })
-  }
+  removeSelectedTag = index => {
+    var selectedTags = this.state.selectedTags;
+    selectedTags = selectedTags.filter((item, i) => i !== index);
+    this.setState({ selectedTags: selectedTags });
+  };
 
   renderSearchSuggestion = () => {
     return (
       <>
-        {this.state.suggestions ?
+        {this.state.suggestions ? (
           <ul>
             {this.state.suggestions.map((option, idx) => {
-              if (option.type == 'member') {
+              if (option.type == "member") {
                 return (
                   <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                    <i className="fa fa-user" ></i>
+                    <i className="fa fa-user"></i>
                     <span className="right-left-space-5">{option.value}</span>
                   </li>
-                )
+                );
               } else {
                 return (
                   <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                    <i className="fa fa-list-alt" ></i>
+                    <i className="fa fa-list-alt"></i>
                     <span className="right-left-space-5">{option.value}</span>
                   </li>
-                )
+                );
               }
             })}
           </ul>
-          : null}
+        ) : null}
       </>
-    )
-  }
+    );
+  };
 
   renderSelectedTags = () => {
     return (
       <>
-        {
-          this.state.selectedTags.map((option, index) => {
-            if (option.type == 'member') {
-              return (
-                <div className={`search-icon-${option.type}`} key={index}>
-                  <i className="fa fa-user right-left-space-5" ></i>
-                  <span className="right-left-space-5">{option.value}</span>
-                  <a className="remove-tag right-left-space-5" onClick={() => this.removeSelectedTag(index)}><i className="fa fa-close"></i></a>
-                </div>
-              )
-            } else {
-              return (
-                <div className={`search-icon-${option.type}`} key={index}>
-                  <i className="fa fa-list-alt right-left-space-5" ></i>
-                  <span className="right-left-space-5">{option.value}</span>
-                  <a className="remove-tag right-left-space-5" onClick={() => this.removeSelectedTag(index)}><i className="fa fa-close"></i></a>
-                </div>
-              )
-            }
-
-          })
-        }
+        {this.state.selectedTags.map((option, index) => {
+          if (option.type == "member") {
+            return (
+              <div className={`search-icon-${option.type}`} key={index}>
+                <i className="fa fa-user right-left-space-5"></i>
+                <span className="right-left-space-5">{option.value}</span>
+                <a
+                  className="remove-tag right-left-space-5"
+                  onClick={() => this.removeSelectedTag(index)}>
+                  <i className="fa fa-close"></i>
+                </a>
+              </div>
+            );
+          } else {
+            return (
+              <div className={`search-icon-${option.type}`} key={index}>
+                <i className="fa fa-list-alt right-left-space-5"></i>
+                <span className="right-left-space-5">{option.value}</span>
+                <a
+                  className="remove-tag right-left-space-5"
+                  onClick={() => this.removeSelectedTag(index)}>
+                  <i className="fa fa-close"></i>
+                </a>
+              </div>
+            );
+          }
+        })}
       </>
-    )
-  }
+    );
+  };
 
   render() {
     const { value } = this.state;
@@ -158,14 +177,12 @@ class Header extends Component {
                 data-target="#navbarTogglerDemo03"
                 aria-controls="navbarTogglerDemo03"
                 aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
+                aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon" />
               </button>
               <a
                 className="navbar-brand logo"
-                href={`/dashboard/${this.props.workspaceId}`}
-              >
+                href={`/dashboard/${this.props.workspaceId}`}>
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
               <div className="col-md-6 no-padding header-search-bar">
@@ -174,13 +191,17 @@ class Header extends Component {
                     <div className="selected-tags">
                       {this.renderSelectedTags()}
                     </div>
-                    <input type="text" value={value} placeholder="Search by people/projects" onChange={this.onSearchTextChange} />
+                    <input
+                      type="text"
+                      value={value}
+                      placeholder="Search by people/projects"
+                      onChange={this.onSearchTextChange}
+                    />
 
                     <div className="suggestion-holder">
                       {this.renderSearchSuggestion()}
                     </div>
                   </div>
-
                 </div>
                 <div className="col-md-1 d-inline-block">
                   <img alt={"search"} src={SearchImg} />
@@ -188,8 +209,7 @@ class Header extends Component {
               </div>
               <div
                 className="collapse navbar-collapse"
-                id="navbarTogglerDemo03"
-              >
+                id="navbarTogglerDemo03">
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                   <Dropdown>
                     <Dropdown.Toggle variant="link" id="dropdown-basic">
@@ -278,8 +298,7 @@ class Header extends Component {
                       </Dropdown.Item>
                       <Dropdown.Item
                         className="workspace-setting"
-                        href={`/workspace/${this.props.workspaceId}/settings`}
-                      >
+                        href={`/workspace/${this.props.workspaceId}/settings`}>
                         <img
                           alt={"setting"}
                           src={setting}
@@ -300,34 +319,55 @@ class Header extends Component {
 
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
-                      className={`header-auth-btn text-titlize ${this.state.userRole === 'admin' ? 'admin-circle' : 'member-circle'} `}
-                      id="dropdown-basic"
-                    >
+                      className={`header-auth-btn text-titlize ${
+                        this.state.userRole === "admin"
+                          ? "admin-circle"
+                          : "member-circle"
+                      } `}
+                      id="dropdown-basic">
                       {x}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-position" >
+                    <Dropdown.Menu className="dropdown-position">
                       <div className="display-flex">
-                        <div className={`workspace-circle d-inline-block text-titlize ${this.state.userRole === 'admin' ? 'admin-circle' : 'member-circle'} `}>
+                        <div
+                          className={`workspace-circle d-inline-block text-titlize ${
+                            this.state.userRole === "admin"
+                              ? "admin-circle"
+                              : "member-circle"
+                          } `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
-                          <span className="text-titlize">{this.state.userName}</span>
+                          <span className="text-titlize">
+                            {this.state.userName}
+                          </span>
                           <br />
                           <span>{this.state.userEmail}</span>
-                          <span className="pull-right close-span" onClick={this.closeSettingModal}><i class="fa fa-close" aria-hidden="true"></i></span>
+                          <span
+                            className="pull-right close-span"
+                            onClick={this.closeSettingModal}>
+                            <i class="fa fa-close" aria-hidden="true"></i>
+                          </span>
                           <br />
                           <img
-                            alt={this.state.userRole === "admin" ? 'Admin' : 'Member'}
-                            src={this.state.userRole === "admin" ? Admin : Member}
+                            alt={
+                              this.state.userRole === "admin"
+                                ? "Admin"
+                                : "Member"
+                            }
+                            src={
+                              this.state.userRole === "admin" ? Admin : Member
+                            }
                             className="img-responsive"
                           />
-                          <span className="text-titlize padding-10px">{this.state.userRole}</span>
+                          <span className="text-titlize padding-10px">
+                            {this.state.userRole}
+                          </span>
                         </div>
                       </div>
                       <Dropdown.Item
                         className="workspace-setting"
-                        href={`/settings/${this.props.workspaceId}`}
-                      >
+                        href={`/settings/${this.props.workspaceId}`}>
                         <img
                           alt={"settings"}
                           src={setting}
@@ -340,8 +380,7 @@ class Header extends Component {
                           Not {this.state.userName} ?{" "}
                           <button
                             className="btn btn-link"
-                            onClick={this.props.logout}
-                          >
+                            onClick={this.props.logout}>
                             Logout
                           </button>
                         </span>
@@ -352,7 +391,7 @@ class Header extends Component {
               </div>
             </nav>
           </div>
-        </div >
+        </div>
       </>
     );
   }

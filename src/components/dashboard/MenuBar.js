@@ -68,6 +68,7 @@ export default class MenuBar extends Component {
       logedInUserEmail: "",
       disabledDateTo: false,
       disableColor: "#fff",
+      suggestions: [],
     };
   }
 
@@ -156,7 +157,32 @@ export default class MenuBar extends Component {
 
   handleChangeMemberInput = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    let suggestions = [];
+    // var searchOptions = ["Arpit", "Kiran", "vikram", "vimal", "ravi"];
+    var searchOptions = this.props.state.isLogedInUserEmailArr.map(
+      user => user.name,
+    );
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = searchOptions.sort().filter(v => regex.test(v));
+    }
+    console.log("Suggestion", suggestions);
+    this.setState({ [name]: value, suggestions: suggestions });
+  };
+
+  selectAutoSuggestion = option => {
+    console.log("option", option);
+    var filterArr = this.props.state.isLogedInUserEmailArr.filter(
+      user => user.name === option,
+    );
+    let memberRole = filterArr[0].role === "admin" ? "1" : "2";
+    this.setState({
+      memberName: filterArr[0].name,
+      memberEmail: filterArr[0].email,
+      memberRole: memberRole,
+      memberWorkingHours: filterArr[0].working_hours,
+    });
+    console.log("filterArr", filterArr);
   };
 
   handleChangeMemberRadio = e => {
@@ -278,6 +304,7 @@ export default class MenuBar extends Component {
                           handleChangeMemberRadio={this.handleChangeMemberRadio}
                           addMember={this.addMember}
                           projects={this.props.state.projects}
+                          selectAutoSuggestion={this.selectAutoSuggestion}
                         />
                       ) : null}
                     </Dropdown.Menu>
