@@ -15,13 +15,13 @@ import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.format = "h:mm a";
+    this.format = "h:mm";
     this.now = moment()
       .hour(0)
       .minute(0);
     this.state = {
       taskName: "",
-      projectName: "",
+      projectId: "",
       taskUser: [],
       sort: "week",
       show: false,
@@ -238,7 +238,7 @@ class Dashboard extends Component {
     try {
       const { data } = await post(
         taskData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.projectName}/tasks`,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks`,
       );
       toast.success("Task Assigned", { autoClose: 2000 });
       setTimeout(() => window.location.reload(), 3000);
@@ -304,10 +304,18 @@ class Dashboard extends Component {
     this.setState({ [name]: userIdArr });
   };
 
+  handleMemberSelect = memberIds => {
+    this.setState({ taskUser: memberIds });
+  };
+
   handleInputChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
+
+  handleProjectSelect = projectId => {
+    this.setState({ projectId: projectId })
+  }
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
@@ -374,14 +382,15 @@ class Dashboard extends Component {
                 state={this.state}
                 closeTaskModal={this.closeTaskModal}
                 handleInputChange={this.handleInputChange}
-                project={this.state.projects}
+                projects={this.state.projects}
                 handleDateFrom={this.handleDateFrom}
                 handleDateTo={this.handleDateTo}
                 handleTimeFrom={this.handleTimeFrom}
                 handleTimeTo={this.handleTimeTo}
-                user={this.state.users}
+                users={this.state.users}
                 addTask={this.addTask}
-                handleUserSelect={this.handleUserSelect}
+                handleMemberSelect={this.handleMemberSelect}
+                handleProjectSelect={this.handleProjectSelect}
               />
             </div>
           </div>
