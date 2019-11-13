@@ -172,7 +172,7 @@ class Dashboard extends Component {
         this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
-
+      console.log(moment(this.state.taskStartDate).format("YYYY-MM-DD hh:mm Z"))
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
@@ -181,8 +181,10 @@ class Dashboard extends Component {
         var tasks = user.tasks.map(task => {
           var tasksObj = {
             id: task.id,
-            start: task.start_datetime,
-            end: task.end_datetime,
+            // start: task.start_datetime,
+            // end: task.end_datetime,
+            start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
+            end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
             resourceId: user.id,
             title: task.name,
             bgColor: task.project.color_code,
@@ -194,6 +196,8 @@ class Dashboard extends Component {
       });
       var tasksResources = tasksUser.map(user => user.usersObj);
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+      console.log("taskEvents", taskEvents)
+
     } catch (e) {
       console.log("error", e);
     }
@@ -226,18 +230,14 @@ class Dashboard extends Component {
   };
 
   addTask = async () => {
+    var startDateTime = moment(this.state.dateFrom).format("YYYY-MM-DD") + " " + this.state.timeFrom
+    var endDateTime = moment(this.state.dateTo).format("YYYY-MM-DD") + " " + this.state.timeTo
     const taskData = {
       task: {
         name: this.state.taskName,
         member_ids: this.state.taskUser,
-        start_datetime:
-          moment(this.state.dateFrom).format("YYYY-MM-DD") +
-          " " +
-          this.state.timeFrom,
-        end_datetime:
-          moment(this.state.dateTo).format("YYYY-MM-DD") +
-          " " +
-          this.state.timeTo,
+        start_datetime: new Date(startDateTime),
+        end_datetime: new Date(endDateTime),
         comments: this.state.comments,
       },
     };
@@ -248,19 +248,14 @@ class Dashboard extends Component {
       );
       var task = data.task
       toast.success("Task Assigned", { autoClose: 2000 });
-      // setTimeout(() => window.location.reload(), 3000);
-
-      console.log("Task Data", data);
       this.setState({ show: false });
     } catch (e) {
-      console.log("error", e.response);
       this.setState({ show: false });
     }
     this.setState({ newTask: task })
   };
 
   onSelectSort = value => {
-    console.log("selected value ", value);
     this.setState({ sort: value });
   };
 

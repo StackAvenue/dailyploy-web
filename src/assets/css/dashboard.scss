@@ -1855,10 +1855,21 @@
 }
 .task-popup{
   text-transform: capitalize;
+  .overflow-text{
+    white-space: normal !important;
+  }
   .ant-row-flex{
     padding: 5px;
   }
   .task-project div{
     padding-right: 10px;
   }
+}
+.ant-popover-inner-content{
+  padding: 5px 10px !important;
+}
+.text-wraper{
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
 }

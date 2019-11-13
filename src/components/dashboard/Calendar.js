@@ -384,19 +384,29 @@ class Calendar extends Component {
     return (
       <div key={event.id} className={mustAddCssClass} style={divStyle}>
         <div className="row item">
-          <div className="col-md-12 item-heading no-padding">{titleText}</div>
+          <div className="col-md-12 item-heading no-padding text-wraper">{titleText}</div>
           <div className="col-md-12 no-padding">
             <div className="col-md-6 no-padding d-inline-block item-time">
               {`${start} - ${end}`}
             </div>
             <div className="col-md-6 no-padding d-inline-block item-time text-right">
-              {moment(event.end).diff(moment(event.start), "hours")}&nbsp;h
+              {/* {moment(event.end).diff(moment(event.start), "hours")}&nbsp;h */}
+              {this.getTimeDifference(moment(event.start), moment(event.end))}
             </div>
           </div>
         </div>
       </div>
     );
   };
+
+  getTimeDifference = (start, end) => {
+    let totalSeconds = end.diff(start, 'seconds')
+    totalSeconds = Number(totalSeconds);
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor(totalSeconds % 3600 / 60);
+    var s = Math.floor(totalSeconds % 3600 % 60);
+    return h + "h" + ":" + m + "m";
+  }
 
   toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId);
