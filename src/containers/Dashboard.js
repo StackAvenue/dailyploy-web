@@ -108,6 +108,7 @@ class Dashboard extends Component {
               resourceId: user.id,
               title: task.name,
               bgColor: task.project.color_code,
+              projectName: task.project.name
             };
             return tasksObj;
           });
@@ -185,6 +186,7 @@ class Dashboard extends Component {
             resourceId: user.id,
             title: task.name,
             bgColor: task.project.color_code,
+            projectName: task.project.name
           };
           return tasksObj;
         });

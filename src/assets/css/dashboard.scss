@@ -1843,3 +1843,22 @@
     }
   }
 }
+.status-dot{
+  border-radius: 0px !important;
+}
+
+.ant-popover-inner-content{
+  .header1-text{
+    font-size: 13px !important; 
+    color: #5c5c5c !important; 
+  }
+}
+.task-popup{
+  text-transform: capitalize;
+  .ant-row-flex{
+    padding: 5px;
+  }
+  .task-project div{
+    padding-right: 10px;
+  }
+}
