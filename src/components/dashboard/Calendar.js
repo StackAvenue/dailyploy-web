@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import "antd/lib/style/index.less";
 import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
+import { post } from "../../utils/API";
 import "../../assets/css/dashboard.scss";
+import AddTaskModal from "../../components/dashboard/AddTaskModal";
 import moment from "moment";
 
 class Calendar extends Component {
@@ -113,14 +115,20 @@ class Calendar extends Component {
   }
 
   async componentDidMount() {
-    this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
-    this.schedulerData.setResources(this.props.resources);
-    this.schedulerData.setEvents(this.props.events);
+    this.renderData();
   }
 
-  async componentWillMount() {
-    this.schedulerData.setResources(this.props.resources);
-    this.schedulerData.setEvents(this.props.events);
+  // async componentWillMount() {
+  //   this.schedulerData.setResources(this.props.resources);
+  //   this.schedulerData.setEvents(this.props.events);
+  // }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.events !== this.props.events ||
+      prevProps.resources !== this.props.resources
+    ) {
+      this.renderData()
+    }
   }
 
   showTaskModal = () => {
@@ -184,7 +192,6 @@ class Calendar extends Component {
       </div>
     );
 
-    // console.log("schedular Data", this.schedulerData);
     return (
       <div>
         <div>
@@ -278,29 +285,7 @@ class Calendar extends Component {
   };
 
   newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-    if (
-      window.confirm(
-        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`,
-      )
-    ) {
-      let newFreshId = 0;
-      schedulerData.events.forEach(item => {
-        if (item.id >= newFreshId) newFreshId = item.id + 1;
-      });
-
-      let newEvent = {
-        id: newFreshId,
-        title: "New event you just created",
-        start: start,
-        end: end,
-        resourceId: slotId,
-        bgColor: "purple",
-      };
-      schedulerData.addEvent(newEvent);
-      this.setState({
-        viewModel: schedulerData,
-      });
-    }
+    this.props.setAddTaskDetails(slotId, start, end)
   };
 
   updateEventStart = (schedulerData, event, newStart) => {

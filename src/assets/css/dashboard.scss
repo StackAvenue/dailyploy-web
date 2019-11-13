@@ -1746,7 +1746,7 @@
   font-size: 14px;
   color: #000000;
   input{
-    width: 100%;
+    width: auto;
     border: none !important;
     outline: 0px;
     display: inline-block;
@@ -1810,6 +1810,12 @@
     height: 20px;
     margin-left: 20px;
     margin-right: 20px;
+    vertical-align: sub;
+  }
+  .down-icon {
+    margin: 5px !important;
+    float: right !important;
+    font-size: 22px !important;
   }
 }
 

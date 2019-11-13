@@ -12,12 +12,27 @@ class AddTaskModal extends Component {
     this.state = {
       members: [],
       project: "",
+      showProjectSuggestion: false,
       projectSuggestions: [],
       membersSuggestions: [],
       selectedMembers: [],
       projectSearchText: "",
       memberSearchText: "",
     };
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.state.taskUser.length == 0 && this.props.state.taskUser.length == 1) {
+      var options = this.props.users.filter(u => u.id === this.props.state.taskUser[0])
+      console.log("addCalenderTask", options)
+      this.setState({ selectedMembers: options })
+    }
+  }
+
+  onClickProjectInput = (e) => {
+    if (e.target.value == "") {
+      this.setState({ projectSuggestions: this.props.projects });
+    }
   }
 
   selectProject = (option) => {
@@ -31,9 +46,10 @@ class AddTaskModal extends Component {
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
       projectSuggestions = this.props.projects.sort().filter(p => regex.test(p.name) && (this.state.project !== p))
+      this.setState({ projectSuggestions: projectSuggestions, projectSearchText: value });
     } else {
+      this.setState({ projectSuggestions: this.props.projects, projectSearchText: value });
     }
-    this.setState({ projectSuggestions: projectSuggestions, projectSearchText: value });
   }
 
   removeSelectedTag = (index) => {
@@ -41,7 +57,7 @@ class AddTaskModal extends Component {
     selectedMembers = selectedMembers.filter((_, idx) => idx !== index)
     var memberIds = selectedMembers.map(user => user.id)
     this.setState({ selectedMembers: selectedMembers })
-    // this.props.handleChangeMember(memberIds)
+    this.props.handleMemberSelect(memberIds)
   }
 
   renderProjectSearchSuggestion = () => {
@@ -100,6 +116,7 @@ class AddTaskModal extends Component {
   }
 
   renderSelectedMembers = () => {
+
     return (
       <>
         {
@@ -147,7 +164,7 @@ class AddTaskModal extends Component {
       <>
         <Modal
           className="project-modal"
-          show={props.state.show}
+          show={props.show}
           onHide={props.closeTaskModal}
           style={{ paddingTop: "2.5%" }}
         >
@@ -191,8 +208,10 @@ class AddTaskModal extends Component {
                       <input className="d-inline-block"
                         type="text" value={this.state.projectSearchText}
                         placeholder={this.state.project ? "" : "Select Project"}
+                        onClick={this.onClickProjectInput}
                         onChange={this.onSearchProjectTextChange}
                       />
+                      <span className="down-icon"><i className="fa fa-angle-down"></i></span>
                     </div>
                     <div className="suggestion-holder">
                       {this.renderProjectSearchSuggestion()}

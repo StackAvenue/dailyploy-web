@@ -44,6 +44,8 @@ class Dashboard extends Component {
       isLogedInUserEmailArr: [],
       taskFrequency: "weekly",
       taskStartDate: new Date(),
+      calenderTaskModal: false,
+      newTask: {}
     };
   }
 
@@ -84,11 +86,14 @@ class Dashboard extends Component {
   async componentDidUpdate(prevProps, prevState) {
     if (
       prevState.taskStartDate !== this.state.taskStartDate ||
-      prevState.taskFrequency !== this.state.taskFrequency
+      prevState.taskFrequency !== this.state.taskFrequency ||
+      prevState.newTask !== this.state.newTask
     ) {
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/user_tasks?frequency=${this.state.taskFrequency}&start_date=${this.state.taskStartDate}`,
+          `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
+          this.state.taskFrequency
+          }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
         );
         var tasksUser = data.users.map(user => {
           var usersObj = {
@@ -112,7 +117,6 @@ class Dashboard extends Component {
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
         this.setState({ resources: tasksResources, events: taskEvents });
       } catch (e) {
-        console.log("error", e);
       }
     }
   }
@@ -240,8 +244,9 @@ class Dashboard extends Component {
         taskData,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks`,
       );
+      var task = data.task
       toast.success("Task Assigned", { autoClose: 2000 });
-      setTimeout(() => window.location.reload(), 3000);
+      // setTimeout(() => window.location.reload(), 3000);
 
       console.log("Task Data", data);
       this.setState({ show: false });
@@ -249,6 +254,7 @@ class Dashboard extends Component {
       console.log("error", e.response);
       this.setState({ show: false });
     }
+    this.setState({ newTask: task })
   };
 
   onSelectSort = value => {
@@ -275,6 +281,7 @@ class Dashboard extends Component {
   closeTaskModal = () => {
     this.setState({
       show: false,
+      calenderTaskModal: false
     });
   };
 
@@ -328,8 +335,6 @@ class Dashboard extends Component {
   };
 
   myViewChange = (schedulerData, view) => {
-    console.log("yoyoyoyoy on view change ", schedulerData === this.state.viewModel)
-    console.log("calenderTab", view)
     schedulerData.setViewType(
       this.props.calenderTab,
       view.showAgenda,
@@ -341,6 +346,15 @@ class Dashboard extends Component {
     });
     this.props.taskView(view.viewType);
   };
+
+  setAddTaskDetails = (memberId, startDate, endDate) => {
+    this.setState({
+      taskUser: [memberId],
+      show: true,
+      calenderTaskModal: true,
+      dateFrom: new Date(startDate), dateTo: new Date(endDate),
+    })
+  }
 
   render() {
     return (
@@ -365,12 +379,18 @@ class Dashboard extends Component {
               state={this.state}
             />
             <Calendar
+              state={this.state}
               sortUnit={this.state.sort}
               workspaceId={this.state.workspaceId}
               resources={this.state.resources}
               events={this.state.events}
               taskView={this.taskView}
               taskDate={this.taskDate}
+              setAddTaskDetails={this.setAddTaskDetails}
+              show={this.state.calenderTaskModal}
+              handleMemberSelect={this.handleMemberSelect}
+              closeTaskModal={this.closeTaskModal}
+              handleProjectSelect={this.handleProjectSelect}
             />
             <div>
               <button
@@ -379,6 +399,7 @@ class Dashboard extends Component {
                 <i className="fas fa-plus" />
               </button>
               <AddTaskModal
+                show={this.state.show}
                 state={this.state}
                 closeTaskModal={this.closeTaskModal}
                 handleInputChange={this.handleInputChange}
