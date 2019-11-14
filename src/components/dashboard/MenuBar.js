@@ -97,7 +97,8 @@ export default class MenuBar extends Component {
         projectData,
         `workspaces/${this.props.workspaceId}/projects`,
       );
-      this.setState({ show: false, isLoading: true });
+      this.setState({ show: false });
+      this.props.handleLoad(true);
       toast(
         <DailyPloyToast
           message="Project added successfully!"

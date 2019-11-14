@@ -88,9 +88,6 @@ class Routes extends Component {
 
   isAllowed = (props, RouteComponent, title) => {
     if (this.isCurrentUser()) {
-      // if (title !== "login" && title !== "signup" && title !== "landing") {
-      //   return <RouteComponent {...props} />;
-      // }
       return (
         <LoggedInLayout
           props={props}
@@ -98,7 +95,6 @@ class Routes extends Component {
           title={title}
         />
       );
-      // return <Redirect to={`/dashboard/${WORKSPACE_ID}`} />;
     } else {
       if (title === "login") {
         return <Login {...props} />;

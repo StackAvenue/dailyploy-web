@@ -112,38 +112,31 @@ class Analysis extends Component {
   render() {
     return (
       <>
-        <div className="dashboard-main no-padding">
-          <Header
-            logout={this.logout}
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-          />
-          <MenuBar
-            onSelectSort={this.onSelectSort}
-            workspaceId={this.state.workspaceId}
-            classNameRoute={this.classNameRoute}
-            state={this.state}
-          />
-          <div className="analysis-box row no-margin">
-            <div className="col-md-12 no-padding analysis-top">
-              <Tabs>
-                <TabList>
-                  <Tab>Members</Tab>
-                  <Tab>Projects</Tab>
-                </TabList>
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          state={this.state}
+        />
+        <div className="analysis-box row no-margin">
+          <div className="col-md-12 no-padding analysis-top">
+            <Tabs>
+              <TabList>
+                <Tab>Members</Tab>
+                <Tab>Projects</Tab>
+              </TabList>
 
-                <TabPanel>
-                  <MemberAnalysis
-                    state={this.state}
-                    handleDateFrom={this.handleDateFrom}
-                    handleDateTo={this.handleDateTo}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <ProjectAnalysis />
-                </TabPanel>
-              </Tabs>
-            </div>
+              <TabPanel>
+                <MemberAnalysis
+                  state={this.state}
+                  handleDateFrom={this.handleDateFrom}
+                  handleDateTo={this.handleDateTo}
+                />
+              </TabPanel>
+              <TabPanel>
+                <ProjectAnalysis />
+              </TabPanel>
+            </Tabs>
           </div>
         </div>
       </>

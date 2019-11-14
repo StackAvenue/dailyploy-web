@@ -47,6 +47,7 @@ class ShowProjects extends Component {
     await logout();
     this.props.history.push("/login");
   };
+
   async componentDidMount() {
     this.setState({ isLoading: true });
     try {
@@ -99,7 +100,45 @@ class ShowProjects extends Component {
       users: userArr,
       isLogedInUserEmailArr: emailArr,
     });
+    console.log("Did Mount");
   }
+
+  // async componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.isLoading !== this.state.isLoading) {
+  //     if (prevState.projects !== this.state.projects) {
+  //       try {
+  //         const { data } = await get(
+  //           `workspaces/${this.state.workspaceId}/projects`,
+  //         );
+  //         var projectsData = data.projects;
+  //         // console.log("projectsData", projectsData);
+  //       } catch (e) {
+  //         console.log("err", e);
+  //       }
+  //     }
+  //     this.setState({ projects: projectsData, isLoading: false });
+  //   }
+  // }
+
+  // async componentDidUpdate(prevProps, prevState) {
+  //   console.log("WorkspaceId", this.state.workspaceId);
+  //   if (
+  //     prevState.projects !== this.state.projects ||
+  //     prevState.isLoading !== this.state.isLoading
+  //   ) {
+  //     try {
+  //       const { data } = await get(
+  //         `workspaces/${this.state.workspaceId}/projects`,
+  //       );
+  //       var projectsData = data.projects;
+  //       // console.log("projectsData", projectsData);
+  //     } catch (e) {
+  //       console.log("err", e);
+  //     }
+
+  //     this.setState({ projects: projectsData, isLoading: false });
+  //   }
+  // }
 
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
@@ -167,79 +206,72 @@ class ShowProjects extends Component {
   };
 
   handleLoad = value => {
-    window.location.reload();
     this.setState({ isLoading: value });
   };
 
   render() {
     return (
       <>
-        <div className="dashboard-main no-padding">
-          <Header
-            logout={this.logout}
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-          />
-          <MenuBar
-            onSelectSort={this.onSelectSort}
-            workspaceId={this.state.workspaceId}
-            classNameRoute={this.classNameRoute}
-            handleLoad={this.handleLoad}
-            state={this.state}
-          />
-          <div className="show-projects">
-            <div className="views">
-              <Tabs>
-                <div className="col-md-12 text-center">
-                  <div
-                    className="col-md-2 offset-5"
-                    style={{ position: "relative", top: "-74px" }}>
-                    <TabList>
-                      <Tab>
-                        <i className="fa fa-bars"></i>
-                      </Tab>
-                      <Tab>
-                        <i className="fas fa-th"></i>
-                      </Tab>
-                    </TabList>
-                  </div>
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          handleLoad={this.handleLoad}
+          state={this.state}
+        />
+        <div className="show-projects">
+          <div className="views">
+            <Tabs>
+              <div className="col-md-12 text-center">
+                <div
+                  className="col-md-2 offset-5"
+                  style={{ position: "relative", top: "-74px" }}>
+                  <TabList>
+                    <Tab>
+                      <i className="fa fa-bars"></i>
+                    </Tab>
+                    <Tab>
+                      <i className="fas fa-th"></i>
+                    </Tab>
+                  </TabList>
                 </div>
-                {/* <div className="col-md-12 no-padding hr"></div> */}
+              </div>
+              {/* <div className="col-md-12 no-padding hr"></div> */}
 
-                <TabPanel>
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id={`customCheck`}
-                              onChange={this.checkAll}
-                              name="chk[]"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor={`customCheck`}></label>
-                          </div>
-                        </th>
-                        <th scope="col">Project ID</th>
-                        <th scope="col">Project Name</th>
-                        <th scope="col">Colour</th>
-                        <th scope="col">Project Owner</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">Duration</th>
-                        <th scope="col">Project Members</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-titlize">
-                      {this.state.projects.map((project, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>
-                              {/* <div className="checkbox">
+              <TabPanel>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">
+                        <div className="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            className="custom-control-input"
+                            id={`customCheck`}
+                            onChange={this.checkAll}
+                            name="chk[]"
+                          />
+                          <label
+                            className="custom-control-label"
+                            htmlFor={`customCheck`}></label>
+                        </div>
+                      </th>
+                      <th scope="col">Project ID</th>
+                      <th scope="col">Project Name</th>
+                      <th scope="col">Colour</th>
+                      <th scope="col">Project Owner</th>
+                      <th scope="col">Start Date</th>
+                      <th scope="col">End Date</th>
+                      <th scope="col">Duration</th>
+                      <th scope="col">Project Members</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-titlize">
+                    {this.state.projects.map((project, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            {/* <div className="checkbox">
                                   <input
                                     type="checkbox"
                                     id={`checkbox${index}`}
@@ -248,98 +280,95 @@ class ShowProjects extends Component {
                                   />
                                   <label for={`checkbox${index}`}></label>
                                 </div> */}
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id={`customCheck${index}`}
-                                  name="isChecked"
-                                  onChange={this.handleCheck}
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor={`customCheck${index}`}></label>
-                              </div>
-                            </td>
-                            <td>{index + 1}</td>
-                            <td>{project.name}</td>
-                            <td>
+                            <div className="custom-control custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className="custom-control-input"
+                                id={`customCheck${index}`}
+                                name="isChecked"
+                                onChange={this.handleCheck}
+                              />
+                              <label
+                                className="custom-control-label"
+                                htmlFor={`customCheck${index}`}></label>
+                            </div>
+                          </td>
+                          <td>{index + 1}</td>
+                          <td>{project.name}</td>
+                          <td>
+                            <div
+                              className="color-block"
+                              style={{
+                                backgroundColor: `${project.color_code}`,
+                              }}></div>
+                          </td>
+                          <td>{project.owner.name}</td>
+                          <td>{project.start_date}</td>
+                          <td>
+                            {project.end_date ? project.end_date : "undefined"}
+                          </td>
+                          <td>
+                            {this.monthDiff(
+                              this.getDate(project.start_date),
+                              this.getDate(project.end_date),
+                            )}
+                            &nbsp; months
+                          </td>
+                          <td>
+                            <span>
+                              {project.members
+                                .slice(0, 4)
+                                .map((user, index) => {
+                                  return (
+                                    <div key={index} className="user-block">
+                                      <span>
+                                        {user.name
+                                          .split(" ")
+                                          .map(x => x[0])
+                                          .join("")}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                            </span>
+                            <span>
                               <div
-                                className="color-block"
-                                style={{
-                                  backgroundColor: `${project.color_code}`,
-                                }}></div>
-                            </td>
-                            <td>{project.owner.name}</td>
-                            <td>{project.start_date}</td>
-                            <td>
-                              {project.end_date
-                                ? project.end_date
-                                : "undefined"}
-                            </td>
-                            <td>
-                              {this.monthDiff(
-                                this.getDate(project.start_date),
-                                this.getDate(project.end_date),
-                              )}
-                              &nbsp; months
-                            </td>
-                            <td>
-                              <span>
-                                {project.members
-                                  .slice(0, 4)
-                                  .map((user, index) => {
-                                    return (
-                                      <div key={index} className="user-block">
-                                        <span>
-                                          {user.name
-                                            .split(" ")
-                                            .map(x => x[0])
-                                            .join("")}
-                                        </span>
-                                      </div>
-                                    );
-                                  })}
-                              </span>
-                              <span>
-                                <div
-                                  key={index}
-                                  className="user-block"
-                                  style={{ backgroundColor: "#33a1ff" }}>
-                                  <span>
-                                    +
-                                    {this.countIncrese(
-                                      project.members.map(user => user.name),
-                                    )}
-                                  </span>
-                                </div>
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </TabPanel>
-                <TabPanel>
-                  <div className="row grid-view no-margin">
-                    {this.state.projects.map((project, index) => {
-                      return (
-                        <GridBlock
-                          key={index}
-                          project={project}
-                          index={index}
-                          projectUser={this.projectUser}
-                          monthDiff={this.monthDiff}
-                          getDate={this.getDate}
-                          countIncrese={this.countIncrese}
-                        />
+                                key={index}
+                                className="user-block"
+                                style={{ backgroundColor: "#33a1ff" }}>
+                                <span>
+                                  +
+                                  {this.countIncrese(
+                                    project.members.map(user => user.name),
+                                  )}
+                                </span>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
                       );
                     })}
-                  </div>
-                </TabPanel>
-              </Tabs>
-            </div>
+                  </tbody>
+                </table>
+              </TabPanel>
+              <TabPanel>
+                <div className="row grid-view no-margin">
+                  {this.state.projects.map((project, index) => {
+                    return (
+                      <GridBlock
+                        key={index}
+                        project={project}
+                        index={index}
+                        projectUser={this.projectUser}
+                        monthDiff={this.monthDiff}
+                        getDate={this.getDate}
+                        countIncrese={this.countIncrese}
+                      />
+                    );
+                  })}
+                </div>
+              </TabPanel>
+            </Tabs>
           </div>
         </div>
       </>

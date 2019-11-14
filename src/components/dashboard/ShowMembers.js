@@ -265,102 +265,92 @@ class ShowMembers extends Component {
   render() {
     return (
       <>
-        <div className="dashboard-main no-padding">
-          <Header
-            logout={this.logout}
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-            searchOptions={this.state.searchOptions}
-            role={this.state.userRole}
-            handleSearchFilterResult={this.handleSearchFilterResult}
-          />
-          <MenuBar
-            onSelectSort={this.onSelectSort}
-            workspaceId={this.state.workspaceId}
-            classNameRoute={this.classNameRoute}
-            state={this.state}
-          />
-          <div className="show-projects">
-            <div className="members"></div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">
-                    <div className="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className="custom-control-input"
-                        id={`customCheck`}
-                        onChange={this.checkAll}
-                        name="chk[]"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor={`customCheck`}></label>
-                    </div>
-                  </th>
-                  <th scope="col">ID</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Working Hours</th>
-                  <th scope="col">Projects</th>
-                  <th scope="col">Invitation</th>
-                  <th scope="col">Created Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.members.map((member, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <div className="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            className="custom-control-input"
-                            id={`customCheck${index}`}
-                            name="isChecked"
-                            onChange={this.handleCheck}
-                          />
-                          <label
-                            className="custom-control-label"
-                            htmlFor={`customCheck${index}`}></label>
-                        </div>
-                      </td>
-                      <td>{index + 1}</td>
-                      <td className="text-titlize">{member.name}</td>
-                      <td>{member.email}</td>
-                      <td className="text-titlize">{member.role}</td>
-                      <td className="text-titlize">
-                        {member.workingHours ? member.workingHours : "8"} hours
-                      </td>
-                      <td className="text-titlize">
-                        {this.displayProjects(member.projects)}
-                      </td>
-                      <td className={"text-titlize"}>
-                        {/* <p
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          state={this.state}
+        />
+        <div className="show-projects">
+          <div className="members"></div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <div className="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id={`customCheck`}
+                      onChange={this.checkAll}
+                      name="chk[]"
+                    />
+                    <label
+                      className="custom-control-label"
+                      htmlFor={`customCheck`}></label>
+                  </div>
+                </th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Working Hours</th>
+                <th scope="col">Projects</th>
+                <th scope="col">Invitation</th>
+                <th scope="col">Created Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.members.map((member, index) => {
+                return (
+                  <tr key={index}>
+                    <td>
+                      <div className="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          className="custom-control-input"
+                          id={`customCheck${index}`}
+                          name="isChecked"
+                          onChange={this.handleCheck}
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor={`customCheck${index}`}></label>
+                      </div>
+                    </td>
+                    <td>{index + 1}</td>
+                    <td className="text-titlize">{member.name}</td>
+                    <td>{member.email}</td>
+                    <td className="text-titlize">{member.role}</td>
+                    <td className="text-titlize">
+                      {member.workingHours ? member.workingHours : "8"} hours
+                    </td>
+                    <td className="text-titlize">
+                      {this.displayProjects(member.projects)}
+                    </td>
+                    <td className={"text-titlize"}>
+                      {/* <p
                             className={
                               member.invited ? "text-blue" : "text-green"
                             }>
                             {}
                           </p> */}
-                        {!member.is_invited ? (
-                          <p className="text-green">Accepted</p>
-                        ) : (
-                          <p className="text-blue">Invited</p>
-                        )}
-                      </td>
-                      <td>{moment(member.created_at).format("DD MMM YY")}</td>
-                      <td></td>
-                      <td>
-                        <i className="fas fa-pencil-alt"></i>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      {!member.is_invited ? (
+                        <p className="text-green">Accepted</p>
+                      ) : (
+                        <p className="text-blue">Invited</p>
+                      )}
+                    </td>
+                    <td>{moment(member.created_at).format("DD MMM YY")}</td>
+                    <td></td>
+                    <td>
+                      <i className="fas fa-pencil-alt"></i>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </>
     );

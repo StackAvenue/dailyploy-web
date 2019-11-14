@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import cookie from "react-cookies";
 import { ToastContainer } from "react-toastify";
 import Sidebar from "./components/dashboard/Sidebar";
 import { get, logout } from "./utils/API";
 import Header from "./components/dashboard/Header";
+import { WORKSPACE_ID } from "./utils/Constants";
 
 class LoggedInLayout extends Component {
   constructor(props) {
@@ -13,6 +14,10 @@ class LoggedInLayout extends Component {
       workspaceId: null,
       workspaces: [],
       loggedInUserInfo: {},
+      userRole: "",
+      searchOptions: [],
+      searchProjectIds: [],
+      searchUserDetail: null,
     };
   }
 
@@ -53,10 +58,42 @@ class LoggedInLayout extends Component {
 
   mainComponent = () => {
     const { props, RouteComponent, title } = this.props;
+    var props1 = {
+      setSearchOptions: this.setSearchOptions,
+      handleSearchFilterResult: this.handleSearchFilterResult,
+      searchProjectIds: this.state.searchProjectIds,
+      searchUserDetail: this.state.searchUserDetail,
+    };
+    var newProps = { ...props, ...props1 };
     if (title !== "login" && title !== "signup" && title !== "landing") {
-      return <RouteComponent {...props} />;
+      return <RouteComponent {...newProps} />;
     }
+    return <Redirect to={`/dashboard/${WORKSPACE_ID}`} />;
   };
+
+  handleSearchFilterResult = data => {
+    console.log("handleSearchFilterResult", data);
+    var searchUserDetail = "";
+    var projectIds = [];
+    if (data) {
+      data.map((item, i) => {
+        if (item.type === "member") {
+          searchUserDetail = item;
+        } else if (item.type === "project") {
+          projectIds.push(item.project_id);
+        }
+      });
+    }
+    this.setState({
+      searchProjectIds: projectIds,
+      searchUserDetail: searchUserDetail,
+    });
+  };
+
+  setSearchOptions = searchOptions => {
+    this.setState({ searchOptions: searchOptions });
+  };
+
   render() {
     return (
       <>
@@ -66,16 +103,20 @@ class LoggedInLayout extends Component {
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
           />
-          {/* <div className="dashboard-main no-padding">
+
+          <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}
               workspaces={this.state.workspaces}
               workspaceId={this.state.workspaceId}
               userData={this.state.loggedInUserInfo}
-            /> */}
+              searchOptions={this.state.searchOptions}
+              // role={this.state.userRole}
+              handleSearchFilterResult={this.handleSearchFilterResult}
+            />
 
-          {this.mainComponent()}
-          {/* </div> */}
+            {this.mainComponent()}
+          </div>
         </div>
       </>
     );

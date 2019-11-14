@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
+// import from"../../LoggedInLayout"
 
 class Reports extends Component {
   constructor(props) {
@@ -62,7 +63,7 @@ class Reports extends Component {
 
   fetchProjectName = () => {
     var project = this.state.projects.filter(
-      project => project.id === this.state.searchProjectIds[0],
+      project => project.id === this.props.searchProjectIds[0],
     );
     return project.length > 0 ? project[0].name : "";
   };
@@ -72,8 +73,8 @@ class Reports extends Component {
     var frequency = this.textTitlize(this.returnFrequency());
     if (
       role == "admin" &&
-      this.state.searchProjectIds.length !== 0 &&
-      this.state.searchUserDetail == ""
+      this.props.searchProjectIds.length !== 0 &&
+      this.props.searchUserDetail == ""
     ) {
       return (
         "Showing " +
@@ -83,17 +84,17 @@ class Reports extends Component {
       );
     } else if (
       role === "member" ||
-      (role == "admin" && this.state.searchUserDetail === "")
+      (role == "admin" && this.props.searchUserDetail === "")
     ) {
       return "My " + `${frequency}` + " Report";
-    } else if (role == "admin" && this.state.searchUserDetail !== "") {
+    } else if (role == "admin" && this.props.searchUserDetail !== "") {
       return (
         "Showing " +
         `${frequency}` +
         " Report for " +
-        this.textTitlize(this.state.searchUserDetail.value) +
+        this.textTitlize(this.props.searchUserDetail.value) +
         "(" +
-        `${this.state.searchUserDetail.email}` +
+        `${this.props.searchUserDetail.email}` +
         ")"
       );
     }
@@ -239,7 +240,7 @@ class Reports extends Component {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
       user_id: loggedInData.id,
       frequency: "daily",
-      project_ids: JSON.stringify(this.state.searchProjectIds),
+      project_ids: JSON.stringify(this.props.searchProjectIds),
     };
 
     try {
@@ -268,18 +269,20 @@ class Reports extends Component {
     });
 
     this.createUserProjectList();
+
+    this.props.handleSearchFilterResult(this.handleSearchFilterResult);
   }
 
   checkProject = () => {
     console.log(
-      this.state.searchProjectIds,
-      this.state.searchUserDetail,
+      this.props.searchProjectIds,
+      this.props.searchUserDetail,
       this.state.userRole,
     );
     return (
-      this.state.searchProjectIds.length > 0 &&
+      this.props.searchProjectIds.length > 0 &&
       this.state.userRole === "admin" &&
-      this.state.searchUserDetail.length == 0
+      this.props.searchUserDetail.length == 0
     );
   };
 
@@ -292,16 +295,16 @@ class Reports extends Component {
     if (
       prevState.dateFrom !== this.state.dateFrom ||
       prevState.dateTo !== this.state.dateTo ||
-      prevState.searchProjectIds !== this.state.searchProjectIds ||
-      prevState.searchUserDetail !== this.state.searchUserDetail
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetail !== this.props.searchUserDetail
     ) {
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        user_id: this.state.searchUserDetail
-          ? this.state.searchUserDetail.member_id
+        user_id: this.props.searchUserDetail
+          ? this.props.searchUserDetail.member_id
           : this.state.userId,
         frequency: this.returnFrequency(),
-        project_ids: JSON.stringify(this.state.searchProjectIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds),
       };
 
       try {
@@ -346,23 +349,23 @@ class Reports extends Component {
     return totalSec;
   };
 
-  handleSearchFilterResult = data => {
-    var searchUserDetail = "";
-    var projectIds = [];
-    {
-      data.map((item, i) => {
-        if (item.type === "member") {
-          searchUserDetail = item;
-        } else if (item.type === "project") {
-          projectIds.push(item.project_id);
-        }
-      });
-    }
-    this.setState({
-      searchProjectIds: projectIds,
-      searchUserDetail: searchUserDetail,
-    });
-  };
+  // handleSearchFilterResult = data => {
+  //   var searchUserDetail = "";
+  //   var projectIds = [];
+  //   {
+  //     data.map((item, i) => {
+  //       if (item.type === "member") {
+  //         searchUserDetail = item;
+  //       } else if (item.type === "project") {
+  //         projectIds.push(item.project_id);
+  //       }
+  //     });
+  //   }
+  //   this.setState({
+  //     searchProjectIds: projectIds,
+  //     searchUserDetail: searchUserDetail,
+  //   });
+  // };
 
   createUserProjectList = () => {
     var searchOptions = [];
@@ -398,6 +401,7 @@ class Reports extends Component {
       }
     }
     this.setState({ searchOptions: searchOptions });
+    this.props.setSearchOptions(searchOptions);
   };
 
   getWorkspaceParams = () => {
@@ -548,6 +552,7 @@ class Reports extends Component {
   };
 
   render() {
+    console.log("props", this.props);
     const Daily = props => {
       return (
         <>
@@ -592,7 +597,7 @@ class Reports extends Component {
 
     return (
       <>
-        <div className="dashboard-main no-padding">
+        {/* <div className="dashboard-main no-padding">
           <Header
             logout={this.logout}
             workspaces={this.state.workspaces}
@@ -600,70 +605,70 @@ class Reports extends Component {
             searchOptions={this.state.searchOptions}
             role={this.state.userRole}
             handleSearchFilterResult={this.handleSearchFilterResult}
-          />
-          <MenuBar
-            onSelectSort={this.onSelectSort}
-            workspaceId={this.state.workspaceId}
-            classNameRoute={this.classNameRoute}
-            state={this.state}
-          />
-          <div className="analysis-box row no-margin">
-            <div className="col-md-12 no-padding analysis-top">
-              <div className="reports-container col-sm-offset-2">
-                <div className="reports-btns ">
-                  <div className="SelectedWeekExample">
-                    <button
-                      onClick={this.setPreviousDate}
-                      className="arrow-button">
-                      <i className="fa fa-angle-left"></i>
-                    </button>
-                    {this.state.daily ? <Daily /> : null}
-                    {this.state.weekly ? <Weekly /> : null}
-                    {this.state.monthly ? <Monthly /> : null}
-                    <button onClick={this.setNextDate} className="arrow-button">
-                      <i className="fa fa-angle-right"></i>
-                    </button>
-                  </div>
-                  <div className="report-caleneder-btn">
-                    <button
-                      name="daily"
-                      onClick={this.calenderButtonHandle}
-                      className={this.state.daily ? "active" : ""}>
-                      Daily
-                    </button>
-                    <button
-                      name="weekly"
-                      className={this.state.weekly ? "active" : ""}
-                      onClick={this.calenderButtonHandle}>
-                      Weekly
-                    </button>
-                    <button
-                      name="monthly"
-                      onClick={this.calenderButtonHandle}
-                      className={this.state.monthly ? "active" : ""}>
-                      {" "}
-                      Monthly
-                    </button>
-                  </div>
-                  <div className="report-download">
-                    <button
-                      className="btn btn-sm btn-default"
-                      onClick={this.showTaskModal}>
-                      <i className="fas fa-download right-left-space-5"></i>
-                      Download
-                    </button>
-                  </div>
+          /> */}
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          state={this.state}
+        />
+        <div className="analysis-box row no-margin">
+          <div className="col-md-12 no-padding analysis-top">
+            <div className="reports-container col-sm-offset-2">
+              <div className="reports-btns ">
+                <div className="SelectedWeekExample">
+                  <button
+                    onClick={this.setPreviousDate}
+                    className="arrow-button">
+                    <i className="fa fa-angle-left"></i>
+                  </button>
+                  {this.state.daily ? <Daily /> : null}
+                  {this.state.weekly ? <Weekly /> : null}
+                  {this.state.monthly ? <Monthly /> : null}
+                  <button onClick={this.setNextDate} className="arrow-button">
+                    <i className="fa fa-angle-right"></i>
+                  </button>
                 </div>
-
-                <ReportTable
-                  taskDetails={this.state.taskDetails}
-                  state={this.state}
-                  frequency={this.returnFrequency()}
-                />
+                <div className="report-caleneder-btn">
+                  <button
+                    name="daily"
+                    onClick={this.calenderButtonHandle}
+                    className={this.state.daily ? "active" : ""}>
+                    Daily
+                  </button>
+                  <button
+                    name="weekly"
+                    className={this.state.weekly ? "active" : ""}
+                    onClick={this.calenderButtonHandle}>
+                    Weekly
+                  </button>
+                  <button
+                    name="monthly"
+                    onClick={this.calenderButtonHandle}
+                    className={this.state.monthly ? "active" : ""}>
+                    {" "}
+                    Monthly
+                  </button>
+                </div>
+                <div className="report-download">
+                  <button
+                    className="btn btn-sm btn-default"
+                    onClick={this.showTaskModal}>
+                    <i className="fas fa-download right-left-space-5"></i>
+                    Download
+                  </button>
+                </div>
               </div>
+
+              <ReportTable
+                taskDetails={this.state.taskDetails}
+                state={this.state}
+                frequency={this.returnFrequency()}
+              />
             </div>
           </div>
         </div>
+        {/* </div> */}
       </>
     );
   }

@@ -44,7 +44,7 @@ class Dashboard extends Component {
       userEmail: "",
       isLogedInUserEmailArr: [],
       taskFrequency: "weekly",
-      taskStartDate: new Date(),
+      taskStartDate: moment().format("YYYY-MM-DD"),
     };
   }
 
@@ -88,7 +88,8 @@ class Dashboard extends Component {
   async componentDidUpdate(prevProps, prevState) {
     if (
       prevState.taskStartDate !== this.state.taskStartDate ||
-      prevState.taskFrequency !== this.state.taskFrequency
+      prevState.taskFrequency !== this.state.taskFrequency ||
+      prevState.isLoading !== this.state.isLoading
     ) {
       try {
         const { data } = await get(
@@ -115,7 +116,11 @@ class Dashboard extends Component {
         });
         var tasksResources = tasksUser.map(user => user.usersObj);
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-        this.setState({ resources: tasksResources, events: taskEvents });
+        this.setState({
+          resources: tasksResources,
+          events: taskEvents,
+          isLoading: false,
+        });
         console.log("taskEvents", taskEvents);
       } catch (e) {
         console.log("error", e);
@@ -219,6 +224,8 @@ class Dashboard extends Component {
       resources: tasksResources,
       events: taskEvents,
     });
+
+    console.log("Did Mount");
   }
 
   getWorkspaceParams = () => {
@@ -264,10 +271,10 @@ class Dashboard extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
-      setTimeout(() => window.location.reload(), 3000);
+      // setTimeout(() => window.location.reload(), 3000);
 
       console.log("Task Data", data);
-      this.setState({ show: false });
+      this.setState({ show: false, isLoading: true });
     } catch (e) {
       console.log("error", e.response);
       this.setState({ show: false });
@@ -351,49 +358,41 @@ class Dashboard extends Component {
     );
     return (
       <>
-        <div className="dashboard-main no-padding">
-          <Header
-            logout={this.logout}
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-          />
-          <MenuBar
-            onSelectSort={this.onSelectSort}
-            workspaceId={this.state.workspaceId}
-            classNameRoute={this.classNameRoute}
-            handleLoad={this.handleLoad}
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          handleLoad={this.handleLoad}
+          state={this.state}
+        />
+        <Calendar
+          sortUnit={this.state.sort}
+          workspaceId={this.state.workspaceId}
+          resources={this.state.resources}
+          events={this.state.events}
+          alam={"alam"}
+          taskView={this.taskView}
+          taskDate={this.taskDate}
+        />
+        <div>
+          <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
+            <i className="fas fa-plus" />
+          </button>
+          <AddTaskModal
             state={this.state}
+            closeTaskModal={this.closeTaskModal}
+            handleInputChange={this.handleInputChange}
+            project={this.state.projects}
+            handleDateFrom={this.handleDateFrom}
+            handleDateTo={this.handleDateTo}
+            handleTimeFrom={this.handleTimeFrom}
+            handleTimeTo={this.handleTimeTo}
+            user={this.state.users}
+            addTask={this.addTask}
+            handleUserSelect={this.handleUserSelect}
           />
-          <Calendar
-            sortUnit={this.state.sort}
-            workspaceId={this.state.workspaceId}
-            resources={this.state.resources}
-            events={this.state.events}
-            alam={"alam"}
-            taskView={this.taskView}
-            taskDate={this.taskDate}
-          />
-          <div>
-            <button
-              className="btn menubar-task-btn"
-              onClick={this.showTaskModal}>
-              <i className="fas fa-plus" />
-            </button>
-            <AddTaskModal
-              state={this.state}
-              closeTaskModal={this.closeTaskModal}
-              handleInputChange={this.handleInputChange}
-              project={this.state.projects}
-              handleDateFrom={this.handleDateFrom}
-              handleDateTo={this.handleDateTo}
-              handleTimeFrom={this.handleTimeFrom}
-              handleTimeTo={this.handleTimeTo}
-              user={this.state.users}
-              addTask={this.addTask}
-              handleUserSelect={this.handleUserSelect}
-            />
-          </div>
         </div>
+
         {/* <Footer />  */}
       </>
     );
