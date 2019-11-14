@@ -355,6 +355,7 @@
 .project-modal{
     .modal-content{
         width:658px;
+        height: 500px;
         .header{
             padding:17px 0 0px 49px !important;
             span{
@@ -1872,4 +1873,21 @@
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
+}
+.twitter-picker{
+  width: 320px !important;
+  height: 91.4px;
+  border-radius: 5px;
+  border: solid 1px #d6d6d6;
+  background-color: #ffffff;
+  position: absolute !important;
+  z-index: 1;
+}
+.chrome-picker{
+  position: absolute !important;
+  top: -219px !important;
+  left: 75px !important;
+}
+.hide-div{
+  display: none !important
 }

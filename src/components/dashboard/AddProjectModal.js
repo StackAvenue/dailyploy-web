@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
 import DatePicker from "react-datepicker";
+import ColorPicker from 'react-color-picker'
 import { get } from "../../utils/API";
-import { TwitterPicker, Twitter } from "react-color";
+import { TwitterPicker, ChromePicker } from "react-color";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
+import 'react-color-picker/index.css'
 
 class AddProjectModal extends Component {
   constructor(props) {
@@ -14,7 +16,10 @@ class AddProjectModal extends Component {
       members: [],
       suggestions: [],
       selectedTags: [],
-      value: ""
+      displayColorPicker: false,
+      displayCustomColorPicker: false,
+      background: "#b9e1ff",
+      value: "",
     };
   }
 
@@ -103,6 +108,46 @@ class AddProjectModal extends Component {
         }
       </>
     )
+  }
+
+  handleChangeColor = () => {
+    if (this.state.displayCustomColorPicker) {
+      this.setState({
+        displayColorPicker: !this.state.displayColorPicker,
+        displayCustomColorPicker: !this.state.displayCustomColorPicker
+      });
+    } else {
+      this.setState({
+        displayColorPicker: !this.state.displayColorPicker
+      });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.displayColorPicker == false && this.state.displayColorPicker == true) {
+      var twitterPicker = document.querySelector(".twitter-picker");
+      var parentDiv = twitterPicker.getElementsByTagName('div')[2]
+      parentDiv.className += 'custom-cp-style';
+      parentDiv.childNodes[8].className += 'hide-div';
+      parentDiv.childNodes[9].className += 'hide-div';
+      var btn = document.createElement("span")
+      var icon = document.createElement('i')
+      icon.setAttribute("class", "fa fa-plus");
+      icon.addEventListener("click", this.setColorPicker);
+      btn.appendChild(icon)
+      parentDiv.append(btn);
+    }
+
+  }
+
+  setColorPicker = () => {
+    this.setState({ displayCustomColorPicker: !this.state.displayCustomColorPicker })
+  }
+
+  handleChangeComplete = (color, event) => {
+    this.setState({ background: color, })
+    this.handleChangeColor()
+    this.props.handleChangeComplete(color, event)
   }
 
   render() {
@@ -214,16 +259,25 @@ class AddProjectModal extends Component {
                     style={{
                       backgroundColor: `${props.state.background}`,
                     }}
-                    onClick={props.handleChangeColor}
+                    onClick={this.handleChangeColor}
                   />
-                  {props.state.displayColorPicker ? (
-                    <div onClick={props.handleColorPickerClose}>
+                  {this.state.displayColorPicker ? (
+                    <div onClick={this.handleColorPickerClose}>
                       <TwitterPicker
                         color={props.state.background}
-                        onChangeComplete={props.handleChangeComplete}
+                        colors={props.colors}
+                        onChangeComplete={this.handleChangeComplete}
                       >
-                        <Twitter colors={props.colors} />
                       </TwitterPicker>
+                    </div>
+                  ) : null}
+                  {this.state.displayCustomColorPicker ? (
+                    <div className="custom-color-picker" onClick={this.setColorPicker} >
+                      <ChromePicker
+                        color={this.state.background}
+                        onChangeComplete={this.handleChangeComplete}
+                      >
+                      </ChromePicker>
                     </div>
                   ) : null}
                 </div>

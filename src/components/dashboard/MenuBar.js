@@ -28,16 +28,14 @@ export default class MenuBar extends Component {
       },
     ];
     this.colors = [
-      "#FF6900",
-      "#FCB900",
-      "#7BDCB5",
-      "#00D084",
-      "#8ED1FC",
-      "#0693E3",
-      "#ABB8C3",
-      "#EB144C",
-      "#F78DA7",
-      "#9900EF",
+      "#b9e1ff",
+      "#ffc1de",
+      "#4fefde",
+      "#c7d0ff",
+      "#ffc6ac",
+      "#ffa2a2",
+      "#e9ff71",
+      "#d7a0ff",
     ];
     this.state = {
       projectName: "",
@@ -50,7 +48,7 @@ export default class MenuBar extends Component {
       dateFrom: new Date(),
       dateTo: "",
       multiEmail: true,
-      background: "#000",
+      background: "#b9e1ff",
       displayColorPicker: false,
       emailOptions: [],
       memberName: "",

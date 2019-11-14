@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
 import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
+import ErrorBoundary from "./../components/ErrorBoundary/ErrorBoundary";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -278,7 +279,7 @@ class Dashboard extends Component {
   closeTaskModal = () => {
     this.setState({
       show: false,
-      calenderTaskModal: false
+      taskUser: [],
     });
   };
 
