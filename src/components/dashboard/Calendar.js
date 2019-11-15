@@ -198,7 +198,32 @@ class Calendar extends Component {
             toggleExpandFunc={this.toggleExpandFunc}
             leftCustomHeader={leftCustomHeader}
             eventItemTemplateResolver={this.eventItemTemplateResolver}
+            eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
           />
+        </div>
+      </div>
+    );
+  }
+  eventItemPopoverTemplateResolver = (schedulerData, eventItem, title, start, end, statusColor) => {
+    let totalSeconds = end.diff(start, 'seconds')
+    totalSeconds = Number(totalSeconds);
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor(totalSeconds % 3600 / 60);
+    var s = Math.floor(totalSeconds % 3600 % 60);
+
+    var timeDiff = ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + "h";
+    return (
+      <div className="event-task-hover">
+        <div className="title">
+          <span className="" title={title}>{title}</span>
+        </div>
+        <div className="project">
+          <div className="status-dot d-inline-block" style={{ backgroundColor: `${eventItem.bgColor}` }}></div>
+          <div className="d-inline-block">{eventItem.projectName}</div>
+        </div>
+        <div className="time">
+          <div className="d-inline-block">{start.format('HH:mm')}-{end.format('HH:mm')}</div>
+          <div className="d-inline-block pull-right">{timeDiff}</div>
         </div>
       </div>
     );
@@ -362,7 +387,7 @@ class Calendar extends Component {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle} >
           <div className="row item">
-            <div className="col-md-12 item-heading text-wraper" style={{ padding: "7px 7px 0px 7px" }}>{titleText}</div>
+            <div className="col-md-12 item-heading text-wraper rk" style={{ padding: "7px 7px 0px 7px" }}>{titleText}</div>
             <div className="col-md-12 no-padding">
               <div className="col-md-6 no-padding d-inline-block item-time pull-right text-right">
                 {this.getTimeDifference(moment(event.start), moment(event.end))}
@@ -375,7 +400,7 @@ class Calendar extends Component {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
-            <div className="col-md-12 item-heading no-padding text-wraper">{titleText}</div>
+            <div className="col-md-12 item-heading text-wraper" style={{ padding: "5px 5px 0px 5px" }}>{titleText}</div>
             <div className="col-md-12 no-padding">
               <div className="col-md-6 no-padding d-inline-block item-time">
                 {`${start} - ${end}`}

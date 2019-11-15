@@ -2027,42 +2027,33 @@
 .status-dot{
   border-radius: 0px !important;
 }
-
-.ant-popover-inner-content{
-  .header1-text{
-    font-size: 13px !important; 
-    color: #5c5c5c !important; 
-  }
-}
-.task-popup{
-  text-transform: capitalize;
-  .overflow-text{
-    white-space: normal !important;
-  }
-  .ant-row-flex{
-    padding: 5px;
-  }
-  .task-project div{
-    padding-right: 10px;
-  }
-  .task-project{
-    .overflow-text{
-      span{
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        width: 100% !important;
-        padding-left: 10px !important;
-      }
-    }
-  }
-}
-.ant-popover-inner-content{
-  padding: 5px 10px !important;
-}
+// .task-popup{
+//   text-transform: capitalize;
+//   .overflow-text{
+//     white-space: normal !important;
+//   }
+//   .ant-row-flex{
+//     padding: 5px;
+//   }
+//   .task-project div{
+//     padding-right: 10px;
+//   }
+//   .task-project{
+//     .overflow-text{
+//       span{
+//         font-size: 14px !important;
+//         font-weight: 500 !important;
+//         width: 100% !important;
+//         padding-left: 10px !important;
+//       }
+//     }
+//   }
+// }
 .text-wraper{
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
+  padding: 5px 5px 0px 5px !important;
 }
 .twitter-picker{
   width: 320px !important;
@@ -2080,4 +2071,30 @@
 }
 .hide-div{
   display: none !important
+}
+.event-task-hover{
+  width: 200px;
+  text-transform: capitalize;
+  .title{
+    width: 145px;
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.15;
+    letter-spacing: normal;
+    text-align: left;
+    color: #424242;
+  }
+  .project{
+    height: 15px;
+    padding-top: 5px;
+    div{
+      padding-left: 10px;
+    }
+  }
+  .time{
+    padding-top: 15px;
+  }
 }
