@@ -76,6 +76,7 @@ class ReportTable extends Component {
           : [];
       return (
         <ReportTable2Row
+          key={index}
           tasks={tasks}
           date={date}
           frequency={this.props.frequency}
@@ -110,9 +111,9 @@ class ReportTable extends Component {
 
   checkProject = () => {
     return (
-      this.props.state.searchProjectIds.length > 0 &&
+      this.props.searchProjectIds.length > 0 &&
       this.props.state.userRole === "admin" &&
-      this.props.state.searchUserDetail.length == 0
+      this.props.searchUserDetail.length == 0
     );
   };
 

@@ -24,7 +24,7 @@ class ReportTable2Row extends Component {
 
   getTotalHours = (tasks) => {
     if (tasks !== undefined) {
-      var totalSec = ""
+      var totalSec = null
       {
         tasks.map((task, idx) => {
           totalSec += Math.abs(new Date(task.start_datetime) - new Date(task.end_datetime));
@@ -43,6 +43,25 @@ class ReportTable2Row extends Component {
     return ""
   }
 
+  displayMembers = members => {
+    if (members) {
+      let arr = members.map(project => project.name);
+      var memberShow;
+      let count;
+      if (arr.length > 2) {
+        count = arr.length - 2;
+      }
+      if (arr.length > 2) {
+        memberShow =
+          arr.length > 1 ? arr[0] + "," + arr[1] + " +" + count : arr[0];
+      } else {
+        memberShow = arr.length > 1 ? arr[0] + "," + arr[1] : arr[0];
+      }
+      return memberShow;
+    }
+    return ""
+  };
+
   taskNotFound = () => {
     return (
       <tr className="manage-error-tr">
@@ -58,7 +77,7 @@ class ReportTable2Row extends Component {
     return tasks.map((task, index) => {
       return (
         <tr key={index}>
-          <td>{}</td>
+          <td className="text-titlize">{this.displayMembers(task.project.members)}</td>
           <td className="text-titlize">{task.name}</td>
           <td className={"text-titlize catergory2 " + task.category} >{"category 2"}</td>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>

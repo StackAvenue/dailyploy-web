@@ -660,6 +660,8 @@ class Reports extends Component {
               <ReportTable
                 taskDetails={this.state.taskDetails}
                 state={this.state}
+                searchProjectIds={this.props.searchProjectIds}
+                searchUserDetail={this.props.searchUserDetail}
                 frequency={this.returnFrequency()}
               />
             </div>
