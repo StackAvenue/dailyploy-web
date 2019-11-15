@@ -136,7 +136,6 @@ class ShowMembers extends Component {
   };
 
   onSelectSort = value => {
-    console.log("selected value ", value);
     this.setState({ sort: value });
   };
 
@@ -173,35 +172,12 @@ class ShowMembers extends Component {
   };
 
   displayProjects = projects => {
-    // console.log("Display Pr")
-    // var names = "";
-    // var projectLength = projects.length;
-    // if (projectLength == 1) {
-    //   names = names + projects[0].name;
-    // } else if (projectLength >= 2) {
-    //   for (let i in projects) {
-    //     if (i == 0) {
-    //       names = names + projects[i].name + ", ";
-    //     } else if (i == 1) {
-    //       names = names + projects[i].name;
-    //     }
-    //   }
-    // }
-    // return names;
-    // let arr = [
-    //   "DailyPloy",
-    //   "Leadsquared",
-    //   "DealSignal",
-    //   "LocusNine",
-    //   "DealSignal",
-    // ];
     let arr = projects.map(project => project.name);
     var projectShow;
     let count;
     if (arr.length > 2) {
       count = arr.length - 2;
     }
-    console.log("count", count);
     if (arr.length > 2) {
       projectShow =
         arr.length > 1 ? arr[0] + "," + arr[1] + " +" + count : arr[0];
@@ -346,8 +322,8 @@ class ShowMembers extends Component {
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
-                        <p className="text-blue">Invited</p>
-                      )}
+                          <p className="text-blue">Invited</p>
+                        )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td></td>

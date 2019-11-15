@@ -101,7 +101,7 @@ class Reports extends Component {
   };
 
   textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function(a) {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
@@ -253,7 +253,7 @@ class Reports extends Component {
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
       this.props.handleLoading(true);
-    } catch (e) {}
+    } catch (e) { }
 
     this.setState({
       userId: loggedInData.id,
@@ -277,11 +277,6 @@ class Reports extends Component {
   }
 
   checkProject = () => {
-    console.log(
-      this.props.searchProjectIds,
-      this.props.searchUserDetail,
-      this.state.userRole,
-    );
     return (
       this.props.searchProjectIds.length > 0 &&
       this.state.userRole === "admin" &&
@@ -318,7 +313,7 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) {}
+      } catch (e) { }
       var message = this.displayMessage();
 
       this.setState({
@@ -555,7 +550,6 @@ class Reports extends Component {
   };
 
   render() {
-    console.log("props", this.props);
     const Daily = props => {
       return (
         <>

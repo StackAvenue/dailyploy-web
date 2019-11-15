@@ -41,7 +41,6 @@ class ReportTable extends Component {
           totalSec += Math.abs(
             new Date(task.start_datetime) - new Date(task.end_datetime),
           );
-          console.log("TotalSec", totalSec);
         });
       }
       var hours = (totalSec / (1000 * 60 * 60)).toFixed(1);
@@ -59,6 +58,7 @@ class ReportTable extends Component {
           : [];
       return (
         <ReportTableRow
+          key={index}
           tasks={tasks}
           date={date}
           frequency={this.props.frequency}
@@ -109,11 +109,6 @@ class ReportTable extends Component {
   };
 
   checkProject = () => {
-    console.log(
-      this.props.state.searchProjectIds,
-      this.props.state.searchUserDetail,
-      this.props.state.userRole,
-    );
     return (
       this.props.state.searchProjectIds.length > 0 &&
       this.props.state.userRole === "admin" &&

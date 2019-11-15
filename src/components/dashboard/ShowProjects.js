@@ -101,7 +101,6 @@ class ShowProjects extends Component {
       users: userArr,
       isLogedInUserEmailArr: emailArr,
     });
-    console.log("Did Mount");
   }
 
   // async componentDidUpdate(prevProps, prevState) {

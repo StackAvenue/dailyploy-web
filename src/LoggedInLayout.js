@@ -77,7 +77,6 @@ class LoggedInLayout extends Component {
   };
 
   handleSearchFilterResult = data => {
-    console.log("handleSearchFilterResult", data);
     var searchUserDetail = "";
     var projectIds = [];
     if (data) {
@@ -104,7 +103,6 @@ class LoggedInLayout extends Component {
   };
 
   render() {
-    console.log("isLoading", this.state.isLoading);
     return (
       <>
         {this.state.isLoading ? (

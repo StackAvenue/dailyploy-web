@@ -78,14 +78,12 @@ export default class MenuBar extends Component {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
     } catch (e) {
-      console.log("err", e);
     }
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate() { }
 
   addProject = async () => {
-    console.log("loading", this.state.isLoading);
     const projectData = {
       project: {
         name: this.state.projectName,
@@ -110,7 +108,6 @@ export default class MenuBar extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
     } catch (e) {
-      console.log("project error", e.response);
       this.setState({ show: false });
     }
   };
@@ -138,9 +135,7 @@ export default class MenuBar extends Component {
       );
       this.setState({ memberShow: false });
       this.props.handleLoad(true);
-      console.log("member Data", data);
     } catch (e) {
-      console.log("error", e.response);
       this.setState({ memberShow: false });
     }
   };
@@ -163,7 +158,6 @@ export default class MenuBar extends Component {
   handleChangeMemberInput = e => {
     const { name, value } = e.target;
     let suggestions = [];
-    // var searchOptions = ["Arpit", "Kiran", "vikram", "vimal", "ravi"];
     var searchOptions = this.props.state.isLogedInUserEmailArr.map(
       user => user.name,
     );
@@ -171,7 +165,6 @@ export default class MenuBar extends Component {
       const regex = new RegExp(`^${value}`, "i");
       suggestions = searchOptions.sort().filter(v => regex.test(v));
     }
-    console.log("Suggestion", suggestions);
     this.setState({
       [name]: value,
       suggestions: suggestions,
@@ -179,17 +172,14 @@ export default class MenuBar extends Component {
   };
 
   selectAutoSuggestion = option => {
-    console.log("option", option);
     var filterArr = this.props.state.isLogedInUserEmailArr.filter(
       user => user.name === option,
     );
-    console.log("filterArr");
     var filterProjectIds = filterArr[0].projects.map(project => project.id);
     let memberRole = filterArr[0].role === "admin" ? "1" : "2";
     let memberProjects = this.props.state.projects.filter(
       project => !filterProjectIds.includes(project.id),
     );
-    console.log("filterArr1", memberProjects);
     this.setState({
       memberName: filterArr[0].name,
       memberEmail: filterArr[0].email,
@@ -200,7 +190,6 @@ export default class MenuBar extends Component {
   };
 
   handleChangeMemberRadio = e => {
-    console.log("radio", e.target.value);
     this.setState({ memberAccess: e.target.value });
   };
 
@@ -265,7 +254,6 @@ export default class MenuBar extends Component {
   };
 
   handleProjectByUser = () => {
-    console.log("Projects", this.props.state.projects);
   };
 
   render() {
