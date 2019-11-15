@@ -51,7 +51,7 @@ class Dashboard extends Component {
     };
   }
 
-  taskView = view => {
+  updateTaskDateView = (view, date) => {
     var viewType;
     var type;
     if (view == 0) {
@@ -66,24 +66,9 @@ class Dashboard extends Component {
     }
     this.setState({
       taskFrequency: viewType,
-      taskStartDate: getFisrtDate(new Date(), type),
-    });
-  };
-
-  taskDate = date => {
-    const { taskFrequency } = this.state;
-    var type;
-    if (taskFrequency === "daily") {
-      type = "day";
-    } else if (taskFrequency === "weekly") {
-      type = "week";
-    } else if (taskFrequency === "monthly") {
-      type = "month";
-    }
-    this.setState({
       taskStartDate: getFisrtDate(date, type),
     });
-  };
+  }
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -95,12 +80,12 @@ class Dashboard extends Component {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
           this.state.taskFrequency
-          }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
+          }&start_date=${this.state.taskStartDate}`,
         );
         var tasksUser = data.users.map(user => {
           var usersObj = {
             id: user.id,
-            name: user.name,
+            name: user.email === this.state.userEmail ? user.name + " (Me)" : user.name,
           };
           var tasks = user.tasks.map(task => {
             var tasksObj = {
@@ -116,7 +101,8 @@ class Dashboard extends Component {
           });
           return { usersObj, tasks };
         });
-        var tasksResources = tasksUser.map(user => user.usersObj);
+        var tasksResources = tasksUser.sort(user => this.state.userId == user.id).map(user => user.usersObj);
+        tasksResources.sort(function (x, y) { return x.id == this.state.userId ? -1 : y.id == this.state.userId ? 1 : 0; });
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
         this.setState({ resources: tasksResources, events: taskEvents });
       } catch (e) {
@@ -200,7 +186,8 @@ class Dashboard extends Component {
         });
         return { usersObj, tasks };
       });
-      var tasksResources = tasksUser.map(user => user.usersObj);
+      var tasksResources = tasksUser.map(user => user.usersObj)
+      tasksResources.sort(function (x, y) { return x.id == loggedInData.id ? -1 : y.id == loggedInData.id ? 1 : 0; });
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
     } catch (e) {
       console.log("error", e);
@@ -338,19 +325,6 @@ class Dashboard extends Component {
     }
   };
 
-  myViewChange = (schedulerData, view) => {
-    schedulerData.setViewType(
-      this.props.calenderTab,
-      view.showAgenda,
-      view.isEventPerspective,
-    );
-    schedulerData.setEvents(this.state.events);
-    this.setState({
-      viewModel: schedulerData,
-    });
-    this.props.taskView(view.viewType);
-  };
-
   memberSearchOptions = (userId) => {
     if (this.state.user.role === 'admin') {
       return this.state.users
@@ -400,8 +374,7 @@ class Dashboard extends Component {
               workspaceId={this.state.workspaceId}
               resources={this.state.resources}
               events={this.state.events}
-              taskView={this.taskView}
-              taskDate={this.taskDate}
+              updateTaskDateView={this.updateTaskDateView}
               setAddTaskDetails={this.setAddTaskDetails}
               show={this.state.calenderTaskModal}
               handleMemberSelect={this.handleMemberSelect}

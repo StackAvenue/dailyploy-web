@@ -24,7 +24,6 @@ class AddTaskModal extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.state.taskUser.length == 0 && this.props.state.taskUser.length == 1) {
       var options = this.props.users.filter(u => u.id === this.props.state.taskUser[0])
-      console.log("addCalenderTask", options)
       this.setState({ selectedMembers: options })
     }
   }

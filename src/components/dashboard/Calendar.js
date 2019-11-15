@@ -118,11 +118,6 @@ class Calendar extends Component {
     this.renderData();
   }
 
-  // async componentWillMount() {
-  //   this.schedulerData.setResources(this.props.resources);
-  //   this.schedulerData.setEvents(this.props.events);
-  // }
-
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.events !== this.props.events ||
       prevProps.resources !== this.props.resources
@@ -130,19 +125,6 @@ class Calendar extends Component {
       this.renderData()
     }
   }
-
-  showTaskModal = () => {
-    this.setState({
-      setShow: true,
-      show: true,
-    });
-  };
-
-  closeTaskModal = () => {
-    this.setState({
-      show: false,
-    });
-  };
 
   renderData = () => {
     this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
@@ -228,8 +210,7 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskView(schedulerData.viewType);
-    this.props.taskDate(schedulerData.startDate);
+    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
   };
 
   nextClick = schedulerData => {
@@ -238,13 +219,11 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskView(schedulerData.viewType);
-    this.props.taskDate(schedulerData.startDate);
+    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
   };
 
   onViewChange = (schedulerData, view) => {
     var newSchedulerData = new SchedulerData(schedulerData)
-    console.log(schedulerData, newSchedulerData)
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
@@ -254,7 +233,7 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskView(view.viewType);
+    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
   };
 
   onSelectDate = (schedulerData, date) => {
@@ -316,12 +295,10 @@ class Calendar extends Component {
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     console.log(schedulerData, event, slotId, slotName, start, end);
-    // if(confirm(`Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`)) {
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     this.setState({
       viewModel: schedulerData,
     });
-    // }
   };
 
   onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
