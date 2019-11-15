@@ -344,107 +344,287 @@
   border-bottom-style: none !important; 
   border-bottom-style: none !important; 
 }
-// .scheduler-bg-table tbody tr:last-child td{
-//   border-bottom-style: none !important;
-// }
-
-// .scheduler-content-table tbody tr:last-child td{
-//   border-bottom-style: none !important;
-// }
-
 .project-modal{
-    .modal-content{
-        width:658px;
-        height: 500px;
-        .header{
-            padding:17px 0 0px 49px !important;
-            span{
-                font-size: 20px;
-                font-weight: bold;
-                color: $color-text1 !important;
-                font-family: $font-family-roboto !important;
-            }
-            button{
-                padding:0 22px 0 0 !important;
-                img{
-                    width: 15px;
-                    height:15px;
-                }
-            }
+  top: 13% !important;
+  .modal-content{
+      width:658px;
+      height: 500px;
+      .header{
+          padding:17px 0 0px 49px !important;
+          span{
+              font-size: 20px;
+              font-weight: bold;
+              color: $color-text1 !important;
+              font-family: $font-family-roboto !important;
+          }
+          button{
+              padding:0 22px 0 0 !important;
+              img{
+                  width: 15px;
+                  height:15px;
+              }
+          }
+      }
+      .body{
+          padding:5px 49px 10px 49px !important;
+          .input-row{
+              padding-top:20px !important;
+              .label{
+                  font-family: $font-family-roboto;
+                  font-size:15px;
+                  color:$color-text3;
+              }
+              input{
+                  height:40px !important;
+                  border-radius:5px !important;
+                  border:1px solid $color-borders ;
+                  font-size: 15px !important;
+                  font-family: $font-family-roboto !important;
+                  color:$color-text3 !important;
+                  padding: .375rem .75rem;
+                  &::placeholder{
+                      font-size: 15px !important;
+                      font-family: $font-family-roboto !important;
+                      color:$color-text3 !important;
+                  }
+              }
+              select{
+                  height:40px !important;
+                  border-radius:5px !important;
+                  border:1px solid $color-borders ;
+                  font-size: 15px !important;
+                  font-family: $font-family-roboto !important;
+                  color:$color-text3 !important;
+                  padding: .375rem .75rem;
+              }
+              textarea{
+                  font-size: 15px !important;
+                  font-family: $font-family-roboto !important;
+                  color:$color-text3 !important;
+                  &::placeholder{
+                      font-size: 15px !important;
+                      font-family: $font-family-roboto !important;
+                      color:$color-text3 !important;
+                  }
+              }
+              .textarea{
+                  height:90px !important;
+              }
+              .btn-color-picker{
+                  width:35px !important;
+                  height: 35px !important;
+                  border-radius: 5px !important;
+                  border:solid 1px $color-borders !important;
+              }
+              .button1{
+                  height: 40px !important;
+                  border-radius: 5px !important;
+                  background-color: $color-brand3 !important;
+                  font-family: $font-family-roboto !important;
+                  font-size: 17px !important;
+                  font-weight: 500 !important;
+                  border:0 !important;
+              }
+              .button2{
+                  border-radius: 5px !important;
+                  border: solid 1px $color-brand3 !important;
+                  background-color: $color-white !important;
+                  font-family: $font-family-roboto !important;
+                  font-size: 17px !important;
+                  font-weight: 500 !important;
+                  color: $color-text3 !important;
+                  margin-left: 7% !important;
+              }
+          }
+      }
+  }
+}
+
+.task-modal{
+  .modal-content{
+      width:658px;
+      .header{
+          padding:17px 0 0px 49px !important;
+          span{
+              font-size: 20px;
+              font-weight: bold;
+              color: $color-text1 !important;
+              font-family: $font-family-roboto !important;
+          }
+          button{
+              padding:0 22px 0 0 !important;
+              img{
+                  width: 15px;
+                  height:15px;
+              }
+          }
+      }
+      .body{
+          padding:5px 49px 10px 49px !important;
+          .input-row{
+              padding-top:20px !important;
+              .label{
+                  font-family: $font-family-roboto;
+                  font-size:15px;
+                  color:$color-text3;
+              }
+              input{
+                  height:40px !important;
+                  border-radius:5px !important;
+                  border:1px solid $color-borders ;
+                  font-size: 15px !important;
+                  font-family: $font-family-roboto !important;
+                  color:$color-text3 !important;
+                  padding: .375rem .75rem;
+                  &::placeholder{
+                      font-size: 15px !important;
+                      font-family: $font-family-roboto !important;
+                      color:$color-text3 !important;
+                  }
+              }
+              select{
+                  height:40px !important;
+                  border-radius:5px !important;
+                  border:1px solid $color-borders ;
+                  font-size: 15px !important;
+                  font-family: $font-family-roboto !important;
+                  color:$color-text3 !important;
+                  padding: .375rem .75rem;
+              }
+              textarea{
+                  font-size: 15px !important;
+                  font-family: $font-family-roboto !important;
+                  color:$color-text3 !important;
+                  &::placeholder{
+                      font-size: 15px !important;
+                      font-family: $font-family-roboto !important;
+                      color:$color-text3 !important;
+                  }
+              }
+              .textarea{
+                  height:90px !important;
+              }
+              .btn-color-picker{
+                  width:35px !important;
+                  height: 35px !important;
+                  border-radius: 5px !important;
+                  border:solid 1px $color-borders !important;
+              }
+              .button1{
+                  height: 40px !important;
+                  border-radius: 5px !important;
+                  background-color: $color-brand3 !important;
+                  font-family: $font-family-roboto !important;
+                  font-size: 17px !important;
+                  font-weight: 500 !important;
+                  border:0 !important;
+              }
+              .button2{
+                  border-radius: 5px !important;
+                  border: solid 1px $color-brand3 !important;
+                  background-color: $color-white !important;
+                  font-family: $font-family-roboto !important;
+                  font-size: 17px !important;
+                  font-weight: 500 !important;
+                  color: $color-text3 !important;
+                  margin-left: 7% !important;
+              }
+          }
+      }
+  }
+}
+.member-modal{
+  .modal-content{
+    width:658px;
+    .header{
+        padding:17px 0 0px 49px !important;
+        span{
+            font-size: 20px;
+            font-weight: bold;
+            color: $color-text1 !important;
+            font-family: $font-family-roboto !important;
         }
-        .body{
-            padding:5px 49px 10px 49px !important;
-            .input-row{
-                padding-top:20px !important;
-                .label{
-                    font-family: $font-family-roboto;
-                    font-size:15px;
-                    color:$color-text3;
-                }
-                input{
-                    height:40px !important;
-                    border-radius:5px !important;
-                    border:1px solid $color-borders ;
-                    font-size: 15px !important;
-                    font-family: $font-family-roboto !important;
-                    color:$color-text3 !important;
-                    padding: .375rem .75rem;
-                    &::placeholder{
-                        font-size: 15px !important;
-                        font-family: $font-family-roboto !important;
-                        color:$color-text3 !important;
-                    }
-                }
-                select{
-                    height:40px !important;
-                    border-radius:5px !important;
-                    border:1px solid $color-borders ;
-                    font-size: 15px !important;
-                    font-family: $font-family-roboto !important;
-                    color:$color-text3 !important;
-                    padding: .375rem .75rem;
-                }
-                textarea{
-                    font-size: 15px !important;
-                    font-family: $font-family-roboto !important;
-                    color:$color-text3 !important;
-                    &::placeholder{
-                        font-size: 15px !important;
-                        font-family: $font-family-roboto !important;
-                        color:$color-text3 !important;
-                    }
-                }
-                .textarea{
-                    height:90px !important;
-                }
-                .btn-color-picker{
-                    width:35px !important;
-                    height: 35px !important;
-                    border-radius: 5px !important;
-                    border:solid 1px $color-borders !important;
-                }
-                .button1{
-                    height: 40px !important;
-                    border-radius: 5px !important;
-                    background-color: $color-brand3 !important;
-                    font-family: $font-family-roboto !important;
-                    font-size: 17px !important;
-                    font-weight: 500 !important;
-                    border:0 !important;
-                }
-                .button2{
-                    border-radius: 5px !important;
-                    border: solid 1px $color-brand3 !important;
-                    background-color: $color-white !important;
-                    font-family: $font-family-roboto !important;
-                    font-size: 17px !important;
-                    font-weight: 500 !important;
-                    color: $color-text3 !important;
-                    margin-left: 7% !important;
-                }
+        button{
+            padding:0 22px 0 0 !important;
+            img{
+                width: 15px;
+                height:15px;
             }
         }
     }
+    .body{
+        padding:5px 49px 10px 49px !important;
+        .input-row{
+            padding-top:20px !important;
+            .label{
+                font-family: $font-family-roboto;
+                font-size:15px;
+                color:$color-text3;
+            }
+            input{
+                height:40px !important;
+                border-radius:5px !important;
+                border:1px solid $color-borders ;
+                font-size: 15px !important;
+                font-family: $font-family-roboto !important;
+                color:$color-text3 !important;
+                padding: .375rem .75rem;
+                &::placeholder{
+                    font-size: 15px !important;
+                    font-family: $font-family-roboto !important;
+                    color:$color-text3 !important;
+                }
+            }
+            select{
+                height:40px !important;
+                border-radius:5px !important;
+                border:1px solid $color-borders ;
+                font-size: 15px !important;
+                font-family: $font-family-roboto !important;
+                color:$color-text3 !important;
+                padding: .375rem .75rem;
+            }
+            textarea{
+                font-size: 15px !important;
+                font-family: $font-family-roboto !important;
+                color:$color-text3 !important;
+                &::placeholder{
+                    font-size: 15px !important;
+                    font-family: $font-family-roboto !important;
+                    color:$color-text3 !important;
+                }
+            }
+            .textarea{
+                height:90px !important;
+            }
+            .btn-color-picker{
+                width:35px !important;
+                height: 35px !important;
+                border-radius: 5px !important;
+                border:solid 1px $color-borders !important;
+            }
+            .button1{
+                height: 40px !important;
+                border-radius: 5px !important;
+                background-color: $color-brand3 !important;
+                font-family: $font-family-roboto !important;
+                font-size: 17px !important;
+                font-weight: 500 !important;
+                border:0 !important;
+            }
+            .button2{
+                border-radius: 5px !important;
+                border: solid 1px $color-brand3 !important;
+                background-color: $color-white !important;
+                font-family: $font-family-roboto !important;
+                font-size: 17px !important;
+                font-weight: 500 !important;
+                color: $color-text3 !important;
+                margin-left: 7% !important;
+            }
+        }
+    }
+  }
 }
 
 .rbt-input-multi{
@@ -1885,7 +2065,7 @@
 }
 .chrome-picker{
   position: absolute !important;
-  top: -219px !important;
+  top: -233px !important;
   left: 75px !important;
 }
 .hide-div{

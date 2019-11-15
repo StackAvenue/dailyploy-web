@@ -35,7 +35,7 @@ class AddMemberModal extends Component {
     return (
       <>
         <Modal
-          dialogClassName="modal-90w project-modal member-modal"
+          dialogClassName="modal-90w member-modal"
           aria-labelledby="example-custom-modal-styling-title"
           show={this.props.state.memberShow}
           onHide={this.props.handleClose}>
@@ -104,7 +104,7 @@ class AddMemberModal extends Component {
                   </td>
                   <td>
                     <select
-                      className="form-control project"
+                      className="form-control project text-titlize"
                       name="memberProject"
                       value={this.props.state.memberProject}
                       onChange={this.props.handleChangeMemberInput}>
