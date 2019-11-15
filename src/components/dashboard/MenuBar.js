@@ -108,7 +108,27 @@ export default class MenuBar extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
     } catch (e) {
-      this.setState({ show: false });
+      var errors = e.response.data.errors
+      if (errors && errors.project_name_workspace_uniqueness) {
+        toast(
+          <DailyPloyToast
+            message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      } else if (errors && errors.name) {
+        toast(
+          <DailyPloyToast
+            message={`Project name ${errors.name}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      }
+      else {
+        this.setState({ show: false });
+      }
     }
   };
 
