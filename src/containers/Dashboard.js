@@ -43,7 +43,7 @@ class Dashboard extends Component {
       userEmail: "",
       isLogedInUserEmailArr: [],
       taskFrequency: "weekly",
-      taskStartDate: new Date(),
+      taskStartDate: moment().format("YYYY-MM-DD"),
       calenderTaskModal: false,
       newTask: {},
       user: "",
@@ -240,11 +240,10 @@ class Dashboard extends Component {
       );
       var task = data.task
       toast.success("Task Assigned", { autoClose: 2000 });
-      this.setState({ show: false });
+      this.setState({ show: false, newTask: task })
     } catch (e) {
       this.setState({ show: false });
     }
-    this.setState({ newTask: task })
   };
 
   onSelectSort = value => {

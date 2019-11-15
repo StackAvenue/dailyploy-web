@@ -882,7 +882,7 @@
   }
   
   .event-item {
-    margin: 1px 0;
+    margin: 2px;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2044,6 +2044,16 @@
   }
   .task-project div{
     padding-right: 10px;
+  }
+  .task-project{
+    .overflow-text{
+      span{
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        width: 100% !important;
+        padding-left: 10px !important;
+      }
+    }
   }
 }
 .ant-popover-inner-content{

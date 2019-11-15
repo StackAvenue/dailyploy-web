@@ -356,24 +356,54 @@ class Calendar extends Component {
       height: mustBeHeight,
     };
     if (!!agendaMaxEventWidth)
-      divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth };
+      divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
-    return (
-      <div key={event.id} className={mustAddCssClass} style={divStyle}>
-        <div className="row item">
-          <div className="col-md-12 item-heading no-padding text-wraper">{titleText}</div>
-          <div className="col-md-12 no-padding">
-            <div className="col-md-6 no-padding d-inline-block item-time">
-              {`${start} - ${end}`}
-            </div>
-            <div className="col-md-6 no-padding d-inline-block item-time text-right">
-              {/* {moment(event.end).diff(moment(event.start), "hours")}&nbsp;h */}
-              {this.getTimeDifference(moment(event.start), moment(event.end))}
+    if (schedulerData.viewType === 0) {
+      return (
+        <div key={event.id} className={mustAddCssClass} style={divStyle} >
+          <div className="row item">
+            <div className="col-md-12 item-heading text-wraper" style={{ padding: "7px 7px 0px 7px" }}>{titleText}</div>
+            <div className="col-md-12 no-padding">
+              <div className="col-md-6 no-padding d-inline-block item-time pull-right text-right">
+                {this.getTimeDifference(moment(event.start), moment(event.end))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else if (schedulerData.viewType === 1) {
+      return (
+        <div key={event.id} className={mustAddCssClass} style={divStyle}>
+          <div className="row item">
+            <div className="col-md-12 item-heading no-padding text-wraper">{titleText}</div>
+            <div className="col-md-12 no-padding">
+              <div className="col-md-6 no-padding d-inline-block item-time">
+                {`${start} - ${end}`}
+              </div>
+              <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                {this.getTimeDifference(moment(event.start), moment(event.end))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (schedulerData.viewType === 2) {
+      return (
+        <div key={event.id} className={mustAddCssClass} style={divStyle}>
+          <div className="row item">
+            <div className="col-md-12 item-heading text-wraper" style={{ padding: "5px 5px 0px 5px" }}>{titleText}</div>
+            {/* <div className="col-md-12 no-padding">
+              <div className="col-md-6 no-padding d-inline-block item-time">
+                {`${start} - ${end}`}
+              </div>
+              <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                {this.getTimeDifference(moment(event.start), moment(event.end))}
+              </div>
+            </div> */}
+          </div>
+        </div>
+      );
+    }
   };
 
   getTimeDifference = (start, end) => {
