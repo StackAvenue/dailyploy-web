@@ -116,7 +116,6 @@ class AddTaskModal extends Component {
   }
 
   renderSelectedMembers = () => {
-
     return (
       <>
         {
@@ -139,7 +138,7 @@ class AddTaskModal extends Component {
     let membersSuggestions = []
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
-      membersSuggestions = this.props.users.sort().filter(m => regex.test(m.name) && !(this.state.selectedMembers.includes(m)))
+      membersSuggestions = this.props.modalMemberSearchOptions.sort().filter(m => regex.test(m.name) && !(this.state.selectedMembers.includes(m)))
     } else {
     }
     this.setState({ membersSuggestions: membersSuggestions, memberSearchText: value });
@@ -163,7 +162,7 @@ class AddTaskModal extends Component {
     return (
       <>
         <Modal
-          className="project-modal"
+          className="task-modal"
           show={props.show}
           onHide={props.closeTaskModal}
           style={{ paddingTop: "2.5%" }}

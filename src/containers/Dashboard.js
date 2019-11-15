@@ -11,7 +11,6 @@ import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
 import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
-import ErrorBoundary from "./../components/ErrorBoundary/ErrorBoundary";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -46,7 +45,9 @@ class Dashboard extends Component {
       taskFrequency: "weekly",
       taskStartDate: new Date(),
       calenderTaskModal: false,
-      newTask: {}
+      newTask: {},
+      user: "",
+      modalMemberSearchOptions: [],
     };
   }
 
@@ -121,6 +122,7 @@ class Dashboard extends Component {
       } catch (e) {
       }
     }
+
   }
 
   async componentDidMount() {
@@ -153,6 +155,12 @@ class Dashboard extends Component {
     } catch (e) {
       console.log("err", e);
     }
+    // role api
+    try {
+      const { data } = await get(`workspaces/${this.state.workspaceId}/members/${loggedInData.id}`);
+      var user = data
+    } catch (e) {
+    }
 
     // workspace Member Listing
     try {
@@ -173,7 +181,6 @@ class Dashboard extends Component {
         this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
-      console.log(moment(this.state.taskStartDate).format("YYYY-MM-DD hh:mm Z"))
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
@@ -182,8 +189,6 @@ class Dashboard extends Component {
         var tasks = user.tasks.map(task => {
           var tasksObj = {
             id: task.id,
-            // start: task.start_datetime,
-            // end: task.end_datetime,
             start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
             end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
             resourceId: user.id,
@@ -197,8 +202,6 @@ class Dashboard extends Component {
       });
       var tasksResources = tasksUser.map(user => user.usersObj);
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-      console.log("taskEvents", taskEvents)
-
     } catch (e) {
       console.log("error", e);
     }
@@ -212,7 +215,8 @@ class Dashboard extends Component {
       users: userArr,
       isLogedInUserEmailArr: emailArr,
       resources: tasksResources,
-      events: taskEvents
+      events: taskEvents,
+      user: user
     });
   }
 
@@ -270,9 +274,11 @@ class Dashboard extends Component {
   };
 
   showTaskModal = () => {
+    let members = this.memberSearchOptions(this.state.userId)
     this.setState({
       setShow: true,
       show: true,
+      modalMemberSearchOptions: members,
     });
   };
 
@@ -345,13 +351,25 @@ class Dashboard extends Component {
     this.props.taskView(view.viewType);
   };
 
+  memberSearchOptions = (userId) => {
+    if (this.state.user.role === 'admin') {
+      return this.state.users
+    } else {
+      return this.state.users.filter(member => member.id === userId)
+    }
+  }
+
   setAddTaskDetails = (memberId, startDate, endDate) => {
-    this.setState({
-      taskUser: [memberId],
-      show: true,
-      calenderTaskModal: true,
-      dateFrom: new Date(startDate), dateTo: new Date(endDate),
-    })
+    let members = this.memberSearchOptions(memberId)
+    if (this.state.user.role === 'admin' || this.state.userId == memberId) {
+      this.setState({
+        taskUser: [memberId],
+        show: true,
+        calenderTaskModal: true,
+        modalMemberSearchOptions: members,
+        dateFrom: new Date(startDate), dateTo: new Date(endDate),
+      })
+    }
   }
 
   render() {
@@ -410,6 +428,7 @@ class Dashboard extends Component {
                 addTask={this.addTask}
                 handleMemberSelect={this.handleMemberSelect}
                 handleProjectSelect={this.handleProjectSelect}
+                modalMemberSearchOptions={this.state.modalMemberSearchOptions}
               />
             </div>
           </div>
