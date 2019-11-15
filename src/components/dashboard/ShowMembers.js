@@ -24,6 +24,7 @@ class ShowMembers extends Component {
       searchOptions: [],
       worksapceUsers: "",
       worksapceUser: [],
+      isLoading: false,
     };
   }
   logout = async () => {
@@ -71,9 +72,10 @@ class ShowMembers extends Component {
       var worksapceMembersExceptLogedUser = data.members.filter(
         user => user.email !== loggedInData.email,
       );
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
+      // .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -97,7 +99,8 @@ class ShowMembers extends Component {
   async componentDidUpdate(prevProps, prevState) {
     if (
       prevState.searchProjectIds !== this.state.searchProjectIds ||
-      prevState.searchUserDetail !== this.state.searchUserDetail
+      prevState.searchUserDetail !== this.state.searchUserDetail ||
+      prevState.isLoading !== this.state.isLoading
     ) {
       var searchData = {
         user_id: this.state.searchUserDetail
@@ -262,6 +265,10 @@ class ShowMembers extends Component {
     this.setState({ searchOptions: searchOptions });
   };
 
+  handleLoad = value => {
+    this.setState({ isLoading: value });
+  };
+
   render() {
     return (
       <>
@@ -269,6 +276,7 @@ class ShowMembers extends Component {
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
+          handleLoad={this.handleLoad}
           state={this.state}
         />
         <div className="show-projects">

@@ -69,6 +69,7 @@ export default class MenuBar extends Component {
       disabledDateTo: false,
       disableColor: "#fff",
       suggestions: [],
+      projectsListing: [],
     };
   }
 
@@ -80,6 +81,8 @@ export default class MenuBar extends Component {
       console.log("err", e);
     }
   }
+
+  componentDidUpdate() {}
 
   addProject = async () => {
     console.log("loading", this.state.isLoading);
@@ -134,6 +137,7 @@ export default class MenuBar extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
       this.setState({ memberShow: false });
+      this.props.handleLoad(true);
       console.log("member Data", data);
     } catch (e) {
       console.log("error", e.response);
@@ -168,7 +172,10 @@ export default class MenuBar extends Component {
       suggestions = searchOptions.sort().filter(v => regex.test(v));
     }
     console.log("Suggestion", suggestions);
-    this.setState({ [name]: value, suggestions: suggestions });
+    this.setState({
+      [name]: value,
+      suggestions: suggestions,
+    });
   };
 
   selectAutoSuggestion = option => {
@@ -176,14 +183,20 @@ export default class MenuBar extends Component {
     var filterArr = this.props.state.isLogedInUserEmailArr.filter(
       user => user.name === option,
     );
+    console.log("filterArr");
+    var filterProjectIds = filterArr[0].projects.map(project => project.id);
     let memberRole = filterArr[0].role === "admin" ? "1" : "2";
+    let memberProjects = this.props.state.projects.filter(
+      project => !filterProjectIds.includes(project.id),
+    );
+    console.log("filterArr1", memberProjects);
     this.setState({
       memberName: filterArr[0].name,
       memberEmail: filterArr[0].email,
       memberRole: memberRole,
       memberWorkingHours: filterArr[0].working_hours,
+      projectsListing: memberProjects,
     });
-    console.log("filterArr", filterArr);
   };
 
   handleChangeMemberRadio = e => {
@@ -219,6 +232,7 @@ export default class MenuBar extends Component {
     this.setState({
       memberSetShow: true,
       memberShow: true,
+      projectsListing: this.props.state.projects,
     });
   };
 
@@ -250,7 +264,12 @@ export default class MenuBar extends Component {
     });
   };
 
+  handleProjectByUser = () => {
+    console.log("Projects", this.props.state.projects);
+  };
+
   render() {
+    this.handleProjectByUser();
     const { sort, show } = this.state;
     return (
       <>
@@ -304,7 +323,7 @@ export default class MenuBar extends Component {
                           handleChangeMemberInput={this.handleChangeMemberInput}
                           handleChangeMemberRadio={this.handleChangeMemberRadio}
                           addMember={this.addMember}
-                          projects={this.props.state.projects}
+                          projects={this.state.projectsListing}
                           selectAutoSuggestion={this.selectAutoSuggestion}
                         />
                       ) : null}

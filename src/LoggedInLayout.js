@@ -6,6 +6,7 @@ import Sidebar from "./components/dashboard/Sidebar";
 import { get, logout } from "./utils/API";
 import Header from "./components/dashboard/Header";
 import { WORKSPACE_ID } from "./utils/Constants";
+import "./assets/css/loading.scss";
 
 class LoggedInLayout extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class LoggedInLayout extends Component {
       searchOptions: [],
       searchProjectIds: [],
       searchUserDetail: null,
+      isLoading: false,
     };
   }
 
@@ -36,6 +38,7 @@ class LoggedInLayout extends Component {
     try {
       const { data } = await get("workspaces");
       var workspacesData = data.workspaces;
+      this.setState({ isLoading: true });
     } catch (e) {
       console.log("err", e);
     }
@@ -43,6 +46,7 @@ class LoggedInLayout extends Component {
     this.setState({
       workspaces: workspacesData,
       loggedInUserInfo: userData,
+      isLoading: false,
     });
   }
 
@@ -63,6 +67,7 @@ class LoggedInLayout extends Component {
       handleSearchFilterResult: this.handleSearchFilterResult,
       searchProjectIds: this.state.searchProjectIds,
       searchUserDetail: this.state.searchUserDetail,
+      handleLoading: this.handleLoad,
     };
     var newProps = { ...props, ...props1 };
     if (title !== "login" && title !== "signup" && title !== "landing") {
@@ -94,9 +99,18 @@ class LoggedInLayout extends Component {
     this.setState({ searchOptions: searchOptions });
   };
 
+  handleLoad = value => {
+    this.setState({ isLoading: value });
+  };
+
   render() {
+    console.log("isLoading", this.state.isLoading);
     return (
       <>
+        {this.state.isLoading ? (
+          <div className="loading">Loading&#8230;</div>
+        ) : null}
+
         <ToastContainer />
         <div className="row no-margin">
           <Sidebar

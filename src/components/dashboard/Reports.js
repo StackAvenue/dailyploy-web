@@ -228,9 +228,10 @@ class Reports extends Component {
       var worksapceUser = data.members.filter(
         user => user.email === loggedInData.email,
       );
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
+      // .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -251,6 +252,7 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
+      this.props.handleLoading(true);
     } catch (e) {}
 
     this.setState({
@@ -271,6 +273,7 @@ class Reports extends Component {
     this.createUserProjectList();
 
     this.props.handleSearchFilterResult(this.handleSearchFilterResult);
+    this.props.handleLoading(false);
   }
 
   checkProject = () => {

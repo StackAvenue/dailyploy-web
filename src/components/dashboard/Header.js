@@ -29,6 +29,7 @@ class Header extends Component {
       value: "",
       suggestions: [],
       selectedTags: [],
+      selectedMember: null,
     };
   }
 
@@ -71,7 +72,11 @@ class Header extends Component {
     let suggestions = [];
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
-      suggestions = this.props.searchOptions
+      var searchOptions = this.props.searchOptions;
+      if (this.state.selectedMember) {
+        var searchOptions = searchOptions.filter(v => v.type != "member");
+      }
+      suggestions = searchOptions
         .sort()
         .filter(
           v => regex.test(v.value) && !this.state.selectedTags.includes(v),
@@ -82,18 +87,39 @@ class Header extends Component {
 
   selectSuggestion = option => {
     var newSelectedTags = new Array(...this.state.selectedTags);
+    if (option.type === "member") {
+      var selectedMember = option;
+    }
     newSelectedTags.push(option);
-    this.setState({
-      selectedTags: newSelectedTags,
-      suggestions: [],
-      value: "",
-    });
+    if (selectedMember) {
+      this.setState({
+        selectedTags: newSelectedTags,
+        selectedMember: selectedMember,
+        suggestions: [],
+        value: "",
+      });
+    } else {
+      this.setState({
+        selectedTags: newSelectedTags,
+        suggestions: [],
+        value: "",
+      });
+    }
   };
 
   removeSelectedTag = index => {
     var selectedTags = this.state.selectedTags;
+    if (this.state.selectedMember) {
+      var selectedMemberTags = selectedTags.filter(
+        (item, i) => this.state.selectedMember.id === item.id && i === index,
+      );
+    }
     selectedTags = selectedTags.filter((item, i) => i !== index);
-    this.setState({ selectedTags: selectedTags });
+    if (selectedMemberTags) {
+      this.setState({ selectedTags: selectedTags, selectedMember: null });
+    } else {
+      this.setState({ selectedTags: selectedTags });
+    }
   };
 
   renderSearchSuggestion = () => {

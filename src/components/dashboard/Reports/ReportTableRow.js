@@ -1,48 +1,56 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
-import { DATE_FORMAT2 } from "./../../../utils/Constants"
-
+import { DATE_FORMAT2 } from "./../../../utils/Constants";
 
 class ReportTableRow extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    }
+    this.state = {};
   }
 
   calculateTime = (startDateTime, endDateTime) => {
-    var s = new Date(startDateTime)
-    var e = new Date(endDateTime)
-    return s.getHours() + ":" + s.getMinutes() + " - " + e.getHours() + ":" + e.getMinutes()
-  }
+    var s = new Date(startDateTime);
+    var e = new Date(endDateTime);
+    return (
+      s.getHours() +
+      ":" +
+      s.getMinutes() +
+      " - " +
+      e.getHours() +
+      ":" +
+      e.getMinutes()
+    );
+  };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
     var diff = Math.abs(new Date(startDateTime) - new Date(endDateTime));
     var hours = (diff / (1000 * 60 * 60)).toFixed(1);
-    return hours + " h"
-  }
+    return hours + " h";
+  };
 
-  getTotalHours = (tasks) => {
+  getTotalHours = tasks => {
     if (tasks !== undefined) {
-      var totalSec = ""
+      var totalSec = null;
       {
         tasks.map((task, idx) => {
-          totalSec += Math.abs(new Date(task.start_datetime) - new Date(task.end_datetime));
-        })
+          totalSec += Math.abs(
+            new Date(task.start_datetime) - new Date(task.end_datetime),
+          );
+        });
       }
       var hours = (totalSec / (1000 * 60 * 60)).toFixed(1);
-      return hours + " h"
+      return hours + " h";
     }
-    return "0 h"
-  }
+    return "0 h";
+  };
 
-  displayDate = (date) => {
-    if (this.props.frequency !== 'daily') {
-      return moment(date).format(DATE_FORMAT2)
+  displayDate = date => {
+    if (this.props.frequency !== "daily") {
+      return moment(date).format(DATE_FORMAT2);
     }
-    return ""
-  }
+    return "";
+  };
 
   taskNotFound = () => {
     return (
@@ -52,24 +60,25 @@ class ReportTableRow extends Component {
         <td></td>
         <td></td>
       </tr>
-    )
-  }
+    );
+  };
 
-  renderTableRow = (tasks) => {
+  renderTableRow = tasks => {
     return tasks.map((task, index) => {
       return (
         <tr key={index}>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
           <td className="text-titlize">{task.name}</td>
           <td className="text-titlize">{task.project.name}</td>
-          <td >{this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}</td>
+          <td>
+            {this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}
+          </td>
         </tr>
-      )
-    })
-  }
+      );
+    });
+  };
 
   render() {
-
     return (
       <>
         <tr className="report-table-date">
@@ -78,10 +87,12 @@ class ReportTableRow extends Component {
           <th></th>
           <th>{this.getTotalHours(this.props.tasks)}</th>
         </tr>
-        {this.props.tasks.length !== 0 ? this.renderTableRow(this.props.tasks) : this.taskNotFound()}
+        {this.props.tasks.length !== 0
+          ? this.renderTableRow(this.props.tasks)
+          : this.taskNotFound()}
       </>
-    )
+    );
   }
 }
 
-export default withRouter(ReportTableRow)
+export default withRouter(ReportTableRow);

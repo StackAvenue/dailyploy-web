@@ -185,7 +185,7 @@ class Dashboard extends Component {
           this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
-
+      this.props.handleLoading(true);
       console.log("dta task", data.users);
       var tasksUser = data.users.map(user => {
         var usersObj = {
@@ -225,7 +225,9 @@ class Dashboard extends Component {
       events: taskEvents,
     });
 
-    console.log("Did Mount");
+    this.props.handleLoading(false);
+
+    // console.log("Did Mount");
   }
 
   getWorkspaceParams = () => {

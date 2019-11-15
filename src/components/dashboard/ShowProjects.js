@@ -84,9 +84,10 @@ class ShowProjects extends Component {
         `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
+      // .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
