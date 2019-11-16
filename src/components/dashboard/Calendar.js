@@ -373,6 +373,7 @@ class Calendar extends Component {
       schedulerData,
       event,
     );
+    titleText = titleText[0].toUpperCase() + titleText.slice(1)
     var start = moment(event.start).format("HH:mm");
     var end = moment(event.end).format("HH:mm");
     let divStyle = {
@@ -417,14 +418,6 @@ class Calendar extends Component {
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
             <div className="col-md-12 item-heading text-wraper" style={{ padding: "5px 5px 0px 5px" }}>{titleText}</div>
-            {/* <div className="col-md-12 no-padding">
-              <div className="col-md-6 no-padding d-inline-block item-time">
-                {`${start} - ${end}`}
-              </div>
-              <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                {this.getTimeDifference(moment(event.start), moment(event.end))}
-              </div>
-            </div> */}
           </div>
         </div>
       );

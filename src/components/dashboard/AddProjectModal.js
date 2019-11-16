@@ -2,12 +2,10 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
 import DatePicker from "react-datepicker";
-import ColorPicker from 'react-color-picker'
 import { get } from "../../utils/API";
 import { TwitterPicker, ChromePicker } from "react-color";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import 'react-color-picker/index.css'
 
 class AddProjectModal extends Component {
   constructor(props) {
