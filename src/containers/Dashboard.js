@@ -20,6 +20,11 @@ class Dashboard extends Component {
     this.now = moment()
       .hour(0)
       .minute(0);
+    this.viewType = {
+      "weekly": "week",
+      "daily": "day",
+      "monthly": "month"
+    }
     this.state = {
       taskName: "",
       projectId: "",
@@ -82,7 +87,7 @@ class Dashboard extends Component {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
           this.state.taskFrequency
-          }&start_date=${this.state.taskStartDate}`,
+          }&start_date=${getFisrtDate(this.state.taskStartDate, this.viewType[this.state.taskFrequency])}`,
         );
 
         var tasksUser = data.users.map(user => {
