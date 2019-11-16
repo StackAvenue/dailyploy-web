@@ -84,25 +84,33 @@ class Dashboard extends Component {
           this.state.taskFrequency
           }&start_date=${this.state.taskStartDate}`,
         );
+
         var tasksUser = data.users.map(user => {
           var usersObj = {
             id: user.id,
-            name: user.email === this.state.userEmail ? user.name + " (Me)" : user.name,
+            name:
+              user.email === this.state.userEmail
+                ? user.name + " (Me)"
+                : user.name,
           };
-          var tasks = user.tasks.map(task => {
-            var tasksObj = {
-              id: task.id,
-              start: task.start_datetime,
-              end: task.end_datetime,
-              resourceId: user.id,
-              title: task.name,
-              bgColor: task.project.color_code,
-              projectName: task.project.name
-            };
-            return tasksObj;
+          var tasks = user.date_formatted_tasks.map(task => {
+            var task = task.tasks.map(task => {
+              var tasksObj = {
+                id: task.id,
+                start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
+                end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
+                resourceId: user.id,
+                title: task.name,
+                bgColor: task.project.color_code,
+                projectName: task.project.name,
+              };
+              return tasksObj;
+            });
+            return task;
           });
           return { usersObj, tasks };
         });
+
         var tasksResources = tasksUser.sort(user => this.state.userId == user.id).map(user => user.usersObj);
         tasksResources.sort(function (x, y) { return x.id == this.state.userId ? -1 : y.id == this.state.userId ? 1 : 0; });
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
@@ -174,24 +182,28 @@ class Dashboard extends Component {
         this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
-      this.props.handleLoading(true);
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
           name:
-            user.email === loggedInData.email ? user.name + " (Me)" : user.name,
+            user.email === loggedInData.email
+              ? user.name + " (Me)"
+              : user.name,
         };
-        var tasks = user.tasks.map(task => {
-          var tasksObj = {
-            id: task.id,
-            start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
-            end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
-            resourceId: user.id,
-            title: task.name,
-            bgColor: task.project.color_code,
-            projectName: task.project.name
-          };
-          return tasksObj;
+        var tasks = user.date_formatted_tasks.map(task => {
+          var task = task.tasks.map(task => {
+            var tasksObj = {
+              id: task.id,
+              start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
+              end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
+              resourceId: user.id,
+              title: task.name,
+              bgColor: task.project.color_code,
+              projectName: task.project.name,
+            };
+            return tasksObj;
+          });
+          return task;
         });
         return { usersObj, tasks };
       });
