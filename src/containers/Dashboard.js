@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
 import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
+import DailyPloyToast from "../components/DailyPloyToast";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -74,7 +75,8 @@ class Dashboard extends Component {
     if (
       prevState.taskStartDate !== this.state.taskStartDate ||
       prevState.taskFrequency !== this.state.taskFrequency ||
-      prevState.newTask !== this.state.newTask
+      prevState.newTask !== this.state.newTask ||
+      prevState.isLoading !== this.state.isLoading
     ) {
       try {
         const { data } = await get(
@@ -104,7 +106,11 @@ class Dashboard extends Component {
         var tasksResources = tasksUser.sort(user => this.state.userId == user.id).map(user => user.usersObj);
         tasksResources.sort(function (x, y) { return x.id == this.state.userId ? -1 : y.id == this.state.userId ? 1 : 0; });
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-        this.setState({ resources: tasksResources, events: taskEvents });
+        this.setState({
+          resources: tasksResources,
+          events: taskEvents,
+          isLoading: false,
+        });
       } catch (e) {
       }
     }
@@ -154,8 +160,9 @@ class Dashboard extends Component {
         `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user);
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
     } catch (e) {
       console.log("users Error", e);
     }
@@ -167,10 +174,12 @@ class Dashboard extends Component {
         this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`,
       );
+      this.props.handleLoading(true);
       var tasksUser = data.users.map(user => {
         var usersObj = {
           id: user.id,
-          name: user.email === loggedInData.email ? user.name + " (Me)" : user.name,
+          name:
+            user.email === loggedInData.email ? user.name + " (Me)" : user.name,
         };
         var tasks = user.tasks.map(task => {
           var tasksObj = {
@@ -205,6 +214,10 @@ class Dashboard extends Component {
       events: taskEvents,
       user: user
     });
+
+    this.props.handleLoading(false);
+
+    // console.log("Did Mount");
   }
 
   getWorkspaceParams = () => {
@@ -239,8 +252,14 @@ class Dashboard extends Component {
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks`,
       );
       var task = data.task
-      toast.success("Task Assigned", { autoClose: 2000 });
-      this.setState({ show: false, newTask: task })
+      toast(
+        <DailyPloyToast
+          message="Task Created successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
+      this.setState({ show: false, isLoading: true, newTask: task });
     } catch (e) {
       this.setState({ show: false });
     }
@@ -348,62 +367,48 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <div className="row no-margin">
-          <Sidebar
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          handleLoad={this.handleLoad}
+          state={this.state}
+        />
+        <Calendar
+          state={this.state}
+          sortUnit={this.state.sort}
+          workspaceId={this.state.workspaceId}
+          resources={this.state.resources}
+          events={this.state.events}
+          updateTaskDateView={this.updateTaskDateView}
+          setAddTaskDetails={this.setAddTaskDetails}
+          show={this.state.calenderTaskModal}
+          handleMemberSelect={this.handleMemberSelect}
+          closeTaskModal={this.closeTaskModal}
+          handleProjectSelect={this.handleProjectSelect}
+        />
+        <div>
+          <button
+            className="btn menubar-task-btn"
+            onClick={this.showTaskModal}>
+            <i className="fas fa-plus" />
+          </button>
+          <AddTaskModal
+            show={this.state.show}
+            state={this.state}
+            closeTaskModal={this.closeTaskModal}
+            handleInputChange={this.handleInputChange}
+            projects={this.state.projects}
+            handleDateFrom={this.handleDateFrom}
+            handleDateTo={this.handleDateTo}
+            handleTimeFrom={this.handleTimeFrom}
+            handleTimeTo={this.handleTimeTo}
+            users={this.state.users}
+            addTask={this.addTask}
+            handleMemberSelect={this.handleMemberSelect}
+            handleProjectSelect={this.handleProjectSelect}
+            modalMemberSearchOptions={this.state.modalMemberSearchOptions}
           />
-          <div className="dashboard-main no-padding">
-            <Header
-              logout={this.logout}
-              workspaces={this.state.workspaces}
-              workspaceId={this.state.workspaceId}
-            />
-            <MenuBar
-              onSelectSort={this.onSelectSort}
-              workspaceId={this.state.workspaceId}
-              classNameRoute={this.classNameRoute}
-              handleLoad={this.handleLoad}
-              state={this.state}
-            />
-            <Calendar
-              state={this.state}
-              sortUnit={this.state.sort}
-              workspaceId={this.state.workspaceId}
-              resources={this.state.resources}
-              events={this.state.events}
-              updateTaskDateView={this.updateTaskDateView}
-              setAddTaskDetails={this.setAddTaskDetails}
-              show={this.state.calenderTaskModal}
-              handleMemberSelect={this.handleMemberSelect}
-              closeTaskModal={this.closeTaskModal}
-              handleProjectSelect={this.handleProjectSelect}
-            />
-            <div>
-              <button
-                className="btn menubar-task-btn"
-                onClick={this.showTaskModal}>
-                <i className="fas fa-plus" />
-              </button>
-              <AddTaskModal
-                show={this.state.show}
-                state={this.state}
-                closeTaskModal={this.closeTaskModal}
-                handleInputChange={this.handleInputChange}
-                projects={this.state.projects}
-                handleDateFrom={this.handleDateFrom}
-                handleDateTo={this.handleDateTo}
-                handleTimeFrom={this.handleTimeFrom}
-                handleTimeTo={this.handleTimeTo}
-                users={this.state.users}
-                addTask={this.addTask}
-                handleMemberSelect={this.handleMemberSelect}
-                handleProjectSelect={this.handleProjectSelect}
-                modalMemberSearchOptions={this.state.modalMemberSearchOptions}
-              />
-            </div>
-          </div>
         </div>
         {/* <Footer />  */}
       </>

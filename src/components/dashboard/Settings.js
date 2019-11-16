@@ -103,51 +103,38 @@ class Settings extends Component {
   render() {
     return (
       <>
-        <div className="row no-margin">
-          <Sidebar
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-          />
-          <div className="dashboard-main no-padding">
-            <Header
-              logout={this.logout}
-              workspaces={this.state.workspaces}
-              workspaceId={this.state.workspaceId}
-            />
-            <MenuBar
-              onSelectSort={this.onSelectSort}
-              workspaceId={this.state.workspaceId}
-              classNameRoute={this.classNameRoute}
-              state={this.state}
-            />
-            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-              <div className="row no-margin workspace1-setting">
-                <div className="col-md-2 side-tabs">
-                  <Nav variant="link" className="flex-column">
-                    <Nav.Item>
-                      <Nav.Link eventKey="first">General</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="second">Privacy</Nav.Link>
-                    </Nav.Item>
-                  </Nav>
-                </div>
-                <div className="col-md-10">
-                  <div className="col-md-12 body-tabs">
-                    <Tab.Content>
-                      <Tab.Pane eventKey="first">
-                        <GeneralSettings />
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="second">
-                        <PrivacySettings />
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </div>
-                </div>
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          state={this.state}
+        />
+        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+          <div className="row no-margin workspace1-setting">
+            <div className="col-md-2 side-tabs">
+              <Nav variant="link" className="flex-column">
+                <Nav.Item>
+                  <Nav.Link eventKey="first">General</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="second">Privacy</Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </div>
+            <div className="col-md-10">
+              <div className="col-md-12 body-tabs">
+                <Tab.Content>
+                  <Tab.Pane eventKey="first">
+                    <GeneralSettings />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="second">
+                    <PrivacySettings />
+                  </Tab.Pane>
+                </Tab.Content>
               </div>
-            </Tab.Container>
+            </div>
           </div>
-        </div>
+        </Tab.Container>
       </>
     );
   }

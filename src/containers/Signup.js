@@ -35,6 +35,7 @@ class Signup extends Component {
       },
       isCompany: false,
       tokenId: "",
+      isDisabled: false,
     };
   }
 
@@ -57,21 +58,29 @@ class Signup extends Component {
   async componentDidMount() {
     const { tokenId } = this.props.match.params;
     if (tokenId !== undefined) {
+      var isDisabled;
       try {
         const { data } = await get(`token_details/${tokenId}`);
-        var userName = data.name
-        var userEmail = data.email
+        console.log("data Token", data);
+        var userName = data.name;
+        var userEmail = data.email;
+        isDisabled = true;
       } catch (e) {
         console.log("error", e.response);
+        isDisabled = false;
       }
 
       this.setState({
-        tokenId: tokenId, name: userName, email: userEmail
+        tokenId: tokenId,
+        name: userName,
+        email: userEmail,
+        isDisabled: isDisabled,
       });
     }
   }
 
-  signupForm = async () => {
+  signupForm = async e => {
+    e.preventDefault();
     this.validateAllInputs();
     if (this.validityCheck()) {
       var signupData;
@@ -117,11 +126,20 @@ class Signup extends Component {
       }
       try {
         const { signUpData } = await signUp(signupData);
-        toast(<DailyPloyToast message="User Created" status="success" />, { autoClose: 2000 })
+        toast(<DailyPloyToast message="User Created" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        });
         setTimeout(() => this.props.history.push("/login"), 3000);
       } catch (e) {
-        toast(<DailyPloyToast message={"email " + `${e.response.data.errors.email}`} status="error" />, { autoClose: 2000 })
-        console.log("error", e.response)
+        toast(
+          <DailyPloyToast
+            message={"email " + `${e.response.data.errors.email}`}
+            status="error"
+          />,
+          { autoClose: 2000 },
+        );
+        console.log("error", e.response);
       }
     } else {
       console.log("Enter valid email address and password");
@@ -148,7 +166,7 @@ class Signup extends Component {
     errors.emailError = validateEmail(this.state.email);
     errors.confirmPasswordError = this.validatePassword(
       this.state.password,
-      this.state.confirmPassword
+      this.state.confirmPassword,
     );
     this.setState({ errors });
   };
@@ -174,7 +192,7 @@ class Signup extends Component {
 
     return (
       <>
-        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+        <ToastContainer position={toast.POSITION.TOP_CENTER} />
         <div className="container-fluid">
           <div className="main-container">
             <Header />
@@ -192,8 +210,7 @@ class Signup extends Component {
                   defaultActiveKey="individual"
                   className="col-md-10 offset-1 main-tabs"
                   id="uncontrolled-tab-example"
-                  onSelect={key => this.companyFlag(key)}
-                >
+                  onSelect={key => this.companyFlag(key)}>
                   <Tab eventKey="individual" title="Individual">
                     <Individual
                       state={this.state}
@@ -206,7 +223,7 @@ class Signup extends Component {
                     eventKey="company"
                     title="Organization"
                     style={{ border: "0" }}
-                  >
+                    disabled={this.state.isDisabled}>
                     <Company
                       state={this.state}
                       enable={isEnabled}

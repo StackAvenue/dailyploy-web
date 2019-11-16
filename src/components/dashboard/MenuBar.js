@@ -61,6 +61,8 @@ export default class MenuBar extends Component {
       logedInUserEmail: "",
       disabledDateTo: false,
       disableColor: "#fff",
+      suggestions: [],
+      projectsListing: [],
     };
   }
 
@@ -69,12 +71,12 @@ export default class MenuBar extends Component {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
     } catch (e) {
-      console.log("err", e);
     }
   }
 
+  componentDidUpdate() { }
+
   addProject = async () => {
-    console.log("loading", this.state.isLoading);
     const projectData = {
       project: {
         name: this.state.projectName,
@@ -89,11 +91,37 @@ export default class MenuBar extends Component {
         projectData,
         `workspaces/${this.props.workspaceId}/projects`,
       );
-      this.setState({ show: false, isLoading: true });
-      toast(<DailyPloyToast message="Project added successfully!" status="success" />, { autoClose: 2000 })
-    } catch (e) {
-      console.log("project error", e.response);
       this.setState({ show: false });
+      this.props.handleLoad(true);
+      toast(
+        <DailyPloyToast
+          message="Project added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
+    } catch (e) {
+      var errors = e.response.data.errors
+      if (errors && errors.project_name_workspace_uniqueness) {
+        toast(
+          <DailyPloyToast
+            message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      } else if (errors && errors.name) {
+        toast(
+          <DailyPloyToast
+            message={`Project name ${errors.name}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      }
+      else {
+        this.setState({ show: false });
+      }
     }
   };
 
@@ -111,11 +139,16 @@ export default class MenuBar extends Component {
     };
     try {
       const { data } = await post(memberData, "invitations");
-      toast(<DailyPloyToast message="Member added successfully!" status="success" />, { autoClose: 2000 })
+      toast(
+        <DailyPloyToast
+          message="Member added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
       this.setState({ memberShow: false });
-      console.log("member Data", data);
+      this.props.handleLoad(true);
     } catch (e) {
-      console.log("error", e.response);
       this.setState({ memberShow: false });
     }
   };
@@ -137,11 +170,39 @@ export default class MenuBar extends Component {
 
   handleChangeMemberInput = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    let suggestions = [];
+    var searchOptions = this.props.state.isLogedInUserEmailArr.map(
+      user => user.name,
+    );
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = searchOptions.sort().filter(v => regex.test(v));
+    }
+    this.setState({
+      [name]: value,
+      suggestions: suggestions,
+    });
+  };
+
+  selectAutoSuggestion = option => {
+    var filterArr = this.props.state.isLogedInUserEmailArr.filter(
+      user => user.name === option,
+    );
+    var filterProjectIds = filterArr[0].projects.map(project => project.id);
+    let memberRole = filterArr[0].role === "admin" ? "1" : "2";
+    let memberProjects = this.props.state.projects.filter(
+      project => !filterProjectIds.includes(project.id),
+    );
+    this.setState({
+      memberName: filterArr[0].name,
+      memberEmail: filterArr[0].email,
+      memberRole: memberRole,
+      memberWorkingHours: filterArr[0].working_hours,
+      projectsListing: memberProjects,
+    });
   };
 
   handleChangeMemberRadio = e => {
-    console.log("radio", e.target.value);
     this.setState({ memberAccess: e.target.value });
   };
 
@@ -173,6 +234,7 @@ export default class MenuBar extends Component {
     this.setState({
       memberSetShow: true,
       memberShow: true,
+      projectsListing: this.props.state.projects,
     });
   };
 
@@ -197,10 +259,18 @@ export default class MenuBar extends Component {
     } else {
       var disableColor = "#eaeaed";
     }
-    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor, dateTo: null })
-  }
+    this.setState({
+      disabledDateTo: !this.state.disabledDateTo,
+      disableColor: disableColor,
+      dateTo: null,
+    });
+  };
+
+  handleProjectByUser = () => {
+  };
 
   render() {
+    this.handleProjectByUser();
     const { sort, show } = this.state;
     return (
       <>
@@ -254,7 +324,8 @@ export default class MenuBar extends Component {
                           handleChangeMemberInput={this.handleChangeMemberInput}
                           handleChangeMemberRadio={this.handleChangeMemberRadio}
                           addMember={this.addMember}
-                          projects={this.props.state.projects}
+                          projects={this.state.projectsListing}
+                          selectAutoSuggestion={this.selectAutoSuggestion}
                         />
                       ) : null}
                     </Dropdown.Menu>

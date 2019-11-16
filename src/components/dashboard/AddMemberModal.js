@@ -31,6 +31,31 @@ class AddMemberModal extends Component {
     };
   }
 
+  autoSearchSuggestion = () => {
+    return (
+      <>
+        {this.props.state.suggestions ? (
+          <ul>
+            {this.props.state.suggestions.map((option, idx) => {
+              return (
+                <li
+                  key={idx}
+                  onClick={() => this.props.selectAutoSuggestion(option)}>
+                  {option}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </>
+    );
+    // console.log("suggestions 1", this.props.state.suggestions);
+  };
+
+  // selectAutoSuggestion = option => {
+  //   console.log("option", option);
+  // };
+
   render() {
     return (
       <>
@@ -69,6 +94,9 @@ class AddMemberModal extends Component {
                       value={this.props.state.memberName}
                       onChange={this.props.handleChangeMemberInput}
                     />
+                    <div className="auto-search">
+                      {this.autoSearchSuggestion()}
+                    </div>
                   </td>
                   <td>
                     <input

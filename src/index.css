@@ -6,23 +6,27 @@
 .Toastify__progress-bar--default {
   height: 0px;
 }
-.Toastify__close-button{
+.Toastify__close-button {
   padding: 10px;
 }
 
-.Toastify__toast-container{
-  width:auto !important;
+.Toastify__toast-container {
+  width: auto !important;
   min-width: 270px !important;
+  top: 112px !important;
 }
 
-.dailyploy-toast{
+.dailyploy-toast {
   width: 6px;
   height: 40px;
   vertical-align: middle;
 }
-.dailyploy-toast-message{
- padding-left: 10px;
- color: #424242;
+.dailyploy-toast-message {
+  padding-left: 20px;
+  color: #424242;
+  font-weight: 900;
+  font-family: "Roboto";
+  font-size: 15px;
 }
 
 .no-padding {
@@ -53,20 +57,19 @@
   transition: none !important;
 }
 
-textarea:hover, 
+textarea:hover,
 input:hover,
-textarea:active, 
-input:active, 
-textarea:focus, 
+textarea:active,
+input:active,
+textarea:focus,
 input:focus,
 button:focus,
 button:active,
 button:hover,
 label:focus,
 .btn:active,
-.btn.active
-{
-  outline:0px !important;
-  -webkit-appearance:none;
+.btn.active {
+  outline: 0px !important;
+  -webkit-appearance: none;
   box-shadow: none !important;
 }
