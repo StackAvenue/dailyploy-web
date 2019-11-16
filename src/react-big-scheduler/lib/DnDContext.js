@@ -1,4 +1,5 @@
 'use strict';
+var ViewTypes = require("./../../../src/react-big-scheduler/lib/ViewTypes");
 
 Object.defineProperty(exports, "__esModule", {
     value: true
