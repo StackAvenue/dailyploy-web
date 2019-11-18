@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
 // import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
-import Scheduler, { SchedulerData, ViewTypes } from "./../../../src/react-big-scheduler";
+import Scheduler, {
+  SchedulerData,
+  ViewTypes,
+} from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import { post } from "../../utils/API";
 import "../../assets/css/dashboard.scss";
@@ -17,7 +20,7 @@ class Calendar extends Component {
       false,
       false,
       {
-        schedulerWidth: '96%',
+        schedulerWidth: "96%",
         besidesWidth: 20,
         schedulerMaxHeight: 0,
         tableHeaderHeight: 34,
@@ -26,12 +29,12 @@ class Calendar extends Component {
         agendaMaxEventWidth: 100,
 
         dayResourceTableWidth: 218,
-        weekResourceTableWidth: '16%',
+        weekResourceTableWidth: "16%",
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
 
         dayCellWidth: 30,
-        weekCellWidth: '12%',
+        weekCellWidth: "12%",
         monthCellWidth: 80,
         customCellWidth: 80,
 
@@ -45,13 +48,13 @@ class Calendar extends Component {
         nonAgendaSlotMinHeight: 0,
         dayStartFrom: 0,
         dayStopTo: 23,
-        defaultEventBgColor: '#80C5F6',
-        selectedAreaColor: '#7EC2F3',
+        defaultEventBgColor: "#80C5F6",
+        selectedAreaColor: "#7EC2F3",
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#e5e5e54f",
-        summaryColor: '#666',
-        groupOnlySlotColor: '#F8F8F8',
+        summaryColor: "#666",
+        groupOnlySlotColor: "#F8F8F8",
 
         startResizable: true,
         endResizable: true,
@@ -68,19 +71,34 @@ class Calendar extends Component {
         relativeMove: true,
         defaultExpanded: true,
 
-        resourceName: '',
-        taskName: 'Task Name',
-        agendaViewHeader: 'Agenda',
-        nonAgendaDayCellHeaderFormat: 'ha',
+        resourceName: "",
+        taskName: "Task Name",
+        agendaViewHeader: "Agenda",
+        nonAgendaDayCellHeaderFormat: "ha",
         nonAgendaOtherCellHeaderFormat: "D ddd",
-        eventItemPopoverDateFormat: 'MMM D',
+        eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
         calenderViewType: "dropdown",
 
         views: [
-          { viewName: 'Day', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false },
-          { viewName: 'Week', viewType: ViewTypes.Week, showAgenda: false, isEventPerspective: false },
-          { viewName: 'Month', viewType: ViewTypes.Month, showAgenda: false, isEventPerspective: false },
+          {
+            viewName: "Day",
+            viewType: ViewTypes.Day,
+            showAgenda: false,
+            isEventPerspective: false,
+          },
+          {
+            viewName: "Week",
+            viewType: ViewTypes.Week,
+            showAgenda: false,
+            isEventPerspective: false,
+          },
+          {
+            viewName: "Month",
+            viewType: ViewTypes.Month,
+            showAgenda: false,
+            isEventPerspective: false,
+          },
         ],
       },
     );
@@ -97,33 +115,34 @@ class Calendar extends Component {
   }
 
   calculateResouceHeight = () => {
-    let resourcesLength = this.props.resources.length
+    let resourcesLength = this.props.resources.length;
     let sceenHeight = window.screen.height;
-    let finalSceenHeight = sceenHeight - (((sceenHeight / 10) * 30) / 10)
-    let heights = new Map()
-    heights.set(0, finalSceenHeight)
-    heights.set(1, finalSceenHeight)
-    heights.set(2, finalSceenHeight / 2)
-    heights.set(3, finalSceenHeight / 3)
-    heights.set(4, finalSceenHeight / 4)
-    heights.set(5, finalSceenHeight / 5)
-    heights.set(6, finalSceenHeight / 6)
-    let height = heights.get(resourcesLength)
+    let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 30) / 10;
+    let heights = new Map();
+    heights.set(0, finalSceenHeight);
+    heights.set(1, finalSceenHeight);
+    heights.set(2, finalSceenHeight / 2);
+    heights.set(3, finalSceenHeight / 3);
+    heights.set(4, finalSceenHeight / 4);
+    heights.set(5, finalSceenHeight / 5);
+    heights.set(6, finalSceenHeight / 6);
+    let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 50
+      return 50;
     }
-    return height
-  }
+    return height;
+  };
 
   async componentDidMount() {
     this.renderData();
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevProps.events !== this.props.events ||
+    if (
+      prevProps.events !== this.props.events ||
       prevProps.resources !== this.props.resources
     ) {
-      this.renderData()
+      this.renderData();
     }
   }
 
@@ -149,7 +168,7 @@ class Calendar extends Component {
     }
 
     if (isCurrentDate) {
-      style.borderTop = "4px solid #33a1ff"
+      style.borderTop = "4px solid #33a1ff";
     }
 
     return (
@@ -199,36 +218,51 @@ class Calendar extends Component {
             toggleExpandFunc={this.toggleExpandFunc}
             leftCustomHeader={leftCustomHeader}
             eventItemTemplateResolver={this.eventItemTemplateResolver}
-            eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
+            eventItemPopoverTemplateResolver={
+              this.eventItemPopoverTemplateResolver
+            }
           />
         </div>
       </div>
     );
   }
-  eventItemPopoverTemplateResolver = (schedulerData, eventItem, title, start, end, statusColor) => {
-    let totalSeconds = end.diff(start, 'seconds')
+  eventItemPopoverTemplateResolver = (
+    schedulerData,
+    eventItem,
+    title,
+    start,
+    end,
+    statusColor,
+  ) => {
+    let totalSeconds = end.diff(start, "seconds");
     totalSeconds = Number(totalSeconds);
     var h = Math.floor(totalSeconds / 3600);
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.floor(totalSeconds % 3600 % 60);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
 
-    var timeDiff = ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + "h";
+    var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
     return (
       <div className="event-task-hover">
         <div className="title">
-          <span className="" title={title}>{title}</span>
+          <span className="" title={title}>
+            {title}
+          </span>
         </div>
         <div className="project">
-          <div className="status-dot d-inline-block" style={{ backgroundColor: `${eventItem.bgColor}` }}></div>
+          <div
+            className="status-dot d-inline-block"
+            style={{ backgroundColor: `${eventItem.bgColor}` }}></div>
           <div className="d-inline-block">{eventItem.projectName}</div>
         </div>
         <div className="time">
-          <div className="d-inline-block">{start.format('HH:mm')}-{end.format('HH:mm')}</div>
+          <div className="d-inline-block">
+            {start.format("HH:mm")}-{end.format("HH:mm")}
+          </div>
           <div className="d-inline-block pull-right">{timeDiff}</div>
         </div>
       </div>
     );
-  }
+  };
 
   prevClick = schedulerData => {
     schedulerData.prev();
@@ -236,7 +270,10 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   nextClick = schedulerData => {
@@ -245,11 +282,14 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   onViewChange = (schedulerData, view) => {
-    var newSchedulerData = new SchedulerData(schedulerData)
+    var newSchedulerData = new SchedulerData(schedulerData);
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
@@ -259,7 +299,10 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   onSelectDate = (schedulerData, date) => {
@@ -290,7 +333,7 @@ class Calendar extends Component {
   };
 
   newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-    this.props.setAddTaskDetails(slotId, start, end)
+    this.props.setAddTaskDetails(slotId, start, end);
   };
 
   updateEventStart = (schedulerData, event, newStart) => {
@@ -374,7 +417,7 @@ class Calendar extends Component {
       schedulerData,
       event,
     );
-    titleText = titleText[0].toUpperCase() + titleText.slice(1)
+    titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start).format("HH:mm");
     var end = moment(event.end).format("HH:mm");
     let divStyle = {
@@ -387,9 +430,13 @@ class Calendar extends Component {
 
     if (schedulerData.viewType === 0) {
       return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle} >
+        <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
-            <div className="col-md-12 item-heading text-wraper rk" style={{ padding: "7px 7px 0px 7px" }}>{titleText}</div>
+            <div
+              className="col-md-12 item-heading text-wraper rk"
+              style={{ padding: "7px 7px 0px 7px" }}>
+              {titleText}
+            </div>
             <div className="col-md-12 no-padding">
               <div className="col-md-6 no-padding d-inline-block item-time pull-right text-right">
                 {this.getTimeDifference(moment(event.start), moment(event.end))}
@@ -402,7 +449,11 @@ class Calendar extends Component {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
-            <div className="col-md-12 item-heading text-wraper" style={{ padding: "5px 5px 0px 5px" }}>{titleText}</div>
+            <div
+              className="col-md-12 item-heading text-wraper"
+              style={{ padding: "5px 5px 0px 5px" }}>
+              {titleText}
+            </div>
             <div className="col-md-12 no-padding">
               <div className="col-md-6 no-padding d-inline-block item-time">
                 {`${start} - ${end}`}
@@ -418,7 +469,11 @@ class Calendar extends Component {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
-            <div className="col-md-12 item-heading text-wraper" style={{ padding: "5px 5px 0px 5px" }}>{titleText}</div>
+            <div
+              className="col-md-12 item-heading text-wraper"
+              style={{ padding: "5px 5px 0px 5px" }}>
+              {titleText}
+            </div>
           </div>
         </div>
       );
@@ -426,13 +481,13 @@ class Calendar extends Component {
   };
 
   getTimeDifference = (start, end) => {
-    let totalSeconds = end.diff(start, 'seconds')
+    let totalSeconds = end.diff(start, "seconds");
     totalSeconds = Number(totalSeconds);
     var h = Math.floor(totalSeconds / 3600);
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.floor(totalSeconds % 3600 % 60);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
     return h + "h" + ":" + m + "m";
-  }
+  };
 
   toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId);

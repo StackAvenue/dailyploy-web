@@ -173,18 +173,19 @@ class ShowMembers extends Component {
 
   displayProjects = projects => {
     let arr = projects.map(project => project.name);
-    var projectShow;
-    let count;
+    // let arr = ["jskjs", "sjsks", "jsksks", "skskksk"];
+    let projectShow = arr.length > 1 ? arr[0] + "," + arr[1] : arr[0];
+    return projectShow;
+  };
+
+  countProject = projects => {
+    let arr = projects.map(project => project.name);
+    var count;
     if (arr.length > 2) {
       count = arr.length - 2;
     }
-    if (arr.length > 2) {
-      projectShow =
-        arr.length > 1 ? arr[0] + "," + arr[1] + " +" + count : arr[0];
-    } else {
-      projectShow = arr.length > 1 ? arr[0] + "," + arr[1] : arr[0];
-    }
-    return projectShow;
+    console.log("count", count);
+    return count;
   };
 
   handleSearchFilterResult = data => {
@@ -310,7 +311,8 @@ class ShowMembers extends Component {
                       {member.workingHours ? member.workingHours : "8"} hours
                     </td>
                     <td className="text-titlize">
-                      {this.displayProjects(member.projects)}
+                      <span>{this.displayProjects(member.projects)}</span>
+                      <span>{this.countProject(member.projects)}</span>
                     </td>
                     <td className={"text-titlize"}>
                       {/* <p
@@ -322,8 +324,8 @@ class ShowMembers extends Component {
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
-                          <p className="text-blue">Invited</p>
-                        )}
+                        <p className="text-blue">Invited</p>
+                      )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td></td>
