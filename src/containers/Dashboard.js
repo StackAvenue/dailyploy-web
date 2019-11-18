@@ -80,8 +80,7 @@ class Dashboard extends Component {
     if (
       prevState.taskStartDate !== this.state.taskStartDate ||
       prevState.taskFrequency !== this.state.taskFrequency ||
-      prevState.newTask !== this.state.newTask ||
-      prevState.isLoading !== this.state.isLoading
+      prevState.newTask !== this.state.newTask
     ) {
       try {
         const { data } = await get(
@@ -98,12 +97,14 @@ class Dashboard extends Component {
                 ? user.name + " (Me)"
                 : user.name,
           };
-          var tasks = user.date_formatted_tasks.map(task => {
-            var task = task.tasks.map(task => {
+          var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
+            var task = dateWiseTasks.tasks.map(task => {
+              var startDateTime = moment(dateWiseTasks.date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
+              var endDateTime = moment(dateWiseTasks.date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
               var tasksObj = {
-                id: task.id,
-                start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
-                end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
+                id: task.id + "-" + index,
+                start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
+                end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
                 resourceId: user.id,
                 title: task.name,
                 bgColor: task.project.color_code,
@@ -115,14 +116,12 @@ class Dashboard extends Component {
           });
           return { usersObj, tasks };
         });
-
-        var tasksResources = tasksUser.sort(user => this.state.userId == user.id).map(user => user.usersObj);
-        tasksResources.sort(function (x, y) { return x.id == this.state.userId ? -1 : y.id == this.state.userId ? 1 : 0; });
+        var tasksResources = tasksUser.map(user => user.usersObj)
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+        // tasksResources.sort(function (x, y) { return x.id === this.state.userId ? -1 : y.id === this.state.userId ? 1 : 0; });
         this.setState({
           resources: tasksResources,
-          events: taskEvents,
-          isLoading: false,
+          events: taskEvents
         });
       } catch (e) {
       }
@@ -195,12 +194,14 @@ class Dashboard extends Component {
               ? user.name + " (Me)"
               : user.name,
         };
-        var tasks = user.date_formatted_tasks.map(task => {
-          var task = task.tasks.map(task => {
+        var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
+          var task = dateWiseTasks.tasks.map(task => {
+            var startDateTime = moment(dateWiseTasks.date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
+            var endDateTime = moment(dateWiseTasks.date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
             var tasksObj = {
-              id: task.id,
-              start: moment(task.start_datetime).format("YYYY-MM-DD HH:mm"),
-              end: moment(task.end_datetime).format("YYYY-MM-DD HH:mm"),
+              id: task.id + "-" + index,
+              start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
+              end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
               resourceId: user.id,
               title: task.name,
               bgColor: task.project.color_code,
@@ -213,7 +214,7 @@ class Dashboard extends Component {
         return { usersObj, tasks };
       });
       var tasksResources = tasksUser.map(user => user.usersObj)
-      tasksResources.sort(function (x, y) { return x.id == loggedInData.id ? -1 : y.id == loggedInData.id ? 1 : 0; });
+      // tasksResources.sort(function (x, y) { return x.id == loggedInData.id ? -1 : y.id == loggedInData.id ? 1 : 0; });
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
     } catch (e) {
       console.log("error", e);
@@ -233,8 +234,6 @@ class Dashboard extends Component {
     });
 
     this.props.handleLoading(false);
-
-    // console.log("Did Mount");
   }
 
   getWorkspaceParams = () => {
@@ -276,7 +275,7 @@ class Dashboard extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
-      this.setState({ show: false, isLoading: true, newTask: task });
+      this.setState({ show: false, newTask: task });
     } catch (e) {
       this.setState({ show: false });
     }
