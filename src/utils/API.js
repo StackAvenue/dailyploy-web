@@ -25,6 +25,10 @@ export const post = async (data, basePath) => {
   return await axios.post(`/${basePath}`, data, headerConfig);
 };
 
+export const put = async (data, basePath) => {
+  return await axios.put(`/${basePath}`, data, headerConfig);
+};
+
 export const mockPost = async (data, basePath) => {
   return await axios.post(`${URL2}/${basePath}`, data, headerConfig);
 };

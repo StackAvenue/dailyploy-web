@@ -271,9 +271,8 @@ class Calendar extends Component {
   };
 
   eventClicked = (schedulerData, event) => {
-    alert(
-      `You just clicked an event: {id: ${event.id}, title: ${event.title}}`,
-    );
+    var taskId = event.id.split('-')[0]
+    this.props.editAddTaskDetails(taskId, event)
   };
 
   ops1 = (schedulerData, event) => {

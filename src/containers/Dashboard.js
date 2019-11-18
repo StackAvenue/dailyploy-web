@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, post, logout } from "../utils/API";
+import { get, post, put, logout } from "../utils/API";
 import moment from "moment";
 import Header from "../components/dashboard/Header";
 import "../assets/css/dashboard.scss";
@@ -36,7 +36,7 @@ class Dashboard extends Component {
       dateTo: new Date(),
       timeFrom: "",
       timeTo: "",
-      comments: "",
+      comments: null,
       userId: "",
       userName: "",
       workspaces: [],
@@ -52,8 +52,12 @@ class Dashboard extends Component {
       taskStartDate: moment().format("YYYY-MM-DD"),
       calenderTaskModal: false,
       newTask: {},
+      project: {},
+      taskId: "",
+      selectedMembers: [],
       user: "",
       modalMemberSearchOptions: [],
+      taskButton: "Add",
     };
   }
 
@@ -109,6 +113,8 @@ class Dashboard extends Component {
                 title: task.name,
                 bgColor: task.project.color_code,
                 projectName: task.project.name,
+                comments: task.comments,
+                projectId: task.project.id,
               };
               return tasksObj;
             });
@@ -206,6 +212,8 @@ class Dashboard extends Component {
               title: task.name,
               bgColor: task.project.color_code,
               projectName: task.project.name,
+              comments: task.comments,
+              projectId: task.project.id,
             };
             return tasksObj;
           });
@@ -230,7 +238,9 @@ class Dashboard extends Component {
       isLogedInUserEmailArr: emailArr,
       resources: tasksResources,
       events: taskEvents,
-      user: user
+      user: user,
+      selectedMembers: [loggedInData],
+      taskUser: [loggedInData.id],
     });
 
     this.props.handleLoading(false);
@@ -251,17 +261,7 @@ class Dashboard extends Component {
   };
 
   addTask = async () => {
-    var startDateTime = moment(this.state.dateFrom).format("YYYY-MM-DD") + " " + this.state.timeFrom
-    var endDateTime = moment(this.state.dateTo).format("YYYY-MM-DD") + " " + this.state.timeTo
-    const taskData = {
-      task: {
-        name: this.state.taskName,
-        member_ids: this.state.taskUser,
-        start_datetime: new Date(startDateTime),
-        end_datetime: new Date(endDateTime),
-        comments: this.state.comments,
-      },
-    };
+    const taskData = this.taskDetails()
     try {
       const { data } = await post(
         taskData,
@@ -280,6 +280,43 @@ class Dashboard extends Component {
       this.setState({ show: false });
     }
   };
+
+  editTask = async () => {
+    const taskData = this.taskDetails()
+    try {
+      const { data } = await put(
+        taskData,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks/${this.state.taskId}`,
+      );
+      var task = data.task
+      toast(
+        <DailyPloyToast
+          message="Task Updated successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
+      this.setState({ show: false, newTask: task });
+    } catch (e) {
+      this.setState({ show: false });
+    }
+  };
+
+  taskDetails = () => {
+    var startDateTime = moment(this.state.dateFrom).format("YYYY-MM-DD") + " " + this.state.timeFrom
+    var endDateTime = moment(this.state.dateTo).format("YYYY-MM-DD") + " " + this.state.timeTo
+    var taskData = {
+      task: {
+        name: this.state.taskName,
+        member_ids: this.state.taskUser,
+        start_datetime: new Date(startDateTime),
+        end_datetime: new Date(endDateTime),
+        comments: this.state.comments,
+      },
+    };
+    return taskData;
+  }
+
 
   onSelectSort = value => {
     this.setState({ sort: value });
@@ -307,6 +344,18 @@ class Dashboard extends Component {
     this.setState({
       show: false,
       taskUser: [],
+      taskButton: "Add",
+      modalMemberSearchOptions: [],
+      dateFrom: new Date(),
+      dateTo: new Date(),
+      timeFrom: "",
+      timeTo: "",
+      taskId: "",
+      selectedMembers: [],
+      taskName: "",
+      projectId: "",
+      project: {},
+      comments: ""
     });
   };
 
@@ -336,8 +385,12 @@ class Dashboard extends Component {
     this.setState({ [name]: userIdArr });
   };
 
-  handleMemberSelect = memberIds => {
-    this.setState({ taskUser: memberIds });
+  handleMemberSelect = members => {
+    var memberIds = members.map(member => member.id)
+    this.setState({
+      taskUser: memberIds,
+      selectedMembers: members
+    });
   };
 
   handleInputChange = e => {
@@ -345,8 +398,11 @@ class Dashboard extends Component {
     this.setState({ [name]: value });
   };
 
-  handleProjectSelect = projectId => {
-    this.setState({ projectId: projectId })
+  handleProjectSelect = option => {
+    this.setState({
+      projectId: option.id,
+      project: option,
+    })
   }
 
   classNameRoute = () => {
@@ -369,13 +425,55 @@ class Dashboard extends Component {
 
   setAddTaskDetails = (memberId, startDate, endDate) => {
     let members = this.memberSearchOptions(memberId)
+    var selectedMembers = this.state.users.filter(member => memberId === member.id)
     if (this.state.user.role === 'admin' || this.state.userId == memberId) {
       this.setState({
         taskUser: [memberId],
+        selectedMembers: selectedMembers,
+        show: true,
+        calenderTaskModal: true,
+        project: {},
+        projectId: "",
+        taskId: "",
+        modalMemberSearchOptions: members,
+        dateFrom: new Date(startDate), dateTo: new Date(endDate),
+      })
+    }
+  }
+
+  editAddTaskDetails = async (taskId, event) => {
+    let members = this.memberSearchOptions(event.resourceId)
+    var project = this.state.projects.filter(project => project.id === event.projectId)
+    var eventTasks = this.state.events.filter(taskEvent => taskEvent.id === event.id)
+    var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
+    var selectedMembers = this.state.users.filter(member => memberIds.includes(member.id))
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`,
+      );
+      var startDate = new Date(data.start_datetime)
+      var endDate = new Date(data.end_datetime)
+      var startTime = moment(data.start_datetime).format("HH:mm:ss")
+      var endTime = moment(data.end_datetime).format("HH:mm:ss")
+    } catch (e) {
+    }
+    if (this.state.user.role === 'admin' || this.state.userId == event.resourceId) {
+      this.setState({
+        taskButton: "Save",
+        taskUser: memberIds,
         show: true,
         calenderTaskModal: true,
         modalMemberSearchOptions: members,
-        dateFrom: new Date(startDate), dateTo: new Date(endDate),
+        dateFrom: startDate,
+        dateTo: endDate,
+        timeFrom: startTime,
+        timeTo: endTime,
+        taskId: taskId,
+        selectedMembers: selectedMembers,
+        taskName: event.title,
+        projectId: event.projectId,
+        project: project[0],
+        comments: event.comments
       })
     }
   }
@@ -398,8 +496,8 @@ class Dashboard extends Component {
           events={this.state.events}
           updateTaskDateView={this.updateTaskDateView}
           setAddTaskDetails={this.setAddTaskDetails}
+          editAddTaskDetails={this.editAddTaskDetails}
           show={this.state.calenderTaskModal}
-          handleMemberSelect={this.handleMemberSelect}
           closeTaskModal={this.closeTaskModal}
           handleProjectSelect={this.handleProjectSelect}
         />
@@ -421,6 +519,7 @@ class Dashboard extends Component {
             handleTimeTo={this.handleTimeTo}
             users={this.state.users}
             addTask={this.addTask}
+            editTask={this.editTask}
             handleMemberSelect={this.handleMemberSelect}
             handleProjectSelect={this.handleProjectSelect}
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}

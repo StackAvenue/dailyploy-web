@@ -5,6 +5,7 @@ import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
+import moment from "moment";
 
 class AddTaskModal extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class AddTaskModal extends Component {
 
   selectProject = (option) => {
     this.setState({ project: option, projectSuggestions: [], projectSearchText: '' })
-    this.props.handleProjectSelect(option.id)
+    this.props.handleProjectSelect(option)
   }
 
   onSearchProjectTextChange = (e) => {
@@ -52,11 +53,11 @@ class AddTaskModal extends Component {
   }
 
   removeSelectedTag = (index) => {
-    var selectedMembers = this.state.selectedMembers
+    var selectedMembers = this.props.state.selectedMembers
     selectedMembers = selectedMembers.filter((_, idx) => idx !== index)
-    var memberIds = selectedMembers.map(user => user.id)
-    this.setState({ selectedMembers: selectedMembers })
-    this.props.handleMemberSelect(memberIds)
+    // var memberIds = selectedMembers.map(user => user.id)
+    // this.setState({ selectedMembers: selectedMembers })
+    this.props.handleMemberSelect(selectedMembers)
   }
 
   renderProjectSearchSuggestion = () => {
@@ -79,7 +80,7 @@ class AddTaskModal extends Component {
   }
 
   renderSelectedProject = () => {
-    var project = this.state.project;
+    var project = this.props.state.project;
     if (project != "") {
       return (
         <span>
@@ -118,7 +119,7 @@ class AddTaskModal extends Component {
     return (
       <>
         {
-          this.state.selectedMembers.map((option, index) => {
+          this.props.state.selectedMembers.map((option, index) => {
             return (
               <div className="select-member" key={index}>
                 <div className="member-title d-inline-block">{this.initalChar(option.name)}</div>
@@ -137,18 +138,18 @@ class AddTaskModal extends Component {
     let membersSuggestions = []
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
-      membersSuggestions = this.props.modalMemberSearchOptions.sort().filter(m => regex.test(m.name) && !(this.state.selectedMembers.includes(m)))
+      membersSuggestions = this.props.modalMemberSearchOptions.sort().filter(m => regex.test(m.name) && !(this.props.state.selectedMembers.includes(m)))
     } else {
     }
     this.setState({ membersSuggestions: membersSuggestions, memberSearchText: value });
   }
 
   selectMemebrSuggestion = (option) => {
-    var newSelectedMembers = new Array(...this.state.selectedMembers)
+    var newSelectedMembers = new Array(...this.props.state.selectedMembers)
     newSelectedMembers.push(option)
-    var memberIds = newSelectedMembers.map(user => user.id)
-    this.setState({ selectedMembers: newSelectedMembers, membersSuggestions: [], memberSearchText: '' })
-    this.props.handleMemberSelect(memberIds)
+    // var memberIds = newSelectedMembers.map(user => user.id)
+    this.setState({ membersSuggestions: [], memberSearchText: '' })
+    this.props.handleMemberSelect(newSelectedMembers)
   }
 
   initalChar = (str) => {
@@ -167,8 +168,8 @@ class AddTaskModal extends Component {
           style={{ paddingTop: "2.5%" }}
         >
           <div className="row no-margin">
-            <div className="col-md-12 header">
-              <span>Add New Task</span>
+            <div className="col-md-12 header text-titlize">
+              <span> {props.state.taskButton === "Add" ? "Add New Task" : props.state.taskName}</span>
               <button
                 className="btn btn-link float-right"
                 onClick={props.closeTaskModal}
@@ -185,7 +186,7 @@ class AddTaskModal extends Component {
                   <input
                     type="text"
                     name="taskName"
-                    // value={props.state.taskName}
+                    value={props.state.taskName}
                     onChange={props.handleInputChange}
                     placeholder="Task name..."
                     className="form-control"
@@ -205,7 +206,7 @@ class AddTaskModal extends Component {
                       </div>
                       <input className="d-inline-block"
                         type="text" value={this.state.projectSearchText}
-                        placeholder={this.state.project ? "" : "Select Project"}
+                        placeholder={this.props.state.project ? "" : "Select Project"}
                         onClick={this.onClickProjectInput}
                         onChange={this.onSearchProjectTextChange}
                       />
@@ -300,6 +301,7 @@ class AddTaskModal extends Component {
                       <div className="col-md-9 d-inline-block" style={{ paddingRight: "0" }}>
                         <TimePicker
                           placeholder="Select"
+                          // value={moment(props.state.dateFrom)}
                           showSecond={false}
                           onChange={props.handleTimeFrom}
                           format={props.format}
@@ -310,6 +312,7 @@ class AddTaskModal extends Component {
                       <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                       <div className="col-md-9 d-inline-block" style={{ paddingRight: "0" }}>
                         <TimePicker
+                          // value={moment(props.state.dateTo).format("HH:mm")}
                           placeholder="Select"
                           showSecond={false}
                           onChange={props.handleTimeTo}
@@ -326,7 +329,7 @@ class AddTaskModal extends Component {
                 <div className="col-md-10">
                   <textarea
                     name="comments"
-                    // value={props.state.comments}
+                    value={props.state.comments}
                     onChange={props.handleInputChange}
                     className="form-control"
                     rows="3"
@@ -340,9 +343,9 @@ class AddTaskModal extends Component {
                   <button
                     type="button"
                     className="btn col-md-5 button1 btn-primary"
-                    onClick={props.addTask}
+                    onClick={props.state.taskButton === "Add" ? props.addTask : props.editTask}
                   >
-                    Add
+                    {props.state.taskButton}
                   </button>
                   <button
                     type="button"
