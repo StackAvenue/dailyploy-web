@@ -5,6 +5,8 @@ import { get, logout, mockGet } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 import moment from "moment";
+import AddMemberModal from "./AddMemberModal";
+import EditMemberModal from "./Member/EditMemberModal";
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -25,6 +27,17 @@ class ShowMembers extends Component {
       worksapceUsers: "",
       worksapceUser: [],
       isLoading: false,
+      isProjectListShow: false,
+      projectShowMemberId: null,
+      show: false,
+      setShow: false,
+      memberName: null,
+      memberEmail: null,
+      memberAccess: null,
+      memberRole: null,
+      memberHours: null,
+      memberProjects: null,
+      isDeleteShow: false,
     };
   }
   logout = async () => {
@@ -165,6 +178,7 @@ class ShowMembers extends Component {
         }
       }
     }
+    this.setState({ isDeleteShow: true });
   };
 
   handleCheck = e => {
@@ -180,12 +194,53 @@ class ShowMembers extends Component {
 
   countProject = projects => {
     let arr = projects.map(project => project.name);
-    var count;
+    // let arr = ["jskjs", "sjsks", "jsksks", "skskksk"];
+
+    let count;
     if (arr.length > 2) {
       count = arr.length - 2;
     }
-    console.log("count", count);
-    return count;
+    let concatCount = "+" + count;
+    if (!count) {
+      return null;
+    } else {
+      return concatCount;
+    }
+  };
+
+  countProjectView = (e, id) => {
+    console.log("member id", id);
+    this.setState({ isProjectListShow: true, projectShowMemberId: id });
+  };
+
+  countProjectViewClose = () => {
+    this.setState({ isProjectListShow: false });
+  };
+
+  handleClose = () => {
+    this.setState({
+      show: false,
+    });
+  };
+
+  handleShow = (e, member) => {
+    this.setState({
+      setShow: true,
+      show: true,
+      projectShowMemberId: member.id,
+      memberName: member.name,
+      memberEmail: member.email,
+      memberRole: member.role,
+      memberHours: member.working_hours,
+      memberProjects: member.projects,
+    });
+  };
+
+  editMemberHandleChange = e => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value,
+    });
   };
 
   handleSearchFilterResult = data => {
@@ -312,15 +367,31 @@ class ShowMembers extends Component {
                     </td>
                     <td className="text-titlize">
                       <span>{this.displayProjects(member.projects)}</span>
-                      <span>{this.countProject(member.projects)}</span>
+                      <span
+                        className="project-count"
+                        style={{ pointer: "cursor" }}
+                        onMouseMove={e => this.countProjectView(e, member.id)}>
+                        {this.countProject(member.projects)}
+                      </span>
+                      {this.state.isProjectListShow &&
+                      this.state.projectShowMemberId === member.id ? (
+                        <div className="project-count-list-show">
+                          <div className="close-div">
+                            <a onClick={this.countProjectViewClose}>
+                              <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                          <div className="project-body-box">
+                            {member.projects.map(project => (
+                              <div className="project-body-text">
+                                {project.name}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
                     </td>
                     <td className={"text-titlize"}>
-                      {/* <p
-                            className={
-                              member.invited ? "text-blue" : "text-green"
-                            }>
-                            {}
-                          </p> */}
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
@@ -330,7 +401,20 @@ class ShowMembers extends Component {
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td></td>
                     <td>
-                      <i className="fas fa-pencil-alt"></i>
+                      <button
+                        className="btn btn-link edit-btn"
+                        onClick={e => this.handleShow(e, member)}>
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                      {this.state.show &&
+                      this.state.projectShowMemberId === member.id ? (
+                        <EditMemberModal
+                          show={this.state.show}
+                          handleClose={this.handleClose}
+                          state={this.state}
+                          editMemberHandleChange={this.editMemberHandleChange}
+                        />
+                      ) : null}
                     </td>
                   </tr>
                 );

@@ -7,6 +7,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
 import Sidebar from "./Sidebar";
+import moment from "moment";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -41,7 +42,12 @@ class ShowProjects extends Component {
     if (arr.length >= 4) {
       count = arr.length - 4;
     }
-    return count;
+    let showCount = count ? (
+      <div className="user-block" style={{ backgroundColor: "#33a1ff" }}>
+        <span>+{count}</span>
+      </div>
+    ) : null;
+    return showCount;
   };
   logout = async () => {
     await logout();
@@ -154,22 +160,26 @@ class ShowProjects extends Component {
     if (!date) {
       return undefined;
     } else {
-      var d = date.split("-");
-      var date1 = new Date(d[0], d[1], d[2]);
-      return date1;
+      var d = moment(date).format("YYYY-MM-DD");
+      return d;
     }
   };
 
   monthDiff = (d1, d2) => {
-    if (d2 === undefined) {
-      return 0;
+    var dayDuration = moment(d2).diff(d1, "days");
+    var monthDuration = moment(d2).diff(d1, "months");
+    var yearDuration = moment(d2).diff(d1, "year");
+    let duration;
+    if (dayDuration > 30) {
+      duration = monthDuration + " months";
+    } else if (dayDuration === 0) {
+      duration = "---";
+    } else if (monthDuration > 12) {
+      duration = yearDuration + " year";
     } else {
-      var months;
-      months = (d2.getFullYear() - d1.getFullYear()) * 12;
-      months -= d1.getMonth() + 1;
-      months += d2.getMonth();
-      return months <= 0 ? 0 : months;
+      duration = dayDuration + " days";
     }
+    return duration;
   };
 
   classNameRoute = () => {
@@ -312,7 +322,6 @@ class ShowProjects extends Component {
                               this.getDate(project.start_date),
                               this.getDate(project.end_date),
                             )}
-                            &nbsp; months
                           </td>
                           <td>
                             <span>
@@ -332,17 +341,9 @@ class ShowProjects extends Component {
                                 })}
                             </span>
                             <span>
-                              <div
-                                key={index}
-                                className="user-block"
-                                style={{ backgroundColor: "#33a1ff" }}>
-                                <span>
-                                  +
-                                  {this.countIncrese(
-                                    project.members.map(user => user.name),
-                                  )}
-                                </span>
-                              </div>
+                              {this.countIncrese(
+                                project.members.map(user => user.name),
+                              )}
                             </span>
                           </td>
                         </tr>

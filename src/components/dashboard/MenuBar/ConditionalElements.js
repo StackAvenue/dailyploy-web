@@ -6,10 +6,7 @@ const ConditionalElements = props => {
   let classNameRoute;
   let routeName = props.classNameRoute();
   if (routeName === "dashboardTrue") {
-    classNameRoute = (
-      <>
-      </>
-    );
+    classNameRoute = <></>;
   } else if (routeName === "analysisTrue") {
     classNameRoute = <></>;
   } else if (routeName === "projectsTrue") {
@@ -23,9 +20,11 @@ const ConditionalElements = props => {
   } else if (routeName === "membersTrue") {
     classNameRoute = (
       <>
-        <div className="col-md-2 d-inline-block">
-          <button className="btn btn-primary menubar-button">Delete</button>
-        </div>
+        {props.isDeleteShow ? (
+          <div className="col-md-2 d-inline-block">
+            <button className="btn btn-primary menubar-button">Delete</button>
+          </div>
+        ) : null}
       </>
     );
   } else {

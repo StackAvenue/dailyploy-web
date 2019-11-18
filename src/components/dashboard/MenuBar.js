@@ -70,11 +70,10 @@ export default class MenuBar extends Component {
     try {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
-  componentDidUpdate() { }
+  componentDidUpdate() {}
 
   addProject = async () => {
     const projectData = {
@@ -101,7 +100,7 @@ export default class MenuBar extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
     } catch (e) {
-      var errors = e.response.data.errors
+      var errors = e.response.data.errors;
       if (errors && errors.project_name_workspace_uniqueness) {
         toast(
           <DailyPloyToast
@@ -118,8 +117,7 @@ export default class MenuBar extends Component {
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
         );
-      }
-      else {
+      } else {
         this.setState({ show: false });
       }
     }
@@ -266,8 +264,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => {
-  };
+  handleProjectByUser = () => {};
 
   render() {
     this.handleProjectByUser();
@@ -284,6 +281,7 @@ export default class MenuBar extends Component {
               <div className="col-md-6 ml-auto text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
+                  isDeleteShow={this.props.state.isDeleteShow}
                 />
                 <div className="col-md-2 d-inline-block">
                   <Dropdown>

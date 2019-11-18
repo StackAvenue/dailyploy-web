@@ -434,6 +434,102 @@
   }
 }
 
+.edit-member-modal {
+  .modal-content {
+    width: 658px;
+    .header {
+      padding: 17px 0 17px 49px !important;
+      span {
+        font-size: 20px;
+        font-weight: bold;
+        color: $color-text1 !important;
+        font-family: $font-family-roboto !important;
+      }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+    .body {
+      padding: 5px 49px 10px 49px !important;
+      .input-row {
+        padding-top: 20px !important;
+        .label {
+          font-family: $font-family-roboto;
+          font-size: 15px;
+          color: $color-text3;
+        }
+        input {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text1 !important;
+          padding: 0.375rem 0.75rem;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        select {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text1 !important;
+          padding: 0.375rem 0.75rem;
+          background-color: #fff;
+          width: 100%;
+        }
+        textarea {
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        .textarea {
+          height: 90px !important;
+        }
+        .btn-color-picker {
+          width: 35px !important;
+          height: 35px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+        }
+        .button1 {
+          height: 40px !important;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          border: 0 !important;
+        }
+        .button2 {
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          color: $color-text3 !important;
+          margin-left: 7% !important;
+        }
+      }
+    }
+  }
+}
+
 .rbt-input-multi {
   height: 90px !important;
   overflow-y: scroll !important;
@@ -516,285 +612,285 @@
   font-size: 15px;
   width: 100%;
 }
-.project-modal{
+.project-modal {
   top: 13% !important;
-  .modal-content{
-      width:658px;
-      height: 500px;
-      .header{
-          padding:17px 0 0px 49px !important;
-          span{
-              font-size: 20px;
-              font-weight: bold;
-              color: $color-text1 !important;
-              font-family: $font-family-roboto !important;
-          }
-          button{
-              padding:0 22px 0 0 !important;
-              img{
-                  width: 15px;
-                  height:15px;
-              }
-          }
+  .modal-content {
+    width: 658px;
+    height: 500px;
+    .header {
+      padding: 17px 0 0px 49px !important;
+      span {
+        font-size: 20px;
+        font-weight: bold;
+        color: $color-text1 !important;
+        font-family: $font-family-roboto !important;
       }
-      .body{
-          padding:5px 49px 10px 49px !important;
-          .input-row{
-              padding-top:20px !important;
-              .label{
-                  font-family: $font-family-roboto;
-                  font-size:15px;
-                  color:$color-text3;
-              }
-              input{
-                  height:40px !important;
-                  border-radius:5px !important;
-                  border:1px solid $color-borders ;
-                  font-size: 15px !important;
-                  font-family: $font-family-roboto !important;
-                  color:$color-text3 !important;
-                  padding: .375rem .75rem;
-                  &::placeholder{
-                      font-size: 15px !important;
-                      font-family: $font-family-roboto !important;
-                      color:$color-text3 !important;
-                  }
-              }
-              select{
-                  height:40px !important;
-                  border-radius:5px !important;
-                  border:1px solid $color-borders ;
-                  font-size: 15px !important;
-                  font-family: $font-family-roboto !important;
-                  color:$color-text3 !important;
-                  padding: .375rem .75rem;
-              }
-              textarea{
-                  font-size: 15px !important;
-                  font-family: $font-family-roboto !important;
-                  color:$color-text3 !important;
-                  &::placeholder{
-                      font-size: 15px !important;
-                      font-family: $font-family-roboto !important;
-                      color:$color-text3 !important;
-                  }
-              }
-              .textarea{
-                  height:90px !important;
-              }
-              .btn-color-picker{
-                  width:35px !important;
-                  height: 35px !important;
-                  border-radius: 5px !important;
-                  border:solid 1px $color-borders !important;
-              }
-              .button1{
-                  height: 40px !important;
-                  border-radius: 5px !important;
-                  background-color: $color-brand3 !important;
-                  font-family: $font-family-roboto !important;
-                  font-size: 17px !important;
-                  font-weight: 500 !important;
-                  border:0 !important;
-              }
-              .button2{
-                  border-radius: 5px !important;
-                  border: solid 1px $color-brand3 !important;
-                  background-color: $color-white !important;
-                  font-family: $font-family-roboto !important;
-                  font-size: 17px !important;
-                  font-weight: 500 !important;
-                  color: $color-text3 !important;
-                  margin-left: 7% !important;
-              }
-          }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
+        }
       }
+    }
+    .body {
+      padding: 5px 49px 10px 49px !important;
+      .input-row {
+        padding-top: 20px !important;
+        .label {
+          font-family: $font-family-roboto;
+          font-size: 15px;
+          color: $color-text3;
+        }
+        input {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        select {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+        }
+        textarea {
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        .textarea {
+          height: 90px !important;
+        }
+        .btn-color-picker {
+          width: 35px !important;
+          height: 35px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+        }
+        .button1 {
+          height: 40px !important;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          border: 0 !important;
+        }
+        .button2 {
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          color: $color-text3 !important;
+          margin-left: 7% !important;
+        }
+      }
+    }
   }
 }
 
-.task-modal{
-  .modal-content{
-      width:658px;
-      .header{
-          padding:17px 0 0px 49px !important;
-          span{
-              font-size: 20px;
-              font-weight: bold;
-              color: $color-text1 !important;
-              font-family: $font-family-roboto !important;
-          }
-          button{
-              padding:0 22px 0 0 !important;
-              img{
-                  width: 15px;
-                  height:15px;
-              }
-          }
+.task-modal {
+  .modal-content {
+    width: 658px;
+    .header {
+      padding: 17px 0 0px 49px !important;
+      span {
+        font-size: 20px;
+        font-weight: bold;
+        color: $color-text1 !important;
+        font-family: $font-family-roboto !important;
       }
-      .body{
-          padding:5px 49px 10px 49px !important;
-          .input-row{
-              padding-top:20px !important;
-              .label{
-                  font-family: $font-family-roboto;
-                  font-size:15px;
-                  color:$color-text3;
-              }
-              input{
-                  height:40px !important;
-                  border-radius:5px !important;
-                  border:1px solid $color-borders ;
-                  font-size: 15px !important;
-                  font-family: $font-family-roboto !important;
-                  color:$color-text3 !important;
-                  padding: .375rem .75rem;
-                  &::placeholder{
-                      font-size: 15px !important;
-                      font-family: $font-family-roboto !important;
-                      color:$color-text3 !important;
-                  }
-              }
-              select{
-                  height:40px !important;
-                  border-radius:5px !important;
-                  border:1px solid $color-borders ;
-                  font-size: 15px !important;
-                  font-family: $font-family-roboto !important;
-                  color:$color-text3 !important;
-                  padding: .375rem .75rem;
-              }
-              textarea{
-                  font-size: 15px !important;
-                  font-family: $font-family-roboto !important;
-                  color:$color-text3 !important;
-                  &::placeholder{
-                      font-size: 15px !important;
-                      font-family: $font-family-roboto !important;
-                      color:$color-text3 !important;
-                  }
-              }
-              .textarea{
-                  height:90px !important;
-              }
-              .btn-color-picker{
-                  width:35px !important;
-                  height: 35px !important;
-                  border-radius: 5px !important;
-                  border:solid 1px $color-borders !important;
-              }
-              .button1{
-                  height: 40px !important;
-                  border-radius: 5px !important;
-                  background-color: $color-brand3 !important;
-                  font-family: $font-family-roboto !important;
-                  font-size: 17px !important;
-                  font-weight: 500 !important;
-                  border:0 !important;
-              }
-              .button2{
-                  border-radius: 5px !important;
-                  border: solid 1px $color-brand3 !important;
-                  background-color: $color-white !important;
-                  font-family: $font-family-roboto !important;
-                  font-size: 17px !important;
-                  font-weight: 500 !important;
-                  color: $color-text3 !important;
-                  margin-left: 7% !important;
-              }
-          }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
+        }
       }
+    }
+    .body {
+      padding: 5px 49px 10px 49px !important;
+      .input-row {
+        padding-top: 20px !important;
+        .label {
+          font-family: $font-family-roboto;
+          font-size: 15px;
+          color: $color-text3;
+        }
+        input {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        select {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+        }
+        textarea {
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        .textarea {
+          height: 90px !important;
+        }
+        .btn-color-picker {
+          width: 35px !important;
+          height: 35px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+        }
+        .button1 {
+          height: 40px !important;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          border: 0 !important;
+        }
+        .button2 {
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          color: $color-text3 !important;
+          margin-left: 7% !important;
+        }
+      }
+    }
   }
 }
-.member-modal{
-  .modal-content{
-    width:658px;
-    .header{
-        padding:17px 0 0px 49px !important;
-        span{
-            font-size: 20px;
-            font-weight: bold;
-            color: $color-text1 !important;
-            font-family: $font-family-roboto !important;
+.member-modal {
+  .modal-content {
+    width: 658px;
+    .header {
+      padding: 17px 0 0px 49px !important;
+      span {
+        font-size: 20px;
+        font-weight: bold;
+        color: $color-text1 !important;
+        font-family: $font-family-roboto !important;
+      }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
         }
-        button{
-            padding:0 22px 0 0 !important;
-            img{
-                width: 15px;
-                height:15px;
-            }
-        }
+      }
     }
-    .body{
-        padding:5px 49px 10px 49px !important;
-        .input-row{
-            padding-top:20px !important;
-            .label{
-                font-family: $font-family-roboto;
-                font-size:15px;
-                color:$color-text3;
-            }
-            input{
-                height:40px !important;
-                border-radius:5px !important;
-                border:1px solid $color-borders ;
-                font-size: 15px !important;
-                font-family: $font-family-roboto !important;
-                color:$color-text3 !important;
-                padding: .375rem .75rem;
-                &::placeholder{
-                    font-size: 15px !important;
-                    font-family: $font-family-roboto !important;
-                    color:$color-text3 !important;
-                }
-            }
-            select{
-                height:40px !important;
-                border-radius:5px !important;
-                border:1px solid $color-borders ;
-                font-size: 15px !important;
-                font-family: $font-family-roboto !important;
-                color:$color-text3 !important;
-                padding: .375rem .75rem;
-            }
-            textarea{
-                font-size: 15px !important;
-                font-family: $font-family-roboto !important;
-                color:$color-text3 !important;
-                &::placeholder{
-                    font-size: 15px !important;
-                    font-family: $font-family-roboto !important;
-                    color:$color-text3 !important;
-                }
-            }
-            .textarea{
-                height:90px !important;
-            }
-            .btn-color-picker{
-                width:35px !important;
-                height: 35px !important;
-                border-radius: 5px !important;
-                border:solid 1px $color-borders !important;
-            }
-            .button1{
-                height: 40px !important;
-                border-radius: 5px !important;
-                background-color: $color-brand3 !important;
-                font-family: $font-family-roboto !important;
-                font-size: 17px !important;
-                font-weight: 500 !important;
-                border:0 !important;
-            }
-            .button2{
-                border-radius: 5px !important;
-                border: solid 1px $color-brand3 !important;
-                background-color: $color-white !important;
-                font-family: $font-family-roboto !important;
-                font-size: 17px !important;
-                font-weight: 500 !important;
-                color: $color-text3 !important;
-                margin-left: 7% !important;
-            }
+    .body {
+      padding: 5px 49px 10px 49px !important;
+      .input-row {
+        padding-top: 20px !important;
+        .label {
+          font-family: $font-family-roboto;
+          font-size: 15px;
+          color: $color-text3;
         }
+        input {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        select {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+        }
+        textarea {
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        .textarea {
+          height: 90px !important;
+        }
+        .btn-color-picker {
+          width: 35px !important;
+          height: 35px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+        }
+        .button1 {
+          height: 40px !important;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          border: 0 !important;
+        }
+        .button2 {
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          color: $color-text3 !important;
+          margin-left: 7% !important;
+        }
+      }
     }
   }
 }
@@ -824,31 +920,31 @@
   position: relative;
 }
 
-.header-dropdown-space{
+.header-dropdown-space {
   height: 1%;
   width: 10%;
   display: inline-block;
 }
-  
-.dropdown-toggle::after{
-  border:0 !important;
+
+.dropdown-toggle::after {
+  border: 0 !important;
 }
-.dropdown-toggle:focus{
+.dropdown-toggle:focus {
   box-shadow: none !important;
 }
 
-.header-dropdown{
-  right:0 !important;
+.header-dropdown {
+  right: 0 !important;
   left: -52px !important;
 }
 
-.menubar-task-btn{
-  width:56px;
-  height:56px;
+.menubar-task-btn {
+  width: 56px;
+  height: 56px;
   border-radius: 50% !important;
   background-color: #33a1ff !important;
-  border:0 !important;
-  color:$color-white !important;
+  border: 0 !important;
+  color: $color-white !important;
   text-align: center !important;
   font-size: 26px !important;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
@@ -869,12 +965,12 @@
   font-size: 15px;
   color: #5c5c5c !important;
 }
-  
+
 /* react-big-scheduler */
 
 .RBS-Scheduler-root tbody tr:last-child td {
-  border-bottom-style: none !important; 
-  border-bottom-style: none !important; 
+  border-bottom-style: none !important;
+  border-bottom-style: none !important;
 }
 
 .overflow-text {
@@ -932,9 +1028,9 @@
   left: -1px;
 }
 
-.header1-text{
+.header1-text {
   font-size: 25px;
-  color: #90CDF9;
+  color: #90cdf9;
   font-weight: 500;
 }
 
@@ -977,7 +1073,7 @@
   width: 1em;
   height: 1em;
   line-height: 1em;
-  font-size: .9em;
+  font-size: 0.9em;
   vertical-align: middle;
   margin-top: -1%;
 }
@@ -1003,14 +1099,16 @@
 
 .scheduler-bg {
   position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
 }
 
-table.resource-table, table.scheduler-bg-table, table.scheduler-table {
+table.resource-table,
+table.scheduler-bg-table,
+table.scheduler-table {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -1029,11 +1127,17 @@ table.scheduler-content-table {
   border-spacing: 0;
 }
 
-table.resource-table tr, table.scheduler-bg-table tr, table.scheduler-table tr {
+table.resource-table tr,
+table.scheduler-bg-table tr,
+table.scheduler-table tr {
   border-bottom: 1px solid $color-borders;
 }
 
-table.resource-table th, table.scheduler-table th, table.resource-table td, table.scheduler-bg-table td, table.scheduler-table td{
+table.resource-table th,
+table.scheduler-table th,
+table.resource-table td,
+table.scheduler-bg-table td,
+table.scheduler-table td {
   border-right: 1px dashed $color-borders;
 }
 
@@ -1042,8 +1146,13 @@ table.scheduler-bg-table th {
 }
 
 table.resource-table tr th:last-child, /*table.scheduler-bg-table tr th:last-child, */table.scheduler-table tr th:last-child,
-table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-child, */table.scheduler-table tr td:last-child{ border-right: 0 }
-/*table.resource-table tr:last-child td, table.scheduler-bg-table tr:last-child td, */table.scheduler-table tr:last-child td{ border-bottom: 0 }
+table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-child, */table.scheduler-table tr td:last-child {
+  border-right: 0;
+}
+/*table.resource-table tr:last-child td, table.scheduler-bg-table tr:last-child td, */
+table.scheduler-table tr:last-child td {
+  border-bottom: 0;
+}
 
 .timeline-event {
   position: absolute;
@@ -1103,12 +1212,12 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
 }
 
 .ant-radio-button-wrapper-checked {
-  background-color: #108EE9;
-  color: #FFFFFF;
+  background-color: #108ee9;
+  color: #ffffff;
 }
 
-.icon-nav:hover{
-  color:#1E90FF !important;
+.icon-nav:hover {
+  color: #1e90ff !important;
   box-shadow: 0 0 0px !important;
   cursor: pointer;
 }
@@ -1127,14 +1236,14 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
 }
 
 .popover-calendar .ant-calendar {
-  box-shadow: 0 1px 6px rgba(0,0,0,0) !important;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0) !important;
 }
 
 .event-resizer {
   position: absolute;
   z-index: 4;
   display: block;
-  width:7px;
+  width: 7px;
   top: -1px;
   bottom: -1px;
 }
@@ -1226,24 +1335,24 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
             color: $color-text2 !important;
           }
         }
-        .leftheader{
+        .leftheader {
           width: 219px !important;
           color: #e5e5e5 !important;
           text-align: center !important;
           height: 35px !important;
           border-right: 1.3px solid $color-borders !important;
-          span{
-            color:$color-text2 !important;
+          span {
+            color: $color-text2 !important;
             font-family: $font-family-roboto !important;
-            font-size:15px !important;
+            font-size: 15px !important;
             font-weight: 900;
             text-align: left !important;
             padding: 0px 0px 20px 22px !important;
             height: 35px !important;
             width: 218px !important;
-            position: relative !important;  
+            position: relative !important;
             top: 23px !important;
-          } 
+          }
         }
       }
     }
@@ -1489,6 +1598,59 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
         text-align: center;
         padding-top: 4px;
         margin-left: -6px;
+        font-weight: bold;
+      }
+      .edit-btn {
+        color: $color-text3 !important;
+        font-size: 13px !important;
+        &:hover {
+          color: $color-text1 !important;
+        }
+      }
+      .project-count {
+        font-family: $font-family-roboto !important;
+        font-size: 13px !important;
+        color: $color-brand4 !important;
+        font-weight: bold;
+        margin-left: 5px !important;
+      }
+      .project-count-list-show {
+        width: 200px;
+        height: 121px;
+        border-radius: 5px;
+        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+        // border: solid 1px $color-text3;
+        background-color: #ffffff;
+        position: absolute;
+        .close-div {
+          width: 100%;
+          height: 25%;
+          background-color: transparent;
+          font-family: $font-family-roboto;
+          font-size: 13px;
+          color: $color-text2;
+          text-align: right;
+          padding: 5px 10px 10px 0px;
+        }
+        .project-body-box {
+          padding-left: 13px;
+          height: 75%;
+          overflow-y: scroll;
+          .project-body-text {
+            font-family: $font-family-roboto;
+            font-size: 13px;
+            color: $color-text2;
+            padding: 0px 0px 20px 0px;
+            font-weight: bold;
+          }
+        }
+      }
+      .text-green {
+        color: $color-success;
+        font-weight: bold;
+      }
+      .text-blue {
+        color: $color-brand4;
         font-weight: bold;
       }
     }
@@ -2044,26 +2206,26 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
   }
 }
 
-.time-picker-container{
-  width: 210px  !important;
+.time-picker-container {
+  width: 210px !important;
   height: auto;
   border-radius: 5px;
   border: solid 1px #d6d6d6;
   background-color: #ffffff;
   margin-left: 15px;
-  .rc-time-picker input{
+  .rc-time-picker input {
     border: none !important;
     padding: 0 0 0 0px !important;
     width: 81%;
   }
-  .rc-time-picker-input{
+  .rc-time-picker-input {
     text-align: center;
   }
-  .rc-time-picker-panel-inner{
+  .rc-time-picker-panel-inner {
     position: fixed !important;
   }
 }
-.project-member-search{
+.project-member-search {
   width: 100%;
   height: 90px;
   border: 1px solid #d6d6d6 !important;
@@ -2133,7 +2295,7 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
   }
 }
 
-.task-project-search{
+.task-project-search {
   width: 100%;
   border: 1px solid #d6d6d6 !important;
   border-radius: 5px;
@@ -2141,7 +2303,7 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   color: #000000;
-  input{
+  input {
     width: auto;
     border: none !important;
     outline: 0px;
@@ -2151,16 +2313,16 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     color: #33a1ff;
     padding: 10px 5px;
   }
-  ul{
+  ul {
     list-style-type: none;
     text-align: left;
     margin: 0;
     padding: 0;
   }
-  li{
+  li {
     padding: 10px 5px;
   }
-  .suggestion-holder{
+  .suggestion-holder {
     position: absolute;
     width: 94%;
     max-height: 200px;
@@ -2168,32 +2330,32 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     background-color: #f8f9fa;
     border-radius: 5px;
     overflow-y: auto;
-    li:hover{
+    li:hover {
       cursor: pointer;
       background-color: $color-dropdown;
     }
   }
-  .selected-tags{
+  .selected-tags {
     display: inline-block;
-    .select-member{
+    .select-member {
       width: auto;
       height: 24px;
       margin: 5px;
       border-radius: 24px;
       border: solid 1px #bfbfbf;
       background-color: #ffffff;
-      display:inline-block !important;
+      display: inline-block !important;
     }
   }
-  .remove-tag:hover{
+  .remove-tag:hover {
     cursor: pointer;
   }
-  .remove-tag{
+  .remove-tag {
     cursor: pointer;
     padding: 0 5px 0px 10px;
     opacity: 0.5;
   }
-  .member-title{
+  .member-title {
     width: 22px;
     height: 22px;
     border-radius: 20px;
@@ -2201,7 +2363,7 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     margin-right: 10px;
     text-align: center;
   }
-  .task-project-color-code{
+  .task-project-color-code {
     width: 20px;
     height: 20px;
     margin-left: 20px;
@@ -2229,17 +2391,17 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     background-color: $color-fafafa;
     color: #5c5c5c;
     outline: none;
-    option{
+    option {
       width: 118px !important;
       height: 36px;
       background-color: #fff;
-      &:hover{
+      &:hover {
         background-color: none;
       }
     }
   }
 }
-.status-dot{
+.status-dot {
   border-radius: 0px !important;
 }
 // .task-popup{
@@ -2264,13 +2426,13 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
 //     }
 //   }
 // }
-.text-wraper{
+.text-wraper {
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
   padding: 5px 5px 0px 5px !important;
 }
-.twitter-picker{
+.twitter-picker {
   width: 320px !important;
   height: 91.4px;
   border-radius: 5px;
@@ -2279,18 +2441,18 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
   position: absolute !important;
   z-index: 1;
 }
-.chrome-picker{
+.chrome-picker {
   position: absolute !important;
   top: -233px !important;
   left: 75px !important;
 }
-.hide-div{
-  display: none !important
+.hide-div {
+  display: none !important;
 }
-.event-task-hover{
+.event-task-hover {
   width: 200px;
   text-transform: capitalize;
-  .title{
+  .title {
     width: 145px;
     font-family: Roboto;
     font-size: 13px;
@@ -2302,14 +2464,14 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     text-align: left;
     color: #424242;
   }
-  .project{
+  .project {
     height: 15px;
     padding-top: 5px;
-    div{
+    div {
       padding-left: 10px;
     }
   }
-  .time{
+  .time {
     padding-top: 15px;
   }
 }
