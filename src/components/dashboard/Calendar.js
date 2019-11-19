@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
 // import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
-import Scheduler, {
-  SchedulerData,
-  ViewTypes,
-} from "./../../../src/react-big-scheduler";
+import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import { post } from "../../utils/API";
 import "../../assets/css/dashboard.scss";
@@ -315,8 +312,8 @@ class Calendar extends Component {
   };
 
   eventClicked = (schedulerData, event) => {
-    var taskId = event.id.split('-')[0]
-    this.props.editAddTaskDetails(taskId, event)
+    var taskId = event.id.split("-")[0];
+    this.props.editAddTaskDetails(taskId, event);
   };
 
   ops1 = (schedulerData, event) => {
