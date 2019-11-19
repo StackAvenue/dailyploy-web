@@ -63,10 +63,11 @@ class Reports extends Component {
   };
 
   fetchProjectName = () => {
-    var project = this.state.projects.filter(
-      project => project.id === this.props.searchProjectIds[0],
+    var projects = this.state.projects.filter(
+      project => this.props.searchProjectIds.includes(project.id),
     );
-    return project.length > 0 ? project[0].name : "";
+    var projectNames = projects.map(project => project.name)
+    return this.textTitlize(projectNames.join(', '))
   };
 
   displayMessage = () => {
