@@ -48,6 +48,7 @@ class Reports extends Component {
       searchProjectIds: [],
       taskDetails: {},
       message: "My Daily Report",
+      frequency: "daily",
     };
   }
 
@@ -106,21 +107,44 @@ class Reports extends Component {
     });
   };
 
+  // calenderButtonHandle = e => {
+  //   const name = e.target.name;
+  //   const newCalenderArr = this.calenderArr.filter(item => item !== name);
+  //   this.setState({ [name]: true });
+  //   var self = this;
+  //   newCalenderArr.map(item => {
+  //     self.setState({ [item]: false });
+  //   });
+  //   if (name == "daily") {
+  //     self.setState({ selectedDays: [new Date()] });
+  //   }
+  //   if (name == "monthly") {
+  //     this.handleMonthlyDateFrom(new Date());
+  //   }
+  //   if (name == "weekly") {
+  //     this.handleDayChange(new Date());
+  //   }
+  // };
+
+
   calenderButtonHandle = e => {
     const name = e.target.name;
-    const newCalenderArr = this.calenderArr.filter(item => item !== name);
-    this.setState({ [name]: true });
+    // const newCalenderArr = this.calenderArr.filter(item => item !== name);
+    // this.setState({ [name]: true });
     var self = this;
-    newCalenderArr.map(item => {
-      self.setState({ [item]: false });
-    });
+    // newCalenderArr.map(item => {
+    //   self.setState({ [item]: false });
+    // });
+    console.log("name", name)
     if (name == "daily") {
-      self.setState({ selectedDays: [new Date()] });
+      self.setState({ selectedDays: [new Date()], weekly: false, daily: true, monthly: false, frequency: "daily" });
     }
     if (name == "monthly") {
+      self.setState({ weekly: false, daily: false, monthly: true, frequency: "monthly" });
       this.handleMonthlyDateFrom(new Date());
     }
     if (name == "weekly") {
+      self.setState({ weekly: true, daily: false, monthly: false, frequency: "weekly" });
       this.handleDayChange(new Date());
     }
   };
@@ -293,6 +317,7 @@ class Reports extends Component {
     if (
       prevState.dateFrom !== this.state.dateFrom ||
       prevState.dateTo !== this.state.dateTo ||
+      prevState.frequency !== this.state.frequency ||
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
       prevProps.searchUserDetail !== this.props.searchUserDetail
     ) {
@@ -330,40 +355,35 @@ class Reports extends Component {
     {
       reports.map((report, i) => {
         taskReports[report.date] = report.tasks;
-        totalSecond += this.calculateTotalSecond(report.tasks);
       });
     }
-    var hours = (totalSecond / (1000 * 60 * 60)).toFixed(1);
-    return { taskReports: taskReports, totalTime: hours };
+
+    this.state.selectedDays.map(date => {
+      let dateFormated = moment(date).format("YYYY-MM-DD");
+      var tasks = taskReports[dateFormated]
+      if (tasks !== undefined) {
+        totalSecond += this.calculateTotalSecond(dateFormated, tasks)
+      }
+    })
+
+    totalSecond = Number(totalSecond);
+    var h = Math.floor(totalSecond / 3600);
+    var m = Math.floor(totalSecond % 3600 / 60);
+    var time = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+    return { taskReports: taskReports, totalTime: time };
   };
 
-  calculateTotalSecond = tasks => {
+  calculateTotalSecond = (date, tasks) => {
     var totalSec = 0;
     tasks.map((task, idx) => {
-      totalSec += Math.abs(
-        new Date(task.start_datetime) - new Date(task.end_datetime),
-      );
+      var start = moment(date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
+      var end = moment(date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
+      let totalMilSeconds = new Date(end) - new Date(start)
+      var totalSeconds = (totalMilSeconds / 1000)
+      totalSec += totalSeconds
     });
     return totalSec;
   };
-
-  // handleSearchFilterResult = data => {
-  //   var searchUserDetail = "";
-  //   var projectIds = [];
-  //   {
-  //     data.map((item, i) => {
-  //       if (item.type === "member") {
-  //         searchUserDetail = item;
-  //       } else if (item.type === "project") {
-  //         projectIds.push(item.project_id);
-  //       }
-  //     });
-  //   }
-  //   this.setState({
-  //     searchProjectIds: projectIds,
-  //     searchUserDetail: searchUserDetail,
-  //   });
-  // };
 
   createUserProjectList = () => {
     var searchOptions = [];
@@ -594,15 +614,6 @@ class Reports extends Component {
 
     return (
       <>
-        {/* <div className="dashboard-main no-padding">
-          <Header
-            logout={this.logout}
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-            searchOptions={this.state.searchOptions}
-            role={this.state.userRole}
-            handleSearchFilterResult={this.handleSearchFilterResult}
-          /> */}
         <MenuBar
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}
