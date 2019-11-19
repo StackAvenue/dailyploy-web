@@ -79,6 +79,7 @@ class ReportTable extends Component {
           key={index}
           tasks={tasks}
           date={date}
+          userRole={this.props.state.userRole}
           frequency={this.props.frequency}
         />
       );

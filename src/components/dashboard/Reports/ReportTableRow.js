@@ -13,20 +13,25 @@ class ReportTableRow extends Component {
     var s = new Date(startDateTime);
     var e = new Date(endDateTime);
     return (
-      s.getHours() +
+      ("0" + s.getHours()).slice(-2) +
       ":" +
-      s.getMinutes() +
+      ("0" + s.getMinutes()).slice(-2) +
       " - " +
-      e.getHours() +
+      ("0" + e.getMinutes()).slice(-2) +
       ":" +
-      e.getMinutes()
+      ("0" + e.getMinutes()).slice(-2)
     );
   };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
-    var diff = Math.abs(new Date(startDateTime) - new Date(endDateTime));
-    var hours = (diff / (1000 * 60 * 60)).toFixed(1);
-    return hours + " h";
+    var start = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(startDateTime).format("HH:mm")
+    var end = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(endDateTime).format("HH:mm")
+    let totalMilSeconds = new Date(end) - new Date(start)
+    var totalSeconds = (totalMilSeconds / 1000)
+    totalSeconds = Number(totalSeconds);
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor(totalSeconds % 3600 / 60);
+    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + " h";
   };
 
   getTotalHours = tasks => {
@@ -34,13 +39,18 @@ class ReportTableRow extends Component {
       var totalSec = null;
       {
         tasks.map((task, idx) => {
-          totalSec += Math.abs(
-            new Date(task.start_datetime) - new Date(task.end_datetime),
-          );
+          var start = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
+          var end = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
+          let totalMilSeconds = new Date(end) - new Date(start)
+          var totalSeconds = (totalMilSeconds / 1000)
+          totalSec += totalSeconds
         });
       }
-      var hours = (totalSec / (1000 * 60 * 60)).toFixed(1);
-      return hours + " h";
+      totalSec = Number(totalSec);
+      var h = Math.floor(totalSec / 3600);
+      var m = Math.floor(totalSec % 3600 / 60);
+
+      return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + " h";
     }
     return "0 h";
   };
