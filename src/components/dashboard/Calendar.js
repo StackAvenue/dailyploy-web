@@ -267,7 +267,7 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskDate(date);
+    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
   };
 
   eventClicked = (schedulerData, event) => {
