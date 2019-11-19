@@ -64,6 +64,9 @@
     color: $color-white !important;
     text-align: center !important;
     width: $wd-100 !important;
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
   .googleIcon {
     img {
@@ -127,8 +130,20 @@ a {
       font-size: 15px !important;
       font-family: $font-family-roboto !important;
     }
+    &:disabled {
+      background-color: #99999959 !important;
+      cursor: not-allowed;
+    }
   }
   .error {
     border: 1px solid $color-failure !important;
+  }
+}
+
+.signup-toaster {
+  .Toastify__toast-container {
+    width: auto !important;
+    min-width: 270px !important;
+    top: 20px !important;
   }
 }

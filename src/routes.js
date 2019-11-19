@@ -102,6 +102,8 @@ class Routes extends Component {
         return <SignUp {...props} />;
       } else if (title === "landing") {
         return <Landing {...props} />;
+      } else {
+        return <Login {...props} />;
       }
     }
   };

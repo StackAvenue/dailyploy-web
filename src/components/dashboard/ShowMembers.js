@@ -302,6 +302,7 @@ class ShowMembers extends Component {
   };
 
   render() {
+    var userRole = localStorage.getItem("userRole");
     return (
       <>
         <MenuBar
@@ -399,8 +400,7 @@ class ShowMembers extends Component {
                       )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
-                    <td></td>
-                    <td>
+                    <td className={userRole === "member" ? "d-none" : null}>
                       <button
                         className="btn btn-link edit-btn"
                         onClick={e => this.handleShow(e, member)}>

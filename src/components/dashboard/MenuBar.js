@@ -9,6 +9,7 @@ import AddMemberModal from "./AddMemberModal";
 import Tabs from "./MenuBar/Tabs";
 import ConditionalElements from "./MenuBar/ConditionalElements";
 import DailyPloyToast from "./../DailyPloyToast";
+import { USER_ROLE } from "../../utils/Constants";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ export default class MenuBar extends Component {
       disableColor: "#fff",
       suggestions: [],
       projectsListing: [],
+      userRole: null,
     };
   }
 
@@ -73,7 +75,11 @@ export default class MenuBar extends Component {
     } catch (e) {}
   }
 
-  componentDidUpdate() {}
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevProps.workspaceId !== this.props.workspaceId) {
+  //     this.setState({ userRole: USER_ROLE });
+  //   }
+  // }
 
   addProject = async () => {
     const projectData = {
@@ -139,7 +145,7 @@ export default class MenuBar extends Component {
       const { data } = await post(memberData, "invitations");
       toast(
         <DailyPloyToast
-          message="Member added successfully!"
+          message="Member Invited successfully!"
           status="success"
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
@@ -269,6 +275,7 @@ export default class MenuBar extends Component {
   render() {
     this.handleProjectByUser();
     const { sort, show } = this.state;
+    var userRole = localStorage.getItem("userRole");
     return (
       <>
         <div className="container-fluid">
@@ -284,7 +291,7 @@ export default class MenuBar extends Component {
                   isDeleteShow={this.props.state.isDeleteShow}
                 />
                 <div className="col-md-2 d-inline-block">
-                  <Dropdown>
+                  <Dropdown className={userRole === "member" ? "d-none" : null}>
                     <Dropdown.Toggle
                       className="menubar-button"
                       id="dropdown-basic">

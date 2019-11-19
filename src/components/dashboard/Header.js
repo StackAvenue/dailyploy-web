@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import Search from 'react-search'
+import cookie from "react-cookies";
 import Select from "react-select";
 import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
@@ -56,6 +56,7 @@ class Header extends Component {
         const { data } = await get(
           `workspaces/${this.props.workspaceId}/members/${this.state.userId}`,
         );
+        localStorage.setItem("userRole", data.role);
         this.setState({ userRole: data.role });
       } catch (e) {
         console.log("err", e);

@@ -3,7 +3,7 @@ import cookie from "react-cookies";
 import { SERVICE_URL, MOCK_URL } from "./Constants";
 
 const headerConfig = {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
 };
 
 const URL = SERVICE_URL;
@@ -19,6 +19,8 @@ export const login = async loginData => {
 
 export const logout = async () => {
   await cookie.remove("accessToken", { path: "/" });
+  await cookie.remove("userRole", { path: "/" });
+  await cookie.remove("loggedInUser", { path: "/" });
 };
 
 export const post = async (data, basePath) => {

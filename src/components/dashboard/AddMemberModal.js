@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
+import SelectSearch from "react-select-search";
 
 const RadioOptions = ({ options, selected, onChange }) => {
   return (
@@ -141,6 +142,27 @@ class AddMemberModal extends Component {
                         <option value={project.id}>{project.name}</option>
                       ))}
                     </select>
+                    {/* <SelectSearch
+                      options={this.props.projects.map(project => project.name)}
+                      autoComplete="on"
+                      multiple={false}
+                      value="sv"
+                      name="language"
+                      placeholder="Choose your language"
+                    /> */}
+                    {/* <input list="project" placeholder="Start typing..." />
+                    <datalist id="project">
+                      <option value="My wife"></option>
+                      <option value="Carsten"></option>
+                      <option value="@imogenf"></option>
+                      <option value="@stereobooster"></option>
+                      <option value="@fabien0102"></option>
+                      <option value="@mpotomin"></option>
+                      <option value="@mweststrate"></option>
+                      <option value="@cpojer"></option>
+                      <option value="@dabit3"></option>
+                      <option value="@_darkfadr"></option>
+                    </datalist> */}
                   </td>
                 </tr>
               </tbody>
