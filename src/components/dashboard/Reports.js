@@ -107,34 +107,9 @@ class Reports extends Component {
     });
   };
 
-  // calenderButtonHandle = e => {
-  //   const name = e.target.name;
-  //   const newCalenderArr = this.calenderArr.filter(item => item !== name);
-  //   this.setState({ [name]: true });
-  //   var self = this;
-  //   newCalenderArr.map(item => {
-  //     self.setState({ [item]: false });
-  //   });
-  //   if (name == "daily") {
-  //     self.setState({ selectedDays: [new Date()] });
-  //   }
-  //   if (name == "monthly") {
-  //     this.handleMonthlyDateFrom(new Date());
-  //   }
-  //   if (name == "weekly") {
-  //     this.handleDayChange(new Date());
-  //   }
-  // };
-
-
   calenderButtonHandle = e => {
     const name = e.target.name;
-    // const newCalenderArr = this.calenderArr.filter(item => item !== name);
-    // this.setState({ [name]: true });
     var self = this;
-    // newCalenderArr.map(item => {
-    //   self.setState({ [item]: false });
-    // });
     console.log("name", name)
     if (name == "daily") {
       self.setState({ selectedDays: [new Date()], weekly: false, daily: true, monthly: false, frequency: "daily" });
@@ -359,7 +334,7 @@ class Reports extends Component {
     }
 
     this.state.selectedDays.map(date => {
-      let dateFormated = moment(date).format("YYYY-MM-DD");
+      let dateFormated = moment(date).format(DATE_FORMAT1);
       var tasks = taskReports[dateFormated]
       if (tasks !== undefined) {
         totalSecond += this.calculateTotalSecond(dateFormated, tasks)
@@ -375,15 +350,29 @@ class Reports extends Component {
 
   calculateTotalSecond = (date, tasks) => {
     var totalSec = 0;
+    if (this.state.userRole === 'admin' && this.props.searchUserDetail === "") {
+      tasks.map((task, idx) => {
+        task.project.members.map(member => {
+          totalSec += this.totalSeconds(tasks, date)
+        })
+      });
+    } else {
+      totalSec += this.totalSeconds(tasks, date)
+    }
+    return totalSec;
+  };
+
+  totalSeconds = (tasks, date) => {
+    var totalSec = 0
     tasks.map((task, idx) => {
-      var start = moment(date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
-      var end = moment(date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
+      var start = moment(date).format(DATE_FORMAT1) + " " + moment(task.start_datetime).format("HH:mm")
+      var end = moment(date).format(DATE_FORMAT1) + " " + moment(task.end_datetime).format("HH:mm")
       let totalMilSeconds = new Date(end) - new Date(start)
       var totalSeconds = (totalMilSeconds / 1000)
       totalSec += totalSeconds
     });
-    return totalSec;
-  };
+    return totalSec
+  }
 
   createUserProjectList = () => {
     var searchOptions = [];

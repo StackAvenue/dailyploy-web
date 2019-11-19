@@ -38,13 +38,15 @@ class ReportTable2Row extends Component {
   getTotalHours = tasks => {
     if (tasks !== undefined) {
       var totalSec = null;
-      {
+      if (this.props.userRole === "admin") {
         tasks.map((task, idx) => {
-          var start = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
-          var end = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
-          let totalMilSeconds = new Date(end) - new Date(start)
-          var totalSeconds = (totalMilSeconds / 1000)
-          totalSec += totalSeconds
+          task.project.members.map(member => {
+            totalSec += this.calculateSeconds(task)
+          })
+        });
+      } else {
+        tasks.map((task, idx) => {
+          totalSec += this.calculateSeconds(task)
         });
       }
       totalSec = Number(totalSec);
@@ -55,6 +57,13 @@ class ReportTable2Row extends Component {
     }
     return "0 h";
   };
+
+  calculateSeconds = (task) => {
+    var start = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(task.start_datetime).format("HH:mm")
+    var end = moment(this.props.date).format("YYYY-MM-DD") + " " + moment(task.end_datetime).format("HH:mm")
+    let totalMilSeconds = new Date(end) - new Date(start)
+    return (totalMilSeconds / 1000)
+  }
 
   displayDate = (date) => {
     if (this.props.frequency !== 'daily') {
@@ -95,9 +104,27 @@ class ReportTable2Row extends Component {
 
   renderTableRow = (tasks) => {
     return tasks.map((task, index) => {
+      if (this.props.userRole === 'admin') {
+        return this.taskMember(task)
+      } else {
+        return (
+          <tr key={index}>
+            <td className="text-titlize">{this.displayMembers(task.project.members)}</td>
+            <td className="text-titlize">{task.name}</td>
+            <td className={"text-titlize catergory2 " + task.category} >{"category 2"}</td>
+            <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
+            <td >{this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}</td>
+          </tr>
+        )
+      }
+    })
+  }
+
+  taskMember = (task) => {
+    return task.project.members.map((member, index) => {
       return (
         <tr key={index}>
-          <td className="text-titlize">{this.displayMembers(task.project.members)}</td>
+          <td className="text-titlize">{member.name}</td>
           <td className="text-titlize">{task.name}</td>
           <td className={"text-titlize catergory2 " + task.category} >{"category 2"}</td>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
