@@ -33,7 +33,7 @@ class Dashboard extends Component {
       show: false,
       setShow: false,
       dateFrom: new Date(),
-      dateTo: new Date(),
+      dateTo: null,
       timeFrom: "",
       timeTo: "",
       comments: null,
@@ -58,6 +58,8 @@ class Dashboard extends Component {
       user: "",
       modalMemberSearchOptions: [],
       taskButton: "Add",
+      hourArr: [],
+      minArr: [],
     };
   }
 
@@ -360,16 +362,37 @@ class Dashboard extends Component {
   };
 
   handleDateFrom = date => {
-    this.setState({ dateFrom: date });
+    if (date > new Date()) {
+      this.setState({ dateFrom: date, dateTo: null });
+    } else {
+      this.setState({ dateFrom: date });
+    }
   };
   handleDateTo = date => {
     this.setState({ dateTo: date });
   };
 
   handleTimeFrom = value => {
-    this.setState({
-      timeFrom: value != null ? value.format("HH:mm:ss") : null,
-    });
+    if (value != null) {
+      var time = value.format("HH:mm:ss")
+      var hr = time.split(':')[0]
+      hr = Number(hr)
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k)
+      var min = time.split(':')[1]
+      min = Number(min) + 1
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k)
+      this.setState({
+        timeFrom: time,
+        hourArr: hoursArr,
+        minArr: minArr
+      });
+    } else {
+      this.setState({
+        timeFrom: null,
+        hourArr: [],
+        minArr: []
+      });
+    }
   };
 
   handleTimeTo = value => {

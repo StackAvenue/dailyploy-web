@@ -157,6 +157,14 @@ class AddTaskModal extends Component {
     return matches.join('').toUpperCase();
   }
 
+  disabledHours = () => {
+    return this.props.state.hourArr
+  }
+
+  disabledMinutes = () => {
+    return this.props.state.minArr
+  }
+
   render() {
     const { props } = this
     return (
@@ -270,6 +278,7 @@ class AddTaskModal extends Component {
                         <DatePicker
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
+                          maxDate={props.state.dateTo}
                           placeholderText="Select Date"
                         />
                       </div>
@@ -278,6 +287,7 @@ class AddTaskModal extends Component {
                       <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                       <div className="col-md-9 d-inline-block">
                         <DatePicker
+                          minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
@@ -316,6 +326,8 @@ class AddTaskModal extends Component {
                           placeholder="Select"
                           showSecond={false}
                           onChange={props.handleTimeTo}
+                          disabledMinutes={this.disabledMinutes}
+                          disabledHours={this.disabledHours}
                           format={props.format}
                         />
                       </div>
