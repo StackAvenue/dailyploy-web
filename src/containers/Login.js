@@ -48,8 +48,6 @@ class Signin extends Component {
       };
       try {
         const { data } = await login(loginData);
-        console.log("data login", data);
-        toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
         axios.defaults.headers.common["Authorization"] = data.access_token
@@ -64,7 +62,7 @@ class Signin extends Component {
           console.log("error", e);
         }
 
-        window.location.reload();
+        // window.location.reload();
       } catch (e) {
         console.log("error", e.response.data.error);
         this.setState({ error: e.response.data.error });

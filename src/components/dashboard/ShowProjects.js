@@ -8,6 +8,7 @@ import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
 import Sidebar from "./Sidebar";
 import moment from "moment";
+import AddProjectModal from "./AddProjectModal";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -34,6 +35,14 @@ class ShowProjects extends Component {
       projects: [],
       userId: "",
       users: [],
+      setShow: false,
+      show: false,
+      projectOwner: null,
+      dateFrom: null,
+      dateTo: null,
+      projectMember: [],
+      projectId: null,
+      background: null,
     };
   }
   countIncrese = projectUser => {
@@ -56,6 +65,7 @@ class ShowProjects extends Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true });
+    this.props.handleLoading(true);
     try {
       const { data } = await get("logged_in_user");
       var loggedInData = data;
@@ -80,6 +90,7 @@ class ShowProjects extends Component {
         `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
+      this.props.handleLoading(false);
     } catch (e) {
       console.log("err", e);
     }
@@ -219,7 +230,28 @@ class ShowProjects extends Component {
     this.setState({ isLoading: value });
   };
 
+  handleEditShow = (e, project) => {
+    console.log("Project", project);
+    this.setState({
+      show: true,
+      setShow: true,
+      projectId: project.id,
+      projectOwner: project.owner.name,
+      projectName: project.name,
+      dateFrom: new Date(project.start_date),
+      dateTo: new Date(project.start_date),
+      background: project.color_code,
+    });
+  };
+
+  handleEditClose = () => {
+    this.setState({
+      show: false,
+    });
+  };
+
   render() {
+    var userRole = localStorage.getItem("userRole");
     return (
       <>
         <MenuBar
@@ -345,6 +377,22 @@ class ShowProjects extends Component {
                                 project.members.map(user => user.name),
                               )}
                             </span>
+                          </td>
+                          <td
+                            className={userRole === "member" ? "d-none" : null}>
+                            <button
+                              className="btn btn-link edit-btn"
+                              onClick={e => this.handleEditShow(e, project)}>
+                              <i className="fas fa-pencil-alt"></i>
+                            </button>
+                            {this.state.show &&
+                            this.state.projectId === project.id ? (
+                              <AddProjectModal
+                                state={this.state}
+                                handleClose={this.handleEditClose}
+                                btnText={"Save"}
+                              />
+                            ) : null}
                           </td>
                         </tr>
                       );

@@ -373,7 +373,7 @@ class Header extends Component {
                           <span
                             className="pull-right close-span"
                             onClick={this.closeSettingModal}>
-                            <i class="fa fa-close" aria-hidden="true"></i>
+                            <i className="fa fa-close" aria-hidden="true"></i>
                           </span>
                           <br />
                           <img

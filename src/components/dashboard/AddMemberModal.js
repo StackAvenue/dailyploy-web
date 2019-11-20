@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
-import SelectSearch from "react-select-search";
+import Select from "react-dropdown-select";
 
 const RadioOptions = ({ options, selected, onChange }) => {
   return (
@@ -27,6 +27,7 @@ const RadioOptions = ({ options, selected, onChange }) => {
 class AddMemberModal extends Component {
   constructor(props) {
     super(props);
+    this.hours = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
     this.state = {
       value: [],
     };
@@ -115,7 +116,7 @@ class AddMemberModal extends Component {
                       name="memberRole"
                       value={this.props.state.memberRole}
                       onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select</option>
+                      <option value="">Select Role</option>
                       <option value="1">Admin</option>
                       <option value="2">Member</option>
                     </select>
@@ -126,29 +127,51 @@ class AddMemberModal extends Component {
                       name="memberWorkingHours"
                       value={this.props.state.memberWorkingHours}
                       onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select</option>
-                      <option value="8">8hr</option>
-                      <option value="9">9hr</option>
+                      <option value="">Select Hours</option>
+                      {this.hours.map((hour, index) => (
+                        <option key={index} value={hour}>
+                          {hour}
+                        </option>
+                      ))}
                     </select>
                   </td>
                   <td>
-                    <select
+                    {/* <select
                       className="form-control project text-titlize"
                       name="memberProject"
                       value={this.props.state.memberProject}
                       onChange={this.props.handleChangeMemberInput}>
                       <option value="">Select Project</option>
-                      {this.props.projects.map(project => (
-                        <option value={project.id}>{project.name}</option>
+                      {this.props.projects.map((project, index) => (
+                        <option key={index} value={project.id}>
+                          {project.name}
+                        </option>
                       ))}
-                    </select>
+                    </select> */}
+                    <Select
+                      placeholder=""
+                      color="#0074D9"
+                      searchBy="name"
+                      dropdownHandle={true}
+                      direction="ltr"
+                      labelField="name"
+                      valueField="id"
+                      options={this.props.projects}
+                      onChange={value =>
+                        this.props.handleChangeProjectSelect(value)
+                      }
+                      noDataLabel="No matches found"
+                      closeOnSelect={true}
+                      name="memberProject"
+                      separator={true}
+                      dropdownHeight="100px"
+                    />
                     {/* <SelectSearch
-                      options={this.props.projects.map(project => project.name)}
-                      autoComplete="on"
-                      multiple={false}
-                      value="sv"
-                      name="language"
-                      placeholder="Choose your language"
+                      name="memberProject"
+                      mode="input"
+                      value={this.props.state.memberProject}
+                      options={["Arpit", "Jain"]}
+                      placeholder="Projects"
                     /> */}
                     {/* <input list="project" placeholder="Start typing..." />
                     <datalist id="project">

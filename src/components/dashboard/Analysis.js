@@ -30,6 +30,7 @@ class Analysis extends Component {
     this.props.history.push("/login");
   };
   async componentDidMount() {
+    this.props.handleLoading(true);
     try {
       const { data } = await get("logged_in_user");
       var loggedInData = data;
@@ -68,6 +69,7 @@ class Analysis extends Component {
         user => user.email !== loggedInData.email,
       );
       // .map(user => user.email);
+      this.props.handleLoading(false);
     } catch (e) {
       console.log("users Error", e);
     }

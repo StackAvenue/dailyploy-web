@@ -24,7 +24,7 @@ class AddProjectModal extends Component {
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
-      var logedInUser = data
+      var logedInUser = data;
     } catch (e) {
       console.log("err", e);
     }
@@ -34,119 +34,142 @@ class AddProjectModal extends Component {
       const { data } = await get(
         `workspaces/${this.props.workspaceId}/members`,
       );
-      var membersArr = data.members.filter(user => user.email !== logedInUser.email)
+      var membersArr = data.members.filter(
+        user => user.email !== logedInUser.email,
+      );
     } catch (e) {
       console.log("users Error", e);
     }
-    this.setState({ members: membersArr })
+    this.setState({ members: membersArr });
   }
 
-  onSearchTextChange = (e) => {
-    const value = e.target.value
-    let suggestions = []
+  onSearchTextChange = e => {
+    const value = e.target.value;
+    let suggestions = [];
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, 'i');
-      suggestions = this.state.members.sort().filter(m => regex.test(m.name) && !(this.state.selectedTags.includes(m)))
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = this.state.members
+        .sort()
+        .filter(
+          m => regex.test(m.name) && !this.state.selectedTags.includes(m),
+        );
     }
     this.setState({ suggestions: suggestions, value: value });
-  }
+  };
 
-  selectSuggestion = (option) => {
-    var newSelectedTags = new Array(...this.state.selectedTags)
-    newSelectedTags.push(option)
-    var memberIds = newSelectedTags.map(user => user.id)
-    this.setState({ selectedTags: newSelectedTags, suggestions: [], value: '' })
-    this.props.handleChangeMember(memberIds)
-  }
+  selectSuggestion = option => {
+    var newSelectedTags = new Array(...this.state.selectedTags);
+    newSelectedTags.push(option);
+    var memberIds = newSelectedTags.map(user => user.id);
+    this.setState({
+      selectedTags: newSelectedTags,
+      suggestions: [],
+      value: "",
+    });
+    this.props.handleChangeMember(memberIds);
+  };
 
-  removeSelectedTag = (index) => {
-    var selectedTags = this.state.selectedTags
-    selectedTags = selectedTags.filter((_, idx) => idx !== index)
-    var memberIds = selectedTags.map(user => user.id)
-    this.setState({ selectedTags: selectedTags })
-    this.props.handleChangeMember(memberIds)
-  }
+  removeSelectedTag = index => {
+    var selectedTags = this.state.selectedTags;
+    selectedTags = selectedTags.filter((_, idx) => idx !== index);
+    var memberIds = selectedTags.map(user => user.id);
+    this.setState({ selectedTags: selectedTags });
+    this.props.handleChangeMember(memberIds);
+  };
 
   renderSearchSuggestion = () => {
     return (
       <>
-        {this.state.suggestions ?
+        {this.state.suggestions ? (
           <ul>
             {this.state.suggestions.map((option, idx) => {
               return (
                 <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                  <span className="right-left-space-5"><span className="text-titlize">{option.name}</span> ({option.email})</span>
+                  <span className="right-left-space-5">
+                    <span className="text-titlize">{option.name}</span> (
+                    {option.email})
+                  </span>
                 </li>
-              )
+              );
             })}
           </ul>
-          : null}
+        ) : null}
       </>
-    )
-  }
+    );
+  };
 
-  initalChar = (str) => {
+  initalChar = str => {
     var matches = str.match(/\b(\w)/g);
-    return matches.join('').toUpperCase();
-  }
+    return matches.join("").toUpperCase();
+  };
 
   renderSelectedTags = () => {
     return (
       <>
-        {
-          this.state.selectedTags.map((option, index) => {
-            return (
-              <div className="select-member" key={index}>
-                <div className="member-title d-inline-block">{this.initalChar(option.name)}</div>
-                <div className="right-left-space-5 d-inline-block">{option.name}</div>
-                <a className="remove-tag right-left-space-5 d-inline-block" onClick={() => this.removeSelectedTag(index)}><i className="fa fa-close"></i></a>
+        {this.state.selectedTags.map((option, index) => {
+          return (
+            <div className="select-member" key={index}>
+              <div className="member-title d-inline-block">
+                {this.initalChar(option.name)}
               </div>
-            )
-          })
-        }
+              <div className="right-left-space-5 d-inline-block">
+                {option.name}
+              </div>
+              <a
+                className="remove-tag right-left-space-5 d-inline-block"
+                onClick={() => this.removeSelectedTag(index)}>
+                <i className="fa fa-close"></i>
+              </a>
+            </div>
+          );
+        })}
       </>
-    )
-  }
+    );
+  };
 
   handleChangeColor = () => {
     if (this.state.displayCustomColorPicker) {
       this.setState({
         displayColorPicker: !this.state.displayColorPicker,
-        displayCustomColorPicker: !this.state.displayCustomColorPicker
+        displayCustomColorPicker: !this.state.displayCustomColorPicker,
       });
     } else {
       this.setState({
-        displayColorPicker: !this.state.displayColorPicker
+        displayColorPicker: !this.state.displayColorPicker,
       });
     }
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.displayColorPicker == false && this.state.displayColorPicker == true) {
+    if (
+      prevState.displayColorPicker == false &&
+      this.state.displayColorPicker == true
+    ) {
       var twitterPicker = document.querySelector(".twitter-picker");
-      var parentDiv = twitterPicker.getElementsByTagName('div')[2]
-      parentDiv.className += 'custom-cp-style';
-      parentDiv.childNodes[8].className += 'hide-div';
-      parentDiv.childNodes[9].className += 'hide-div';
-      var btn = document.createElement("span")
-      var icon = document.createElement('i')
+      var parentDiv = twitterPicker.getElementsByTagName("div")[2];
+      parentDiv.className += "custom-cp-style";
+      parentDiv.childNodes[8].className += "hide-div";
+      parentDiv.childNodes[9].className += "hide-div";
+      var btn = document.createElement("span");
+      var icon = document.createElement("i");
       icon.setAttribute("class", "fa fa-plus");
       icon.addEventListener("click", this.setColorPicker);
-      btn.appendChild(icon)
+      btn.appendChild(icon);
       parentDiv.append(btn);
     }
-
-  }
+  };
 
   setColorPicker = () => {
-    this.setState({ displayCustomColorPicker: !this.state.displayCustomColorPicker })
-  }
+    this.setState({
+      displayCustomColorPicker: !this.state.displayCustomColorPicker,
+    });
+  };
 
   handleChangeComplete = (color, event) => {
-    this.setState({ background: color, })
-    this.handleChangeColor()
-    this.props.handleChangeComplete(color, event)
-  }
+    this.setState({ background: color });
+    this.handleChangeColor();
+    this.props.handleChangeComplete(color, event);
+  };
 
   render() {
     const { props } = this;
@@ -156,15 +179,13 @@ class AddProjectModal extends Component {
         <Modal
           className="project-modal"
           show={props.state.show}
-          onHide={props.handleClose}
-        >
+          onHide={props.handleClose}>
           <div className="row no-margin">
             <div className="col-md-12 header">
               <span>Add New Project</span>
               <button
                 className="btn btn-link float-right"
-                onClick={props.handleClose}
-              >
+                onClick={props.handleClose}>
                 <img src={Close} alt="close" />
               </button>
             </div>
@@ -172,7 +193,7 @@ class AddProjectModal extends Component {
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Name
-                  </div>
+                </div>
                 <div className="col-md-10 d-inline-block">
                   <input
                     type="text"
@@ -180,6 +201,7 @@ class AddProjectModal extends Component {
                     onChange={props.handleChangeInput}
                     placeholder="Write Project Name here"
                     className="form-control"
+                    value={props.state.projectName}
                   />
                 </div>
               </div>
@@ -187,16 +209,17 @@ class AddProjectModal extends Component {
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Start Date
+                </div>
+                <div className="col-md-6 d-inline-block date-picker-container no-padding">
+                  <div className="col-md-3 d-inline-block date-text-light">
+                    <span>From:</span>
                   </div>
-                <div
-                  className="col-md-6 d-inline-block date-picker-container no-padding"
-                >
-                  <div className="col-md-3 d-inline-block date-text-light"><span>From:</span></div>
                   <div className="col-md-9 d-inline-block">
                     <DatePicker
                       selected={props.state.dateFrom}
                       onChange={props.handleDateFrom}
                       placeholderText="Select Date"
+                      value={props.state.dateFrom}
                     />
                   </div>
                 </div>
@@ -205,16 +228,21 @@ class AddProjectModal extends Component {
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   End Date
-                  </div>
+                </div>
                 <div className="col-md-10 d-inline-block no-padding">
-                  <div className="col-md-6 d-inline-block date-picker-container no-padding" style={{ backgroundColor: props.state.disableColor }}>
-                    <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
+                  <div
+                    className="col-md-6 d-inline-block date-picker-container no-padding"
+                    style={{ backgroundColor: props.state.disableColor }}>
+                    <div className="col-md-3 d-inline-block date-text-light ">
+                      <span>To:</span>
+                    </div>
                     <div className="col-md-9 d-inline-block">
                       <DatePicker
                         selected={props.state.dateTo}
                         onChange={props.handleDateTo}
                         placeholderText="Select Date"
                         disabled={props.state.disabledDateTo}
+                        value={props.state.dateTo}
                       />
                     </div>
                   </div>
@@ -228,8 +256,9 @@ class AddProjectModal extends Component {
                     />
                     <label
                       className="custom-control-label d-inline-block"
-                      htmlFor="endDateUndefined"
-                    >Undefined</label>
+                      htmlFor="endDateUndefined">
+                      Undefined
+                    </label>
                   </div>
                 </div>
               </div>
@@ -240,13 +269,17 @@ class AddProjectModal extends Component {
                     <div className="selected-tags text-titlize">
                       {this.renderSelectedTags()}
                     </div>
-                    <input type="text" value={this.state.value} placeholder="Write Here" onChange={this.onSearchTextChange} />
+                    <input
+                      type="text"
+                      value={this.state.value}
+                      placeholder="Write Here"
+                      onChange={this.onSearchTextChange}
+                    />
 
                     <div className="suggestion-holder">
                       {this.renderSearchSuggestion()}
                     </div>
                   </div>
-
                 </div>
               </div>
               <div className="col-md-12 row no-margin no-padding input-row">
@@ -265,17 +298,18 @@ class AddProjectModal extends Component {
                         color={props.state.background}
                         colors={props.colors}
                         onChangeComplete={this.handleChangeComplete}
-                      >
-                      </TwitterPicker>
+                        value={props.state.background}></TwitterPicker>
                     </div>
                   ) : null}
                   {this.state.displayCustomColorPicker ? (
-                    <div className="custom-color-picker" onClick={this.setColorPicker} >
+                    <div
+                      className="custom-color-picker"
+                      onClick={this.setColorPicker}>
                       <ChromePicker
                         color={this.state.background}
-                        onChangeComplete={this.handleChangeComplete}
-                      >
-                      </ChromePicker>
+                        onChangeComplete={
+                          this.handleChangeComplete
+                        }></ChromePicker>
                     </div>
                   ) : null}
                 </div>
@@ -285,17 +319,15 @@ class AddProjectModal extends Component {
                   <button
                     type="button"
                     className="btn col-md-5 button1 btn-primary"
-                    onClick={props.addProject}
-                  >
+                    onClick={props.addProject}>
                     {props.btnText}
                   </button>
                   <button
                     type="button"
                     className="btn col-md-6 button2 btn-primary"
-                    onClick={props.handleClose}
-                  >
+                    onClick={props.handleClose}>
                     Cancel
-                    </button>
+                  </button>
                 </div>
               </div>
             </div>

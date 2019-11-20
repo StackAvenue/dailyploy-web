@@ -16,20 +16,21 @@ const axiosInitializer = {
       },
       error => {
         return Promise.reject(error);
-      }
+      },
     );
 
     //Response Interceptor
     axios.interceptors.response.use(
       response => {
         if (response.data && response.data.message) {
+          console.log("Props", this.props);
           toast.success(response.data.message);
         }
         return response;
       },
       error => {
         return Promise.reject(error);
-      }
+      },
     );
   },
 };

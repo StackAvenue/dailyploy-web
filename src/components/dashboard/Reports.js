@@ -63,11 +63,11 @@ class Reports extends Component {
   };
 
   fetchProjectName = () => {
-    var projects = this.state.projects.filter(
-      project => this.props.searchProjectIds.includes(project.id),
+    var projects = this.state.projects.filter(project =>
+      this.props.searchProjectIds.includes(project.id),
     );
-    var projectNames = projects.map(project => project.name)
-    return this.textTitlize(projectNames.join(', '))
+    var projectNames = projects.map(project => project.name);
+    return this.textTitlize(projectNames.join(", "));
   };
 
   displayMessage = () => {
@@ -103,7 +103,7 @@ class Reports extends Component {
   };
 
   textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function (a) {
+    return text.replace(/(?:^|\s)\S/g, function(a) {
       return a.toUpperCase();
     });
   };
@@ -111,16 +111,32 @@ class Reports extends Component {
   calenderButtonHandle = e => {
     const name = e.target.name;
     var self = this;
-    console.log("name", name)
+    console.log("name", name);
     if (name == "daily") {
-      self.setState({ selectedDays: [new Date()], weekly: false, daily: true, monthly: false, frequency: "daily" });
+      self.setState({
+        selectedDays: [new Date()],
+        weekly: false,
+        daily: true,
+        monthly: false,
+        frequency: "daily",
+      });
     }
     if (name == "monthly") {
-      self.setState({ weekly: false, daily: false, monthly: true, frequency: "monthly" });
+      self.setState({
+        weekly: false,
+        daily: false,
+        monthly: true,
+        frequency: "monthly",
+      });
       this.handleMonthlyDateFrom(new Date());
     }
     if (name == "weekly") {
-      self.setState({ weekly: true, daily: false, monthly: false, frequency: "weekly" });
+      self.setState({
+        weekly: true,
+        daily: false,
+        monthly: false,
+        frequency: "weekly",
+      });
       this.handleDayChange(new Date());
     }
   };
@@ -190,6 +206,7 @@ class Reports extends Component {
   };
 
   async componentDidMount() {
+    this.props.handleLoading(true);
     try {
       const { data } = await get("logged_in_user");
       var loggedInData = data;
@@ -252,8 +269,8 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
-      this.props.handleLoading(true);
-    } catch (e) { }
+      this.props.handleLoading(false);
+    } catch (e) {}
 
     this.setState({
       userId: loggedInData.id,
@@ -273,7 +290,6 @@ class Reports extends Component {
     this.createUserProjectList();
 
     this.props.handleSearchFilterResult(this.handleSearchFilterResult);
-    this.props.handleLoading(false);
   }
 
   checkProject = () => {
@@ -314,7 +330,7 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) { }
+      } catch (e) {}
       var message = this.displayMessage();
 
       this.setState({
@@ -336,44 +352,50 @@ class Reports extends Component {
 
     this.state.selectedDays.map(date => {
       let dateFormated = moment(date).format(DATE_FORMAT1);
-      var tasks = taskReports[dateFormated]
+      var tasks = taskReports[dateFormated];
       if (tasks !== undefined) {
-        totalSecond += this.calculateTotalSecond(dateFormated, tasks)
+        totalSecond += this.calculateTotalSecond(dateFormated, tasks);
       }
-    })
+    });
 
     totalSecond = Number(totalSecond);
     var h = Math.floor(totalSecond / 3600);
-    var m = Math.floor(totalSecond % 3600 / 60);
+    var m = Math.floor((totalSecond % 3600) / 60);
     var time = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
     return { taskReports: taskReports, totalTime: time };
   };
 
   calculateTotalSecond = (date, tasks) => {
     var totalSec = 0;
-    if (this.state.userRole === 'admin' && this.props.searchUserDetail === "") {
+    if (this.state.userRole === "admin" && this.props.searchUserDetail === "") {
       tasks.map((task, idx) => {
         task.project.members.map(member => {
-          totalSec += this.totalSeconds(tasks, date)
-        })
+          totalSec += this.totalSeconds(tasks, date);
+        });
       });
     } else {
-      totalSec += this.totalSeconds(tasks, date)
+      totalSec += this.totalSeconds(tasks, date);
     }
     return totalSec;
   };
 
   totalSeconds = (tasks, date) => {
-    var totalSec = 0
+    var totalSec = 0;
     tasks.map((task, idx) => {
-      var start = moment(date).format(DATE_FORMAT1) + " " + moment(task.start_datetime).format("HH:mm")
-      var end = moment(date).format(DATE_FORMAT1) + " " + moment(task.end_datetime).format("HH:mm")
-      let totalMilSeconds = new Date(end) - new Date(start)
-      var totalSeconds = (totalMilSeconds / 1000)
-      totalSec += totalSeconds
+      var start =
+        moment(date).format(DATE_FORMAT1) +
+        " " +
+        moment(task.start_datetime).format("HH:mm");
+      var end =
+        moment(date).format(DATE_FORMAT1) +
+        " " +
+        moment(task.end_datetime).format("HH:mm");
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      totalSec += totalSeconds;
     });
-    return totalSec
-  }
+    return totalSec;
+  };
 
   createUserProjectList = () => {
     var searchOptions = [];

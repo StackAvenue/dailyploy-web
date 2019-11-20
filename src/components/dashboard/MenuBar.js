@@ -188,6 +188,10 @@ export default class MenuBar extends Component {
     });
   };
 
+  handleChangeProjectSelect = value => {
+    this.setState({ memberProject: value[0].id });
+  };
+
   selectAutoSuggestion = option => {
     var filterArr = this.props.state.isLogedInUserEmailArr.filter(
       user => user.name === option,
@@ -331,6 +335,9 @@ export default class MenuBar extends Component {
                           addMember={this.addMember}
                           projects={this.state.projectsListing}
                           selectAutoSuggestion={this.selectAutoSuggestion}
+                          handleChangeProjectSelect={
+                            this.handleChangeProjectSelect
+                          }
                         />
                       ) : null}
                     </Dropdown.Menu>
