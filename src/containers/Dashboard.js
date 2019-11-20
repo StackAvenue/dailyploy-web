@@ -60,7 +60,8 @@ class Dashboard extends Component {
       taskButton: "Add",
       hourArr: [],
       minArr: [],
-      border: "solid 1px #ffffff"
+      border: "solid 1px #ffffff",
+      isBorder: false,
     };
   }
 
@@ -289,7 +290,7 @@ class Dashboard extends Component {
     try {
       const { data } = await put(
         taskData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks/${this.state.taskId}`,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.project.id}/tasks/${this.state.taskId}`,
       );
       var task = data.task
       toast(
@@ -340,6 +341,7 @@ class Dashboard extends Component {
       setShow: true,
       show: true,
       modalMemberSearchOptions: members,
+      project: "",
     });
   };
 
@@ -424,19 +426,25 @@ class Dashboard extends Component {
   };
 
   handleProjectSelect = option => {
+    let options = []
+    var memberIds = []
     if (this.state.user.role === 'admin') {
-      var options = option.members
+      options = option.members
+      options.push({ email: this.state.userEmail, id: this.state.userId, name: this.state.userName })
     } else {
-      var options = option.members.filter(member => member.id === this.state.userId)
+      options = option.members.filter(member => member.id === this.state.userId)
     }
-    var memberIds = options.map(member => member.id)
+    options = Array.from(new Set(options.map(JSON.stringify))).map(JSON.parse);
+    memberIds = options.map(member => member.id)
+    memberIds = Array.from(new Set(memberIds));
     var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
     this.setState({
       projectId: option.id,
       selectedMembers: removedMembers,
       project: option,
       modalMemberSearchOptions: options,
-      border: "solid 1px #9b9b9b"
+      border: "solid 1px #9b9b9b",
+      isBorder: false,
     })
   }
 
@@ -450,21 +458,33 @@ class Dashboard extends Component {
     }
   };
 
-  memberSearchOptions = (userId) => {
-    if (this.state.user.role === 'admin') {
-      return this.state.users
+  memberSearchOptions = (userId, projectId) => {
+    // if (this.state.user.role === 'admin') {
+    //   return this.state.users
+    // } else {
+    //   return this.state.users.filter(member => member.id === userId)
+    // }
+    var projects = this.state.projects.filter(project => project.id === projectId)
+    var members = projects[0].members
+    if (this.state.user.role === 'admin' && projects) {
+      members.push({ email: this.state.userEmail, id: this.state.userId, name: this.state.userName })
     } else {
-      return this.state.users.filter(member => member.id === userId)
+      members = members.filter(member => member.id === userId)
     }
+    console.log("members", members)
+    return members
   }
 
   setAddTaskDetails = (memberId, startDate, endDate) => {
     let members = this.memberSearchOptions(memberId)
     var selectedMembers = this.state.users.filter(member => memberId === member.id)
+    var selecteMember = selectedMembers.map(member => {
+      return { email: member.email, id: member.id, name: member.name }
+    })
     if (this.state.user.role === 'admin' || this.state.userId == memberId) {
       this.setState({
         taskUser: [memberId],
-        selectedMembers: selectedMembers,
+        selectedMembers: selecteMember,
         show: true,
         calenderTaskModal: true,
         project: {},
@@ -476,8 +496,22 @@ class Dashboard extends Component {
     }
   }
 
+  renderSelectedProject = () => {
+    var project = this.state.project;
+    let border = this.state.border
+    if (project != "") {
+      return (
+        <span style={{ display: `${this.state.project ? "block" : "none"}` }}>
+          <span className="d-inline-block selected-project-color-code" style={{ backgroundColor: `${project.color_code}`, border: `${border}` }}></span>
+          <span className="d-inline-block right-left-space-5 text-titlize">{project.name}</span>
+        </span>
+      )
+    }
+    return null
+  }
+
   editAddTaskDetails = async (taskId, event) => {
-    let members = this.memberSearchOptions(event.resourceId)
+    let members = this.memberSearchOptions(event.resourceId, event.projectId)
     var project = this.state.projects.filter(project => project.id === event.projectId)
     var eventTasks = this.state.events.filter(taskEvent => taskEvent.id === event.id)
     var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
@@ -496,7 +530,6 @@ class Dashboard extends Component {
       this.setState({
         taskButton: "Save",
         taskUser: memberIds,
-        show: true,
         calenderTaskModal: true,
         modalMemberSearchOptions: members,
         dateFrom: startDate,
@@ -508,9 +541,14 @@ class Dashboard extends Component {
         taskName: event.title,
         projectId: event.projectId,
         project: project[0],
-        comments: event.comments
+        comments: event.comments,
+        show: true,
       })
     }
+  }
+
+  managesuggestionBorder = () => {
+    this.setState({ isBorder: true })
   }
 
   render() {
@@ -558,6 +596,8 @@ class Dashboard extends Component {
             handleMemberSelect={this.handleMemberSelect}
             handleProjectSelect={this.handleProjectSelect}
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}
+            renderSelectedProject={this.renderSelectedProject}
+            managesuggestionBorder={this.managesuggestionBorder}
           />
         </div>
         {/* <Footer />  */}

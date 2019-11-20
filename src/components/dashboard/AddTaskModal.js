@@ -20,25 +20,19 @@ class AddTaskModal extends Component {
       projectSearchText: "",
       memberSearchText: "",
       isBorder: false,
-      border: "solid 1px #d1d1d1"
+      border: "solid 1px #d1d1d1",
     };
   }
 
-  // componentDidUpdate = (prevProps, prevState) => {
-  //   if (prevProps.state.taskUser.length == 0 && this.props.state.taskUser.length == 1) {
-  //     var options = this.props.users.filter(u => u.id === this.props.state.taskUser[0])
-  //     this.setState({ selectedMembers: options })
-  //   }
-  // }
-
   onClickProjectInput = (e) => {
     if (e.target.value == "") {
-      this.setState({ projectSuggestions: this.props.projects, isBorder: true });
+      this.setState({ projectSuggestions: this.props.projects });
+      this.props.managesuggestionBorder()
     }
   }
 
   selectProject = (option) => {
-    this.setState({ project: option, projectSuggestions: [], projectSearchText: '', isBorder: false })
+    this.setState({ project: option, projectSuggestions: [], projectSearchText: '' })
     this.props.handleProjectSelect(option)
   }
 
@@ -79,20 +73,6 @@ class AddTaskModal extends Component {
           : null}
       </>
     )
-  }
-
-  renderSelectedProject = () => {
-    var project = this.props.state.project;
-    let border = this.props.state.border
-    if (project != "") {
-      return (
-        <span>
-          <span className="d-inline-block selected-project-color-code" style={{ backgroundColor: `${project.color_code}`, border: `${border}` }}></span>
-          <span className="d-inline-block right-left-space-5 text-titlize">{project.name}</span>
-        </span>
-      )
-    }
-    return null
   }
 
   renderMembersSearchSuggestion = () => {
@@ -141,7 +121,9 @@ class AddTaskModal extends Component {
     let membersSuggestions = []
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
-      membersSuggestions = this.props.modalMemberSearchOptions.sort().filter(m => regex.test(m.name) && !(this.props.state.selectedMembers.includes(m)))
+      var selectedMemberIds = this.props.state.selectedMembers.map(member => member.id)
+      var options = this.props.modalMemberSearchOptions.filter(member => !selectedMemberIds.includes(member.id))
+      membersSuggestions = options.sort().filter(m => regex.test(m.name))
     } else {
     }
     this.setState({ membersSuggestions: membersSuggestions, memberSearchText: value });
@@ -150,7 +132,6 @@ class AddTaskModal extends Component {
   selectMemebrSuggestion = (option) => {
     var newSelectedMembers = new Array(...this.props.state.selectedMembers)
     newSelectedMembers.push(option)
-    // var memberIds = newSelectedMembers.map(user => user.id)
     this.setState({ membersSuggestions: [], memberSearchText: '' })
     this.props.handleMemberSelect(newSelectedMembers)
   }
@@ -213,17 +194,17 @@ class AddTaskModal extends Component {
                   <div className="task-project-search">
                     <div>
                       <div className="d-inline-block selected-tags text-titlize">
-                        {this.renderSelectedProject()}
+                        {this.props.renderSelectedProject()}
                       </div>
                       <input className="d-inline-block"
                         type="text" value={this.state.projectSearchText}
-                        placeholder={this.props.state.project ? "" : "Select Project"}
+                        placeholder={`${this.props.state.project ? "" : "Select Project"}`}
                         onClick={this.onClickProjectInput}
                         onChange={this.onSearchProjectTextChange}
                       />
                       <span className="down-icon"><i className="fa fa-angle-down"></i></span>
                     </div>
-                    <div className="suggestion-holder" style={{ border: `${this.state.isBorder ? this.state.border : ""}` }}>
+                    <div className="suggestion-holder" style={{ border: `${this.props.state.isBorder ? this.state.border : ""}` }}>
                       {this.renderProjectSearchSuggestion()}
                     </div>
                   </div>
