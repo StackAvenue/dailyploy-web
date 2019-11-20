@@ -2162,12 +2162,14 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
   }
   .suggestion-holder{
     position: absolute;
-    width: 94%;
+    width: 93%;
+    margin-top: 2px;
     max-height: 200px;
     z-index: 1;
-    background-color: #f8f9fa;
     border-radius: 5px;
     overflow-y: auto;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17);
+    background-color: #ffffff;
     li:hover{
       cursor: pointer;
       background-color: $color-dropdown;
@@ -2207,6 +2209,15 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     margin-left: 20px;
     margin-right: 20px;
     vertical-align: sub;
+    border: solid 1px#9b9b9b;
+  }
+  .selected-project-color-code{
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    vertical-align: sub;
+    // border: solid 1px#9b9b9b;
   }
   .down-icon {
     margin: 5px !important;

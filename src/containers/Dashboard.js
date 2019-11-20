@@ -60,6 +60,7 @@ class Dashboard extends Component {
       taskButton: "Add",
       hourArr: [],
       minArr: [],
+      border: "solid 1px #ffffff"
     };
   }
 
@@ -357,7 +358,8 @@ class Dashboard extends Component {
       taskName: "",
       projectId: "",
       project: {},
-      comments: ""
+      comments: "",
+      border: "solid 1px #ffffff",
     });
   };
 
@@ -422,9 +424,19 @@ class Dashboard extends Component {
   };
 
   handleProjectSelect = option => {
+    if (this.state.user.role === 'admin') {
+      var options = option.members
+    } else {
+      var options = option.members.filter(member => member.id === this.state.userId)
+    }
+    var memberIds = options.map(member => member.id)
+    var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
     this.setState({
       projectId: option.id,
+      selectedMembers: removedMembers,
       project: option,
+      modalMemberSearchOptions: options,
+      border: "solid 1px #9b9b9b"
     })
   }
 

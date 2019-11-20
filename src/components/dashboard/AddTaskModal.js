@@ -19,24 +19,26 @@ class AddTaskModal extends Component {
       selectedMembers: [],
       projectSearchText: "",
       memberSearchText: "",
+      isBorder: false,
+      border: "solid 1px #d1d1d1"
     };
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevProps.state.taskUser.length == 0 && this.props.state.taskUser.length == 1) {
-      var options = this.props.users.filter(u => u.id === this.props.state.taskUser[0])
-      this.setState({ selectedMembers: options })
-    }
-  }
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   if (prevProps.state.taskUser.length == 0 && this.props.state.taskUser.length == 1) {
+  //     var options = this.props.users.filter(u => u.id === this.props.state.taskUser[0])
+  //     this.setState({ selectedMembers: options })
+  //   }
+  // }
 
   onClickProjectInput = (e) => {
     if (e.target.value == "") {
-      this.setState({ projectSuggestions: this.props.projects });
+      this.setState({ projectSuggestions: this.props.projects, isBorder: true });
     }
   }
 
   selectProject = (option) => {
-    this.setState({ project: option, projectSuggestions: [], projectSearchText: '' })
+    this.setState({ project: option, projectSuggestions: [], projectSearchText: '', isBorder: false })
     this.props.handleProjectSelect(option)
   }
 
@@ -81,10 +83,11 @@ class AddTaskModal extends Component {
 
   renderSelectedProject = () => {
     var project = this.props.state.project;
+    let border = this.props.state.border
     if (project != "") {
       return (
         <span>
-          <span className="d-inline-block task-project-color-code" style={{ backgroundColor: `${project.color_code}` }}></span>
+          <span className="d-inline-block selected-project-color-code" style={{ backgroundColor: `${project.color_code}`, border: `${border}` }}></span>
           <span className="d-inline-block right-left-space-5 text-titlize">{project.name}</span>
         </span>
       )
@@ -220,7 +223,7 @@ class AddTaskModal extends Component {
                       />
                       <span className="down-icon"><i className="fa fa-angle-down"></i></span>
                     </div>
-                    <div className="suggestion-holder">
+                    <div className="suggestion-holder" style={{ border: `${this.state.isBorder ? this.state.border : ""}` }}>
                       {this.renderProjectSearchSuggestion()}
                     </div>
                   </div>
@@ -243,7 +246,7 @@ class AddTaskModal extends Component {
               </div> */}
 
               <div className="col-md-12 no-padding input-row">
-                <div className="col-md-2 d-inline-block no-padding label">
+                <div className="col-md-2 d-inline-block no-padding label" style={{ verticalAlign: "top" }}>
                   Members
                 </div>
                 <div className="col-md-10 d-inline-block">
