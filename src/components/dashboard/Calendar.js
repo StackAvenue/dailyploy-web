@@ -74,7 +74,7 @@ class Calendar extends Component {
         nonAgendaOtherCellHeaderFormat: "D ddd",
         eventItemPopoverDateFormat: 'MMM D',
         minuteStep: 30,
-        calenderViewType: "dropdown",
+        // calenderViewType: "dropdown",
 
         views: [
           { viewName: 'Day', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false },
@@ -107,6 +107,8 @@ class Calendar extends Component {
     heights.set(4, finalSceenHeight / 4)
     heights.set(5, finalSceenHeight / 5)
     heights.set(6, finalSceenHeight / 6)
+    heights.set(7, finalSceenHeight / 7)
+    heights.set(8, finalSceenHeight / 8)
     let height = heights.get(resourcesLength)
     if (height === undefined) {
       return 50

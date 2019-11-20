@@ -270,6 +270,7 @@ class ShowProjects extends Component {
                       <th scope="col">Start Date</th>
                       <th scope="col">End Date</th>
                       <th scope="col">Duration</th>
+                      <th scope="col">Created Date</th>
                       <th scope="col">Project Members</th>
                     </tr>
                   </thead>
@@ -321,6 +322,7 @@ class ShowProjects extends Component {
                             )}
                             &nbsp; months
                           </td>
+                          <td>{project.start_date}</td> {/* TODO: here project created date */}
                           <td>
                             <span>
                               {project.members

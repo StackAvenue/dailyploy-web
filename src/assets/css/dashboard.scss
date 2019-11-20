@@ -2324,3 +2324,22 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
     padding-top: 15px;
   }
 }
+.ant-radio-button-wrapper{
+  width: auto;
+  border-radius: 5px !important;
+  border: solid 1px #d6d6d6 !important;
+  background-color: #ffffff !important;
+  margin-right: 5px !important;
+  &:active{
+    -webkit-box-shadow: none !important; 
+     box-shadow: none !important;
+     outline: 0px !important;
+  }
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+    -webkit-box-shadow: none !important; 
+     box-shadow: none !important;
+     outline: 0px !important;
+
+}
