@@ -30,9 +30,9 @@ class ShowProjects extends Component {
       isChecked: true,
       isLoading: false,
       isLogedInUserEmailArr: [],
-      projects: [],
       userId: "",
       users: [],
+      userName: "",
     };
   }
   countIncrese = projectUser => {
@@ -209,6 +209,12 @@ class ShowProjects extends Component {
     this.setState({ isLoading: value });
   };
 
+  manageProjectListing = (project) => {
+    project['owner'] = { name: `${this.state.userName}` }
+    var projects = [...this.state.projects, ...[project]]
+    this.setState({ projects: projects })
+  }
+
   render() {
     return (
       <>
@@ -217,6 +223,7 @@ class ShowProjects extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           handleLoad={this.handleLoad}
+          manageProjectListing={this.manageProjectListing}
           state={this.state}
         />
         <div className="show-projects">
@@ -302,7 +309,7 @@ class ShowProjects extends Component {
                                 backgroundColor: `${project.color_code}`,
                               }}></div>
                           </td>
-                          <td>{project.owner.name}</td>
+                          <td>{project.owner ? project.owner.name : ""}</td>
                           <td>{project.start_date}</td>
                           <td>
                             {project.end_date ? project.end_date : "undefined"}
