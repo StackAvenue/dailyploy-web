@@ -40,7 +40,7 @@ class ReportTable2Row extends Component {
       var totalSec = null;
       if (this.props.userRole === "admin") {
         tasks.map((task, idx) => {
-          task.project.members.map(member => {
+          task.members.map(member => {
             totalSec += this.calculateSeconds(task)
           })
         });
@@ -74,7 +74,7 @@ class ReportTable2Row extends Component {
 
   displayMembers = members => {
     if (members) {
-      let arr = members.map(project => project.name);
+      let arr = members.map(member => member.name);
       var memberShow;
       let count;
       if (arr.length > 2) {
@@ -109,7 +109,7 @@ class ReportTable2Row extends Component {
       } else {
         return (
           <tr key={index}>
-            <td className="text-titlize">{this.displayMembers(task.project.members)}</td>
+            <td className="text-titlize">{this.displayMembers(task.members)}</td>
             <td className="text-titlize">{task.name}</td>
             <td className={"text-titlize catergory2 " + task.category} >{"category 2"}</td>
             <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
@@ -121,7 +121,7 @@ class ReportTable2Row extends Component {
   }
 
   taskMember = (task) => {
-    return task.project.members.map((member, index) => {
+    return task.members.map((member, index) => {
       return (
         <tr key={index}>
           <td className="text-titlize">{member.name}</td>

@@ -353,7 +353,7 @@ class Reports extends Component {
     var totalSec = 0;
     if (this.state.userRole === 'admin' && this.props.searchUserDetail === "") {
       tasks.map((task, idx) => {
-        task.project.members.map(member => {
+        task.members.map(member => {
           totalSec += this.totalSeconds(tasks, date)
         })
       });
