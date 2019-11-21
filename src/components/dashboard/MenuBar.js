@@ -65,6 +65,7 @@ export default class MenuBar extends Component {
       suggestions: [],
       projectsListing: [],
       userRole: null,
+      selectedTags: [],
     };
   }
 
@@ -97,7 +98,7 @@ export default class MenuBar extends Component {
         `workspaces/${this.props.workspaceId}/projects`,
       );
       this.setState({ show: false });
-      this.props.manageProjectListing(data.project)
+      this.props.manageProjectListing(data.project);
       this.props.handleLoad(true);
       toast(
         <DailyPloyToast
@@ -158,10 +159,9 @@ export default class MenuBar extends Component {
     }
   };
 
-  handleChangeMember = selected => {
-    this.setState({ projectMembers: selected });
+  handleChangeMember = (selected, selectedTags) => {
+    this.setState({ projectMembers: selected, selectedTags: selectedTags });
   };
-
   sortHandler = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -320,9 +320,11 @@ export default class MenuBar extends Component {
                         colors={this.colors}
                         addProject={this.addProject}
                         btnText={"Add"}
+                        headText={"Add Project"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}
                         handleUndefinedToDate={this.handleUndefinedToDate}
                         workspaceId={this.props.workspaceId}
+                        ownerClassName={"d-none"}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People

@@ -51,30 +51,33 @@ class AddProjectModal extends Component {
       suggestions = this.state.members
         .sort()
         .filter(
-          m => regex.test(m.name) && !this.state.selectedTags.includes(m),
+          m => regex.test(m.name) && !this.props.state.selectedTags.includes(m),
         );
     }
     this.setState({ suggestions: suggestions, value: value });
   };
 
   selectSuggestion = option => {
-    var newSelectedTags = new Array(...this.state.selectedTags);
+    var newSelectedTags = new Array(...this.props.state.selectedTags);
     newSelectedTags.push(option);
     var memberIds = newSelectedTags.map(user => user.id);
     this.setState({
-      selectedTags: newSelectedTags,
+      // selectedTags: newSelectedTags,
       suggestions: [],
       value: "",
     });
-    this.props.handleChangeMember(memberIds);
+    this.props.handleChangeMember(memberIds, newSelectedTags);
   };
 
   removeSelectedTag = index => {
-    var selectedTags = this.state.selectedTags;
+    var selectedTags = this.props.state.selectedTags;
+    console.log("idididi", selectedTags);
     selectedTags = selectedTags.filter((_, idx) => idx !== index);
+    console.log("shsjsks", selectedTags);
     var memberIds = selectedTags.map(user => user.id);
-    this.setState({ selectedTags: selectedTags });
-    this.props.handleChangeMember(memberIds);
+    console.log("jskssjsksj", memberIds);
+    // this.setState({ selectedTags: selectedTags });
+    this.props.handleChangeMember(memberIds, selectedTags);
   };
 
   renderSearchSuggestion = () => {
@@ -106,7 +109,7 @@ class AddProjectModal extends Component {
   renderSelectedTags = () => {
     return (
       <>
-        {this.state.selectedTags.map((option, index) => {
+        {this.props.state.selectedTags.map((option, index) => {
           return (
             <div className="select-member" key={index}>
               <div className="member-title d-inline-block">
@@ -182,7 +185,7 @@ class AddProjectModal extends Component {
           onHide={props.handleClose}>
           <div className="row no-margin">
             <div className="col-md-12 header">
-              <span>Add New Project</span>
+              <span>{props.headText}</span>
               <button
                 className="btn btn-link float-right"
                 onClick={props.handleClose}>
@@ -190,6 +193,16 @@ class AddProjectModal extends Component {
               </button>
             </div>
             <div className="col-md-12 body">
+              <div
+                className={`col-md-12 no-padding input-row ${props.ownerClassName}`}>
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Owner Name
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  {props.state.projectOwner}
+                </div>
+              </div>
+
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Name

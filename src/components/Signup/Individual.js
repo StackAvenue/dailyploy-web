@@ -62,8 +62,11 @@ const Individual = props => {
           <div className="form-group">
             <label>Password</label>
             {props.state.errors.passwordError ? (
-              <span className="error-warning">
-                {props.state.errors.passwordError}
+              <span
+                className="error-warning text-wraping "
+                data-toggle="tooltip"
+                title="Min 8 characters at least 1 number and 1 special character">
+                Must be Valid
               </span>
             ) : null}
             {props.state.errors.passwordError ? (
@@ -114,7 +117,10 @@ const Individual = props => {
             )}
           </div>
           {/* <br /> */}
-          <div className="col-md-12 no-padding text-center">
+          <div
+            className="col-md-12 no-padding text-center"
+            data-toggle="tooltip"
+            title="Fill All Fields">
             <button
               disabled={!props.enable}
               // onClick={props.signup}

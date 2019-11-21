@@ -616,10 +616,10 @@
   width: 100%;
 }
 .project-modal {
-  top: 13% !important;
+  top: 9% !important;
   .modal-content {
     width: 658px;
-    height: 500px;
+    // height: 500px;
     .header {
       padding: 17px 0 0px 49px !important;
       span {
@@ -2363,7 +2363,7 @@ table.scheduler-table tr:last-child td {
     overflow-y: auto;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17);
     background-color: #ffffff;
-    li:hover{
+    li:hover {
       cursor: pointer;
       background-color: $color-dropdown;
     }
@@ -2404,7 +2404,7 @@ table.scheduler-table tr:last-child td {
     vertical-align: sub;
     border: solid 1px#9b9b9b;
   }
-  .selected-project-color-code{
+  .selected-project-color-code {
     width: 20px;
     height: 20px;
     margin-left: 20px;
@@ -2517,22 +2517,21 @@ table.scheduler-table tr:last-child td {
     padding-top: 15px;
   }
 }
-.ant-radio-button-wrapper{
+.ant-radio-button-wrapper {
   width: auto;
   border-radius: 5px !important;
   border: solid 1px #d6d6d6 !important;
   background-color: #ffffff !important;
   margin-right: 5px !important;
-  &:active{
-    -webkit-box-shadow: none !important; 
-     box-shadow: none !important;
-     outline: 0px !important;
+  &:active {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    outline: 0px !important;
   }
 }
 
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
-    -webkit-box-shadow: none !important; 
-     box-shadow: none !important;
-     outline: 0px !important;
-
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  outline: 0px !important;
 }

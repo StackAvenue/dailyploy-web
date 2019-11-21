@@ -1,55 +1,98 @@
 @import "./colors";
 @import "./variables";
 
-.error-warning{
-    color:$red-color;
-    font-family: $font-family-roboto;
-    text-align: $text-left;
-    font-size:$font-14;
-    margin-left: 15px;
+.error-warning {
+  color: $red-color;
+  font-family: $font-family-roboto;
+  text-align: $text-left;
+  font-size: $font-14;
+  margin-left: 15px;
 }
 
-.no-margin{
-    margin-left:$mr-0 !important;
-    margin-right:$mr-0 !important;
-}   
-
-.no-padding{
-    padding:$mr-0 !important;
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
 }
 
-.main-container{
-    width:94% !important;
-    margin:auto !important;
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 110%;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.text-wraping {
+  display: inline-block;
+  width: 270px;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  vertical-align: middle;
+}
+
+.no-margin {
+  margin-left: $mr-0 !important;
+  margin-right: $mr-0 !important;
+}
+
+.no-padding {
+  padding: $mr-0 !important;
+}
+
+.main-container {
+  width: 94% !important;
+  margin: auto !important;
 }
 
 .text-titlize {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 .left-padding-50px {
-    padding-left: 50px !important;
+  padding-left: 50px !important;
 }
-.date-text-light{
-    width: 24px;
-    height: 18px;
-    opacity: 0.5;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.2;
-    letter-spacing: normal;
-    text-align: left;
-    color: #555555 !important;
+.date-text-light {
+  width: 24px;
+  height: 18px;
+  opacity: 0.5;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: left;
+  color: #555555 !important;
 }
-.padding-10px{
-    padding: 10px !important;
+.padding-10px {
+  padding: 10px !important;
 }
-.text-blue{
-    color: #0075d9;
+.text-blue {
+  color: #0075d9;
 }
-.text-green{
-    color:#008135;
+.text-green {
+  color: #008135;
 }

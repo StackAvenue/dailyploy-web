@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, logout } from "../../utils/API";
+import { get, logout, put } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -9,6 +9,8 @@ import GridBlock from "./ProjectViews/GridBlock";
 import Sidebar from "./Sidebar";
 import moment from "moment";
 import AddProjectModal from "./AddProjectModal";
+import DailyPloyToast from "../DailyPloyToast";
+import { toast } from "react-toastify";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -22,6 +24,16 @@ class ShowProjects extends Component {
       "Kiran Chaudahry",
       "Kiran Chaudahry",
       "Kiran Chaudahry",
+    ];
+    this.colors = [
+      "#b9e1ff",
+      "#ffc1de",
+      "#4fefde",
+      "#c7d0ff",
+      "#ffc6ac",
+      "#ffa2a2",
+      "#e9ff71",
+      "#d7a0ff",
     ];
     this.state = {
       workspaces: [],
@@ -39,10 +51,12 @@ class ShowProjects extends Component {
       projectOwner: null,
       dateFrom: null,
       dateTo: null,
-      projectMember: [],
+      projectMembers: [],
       projectId: null,
       background: null,
       userName: "",
+      displayColorPicker: false,
+      selectedTags: [],
     };
   }
   countIncrese = projectUser => {
@@ -120,43 +134,6 @@ class ShowProjects extends Component {
     });
   }
 
-  // async componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.isLoading !== this.state.isLoading) {
-  //     if (prevState.projects !== this.state.projects) {
-  //       try {
-  //         const { data } = await get(
-  //           `workspaces/${this.state.workspaceId}/projects`,
-  //         );
-  //         var projectsData = data.projects;
-  //         // console.log("projectsData", projectsData);
-  //       } catch (e) {
-  //         console.log("err", e);
-  //       }
-  //     }
-  //     this.setState({ projects: projectsData, isLoading: false });
-  //   }
-  // }
-
-  // async componentDidUpdate(prevProps, prevState) {
-  //   console.log("WorkspaceId", this.state.workspaceId);
-  //   if (
-  //     prevState.projects !== this.state.projects ||
-  //     prevState.isLoading !== this.state.isLoading
-  //   ) {
-  //     try {
-  //       const { data } = await get(
-  //         `workspaces/${this.state.workspaceId}/projects`,
-  //       );
-  //       var projectsData = data.projects;
-  //       // console.log("projectsData", projectsData);
-  //     } catch (e) {
-  //       console.log("err", e);
-  //     }
-
-  //     this.setState({ projects: projectsData, isLoading: false });
-  //   }
-  // }
-
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
     this.setState({ workspaceId: workspaceId });
@@ -181,10 +158,10 @@ class ShowProjects extends Component {
     var monthDuration = moment(d2).diff(d1, "months");
     var yearDuration = moment(d2).diff(d1, "year");
     let duration;
-    if (dayDuration > 30) {
+    if (dayDuration > 30 && monthDuration < 12) {
       duration = monthDuration + " months";
     } else if (dayDuration === 0) {
-      duration = "---";
+      duration = "undefined";
     } else if (monthDuration > 12) {
       duration = yearDuration + " year";
     } else {
@@ -239,8 +216,10 @@ class ShowProjects extends Component {
       projectOwner: project.owner.name,
       projectName: project.name,
       dateFrom: new Date(project.start_date),
-      dateTo: new Date(project.start_date),
+      dateTo: new Date(project.end_date),
       background: project.color_code,
+      selectedTags: project.members,
+      projectMembers: project.members.map(project => project.id),
     });
   };
 
@@ -249,14 +228,107 @@ class ShowProjects extends Component {
       show: false,
     });
   };
-  manageProjectListing = (project) => {
-    project['owner'] = { name: `${this.state.userName}` }
-    var projects = [...this.state.projects, ...[project]]
-    this.setState({ projects: projects })
-  }
+
+  handleChangeInput = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  handleDateFrom = date => {
+    this.setState({ dateFrom: date });
+  };
+
+  handleDateTo = date => {
+    this.setState({ dateTo: date });
+  };
+
+  handleUndefinedToDate = () => {
+    if (this.state.disabledDateTo) {
+      var disableColor = "#fff";
+    } else {
+      var disableColor = "#eaeaed";
+    }
+    this.setState({
+      disabledDateTo: !this.state.disabledDateTo,
+      disableColor: disableColor,
+      dateTo: null,
+    });
+  };
+
+  handleChangeComplete = (color, event) => {
+    this.setState({
+      background: color.hex,
+      displayColorPicker: !this.state.displayColorPicker,
+    });
+  };
+
+  handleChangeColor = () => {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker });
+  };
+
+  manageProjectListing = project => {
+    project["owner"] = { name: `${this.state.userName}` };
+    var projects = [...this.state.projects, ...[project]];
+    this.setState({ projects: projects });
+  };
+
+  handleChangeMember = (selected, selectedTags) => {
+    this.setState({ projectMembers: selected, selectedTags: selectedTags });
+  };
+
+  editProject = async () => {
+    const projectData = {
+      project: {
+        name: this.state.projectName,
+        start_date: this.state.dateFrom,
+        end_date: this.state.dateTo,
+        members: this.state.projectMembers,
+        color_code: this.state.background,
+      },
+    };
+    try {
+      const { data } = await put(
+        projectData,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}`,
+      );
+      this.setState({ show: false });
+      this.manageProjectListing(data.project);
+      this.handleLoad(true);
+      toast(
+        <DailyPloyToast
+          message="Project added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
+    } catch (e) {
+      console.log("Error", e);
+      var errors = e.response.data.errors;
+      if (errors && errors.project_name_workspace_uniqueness) {
+        toast(
+          <DailyPloyToast
+            message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      } else if (errors && errors.name) {
+        toast(
+          <DailyPloyToast
+            message={`Project name ${errors.name}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      } else {
+        this.setState({ show: false });
+      }
+    }
+  };
 
   render() {
     var userRole = localStorage.getItem("userRole");
+    console.log("Members", this.state.projectMembers);
     return (
       <>
         <MenuBar
@@ -352,9 +424,13 @@ class ShowProjects extends Component {
                               }}></div>
                           </td>
                           <td>{project.owner ? project.owner.name : ""}</td>
-                          <td>{project.start_date}</td>
                           <td>
-                            {project.end_date ? project.end_date : "undefined"}
+                            {moment(project.start_date).format("DD MMM YY")}
+                          </td>
+                          <td>
+                            {project.end_date
+                              ? moment(project.end_date).format("DD MMM YY")
+                              : "---"}
                           </td>
                           <td>
                             {this.monthDiff(
@@ -362,7 +438,10 @@ class ShowProjects extends Component {
                               this.getDate(project.end_date),
                             )}
                           </td>
-                          <td>{project.start_date}</td> {/* TODO: here project created date */}
+                          <td>
+                            {moment(project.start_date).format("DD MMM YY")}
+                          </td>{" "}
+                          {/* TODO: here project created date */}
                           <td>
                             <span>
                               {project.members
@@ -394,13 +473,28 @@ class ShowProjects extends Component {
                               <i className="fas fa-pencil-alt"></i>
                             </button>
                             {this.state.show &&
-                              this.state.projectId === project.id ? (
-                                <AddProjectModal
-                                  state={this.state}
-                                  handleClose={this.handleEditClose}
-                                  btnText={"Save"}
-                                />
-                              ) : null}
+                            this.state.projectId === project.id ? (
+                              <AddProjectModal
+                                state={this.state}
+                                handleClose={this.handleEditClose}
+                                btnText={"Save"}
+                                headText={project.name}
+                                ownerClassName={""}
+                                handleChangeInput={this.handleChangeInput}
+                                handleDateFrom={this.handleDateFrom}
+                                handleDateTo={this.handleDateTo}
+                                handleUndefinedToDate={
+                                  this.handleUndefinedToDate
+                                }
+                                workspaceId={this.state.workspaceId}
+                                handleChangeColor={this.handleChangeColor}
+                                handleChangeComplete={this.handleChangeComplete}
+                                colors={this.colors}
+                                handleChangeMember={this.handleChangeMember}
+                                emailOptions={this.state.isLogedInUserEmailArr}
+                                addProject={this.editProject}
+                              />
+                            ) : null}
                           </td>
                         </tr>
                       );
