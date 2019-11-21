@@ -58,10 +58,11 @@ class Dashboard extends Component {
       user: "",
       modalMemberSearchOptions: [],
       taskButton: "Add",
-      hourArr: [],
-      minArr: [],
       border: "solid 1px #ffffff",
       isBorder: false,
+      editProjectId: "",
+      timeDateTo: null,
+      timeDateFrom: null,
     };
   }
 
@@ -149,6 +150,24 @@ class Dashboard extends Component {
           events: taskEvents,
         });
       } catch (e) { }
+    }
+
+    if (prevState.timeFrom !== this.state.timeFrom) {
+      var startDateTime = null
+      if (this.state.timeFrom !== null) {
+        startDateTime = moment().format("YYYY-MM-DD") + " " + this.state.timeFrom;
+        startDateTime = moment(startDateTime)
+      }
+      this.setState({ timeDateFrom: startDateTime })
+    }
+
+    if (prevState.timeTo !== this.state.timeTo) {
+      var endDateTime = null
+      if (this.state.timeTo !== null) {
+        endDateTime = moment().format("YYYY-MM-DD") + " " + this.state.timeTo;
+        endDateTime = moment(endDateTime)
+      }
+      this.setState({ timeDateTo: endDateTime })
     }
   }
 
@@ -300,9 +319,9 @@ class Dashboard extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
-      this.setState({ show: false, newTask: task });
+      this.setState({ show: false, newTask: task, border: "solid 1px #ffffff" });
     } catch (e) {
-      this.setState({ show: false });
+      this.setState({ show: false, border: "solid 1px #ffffff" });
     }
   };
 
@@ -311,7 +330,7 @@ class Dashboard extends Component {
     try {
       const { data } = await put(
         taskData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.project.id}/tasks/${this.state.taskId}`,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${this.state.taskId}`,
       );
       var task = data.task;
       toast(
@@ -321,9 +340,9 @@ class Dashboard extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
-      this.setState({ show: false, newTask: task });
+      this.setState({ show: false, newTask: task, border: "solid 1px #ffffff" });
     } catch (e) {
-      this.setState({ show: false });
+      this.setState({ show: false, border: "solid 1px #ffffff" });
     }
   };
 
@@ -341,6 +360,7 @@ class Dashboard extends Component {
         start_datetime: new Date(startDateTime),
         end_datetime: new Date(endDateTime),
         comments: this.state.comments,
+        project_id: this.state.project.id
       },
     };
     return taskData;
@@ -401,26 +421,9 @@ class Dashboard extends Component {
   };
 
   handleTimeFrom = value => {
-    if (value != null) {
-      var time = value.format("HH:mm:ss")
-      var hr = time.split(':')[0]
-      hr = Number(hr)
-      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k)
-      var min = time.split(':')[1]
-      min = Number(min) + 1
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k)
-      this.setState({
-        timeFrom: time,
-        hourArr: hoursArr,
-        minArr: minArr
-      });
-    } else {
-      this.setState({
-        timeFrom: null,
-        hourArr: [],
-        minArr: []
-      });
-    }
+    this.setState({
+      timeFrom: value != null ? value.format("HH:mm:ss") : null,
+    });
   };
 
   handleTimeTo = value => {
@@ -489,13 +492,12 @@ class Dashboard extends Component {
     //   return this.state.users.filter(member => member.id === userId)
     // }
     var projects = this.state.projects.filter(project => project.id === projectId)
-    var members = projects[0].members
+    var members = projects.length > 0 ? projects[0].members : []
     if (this.state.user.role === 'admin' && projects) {
       members.push({ email: this.state.userEmail, id: this.state.userId, name: this.state.userName })
     } else {
       members = members.filter(member => member.id === userId)
     }
-    console.log("members", members)
     return members
   }
 
@@ -511,12 +513,15 @@ class Dashboard extends Component {
         selectedMembers: selecteMember,
         show: true,
         calenderTaskModal: true,
-        project: {},
+        project: "",
         projectId: "",
         taskId: "",
         modalMemberSearchOptions: members,
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
+        border: "solid 1px #ffffff",
+        timeDateTo: null,
+        timeDateFrom: null,
       });
     }
   };
@@ -539,7 +544,8 @@ class Dashboard extends Component {
     let members = this.memberSearchOptions(event.resourceId, event.projectId)
     var project = this.state.projects.filter(project => project.id === event.projectId)
     var eventTasks = this.state.events.filter(taskEvent => taskEvent.id === event.id)
-    var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
+    // var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
+    var memberIds = eventTasks.map(filterEvent => filterEvent.resourceId)
     var selectedMembers = this.state.users.filter(member => memberIds.includes(member.id))
     try {
       const { data } = await get(
@@ -566,6 +572,7 @@ class Dashboard extends Component {
         taskId: taskId,
         selectedMembers: selectedMembers,
         taskName: event.title,
+        editProjectId: event.projectId,
         projectId: event.projectId,
         project: project[0],
         comments: event.comments,
