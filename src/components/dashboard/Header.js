@@ -51,6 +51,12 @@ class Header extends Component {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
 
+    if (prevProps.searchOptions !== this.props.searchOptions) {
+      this.setState({
+        selectedTags: this.props.searchOptions.filter(option => option.email === this.state.userEmail)
+      })
+    }
+
     if (this.props.workspaceId !== prevProps.workspaceId) {
       try {
         const { data } = await get(
@@ -350,7 +356,7 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                      } `}
+                        } `}
                       id="dropdown-basic">
                       {x}
                     </Dropdown.Toggle>
@@ -361,7 +367,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                          } `}>
+                            } `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">

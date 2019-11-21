@@ -2535,3 +2535,12 @@ table.scheduler-table tr:last-child td {
   box-shadow: none !important;
   outline: 0px !important;
 }
+.fa-close {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.taskedit-u-line{
+  border-bottom: solid 1px #5f696552;
+  width: 90%;
+  border-radius: 1px;
+}

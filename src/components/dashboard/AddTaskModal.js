@@ -99,6 +99,7 @@ class AddTaskModal extends Component {
   }
 
   renderSelectedMembers = () => {
+    const state = this.props.state
     return (
       <>
         {
@@ -107,13 +108,24 @@ class AddTaskModal extends Component {
               <div className="select-member" key={index}>
                 <div className="member-title d-inline-block">{this.initalChar(option.name)}</div>
                 <div className="right-left-space-5 d-inline-block">{option.name}</div>
-                <a className="remove-tag right-left-space-5 d-inline-block" onClick={() => this.removeSelectedTag(index)}><i className="fa fa-close"></i></a>
+                <a
+                  className="right-left-space-5 d-inline-block"
+                  onClick={() => this.removeSelectedTag(index)}
+                >
+                  {state.taskButton === 'Save' && state.user.role !== 'admin' ? this.placeCloseIcon(option, state) : <i className="fa fa-close "></i>}
+                </a>
               </div>
             )
           })
         }
       </>
     )
+  }
+
+  placeCloseIcon = (option, state) => {
+    if (state.userId === option.id) {
+      return <i className="fa fa-close"></i>
+    }
   }
 
   onSearchMemberTextChange = (e) => {
@@ -142,11 +154,25 @@ class AddTaskModal extends Component {
   }
 
   disabledHours = () => {
-    return this.props.state.hourArr
+    var time = this.props.state.timeFrom
+    if (time) {
+      var hr = time.split(':')[0]
+      hr = Number(hr)
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k)
+      return hoursArr
+    }
+    return []
   }
 
   disabledMinutes = () => {
-    return this.props.state.minArr
+    var time = this.props.state.timeFrom
+    if (time) {
+      var min = time.split(':')[1]
+      min = Number(min) + 1
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k)
+      return minArr
+    }
+    return []
   }
 
   render() {
@@ -161,7 +187,9 @@ class AddTaskModal extends Component {
         >
           <div className="row no-margin">
             <div className="col-md-12 header text-titlize">
-              <span> {props.state.taskButton === "Add" ? "Add New Task" : props.state.taskName}</span>
+              <div className={`d-inline-block ${props.state.taskButton === "Add" ? "" : "taskedit-u-line"}`}>
+                <span> {props.state.taskButton === "Add" ? "Add New Task" : props.state.taskName}</span>
+              </div>
               <button
                 className="btn btn-link float-right"
                 onClick={props.closeTaskModal}
@@ -295,7 +323,7 @@ class AddTaskModal extends Component {
                       <div className="col-md-9 d-inline-block" style={{ paddingRight: "0" }}>
                         <TimePicker
                           placeholder="Select"
-                          // value={moment(props.state.dateFrom)}
+                          value={this.props.state.timeDateFrom}
                           showSecond={false}
                           onChange={props.handleTimeFrom}
                           format={props.format}
@@ -306,7 +334,7 @@ class AddTaskModal extends Component {
                       <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                       <div className="col-md-9 d-inline-block" style={{ paddingRight: "0" }}>
                         <TimePicker
-                          // value={moment(props.state.dateTo).format("HH:mm")}
+                          value={this.props.state.timeDateTo}
                           placeholder="Select"
                           showSecond={false}
                           onChange={props.handleTimeTo}
