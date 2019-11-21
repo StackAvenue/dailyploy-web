@@ -32,7 +32,6 @@ class ShowProjects extends Component {
       isChecked: true,
       isLoading: false,
       isLogedInUserEmailArr: [],
-      projects: [],
       userId: "",
       users: [],
       setShow: false,
@@ -43,6 +42,7 @@ class ShowProjects extends Component {
       projectMember: [],
       projectId: null,
       background: null,
+      userName: "",
     };
   }
   countIncrese = projectUser => {
@@ -249,6 +249,11 @@ class ShowProjects extends Component {
       show: false,
     });
   };
+  manageProjectListing = (project) => {
+    project['owner'] = { name: `${this.state.userName}` }
+    var projects = [...this.state.projects, ...[project]]
+    this.setState({ projects: projects })
+  }
 
   render() {
     var userRole = localStorage.getItem("userRole");
@@ -259,6 +264,7 @@ class ShowProjects extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           handleLoad={this.handleLoad}
+          manageProjectListing={this.manageProjectListing}
           state={this.state}
         />
         <div className="show-projects">
@@ -305,6 +311,7 @@ class ShowProjects extends Component {
                       <th scope="col">Start Date</th>
                       <th scope="col">End Date</th>
                       <th scope="col">Duration</th>
+                      <th scope="col">Created Date</th>
                       <th scope="col">Project Members</th>
                     </tr>
                   </thead>
@@ -344,7 +351,7 @@ class ShowProjects extends Component {
                                 backgroundColor: `${project.color_code}`,
                               }}></div>
                           </td>
-                          <td>{project.owner.name}</td>
+                          <td>{project.owner ? project.owner.name : ""}</td>
                           <td>{project.start_date}</td>
                           <td>
                             {project.end_date ? project.end_date : "undefined"}
@@ -355,6 +362,7 @@ class ShowProjects extends Component {
                               this.getDate(project.end_date),
                             )}
                           </td>
+                          <td>{project.start_date}</td> {/* TODO: here project created date */}
                           <td>
                             <span>
                               {project.members
@@ -386,13 +394,13 @@ class ShowProjects extends Component {
                               <i className="fas fa-pencil-alt"></i>
                             </button>
                             {this.state.show &&
-                            this.state.projectId === project.id ? (
-                              <AddProjectModal
-                                state={this.state}
-                                handleClose={this.handleEditClose}
-                                btnText={"Save"}
-                              />
-                            ) : null}
+                              this.state.projectId === project.id ? (
+                                <AddProjectModal
+                                  state={this.state}
+                                  handleClose={this.handleEditClose}
+                                  btnText={"Save"}
+                                />
+                              ) : null}
                           </td>
                         </tr>
                       );

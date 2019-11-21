@@ -2355,13 +2355,15 @@ table.scheduler-table tr:last-child td {
   }
   .suggestion-holder {
     position: absolute;
-    width: 94%;
+    width: 93%;
+    margin-top: 2px;
     max-height: 200px;
     z-index: 1;
-    background-color: #f8f9fa;
     border-radius: 5px;
     overflow-y: auto;
-    li:hover {
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17);
+    background-color: #ffffff;
+    li:hover{
       cursor: pointer;
       background-color: $color-dropdown;
     }
@@ -2400,6 +2402,15 @@ table.scheduler-table tr:last-child td {
     margin-left: 20px;
     margin-right: 20px;
     vertical-align: sub;
+    border: solid 1px#9b9b9b;
+  }
+  .selected-project-color-code{
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    vertical-align: sub;
+    // border: solid 1px#9b9b9b;
   }
   .down-icon {
     margin: 5px !important;
@@ -2505,4 +2516,23 @@ table.scheduler-table tr:last-child td {
   .time {
     padding-top: 15px;
   }
+}
+.ant-radio-button-wrapper{
+  width: auto;
+  border-radius: 5px !important;
+  border: solid 1px #d6d6d6 !important;
+  background-color: #ffffff !important;
+  margin-right: 5px !important;
+  &:active{
+    -webkit-box-shadow: none !important; 
+     box-shadow: none !important;
+     outline: 0px !important;
+  }
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+    -webkit-box-shadow: none !important; 
+     box-shadow: none !important;
+     outline: 0px !important;
+
 }

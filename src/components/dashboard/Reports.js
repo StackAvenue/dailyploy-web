@@ -103,7 +103,7 @@ class Reports extends Component {
   };
 
   textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function(a) {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
@@ -270,7 +270,7 @@ class Reports extends Component {
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
       this.props.handleLoading(false);
-    } catch (e) {}
+    } catch (e) { }
 
     this.setState({
       userId: loggedInData.id,
@@ -330,7 +330,7 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) {}
+      } catch (e) { }
       var message = this.displayMessage();
 
       this.setState({
@@ -369,9 +369,9 @@ class Reports extends Component {
     var totalSec = 0;
     if (this.state.userRole === "admin" && this.props.searchUserDetail === "") {
       tasks.map((task, idx) => {
-        task.project.members.map(member => {
-          totalSec += this.totalSeconds(tasks, date);
-        });
+        task.members.map(member => {
+          totalSec += this.totalSeconds(tasks, date)
+        })
       });
     } else {
       totalSec += this.totalSeconds(tasks, date);

@@ -19,19 +19,15 @@ class AddTaskModal extends Component {
       selectedMembers: [],
       projectSearchText: "",
       memberSearchText: "",
+      isBorder: false,
+      border: "solid 1px #d1d1d1",
     };
-  }
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevProps.state.taskUser.length == 0 && this.props.state.taskUser.length == 1) {
-      var options = this.props.users.filter(u => u.id === this.props.state.taskUser[0])
-      this.setState({ selectedMembers: options })
-    }
   }
 
   onClickProjectInput = (e) => {
     if (e.target.value == "") {
       this.setState({ projectSuggestions: this.props.projects });
+      this.props.managesuggestionBorder()
     }
   }
 
@@ -77,19 +73,6 @@ class AddTaskModal extends Component {
           : null}
       </>
     )
-  }
-
-  renderSelectedProject = () => {
-    var project = this.props.state.project;
-    if (project != "") {
-      return (
-        <span>
-          <span className="d-inline-block task-project-color-code" style={{ backgroundColor: `${project.color_code}` }}></span>
-          <span className="d-inline-block right-left-space-5 text-titlize">{project.name}</span>
-        </span>
-      )
-    }
-    return null
   }
 
   renderMembersSearchSuggestion = () => {
@@ -138,7 +121,9 @@ class AddTaskModal extends Component {
     let membersSuggestions = []
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
-      membersSuggestions = this.props.modalMemberSearchOptions.sort().filter(m => regex.test(m.name) && !(this.props.state.selectedMembers.includes(m)))
+      var selectedMemberIds = this.props.state.selectedMembers.map(member => member.id)
+      var options = this.props.modalMemberSearchOptions.filter(member => !selectedMemberIds.includes(member.id))
+      membersSuggestions = options.sort().filter(m => regex.test(m.name))
     } else {
     }
     this.setState({ membersSuggestions: membersSuggestions, memberSearchText: value });
@@ -147,7 +132,6 @@ class AddTaskModal extends Component {
   selectMemebrSuggestion = (option) => {
     var newSelectedMembers = new Array(...this.props.state.selectedMembers)
     newSelectedMembers.push(option)
-    // var memberIds = newSelectedMembers.map(user => user.id)
     this.setState({ membersSuggestions: [], memberSearchText: '' })
     this.props.handleMemberSelect(newSelectedMembers)
   }
@@ -155,6 +139,14 @@ class AddTaskModal extends Component {
   initalChar = (str) => {
     var matches = str.match(/\b(\w)/g);
     return matches.join('').toUpperCase();
+  }
+
+  disabledHours = () => {
+    return this.props.state.hourArr
+  }
+
+  disabledMinutes = () => {
+    return this.props.state.minArr
   }
 
   render() {
@@ -202,17 +194,17 @@ class AddTaskModal extends Component {
                   <div className="task-project-search">
                     <div>
                       <div className="d-inline-block selected-tags text-titlize">
-                        {this.renderSelectedProject()}
+                        {this.props.renderSelectedProject()}
                       </div>
                       <input className="d-inline-block"
                         type="text" value={this.state.projectSearchText}
-                        placeholder={this.props.state.project ? "" : "Select Project"}
+                        placeholder={`${this.props.state.project ? "" : "Select Project"}`}
                         onClick={this.onClickProjectInput}
                         onChange={this.onSearchProjectTextChange}
                       />
                       <span className="down-icon"><i className="fa fa-angle-down"></i></span>
                     </div>
-                    <div className="suggestion-holder">
+                    <div className="suggestion-holder" style={{ border: `${this.props.state.isBorder ? this.state.border : ""}` }}>
                       {this.renderProjectSearchSuggestion()}
                     </div>
                   </div>
@@ -235,7 +227,7 @@ class AddTaskModal extends Component {
               </div> */}
 
               <div className="col-md-12 no-padding input-row">
-                <div className="col-md-2 d-inline-block no-padding label">
+                <div className="col-md-2 d-inline-block no-padding label" style={{ verticalAlign: "top" }}>
                   Members
                 </div>
                 <div className="col-md-10 d-inline-block">
@@ -270,6 +262,7 @@ class AddTaskModal extends Component {
                         <DatePicker
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
+                          maxDate={props.state.dateTo}
                           placeholderText="Select Date"
                         />
                       </div>
@@ -278,6 +271,7 @@ class AddTaskModal extends Component {
                       <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                       <div className="col-md-9 d-inline-block">
                         <DatePicker
+                          minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
@@ -316,6 +310,8 @@ class AddTaskModal extends Component {
                           placeholder="Select"
                           showSecond={false}
                           onChange={props.handleTimeTo}
+                          disabledMinutes={this.disabledMinutes}
+                          disabledHours={this.disabledHours}
                           format={props.format}
                         />
                       </div>
