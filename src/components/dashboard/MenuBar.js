@@ -73,14 +73,8 @@ export default class MenuBar extends Component {
     try {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
-    } catch (e) {}
+    } catch (e) { }
   }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevProps.workspaceId !== this.props.workspaceId) {
-  //     this.setState({ userRole: USER_ROLE });
-  //   }
-  // }
 
   addProject = async () => {
     const projectData = {
@@ -275,7 +269,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => {};
+  handleProjectByUser = () => { };
 
   render() {
     this.handleProjectByUser();

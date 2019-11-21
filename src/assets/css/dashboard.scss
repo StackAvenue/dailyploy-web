@@ -31,9 +31,9 @@
   .workspace-text {
     display: block;
     width: 120px;
-    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow: hidden !important;
     &:hover {
       overflow: visible;
       white-space: normal;
@@ -2011,17 +2011,17 @@ table.scheduler-table tr:last-child td {
 }
 
 .workspace-list {
-  // width: 73px;
-  width: 5%;
+  width: 4.6%;
   box-shadow: 0 -3px 2px 0 rgba(0, 0, 0, 0.05);
-  background-color: $color-white;
+  background-color: rgba(2, 40, 17, 0.5);
   border-right: 1px solid $color-borders;
   display: inline-flex;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
-  height: 100%;
+  height: 800px;
+  
   ul {
     list-style-type: none !important;
     padding: 0 !important;
@@ -2033,6 +2033,7 @@ table.scheduler-table tr:last-child td {
         height: 40px;
         border-radius: 5px;
         background-color: $color-background;
+        border: solid 2px #fff;
         float: left;
         text-align: center;
         a {
@@ -2057,16 +2058,18 @@ table.scheduler-table tr:last-child td {
       .workspace-text {
         width: 40px;
         font-family: $font-family-roboto !important;
-        font-size: 9px !important;
-        color: $color-text2 !important;
+        font-size: 12px !important;
+        color: $color-white !important;
         text-align: center !important;
+        font-weight: 400;
+        font-style: normal;
       }
     }
   }
 }
 .dashboard-main {
-  width: 95%;
-  margin-left: 5%;
+  width: 95.6%;
+  margin-left: 4.5%;
 }
 
 .workspace-modal {
