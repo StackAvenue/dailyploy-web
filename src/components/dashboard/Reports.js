@@ -85,8 +85,10 @@ class Reports extends Component {
         `${this.fetchProjectName()}`
       );
     } else if (
-      role === "member" ||
-      (role == "admin" && this.props.searchUserDetail === "")
+      role === "member" && this.props.searchUserDetail === "" ||
+      (role === 'member' && this.props.searchUserDetail && this.props.searchUserDetail.email === this.state.userEmail) ||
+      (role === "admin" && this.props.searchUserDetail === "") ||
+      (role === 'admin' && this.props.searchUserDetail && this.props.searchUserDetail.email === this.state.userEmail)
     ) {
       return "My " + `${frequency}` + " Report";
     } else if (role == "admin" && this.props.searchUserDetail !== "") {
@@ -414,11 +416,11 @@ class Reports extends Component {
 
     var index = searchOptions.length;
     if (this.state.userRole === "admin" && this.state.worksapceUsers) {
-      var otherMembers = this.state.worksapceUsers.filter(
-        user => user.email !== this.state.userEmail,
-      );
+      // var otherMembers = this.state.worksapceUsers.filter(
+      //   user => user.email !== this.state.userEmail,
+      // );
       {
-        otherMembers.map((member, idx) => {
+        this.state.worksapceUsers.map((member, idx) => {
           searchOptions.push({
             value: member.name,
             id: (index += 1),
@@ -429,6 +431,15 @@ class Reports extends Component {
           });
         });
       }
+    } else {
+      searchOptions.push({
+        value: this.state.userName,
+        id: (index += 1),
+        member_id: this.state.userId,
+        email: this.state.userEmail,
+        type: "member",
+        role: this.state.userRole,
+      });
     }
     this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
