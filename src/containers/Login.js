@@ -38,7 +38,8 @@ class Signin extends Component {
     }
   }
 
-  login = async () => {
+  login = async e => {
+    e.preventDefault();
     this.validateAllInputs();
     if (this.isPresentAllInputs()) {
       const loginData = {
@@ -47,8 +48,6 @@ class Signin extends Component {
       };
       try {
         const { data } = await login(loginData);
-        console.log("data login", data);
-        toast.success("Sucessfully Logged In");
         cookie.save("accessToken", data.access_token, { path: "/" });
         cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
         axios.defaults.headers.common["Authorization"] = data.access_token
@@ -62,10 +61,7 @@ class Signin extends Component {
         } catch (e) {
           console.log("error", e);
         }
-
-        window.location.reload();
       } catch (e) {
-        console.log("error", e.response.data.error);
         this.setState({ error: e.response.data.error });
       }
     } else {
@@ -108,56 +104,54 @@ class Signin extends Component {
                     Invalid Email or Password!
                   </div>
                 ) : null}
-                <div className="col-md-10 offset-1 no-padding signup-form text-left">
-                  <div className="form-group">
-                    <label>Email</label>
-                    {this.state.errors.emailError ? (
-                      <span className="error-warning">
-                        {this.state.errors.emailError}
-                      </span>
-                    ) : null}
-                    <input
-                      type="email"
-                      name="email"
-                      value={email}
-                      onChange={this.handleChange}
-                      className="form-control login-form-field"
-                      placeholder="johndoe1234@amazon.com"
-                    />
+                <form onSubmit={this.login}>
+                  <div className="col-md-10 offset-1 no-padding signup-form text-left">
+                    <div className="form-group">
+                      <label>Email</label>
+                      {this.state.errors.emailError ? (
+                        <span className="error-warning">
+                          {this.state.errors.emailError}
+                        </span>
+                      ) : null}
+                      <input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={this.handleChange}
+                        className="form-control login-form-field"
+                        placeholder="johndoe1234@amazon.com"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Password</label>
+                      {this.state.errors.passwordError ? (
+                        <span className="error-warning">
+                          {this.state.errors.passwordError}
+                        </span>
+                      ) : null}
+                      <input
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={this.handleChange}
+                        className="form-control login-form-field"
+                        placeholder="Password"
+                      />
+                    </div>
+                    <div className="text-right forgot-pass">
+                      Forgot Password?{" "}
+                      <button className="btn btn-link no-padding">
+                        Click here
+                      </button>
+                    </div>
+                    <br />
+                    <div className="col-md-12 no-padding text-center">
+                      <button disabled={!isEnabled} className="btn form-btn">
+                        Sign In
+                      </button>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label>Password</label>
-                    {this.state.errors.passwordError ? (
-                      <span className="error-warning">
-                        {this.state.errors.passwordError}
-                      </span>
-                    ) : null}
-                    <input
-                      type="password"
-                      name="password"
-                      value={password}
-                      onChange={this.handleChange}
-                      className="form-control login-form-field"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="text-right forgot-pass">
-                    Forgot Password?{" "}
-                    <button className="btn btn-link no-padding">
-                      Click here
-                    </button>
-                  </div>
-                  <br />
-                  <div className="col-md-12 no-padding text-center">
-                    <button
-                      disabled={!isEnabled}
-                      onClick={this.login}
-                      className="btn form-btn"
-                    >
-                      Sign In
-                    </button>
-                  </div>
-                </div>
+                </form>
                 <br />
                 <div className="col-md-8 offset-2 googleIcon">
                   <img

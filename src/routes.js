@@ -13,6 +13,7 @@ import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import WorkspaceSettings from "./components/dashboard/WorkspaceSettings";
 import { WORKSPACE_ID } from "./utils/Constants";
+import LoggedInLayout from "./LoggedInLayout";
 
 class Routes extends Component {
   constructor(props) {
@@ -87,17 +88,20 @@ class Routes extends Component {
 
   isAllowed = (props, RouteComponent, title) => {
     if (this.isCurrentUser()) {
-      if (title !== "login" && title !== "signup" && title !== "landing") {
-        return <RouteComponent {...props} />;
-      }
-      return <Redirect to={`/dashboard/${WORKSPACE_ID}`} />;
+      return (
+        <LoggedInLayout
+          props={props}
+          RouteComponent={RouteComponent}
+          title={title}
+        />
+      );
     } else {
-      if (title === "login") {
-        return <Login {...props} />;
-      } else if (title === "signup") {
+      if (title === "signup") {
         return <SignUp {...props} />;
       } else if (title === "landing") {
         return <Landing {...props} />;
+      } else {
+        return <Login {...props} />;
       }
     }
   };

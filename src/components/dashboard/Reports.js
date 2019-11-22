@@ -11,11 +11,12 @@ import DatePicker from "react-datepicker";
 import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
+// import from"../../LoggedInLayout"
 
 class Reports extends Component {
   constructor(props) {
     super(props);
-    this.calenderArr = ['daily', 'weekly', 'monthly']
+    this.calenderArr = ["daily", "weekly", "monthly"];
     this.now = moment()
       .hour(0)
       .minute(0);
@@ -41,109 +42,163 @@ class Reports extends Component {
       weekNumber: "",
       displayWeek: "",
       searchOptions: [],
-      worksapceUsers: '',
+      worksapceUsers: "",
       worksapceUser: [],
       searchUserDetail: "",
       searchProjectIds: [],
       taskDetails: {},
       message: "My Daily Report",
+      frequency: "daily",
     };
   }
 
   returnFrequency = () => {
     if (this.state.daily) {
-      return "daily"
+      return "daily";
     } else if (this.state.monthly) {
-      return "monthly"
+      return "monthly";
     } else if (this.state.weekly) {
-      return "weekly"
+      return "weekly";
     }
-  }
+  };
 
   fetchProjectName = () => {
-    var project = this.state.projects.filter(project => project.id === this.state.searchProjectIds[0])
-    return project.length > 0 ? project[0].name : ""
-  }
+    var projects = this.state.projects.filter(project =>
+      this.props.searchProjectIds.includes(project.id),
+    );
+    var projectNames = projects.map(project => project.name);
+    return this.textTitlize(projectNames.join(", "));
+  };
 
   displayMessage = () => {
-    var role = this.state.userRole
-    var frequency = this.textTitlize(this.returnFrequency())
-    if (role == 'admin' && this.state.searchProjectIds.length !== 0 && this.state.searchUserDetail == "") {
-      return "Showing " + `${frequency}` + " Report for " + `${this.fetchProjectName()}`
-    } else if (role === "member" || (role == "admin" && this.state.searchUserDetail === "")) {
-      return "My " + `${frequency}` + " Report"
-    } else if (role == 'admin' && this.state.searchUserDetail !== "") {
-      return "Showing " + `${frequency}` + " Report for " + this.textTitlize(this.state.searchUserDetail.value) + "(" + `${this.state.searchUserDetail.email}` + ")"
+    var role = this.state.userRole;
+    var frequency = this.textTitlize(this.returnFrequency());
+    if (
+      role == "admin" &&
+      this.props.searchProjectIds.length !== 0 &&
+      this.props.searchUserDetail == ""
+    ) {
+      return (
+        "Showing " +
+        `${frequency}` +
+        " Report for " +
+        `${this.fetchProjectName()}`
+      );
+    } else if (
+      role === "member" && this.props.searchUserDetail === "" ||
+      (role === 'member' && this.props.searchUserDetail && this.props.searchUserDetail.email === this.state.userEmail) ||
+      (role === "admin" && this.props.searchUserDetail === "") ||
+      (role === 'admin' && this.props.searchUserDetail && this.props.searchUserDetail.email === this.state.userEmail)
+    ) {
+      return "My " + `${frequency}` + " Report";
+    } else if (role == "admin" && this.props.searchUserDetail !== "") {
+      return (
+        "Showing " +
+        `${frequency}` +
+        " Report for " +
+        this.textTitlize(this.props.searchUserDetail.value) +
+        "(" +
+        `${this.props.searchUserDetail.email}` +
+        ")"
+      );
     }
-  }
+  };
 
-  textTitlize = (text) => {
-    return text.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
-  }
+  textTitlize = text => {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
+      return a.toUpperCase();
+    });
+  };
 
-  calenderButtonHandle = (e) => {
-    const name = e.target.name
-    const newCalenderArr = this.calenderArr.filter(item => item !== name)
-    this.setState({ [name]: true })
+  calenderButtonHandle = e => {
+    const name = e.target.name;
     var self = this;
-    newCalenderArr.map(item => {
-      self.setState({ [item]: false })
-    })
-    if (name == 'daily') {
-      self.setState({ selectedDays: [new Date()] })
+    console.log("name", name);
+    if (name == "daily") {
+      self.setState({
+        selectedDays: [new Date()],
+        weekly: false,
+        daily: true,
+        monthly: false,
+        frequency: "daily",
+      });
     }
-    if (name == 'monthly') {
-      this.handleMonthlyDateFrom(new Date())
+    if (name == "monthly") {
+      self.setState({
+        weekly: false,
+        daily: false,
+        monthly: true,
+        frequency: "monthly",
+      });
+      this.handleMonthlyDateFrom(new Date());
     }
-    if (name == 'weekly') {
-      this.handleDayChange(new Date())
+    if (name == "weekly") {
+      self.setState({
+        weekly: true,
+        daily: false,
+        monthly: false,
+        frequency: "weekly",
+      });
+      this.handleDayChange(new Date());
     }
-  }
+  };
 
   handleDayChange = date => {
     const week = moment(date, "MM-DD-YYYY").week();
-    const weekdays = this.getWeekDays(this.getWeekRange(date).from)
-    const fm = 'DD MMM'
+    const weekdays = this.getWeekDays(this.getWeekRange(date).from);
+    const fm = "DD MMM";
     this.setState({
       selectedDays: weekdays,
       dateFrom: weekdays[0],
       dateTo: weekdays[weekdays.length - 1],
       weekNumber: week,
-      displayWeek: moment(weekdays[0]).format(fm) + " - " + moment(weekdays[6]).format(fm) + " (Week " + week + ")"
+      displayWeek:
+        moment(weekdays[0]).format(fm) +
+        " - " +
+        moment(weekdays[6]).format(fm) +
+        " (Week " +
+        week +
+        ")",
     });
   };
 
-  getWeekDays = (weekStart) => {
+  getWeekDays = weekStart => {
     const days = [weekStart];
     for (let i = 1; i < 7; i += 1) {
       days.push(
         moment(weekStart)
-          .add(i, 'days')
-          .toDate()
+          .add(i, "days")
+          .toDate(),
       );
     }
     return days;
-  }
+  };
 
-  getWeekRange = (date) => {
+  getWeekRange = date => {
     return {
       from: moment(date)
-        .startOf('week')
+        .startOf("week")
         .toDate(),
       to: moment(date)
-        .endOf('week')
+        .endOf("week")
         .toDate(),
     };
-  }
+  };
 
   handleWeekClick = (days, weekNumber) => {
-    const weekdays = this.getWeekDays(this.getWeekRange(days).from)
+    const weekdays = this.getWeekDays(this.getWeekRange(days).from);
     this.setState({
       selectedDays: weekdays,
       dateFrom: weekdays[0],
       dateTo: weekdays[weekdays.length - 1],
       weekNumber: weekNumber,
-      displayWeek: moment(weekdays[0]).format(MONTH_FORMAT) + " - " + moment(weekdays[6]).format(MONTH_FORMAT) + "(Week" + this.state.weekNumber + ")"
+      displayWeek:
+        moment(weekdays[0]).format(MONTH_FORMAT) +
+        " - " +
+        moment(weekdays[6]).format(MONTH_FORMAT) +
+        "(Week" +
+        this.state.weekNumber +
+        ")",
     });
   };
 
@@ -153,6 +208,7 @@ class Reports extends Component {
   };
 
   async componentDidMount() {
+    this.props.handleLoading(true);
     try {
       const { data } = await get("logged_in_user");
       var loggedInData = data;
@@ -174,7 +230,7 @@ class Reports extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -184,14 +240,17 @@ class Reports extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
+        `workspaces/${this.state.workspaceId}/members`,
       );
       var userArr = data.members.map(user => user.email);
-      var worksapceUsers = data.members
-      var worksapceUser = data.members.filter(user => user.email === loggedInData.email)
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
+      var worksapceUsers = data.members;
+      var worksapceUser = data.members.filter(
+        user => user.email === loggedInData.email,
+      );
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
+      // .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -199,19 +258,21 @@ class Reports extends Component {
     // MIS report listing
     var searchData = {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      user_id: loggedInData.id, frequency: 'daily',
-      project_ids: JSON.stringify(this.state.searchProjectIds)
-    }
+      user_id: loggedInData.id,
+      frequency: "daily",
+      project_ids: JSON.stringify(this.props.searchProjectIds),
+    };
 
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/reports`, searchData
+        `workspaces/${this.state.workspaceId}/reports`,
+        searchData,
       );
-      var details = this.makeDatesHash(data.reports)
-      var taskDetails = details.taskReports
-      var totalTime = details.totalTime
-    } catch (e) {
-    }
+      var details = this.makeDatesHash(data.reports);
+      var taskDetails = details.taskReports;
+      var totalTime = details.totalTime;
+      this.props.handleLoading(false);
+    } catch (e) { }
 
     this.setState({
       userId: loggedInData.id,
@@ -225,91 +286,121 @@ class Reports extends Component {
       worksapceUser: worksapceUser,
       taskDetails: taskDetails,
       userRole: worksapceUser[0].role,
-      totalTime: totalTime
+      totalTime: totalTime,
     });
 
     this.createUserProjectList();
-  }
 
+    this.props.handleSearchFilterResult(this.handleSearchFilterResult);
+  }
 
   checkProject = () => {
-    console.log(this.state.searchProjectIds, this.state.searchUserDetail, this.state.userRole)
-    return this.state.searchProjectIds.length > 0 && this.state.userRole === 'admin' && this.state.searchUserDetail.length == 0
-  }
+    return (
+      this.props.searchProjectIds.length > 0 &&
+      this.state.userRole === "admin" &&
+      this.props.searchUserDetail.length == 0
+    );
+  };
 
   async componentDidUpdate(prevProps, prevState) {
-    var taskDetails = []
+    var taskDetails = [];
     if (this.state.daily !== prevState.daily) {
-      var message = this.displayMessage()
-      this.setState({ message: message })
+      var message = this.displayMessage();
+      this.setState({ message: message });
     }
-    if (prevState.dateFrom !== this.state.dateFrom
-      || prevState.dateTo !== this.state.dateTo
-      || prevState.searchProjectIds !== this.state.searchProjectIds
-      || prevState.searchUserDetail !== this.state.searchUserDetail
+    if (
+      prevState.dateFrom !== this.state.dateFrom ||
+      prevState.dateTo !== this.state.dateTo ||
+      prevState.frequency !== this.state.frequency ||
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetail !== this.props.searchUserDetail
     ) {
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        user_id: this.state.searchUserDetail ? this.state.searchUserDetail.member_id : this.state.userId,
+        user_id: this.props.searchUserDetail
+          ? this.props.searchUserDetail.member_id
+          : this.state.userId,
         frequency: this.returnFrequency(),
-        project_ids: JSON.stringify(this.state.searchProjectIds)
-      }
+        project_ids: JSON.stringify(this.props.searchProjectIds),
+      };
 
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/reports`, searchData
+          `workspaces/${this.state.workspaceId}/reports`,
+          searchData,
         );
-        var details = this.makeDatesHash(data.reports)
-        var taskDetails = details.taskReports
-        var totalTime = details.totalTime
-      } catch (e) {
-      }
-      var message = this.displayMessage()
+        var details = this.makeDatesHash(data.reports);
+        var taskDetails = details.taskReports;
+        var totalTime = details.totalTime;
+      } catch (e) { }
+      var message = this.displayMessage();
 
-      this.setState({ taskDetails: taskDetails, message: message, totalTime: totalTime })
+      this.setState({
+        taskDetails: taskDetails,
+        message: message,
+        totalTime: totalTime,
+      });
     }
   }
 
-  makeDatesHash = (reports) => {
-    var taskReports = {}
-    var totalSecond = 0
+  makeDatesHash = reports => {
+    var taskReports = {};
+    var totalSecond = 0;
     {
       reports.map((report, i) => {
-        taskReports[report.date] = report.tasks
-        totalSecond += this.calculateTotalSecond(report.tasks)
-      })
+        taskReports[report.date] = report.tasks;
+      });
     }
-    var hours = (totalSecond / (1000 * 60 * 60)).toFixed(1);
-    return { taskReports: taskReports, totalTime: hours }
-  }
 
-  calculateTotalSecond = (tasks) => {
+    this.state.selectedDays.map(date => {
+      let dateFormated = moment(date).format(DATE_FORMAT1);
+      var tasks = taskReports[dateFormated];
+      if (tasks !== undefined) {
+        totalSecond += this.calculateTotalSecond(dateFormated, tasks);
+      }
+    });
+
+    totalSecond = Number(totalSecond);
+    var h = Math.floor(totalSecond / 3600);
+    var m = Math.floor((totalSecond % 3600) / 60);
+    var time = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+    return { taskReports: taskReports, totalTime: time };
+  };
+
+  calculateTotalSecond = (date, tasks) => {
+    var totalSec = 0;
+    if (this.state.userRole === "admin" && this.props.searchUserDetail === "") {
+      tasks.map((task, idx) => {
+        task.members.map(member => {
+          totalSec += this.totalSeconds(tasks, date)
+        })
+      });
+    } else {
+      totalSec += this.totalSeconds(tasks, date);
+    }
+    return totalSec;
+  };
+
+  totalSeconds = (tasks, date) => {
     var totalSec = 0;
     tasks.map((task, idx) => {
-      totalSec += Math.abs(new Date(task.start_datetime) - new Date(task.end_datetime));
-    })
-    return totalSec
-  }
-
-
-  handleSearchFilterResult = (data) => {
-    var searchUserDetail = ""
-    var projectIds = []
-    {
-      data.map((item, i) => {
-        if (item.type === "member") {
-          searchUserDetail = item
-        }
-        else if (item.type === "project") {
-          projectIds.push(item.project_id)
-        }
-      })
-    }
-    this.setState({ searchProjectIds: projectIds, searchUserDetail: searchUserDetail })
-  }
+      var start =
+        moment(date).format(DATE_FORMAT1) +
+        " " +
+        moment(task.start_datetime).format("HH:mm");
+      var end =
+        moment(date).format(DATE_FORMAT1) +
+        " " +
+        moment(task.end_datetime).format("HH:mm");
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      totalSec += totalSeconds;
+    });
+    return totalSec;
+  };
 
   createUserProjectList = () => {
-    var searchOptions = []
+    var searchOptions = [];
     if (this.state.projects) {
       {
         this.state.projects.map((project, index) => {
@@ -317,30 +408,42 @@ class Reports extends Component {
             value: project.name,
             project_id: project.id,
             type: "project",
-            id: index += 1
-          })
-        })
+            id: (index += 1),
+          });
+        });
       }
     }
 
-    var index = searchOptions.length
-    if (this.state.userRole === 'admin' && this.state.worksapceUsers) {
-      var otherMembers = this.state.worksapceUsers.filter(user => user.email !== this.state.userEmail)
+    var index = searchOptions.length;
+    if (this.state.userRole === "admin" && this.state.worksapceUsers) {
+      // var otherMembers = this.state.worksapceUsers.filter(
+      //   user => user.email !== this.state.userEmail,
+      // );
       {
-        otherMembers.map((member, idx) => {
+        this.state.worksapceUsers.map((member, idx) => {
           searchOptions.push({
             value: member.name,
-            id: index += 1,
+            id: (index += 1),
             member_id: member.id,
             email: member.email,
-            type: 'member',
-            role: member.role
-          })
-        })
+            type: "member",
+            role: member.role,
+          });
+        });
       }
+    } else {
+      searchOptions.push({
+        value: this.state.userName,
+        id: (index += 1),
+        member_id: this.state.userId,
+        email: this.state.userEmail,
+        type: "member",
+        role: this.state.userRole,
+      });
     }
-    this.setState({ searchOptions: searchOptions })
-  }
+    this.setState({ searchOptions: searchOptions });
+    this.props.setSearchOptions(searchOptions);
+  };
 
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
@@ -367,110 +470,130 @@ class Reports extends Component {
 
   handleMonthlyDateFrom = date => {
     const output = moment(date, DATE_FORMAT1);
-    var startDate = output.startOf('month').format(DATE_FORMAT1)
-    var endDate = output.endOf('month').format(DATE_FORMAT1)
-    var days = this.getMonthDates(startDate, endDate)
+    var startDate = output.startOf("month").format(DATE_FORMAT1);
+    var endDate = output.endOf("month").format(DATE_FORMAT1);
+    var days = this.getMonthDates(startDate, endDate);
     this.setState({
       dateFrom: new Date(startDate),
       dateTo: new Date(endDate),
-      selectedDays: days
-    })
-  }
+      selectedDays: days,
+    });
+  };
 
   getMonthDates = (start, end) => {
-    var startDate = new Date(start)
-    var endDate = new Date(end)
+    var startDate = new Date(start);
+    var endDate = new Date(end);
     var daysArr = new Array();
     var currentDate = startDate;
     while (currentDate <= endDate) {
       daysArr.push(currentDate);
-      var date = moment(currentDate, DATE_FORMAT1).add(1, 'days').format(DATE_FORMAT1)
-      currentDate = new Date(date)
+      var date = moment(currentDate, DATE_FORMAT1)
+        .add(1, "days")
+        .format(DATE_FORMAT1);
+      currentDate = new Date(date);
     }
     return daysArr;
-  }
-
+  };
 
   setPreviousDate = () => {
-    const dateFrom = this.state.dateFrom
-    const startOfDate = moment(dateFrom, DATE_FORMAT1).startOf('day')
-    const endOfDate = moment(dateFrom, DATE_FORMAT1).endOf('day')
+    const dateFrom = this.state.dateFrom;
+    const startOfDate = moment(dateFrom, DATE_FORMAT1).startOf("day");
+    const endOfDate = moment(dateFrom, DATE_FORMAT1).endOf("day");
     if (this.state.daily) {
-      const prevDate = startOfDate.subtract(1, 'days').format(DATE_FORMAT1)
+      const prevDate = startOfDate.subtract(1, "days").format(DATE_FORMAT1);
       this.setState({
         dateFrom: new Date(prevDate),
         dateTo: new Date(prevDate),
-        selectedDays: [new Date(prevDate)]
-      })
+        selectedDays: [new Date(prevDate)],
+      });
     } else if (this.state.weekly) {
-      const format = 'DD MMM'
-      var weekDay = startOfDate.subtract(1, 'days').format(DATE_FORMAT1)
-      var weekDay = moment(weekDay, DATE_FORMAT1)
-      var weekStart = weekDay.startOf('week').format(DATE_FORMAT1)
-      var weekEnd = weekDay.endOf('week').format(DATE_FORMAT1)
-      var weekNumber = weekDay.week()
+      const format = "DD MMM";
+      var weekDay = startOfDate.subtract(1, "days").format(DATE_FORMAT1);
+      var weekDay = moment(weekDay, DATE_FORMAT1);
+      var weekStart = weekDay.startOf("week").format(DATE_FORMAT1);
+      var weekEnd = weekDay.endOf("week").format(DATE_FORMAT1);
+      var weekNumber = weekDay.week();
       this.setState({
         dateFrom: new Date(weekStart),
         dateTo: new Date(weekEnd),
         weekNumber: weekNumber,
         selectedDays: this.getWeekDays(new Date(weekStart)),
-        displayWeek: moment(weekStart).format(format) + " - " + moment(weekEnd).format(format) + " (Week " + weekNumber + ")"
-      })
+        displayWeek:
+          moment(weekStart).format(format) +
+          " - " +
+          moment(weekEnd).format(format) +
+          " (Week " +
+          weekNumber +
+          ")",
+      });
     } else if (this.state.monthly) {
-      const output = startOfDate.subtract(1, 'days').format(DATE_FORMAT1)
-      var startDate = moment(output).startOf('month').format(DATE_FORMAT1)
-      var endDate = moment(output).endOf('month').format(DATE_FORMAT1)
+      const output = startOfDate.subtract(1, "days").format(DATE_FORMAT1);
+      var startDate = moment(output)
+        .startOf("month")
+        .format(DATE_FORMAT1);
+      var endDate = moment(output)
+        .endOf("month")
+        .format(DATE_FORMAT1);
       var monthDays = this.getMonthDates(startDate, endDate);
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
-        selectedDays: monthDays
-      })
+        selectedDays: monthDays,
+      });
     }
-  }
+  };
 
   setNextDate = () => {
-    const dateFrom = this.state.dateFrom
-    const dateTo = this.state.dateTo
-    const startOfDate = moment(dateFrom, DATE_FORMAT1).startOf('day')
-    const endOfDate = moment(dateTo, DATE_FORMAT1).startOf('day')
+    const dateFrom = this.state.dateFrom;
+    const dateTo = this.state.dateTo;
+    const startOfDate = moment(dateFrom, DATE_FORMAT1).startOf("day");
+    const endOfDate = moment(dateTo, DATE_FORMAT1).startOf("day");
     if (this.state.daily) {
-      const nextDate = startOfDate.add(1, 'days').format(DATE_FORMAT1)
+      const nextDate = startOfDate.add(1, "days").format(DATE_FORMAT1);
       this.setState({
         dateFrom: new Date(nextDate),
         dateTo: new Date(nextDate),
-        selectedDays: [new Date(nextDate)]
-      })
+        selectedDays: [new Date(nextDate)],
+      });
     } else if (this.state.weekly) {
-      const format = 'DD MMM'
-      var weekDay = endOfDate.add(1, 'days').format(DATE_FORMAT1)
-      var weekDay = moment(weekDay, DATE_FORMAT1)
-      var weekStart = weekDay.startOf('week').format(DATE_FORMAT1)
-      var weekEnd = weekDay.endOf('week').format(DATE_FORMAT1)
-      var weekNumber = weekDay.week()
+      const format = "DD MMM";
+      var weekDay = endOfDate.add(1, "days").format(DATE_FORMAT1);
+      var weekDay = moment(weekDay, DATE_FORMAT1);
+      var weekStart = weekDay.startOf("week").format(DATE_FORMAT1);
+      var weekEnd = weekDay.endOf("week").format(DATE_FORMAT1);
+      var weekNumber = weekDay.week();
       this.setState({
         dateFrom: new Date(weekStart),
         dateTo: new Date(weekEnd),
         weekNumber: weekNumber,
         selectedDays: this.getWeekDays(new Date(weekStart)),
-        displayWeek: moment(weekStart).format(format) + " - " + moment(weekEnd).format(format) + " (Week " + weekNumber + ")"
-      })
+        displayWeek:
+          moment(weekStart).format(format) +
+          " - " +
+          moment(weekEnd).format(format) +
+          " (Week " +
+          weekNumber +
+          ")",
+      });
     } else if (this.state.monthly) {
-      const output = endOfDate.add(1, 'days').format(DATE_FORMAT1)
-      var startDate = moment(output).startOf('month').format(DATE_FORMAT1)
-      var endDate = moment(output).endOf('month').format(DATE_FORMAT1)
-      var monthDays = this.getMonthDates(startDate, endDate)
+      const output = endOfDate.add(1, "days").format(DATE_FORMAT1);
+      var startDate = moment(output)
+        .startOf("month")
+        .format(DATE_FORMAT1);
+      var endDate = moment(output)
+        .endOf("month")
+        .format(DATE_FORMAT1);
+      var monthDays = this.getMonthDates(startDate, endDate);
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
-        selectedDays: monthDays
-      })
+        selectedDays: monthDays,
+      });
     }
-  }
+  };
 
   render() {
-
-    const Daily = (props) => {
+    const Daily = props => {
       return (
         <>
           <DatePicker
@@ -480,10 +603,10 @@ class Reports extends Component {
             dateFormat="dd MMMM, yyyy"
           />
         </>
-      )
-    }
+      );
+    };
 
-    const Monthly = (props) => {
+    const Monthly = props => {
       return (
         <>
           <DatePicker
@@ -493,11 +616,10 @@ class Reports extends Component {
             showMonthYearPicker
           />
         </>
+      );
+    };
 
-      )
-    }
-
-    const Weekly = (props) => {
+    const Weekly = props => {
       return (
         <>
           <DatePicker
@@ -510,87 +632,79 @@ class Reports extends Component {
             showWeekNumbers
           />
         </>
-      )
-    }
+      );
+    };
 
     return (
       <>
-        <div className="row no-margin">
-          <Sidebar workspaces={this.state.workspaces} workspaceId={this.state.workspaceId} />
-          <div className="dashboard-main no-padding">
-            <Header
-              logout={this.logout}
-              workspaces={this.state.workspaces}
-              workspaceId={this.state.workspaceId}
-              searchOptions={this.state.searchOptions}
-              role={this.state.userRole}
-              handleSearchFilterResult={this.handleSearchFilterResult}
-            />
-            <MenuBar
-              onSelectSort={this.onSelectSort}
-              workspaceId={this.state.workspaceId}
-              classNameRoute={this.classNameRoute}
-              state={this.state}
-            />
-            <div className="analysis-box row no-margin">
-              <div className="col-md-12 no-padding analysis-top">
-                <div className="reports-container col-sm-offset-2">
-                  <div className="reports-btns ">
-                    <div className="SelectedWeekExample">
-                      <button
-                        onClick={this.setPreviousDate}
-                        className="arrow-button">
-                        <i className="fa fa-angle-left"></i>
-                      </button>
-                      {this.state.daily ? <Daily /> : null}
-                      {this.state.weekly ? <Weekly /> : null}
-                      {this.state.monthly ? <Monthly /> : null}
-                      <button
-                        onClick={this.setNextDate}
-                        className="arrow-button">
-                        <i className="fa fa-angle-right"></i>
-                      </button>
-                    </div>
-                    <div className="report-caleneder-btn">
-                      <button
-                        name="daily"
-                        onClick={this.calenderButtonHandle}
-                        className={this.state.daily ? 'active' : ''}
-                      >Daily
-                      </button>
-                      <button
-                        name="weekly"
-                        className={this.state.weekly ? 'active' : ''}
-                        onClick={this.calenderButtonHandle}
-                      >Weekly
-                      </button>
-                      <button
-                        name="monthly"
-                        onClick={this.calenderButtonHandle}
-                        className={this.state.monthly ? 'active' : ''}
-                      > Monthly
-                      </button>
-                    </div>
-                    <div className="report-download">
-                      <button
-                        className="btn btn-sm btn-default"
-                        onClick={this.showTaskModal}>
-                        <i className="fas fa-download right-left-space-5"></i>Download
-                      </button>
-                    </div>
-                  </div>
-
-                  <ReportTable taskDetails={this.state.taskDetails} state={this.state} frequency={this.returnFrequency()} />
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          state={this.state}
+        />
+        <div className="analysis-box row no-margin">
+          <div className="col-md-12 no-padding analysis-top">
+            <div className="reports-container col-sm-offset-2">
+              <div className="reports-btns ">
+                <div className="SelectedWeekExample">
+                  <button
+                    onClick={this.setPreviousDate}
+                    className="arrow-button">
+                    <i className="fa fa-angle-left"></i>
+                  </button>
+                  {this.state.daily ? <Daily /> : null}
+                  {this.state.weekly ? <Weekly /> : null}
+                  {this.state.monthly ? <Monthly /> : null}
+                  <button onClick={this.setNextDate} className="arrow-button">
+                    <i className="fa fa-angle-right"></i>
+                  </button>
                 </div>
-
+                <div className="report-caleneder-btn">
+                  <button
+                    name="daily"
+                    onClick={this.calenderButtonHandle}
+                    className={this.state.daily ? "active" : ""}>
+                    Daily
+                  </button>
+                  <button
+                    name="weekly"
+                    className={this.state.weekly ? "active" : ""}
+                    onClick={this.calenderButtonHandle}>
+                    Weekly
+                  </button>
+                  <button
+                    name="monthly"
+                    onClick={this.calenderButtonHandle}
+                    className={this.state.monthly ? "active" : ""}>
+                    {" "}
+                    Monthly
+                  </button>
+                </div>
+                <div className="report-download">
+                  <button
+                    className="btn btn-sm btn-default"
+                    onClick={this.showTaskModal}>
+                    <i className="fas fa-download right-left-space-5"></i>
+                    Download
+                  </button>
+                </div>
               </div>
+
+              <ReportTable
+                taskDetails={this.state.taskDetails}
+                state={this.state}
+                searchProjectIds={this.props.searchProjectIds}
+                searchUserDetail={this.props.searchUserDetail}
+                frequency={this.returnFrequency()}
+              />
             </div>
           </div>
         </div>
+        {/* </div> */}
       </>
     );
   }
 }
-
 
 export default withRouter(Reports);

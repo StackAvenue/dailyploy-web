@@ -9,6 +9,7 @@ import AddMemberModal from "./AddMemberModal";
 import Tabs from "./MenuBar/Tabs";
 import ConditionalElements from "./MenuBar/ConditionalElements";
 import DailyPloyToast from "./../DailyPloyToast";
+import { USER_ROLE } from "../../utils/Constants";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -28,16 +29,14 @@ export default class MenuBar extends Component {
       },
     ];
     this.colors = [
-      "#FF6900",
-      "#FCB900",
-      "#7BDCB5",
-      "#00D084",
-      "#8ED1FC",
-      "#0693E3",
-      "#ABB8C3",
-      "#EB144C",
-      "#F78DA7",
-      "#9900EF",
+      "#b9e1ff",
+      "#ffc1de",
+      "#4fefde",
+      "#c7d0ff",
+      "#ffc6ac",
+      "#ffa2a2",
+      "#e9ff71",
+      "#d7a0ff",
     ];
     this.state = {
       projectName: "",
@@ -50,7 +49,7 @@ export default class MenuBar extends Component {
       dateFrom: new Date(),
       dateTo: "",
       multiEmail: true,
-      background: "#000",
+      background: "#b9e1ff",
       displayColorPicker: false,
       emailOptions: [],
       memberName: "",
@@ -63,6 +62,10 @@ export default class MenuBar extends Component {
       logedInUserEmail: "",
       disabledDateTo: false,
       disableColor: "#fff",
+      suggestions: [],
+      projectsListing: [],
+      userRole: null,
+      selectedTags: [],
     };
   }
 
@@ -70,13 +73,10 @@ export default class MenuBar extends Component {
     try {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
-    } catch (e) {
-      console.log("err", e);
-    }
+    } catch (e) {}
   }
 
   addProject = async () => {
-    console.log("loading", this.state.isLoading);
     const projectData = {
       project: {
         name: this.state.projectName,
@@ -91,11 +91,38 @@ export default class MenuBar extends Component {
         projectData,
         `workspaces/${this.props.workspaceId}/projects`,
       );
-      this.setState({ show: false, isLoading: true });
-      toast(<DailyPloyToast message="Project added successfully!" status="success" />, { autoClose: 2000 })
-    } catch (e) {
-      console.log("project error", e.response);
       this.setState({ show: false });
+      this.props.manageProjectListing(data.project);
+      this.props.handleLoad(true);
+      toast(
+        <DailyPloyToast
+          message="Project added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
+    } catch (e) {
+      console.log("error", e);
+      // var errors = e.response.data.errors;
+      // if (errors && errors.project_name_workspace_uniqueness) {
+      //   toast(
+      //     <DailyPloyToast
+      //       message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+      //       status="error"
+      //     />,
+      //     { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      //   );
+      // } else if (errors && errors.name) {
+      //   toast(
+      //     <DailyPloyToast
+      //       message={`Project name ${errors.name}`}
+      //       status="error"
+      //     />,
+      //     { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      //   );
+      // } else {
+      //   this.setState({ show: false });
+      // }
     }
   };
 
@@ -113,19 +140,23 @@ export default class MenuBar extends Component {
     };
     try {
       const { data } = await post(memberData, "invitations");
-      toast(<DailyPloyToast message="Member added successfully!" status="success" />, { autoClose: 2000 })
+      toast(
+        <DailyPloyToast
+          message="Member Invited successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
       this.setState({ memberShow: false });
-      console.log("member Data", data);
+      this.props.handleLoad(true);
     } catch (e) {
-      console.log("error", e.response);
       this.setState({ memberShow: false });
     }
   };
 
-  handleChangeMember = selected => {
-    this.setState({ projectMembers: selected });
+  handleChangeMember = (selected, selectedTags) => {
+    this.setState({ projectMembers: selected, selectedTags: selectedTags });
   };
-
   sortHandler = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -139,11 +170,43 @@ export default class MenuBar extends Component {
 
   handleChangeMemberInput = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    let suggestions = [];
+    var searchOptions = this.props.state.isLogedInUserEmailArr.map(
+      user => user.name,
+    );
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = searchOptions.sort().filter(v => regex.test(v));
+    }
+    this.setState({
+      [name]: value,
+      suggestions: suggestions,
+    });
+  };
+
+  handleChangeProjectSelect = value => {
+    this.setState({ memberProject: value[0].id });
+  };
+
+  selectAutoSuggestion = option => {
+    var filterArr = this.props.state.isLogedInUserEmailArr.filter(
+      user => user.name === option,
+    );
+    var filterProjectIds = filterArr[0].projects.map(project => project.id);
+    let memberRole = filterArr[0].role === "admin" ? "1" : "2";
+    let memberProjects = this.props.state.projects.filter(
+      project => !filterProjectIds.includes(project.id),
+    );
+    this.setState({
+      memberName: filterArr[0].name,
+      memberEmail: filterArr[0].email,
+      memberRole: memberRole,
+      memberWorkingHours: filterArr[0].working_hours,
+      projectsListing: memberProjects,
+    });
   };
 
   handleChangeMemberRadio = e => {
-    console.log("radio", e.target.value);
     this.setState({ memberAccess: e.target.value });
   };
 
@@ -175,6 +238,7 @@ export default class MenuBar extends Component {
     this.setState({
       memberSetShow: true,
       memberShow: true,
+      projectsListing: this.props.state.projects,
     });
   };
 
@@ -199,11 +263,19 @@ export default class MenuBar extends Component {
     } else {
       var disableColor = "#eaeaed";
     }
-    this.setState({ disabledDateTo: !this.state.disabledDateTo, disableColor: disableColor, dateTo: null })
-  }
+    this.setState({
+      disabledDateTo: !this.state.disabledDateTo,
+      disableColor: disableColor,
+      dateTo: null,
+    });
+  };
+
+  handleProjectByUser = () => {};
 
   render() {
+    this.handleProjectByUser();
     const { sort, show } = this.state;
+    var userRole = localStorage.getItem("userRole");
     return (
       <>
         <div className="container-fluid">
@@ -216,9 +288,10 @@ export default class MenuBar extends Component {
               <div className="col-md-6 ml-auto text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
+                  isDeleteShow={this.props.state.isDeleteShow}
                 />
                 <div className="col-md-2 d-inline-block">
-                  <Dropdown>
+                  <Dropdown className={userRole === "member" ? "d-none" : null}>
                     <Dropdown.Toggle
                       className="menubar-button"
                       id="dropdown-basic">
@@ -227,7 +300,11 @@ export default class MenuBar extends Component {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="dropdownMenu">
-                      <Dropdown.Item onClick={this.handleShow}>
+                      <Dropdown.Item
+                        onClick={this.handleShow}
+                        style={{
+                          borderBottom: "1px solid rgba(210, 210, 210, 1)",
+                        }}>
                         Project
                       </Dropdown.Item>
                       <AddProjectModal
@@ -242,9 +319,11 @@ export default class MenuBar extends Component {
                         colors={this.colors}
                         addProject={this.addProject}
                         btnText={"Add"}
+                        headText={"Add New Project"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}
                         handleUndefinedToDate={this.handleUndefinedToDate}
                         workspaceId={this.props.workspaceId}
+                        ownerClassName={"d-none"}
                       />
                       <Dropdown.Item onClick={this.handleMemberShow}>
                         People
@@ -256,7 +335,11 @@ export default class MenuBar extends Component {
                           handleChangeMemberInput={this.handleChangeMemberInput}
                           handleChangeMemberRadio={this.handleChangeMemberRadio}
                           addMember={this.addMember}
-                          projects={this.props.state.projects}
+                          projects={this.state.projectsListing}
+                          selectAutoSuggestion={this.selectAutoSuggestion}
+                          handleChangeProjectSelect={
+                            this.handleChangeProjectSelect
+                          }
                         />
                       ) : null}
                     </Dropdown.Menu>

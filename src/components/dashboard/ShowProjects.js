@@ -1,25 +1,29 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, logout } from "../../utils/API";
+import { get, logout, put } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
 import Sidebar from "./Sidebar";
+import moment from "moment";
+import AddProjectModal from "./AddProjectModal";
+import DailyPloyToast from "../DailyPloyToast";
+import { toast } from "react-toastify";
 
 class ShowProjects extends Component {
   constructor(props) {
     super(props);
-    this.projectUser = [
-      "Arpit Jain",
-      "Ankit Jain",
-      "Vikram Jadon",
-      "Alam Khan",
-      "Kiran Chaudahry",
-      "Kiran Chaudahry",
-      "Kiran Chaudahry",
-      "Kiran Chaudahry",
+    this.colors = [
+      "#b9e1ff",
+      "#ffc1de",
+      "#4fefde",
+      "#c7d0ff",
+      "#ffc6ac",
+      "#ffa2a2",
+      "#e9ff71",
+      "#d7a0ff",
     ];
     this.state = {
       workspaces: [],
@@ -30,25 +34,45 @@ class ShowProjects extends Component {
       isChecked: true,
       isLoading: false,
       isLogedInUserEmailArr: [],
-      projects: [],
       userId: "",
       users: [],
+      setShow: false,
+      show: false,
+      projectOwner: null,
+      dateFrom: null,
+      dateTo: null,
+      projectMembers: [],
+      projectId: null,
+      background: null,
+      userName: "",
+      displayColorPicker: false,
+      selectedTags: [],
+      worksapceUsers: [],
     };
   }
+
   countIncrese = projectUser => {
     let arr = projectUser;
     let count;
     if (arr.length >= 4) {
       count = arr.length - 4;
     }
-    return count;
+    let showCount = count ? (
+      <div className="user-block" style={{ backgroundColor: "#33a1ff" }}>
+        <span>+{count}</span>
+      </div>
+    ) : null;
+    return showCount;
   };
+
   logout = async () => {
     await logout();
     this.props.history.push("/login");
   };
+
   async componentDidMount() {
     this.setState({ isLoading: true });
+    this.props.handleLoading(true);
     try {
       const { data } = await get("logged_in_user");
       var loggedInData = data;
@@ -73,6 +97,7 @@ class ShowProjects extends Component {
         `workspaces/${this.state.workspaceId}/projects`,
       );
       var projectsData = data.projects;
+      this.props.handleLoading(false);
     } catch (e) {
       console.log("err", e);
     }
@@ -82,10 +107,12 @@ class ShowProjects extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`,
       );
+      var worksapceUsers = data.members;
       var userArr = data.members.map(user => user.email);
-      var emailArr = data.members
-        .filter(user => user.email !== loggedInData.email)
-        .map(user => user.email);
+      var emailArr = data.members.filter(
+        user => user.email !== loggedInData.email,
+      );
+      // .map(user => user.email);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -98,8 +125,40 @@ class ShowProjects extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
+      worksapceUsers: worksapceUsers,
     });
+    this.createUserProjectList();
   }
+
+  createUserProjectList = () => {
+    var searchOptions = [];
+    if (this.state.projects) {
+      this.state.projects.map((project, index) => {
+        searchOptions.push({
+          value: project.name,
+          project_id: project.id,
+          type: "project",
+          id: (index += 1),
+        });
+      });
+    }
+
+    var index = searchOptions.length;
+    if (this.state.worksapceUsers) {
+      this.state.worksapceUsers.map((member, idx) => {
+        searchOptions.push({
+          value: member.name,
+          id: (index += 1),
+          member_id: member.id,
+          email: member.email,
+          type: "member",
+          role: member.role,
+        });
+      });
+    }
+    // this.setState({ searchOptions: searchOptions });
+    this.props.setSearchOptions(searchOptions);
+  };
 
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
@@ -113,24 +172,28 @@ class ShowProjects extends Component {
 
   getDate = date => {
     if (!date) {
-      return undefined
+      return undefined;
     } else {
-      var d = date.split("-");
-      var date1 = new Date(d[0], d[1], d[2]);
-      return date1;
+      var d = moment(date).format("YYYY-MM-DD");
+      return d;
     }
   };
 
   monthDiff = (d1, d2) => {
-    if (d2 === undefined) {
-      return 0
+    var dayDuration = moment(d2).diff(d1, "days");
+    var monthDuration = moment(d2).diff(d1, "months");
+    var yearDuration = moment(d2).diff(d1, "year");
+    let duration;
+    if (dayDuration > 30 && monthDuration < 12) {
+      duration = monthDuration + " months";
+    } else if (dayDuration === 0) {
+      duration = "undefined";
+    } else if (monthDuration > 12) {
+      duration = yearDuration + " year";
     } else {
-      var months;
-      months = (d2.getFullYear() - d1.getFullYear()) * 12;
-      months -= d1.getMonth() + 1;
-      months += d2.getMonth();
-      return months <= 0 ? 0 : months;
+      duration = dayDuration + " days";
     }
+    return duration;
   };
 
   classNameRoute = () => {
@@ -167,162 +230,161 @@ class ShowProjects extends Component {
   };
 
   handleLoad = value => {
-    window.location.reload();
     this.setState({ isLoading: value });
   };
 
-  render() {
-    return (
-      <div>
-        <div className="row no-margin">
-          <Sidebar
-            workspaces={this.state.workspaces}
-            workspaceId={this.state.workspaceId}
-          />
-          <div className="dashboard-main no-padding">
-            <Header
-              logout={this.logout}
-              workspaces={this.state.workspaces}
-              workspaceId={this.state.workspaceId}
-            />
-            <MenuBar
-              onSelectSort={this.onSelectSort}
-              workspaceId={this.state.workspaceId}
-              classNameRoute={this.classNameRoute}
-              handleLoad={this.handleLoad}
-              state={this.state}
-            />
-            <div className="show-projects">
-              <div className="views">
-                <Tabs>
-                  <div className="col-md-12 text-center">
-                    <div
-                      className="col-md-2 offset-5"
-                      style={{ position: "relative", top: "-74px" }}>
-                      <TabList>
-                        <Tab>
-                          <i className="fa fa-bars"></i>
-                        </Tab>
-                        <Tab>
-                          <i className="fas fa-th"></i>
-                        </Tab>
-                      </TabList>
-                    </div>
-                  </div>
-                  {/* <div className="col-md-12 no-padding hr"></div> */}
+  handleEditShow = (e, project) => {
+    console.log("Project", project);
+    this.setState({
+      show: true,
+      setShow: true,
+      projectId: project.id,
+      projectOwner: project.owner.name,
+      projectName: project.name,
+      dateFrom: new Date(project.start_date),
+      dateTo: new Date(project.end_date),
+      background: project.color_code,
+      selectedTags: project.members,
+      projectMembers: project.members.map(project => project.id),
+    });
+  };
 
-                  <TabPanel>
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id={`customCheck`}
-                                onChange={this.checkAll}
-                                name="chk[]"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor={`customCheck`}></label>
-                            </div>
-                          </th>
-                          <th scope="col">Project ID</th>
-                          <th scope="col">Project Name</th>
-                          <th scope="col">Colour</th>
-                          <th scope="col">Project Owner</th>
-                          <th scope="col">Start Date</th>
-                          <th scope="col">End Date</th>
-                          <th scope="col">Duration</th>
-                          <th scope="col">Project Members</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-titlize">
-                        {this.state.projects.map((project, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>
-                                {/* <div className="checkbox">
-                                  <input
-                                    type="checkbox"
-                                    id={`checkbox${index}`}
-                                    name=""
-                                    value=""
-                                  />
-                                  <label for={`checkbox${index}`}></label>
-                                </div> */}
-                                <div className="custom-control custom-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id={`customCheck${index}`}
-                                    name="isChecked"
-                                    onChange={this.handleCheck}
-                                  />
-                                  <label
-                                    className="custom-control-label"
-                                    htmlFor={`customCheck${index}`}></label>
-                                </div>
-                              </td>
-                              <td>{index + 1}</td>
-                              <td>{project.name}</td>
-                              <td>
-                                <div
-                                  className="color-block"
-                                  style={{
-                                    backgroundColor: `${project.color_code}`,
-                                  }}></div>
-                              </td>
-                              <td>{project.owner.name}</td>
-                              <td>{project.start_date}</td>
-                              <td>{project.end_date ? project.end_date : 'undefined'}</td>
-                              <td>
-                                {this.monthDiff(
-                                  this.getDate(project.start_date),
-                                  this.getDate(project.end_date),
-                                )}
-                                &nbsp; months
-                              </td>
-                              <td>
-                                <span>
-                                  {project.members
-                                    .slice(0, 4)
-                                    .map((user, index) => {
-                                      return (
-                                        <div key={index} className="user-block">
-                                          <span>
-                                            {user.name
-                                              .split(" ")
-                                              .map(x => x[0])
-                                              .join("")}
-                                          </span>
-                                        </div>
-                                      );
-                                    })}
-                                </span>
-                                <span>
-                                  <div
-                                    key={index}
-                                    className="user-block"
-                                    style={{ backgroundColor: "#33a1ff" }}>
-                                    <span>
-                                      +
-                                      {this.countIncrese(
-                                        project.members.map(user => user.name),
-                                      )}
-                                    </span>
-                                  </div>
-                                </span>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </TabPanel>
-                  <TabPanel>
+  handleEditClose = () => {
+    this.setState({
+      show: false,
+    });
+  };
+
+  handleChangeInput = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  handleDateFrom = date => {
+    this.setState({ dateFrom: date });
+  };
+
+  handleDateTo = date => {
+    this.setState({ dateTo: date });
+  };
+
+  handleUndefinedToDate = () => {
+    if (this.state.disabledDateTo) {
+      var disableColor = "#fff";
+    } else {
+      var disableColor = "#eaeaed";
+    }
+    this.setState({
+      disabledDateTo: !this.state.disabledDateTo,
+      disableColor: disableColor,
+      dateTo: null,
+    });
+  };
+
+  handleChangeComplete = (color, event) => {
+    this.setState({
+      background: color.hex,
+      displayColorPicker: !this.state.displayColorPicker,
+    });
+  };
+
+  handleChangeColor = () => {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker });
+  };
+
+  manageProjectListing = project => {
+    project["owner"] = { name: `${this.state.userName}` };
+    var projects = [...this.state.projects, ...[project]];
+    this.setState({ projects: projects });
+  };
+
+  handleChangeMember = (selected, selectedTags) => {
+    this.setState({ projectMembers: selected, selectedTags: selectedTags });
+  };
+
+  editProject = async () => {
+    const projectData = {
+      project: {
+        name: this.state.projectName,
+        start_date: this.state.dateFrom,
+        end_date: this.state.dateTo,
+        members: this.state.projectMembers,
+        color_code: this.state.background,
+      },
+    };
+    try {
+      const { data } = await put(
+        projectData,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}`,
+      );
+      this.setState({ show: false });
+      this.manageProjectListing(data.project);
+      this.handleLoad(true);
+      toast(
+        <DailyPloyToast
+          message="Project added successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      );
+    } catch (e) {
+      console.log("Error", e);
+      var errors = e.response.data.errors;
+      if (errors && errors.project_name_workspace_uniqueness) {
+        toast(
+          <DailyPloyToast
+            message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      } else if (errors && errors.name) {
+        toast(
+          <DailyPloyToast
+            message={`Project name ${errors.name}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+      } else {
+        this.setState({ show: false });
+      }
+    }
+  };
+
+  render() {
+    var userRole = localStorage.getItem("userRole");
+    console.log("Members", this.state.projectMembers);
+    return (
+      <>
+        <MenuBar
+          onSelectSort={this.onSelectSort}
+          workspaceId={this.state.workspaceId}
+          classNameRoute={this.classNameRoute}
+          handleLoad={this.handleLoad}
+          manageProjectListing={this.manageProjectListing}
+          state={this.state}
+        />
+        <div className="show-projects">
+          <div className="views">
+            <Tabs>
+              <div className="col-md-12 text-center">
+                <div
+                  className="col-md-2 offset-5"
+                  style={{ position: "relative" }}>
+                  <TabList>
+                    <Tab>
+                      <i className="fas fa-th"></i>
+                    </Tab>
+                    <Tab>
+                      <i className="fa fa-bars"></i>
+                    </Tab>
+                  </TabList>
+                </div>
+              </div>
+              <div className="project-view">
+                <TabPanel>
+                  <div style={{ margin: "0px 30px 0px 30px" }}>
                     <div className="row grid-view no-margin">
                       {this.state.projects.map((project, index) => {
                         return (
@@ -338,13 +400,194 @@ class ShowProjects extends Component {
                         );
                       })}
                     </div>
-                  </TabPanel>
-                </Tabs>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id={`customCheck`}
+                              onChange={this.checkAll}
+                              name="chk[]"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor={`customCheck`}></label>
+                          </div>
+                          {/* <input
+                            class="styled-checkbox"
+                            id="styled-checkbox-1"
+                            type="checkbox"
+                            value="value1"
+                          />
+                          <label for="styled-checkbox-1"></label> */}
+                        </th>
+                        <th scope="col">
+                          Project ID{" "}
+                          <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col" style={{ width: "195px" }}>
+                          Project Name{" "}
+                          <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          Colour <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          Project Owner{" "}
+                          <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          Start Date{" "}
+                          <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          End Date <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          Duration <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          Created Date{" "}
+                          <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th scope="col">
+                          Project Members{" "}
+                          <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-titlize">
+                      {this.state.projects.map((project, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>
+                              {/* <div className="checkbox">
+                                  <input
+                                    type="checkbox"
+                                    id={`checkbox${index}`}
+                                    name=""
+                                    value=""
+                                  />
+                                  <label for={`checkbox${index}`}></label>
+                                </div> */}
+                              <div className="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className="custom-control-input"
+                                  id={`customCheck${index}`}
+                                  name="isChecked"
+                                  onChange={this.handleCheck}
+                                />
+                                <label
+                                  className="custom-control-label"
+                                  htmlFor={`customCheck${index}`}></label>
+                              </div>
+                            </td>
+                            <td>{`${"P-00"}${index + 1}`}</td>
+                            <td>{project.name}</td>
+                            <td>
+                              <div
+                                className="color-block"
+                                style={{
+                                  backgroundColor: `${project.color_code}`,
+                                }}></div>
+                            </td>
+                            <td>{project.owner ? project.owner.name : ""}</td>
+                            <td>
+                              {moment(project.start_date).format("DD MMM YY")}
+                            </td>
+                            <td>
+                              {project.end_date
+                                ? moment(project.end_date).format("DD MMM YY")
+                                : "---"}
+                            </td>
+                            <td>
+                              {this.monthDiff(
+                                this.getDate(project.start_date),
+                                this.getDate(project.end_date),
+                              )}
+                            </td>
+                            <td>
+                              {moment(project.start_date).format("DD MMM YY")}
+                            </td>{" "}
+                            {/* TODO: here project created date */}
+                            <td>
+                              <span>
+                                {project.members
+                                  .slice(0, 4)
+                                  .map((user, index) => {
+                                    return (
+                                      <div key={index} className="user-block">
+                                        <span>
+                                          {user.name
+                                            .split(" ")
+                                            .map(x => x[0])
+                                            .join("")}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                              </span>
+                              <span>
+                                {this.countIncrese(
+                                  project.members.map(user => user.name),
+                                )}
+                              </span>
+                            </td>
+                            <td
+                              className={
+                                userRole === "member" ? "d-none" : null
+                              }>
+                              <button
+                                className="btn btn-link edit-btn"
+                                onClick={e => this.handleEditShow(e, project)}>
+                                <i className="fas fa-pencil-alt"></i>
+                              </button>
+                              {this.state.show &&
+                              this.state.projectId === project.id ? (
+                                <AddProjectModal
+                                  state={this.state}
+                                  handleClose={this.handleEditClose}
+                                  btnText={"Save"}
+                                  headText={project.name}
+                                  ownerClassName={""}
+                                  handleChangeInput={this.handleChangeInput}
+                                  handleDateFrom={this.handleDateFrom}
+                                  handleDateTo={this.handleDateTo}
+                                  handleUndefinedToDate={
+                                    this.handleUndefinedToDate
+                                  }
+                                  workspaceId={this.state.workspaceId}
+                                  handleChangeColor={this.handleChangeColor}
+                                  handleChangeComplete={
+                                    this.handleChangeComplete
+                                  }
+                                  colors={this.colors}
+                                  handleChangeMember={this.handleChangeMember}
+                                  emailOptions={
+                                    this.state.isLogedInUserEmailArr
+                                  }
+                                  addProject={this.editProject}
+                                />
+                              ) : null}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </TabPanel>
               </div>
-            </div>
+            </Tabs>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

@@ -1,4 +1,6 @@
 import React from "react";
+import { Dropdown, select } from "react-bootstrap";
+import Add from "../../../assets/images/add.svg";
 
 const ConditionalElements = props => {
   let classNameRoute;
@@ -18,9 +20,11 @@ const ConditionalElements = props => {
   } else if (routeName === "membersTrue") {
     classNameRoute = (
       <>
-        <div className="col-md-2 d-inline-block">
-          <button className="btn btn-primary menubar-button">Delete</button>
-        </div>
+        {props.isDeleteShow ? (
+          <div className="col-md-2 d-inline-block">
+            <button className="btn btn-primary menubar-button">Delete</button>
+          </div>
+        ) : null}
       </>
     );
   } else {

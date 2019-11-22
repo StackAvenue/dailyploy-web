@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
+// import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
+import { post } from "../../utils/API";
 import "../../assets/css/dashboard.scss";
+import AddTaskModal from "../../components/dashboard/AddTaskModal";
 import moment from "moment";
 
 class Calendar extends Component {
@@ -14,21 +17,66 @@ class Calendar extends Component {
       false,
       false,
       {
-        resourceName: "",
-        nonAgendaOtherCellHeaderFormat: "D ddd",
-        dayResourceTableWidth: "218px",
+        schedulerWidth: "96%",
+        besidesWidth: 20,
+        schedulerMaxHeight: 0,
+        tableHeaderHeight: 34,
+
+        agendaResourceTableWidth: 160,
+        agendaMaxEventWidth: 100,
+
+        dayResourceTableWidth: 218,
         weekResourceTableWidth: "16%",
-        monthResourceTableWidth: "218px",
-        dayCellWidth: "5%",
+        monthResourceTableWidth: 218,
+        customResourceTableWidth: 160,
+
+        dayCellWidth: 30,
         weekCellWidth: "12%",
-        monthCellWidth: "4%",
+        monthCellWidth: 80,
+        customCellWidth: 80,
+
+        dayMaxEvents: 99,
+        weekMaxEvents: 99,
+        monthMaxEvents: 99,
+        customMaxEvents: 99,
+
         eventItemHeight: 45,
-        eventItemLineHeight: 50,
+        eventItemLineHeight: this.calculateResouceHeight(),
+        nonAgendaSlotMinHeight: 0,
+        dayStartFrom: 0,
+        dayStopTo: 23,
+        defaultEventBgColor: "#80C5F6",
+        selectedAreaColor: "#7EC2F3",
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#e5e5e54f",
-        tableHeaderHeight: 35,
-        schedulerWidth: "96%",
+        summaryColor: "#666",
+        groupOnlySlotColor: "#F8F8F8",
+
+        startResizable: true,
+        endResizable: true,
+        movable: true,
+        creatable: true,
+        crossResourceMove: true,
+        checkConflict: false,
+        scrollToSpecialMomentEnabled: true,
+        eventItemPopoverEnabled: true,
+        calendarPopoverEnabled: true,
+        recurringEventsEnabled: true,
+        headerEnabled: true,
+        displayWeekend: true,
+        relativeMove: true,
+        defaultExpanded: true,
+
+        resourceName: "",
+        taskName: "Task Name",
+        agendaViewHeader: "Agenda",
+        nonAgendaDayCellHeaderFormat: "ha",
+        nonAgendaOtherCellHeaderFormat: "D ddd",
+        eventItemPopoverDateFormat: "MMM D",
+        minuteStep: 30,
+        // calenderViewType: "dropdown",
+
         views: [
           {
             viewName: "Day",
@@ -63,25 +111,42 @@ class Calendar extends Component {
     };
   }
 
-  async componentWillMount() {
-    this.schedulerData.setResources(this.props.resources);
-    this.schedulerData.setEvents(this.props.events);
+  calculateResouceHeight = () => {
+    let resourcesLength = this.props.resources.length;
+    let sceenHeight = window.screen.height;
+    let finalSceenHeight = sceenHeight - (((sceenHeight / 10) * 30) / 10)
+    let heights = new Map()
+    heights.set(0, finalSceenHeight)
+    heights.set(1, finalSceenHeight)
+    heights.set(2, finalSceenHeight / 2)
+    heights.set(3, finalSceenHeight / 3)
+    heights.set(4, finalSceenHeight / 4)
+    heights.set(5, finalSceenHeight / 5)
+    heights.set(6, finalSceenHeight / 6)
+    heights.set(7, finalSceenHeight / 7)
+    heights.set(8, finalSceenHeight / 8)
+    let height = heights.get(resourcesLength)
+    if (height === undefined) {
+      return 50;
+    }
+    return height;
+  };
+
+  async componentDidMount() {
+    this.renderData();
   }
 
-  showTaskModal = () => {
-    this.setState({
-      setShow: true,
-      show: true,
-    });
-  };
-
-  closeTaskModal = () => {
-    this.setState({
-      show: false,
-    });
-  };
+  async componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.events !== this.props.events ||
+      prevProps.resources !== this.props.resources
+    ) {
+      this.renderData();
+    }
+  }
 
   renderData = () => {
+    this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
     this.schedulerData.setResources(this.props.resources);
     this.schedulerData.setEvents(this.props.events);
   };
@@ -102,8 +167,7 @@ class Calendar extends Component {
     }
 
     if (isCurrentDate) {
-      style.backgroundColor = "#118dea";
-      style.color = "white";
+      style.borderTop = "4px solid #33a1ff";
     }
 
     return (
@@ -129,7 +193,6 @@ class Calendar extends Component {
       </div>
     );
 
-    // console.log("schedular Data", this.schedulerData);
     return (
       <div>
         <div>
@@ -154,11 +217,51 @@ class Calendar extends Component {
             toggleExpandFunc={this.toggleExpandFunc}
             leftCustomHeader={leftCustomHeader}
             eventItemTemplateResolver={this.eventItemTemplateResolver}
+            eventItemPopoverTemplateResolver={
+              this.eventItemPopoverTemplateResolver
+            }
           />
         </div>
       </div>
     );
   }
+  eventItemPopoverTemplateResolver = (
+    schedulerData,
+    eventItem,
+    title,
+    start,
+    end,
+    statusColor,
+  ) => {
+    let totalSeconds = end.diff(start, "seconds");
+    totalSeconds = Number(totalSeconds);
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
+
+    var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
+    return (
+      <div className="event-task-hover">
+        <div className="title">
+          <span className="" title={title}>
+            {title}
+          </span>
+        </div>
+        <div className="project">
+          <div
+            className="status-dot d-inline-block"
+            style={{ backgroundColor: `${eventItem.bgColor}` }}></div>
+          <div className="d-inline-block">{eventItem.projectName}</div>
+        </div>
+        <div className="time">
+          <div className="d-inline-block">
+            {start.format("HH:mm")}-{end.format("HH:mm")}
+          </div>
+          <div className="d-inline-block pull-right">{timeDiff}</div>
+        </div>
+      </div>
+    );
+  };
 
   prevClick = schedulerData => {
     schedulerData.prev();
@@ -166,8 +269,10 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskView(schedulerData.viewType);
-    this.props.taskDate(schedulerData.startDate);
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   nextClick = schedulerData => {
@@ -176,11 +281,14 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskView(schedulerData.viewType);
-    this.props.taskDate(schedulerData.startDate);
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   onViewChange = (schedulerData, view) => {
+    var newSchedulerData = new SchedulerData(schedulerData);
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
@@ -190,7 +298,10 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskView(view.viewType);
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   onSelectDate = (schedulerData, date) => {
@@ -199,13 +310,12 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.taskDate(date);
+    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
   };
 
   eventClicked = (schedulerData, event) => {
-    alert(
-      `You just clicked an event: {id: ${event.id}, title: ${event.title}}`,
-    );
+    var taskId = event.id.split("-")[0];
+    this.props.editAddTaskDetails(taskId, event);
   };
 
   ops1 = (schedulerData, event) => {
@@ -221,29 +331,7 @@ class Calendar extends Component {
   };
 
   newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-    if (
-      window.confirm(
-        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`,
-      )
-    ) {
-      let newFreshId = 0;
-      schedulerData.events.forEach(item => {
-        if (item.id >= newFreshId) newFreshId = item.id + 1;
-      });
-
-      let newEvent = {
-        id: newFreshId,
-        title: "New event you just created",
-        start: start,
-        end: end,
-        resourceId: slotId,
-        bgColor: "purple",
-      };
-      schedulerData.addEvent(newEvent);
-      this.setState({
-        viewModel: schedulerData,
-      });
-    }
+    this.props.setAddTaskDetails(slotId, start, end);
   };
 
   updateEventStart = (schedulerData, event, newStart) => {
@@ -274,12 +362,10 @@ class Calendar extends Component {
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     console.log(schedulerData, event, slotId, slotName, start, end);
-    // if(confirm(`Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`)) {
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     this.setState({
       viewModel: schedulerData,
     });
-    // }
   };
 
   onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
@@ -329,6 +415,7 @@ class Calendar extends Component {
       schedulerData,
       event,
     );
+    titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start).format("HH:mm");
     var end = moment(event.end).format("HH:mm");
     let divStyle = {
@@ -337,23 +424,67 @@ class Calendar extends Component {
       height: mustBeHeight,
     };
     if (!!agendaMaxEventWidth)
-      divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth };
+      divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
-    return (
-      <div key={event.id} className={mustAddCssClass} style={divStyle}>
-        <div className="row item">
-          <div className="col-md-12 item-heading no-padding">{titleText}</div>
-          <div className="col-md-12 no-padding">
-            <div className="col-md-6 no-padding d-inline-block item-time">
-              {`${start} - ${end}`}
+    if (schedulerData.viewType === 0) {
+      return (
+        <div key={event.id} className={mustAddCssClass} style={divStyle}>
+          <div className="row item">
+            <div
+              className="col-md-12 item-heading text-wraper rk"
+              style={{ padding: "7px 7px 0px 7px" }}>
+              {titleText}
             </div>
-            <div className="col-md-6 no-padding d-inline-block item-time text-right">
-              {moment(event.end).diff(moment(event.start), "hours")}&nbsp;h
+            <div className="col-md-12 no-padding">
+              <div className="col-md-6 no-padding d-inline-block item-time pull-right text-right">
+                {this.getTimeDifference(moment(event.start), moment(event.end))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else if (schedulerData.viewType === 1) {
+      return (
+        <div key={event.id} className={mustAddCssClass} style={divStyle}>
+          <div className="row item">
+            <div
+              className="col-md-12 item-heading text-wraper"
+              style={{ padding: "5px 5px 0px 5px" }}>
+              {titleText}
+            </div>
+            <div className="col-md-12 no-padding">
+              <div className="col-md-6 no-padding d-inline-block item-time">
+                {`${start} - ${end}`}
+              </div>
+              <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                {this.getTimeDifference(moment(event.start), moment(event.end))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (schedulerData.viewType === 2) {
+      return (
+        <div key={event.id} className={mustAddCssClass} style={divStyle}>
+          <div className="row item">
+            <div
+              className="col-md-12 item-heading text-wraper"
+              style={{ padding: "5px 5px 0px 5px" }}>
+              {titleText}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  getTimeDifference = (start, end) => {
+    let totalSeconds = end.diff(start, "seconds");
+    totalSeconds = Number(totalSeconds);
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
+    return h + "h" + ":" + m + "m";
   };
 
   toggleExpandFunc = (schedulerData, slotId) => {
