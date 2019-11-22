@@ -21,11 +21,11 @@ class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: null,
-      companyName: null,
-      email: null,
-      password: null,
-      confirmPassword: null,
+      name: "",
+      companyName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
       errors: {
         nameError: null,
         companyNameError: null,

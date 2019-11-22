@@ -53,8 +53,10 @@ class Header extends Component {
 
     if (prevProps.searchOptions !== this.props.searchOptions) {
       this.setState({
-        selectedTags: this.props.searchOptions.filter(option => option.email === this.state.userEmail)
-      })
+        selectedTags: this.props.searchOptions.filter(
+          option => option.email === this.state.userEmail,
+        ),
+      });
     }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
@@ -218,7 +220,7 @@ class Header extends Component {
                 href={`/dashboard/${this.props.workspaceId}`}>
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
-              <div className="col-md-6 no-padding header-search-bar">
+              <div className="col-md-7 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
                   <div className="user-project-search text-titlize">
                     <div className="selected-tags">
@@ -312,7 +314,7 @@ class Header extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <Dropdown>
+                  {/* <Dropdown>
                     <Dropdown.Toggle variant="link" id="dropdown-basic">
                       <i className="fa fa-bars"></i>
                     </Dropdown.Toggle>
@@ -348,7 +350,7 @@ class Header extends Component {
                         &nbsp;&nbsp;Invite to Workspace
                       </Dropdown.Item>
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
@@ -356,7 +358,7 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
+                      } `}
                       id="dropdown-basic">
                       {x}
                     </Dropdown.Toggle>
@@ -367,7 +369,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}>
+                          } `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">

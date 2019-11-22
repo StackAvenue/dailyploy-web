@@ -108,26 +108,27 @@ export default class MenuBar extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
     } catch (e) {
-      var errors = e.response.data.errors;
-      if (errors && errors.project_name_workspace_uniqueness) {
-        toast(
-          <DailyPloyToast
-            message={`Project Name ${errors.project_name_workspace_uniqueness}`}
-            status="error"
-          />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
-        );
-      } else if (errors && errors.name) {
-        toast(
-          <DailyPloyToast
-            message={`Project name ${errors.name}`}
-            status="error"
-          />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
-        );
-      } else {
-        this.setState({ show: false });
-      }
+      console.log("error", e);
+      // var errors = e.response.data.errors;
+      // if (errors && errors.project_name_workspace_uniqueness) {
+      //   toast(
+      //     <DailyPloyToast
+      //       message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+      //       status="error"
+      //     />,
+      //     { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      //   );
+      // } else if (errors && errors.name) {
+      //   toast(
+      //     <DailyPloyToast
+      //       message={`Project name ${errors.name}`}
+      //       status="error"
+      //     />,
+      //     { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+      //   );
+      // } else {
+      //   this.setState({ show: false });
+      // }
     }
   };
 
@@ -320,7 +321,7 @@ export default class MenuBar extends Component {
                         colors={this.colors}
                         addProject={this.addProject}
                         btnText={"Add"}
-                        headText={"Add Project"}
+                        headText={"Add New Project"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}
                         handleUndefinedToDate={this.handleUndefinedToDate}
                         workspaceId={this.props.workspaceId}
