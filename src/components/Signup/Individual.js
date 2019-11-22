@@ -45,7 +45,7 @@ const Individual = props => {
                 value={email}
                 onChange={props.changeHandler}
                 className="form-control login-form-field error"
-                placeholder="johndoe123@example.com"
+                placeholder="john@daiilyploy.com"
               />
             ) : (
               <input
@@ -55,7 +55,7 @@ const Individual = props => {
                 value={email}
                 onChange={props.changeHandler}
                 className="form-control login-form-field"
-                placeholder="johndoe123@example.com"
+                placeholder="john@daiilyploy.com"
               />
             )}
           </div>

@@ -247,8 +247,11 @@ class Header extends Component {
                 id="navbarTogglerDemo03">
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                   <Dropdown>
-                    <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      <i className="fas fa-bell" />
+                    <Dropdown.Toggle
+                      variant="link"
+                      id="dropdown-basic"
+                      style={{ padding: "8px 20px 0px 0px" }}>
+                      <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="dropdown-notification">
@@ -362,7 +365,7 @@ class Header extends Component {
                       id="dropdown-basic">
                       {x}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-position">
+                    <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
                         <div
                           className={`workspace-circle d-inline-block text-titlize ${
@@ -373,7 +376,7 @@ class Header extends Component {
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
-                          <span className="text-titlize">
+                          <span className="text-titlize big">
                             {this.state.userName}
                           </span>
                           <br />
@@ -399,6 +402,7 @@ class Header extends Component {
                             {this.state.userRole}
                           </span>
                         </div>
+                        <div></div>
                       </div>
                       <Dropdown.Item
                         className="workspace-setting"

@@ -44,7 +44,7 @@ const Company = props => {
                 disabled={isDisabled}
                 onChange={props.changeHandler}
                 className="form-control login-form-field error"
-                placeholder="johndoe1234@amazon.com"
+                placeholder="john@daiilyploy.com"
               />
             ) : (
               <input
@@ -54,7 +54,7 @@ const Company = props => {
                 disabled={isDisabled}
                 onChange={props.changeHandler}
                 className="form-control login-form-field"
-                placeholder="johndoe1234@amazon.com"
+                placeholder="john@daiilyploy.com"
               />
             )}
           </div>
@@ -71,7 +71,7 @@ const Company = props => {
               value={companyName}
               onChange={props.changeHandler}
               className="form-control login-form-field"
-              placeholder="Amazon"
+              placeholder="DailyPloy"
             />
           </div>
           <div className="form-group">

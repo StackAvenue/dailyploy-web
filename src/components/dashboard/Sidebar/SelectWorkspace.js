@@ -4,9 +4,7 @@ const SelectWorkspace = props => {
   if (props.item.id === Number(props.workspaceId)) {
     return (
       <li key={props.index}>
-        <div
-          className="workspace-box text-titlize"
-          style={{ backgroundColor: "#33a1ff" }}>
+        <div className="workspace-box text-titlize active">
           <a className="btn btn-default" href={`/dashboard/${props.item.id}`}>
             {props.nameFirstLetters(props.item.name)}
             {}

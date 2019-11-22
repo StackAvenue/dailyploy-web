@@ -44,7 +44,7 @@ class Sidebar extends Component {
     let divideArr = workspacesArr.map(item => item);
     return (
       <>
-        <div className="workspace-list no-padding">
+        <div className="workspace-list">
           <ul>
             {divideArr.map((item, index) => (
               <SelectWorkspace
@@ -57,7 +57,7 @@ class Sidebar extends Component {
               />
             ))}
             <li>
-              <div className="workspace-box">
+              <div className="workspace-box" style={{ paddingTop: "8px" }}>
                 <button className="btn btn-link" onClick={this.showTaskModal}>
                   +
                 </button>

@@ -1,14 +1,13 @@
 import React from "react";
 
 const GridBlock = props => {
-  console.log("Project", props.project);
   return (
     <div className="grid-div" key={props.index}>
-      <div className="col-md-12 id">{props.index + 1}</div>
+      <div className="col-md-12 id">{`${"P-00"}${props.index + 1}`}</div>
       <div className="col-md-12 name">{props.project.name}</div>
       <div className="col-md-12 no-padding">
         <div className="col-md-2 d-inline-block no-padding">
-          <div className="user-block">
+          <div className="owner-block">
             {props.project.owner.name
               .split(" ")
               .map(x => x[0])

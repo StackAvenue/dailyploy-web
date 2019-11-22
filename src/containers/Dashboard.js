@@ -63,6 +63,7 @@ class Dashboard extends Component {
       editProjectId: "",
       timeDateTo: null,
       timeDateFrom: null,
+      worksapceUsers: [],
     };
   }
 
@@ -215,6 +216,7 @@ class Dashboard extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`,
       );
+      var worksapceUsers = data.members
       var userArr = data.members.map(user => user);
       var emailArr = data.members.filter(
         user => user.email !== loggedInData.email,
@@ -264,10 +266,6 @@ class Dashboard extends Component {
         return { usersObj, tasks };
       });
       var tasksResources = tasksUser.map(user => user.usersObj);
-      // .sort((x, y) => {
-      //   return x.id == loggedInData.id ? -1 : y.id == loggedInData.id ? 1 : 0;
-      // });
-
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
       this.props.handleLoading(false);
     } catch (e) {
@@ -287,8 +285,39 @@ class Dashboard extends Component {
       user: user,
       selectedMembers: [loggedInData],
       taskUser: [loggedInData.id],
+      worksapceUsers: worksapceUsers
     });
+    this.createUserProjectList();
   }
+
+  createUserProjectList = () => {
+    var searchOptions = [];
+    if (this.state.projects) {
+      this.state.projects.map((project, index) => {
+        searchOptions.push({
+          value: project.name,
+          project_id: project.id,
+          type: "project",
+          id: (index += 1),
+        });
+      });
+    }
+
+    var index = searchOptions.length;
+    if (this.state.worksapceUsers) {
+      this.state.worksapceUsers.map((member, idx) => {
+        searchOptions.push({
+          value: member.name,
+          id: (index += 1),
+          member_id: member.id,
+          email: member.email,
+          type: "member",
+          role: member.role,
+        });
+      });
+    }
+    this.props.setSearchOptions(searchOptions);
+  };
 
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
@@ -486,11 +515,6 @@ class Dashboard extends Component {
   };
 
   memberSearchOptions = (userId, projectId) => {
-    // if (this.state.user.role === 'admin') {
-    //   return this.state.users
-    // } else {
-    //   return this.state.users.filter(member => member.id === userId)
-    // }
     var projects = this.state.projects.filter(project => project.id === projectId)
     var members = projects.length > 0 ? projects[0].members : []
     if (this.state.user.role === 'admin' && projects) {

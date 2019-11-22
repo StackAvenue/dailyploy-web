@@ -71,11 +71,8 @@ class AddProjectModal extends Component {
 
   removeSelectedTag = index => {
     var selectedTags = this.props.state.selectedTags;
-    console.log("idididi", selectedTags);
     selectedTags = selectedTags.filter((_, idx) => idx !== index);
-    console.log("shsjsks", selectedTags);
     var memberIds = selectedTags.map(user => user.id);
-    console.log("jskssjsksj", memberIds);
     // this.setState({ selectedTags: selectedTags });
     this.props.handleChangeMember(memberIds, selectedTags);
   };
@@ -212,7 +209,7 @@ class AddProjectModal extends Component {
                     type="text"
                     name="projectName"
                     onChange={props.handleChangeInput}
-                    placeholder="Write Project Name here"
+                    placeholder="Project Name..."
                     className="form-control"
                     value={props.state.projectName}
                   />
@@ -275,24 +272,18 @@ class AddProjectModal extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-md-12 row no-margin no-padding input-row">
-                <div className="col-md-2 no-padding label">Members</div>
-                <div className="col-md-10">
-                  <div className="project-member-search">
-                    <div className="selected-tags text-titlize">
-                      {this.renderSelectedTags()}
-                    </div>
-                    <input
-                      type="text"
-                      value={this.state.value}
-                      placeholder="Write Here"
-                      onChange={this.onSearchTextChange}
-                    />
-
-                    <div className="suggestion-holder">
-                      {this.renderSearchSuggestion()}
-                    </div>
-                  </div>
+              <div className="col-md-12 no-padding input-row">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Budget
+                </div>
+                <div
+                  className="col-md-5 d-inline-block"
+                  style={{ maxWidth: "240px" }}>
+                  <input
+                    type="text"
+                    placeholder="Enter amount"
+                    className="form-control"
+                  />
                 </div>
               </div>
               <div className="col-md-12 row no-margin no-padding input-row">
@@ -327,6 +318,27 @@ class AddProjectModal extends Component {
                   ) : null}
                 </div>
               </div>
+              <div className="col-md-12 row no-margin no-padding input-row">
+                <div className="col-md-2 no-padding label">Members</div>
+                <div className="col-md-10">
+                  <div className="project-member-search">
+                    <div className="selected-tags text-titlize">
+                      {this.renderSelectedTags()}
+                    </div>
+                    <input
+                      type="text"
+                      value={this.state.value}
+                      placeholder="Search for member"
+                      onChange={this.onSearchTextChange}
+                    />
+
+                    <div className="suggestion-holder">
+                      {this.renderSearchSuggestion()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-5 ml-auto">
                   <button

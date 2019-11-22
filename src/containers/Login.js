@@ -61,10 +61,7 @@ class Signin extends Component {
         } catch (e) {
           console.log("error", e);
         }
-
-        // window.location.reload();
       } catch (e) {
-        console.log("error", e.response.data.error);
         this.setState({ error: e.response.data.error });
       }
     } else {
