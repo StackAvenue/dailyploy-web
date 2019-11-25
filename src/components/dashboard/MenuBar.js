@@ -77,12 +77,14 @@ export default class MenuBar extends Component {
   }
 
   addProject = async () => {
+    let addOwner = [];
+    addOwner.push(this.props.state.userId);
     const projectData = {
       project: {
         name: this.state.projectName,
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
-        members: this.state.projectMembers,
+        members: [...this.state.projectMembers, ...addOwner],
         color_code: this.state.background,
       },
     };

@@ -3,7 +3,19 @@ import React from "react";
 const GridBlock = props => {
   return (
     <div className="grid-div" key={props.index}>
-      <div className="col-md-12 id">{`${"P-00"}${props.index + 1}`}</div>
+      <div className="col-md-12 id">
+        {`${"P-00"}${props.index + 1}`}{" "}
+        <div className="pull-right">
+          <input
+            className="styled-checkbox"
+            id={`styled-checkbox-${props.index}`}
+            type="checkbox"
+            name="isChecked"
+            // onChange={e => this.check(e, project)}
+          />
+          <label htmlFor={`styled-checkbox-${props.index}`}></label>
+        </div>
+      </div>
       <div className="col-md-12 name">{props.project.name}</div>
       <div className="col-md-12 no-padding">
         <div className="col-md-2 d-inline-block no-padding">

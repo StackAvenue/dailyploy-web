@@ -44,7 +44,7 @@ class Reports extends Component {
       searchOptions: [],
       worksapceUsers: "",
       worksapceUser: [],
-      searchUserDetail: "",
+      searchUserDetails: [],
       searchProjectIds: [],
       taskDetails: {},
       message: "My Daily Report",
@@ -73,10 +73,11 @@ class Reports extends Component {
   displayMessage = () => {
     var role = this.state.userRole;
     var frequency = this.textTitlize(this.returnFrequency());
+    console.log("this.props.searchUserDetails", this.props.searchUserDetails === [])
     if (
       role == "admin" &&
       this.props.searchProjectIds.length !== 0 &&
-      this.props.searchUserDetail == ""
+      this.props.searchUserDetails.length === 0
     ) {
       return (
         "Showing " +
@@ -85,20 +86,20 @@ class Reports extends Component {
         `${this.fetchProjectName()}`
       );
     } else if (
-      role === "member" && this.props.searchUserDetail === "" ||
-      (role === 'member' && this.props.searchUserDetail && this.props.searchUserDetail.email === this.state.userEmail) ||
-      (role === "admin" && this.props.searchUserDetail === "") ||
-      (role === 'admin' && this.props.searchUserDetail && this.props.searchUserDetail.email === this.state.userEmail)
+      role === "member" && this.props.searchUserDetails.length === 0 ||
+      (role === 'member' && this.props.searchUserDetails.length > 0 && this.props.searchUserDetails[0].email === this.state.userEmail) ||
+      (role === "admin" && this.props.searchUserDetails.length === 0) ||
+      (role === 'admin' && this.props.searchUserDetails && this.props.searchUserDetails[0].email === this.state.userEmail)
     ) {
       return "My " + `${frequency}` + " Report";
-    } else if (role == "admin" && this.props.searchUserDetail !== "") {
+    } else if (role == "admin" && this.props.searchUserDetails !== []) {
       return (
         "Showing " +
         `${frequency}` +
         " Report for " +
-        this.textTitlize(this.props.searchUserDetail.value) +
+        this.textTitlize(this.props.searchUserDetails[0].value) +
         "(" +
-        `${this.props.searchUserDetail.email}` +
+        `${this.props.searchUserDetails[0].email}` +
         ")"
       );
     }
@@ -298,7 +299,7 @@ class Reports extends Component {
     return (
       this.props.searchProjectIds.length > 0 &&
       this.state.userRole === "admin" &&
-      this.props.searchUserDetail.length == 0
+      this.props.searchUserDetails.length == 0
     );
   };
 
@@ -313,12 +314,12 @@ class Reports extends Component {
       prevState.dateTo !== this.state.dateTo ||
       prevState.frequency !== this.state.frequency ||
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      prevProps.searchUserDetail !== this.props.searchUserDetail
+      prevProps.searchUserDetails !== this.props.searchUserDetails
     ) {
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        user_id: this.props.searchUserDetail
-          ? this.props.searchUserDetail.member_id
+        user_id: this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails[0].member_id
           : this.state.userId,
         frequency: this.returnFrequency(),
         project_ids: JSON.stringify(this.props.searchProjectIds),
@@ -369,7 +370,7 @@ class Reports extends Component {
 
   calculateTotalSecond = (date, tasks) => {
     var totalSec = 0;
-    if (this.state.userRole === "admin" && this.props.searchUserDetail === "") {
+    if (this.state.userRole === "admin" && this.props.searchUserDetails === []) {
       tasks.map((task, idx) => {
         task.members.map(member => {
           totalSec += this.totalSeconds(tasks, date)
@@ -695,7 +696,7 @@ class Reports extends Component {
                 taskDetails={this.state.taskDetails}
                 state={this.state}
                 searchProjectIds={this.props.searchProjectIds}
-                searchUserDetail={this.props.searchUserDetail}
+                searchUserDetails={this.props.searchUserDetails}
                 frequency={this.returnFrequency()}
               />
             </div>

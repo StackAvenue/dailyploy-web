@@ -233,8 +233,8 @@
     width: 93px !important;
     height: 36px !important;
     border-radius: 5px !important;
-    font-size: $font-16 !important;
-    font-weight: 700 !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
     background-color: $btn-background-color;
     border-color: $btn-background-color;
     margin-right: 2% !important;
@@ -243,7 +243,9 @@
       border-color: $color-brand4;
     }
     img {
-      padding-right: 6%;
+      // padding-right: 5%;
+      height: 10px;
+      width: 10px;
     }
   }
   .dropdownMenu {
@@ -954,8 +956,11 @@
 }
 
 .header3-text {
-  font-size: 12px;
-  font-weight: 500;
+  font-weight: 500 !important;
+  text-align: left !important;
+  padding-left: 14px !important;
+  font-size: 13px !important;
+  color: #555555 !important;
 }
 
 .base-text {
@@ -1538,6 +1543,9 @@ table.scheduler-table tr:last-child td {
       border: 0 !important;
       i {
         margin-left: 10px;
+      }
+      label {
+        margin: 0 !important;
       }
     }
     td {
@@ -2558,4 +2566,10 @@ table.scheduler-table tr:last-child td {
       4px -7px 0 $color-text2;
     transform: rotate(45deg);
   }
+}
+
+.header2-text-label{
+  font-size: 13px !important;
+  /* color: rgb(155, 155, 155); */
+  text-transform: uppercase !important;
 }

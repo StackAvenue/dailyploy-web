@@ -48,6 +48,7 @@ class ShowProjects extends Component {
       displayColorPicker: false,
       selectedTags: [],
       worksapceUsers: [],
+      projectsLength: null,
     };
   }
 
@@ -93,6 +94,14 @@ class ShowProjects extends Component {
 
     // worksapce project Listing
     try {
+      var userIds =
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map(member => member.member_id)
+          : [];
+      var searchData = {
+        user_ids: JSON.stringify(userIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds),
+      };
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects`,
       );
@@ -128,6 +137,33 @@ class ShowProjects extends Component {
       worksapceUsers: worksapceUsers,
     });
     this.createUserProjectList();
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetails !== this.props.searchUserDetails
+    ) {
+      try {
+        var userIds =
+          this.props.searchUserDetails.length > 0
+            ? this.props.searchUserDetails.map(member => member.member_id)
+            : [];
+        var searchData = {
+          user_ids: JSON.stringify(userIds),
+          project_ids: JSON.stringify(this.props.searchProjectIds),
+        };
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/projects`,
+        );
+        var projectsData = data.projects;
+        this.props.handleLoading(false);
+      } catch (e) {}
+
+      this.setState({
+        projects: projectsData,
+      });
+    }
   }
 
   createUserProjectList = () => {
@@ -209,6 +245,8 @@ class ShowProjects extends Component {
   checkAll = e => {
     const allCheckboxChecked = e.target.checked;
     var checkboxes = document.getElementsByName("isChecked");
+    console.log("checkboxes", checkboxes);
+
     if (allCheckboxChecked) {
       for (let i in checkboxes) {
         if (checkboxes[i].checked === false) {
@@ -352,9 +390,35 @@ class ShowProjects extends Component {
     }
   };
 
+  handleCheckAll = (e, projects) => {
+    const allCheckboxChecked = e.target.checked;
+    let projectsLength = projects.length;
+    console.log("projects", projectsLength, allCheckboxChecked);
+    var checkboxes = document.getElementsByName("isChecked");
+    console.log("checkboxes", checkboxes);
+
+    if (allCheckboxChecked) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === false) {
+          checkboxes[i].checked = true;
+        }
+      }
+    } else {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === true) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+  };
+
+  handleCheck = (e, project) => {
+    let checked = e.target.checked;
+    console.log("Project", project, checked);
+  };
+
   render() {
     var userRole = localStorage.getItem("userRole");
-    console.log("Members", this.state.projectMembers);
     return (
       <>
         <MenuBar
@@ -368,9 +432,26 @@ class ShowProjects extends Component {
         <div className="show-projects">
           <div className="views">
             <Tabs>
-              <div className="col-md-12 text-center">
+              <div className="col-md-12">
                 <div
-                  className="col-md-2 offset-5"
+                  className="d-inline-block"
+                  style={{ position: "relative", left: "43px" }}>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox`}
+                    type="checkbox"
+                    name="chk[]"
+                    onChange={e => this.handleCheckAll(e, this.state.projects)}
+                  />
+                  <label htmlFor={`styled-checkbox`}>Select All</label>
+                  {/* <div className="col-md-2 d-inline-block">
+                    <button className="btn btn-primary menubar-button">
+                      Delete
+                    </button>
+                  </div> */}
+                </div>
+                <div
+                  className="col-md-2 offset-5 d-inline-block"
                   style={{ position: "relative" }}>
                   <TabList>
                     <Tab>
@@ -406,59 +487,41 @@ class ShowProjects extends Component {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th scope="col">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id={`customCheck`}
-                              onChange={this.checkAll}
-                              name="chk[]"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor={`customCheck`}></label>
-                          </div>
-                          {/* <input
-                            class="styled-checkbox"
-                            id="styled-checkbox-1"
-                            type="checkbox"
-                            value="value1"
-                          />
-                          <label for="styled-checkbox-1"></label> */}
-                        </th>
-                        <th scope="col">
+                        <th scope="col" style={{ paddingLeft: "60px" }}>
                           Project ID{" "}
-                          <i class="fa fa-sort" aria-hidden="true"></i>
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col" style={{ width: "195px" }}>
                           Project Name{" "}
-                          <i class="fa fa-sort" aria-hidden="true"></i>
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
-                          Colour <i class="fa fa-sort" aria-hidden="true"></i>
+                          Colour{" "}
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
                           Project Owner{" "}
-                          <i class="fa fa-sort" aria-hidden="true"></i>
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
                           Start Date{" "}
-                          <i class="fa fa-sort" aria-hidden="true"></i>
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
-                          End Date <i class="fa fa-sort" aria-hidden="true"></i>
+                          End Date{" "}
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
-                          Duration <i class="fa fa-sort" aria-hidden="true"></i>
+                          Duration{" "}
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
                           Created Date{" "}
-                          <i class="fa fa-sort" aria-hidden="true"></i>
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                         <th scope="col">
                           Project Members{" "}
-                          <i class="fa fa-sort" aria-hidden="true"></i>
+                          <i className="fa fa-sort" aria-hidden="true"></i>
                         </th>
                       </tr>
                     </thead>
@@ -466,30 +529,18 @@ class ShowProjects extends Component {
                       {this.state.projects.map((project, index) => {
                         return (
                           <tr key={index}>
-                            <td>
-                              {/* <div className="checkbox">
-                                  <input
-                                    type="checkbox"
-                                    id={`checkbox${index}`}
-                                    name=""
-                                    value=""
-                                  />
-                                  <label for={`checkbox${index}`}></label>
-                                </div> */}
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id={`customCheck${index}`}
-                                  name="isChecked"
-                                  onChange={this.handleCheck}
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor={`customCheck${index}`}></label>
-                              </div>
+                            <td style={{ paddingLeft: "60px" }}>
+                              <input
+                                className="styled-checkbox"
+                                id={`styled-checkbox-${index}`}
+                                type="checkbox"
+                                name="isChecked"
+                                onChange={e => this.handleCheck(e, project)}
+                              />
+                              <label
+                                htmlFor={`styled-checkbox-${index}`}></label>
+                              {`${"P-00"}${index + 1}`}
                             </td>
-                            <td>{`${"P-00"}${index + 1}`}</td>
                             <td>{project.name}</td>
                             <td>
                               <div
@@ -516,7 +567,6 @@ class ShowProjects extends Component {
                             <td>
                               {moment(project.start_date).format("DD MMM YY")}
                             </td>{" "}
-                            {/* TODO: here project created date */}
                             <td>
                               <span>
                                 {project.members

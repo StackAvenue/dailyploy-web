@@ -114,7 +114,7 @@ class ReportTable extends Component {
     return (
       this.props.searchProjectIds.length > 0 &&
       this.props.state.userRole === "admin" &&
-      this.props.searchUserDetail.length == 0
+      this.props.searchUserDetails.length === 0
     );
   };
 

@@ -12,6 +12,7 @@ import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
 import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
+import { DATE_FORMAT1 } from "../utils/Constants";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -64,6 +65,15 @@ class Dashboard extends Component {
       timeDateTo: null,
       timeDateFrom: null,
       worksapceUsers: [],
+      errors: {
+        taskNameError: "",
+        projectError: "",
+        memberError: "",
+        dateFromError: "",
+        dateToError: "",
+        timeFromError: "",
+        timeToError: "",
+      }
     };
   }
 
@@ -90,9 +100,18 @@ class Dashboard extends Component {
     if (
       prevState.taskStartDate !== this.state.taskStartDate ||
       prevState.taskFrequency !== this.state.taskFrequency ||
-      prevState.newTask !== this.state.newTask
+      prevState.newTask !== this.state.newTask ||
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetails !== this.props.searchUserDetails
     ) {
       try {
+        var userIds = this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map(member => member.member_id)
+          : []
+        var searchData = {
+          user_ids: JSON.stringify(userIds),
+          project_ids: JSON.stringify(this.props.searchProjectIds),
+        };
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
           this.state.taskFrequency
@@ -227,6 +246,13 @@ class Dashboard extends Component {
 
     // workspace Tasks Listing
     try {
+      var userIds = this.props.searchUserDetails.length > 0
+        ? this.props.searchUserDetails.map(member => member.member_id)
+        : []
+      var searchData = {
+        user_ids: JSON.stringify(userIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds),
+      };
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
         this.state.taskFrequency
@@ -334,54 +360,58 @@ class Dashboard extends Component {
   };
 
   addTask = async () => {
-    const taskData = this.taskDetails();
-    try {
-      const { data } = await post(
-        taskData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks`,
-      );
-      var task = data.task;
-      toast(
-        <DailyPloyToast
-          message="Task Created successfully!"
-          status="success"
-        />,
-        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
-      );
-      this.setState({ show: false, newTask: task, border: "solid 1px #ffffff" });
-    } catch (e) {
-      this.setState({ show: false, border: "solid 1px #ffffff" });
+    if (this.validateTaskModal()) {
+      const taskData = this.taskDetails();
+      try {
+        const { data } = await post(
+          taskData,
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/tasks`,
+        );
+        var task = data.task;
+        toast(
+          <DailyPloyToast
+            message="Task Created successfully!"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+        this.setState({ show: false, newTask: task, border: "solid 1px #ffffff" });
+      } catch (e) {
+        this.setState({ show: false, border: "solid 1px #ffffff" });
+      }
     }
   };
 
   editTask = async () => {
-    const taskData = this.taskDetails();
-    try {
-      const { data } = await put(
-        taskData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${this.state.taskId}`,
-      );
-      var task = data.task;
-      toast(
-        <DailyPloyToast
-          message="Task Updated successfully!"
-          status="success"
-        />,
-        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
-      );
-      this.setState({ show: false, newTask: task, border: "solid 1px #ffffff" });
-    } catch (e) {
-      this.setState({ show: false, border: "solid 1px #ffffff" });
+    if (this.validateTaskModal()) {
+      const taskData = this.taskDetails();
+      try {
+        const { data } = await put(
+          taskData,
+          `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${this.state.taskId}`,
+        );
+        var task = data.task;
+        toast(
+          <DailyPloyToast
+            message="Task Updated successfully!"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        );
+        this.setState({ show: false, newTask: task, border: "solid 1px #ffffff" });
+      } catch (e) {
+        this.setState({ show: false, border: "solid 1px #ffffff" });
+      }
     }
   };
 
   taskDetails = () => {
     var startDateTime =
-      moment(this.state.dateFrom).format("YYYY-MM-DD") +
+      moment(this.state.dateFrom).format(DATE_FORMAT1) +
       " " +
       this.state.timeFrom;
     var endDateTime =
-      moment(this.state.dateTo).format("YYYY-MM-DD") + " " + this.state.timeTo;
+      moment(this.state.dateTo ? this.state.dateTo : new Date()).format(DATE_FORMAT1) + " " + this.state.timeTo;
     var taskData = {
       task: {
         name: this.state.taskName,
@@ -494,10 +524,12 @@ class Dashboard extends Component {
     memberIds = options.map(member => member.id)
     memberIds = Array.from(new Set(memberIds));
     var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
+    var taskUsers = removedMembers.map(m => m.id)
     this.setState({
       projectId: option.id,
       selectedMembers: removedMembers,
       project: option,
+      taskUser: taskUsers,
       modalMemberSearchOptions: options,
       border: "solid 1px #9b9b9b",
       isBorder: false,
@@ -562,6 +594,32 @@ class Dashboard extends Component {
       )
     }
     return null
+  }
+
+  validateTaskModal = () => {
+    var errors = {}
+    var flag = true
+    errors['taskNameError'] = this.state.taskName ? "" : "please enter task name"
+    errors['projectError'] = this.state.projectId ? "" : "please select project"
+    errors['memberError'] = this.state.taskUser.length > 0 ? "" : "please select members"
+    errors['dateFromError'] = this.state.dateFrom ? "" : "please select date from"
+    if (!this.state.dateTo && this.state.dateFrom) {
+      console.log("dsdsd", this.state.dateFrom, new Date(), this.state.dateFrom === new Date())
+      if (moment(this.state.dateFrom).format(DATE_FORMAT1) === moment().format(DATE_FORMAT1)) {
+        errors['dateToError'] = ""
+      } else {
+        errors['dateToError'] = "please select date to"
+        flag = false
+      }
+    }
+    errors['timeFromError'] = this.state.timeFrom ? "" : "please select time from"
+    errors['timeToError'] = this.state.timeTo ? "" : "please select time to"
+    this.setState({ errors: errors })
+    return (
+      this.state.taskName && this.state.projectId &&
+      this.state.taskUser.length > 0 && this.state.timeTo &&
+      this.state.timeFrom && this.state.dateFrom && flag
+    )
   }
 
   editAddTaskDetails = async (taskId, event) => {

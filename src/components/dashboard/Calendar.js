@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
-// import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import { post } from "../../utils/API";
@@ -72,7 +71,7 @@ class Calendar extends Component {
         taskName: "Task Name",
         agendaViewHeader: "Agenda",
         nonAgendaDayCellHeaderFormat: "ha",
-        nonAgendaOtherCellHeaderFormat: "D ddd",
+        nonAgendaOtherCellHeaderFormat: "ddd DD MMM",
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
         // calenderViewType: "dropdown",
@@ -114,18 +113,18 @@ class Calendar extends Component {
   calculateResouceHeight = () => {
     let resourcesLength = this.props.resources.length;
     let sceenHeight = window.screen.height;
-    let finalSceenHeight = sceenHeight - (((sceenHeight / 10) * 30) / 10)
-    let heights = new Map()
-    heights.set(0, finalSceenHeight)
-    heights.set(1, finalSceenHeight)
-    heights.set(2, finalSceenHeight / 2)
-    heights.set(3, finalSceenHeight / 3)
-    heights.set(4, finalSceenHeight / 4)
-    heights.set(5, finalSceenHeight / 5)
-    heights.set(6, finalSceenHeight / 6)
-    heights.set(7, finalSceenHeight / 7)
-    heights.set(8, finalSceenHeight / 8)
-    let height = heights.get(resourcesLength)
+    let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 30) / 10;
+    let heights = new Map();
+    heights.set(0, finalSceenHeight);
+    heights.set(1, finalSceenHeight);
+    heights.set(2, finalSceenHeight / 2);
+    heights.set(3, finalSceenHeight / 3);
+    heights.set(4, finalSceenHeight / 4);
+    heights.set(5, finalSceenHeight / 5);
+    heights.set(6, finalSceenHeight / 6);
+    heights.set(7, finalSceenHeight / 7);
+    heights.set(8, finalSceenHeight / 8);
+    let height = heights.get(resourcesLength);
     if (height === undefined) {
       return 50;
     }
@@ -134,6 +133,9 @@ class Calendar extends Component {
 
   async componentDidMount() {
     this.renderData();
+    let date = document.querySelector(".header3-text");
+
+    console.log("data", date);
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -310,7 +312,10 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData,
     });
-    this.props.updateTaskDateView(schedulerData.viewType, schedulerData.startDate)
+    this.props.updateTaskDateView(
+      schedulerData.viewType,
+      schedulerData.startDate,
+    );
   };
 
   eventClicked = (schedulerData, event) => {
