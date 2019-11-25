@@ -48,7 +48,8 @@ class AddProjectModal extends Component {
     let suggestions = [];
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
-      suggestions = this.state.members
+      var selectedIds = this.props.state.selectedTags.map(m => m.id)
+      suggestions = this.state.members.filter(m => !selectedIds.includes(m.id))
         .sort()
         .filter(
           m => regex.test(m.name) && !this.props.state.selectedTags.includes(m),

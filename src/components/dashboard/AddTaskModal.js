@@ -212,6 +212,18 @@ class AddTaskModal extends Component {
                     className="form-control"
                   />
                 </div>
+
+                {this.props.state.errors.taskNameError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding">
+                    </div>
+                    <div className="col-md- d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.taskNameError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="col-md-12 no-padding input-row">
@@ -237,6 +249,17 @@ class AddTaskModal extends Component {
                     </div>
                   </div>
                 </div>
+                {this.props.state.errors.projectError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding">
+                    </div>
+                    <div className="col-md-10 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.projectError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               {/* <div className="col-md-12 no-padding input-row">
@@ -275,6 +298,17 @@ class AddTaskModal extends Component {
                     </div>
                   </div>
                 </div>
+                {this.props.state.errors.memberError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding">
+                    </div>
+                    <div className="col-md- d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.memberError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
 
@@ -309,6 +343,22 @@ class AddTaskModal extends Component {
                     </div>
                   </div>
                 </div>
+                {this.props.state.errors.dateFromError || this.props.state.errors.dateToError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding">
+                    </div>
+                    <div className="col-md-5 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.dateFromError}
+                      </span>
+                    </div>
+                    <div className="col-md-5 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.dateToError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="col-md-12 no-padding input-row">
@@ -346,6 +396,22 @@ class AddTaskModal extends Component {
                     </div>
                   </div>
                 </div>
+
+                {this.props.state.errors.timeFromError || this.props.state.errors.timeToError ? (
+                  <div className="col-md-12 d-inline-block no-padding">
+                    <div className="col-md-2 d-inline-block no-padding"></div>
+                    <div className="col-md-4 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.timeFromError}
+                      </span>
+                    </div>
+                    <div className="col-md-4 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.timeToError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="col-md-12 row no-margin no-padding input-row">

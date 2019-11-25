@@ -51,12 +51,28 @@ class Header extends Component {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
 
-    if (prevProps.searchOptions !== this.props.searchOptions) {
-      this.setState({
-        selectedTags: this.props.searchOptions.filter(
-          option => option.email === this.state.userEmail,
-        ),
-      });
+    // <<<<<<< HEAD
+    //     if (prevProps.searchOptions !== this.props.searchOptions) {
+    //       this.setState({
+    //         selectedTags: this.props.searchOptions.filter(
+    //           option => option.email === this.state.userEmail,
+    //         ),
+    //       });
+    // =======
+    if (
+      prevProps.searchOptions !== this.props.searchOptions &&
+      this.props.pathname === "reports"
+    ) {
+      var members = this.props.searchOptions.filter(
+        option => option.email === this.state.userEmail,
+      );
+      if (members) {
+        this.setState({
+          selectedTags: members,
+          selectedMember: members[0],
+        });
+      }
+      // >>>>>>> 21a8e66b187a4689eca8ac01c1790af39a642ff4
     }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
@@ -82,7 +98,7 @@ class Header extends Component {
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       var searchOptions = this.props.searchOptions;
-      if (this.state.selectedMember) {
+      if (this.state.selectedMember && this.props.pathname == "reports") {
         var searchOptions = searchOptions.filter(v => v.type != "member");
       }
       suggestions = searchOptions
@@ -402,7 +418,6 @@ class Header extends Component {
                             {this.state.userRole}
                           </span>
                         </div>
-                        <div></div>
                       </div>
                       <Dropdown.Item
                         className="workspace-setting"

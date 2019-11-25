@@ -18,7 +18,7 @@ class LoggedInLayout extends Component {
       userRole: "",
       searchOptions: [],
       searchProjectIds: [],
-      searchUserDetail: null,
+      searchUserDetails: [],
       isLoading: false,
     };
   }
@@ -66,7 +66,7 @@ class LoggedInLayout extends Component {
       setSearchOptions: this.setSearchOptions,
       handleSearchFilterResult: this.handleSearchFilterResult,
       searchProjectIds: this.state.searchProjectIds,
-      searchUserDetail: this.state.searchUserDetail,
+      searchUserDetails: this.state.searchUserDetails,
       handleLoading: this.handleLoad,
     };
     var newProps = { ...props, ...props1 };
@@ -77,12 +77,12 @@ class LoggedInLayout extends Component {
   };
 
   handleSearchFilterResult = data => {
-    var searchUserDetail = "";
+    var searchUserDetails = [];
     var projectIds = [];
     if (data) {
       data.map((item, i) => {
         if (item.type === "member") {
-          searchUserDetail = item;
+          searchUserDetails.push(item);
         } else if (item.type === "project") {
           projectIds.push(item.project_id);
         }
@@ -90,7 +90,7 @@ class LoggedInLayout extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetail: searchUserDetail,
+      searchUserDetails: searchUserDetails,
     });
   };
 
@@ -100,6 +100,11 @@ class LoggedInLayout extends Component {
 
   handleLoad = value => {
     this.setState({ isLoading: value });
+  };
+
+  classNameRoute = () => {
+    let route = this.props.history.location.pathname;
+    return route.split("/")[1];
   };
 
   render() {
@@ -123,7 +128,7 @@ class LoggedInLayout extends Component {
               workspaceId={this.state.workspaceId}
               userData={this.state.loggedInUserInfo}
               searchOptions={this.state.searchOptions}
-              // role={this.state.userRole}
+              pathname={this.classNameRoute()}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
 

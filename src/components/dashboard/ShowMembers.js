@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, logout, mockGet } from "../../utils/API";
+import { get, logout, mockGet, mockPost } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 import moment from "moment";
@@ -21,8 +21,6 @@ class ShowMembers extends Component {
       projects: [],
       userId: "",
       users: [],
-      searchUserDetail: "",
-      searchProjectIds: [],
       searchOptions: [],
       worksapceUsers: "",
       worksapceUser: [],
@@ -35,7 +33,7 @@ class ShowMembers extends Component {
       memberEmail: null,
       memberAccess: null,
       memberRole: null,
-      memberHours: null,
+      memberHours: "",
       memberProjects: null,
       isDeleteShow: false,
     };
@@ -75,6 +73,14 @@ class ShowMembers extends Component {
     }
 
     try {
+      var userIds =
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map(member => member.member_id)
+          : [];
+      var searchData = {
+        user_ids: JSON.stringify(userIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds),
+      };
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`,
       );
@@ -83,7 +89,7 @@ class ShowMembers extends Component {
       var worksapceUser = data.members.filter(
         user => user.email === loggedInData.email,
       );
-      var worksapceMembersExceptLogedUser = data.members.filter(
+      var memberArr = data.members.filter(
         user => user.email !== loggedInData.email,
       );
       var emailArr = data.members.filter(
@@ -106,31 +112,32 @@ class ShowMembers extends Component {
       userRole: worksapceUser[0].role,
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
-      members: worksapceMembersExceptLogedUser,
+      members: memberArr,
     });
     this.createUserProjectList();
   }
 
   async componentDidUpdate(prevProps, prevState) {
     if (
-      prevState.searchProjectIds !== this.state.searchProjectIds ||
-      prevState.searchUserDetail !== this.state.searchUserDetail ||
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetails !== this.props.searchUserDetails ||
       prevState.isLoading !== this.state.isLoading
     ) {
+      var userIds =
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map(member => member.member_id)
+          : [];
       var searchData = {
-        user_id: this.state.searchUserDetail
-          ? this.state.searchUserDetail.member_id
-          : this.state.userId,
-        project_ids: JSON.stringify(this.state.searchProjectIds),
+        user_ids: JSON.stringify(userIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds),
       };
-
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/members`,
         );
         var userArr = data.members.map(user => user.email);
         var worksapceUsers = data.members;
-        var worksapceMembersExceptLogedUser = data.members.filter(
+        var memberArr = data.members.filter(
           user => user.email !== this.state.userEmail,
         );
       } catch (e) {
@@ -140,7 +147,7 @@ class ShowMembers extends Component {
       this.setState({
         users: userArr,
         worksapceUsers: worksapceUsers,
-        members: worksapceMembersExceptLogedUser,
+        members: memberArr,
       });
     }
   }
@@ -164,40 +171,18 @@ class ShowMembers extends Component {
     }
   };
 
-  checkAll = e => {
-    const allCheckboxChecked = e.target.checked;
-    var checkboxes = document.getElementsByName("isChecked");
-    if (allCheckboxChecked) {
-      for (let i in checkboxes) {
-        if (checkboxes[i].checked === false) {
-          checkboxes[i].checked = true;
-        }
-      }
-    } else {
-      for (let i in checkboxes) {
-        if (checkboxes[i].checked === true) {
-          checkboxes[i].checked = false;
-        }
-      }
-    }
-    this.setState({ isDeleteShow: true });
-  };
-
   handleCheck = e => {
     const value = e.target.checked;
   };
 
   displayProjects = projects => {
     let arr = projects.map(project => project.name);
-    // let arr = ["jskjs", "sjsks", "jsksks", "skskksk"];
     let projectShow = arr.length > 1 ? arr[0] + "," + arr[1] : arr[0];
     return projectShow;
   };
 
   countProject = projects => {
     let arr = projects.map(project => project.name);
-    // let arr = ["jskjs", "sjsks", "jsksks", "skskksk"];
-
     let count;
     if (arr.length > 2) {
       count = arr.length - 2;
@@ -245,13 +230,28 @@ class ShowMembers extends Component {
     });
   };
 
+  editMember = async () => {
+    const editMemberData = {
+      id: this.state.projectShowMemberId,
+      role_id: this.state.memberRole,
+      working_hours: this.state.memberHours,
+      workspace_id: this.state.workspaceId,
+    };
+    try {
+      const { data } = await mockPost(editMemberData, "editMember");
+      console.log("data", data);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
   handleSearchFilterResult = data => {
-    var searchUserDetail = "";
+    var searchUserDetails = [];
     var projectIds = [];
     {
       data.map((item, i) => {
         if (item.type === "member") {
-          searchUserDetail = item;
+          searchUserDetails.push(item);
         } else if (item.type === "project") {
           projectIds.push(item.project_id);
         }
@@ -259,7 +259,7 @@ class ShowMembers extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetail: searchUserDetail,
+      searchUserDetails: searchUserDetails,
     });
   };
 
@@ -299,6 +299,25 @@ class ShowMembers extends Component {
     this.setState({ isLoading: value });
   };
 
+  handleCheckAll = e => {
+    const allCheckboxChecked = e.target.checked;
+    var checkboxes = document.getElementsByName("isChecked");
+    if (allCheckboxChecked) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === false) {
+          checkboxes[i].checked = true;
+        }
+      }
+    } else {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === true) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+    this.setState({ isDeleteShow: true });
+  };
+
   render() {
     var userRole = localStorage.getItem("userRole");
     return (
@@ -311,54 +330,54 @@ class ShowMembers extends Component {
           state={this.state}
         />
         <div className="show-projects">
-          <div className="members"></div>
+          <div className="members" style={{ padding: "24px 0px 0px 56px" }}>
+            {" "}
+            <input
+              className="styled-checkbox"
+              id={`styled-checkbox`}
+              type="checkbox"
+              name="chk[]"
+              onChange={e => this.handleCheckAll(e, this.state.members)}
+            />
+            <label htmlFor={`styled-checkbox`}>Select All</label>
+          </div>
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      className="custom-control-input"
-                      id={`customCheck`}
-                      onChange={this.checkAll}
-                      name="chk[]"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor={`customCheck`}></label>
-                  </div>
+                <th scope="col" style={{ paddingLeft: "60px" }}>
+                  Name <i className="fa fa-sort" aria-hidden="true"></i>
                 </th>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
+                <th scope="col">
+                  Email <i className="fa fa-sort" aria-hidden="true"></i>
+                </th>
                 <th scope="col">Role</th>
-                <th scope="col">Working Hours</th>
+                <th scope="col">
+                  Working Hours{" "}
+                  <i className="fa fa-sort" aria-hidden="true"></i>
+                </th>
                 <th scope="col">Projects</th>
                 <th scope="col">Invitation</th>
-                <th scope="col">Created Date</th>
+                <th scope="col">
+                  Date Created <i className="fa fa-sort" aria-hidden="true"></i>
+                </th>
               </tr>
             </thead>
             <tbody>
               {this.state.members.map((member, index) => {
                 return (
                   <tr key={index}>
-                    <td>
-                      <div className="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id={`customCheck${index}`}
-                          name="isChecked"
-                          onChange={this.handleCheck}
-                        />
-                        <label
-                          className="custom-control-label"
-                          htmlFor={`customCheck${index}`}></label>
-                      </div>
+                    <td
+                      className="text-titlize"
+                      style={{ paddingLeft: "60px" }}>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-${index}`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label htmlFor={`styled-checkbox-${index}`}></label>
+                      {member.name}
                     </td>
-                    <td>{index + 1}</td>
-                    <td className="text-titlize">{member.name}</td>
                     <td>{member.email}</td>
                     <td className="text-titlize">{member.role}</td>
                     <td className="text-titlize">
@@ -373,29 +392,29 @@ class ShowMembers extends Component {
                         {this.countProject(member.projects)}
                       </span>
                       {this.state.isProjectListShow &&
-                        this.state.projectShowMemberId === member.id ? (
-                          <div className="project-count-list-show">
-                            <div className="close-div">
-                              <a onClick={this.countProjectViewClose}>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                              </a>
-                            </div>
-                            <div className="project-body-box">
-                              {member.projects.map(project => (
-                                <div className="project-body-text">
-                                  {project.name}
-                                </div>
-                              ))}
-                            </div>
+                      this.state.projectShowMemberId === member.id ? (
+                        <div className="project-count-list-show">
+                          <div className="close-div">
+                            <a onClick={this.countProjectViewClose}>
+                              <i className="fa fa-times" aria-hidden="true"></i>
+                            </a>
                           </div>
-                        ) : null}
+                          <div className="project-body-box">
+                            {member.projects.map(project => (
+                              <div className="project-body-text">
+                                {project.name}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
                     </td>
                     <td className={"text-titlize"}>
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
-                          <p className="text-blue">Invited</p>
-                        )}
+                        <p className="text-blue">Invited</p>
+                      )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td className={userRole === "member" ? "d-none" : null}>
@@ -405,14 +424,15 @@ class ShowMembers extends Component {
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       {this.state.show &&
-                        this.state.projectShowMemberId === member.id ? (
-                          <EditMemberModal
-                            show={this.state.show}
-                            handleClose={this.handleClose}
-                            state={this.state}
-                            editMemberHandleChange={this.editMemberHandleChange}
-                          />
-                        ) : null}
+                      this.state.projectShowMemberId === member.id ? (
+                        <EditMemberModal
+                          show={this.state.show}
+                          handleClose={this.handleClose}
+                          state={this.state}
+                          editMemberHandleChange={this.editMemberHandleChange}
+                          editMember={this.editMember}
+                        />
+                      ) : null}
                     </td>
                   </tr>
                 );

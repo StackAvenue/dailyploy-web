@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-// import Close from "../../assets/images/close.svg";
 import Close from "../../../assets/images/close.svg";
 
 const EditMemberModal = props => {
@@ -56,17 +55,6 @@ const EditMemberModal = props => {
               />
             </div>
           </div>
-          {/* <div className="col-md-12 no-padding input-row">
-            <div className="col-md-3 d-inline-block no-padding label">
-              Access
-            </div>
-            <div className="col-md-3 d-inline-block">
-              <select value={member}>
-                <option>View</option>
-                <option>Edit</option>
-              </select>
-            </div>
-          </div> */}
           <div className="col-md-12 no-padding input-row">
             <div className="col-md-3 d-inline-block no-padding label">Role</div>
             <div className="col-md-3 d-inline-block">
@@ -94,18 +82,21 @@ const EditMemberModal = props => {
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">
-            <div className="col-md-3 d-inline-block no-padding label">
+            <div
+              className="col-md-3 d-inline-block no-padding label"
+              style={{ verticalAlign: "top" }}>
               Projects
             </div>
-            <div className="col-md-6 d-inline-block">
-              {memberProjects.map(project => project.name + " , ")}
+            <div className="col-md-7 d-inline-block">
+              <MemberProject projects={memberProjects} />
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">
             <div className="col-md-5 ml-auto">
               <button
                 type="button"
-                className="btn col-md-5 button1 btn-primary">
+                className="btn col-md-5 button1 btn-primary"
+                onClick={props.editMember}>
                 Save
               </button>
               <button
@@ -120,6 +111,15 @@ const EditMemberModal = props => {
       </div>
     </Modal>
   );
+};
+
+const MemberProject = props => {
+  let memberProject = props.projects
+    .slice(0, props.projects.length - 1)
+    .map(project => project.name + ", ");
+  let memberProjects = memberProject.join("");
+  let lastProject = props.projects[props.projects.length - 1].name;
+  return memberProjects + lastProject;
 };
 
 export default EditMemberModal;
