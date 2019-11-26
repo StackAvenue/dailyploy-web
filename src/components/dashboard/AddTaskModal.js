@@ -21,18 +21,23 @@ class AddTaskModal extends Component {
       memberSearchText: "",
       isBorder: false,
       border: "solid 1px #d1d1d1",
+      notFound: "hide",
     };
   }
 
   onClickProjectInput = (e) => {
     if (e.target.value == "") {
-      this.setState({ projectSuggestions: this.props.projects });
+      if (this.state.canBack === false) {
+        this.setState({ projectSuggestions: this.props.projects, canBack: true });
+      } else {
+        this.setState({ projectSuggestions: this.props.projects });
+      }
       this.props.managesuggestionBorder()
     }
   }
 
   selectProject = (option) => {
-    this.setState({ project: option, projectSuggestions: [], projectSearchText: '' })
+    this.setState({ project: option, projectSuggestions: [], projectSearchText: '', canBack: false })
     this.props.handleProjectSelect(option)
   }
 
@@ -42,9 +47,35 @@ class AddTaskModal extends Component {
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
       projectSuggestions = this.props.projects.sort().filter(p => regex.test(p.name) && (this.state.project !== p))
-      this.setState({ projectSuggestions: projectSuggestions, projectSearchText: value });
+      this.setState({
+        projectSuggestions: projectSuggestions,
+        projectSearchText: value,
+        notFound: projectSuggestions.length > 0 ? "hide" : "show",
+        canBack: false
+      });
     } else {
-      this.setState({ projectSuggestions: this.props.projects, projectSearchText: value });
+      this.setState({
+        projectSuggestions: this.props.projects,
+        projectSearchText: value,
+        notFound: "hide",
+        canBack: false
+      });
+    }
+  }
+
+  handleBackSpace = (event) => {
+    if (event.keyCode === 8 && this.state.projectSearchText.length === 0) {
+      this.setState({
+        canBack: true
+      })
+    }
+
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.canBack && this.state.canBack && this.state.project) {
+      this.setState({ project: "", projectSuggestions: this.props.projects, projectSearchText: '' })
+      this.props.handleProjectBackspace()
     }
   }
 
@@ -59,7 +90,7 @@ class AddTaskModal extends Component {
   renderProjectSearchSuggestion = () => {
     return (
       <>
-        {this.state.projectSuggestions ?
+        {this.state.projectSuggestions.length > 0 ?
           <ul>
             {this.state.projectSuggestions.map((option, idx) => {
               return (
@@ -70,7 +101,9 @@ class AddTaskModal extends Component {
               )
             })}
           </ul>
-          : null}
+          : null
+        }
+        < span className={`text-titlize left-padding-20px  ${this.state.notFound}`} >No Match Found</span>
       </>
     )
   }
@@ -241,6 +274,7 @@ class AddTaskModal extends Component {
                         placeholder={`${this.props.state.project ? "" : "Select Project"}`}
                         onClick={this.onClickProjectInput}
                         onChange={this.onSearchProjectTextChange}
+                        onKeyUp={this.handleBackSpace}
                       />
                       <span className="down-icon"><i className="fa fa-angle-down"></i></span>
                     </div>

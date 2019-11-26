@@ -536,6 +536,14 @@ class Dashboard extends Component {
     })
   }
 
+  handleProjectBackspace = () => {
+    this.setState({
+      projectId: "",
+      project: "",
+      border: "solid 1px #ffffff",
+    })
+  }
+
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
     let routeName = route.split("/")[1];
@@ -712,6 +720,7 @@ class Dashboard extends Component {
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}
             renderSelectedProject={this.renderSelectedProject}
             managesuggestionBorder={this.managesuggestionBorder}
+            handleProjectBackspace={this.handleProjectBackspace}
           />
         </div>
         {/* <Footer />  */}
