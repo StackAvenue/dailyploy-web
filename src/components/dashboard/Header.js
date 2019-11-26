@@ -50,15 +50,6 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
-
-    // <<<<<<< HEAD
-    //     if (prevProps.searchOptions !== this.props.searchOptions) {
-    //       this.setState({
-    //         selectedTags: this.props.searchOptions.filter(
-    //           option => option.email === this.state.userEmail,
-    //         ),
-    //       });
-    // =======
     if (
       prevProps.searchOptions !== this.props.searchOptions &&
       this.props.pathname === "reports"
@@ -72,7 +63,6 @@ class Header extends Component {
           selectedMember: members[0]
         });
       }
-      // >>>>>>> 21a8e66b187a4689eca8ac01c1790af39a642ff4
     }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
@@ -258,7 +248,7 @@ class Header extends Component {
                         this.state.suggestions.length > 0
                           ? "suggestion-holder-border"
                           : null
-                      }`}
+                        }`}
                     >
                       {this.renderSearchSuggestion()}
                     </div>
@@ -389,9 +379,8 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                      } `}
-                      id="dropdown-basic"
-                    >
+                        } `}
+                      id="dropdown-basic">
                       {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
@@ -401,8 +390,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                          } `}
-                        >
+                            } `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
