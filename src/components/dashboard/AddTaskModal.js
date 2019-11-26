@@ -22,6 +22,7 @@ class AddTaskModal extends Component {
       isBorder: false,
       border: "solid 1px #d1d1d1",
       notFound: "hide",
+      memberNotFound: "hide",
     };
   }
 
@@ -127,6 +128,7 @@ class AddTaskModal extends Component {
             })}
           </ul>
           : null}
+        < span className={`text-titlize left-padding-20px  ${this.state.memberNotFound}`} >No Match Found</span>
       </>
     )
   }
@@ -145,7 +147,7 @@ class AddTaskModal extends Component {
                   className="right-left-space-5 d-inline-block"
                   onClick={() => this.removeSelectedTag(index)}
                 >
-                  {state.taskButton === 'Save' && state.user.role !== 'admin' ? this.placeCloseIcon(option, state) : <i className="fa fa-close "></i>}
+                  {state.taskButton === 'Save' && state.user.role !== 'admin' ? this.placeCloseIcon(option, state) : (state.taskButton === 'Add' && state.user.role === 'member' ? "" : <i className="fa fa-close "></i>)}
                 </a>
               </div>
             )
@@ -164,14 +166,16 @@ class AddTaskModal extends Component {
   onSearchMemberTextChange = (e) => {
     const value = e.target.value
     let membersSuggestions = []
+    var memberNotFound = "hide"
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, 'i');
       var selectedMemberIds = this.props.state.selectedMembers.map(member => member.id)
       var options = this.props.modalMemberSearchOptions.filter(member => !selectedMemberIds.includes(member.id))
       membersSuggestions = options.sort().filter(m => regex.test(m.name))
+      memberNotFound = membersSuggestions.length > 0 ? "hide" : "show";
     } else {
     }
-    this.setState({ membersSuggestions: membersSuggestions, memberSearchText: value });
+    this.setState({ membersSuggestions: membersSuggestions, memberSearchText: value, memberNotFound: memberNotFound });
   }
 
   selectMemebrSuggestion = (option) => {
@@ -264,7 +268,7 @@ class AddTaskModal extends Component {
                   Project
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <div className="task-project-search">
+                  <div className="task-project-search" style={{ backgroundColor: props.state.taskButton == "Save" ? "#e9e9e9" : "" }}>
                     <div>
                       <div className="d-inline-block selected-tags text-titlize">
                         {this.props.renderSelectedProject()}
@@ -274,6 +278,7 @@ class AddTaskModal extends Component {
                         placeholder={`${this.props.state.project ? "" : "Select Project"}`}
                         onClick={this.onClickProjectInput}
                         onChange={this.onSearchProjectTextChange}
+                        disabled={props.state.taskButton == "Save" ? true : false}
                         onKeyUp={this.handleBackSpace}
                       />
                       <span className="down-icon"><i className="fa fa-angle-down"></i></span>
@@ -316,7 +321,7 @@ class AddTaskModal extends Component {
                   Members
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <div className="project-member-search">
+                  <div className="project-member-search" style={{ backgroundColor: props.state.taskButton == "Add" && props.state.user.role == 'member' ? "rgb(235, 235, 235)" : "" }}>
                     <div>
                       <div className="d-inline-block selected-tags text-titlize">
                         {this.renderSelectedMembers()}
@@ -324,6 +329,7 @@ class AddTaskModal extends Component {
                       <input className="d-inline-block"
                         type="text" value={this.state.memberSearchText}
                         placeholder="Select Memebrs"
+                        disabled={props.state.taskButton == "Add" && props.state.user.role == 'member' ? true : false}
                         onChange={this.onSearchMemberTextChange}
                       />
                     </div>

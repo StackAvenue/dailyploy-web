@@ -65,6 +65,8 @@ class Dashboard extends Component {
       timeDateTo: null,
       timeDateFrom: null,
       worksapceUsers: [],
+      selectedTaskMember: [],
+      memberProjects: [],
       errors: {
         taskNameError: "",
         projectError: "",
@@ -445,6 +447,7 @@ class Dashboard extends Component {
       show: true,
       modalMemberSearchOptions: members,
       project: "",
+      memberProjects: this.state.projects
     });
   };
 
@@ -454,6 +457,7 @@ class Dashboard extends Component {
       taskUser: [],
       taskButton: "Add",
       modalMemberSearchOptions: [],
+      memberProjects: [],
       dateFrom: new Date(),
       dateTo: new Date(),
       timeFrom: "",
@@ -529,6 +533,38 @@ class Dashboard extends Component {
     this.setState({ [name]: value, errors: errors });
   };
 
+  // handleProjectSelect = option => {
+  //   let options = []
+  //   var memberIds = []
+  //   if (this.state.user.role === 'admin') {
+  //     options = option.members
+  //   } else {
+  //     options = option.members.filter(member => member.id === this.state.userId)
+  //   }
+  //   options = Array.from(new Set(options.map(JSON.stringify))).map(JSON.parse);
+  //   console.log("options", options)
+  //   memberIds = this.state.selectedTaskMember.map(member => member.id)
+  //   var m = memberIds.length === 0 ? memberIds.push(this.state.userId) : memberIds
+  //   // memberIds = Array.from(new Set(memberIds));
+  //   console.log("memberIds", memberIds)
+  //   // var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
+  //   var removedMembers = options.filter(member => memberIds.includes(member.id))
+  //   console.log("removedMembers", removedMembers)
+  //   var taskUsers = removedMembers.map(m => m.id)
+  //   var errors = this.state.errors
+  //   errors["projectError"] = ""
+  //   this.setState({
+  //     projectId: option.id,
+  //     selectedMembers: removedMembers,
+  //     project: option,
+  //     taskUser: taskUsers,
+  //     modalMemberSearchOptions: options,
+  //     border: "solid 1px #9b9b9b",
+  //     isBorder: false,
+  //     errors: errors,
+  //   })
+  // }
+
   handleProjectSelect = option => {
     let options = []
     var memberIds = []
@@ -578,9 +614,7 @@ class Dashboard extends Component {
   memberSearchOptions = (userId, projectId) => {
     var projects = this.state.projects.filter(project => project.id === projectId)
     var members = projects.length > 0 ? projects[0].members : []
-    if (this.state.user.role === 'admin' && projects) {
-      members.push({ email: this.state.userEmail, id: this.state.userId, name: this.state.userName })
-    } else {
+    if (this.state.user.role === 'member') {
       members = members.filter(member => member.id === userId)
     }
     return members
@@ -589,6 +623,8 @@ class Dashboard extends Component {
   setAddTaskDetails = (memberId, startDate, endDate) => {
     let members = this.memberSearchOptions(memberId)
     var selectedMembers = this.state.users.filter(member => memberId === member.id)
+
+    var memberProjects = this.state.projects.filter(project => project.members.map(member => member.id).includes(memberId))
     var selecteMember = selectedMembers.map(member => {
       return { email: member.email, id: member.id, name: member.name }
     })
@@ -607,6 +643,7 @@ class Dashboard extends Component {
         border: "solid 1px #ffffff",
         timeDateTo: null,
         timeDateFrom: null,
+        memberProjects: memberProjects,
       });
     }
   };
@@ -652,6 +689,7 @@ class Dashboard extends Component {
 
   editAddTaskDetails = async (taskId, event) => {
     let members = this.memberSearchOptions(event.resourceId, event.projectId)
+    var memberProjects = this.state.projects.filter(project => project.members.map(member => member.id).includes(event.resourceId))
     var project = this.state.projects.filter(project => project.id === event.projectId)
     var eventTasks = this.state.events.filter(taskEvent => taskEvent.id === event.id)
     // var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
@@ -687,6 +725,8 @@ class Dashboard extends Component {
         project: project[0],
         comments: event.comments,
         show: true,
+        selectedTaskMember: selectedMembers,
+        memberProjects: memberProjects,
       })
     }
   };
@@ -727,7 +767,7 @@ class Dashboard extends Component {
             state={this.state}
             closeTaskModal={this.closeTaskModal}
             handleInputChange={this.handleInputChange}
-            projects={this.state.projects}
+            projects={this.state.memberProjects}
             handleDateFrom={this.handleDateFrom}
             handleDateTo={this.handleDateTo}
             handleTimeFrom={this.handleTimeFrom}
