@@ -469,25 +469,38 @@ class Dashboard extends Component {
   };
 
   handleDateFrom = date => {
+    var errors = this.state.errors
+    errors["dateFromError"] = ""
     if (date > new Date()) {
-      this.setState({ dateFrom: date, dateTo: null });
+      errors["dateToError"] = ""
+      this.setState({
+        dateFrom: date, dateTo: null, errors: errors,
+      });
     } else {
-      this.setState({ dateFrom: date });
+      this.setState({ dateFrom: date, errors: errors });
     }
   };
   handleDateTo = date => {
-    this.setState({ dateTo: date });
+    var errors = this.state.errors
+    errors["dateToError"] = ""
+    this.setState({ dateTo: date, errors: errors });
   };
 
   handleTimeFrom = value => {
+    var errors = this.state.errors
+    errors["timeFromError"] = ""
     this.setState({
       timeFrom: value != null ? value.format("HH:mm:ss") : null,
+      errors: errors
     });
   };
 
   handleTimeTo = value => {
+    var errors = this.state.errors
+    errors["timeToError"] = ""
     this.setState({
       timeTo: value != null ? value.format("HH:mm:ss") : null,
+      errors: errors
     });
   };
 
@@ -499,16 +512,21 @@ class Dashboard extends Component {
   };
 
   handleMemberSelect = members => {
+    var errors = this.state.errors
+    errors["memberError"] = ""
     var memberIds = members.map(member => member.id);
     this.setState({
       taskUser: memberIds,
       selectedMembers: members,
+      errors: errors
     });
   };
 
   handleInputChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    var errors = this.state.errors
+    errors[`${name}Error`] = ""
+    this.setState({ [name]: value, errors: errors });
   };
 
   handleProjectSelect = option => {
@@ -525,6 +543,8 @@ class Dashboard extends Component {
     memberIds = Array.from(new Set(memberIds));
     var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
     var taskUsers = removedMembers.map(m => m.id)
+    var errors = this.state.errors
+    errors["projectError"] = ""
     this.setState({
       projectId: option.id,
       selectedMembers: removedMembers,
@@ -533,6 +553,7 @@ class Dashboard extends Component {
       modalMemberSearchOptions: options,
       border: "solid 1px #9b9b9b",
       isBorder: false,
+      errors: errors,
     })
   }
 
@@ -612,7 +633,6 @@ class Dashboard extends Component {
     errors['memberError'] = this.state.taskUser.length > 0 ? "" : "please select members"
     errors['dateFromError'] = this.state.dateFrom ? "" : "please select date from"
     if (!this.state.dateTo && this.state.dateFrom) {
-      console.log("dsdsd", this.state.dateFrom, new Date(), this.state.dateFrom === new Date())
       if (moment(this.state.dateFrom).format(DATE_FORMAT1) === moment().format(DATE_FORMAT1)) {
         errors['dateToError'] = ""
       } else {
