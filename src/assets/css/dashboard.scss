@@ -1436,10 +1436,62 @@ table.scheduler-table tr:last-child td {
   .members {
     height: 60px !important;
     border-bottom: solid 2px $color-borders !important;
+      label{
+        font-size: 14px !important;
+        span{
+          vertical-align: text-bottom !important;
+        }
+      }
+      .delete-button{
+        width: 93px !important;
+        height: 36px !important;
+        border-radius: 5px !important;
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        background-color: $btn-background-color !important;
+        border-color: $btn-background-color !important;
+        margin: 0px 20px 0px 46px;
+        &:hover {
+          background-color: $color-brand4;
+          border-color: $color-brand4;
+        }
+      }
+      .select-project-text{
+        font-size: 14px !important;
+        color: $color-text3 !important;
+      }
+
   }
   .views {
     padding: 10px 0px 10px 0px;
     // border-bottom: 2px solid $color-borders;
+    .select{
+      padding: 10px 0px 0px 60px;
+      label{
+        font-size: 14px !important;
+        span{
+          vertical-align: text-bottom !important;
+        }
+      }
+      .delete-button{
+        width: 93px !important;
+        height: 36px !important;
+        border-radius: 5px !important;
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        background-color: $btn-background-color !important;
+        border-color: $btn-background-color !important;
+        margin: 0px 20px 0px 46px;
+        &:hover {
+          background-color: $color-brand4;
+          border-color: $color-brand4;
+        }
+      }
+      .select-project-text{
+        font-size: 14px !important;
+        color: $color-text3 !important;
+      }
+    }
     .hr {
       background-color: $color-borders !important;
       height: 2px !important;

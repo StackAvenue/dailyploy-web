@@ -11,7 +11,7 @@ const GridBlock = props => {
             id={`styled-checkbox-${props.index}`}
             type="checkbox"
             name="isChecked"
-            // onChange={e => this.check(e, project)}
+            onChange={e => props.handleCheck(e, props.project)}
           />
           <label htmlFor={`styled-checkbox-${props.index}`}></label>
         </div>
@@ -50,8 +50,9 @@ const GridBlock = props => {
             className="grid-color"
             style={{
               backgroundColor: `${props.project.color_code}`,
-              marginBottom: "-7px",
-            }}></div>
+              marginBottom: "-7px"
+            }}
+          ></div>
         </div>
       </div>
       <div className="col-md-12 no-padding">
@@ -61,7 +62,7 @@ const GridBlock = props => {
         <div className="col-md-4 d-inline-block duration">
           {props.monthDiff(
             props.getDate(props.project.start_date),
-            props.getDate(props.project.end_date),
+            props.getDate(props.project.end_date)
           )}
         </div>
       </div>
