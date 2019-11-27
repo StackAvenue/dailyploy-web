@@ -1,15 +1,21 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
-import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
+// import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
+import Scheduler, { SchedulerData, ViewTypes } from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
-import { post } from "../../utils/API";
 import "../../assets/css/dashboard.scss";
-import AddTaskModal from "../../components/dashboard/AddTaskModal";
 import moment from "moment";
+import Timer from "./../dashboard/Timer/Timer";
+import Select from "react-dropdown-select";
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
+    this.times = [
+      { value: '18:19 - 20:19', label: '18:19 - 20:19' },
+      { value: '18:19 - 20:19', label: '18:19 - 20:19' },
+      { value: '18:19 - 20:19', label: '18:19 - 20:19' },
+    ];
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -25,13 +31,14 @@ class Calendar extends Component {
         agendaMaxEventWidth: 100,
 
         dayResourceTableWidth: 218,
-        weekResourceTableWidth: "16%",
+        weekResourceTableWidth: 140,
+        // weekResourceTableWidth: "16%",
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
 
         dayCellWidth: 30,
         weekCellWidth: "12%",
-        monthCellWidth: 80,
+        monthCellWidth: 40,
         customCellWidth: 80,
 
         dayMaxEvents: 99,
@@ -39,7 +46,8 @@ class Calendar extends Component {
         monthMaxEvents: 99,
         customMaxEvents: 99,
 
-        eventItemHeight: 45,
+        eventItemHeight: 85,
+        // eventItemHeight: 45,
         eventItemLineHeight: this.calculateResouceHeight(),
         nonAgendaSlotMinHeight: 0,
         dayStartFrom: 0,
@@ -71,7 +79,8 @@ class Calendar extends Component {
         taskName: "Task Name",
         agendaViewHeader: "Agenda",
         nonAgendaDayCellHeaderFormat: "ha",
-        nonAgendaMonthCellHeaderFormat: "ddd DD MMM",
+        nonAgendaWeekCellHeaderFormat: "ddd DD MMM",
+        nonAgendaMonthCellHeaderFormat: "DD",
         nonAgendaOtherCellHeaderFormat: "DD MMM",
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
@@ -127,7 +136,8 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 50;
+      // return 50;
+      return 85;
     }
     return height;
   };
@@ -296,6 +306,13 @@ class Calendar extends Component {
       view.isEventPerspective
     );
     schedulerData.setEvents(this.state.events);
+    if (view.viewType === 0) {
+      schedulerData.setEventItemHeight(85);
+    } else if (view.viewType === 1) {
+      schedulerData.setEventItemHeight(85);
+    } else if (view.viewType === 2) {
+      schedulerData.setEventItemHeight(51);
+    }
     this.setState({
       viewModel: schedulerData
     });
@@ -448,6 +465,33 @@ class Calendar extends Component {
           </div>
         </div>
       );
+      // return (
+      //   <div key={event.id} className={mustAddCssClass} style={divStyle}>
+      //     <div className="row item">
+      //       <div
+      //         className="col-md-12 item-heading text-wraper"
+      //         style={{ padding: "5px 5px 0px 5px" }}
+      //       >
+      //         {titleText}
+      //       </div>
+      //       <div className="d-inline-block">
+      //         <div className="task-ongoing d-inline-block"></div>
+      //         <div className="d-inline-block task-timer">00:00:00</div>
+      //         <div className="d-inline-block task-play-btn"><i class="fa fa-pause"></i></div>
+      //         {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
+      //         {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
+      //       </div>
+      //       <div className="col-md-12 no-padding">
+      //         <div className="col-md-6 no-padding d-inline-block item-time">
+      //           {`${start} - ${end}`}
+      //         </div>
+      //         <div className="col-md-6 no-padding d-inline-block item-time text-right">
+      //           <span className="task-event-action" onClick={(e) => ""}>...</span>
+      //         </div>
+      //       </div>
+      //     </div>
+      //   </div>
+      // );
     } else if (schedulerData.viewType === 1) {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
@@ -458,12 +502,19 @@ class Calendar extends Component {
             >
               {titleText}
             </div>
+            <div className="d-inline-block">
+              <div className="task-ongoing d-inline-block"></div>
+              <div className="d-inline-block task-timer">00:00:00</div>
+              <div className="d-inline-block task-play-btn"><i class="fa fa-pause"></i></div>
+              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
+              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
+            </div>
             <div className="col-md-12 no-padding">
               <div className="col-md-6 no-padding d-inline-block item-time">
                 {`${start} - ${end}`}
               </div>
               <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                {this.getTimeDifference(moment(event.start), moment(event.end))}
+                <span className="task-event-action" onClick={(e) => ""}>...</span>
               </div>
             </div>
           </div>
@@ -500,5 +551,6 @@ class Calendar extends Component {
       viewModel: schedulerData
     });
   };
+
 }
 export default withDragDropContext(Calendar);

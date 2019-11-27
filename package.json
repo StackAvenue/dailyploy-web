@@ -14,7 +14,7 @@
     "randomcolor": "^0.5.4",
     "rc-time-picker": "^3.7.1",
     "react": "^16.8.6",
-    "react-big-scheduler": "git+https://github.com/awesomearpit/react-timeline.git",
+    "react-big-scheduler": "^0.2.7",
     "react-bootstrap": "^1.0.0-beta.9",
     "react-bootstrap-typeahead": "^3.4.6",
     "react-calendar-icon": "^0.9.2",
