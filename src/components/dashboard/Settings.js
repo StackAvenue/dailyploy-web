@@ -20,7 +20,7 @@ class Settings extends Component {
       isLogedInUserEmailArr: [],
       projects: [],
       userId: "",
-      users: [],
+      users: []
     };
   }
   logout = async () => {
@@ -49,7 +49,7 @@ class Settings extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`,
+        `workspaces/${this.state.workspaceId}/projects`
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -59,7 +59,7 @@ class Settings extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`,
+        `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
       var emailArr = data.members
@@ -76,7 +76,7 @@ class Settings extends Component {
       workspaces: workspacesData,
       projects: projectsData,
       users: userArr,
-      isLogedInUserEmailArr: emailArr,
+      isLogedInUserEmailArr: emailArr
     });
   }
 
@@ -114,10 +114,13 @@ class Settings extends Component {
             <div className="col-md-2 side-tabs">
               <Nav variant="link" className="flex-column">
                 <Nav.Item>
-                  <Nav.Link eventKey="first">General</Nav.Link>
+                  <Nav.Link eventKey="first">User Settings</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="second">Privacy</Nav.Link>
+                  <Nav.Link eventKey="second">Workspace Settings</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="third">Preferences</Nav.Link>
                 </Nav.Item>
               </Nav>
             </div>
@@ -128,6 +131,9 @@ class Settings extends Component {
                     <GeneralSettings />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
+                    <PrivacySettings />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="third">
                     <PrivacySettings />
                   </Tab.Pane>
                 </Tab.Content>
