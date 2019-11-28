@@ -1755,6 +1755,130 @@ table.scheduler-table tr:last-child td {
   }
 }
 
+.workspace-settings{
+  .react-tabs__tab--selected {
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid $color-brand3;
+    border-radius: 0px;
+  }
+  .react-tabs__tab{
+    color: $color-text2;
+    font-size: 15px;
+    font-family: $font-family-roboto !important;
+    margin-right: 30px;
+  }
+  .react-tabs__tab-list{
+    border-bottom: 1px solid $color-borders;
+  }
+  .general-setting{
+    .workspace-name{
+      padding-top:40px;
+      .name {
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text3 !important;
+        p {
+          font-weight: bold !important;
+          color: $color-text2 !important;
+        }
+        span {
+          color: $color-failure !important;
+        }
+      }
+      .save-button{
+        height: 40px !important;
+        width: 93px !important;
+        border-radius: 5px !important;
+        border: solid 1px $color-borders !important;
+        background-color: $color-brand3 !important;
+        font-family: $font-family-roboto !important;
+        font-size: 17px !important;
+        color: $color-white !important;
+        white-space: nowrap !important;
+        margin-bottom: 4px;
+      }
+      .input {
+        height: 40px !important;
+        border-radius: 5px !important;
+        border: solid 1px $color-borders !important;
+        background-color: $color-white !important;
+        color: $color-text1 !important;
+        &:disabled{
+          background-color: $color-borders !important;
+          cursor: not-allowed;
+        }
+      }
+    }
+    .admin-add{
+      padding-top:20px;
+      .admin-box{
+        width: 200px;
+        height: 40px;
+        border-radius: 2px;
+        border: solid 1px $color-borders;
+        background-color: #ffffff;
+        display: inline-block;
+        margin: 0px 10px 5px 0px;
+        .img-box{
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background-color: #424242;
+          border: solid 2px #fffcfc;
+          float: left;
+          margin: 6px 10px 6px 10px;
+          font-family: $font-family-roboto !important;
+          font-size: 12px !important;
+          color: $color-white !important;
+          font-weight: 700;
+          padding: 2px 0px 0px 0px;
+          text-align: center;
+        }
+        .text{
+          font-family: $font-family-roboto !important;
+          font-size: 14px !important;
+          color: $color-text2 !important;
+          float: left;
+          padding-top: 8px;
+        }
+        .triple-dot{
+          float: right;
+          padding: 5px 10px 0px 0px;
+          i{
+            font-size: 12px;
+            color: $color-text2;
+          }
+        }
+      }
+      .addnew-button{
+        height: 40px !important;
+        width: 93px !important;
+        border-radius: 5px !important;
+        border: solid 1px $color-borders !important;
+        background-color: $color-brand3 !important;
+        font-family: $font-family-roboto !important;
+        font-size: 14px !important;
+        color: $color-white !important;
+        white-space: nowrap !important;
+        margin-bottom: 4px;
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+    .hr1{
+      border: 1px solid $color-borders;
+      margin: 50px 0px 30px 0px;
+    }
+    .config-email-box{
+      border-radius: 2px;
+      border: solid 1px $color-borders;
+      background-color: #ffffff;
+      padding: 21px 33px 30px 33px;
+    }
+  }
+}
+
 .workspace1-setting {
   box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1) !important;
   background-color: $color-white !important;
@@ -1779,7 +1903,9 @@ table.scheduler-table tr:last-child td {
   }
   .body-tabs {
     background-color: #f9f9f9 !important;
-    height: 650px !important;
+    // height: 650px !important;
+    padding-bottom: 60px;
+    min-height: 650px !important;
     padding-top: 37px !important;
     padding-left: 60px !important;
     padding-right: 60px !important;
@@ -1949,6 +2075,10 @@ table.scheduler-table tr:last-child td {
           border: solid 1px $color-borders !important;
           background-color: $color-white !important;
           color: $color-text1 !important;
+          &:disabled{
+            background-color: $color-borders !important;
+            cursor: not-allowed;
+          }
         }
       }
       .box-btn {

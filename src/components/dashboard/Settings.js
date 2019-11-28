@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Header from "./Header";
-import { get, logout, mockGet } from "../../utils/API";
+import { get, logout } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Nav } from "react-bootstrap";
-import GeneralSettings from "./UserSettings/GeneralSettings";
-import PrivacySettings from "./UserSettings/PrivacySettings";
-import Sidebar from "./Sidebar";
+import UserSettings from "./settings/UserSettings";
+import WorkspaceSettings from "./settings/WorkspaceSettings";
 
 class Settings extends Component {
   constructor(props) {
@@ -20,13 +18,15 @@ class Settings extends Component {
       isLogedInUserEmailArr: [],
       projects: [],
       userId: "",
-      users: []
+      userName: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+      users: [],
+      isDisableName: false
     };
   }
-  logout = async () => {
-    await logout();
-    this.props.history.push("/login");
-  };
+
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
@@ -100,6 +100,22 @@ class Settings extends Component {
     }
   };
 
+  handleUserChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  updateUserInfo = async () => {
+    const userData = {
+      name: this.state.userName
+    };
+  };
+
+  save = () => {
+    console.log("disable");
+    this.setState({ isDisableName: true });
+  };
+
   render() {
     return (
       <>
@@ -128,13 +144,18 @@ class Settings extends Component {
               <div className="col-md-12 body-tabs">
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <GeneralSettings />
+                    <UserSettings
+                      handleChange={this.handleUserChange}
+                      state={this.state}
+                      role={localStorage.getItem("userRole")}
+                      save={this.save}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <PrivacySettings />
+                    <WorkspaceSettings />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
-                    <PrivacySettings />
+                    <WorkspaceSettings />
                   </Tab.Pane>
                 </Tab.Content>
               </div>
