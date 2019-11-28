@@ -27,8 +27,9 @@ class Calendar extends Component {
         schedulerMaxHeight: 0,
         tableHeaderHeight: 34,
 
-        agendaResourceTableWidth: 160,
-        agendaMaxEventWidth: 100,
+        // agendaResourceTableWidth: 160,
+        agendaResourceTableWidth: 218,
+        agendaMaxEventWidth: 138,
 
         dayResourceTableWidth: 218,
         weekResourceTableWidth: 140,
@@ -36,7 +37,7 @@ class Calendar extends Component {
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
 
-        dayCellWidth: 30,
+        dayCellWidth: 40,
         weekCellWidth: "12%",
         monthCellWidth: 40,
         customCellWidth: 80,
@@ -77,7 +78,7 @@ class Calendar extends Component {
 
         resourceName: "",
         taskName: "Task Name",
-        agendaViewHeader: "Agenda",
+        agendaViewHeader: "",
         nonAgendaDayCellHeaderFormat: "ha",
         nonAgendaWeekCellHeaderFormat: "ddd DD MMM",
         nonAgendaMonthCellHeaderFormat: "DD",
@@ -90,7 +91,7 @@ class Calendar extends Component {
           {
             viewName: "Day",
             viewType: ViewTypes.Day,
-            showAgenda: false,
+            showAgenda: true,
             isEventPerspective: false
           },
           {
@@ -452,46 +453,29 @@ class Calendar extends Component {
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
             <div
-              className="col-md-12 item-heading text-wraper rk"
-              style={{ padding: "7px 7px 0px 7px" }}
+              className="col-md-12 item-heading text-wraper"
+              style={{ padding: "5px 5px 0px 5px" }}
             >
               {titleText}
             </div>
+            <div className="d-inline-block">
+              <div className="task-ongoing d-inline-block"></div>
+              <div className="d-inline-block task-timer">00:00:00</div>
+              <div className="d-inline-block task-play-btn"><i class="fa fa-pause"></i></div>
+              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
+              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
+            </div>
             <div className="col-md-12 no-padding">
-              <div className="col-md-6 no-padding d-inline-block item-time pull-right text-right">
-                {this.getTimeDifference(moment(event.start), moment(event.end))}
+              <div className="col-md-6 no-padding d-inline-block item-time">
+                {`${start} - ${end}`}
+              </div>
+              <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                <span className="task-event-action" onClick={(e) => ""}>...</span>
               </div>
             </div>
           </div>
         </div>
       );
-      // return (
-      //   <div key={event.id} className={mustAddCssClass} style={divStyle}>
-      //     <div className="row item">
-      //       <div
-      //         className="col-md-12 item-heading text-wraper"
-      //         style={{ padding: "5px 5px 0px 5px" }}
-      //       >
-      //         {titleText}
-      //       </div>
-      //       <div className="d-inline-block">
-      //         <div className="task-ongoing d-inline-block"></div>
-      //         <div className="d-inline-block task-timer">00:00:00</div>
-      //         <div className="d-inline-block task-play-btn"><i class="fa fa-pause"></i></div>
-      //         {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
-      //         {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
-      //       </div>
-      //       <div className="col-md-12 no-padding">
-      //         <div className="col-md-6 no-padding d-inline-block item-time">
-      //           {`${start} - ${end}`}
-      //         </div>
-      //         <div className="col-md-6 no-padding d-inline-block item-time text-right">
-      //           <span className="task-event-action" onClick={(e) => ""}>...</span>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   </div>
-      // );
     } else if (schedulerData.viewType === 1) {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
