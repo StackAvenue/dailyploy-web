@@ -75,6 +75,7 @@ const GeneralSettings = props => {
           <button className="btn btn-primary addnew-button"> + Add New</button>
         </div>
         <div className="col-md-12 hr1"></div>
+        <div className="col-md-12 config-heading">Email Configuration</div>
         <div className="config-email-box">
           <div className="col-md-12 heading">
             <div className="col-md-6 no-padding d-inline-block">
@@ -148,6 +149,194 @@ const GeneralSettings = props => {
           </div>
         </div>
         <div className="col-md-12 hr1"></div>
+        <div className="col-md-12 config-heading">Workspace Preferences</div>
+        <div className="col-md-12 box config-email-box">
+          <div className="col-md-12 inner-box">
+            <div className="col-md-2 d-inline-block no-padding name">
+              Currency
+            </div>
+            <div className="col-md-5 d-inline-block">
+              <select className="form-control input">
+                <option>INR - Indian Rupee</option>
+                <option>USD - US Dollar</option>
+                <option>INR - Indian Rupee</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-md-12 inner-box">
+            <div className="col-md-2 d-inline-block no-padding name">
+              Time Zone
+            </div>
+            <div className="col-md-5 d-inline-block">
+              <select className="form-control input">
+                <option>(GMT+5:30) Kolkata</option>
+                <option>(GMT+5:30) Kolkata</option>
+                <option>(GMT+5:30) Kolkata</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-md-5 workdays-text">Work Days</div>
+          <div className="col-md-5 workdays">
+            <table>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-1`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label htmlFor="styled-checkbox-1" className="check"></label>
+                </td>
+                <td className="text" colspan="2">
+                  Sunday
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-1`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label
+                    htmlFor={`styled-checkbox-1`}
+                    className="check"
+                  ></label>
+                </td>
+                <td className="text">Monday</td>
+                <td>
+                  <select>
+                    <option>1</option>
+                    <option>2</option>
+                  </select>
+                </td>
+                <td className="hrs">hrs</td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-1`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label
+                    htmlFor={`styled-checkbox-1`}
+                    className="check"
+                  ></label>
+                </td>
+                <td className="text">Tuesday</td>
+                <td>
+                  <select>
+                    <option>1</option>
+                    <option>2</option>
+                  </select>
+                </td>
+                <td className="hrs">hrs</td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-1`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label
+                    htmlFor={`styled-checkbox-1`}
+                    className="check"
+                  ></label>
+                </td>
+                <td className="text">Wednesday</td>
+                <td>
+                  <select>
+                    <option>1</option>
+                    <option>2</option>
+                  </select>
+                </td>
+                <td className="hrs">hrs</td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-1`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label
+                    htmlFor={`styled-checkbox-1`}
+                    className="check"
+                  ></label>
+                </td>
+                <td className="text">Thrusday</td>
+                <td>
+                  <select>
+                    <option>1</option>
+                    <option>2</option>
+                  </select>
+                </td>
+                <td className="hrs">hrs</td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-1`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label
+                    htmlFor={`styled-checkbox-1`}
+                    className="check"
+                  ></label>
+                </td>
+                <td className="text">Friday</td>
+                <td>
+                  <select>
+                    <option>1</option>
+                    <option>2</option>
+                  </select>
+                </td>
+                <td className="hrs">hrs</td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox-6`}
+                    type="checkbox"
+                    name="isChecked"
+                  />
+                  <label
+                    htmlFor={`styled-checkbox-6`}
+                    className="check"
+                  ></label>
+                </td>
+                <td className="text" colspan="2">
+                  Saturday
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div className="col-md-12 box-btn">
+            <button className="btn btn-default button">Save</button>
+          </div>
+        </div>
+        <div className="col-md-12 hr1"></div>
+        <div className="col-md-12 config-heading">Delete Workspace</div>
+        <div className="col-md-12 delete-text">
+          Deleting a Dailyploy workspace cannot be undone. All data will be
+          deleted and irretrievable.
+          <button className="btn btn-link">Delete Team</button>
+          {/* <DeleteWorkspaceModal
+            state={this.state}
+            handleClose={this.handleClose}
+          /> */}
+        </div>
       </div>
     </>
   );

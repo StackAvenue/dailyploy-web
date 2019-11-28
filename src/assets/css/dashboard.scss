@@ -1875,6 +1875,206 @@ table.scheduler-table tr:last-child td {
       border: solid 1px $color-borders;
       background-color: #ffffff;
       padding: 21px 33px 30px 33px;
+      .workdays-text{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text3 !important;
+        padding:31px 15px 9px 0px;
+        margin-left: 15px;
+        border-bottom: 1px solid $color-borders;
+      }
+      .workdays{
+        table{
+          width: 100% !important;
+          tr{
+            border-bottom: 1px solid $color-borders;
+            td{
+              padding: 10px 0px 10px 0px;
+            }
+            .check{
+              margin-bottom: 0 !important;
+              vertical-align: middle !important;
+            }
+            .text{
+              font-family: $font-family-roboto !important;
+              font-size: 15px !important;
+              color: $color-text2 !important;
+            }
+            select{
+              width: 92px !important;
+              height: 25px !important;
+              border-radius: 5px !important;
+              background-color: #ffffff !important;
+              border: 1px solid $color-borders !important;
+            }
+            .hrs{
+              font-family: $font-family-roboto !important;
+              font-size: 14px !important;
+              color: $color-text2 !important;
+            }
+          }
+        }
+      }
+    }
+    .config-heading{
+      font-family: $font-family-roboto !important;
+      font-size: 20px !important;
+      color: $color-text2 !important;
+      font-weight: bold !important;
+      margin-bottom: 20px !important;
+      padding:0 !important;
+    }
+  }
+  .categories-setting{
+    padding: 50px 60px 0px 60px;
+    .category{
+      .heading-text{
+        font-family: $font-family-roboto !important;
+        font-size: 20px !important;
+        color: $color-text2 !important;
+        font-weight: bold !important;
+      }
+      .sub{
+        font-family: $font-family-roboto !important;
+        font-size: 18px !important;
+        color: $color-text3 !important;
+        font-weight: bold !important;
+        padding:0;
+      }
+      .btn-add{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-white !important;
+        font-weight: bold !important;
+        border:0 !important;
+        background-color: $color-brand3 !important;
+        width: 93px;
+        height: 32px;
+      }
+    }
+    .category-box{
+      border-radius: 2px;
+      border: solid 1px $color-borders;
+      background-color: #ffffff;
+      padding: 10px 20px 0px 20px;
+      margin-top:20px;
+      table{
+        thead{
+          th{
+            border:0;
+            font-family: $font-family-roboto !important;
+            font-size: 14px !important;
+            color: $color-text1 !important;
+            font-weight: 700 !important;
+            i{
+              margin-left:20px;
+              color: $color-text3 !important;
+            }
+          }
+        }
+        tbody{
+          td{
+            font-family: $font-family-roboto !important;
+            font-size: 13px !important;
+            color: #000000 !important;
+            i{
+              font-size: 14px !important;
+            color: $color-text3 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .employee-project-settings{
+    padding: 30px 60px 0px 60px;
+    .email-heading{
+      font-family: $font-family-roboto !important;
+      font-size: 20px !important;
+      color: $color-text2 !important;
+      font-weight: 700 !important;
+      margin-bottom:20px;
+    }
+    .report-box{
+      border-radius: 2px;
+      border: solid 1px $color-brand3;
+      height: 167px;
+      max-width: 279px !important;
+      background-color: #ffffff;
+      padding: 10px 20px 10px 20px;
+      .day-text{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text2 !important;
+      }
+      .day-select{
+        margin: 15px 0px;
+        select{
+          width: 70px;
+          height: 40px;
+          background-color: $color-white;
+          margin-right:5px;
+          border: 1px solid $color-borders;
+        }
+
+      }
+      .week-select{
+        margin: 15px 0px;
+        select{
+          width: 130px;
+          height: 40px;
+          background-color: $color-white;
+          border: 1px solid $color-borders;
+        }
+      }
+      .month-select{
+        margin: 15px 0px;
+        select{
+          width: 220px;
+          height: 40px;
+          background-color: $color-white;
+          border: 1px solid $color-borders;
+        }
+      }
+      .day-desc{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text3 !important;
+      }
+    }
+    .employee-project-box{
+      border-radius: 2px;
+      border: solid 1px $color-borders;
+      background-color: #ffffff;
+      padding: 10px 20px 0px 20px;
+      margin-top:20px;
+      table{
+        thead{
+          th{
+            border:0;
+            font-family: $font-family-roboto !important;
+            font-size: 14px !important;
+            color: $color-text1 !important;
+            font-weight: 700 !important;
+            i{
+              margin-left:20px;
+              color: $color-text3 !important;
+            }
+          }
+        }
+        tbody{
+          td{
+            font-family: $font-family-roboto !important;
+            font-size: 13px !important;
+            color: #000000 !important;
+            i{
+              font-size: 14px !important;
+            color: $color-text3 !important;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -1911,9 +2111,11 @@ table.scheduler-table tr:last-child td {
     padding-right: 60px !important;
     .heading {
       font-family: $font-family-roboto !important;
-      font-size: 20px !important;
+      font-size: 15px !important;
       font-weight: bold !important;
       color: $color-text2 !important;
+      padding-bottom:10px;
+      vertical-align: middle;
       .alert {
         color: $color-failure !important;
         font-family: $font-family-roboto !important;
@@ -1924,8 +2126,11 @@ table.scheduler-table tr:last-child td {
         width: 93px !important;
         height: 35px !important;
         border-radius: 5px !important;
-        background-color: $color-brand3 !important;
-        border: 0 !important;
+        color: $color-text2;
+        font-size: 14px;
+        font-family: $font-family-roboto !important;
+        background-color: $color-white !important;
+        border: 1px solid $color-borders !important;
       }
     }
 
@@ -2104,7 +2309,7 @@ table.scheduler-table tr:last-child td {
       margin: 30px 0px 30px 0px !important;
     }
     .delete-text {
-      padding-top: 30px !important;
+      padding:0px !important;
       font-family: $font-family-roboto !important;
       font-size: 15px !important;
       color: $color-text3 !important;

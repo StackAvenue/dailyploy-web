@@ -3,6 +3,9 @@ import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import GeneralSettings from "./GeneralSettings";
+import CategoriesSettings from "./CategoriesSettings";
+import EmployeeReportsSettings from "./EmployeeReportsSettings";
+import ProjectReportsSettings from "./ProjectReportsSettings";
 
 class WorkspaceSettings extends Component {
   constructor(props) {
@@ -46,9 +49,15 @@ class WorkspaceSettings extends Component {
           <TabPanel>
             <GeneralSettings />
           </TabPanel>
-          <TabPanel>Categories</TabPanel>
-          <TabPanel>Employee Reports</TabPanel>
-          <TabPanel>Project Reports</TabPanel>
+          <TabPanel>
+            <CategoriesSettings />
+          </TabPanel>
+          <TabPanel>
+            <EmployeeReportsSettings />
+          </TabPanel>
+          <TabPanel>
+            <ProjectReportsSettings />
+          </TabPanel>
         </Tabs>
       </div>
     );
