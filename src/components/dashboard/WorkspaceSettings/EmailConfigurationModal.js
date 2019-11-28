@@ -4,7 +4,7 @@ import Close from "../../../assets/images/close.svg";
 
 const EmailConfigurationModal = props => {
   return (
-    <Modal show={props.state.show} onHide={props.handleClose}>
+    <Modal show={props.state.resumeShow} onHide={props.handleClose}>
       <div className="row no-margin modal-box">
         <div className="col-md-12 heading">
           <span className="heading">Resume Daily Status Mail</span>
