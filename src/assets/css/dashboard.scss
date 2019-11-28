@@ -1283,6 +1283,10 @@ table.scheduler-table tr:last-child td {
   .item-heading {
     font-size: 13px !important;
     font-weight: 900 !important;
+    .fa-pencil{
+      right: 0px;
+      position: absolute
+    }
   }
   .item-time {
     font-size: 12px !important;
@@ -2694,4 +2698,43 @@ table.scheduler-table tr:last-child td {
 }
 .border-top {
   border-top:  solid 1px rgba(155, 155, 155, 1) !important;
+}
+#RBS-Scheduler-root a{
+  cursor: text !important;
+}
+.pointer{
+  cursor: pointer !important;
+}
+
+.dropdown-div{
+  position: absolute;
+  width: 98px;
+  border: 1px solid #ffffff;
+  top: 73px;
+  left: 13px;
+  background-color: #ffffff;
+  border-top: 0;
+  z-index: 1;
+  font-size: 12px !important;
+}
+
+.timer-dropdown{
+  width: 100px !important;
+  height: 26px !important;
+  border-radius: 0px !important;
+  padding-left: 0px !important;
+  text-align: left;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  color: #424242;
+  line-height: 9px;
+  &:hover{
+    border-color: #ffffff !important;
+  }
+}
+.hover-border{
+&:hover{
+  border: 1px solid #505050;
+}
 }

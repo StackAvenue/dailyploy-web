@@ -3,9 +3,10 @@ import "antd/lib/style/index.less";
 // import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
 import Scheduler, { SchedulerData, ViewTypes } from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
+import { Dropdown } from "react-bootstrap";
 import "../../assets/css/dashboard.scss";
 import moment from "moment";
-import Timer from "./../dashboard/Timer/Timer";
+import DashboardEvent from "./../dashboard/DashboardEvent";
 import Select from "react-dropdown-select";
 
 class Calendar extends Component {
@@ -423,6 +424,7 @@ class Calendar extends Component {
   };
 
   eventItemTemplateResolver = (
+    eventItemClick,
     schedulerData,
     event,
     bgColor,
@@ -448,70 +450,37 @@ class Calendar extends Component {
     if (!!agendaMaxEventWidth)
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
-    if (schedulerData.viewType === 0) {
+    if (schedulerData.viewType === 0 || schedulerData.viewType === 1) {
       return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle}>
-          <div className="row item">
-            <div
-              className="col-md-12 item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}
-            >
-              {titleText}
-            </div>
-            <div className="d-inline-block">
-              <div className="task-ongoing d-inline-block"></div>
-              <div className="d-inline-block task-timer">00:00:00</div>
-              <div className="d-inline-block task-play-btn"><i class="fa fa-pause"></i></div>
-              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
-              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
-            </div>
-            <div className="col-md-12 no-padding">
-              <div className="col-md-6 no-padding d-inline-block item-time">
-                {`${start} - ${end}`}
-              </div>
-              <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                <span className="task-event-action" onClick={(e) => ""}>...</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (schedulerData.viewType === 1) {
-      return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle}>
-          <div className="row item">
-            <div
-              className="col-md-12 item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}
-            >
-              {titleText}
-            </div>
-            <div className="d-inline-block">
-              <div className="task-ongoing d-inline-block"></div>
-              <div className="d-inline-block task-timer">00:00:00</div>
-              <div className="d-inline-block task-play-btn"><i class="fa fa-pause"></i></div>
-              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
-              {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
-            </div>
-            <div className="col-md-12 no-padding">
-              <div className="col-md-6 no-padding d-inline-block item-time">
-                {`${start} - ${end}`}
-              </div>
-              <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                <span className="task-event-action" onClick={(e) => ""}>...</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <>
+          <DashboardEvent
+            eventItemClick={eventItemClick}
+            schedulerData={schedulerData}
+            event={event}
+            bgColor={bgColor}
+            isStart={isStart}
+            isEnd={isEnd}
+            mustAddCssClass={mustAddCssClass}
+            mustBeHeight={mustBeHeight}
+            agendaMaxEventWidth={agendaMaxEventWidth}
+            titleText={titleText}
+            start={start}
+            end={end}
+            mustAddCssClass={mustAddCssClass}
+            divStyle={divStyle}
+          />
+        </>
       );
     } else if (schedulerData.viewType === 2) {
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
           <div className="row item">
             <div
-              className="col-md-12 item-heading text-wraper"
+              className="col-md-12 pointer item-heading text-wraper"
               style={{ padding: "5px 5px 0px 5px" }}
+              onClick={() => { if (!!eventItemClick) eventItemClick(schedulerData, event) }}
             >
+              {/* <i class="fa fa-pencil pull-right" aria-hidden="true"></i> */}
               {titleText}
             </div>
           </div>
