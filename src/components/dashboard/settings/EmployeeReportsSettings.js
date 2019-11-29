@@ -71,7 +71,7 @@ class EmployeeReportsSettings extends Component {
         </div>
         <div className="employee-project-box">
           <div className="col-md-12 no-padding">
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th scope="col" style={{ width: "40%" }}>

@@ -6,34 +6,59 @@ import GeneralSettings from "./GeneralSettings";
 import CategoriesSettings from "./CategoriesSettings";
 import EmployeeReportsSettings from "./EmployeeReportsSettings";
 import ProjectReportsSettings from "./ProjectReportsSettings";
+import { put } from "../../../utils/API";
 
 class WorkspaceSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
-      setShow: false,
-      name: "",
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: ""
+      workspaceName: "",
+      adminUserArr: [],
+      workspaceId: "",
+      userArr: []
     };
   }
-  handleClose = () => {
-    this.setState({
-      show: false
-    });
-  };
-  handleShow = () => {
-    this.setState({
-      setShow: true,
-      show: true
-    });
-  };
 
-  handleChange = e => {
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.workspaceObj !== this.props.workspaceObj ||
+      prevProps.state.adminUserArr.length !==
+        this.props.state.adminUserArr.length ||
+      prevProps.state.allMembers.length !== this.props.state.allMembers.length
+    ) {
+      let workspaceName = this.props.workspaceObj
+        ? this.props.workspaceObj.name
+        : null;
+      let adminUserArr = this.props.state.adminUserArr;
+      this.setState({
+        workspaceName: workspaceName,
+        adminUserArr: adminUserArr,
+        workspaceId: this.props.workspaceObj.id,
+        userArr: this.props.state.allMembers
+      });
+    }
+  }
+
+  worskpaceNameHandler = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  };
+
+  updateWorkspaceName = async () => {
+    const updateWorkspaceName = {
+      user: {
+        name: this.state.workspaceName
+      }
+    };
+    try {
+      const { data } = await put(
+        updateWorkspaceName,
+        `workspaces/${this.props.workspaceObj.id}/workspace_settings/${this.props.workspaceObj.id}`
+      );
+      console.log("Data", data);
+    } catch (e) {
+      console.log("error", e);
+    }
   };
   render() {
     return (
@@ -47,7 +72,12 @@ class WorkspaceSettings extends Component {
           </TabList>
 
           <TabPanel>
-            <GeneralSettings />
+            <GeneralSettings
+              worskpaceNameHandler={this.worskpaceNameHandler}
+              state={this.state}
+              updateWorkspaceName={this.updateWorkspaceName}
+              adminUserArr={this.props.state.adminUserArr}
+            />
           </TabPanel>
           <TabPanel>
             <CategoriesSettings />

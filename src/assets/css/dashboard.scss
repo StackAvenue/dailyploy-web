@@ -1755,6 +1755,66 @@ table.scheduler-table tr:last-child td {
   }
 }
 
+.add-admin-modal{
+  .modal-dialog{
+    max-width:432px !important;
+      top:251px !important;
+      .modal-content{   
+        .box{
+          padding: 26px 0px 30px 36px;
+          .box-top{
+            padding:0 !important;
+            .heading{
+              font-family: $font-family-roboto !important;
+              color: $color-text1;
+              font-size: 20px;
+              font-weight: bold;
+            }
+            .btn{
+              padding-top:0px;
+              padding-right:20px;
+            }
+          }
+          .input{
+            height: 40px;
+            border-radius: 5px;
+            border: solid 1px $color-borders;
+            background-color: #ffffff;
+            font-family: $font-family-roboto !important;
+            color: $color-text2;
+            font-size: 12px;
+            margin:28px 0px 62px 0px;
+          }
+          .btn-box {
+            padding-top: 30px !important;
+            padding-bottom: 21px !important;
+            .add {
+              width: 93px !important;
+              height: 40px !important;
+              border-radius: 5px !important;
+              background-color: $color-brand3 !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              color: $color-white !important;
+            }
+            .cancel {
+              width: 93px !important;
+              height: 40px !important;
+              border-radius: 5px !important;
+              border: solid 1px $color-brand3 !important;
+              background-color: $color-white !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              color: $color-text2 !important;
+              margin-left: 10px !important;
+            }
+          }
+        }
+      }
+  }
+  
+}
+
 .workspace-settings{
   .react-tabs__tab--selected {
     background: transparent;
@@ -1865,6 +1925,8 @@ table.scheduler-table tr:last-child td {
         display: inline-block;
         vertical-align: top;
       }
+      
+      
     }
     .hr1{
       border: 1px solid $color-borders;

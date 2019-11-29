@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import EmailConfigurationModal from "../WorkspaceSettings/EmailConfigurationModal";
 import DeleteWorkspaceModal from "../WorkspaceSettings/DeleteWorkspaceModal";
+import AddAdminModal from "./AddAdminModal";
+import { firstTwoLetter } from "../../../utils/function";
+import { post } from "../../../utils/API";
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -9,9 +12,27 @@ class GeneralSettings extends Component {
       resumeShow: false,
       resumeSetShow: false,
       deleteShow: false,
-      deleteSetShow: false
+      deleteSetShow: false,
+      addAdminShow: false,
+      addAdminSetShow: false,
+      addAdminEmail: "",
+      addAdminId: ""
     };
   }
+
+  handleAddAdminShow = () => {
+    this.setState({
+      addAdminShow: true,
+      addAdminSetShow: true
+    });
+  };
+
+  handleAddAdminClose = () => {
+    this.setState({
+      addAdminShow: false
+    });
+  };
+
   handleResumeShow = () => {
     this.setState({
       resumeShow: true,
@@ -36,6 +57,20 @@ class GeneralSettings extends Component {
       deleteShow: false
     });
   };
+
+  addAdmin = () => {
+    const addAdminData = {
+      user_id: this.state.addAdminId
+    };
+    try {
+      const { data } = post(
+        addAdminData,
+        `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
+      );
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
   render() {
     return (
       <>
@@ -49,69 +84,45 @@ class GeneralSettings extends Component {
                 type="text"
                 placeholder="Workspace Name"
                 className="form-control input"
+                name="workspaceName"
+                value={this.props.state.workspaceName}
+                onChange={this.props.worskpaceNameHandler}
               />
             </div>
             <div className="d-inline-block">
-              <button className="btn btn-primary save-button">Save</button>
+              <button
+                className="btn btn-primary save-button"
+                onClick={this.props.updateWorkspaceName}
+              >
+                Save
+              </button>
             </div>
           </div>
           <div className="col-md-12 workspace-name">
             <div className="col-md-2 no-padding name">Admins</div>
           </div>
           <div className="col-md-12 admin-add">
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
+            {this.props.state.adminUserArr.map((admin, index) => (
+              <div className="admin-box" key={index}>
+                <div className="img-box">{firstTwoLetter(admin.name)}</div>
+                <div className="text">{admin.name}</div>
+                <div className="triple-dot">
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
               </div>
-            </div>
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-            </div>
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-            </div>
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-            </div>
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-            </div>
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-            </div>
-            <div className="admin-box">
-              <div className="img-box">AJ</div>
-              <div className="text">Arpit Jain</div>
-              <div className="triple-dot">
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-            </div>
-            <button className="btn btn-primary addnew-button">
+            ))}
+
+            <button
+              className="btn btn-primary addnew-button"
+              onClick={this.handleAddAdminShow}
+            >
               {" "}
               + Add New
             </button>
+            <AddAdminModal
+              state={this.state}
+              handleClose={this.handleAddAdminClose}
+            />
           </div>
           <div className="col-md-12 hr1"></div>
           <div className="col-md-12 config-heading">Email Configuration</div>
@@ -126,7 +137,7 @@ class GeneralSettings extends Component {
                     className="btn btn-primary resume-btn"
                     onClick={this.handleResumeShow}
                   >
-                    Resume
+                    Suspend
                   </button>
                   <EmailConfigurationModal
                     state={this.state}
@@ -217,150 +228,152 @@ class GeneralSettings extends Component {
             <div className="col-md-5 workdays-text">Work Days</div>
             <div className="col-md-5 workdays">
               <table>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-1`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor="styled-checkbox-1"
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text" colspan="2">
-                    Sunday
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-1`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor={`styled-checkbox-1`}
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text">Monday</td>
-                  <td>
-                    <select>
-                      <option>1</option>
-                      <option>2</option>
-                    </select>
-                  </td>
-                  <td className="hrs">hrs</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-1`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor={`styled-checkbox-1`}
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text">Tuesday</td>
-                  <td>
-                    <select>
-                      <option>1</option>
-                      <option>2</option>
-                    </select>
-                  </td>
-                  <td className="hrs">hrs</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-1`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor={`styled-checkbox-1`}
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text">Wednesday</td>
-                  <td>
-                    <select>
-                      <option>1</option>
-                      <option>2</option>
-                    </select>
-                  </td>
-                  <td className="hrs">hrs</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-1`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor={`styled-checkbox-1`}
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text">Thrusday</td>
-                  <td>
-                    <select>
-                      <option>1</option>
-                      <option>2</option>
-                    </select>
-                  </td>
-                  <td className="hrs">hrs</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-1`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor={`styled-checkbox-1`}
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text">Friday</td>
-                  <td>
-                    <select>
-                      <option>1</option>
-                      <option>2</option>
-                    </select>
-                  </td>
-                  <td className="hrs">hrs</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="styled-checkbox"
-                      id={`styled-checkbox-6`}
-                      type="checkbox"
-                      name="isChecked"
-                    />
-                    <label
-                      htmlFor={`styled-checkbox-6`}
-                      className="check"
-                    ></label>
-                  </td>
-                  <td className="text" colspan="2">
-                    Saturday
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-1`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor="styled-checkbox-1"
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text" colSpan="2">
+                      Sunday
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-1`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor={`styled-checkbox-1`}
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text">Monday</td>
+                    <td>
+                      <select>
+                        <option>1</option>
+                        <option>2</option>
+                      </select>
+                    </td>
+                    <td className="hrs">hrs</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-1`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor={`styled-checkbox-1`}
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text">Tuesday</td>
+                    <td>
+                      <select>
+                        <option>1</option>
+                        <option>2</option>
+                      </select>
+                    </td>
+                    <td className="hrs">hrs</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-1`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor={`styled-checkbox-1`}
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text">Wednesday</td>
+                    <td>
+                      <select>
+                        <option>1</option>
+                        <option>2</option>
+                      </select>
+                    </td>
+                    <td className="hrs">hrs</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-1`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor={`styled-checkbox-1`}
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text">Thrusday</td>
+                    <td>
+                      <select>
+                        <option>1</option>
+                        <option>2</option>
+                      </select>
+                    </td>
+                    <td className="hrs">hrs</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-1`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor={`styled-checkbox-1`}
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text">Friday</td>
+                    <td>
+                      <select>
+                        <option>1</option>
+                        <option>2</option>
+                      </select>
+                    </td>
+                    <td className="hrs">hrs</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox-6`}
+                        type="checkbox"
+                        name="isChecked"
+                      />
+                      <label
+                        htmlFor={`styled-checkbox-6`}
+                        className="check"
+                      ></label>
+                    </td>
+                    <td className="text" colSpan="2">
+                      Saturday
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
 

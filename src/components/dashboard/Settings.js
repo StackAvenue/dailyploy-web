@@ -23,7 +23,9 @@ class Settings extends Component {
       newPassword: "",
       confirmPassword: "",
       users: [],
-      isDisableName: false
+      isDisableName: false,
+      adminUserArr: [],
+      allMembers: []
     };
   }
 
@@ -65,6 +67,8 @@ class Settings extends Component {
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
         .map(user => user.email);
+      var adminUserArr = data.members.filter(user => user.role === "admin");
+      var allMembers = data;
     } catch (e) {
       console.log("users Error", e);
     }
@@ -76,7 +80,9 @@ class Settings extends Component {
       workspaces: workspacesData,
       projects: projectsData,
       users: userArr,
-      isLogedInUserEmailArr: emailArr
+      isLogedInUserEmailArr: emailArr,
+      adminUserArr: adminUserArr,
+      allMembers: allMembers
     });
   }
 
@@ -112,11 +118,13 @@ class Settings extends Component {
   };
 
   save = () => {
-    console.log("disable");
     this.setState({ isDisableName: true });
   };
 
   render() {
+    let filterArr = this.state.workspaces.filter(
+      workspace => workspace.id == this.state.workspaceId
+    );
     return (
       <>
         <MenuBar
@@ -152,11 +160,12 @@ class Settings extends Component {
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <WorkspaceSettings />
+                    <WorkspaceSettings
+                      workspaceObj={filterArr[0]}
+                      state={this.state}
+                    />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="third">
-                    <WorkspaceSettings />
-                  </Tab.Pane>
+                  <Tab.Pane eventKey="third">Prefrences</Tab.Pane>
                 </Tab.Content>
               </div>
             </div>
