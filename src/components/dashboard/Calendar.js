@@ -69,7 +69,7 @@ class Calendar extends Component {
         crossResourceMove: true,
         checkConflict: false,
         scrollToSpecialMomentEnabled: true,
-        eventItemPopoverEnabled: true,
+        eventItemPopoverEnabled: false,
         calendarPopoverEnabled: true,
         recurringEventsEnabled: true,
         headerEnabled: true,
@@ -440,8 +440,8 @@ class Calendar extends Component {
       event
     );
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
-    var start = moment(event.start).format("HH:mm");
-    var end = moment(event.end).format("HH:mm");
+    var start = moment(event.start);
+    var end = moment(event.end);
     let divStyle = {
       borderRadius: "2px",
       backgroundColor: backgroundColor,
@@ -450,43 +450,29 @@ class Calendar extends Component {
     if (!!agendaMaxEventWidth)
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
-    if (schedulerData.viewType === 0 || schedulerData.viewType === 1) {
-      return (
-        <>
-          <DashboardEvent
-            eventItemClick={eventItemClick}
-            schedulerData={schedulerData}
-            event={event}
-            bgColor={bgColor}
-            isStart={isStart}
-            isEnd={isEnd}
-            mustAddCssClass={mustAddCssClass}
-            mustBeHeight={mustBeHeight}
-            agendaMaxEventWidth={agendaMaxEventWidth}
-            titleText={titleText}
-            start={start}
-            end={end}
-            mustAddCssClass={mustAddCssClass}
-            divStyle={divStyle}
-          />
-        </>
-      );
-    } else if (schedulerData.viewType === 2) {
-      return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle}>
-          <div className="row item">
-            <div
-              className="col-md-12 pointer item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}
-              onClick={() => { if (!!eventItemClick) eventItemClick(schedulerData, event) }}
-            >
-              {/* <i class="fa fa-pencil pull-right" aria-hidden="true"></i> */}
-              {titleText}
-            </div>
-          </div>
-        </div>
-      );
-    }
+    return (
+      <>
+        <DashboardEvent
+          eventItemClick={eventItemClick}
+          schedulerData={schedulerData}
+          event={event}
+          bgColor={bgColor}
+          isStart={isStart}
+          isEnd={isEnd}
+          mustAddCssClass={mustAddCssClass}
+          mustBeHeight={mustBeHeight}
+          agendaMaxEventWidth={agendaMaxEventWidth}
+          titleText={titleText}
+          start={start}
+          end={end}
+          mustAddCssClass={mustAddCssClass}
+          divStyle={divStyle}
+          scheduler={this.schedulerData}
+          hideOverPopup={this.hideOverPopup}
+          eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
+        />
+      </>
+    );
   };
 
   getTimeDifference = (start, end) => {
