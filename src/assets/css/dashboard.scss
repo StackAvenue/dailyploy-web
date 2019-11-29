@@ -814,6 +814,9 @@
 .day-event-container {
   text-align: left;
   padding: 5px 5px 0 5px;
+  .dropdown-div{
+    margin: 3px !important;
+  }
 }
 
 .round-all {
@@ -2660,7 +2663,7 @@ table.scheduler-table tr:last-child td {
 }
 .fa-play{
   color: #1e90ff;
-  padding: 5px;
+  padding: 5px 0px 0 7px;
 }
 .fa-check{
   color: green;

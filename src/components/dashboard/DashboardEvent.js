@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import moment from "moment";
+import { post, mockGet } from "../../utils/API";
 
 
 class DashboardEvent extends Component {
@@ -13,6 +14,7 @@ class DashboardEvent extends Component {
       showAction: false,
       showPopup: false,
       clickEventId: "",
+      icon: "pause"
     };
   }
 
@@ -30,6 +32,39 @@ class DashboardEvent extends Component {
 
   ToggleActionDropDown = (id) => {
     this.setState({ clickEventId: id, showAction: !this.state.showAction, showPopup: false })
+  }
+
+  handlePlayEvent = (id) => {
+    var icon = this.state.icon
+    this.setState({
+      showPopup: false,
+      icon: icon == "pause" ? "play" : icon == "play" ? "pause" : "check",
+    })
+  }
+
+  async markCompleteTask(id) {
+    if (id) {
+      try {
+        const { data } = await mockGet("mark-complete");
+        var isComplete = data[0].complete
+      } catch (e) {
+      }
+      if (isComplete) {
+        this.setState({ icon: "check", showAction: false })
+      }
+    }
+  }
+
+  async deleteTask(id) {
+    if (id) {
+      try {
+        const { data } = await mockGet("mark-complete");
+        var isComplete = data[0].complete
+      } catch (e) {
+      }
+      if (isComplete) {
+      }
+    }
   }
 
   render() {
@@ -54,11 +89,22 @@ class DashboardEvent extends Component {
                 {titleText}
               </div>
               <div className="d-inline-block">
-                <div className="task-ongoing d-inline-block"></div>
+                <div className={`d-inline-block ${this.state.icon !== "check" ? "task-ongoing" : "task-compete"}`} ></div>
                 <div className="d-inline-block task-timer">00:00:00</div>
-                <div className="d-inline-block task-play-btn pointer"><i className="fa fa-pause"></i></div>
-                {/* <div className="d-inline-block task-play-btn"><i class="fa fa-play"></i></div> */}
-                {/* <div className="d-inline-block task-play-btn"><i class="fa fa-check"></i></div> */}
+                {this.state.icon === 'pause' ?
+                  <div
+                    className="d-inline-block task-play-btn pointer"
+                    onClick={() => this.handlePlayEvent(event.id)}
+                  ><i className="fa fa-pause"></i></div> : null}
+
+                {this.state.icon === 'play' ?
+                  <div
+                    className="d-inline-block task-play-btn pointer"
+                    onClick={() => this.handlePlayEvent(event.id)}
+                  ><i class="fa fa-play"></i></div> : null}
+
+                {this.state.icon === 'check' ?
+                  <div className="d-inline-block task-play-btn"><i className="fa fa-check"></i></div> : null}
               </div>
               <div className="col-md-12 no-padding">
                 <div className="col-md-6 no-padding d-inline-block item-time">
@@ -70,9 +116,10 @@ class DashboardEvent extends Component {
                     onMouseOver={() => this.hideEventPopUp(event.id)}
                   />
                 </div>
-                <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                  <span className="task-event-action pointer" onClick={() => this.ToggleActionDropDown(event.id)}>...</span>
-                </div>
+                {this.state.icon !== "check" ?
+                  <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                    <span className="task-event-action pointer" onClick={() => this.ToggleActionDropDown(event.id)}>...</span>
+                  </div> : null}
               </div>
             </div>
           </div>
@@ -92,10 +139,24 @@ class DashboardEvent extends Component {
 
         {this.state.showAction && this.state.clickEventId === event.id ?
           <div className="d-inline-block event-action-dropdown">
-            <div className="border-bottom pointer" style={{ padding: "5px 0px 0px 0px" }} onClick={{}} >Mark Complete</div>
-            <div className="pointer" style={{ padding: "5px 0px 5px 0px" }} onClick={{}}>Delete Task</div>
+            {this.state.icon !== "check" ?
+              <div
+                className="border-bottom pointer"
+                style={{ padding: "5px 0px 0px 0px" }}
+                onClick={() => this.markCompleteTask(event.id)}
+              >
+                Mark Complete
+            </div> : null}
+            <div
+              className="pointer"
+              style={{ padding: "5px 0px 5px 0px" }}
+              onClick={() => this.deleteTask(event.id)}
+            >
+              Delete Task
+            </div>
           </div>
-          : null}
+          : null
+        }
 
         <div className="custom-event-popup">
           {this.state.showPopup ? this.props.eventItemPopoverTemplateResolver(schedulerData, event, titleText, start, end, this.props.bgColor)

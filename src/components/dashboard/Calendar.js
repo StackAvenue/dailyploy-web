@@ -30,7 +30,7 @@ class Calendar extends Component {
 
         // agendaResourceTableWidth: 160,
         agendaResourceTableWidth: 218,
-        agendaMaxEventWidth: 138,
+        agendaMaxEventWidth: 153,
 
         dayResourceTableWidth: 218,
         weekResourceTableWidth: 140,
