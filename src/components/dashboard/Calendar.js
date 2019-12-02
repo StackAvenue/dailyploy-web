@@ -12,11 +12,7 @@ import Select from "react-dropdown-select";
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.times = [
-      { value: '18:19 - 20:19', label: '18:19 - 20:19' },
-      { value: '18:19 - 20:19', label: '18:19 - 20:19' },
-      { value: '18:19 - 20:19', label: '18:19 - 20:19' },
-    ];
+    this.times = ['18:19 - 20:19', '18:19 - 20:19', '18:19 - 20:19'];
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -469,6 +465,7 @@ class Calendar extends Component {
           divStyle={divStyle}
           scheduler={this.schedulerData}
           hideOverPopup={this.hideOverPopup}
+          times={this.times}
           eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
         />
       </>

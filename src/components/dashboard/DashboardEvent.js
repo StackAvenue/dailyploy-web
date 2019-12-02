@@ -3,19 +3,99 @@ import { withRouter } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import moment from "moment";
-import { post, mockGet } from "../../utils/API";
+import { post, mockGet, mockPost } from "../../utils/API";
+import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
+
 
 
 class DashboardEvent extends Component {
   constructor(props) {
     super(props)
+    this.isToday = this.props.end.format(DATE_FORMAT1) == moment(new Date()).format(DATE_FORMAT1)
     this.state = {
+      status: false,
+      runningTime: 0,
       showTimerMenu: false,
       showAction: false,
       showPopup: false,
       clickEventId: "",
-      icon: "pause"
+      startOn: "",
+      endOn: "",
+      icon: "play",
+      timeArr: [
+      ],
     };
+  }
+
+  async componentDidMount() {
+    try {
+      const { data } = await mockGet("task-track");
+      if (data) {
+        var timeArr = []
+        data.map(date => {
+          var sTime = moment(date.startdate).format("HH:mm")
+          var eTime = moment(date.enddate).format("HH:mm")
+          timeArr.push(`${sTime} - ${eTime}`)
+        })
+      }
+    } catch (e) {
+    }
+  }
+
+  handleClick = () => {
+    this.setState(state => {
+      if (state.status) {
+        var endOn = Date.now()
+        this.setState({ runningTime: 0, endOn: endOn });
+        this.saveTaskTrackingTime(endOn)
+        this.handleReset()
+      } else {
+        var startOn = Date.now()
+        this.setState({ startOn: startOn })
+        const startTime = startOn - this.state.runningTime;
+        this.timer = setInterval(() => {
+          this.setState({ runningTime: Date.now() - startTime });
+        });
+      }
+      var icon = this.state.icon
+      return {
+        status: !state.status,
+        showPopup: false,
+        icon: icon == "pause" ? "play" : icon == "play" ? "pause" : "check",
+      };
+    });
+  };
+
+  async saveTaskTrackingTime(endOn) {
+    var taskData = {
+      startdate: new Date(this.state.startOn),
+      enddate: new Date(endOn)
+    }
+    try {
+      const { data } = await mockPost(taskData, "task-track");
+      if (data) {
+        var timeArr = [this.state.timeArr, ...[]]
+        var sTime = moment(data.startdate).format("HH:mm")
+        var eTime = moment(data.enddate).format("HH:mm")
+        timeArr.push(`${sTime} - ${eTime}`)
+        console.log(timeArr)
+        this.setState({ timeArr: timeArr })
+      }
+    } catch (e) {
+    }
+  }
+
+  handleReset = () => {
+    clearInterval(this.timer);
+    this.setState({ runningTime: 0, status: false, startOn: "" });
+  };
+
+  formattedSeconds = (ms) => {
+    var totalSeconds = (ms / 1000)
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
+    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
   }
 
   showEventPopUp = () => {
@@ -90,17 +170,19 @@ class DashboardEvent extends Component {
               </div>
               <div className="d-inline-block">
                 <div className={`d-inline-block ${this.state.icon !== "check" ? "task-ongoing" : "task-compete"}`} ></div>
-                <div className="d-inline-block task-timer">00:00:00</div>
+                <div className="d-inline-block task-timer">{this.formattedSeconds(this.state.runningTime)}</div>
                 {this.state.icon === 'pause' ?
                   <div
+                    style={{ pointerEvents: this.isToday ? "" : "none" }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.handlePlayEvent(event.id)}
+                    onClick={() => this.handleClick()}
                   ><i className="fa fa-pause"></i></div> : null}
 
                 {this.state.icon === 'play' ?
                   <div
+                    style={{ pointerEvents: this.isToday ? "" : "none" }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.handlePlayEvent(event.id)}
+                    onClick={() => this.handleClick(event.id)}
                   ><i class="fa fa-play"></i></div> : null}
 
                 {this.state.icon === 'check' ?
@@ -132,10 +214,15 @@ class DashboardEvent extends Component {
 
         {this.state.showTimerMenu && this.state.clickEventId === event.id ?
           <div className={`dropdown-div `}>
-            <div className="hover-border"> {`${startTime} - ${endTime}`} </div>
-            <div className="hover-border"> {`${startTime} - ${endTime}`} </div>
-            <div className="hover-border"> {`${startTime} - ${endTime}`} </div>
-          </div> : null}
+            {this.props.times.map(time => {
+              return <div className="hover-border"> {time} </div>
+            })}
+            {this.state.timeArr ?
+              this.state.timeArr.map(time => {
+                return <div className="hover-border"> {time} </div>
+              }) : null}
+          </div>
+          : null}
 
         {this.state.showAction && this.state.clickEventId === event.id ?
           <div className="d-inline-block event-action-dropdown">
