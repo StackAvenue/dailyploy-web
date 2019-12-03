@@ -151,9 +151,17 @@
     width: 109%;
     height: auto;
     z-index: 1;
-    background-color: #f8f9fa;
+    background-color: #fff;
     border-radius: 5px;
+    top:39px;
+    li:hover{
+      cursor: pointer;
+      background-color: rgba(242, 242, 242, 1);
+    }
+  }
 
+  .suggestion-holder-border{
+    border: 1px solid rgba(155, 155, 155, 1);
   }
   .selected-tags{
     display: inline-block;
