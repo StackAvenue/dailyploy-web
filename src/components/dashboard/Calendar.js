@@ -466,6 +466,7 @@ class Calendar extends Component {
           scheduler={this.schedulerData}
           hideOverPopup={this.hideOverPopup}
           times={this.times}
+          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
         />
       </>

@@ -5,6 +5,7 @@ import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
+import TaskBottomPopup from "./../dashboard/TaskBottomPopup";
 
 
 
@@ -28,18 +29,18 @@ class DashboardEvent extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const { data } = await mockGet("task-track");
-      if (data) {
-        var timeArr = []
-        data.map(date => {
-          var sTime = moment(date.startdate).format("HH:mm")
-          var eTime = moment(date.enddate).format("HH:mm")
-          timeArr.push(`${sTime} - ${eTime}`)
-        })
-      }
-    } catch (e) {
-    }
+    // try {
+    //   const { data } = await mockGet("task-track");
+    //   if (data) {
+    //     var timeArr = []
+    //     data.map(date => {
+    //       var sTime = moment(date.startdate).format("HH:mm")
+    //       var eTime = moment(date.enddate).format("HH:mm")
+    //       timeArr.push(`${sTime} - ${eTime}`)
+    //     })
+    //   }
+    // } catch (e) {
+    // }
   }
 
   handleClick = () => {
@@ -57,6 +58,10 @@ class DashboardEvent extends Component {
           this.setState({ runningTime: Date.now() - startTime });
         });
       }
+      localStorage.setItem('startOn', startOn)
+      localStorage.setItem('taskId', this.props.event.id)
+      localStorage.setItem('colorCode', this.props.bgColor)
+      localStorage.setItem('taskTitle', this.props.titleText)
       var icon = this.state.icon
       return {
         status: !state.status,
@@ -65,6 +70,12 @@ class DashboardEvent extends Component {
       };
     });
   };
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.state.startOn !== prevState.startOn) {
+      // this.props.handleTaskBottomPopup(this.state.startOn)
+    }
+  }
 
   async saveTaskTrackingTime(endOn) {
     var taskData = {
@@ -78,7 +89,6 @@ class DashboardEvent extends Component {
         var sTime = moment(data.startdate).format("HH:mm")
         var eTime = moment(data.enddate).format("HH:mm")
         timeArr.push(`${sTime} - ${eTime}`)
-        console.log(timeArr)
         this.setState({ timeArr: timeArr })
       }
     } catch (e) {
@@ -88,6 +98,10 @@ class DashboardEvent extends Component {
   handleReset = () => {
     clearInterval(this.timer);
     this.setState({ runningTime: 0, status: false, startOn: "" });
+    localStorage.setItem('startOn', "")
+    localStorage.setItem('taskId', "")
+    localStorage.setItem('colorCode', "")
+    localStorage.setItem('taskTitle', "")
   };
 
   formattedSeconds = (ms) => {
@@ -130,6 +144,7 @@ class DashboardEvent extends Component {
       } catch (e) {
       }
       if (isComplete) {
+        this.handleReset()
         this.setState({ icon: "check", showAction: false })
       }
     }
@@ -183,17 +198,16 @@ class DashboardEvent extends Component {
                     style={{ pointerEvents: this.isToday ? "" : "none" }}
                     className="d-inline-block task-play-btn pointer"
                     onClick={() => this.handleClick(event.id)}
-                  ><i class="fa fa-play"></i></div> : null}
+                  ><i className="fa fa-play"></i></div> : null}
 
                 {this.state.icon === 'check' ?
                   <div className="d-inline-block task-play-btn"><i className="fa fa-check"></i></div> : null}
               </div>
               <div className="col-md-12 no-padding">
                 <div className="col-md-6 no-padding d-inline-block item-time">
-                  {/* {`${start} - ${end}`} */}
                   <input className="form-control  timer-dropdown d-inline-block"
                     style={{ backgroundColor: this.state.showTimerMenu ? "#ffffff" : this.props.bgColor, borderColor: this.props.bgColor }}
-                    defaultValue={`${startTime} - ${endTime}`}
+                    defaultValue={this.props.times ? this.props.times[0] : ""}
                     onClick={() => this.ToggleTimerDropDown(event.id)}
                     onMouseOver={() => this.hideEventPopUp(event.id)}
                   />
@@ -214,8 +228,10 @@ class DashboardEvent extends Component {
 
         {this.state.showTimerMenu && this.state.clickEventId === event.id ?
           <div className={`dropdown-div `}>
-            {this.props.times.map(time => {
-              return <div className="hover-border"> {time} </div>
+            {this.props.times.map((time, idx) => {
+              if (idx !== 0) {
+                return <div className="hover-border"> {time} </div>
+              }
             })}
             {this.state.timeArr ?
               this.state.timeArr.map(time => {
@@ -249,6 +265,14 @@ class DashboardEvent extends Component {
           {this.state.showPopup ? this.props.eventItemPopoverTemplateResolver(schedulerData, event, titleText, start, end, this.props.bgColor)
             : null}
         </div>
+        {/* {this.state.icon === 'pause' ?
+          <TaskBottomPopup
+            formattedSeconds={this.formattedSeconds}
+            bgColor={this.props.bgColor}
+            taskTitle={titleText}
+            runningTime={this.state.runningTime}
+          />
+          : null} */}
       </>
     );
   }
