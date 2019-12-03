@@ -1755,6 +1755,76 @@ table.scheduler-table tr:last-child td {
   }
 }
 
+.email-config-modal{
+  .modal-dialog{
+    max-width: 648px !important;
+    // top: 100px !important;
+    .modal-content{
+      .config-modal-box{
+        padding: 20px 22px 0px 50px;
+        margin:0;
+        .header{
+          padding:0px 0px 44px 0px  !important;
+          span{
+            font-family: $font-family-roboto !important;
+            color: $color-text1;
+            font-size: 20px;
+            font-weight: bold;
+          }
+          button{
+            padding:0;
+          }
+        }
+        .body{
+          padding: 0px !important;
+          .input-row{
+            margin-bottom:21px;
+            padding: 0px !important;
+            .label{
+              font-family: $font-family-roboto !important;
+              color: $color-text3;
+              font-size: 15px;
+              padding: 0px !important;
+              display: inline-block !important;
+              vertical-align: top;
+            }
+            textarea{
+              width: 100%;
+              height: 150px;
+              border: 1px solid #d6d6d6 !important;
+              border-radius: 5px;
+              box-shadow: #d6d6d6;
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 14px;
+              color: #000000;
+              overflow-y: scroll;
+            }
+            .button1 {
+              height: 40px !important;
+              border-radius: 5px !important;
+              background-color: $color-brand3 !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              font-weight: 500 !important;
+              border: 0 !important;
+            }
+            .button2 {
+              border-radius: 5px !important;
+              border: solid 1px $color-brand3 !important;
+              background-color: $color-white !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              font-weight: 500 !important;
+              color: $color-text3 !important;
+              margin-left: 7% !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .add-admin-modal{
   .modal-dialog{
     max-width:432px !important;
@@ -1784,6 +1854,33 @@ table.scheduler-table tr:last-child td {
             color: $color-text2;
             font-size: 12px;
             margin:28px 0px 62px 0px;
+          }
+          .auto-search {
+            position: absolute;
+            top:70px;
+            width: 361px;
+            height: auto;
+            z-index: 1;
+            background-color: #fff;
+            border-radius: 5px;
+            ul {
+              list-style: none;
+              padding-left: 0px;
+              text-align: left;
+              margin-bottom: 0px;
+              li {
+                padding: 10px;
+                font-family: $font-family-roboto !important;
+                color: $color-text2;
+                font-size: 12px;
+              }
+              li:hover {
+                cursor: pointer;
+              }
+            }
+          } 
+          .border-add{
+            border: 1px solid $color-borders;
           }
           .btn-box {
             padding-top: 30px !important;
@@ -1909,6 +2006,21 @@ table.scheduler-table tr:last-child td {
             font-size: 12px;
             color: $color-text2;
           }
+        }
+        .remove-btn{
+          position: relative;
+          width: 62px;
+          height: 25px;
+          padding:0px;
+          border-radius: 5px;
+          box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.15);
+          border: solid 1px $color-borders;
+          background-color: #ffffff;
+          font-family: $font-family-roboto !important;
+          font-size: 12px !important;
+          color: $color-brand4 !important;
+          top: 30px;
+          left: 139px;
         }
       }
       .addnew-button{

@@ -4,6 +4,10 @@ import DeleteWorkspaceModal from "../WorkspaceSettings/DeleteWorkspaceModal";
 import AddAdminModal from "./AddAdminModal";
 import { firstTwoLetter } from "../../../utils/function";
 import { post } from "../../../utils/API";
+import { toast } from "react-toastify";
+import DailyPloyToast from "../../DailyPloyToast";
+import RemoveAdminModal from "./RemoveAdminModal";
+import EmailConfigModal from "./EmailConfigModal";
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -15,10 +19,58 @@ class GeneralSettings extends Component {
       deleteSetShow: false,
       addAdminShow: false,
       addAdminSetShow: false,
+      removeShow: false,
+      removeSetShow: false,
+      editShow: false,
+      editSetShow: false,
       addAdminEmail: "",
-      addAdminId: ""
+      addAdminId: "",
+      allUserArr: [],
+      suggestions: [],
+      isShowRemoveAdmin: false,
+      showRemoveAdminId: ""
     };
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.state.userArr !== this.props.state.userArr ||
+      prevState.addAdminEmail !== this.state.addAdminEmail
+    ) {
+      let selectedUser = this.props.state.userArr.members.filter(
+        user => user.email === this.state.addAdminEmail
+      );
+      let addAdminId = selectedUser[0] ? selectedUser[0].id : null;
+      this.setState({ addAdminId: addAdminId });
+    }
+  };
+
+  handleRemoveShow = () => {
+    this.setState({
+      removeShow: true,
+      removeSetShow: true
+    });
+  };
+
+  handleRemoveClose = () => {
+    this.setState({
+      removeShow: false,
+      isShowRemoveAdmin: false
+    });
+  };
+
+  handleEditShow = () => {
+    this.setState({
+      editShow: true,
+      editSetShow: true
+    });
+  };
+
+  handleEditClose = () => {
+    this.setState({
+      editShow: false
+    });
+  };
 
   handleAddAdminShow = () => {
     this.setState({
@@ -58,6 +110,45 @@ class GeneralSettings extends Component {
     });
   };
 
+  adminEmailHandleChange = e => {
+    const { name, value } = e.target;
+    let suggestions = [];
+    let memberList = this.props.state.userArr.members.filter(
+      user => user.role === "member"
+    );
+    var searchOptions = memberList.map(user => user.email);
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = searchOptions.sort().filter(v => regex.test(v));
+    }
+    this.setState({ [name]: value, suggestions: suggestions });
+  };
+
+  selectAutoSuggestion = option => {
+    var filterArr = this.props.state.userArr.members.filter(
+      user => user.email === option
+    );
+    this.setState({ addAdminEmail: filterArr[0].email, suggestions: [] });
+  };
+
+  autoSearchSuggestion = () => {
+    return (
+      <>
+        {this.state.suggestions ? (
+          <ul>
+            {this.state.suggestions.map((option, idx) => {
+              return (
+                <li key={idx} onClick={() => this.selectAutoSuggestion(option)}>
+                  <i className="fa fa-user"></i> {option}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </>
+    );
+  };
+
   addAdmin = () => {
     const addAdminData = {
       user_id: this.state.addAdminId
@@ -67,10 +158,41 @@ class GeneralSettings extends Component {
         addAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
       );
+
+      toast(
+        <DailyPloyToast message="Admin add Successful" status="success" />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
+      this.setState({ addAdminShow: false });
     } catch (e) {
       console.log("error", e);
     }
   };
+
+  removeAdmin = () => {
+    const removeAdminData = {
+      user_id: this.state.showRemoveAdminId
+    };
+
+    try {
+      const { data } = post(
+        removeAdminData,
+        `workspaces/${this.props.state.workspaceId}/workspace_settings/adminship_removal/`
+      );
+      toast(<DailyPloyToast message="Remove Admenship" status="success" />, {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_CENTER
+      });
+      this.setState({ removeShow: false, isShowRemoveAdmin: false });
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
+  handleRemoveAdmin = (value, id) => {
+    this.setState({ showRemoveAdminId: id, isShowRemoveAdmin: value });
+  };
+
   render() {
     return (
       <>
@@ -106,8 +228,30 @@ class GeneralSettings extends Component {
               <div className="admin-box" key={index}>
                 <div className="img-box">{firstTwoLetter(admin.name)}</div>
                 <div className="text">{admin.name}</div>
-                <div className="triple-dot">
+                <button
+                  className="btn btn-link triple-dot"
+                  onClick={() => this.handleRemoveAdmin(true, admin.id)}
+                  // onBlur={() => this.handleRemoveAdmin(false, admin.id)}
+                >
                   <i className="fas fa-ellipsis-v"></i>
+                </button>
+                <div style={{ position: "absolute" }}>
+                  {this.state.isShowRemoveAdmin &&
+                  this.state.showRemoveAdminId === admin.id ? (
+                    <>
+                      <button
+                        className="btn btn-primary remove-btn"
+                        onClick={this.handleRemoveShow}
+                      >
+                        Remove
+                      </button>
+                      <RemoveAdminModal
+                        state={this.state}
+                        handleClose={this.handleRemoveClose}
+                        removeAdmin={this.removeAdmin}
+                      />
+                    </>
+                  ) : null}
                 </div>
               </div>
             ))}
@@ -122,6 +266,9 @@ class GeneralSettings extends Component {
             <AddAdminModal
               state={this.state}
               handleClose={this.handleAddAdminClose}
+              onChange={this.adminEmailHandleChange}
+              addAdmin={this.addAdmin}
+              autoSearchSuggestion={this.autoSearchSuggestion}
             />
           </div>
           <div className="col-md-12 hr1"></div>
@@ -129,8 +276,15 @@ class GeneralSettings extends Component {
           <div className="config-email-box">
             <div className="col-md-12 heading">
               <div className="col-md-6 no-padding d-inline-block">
-                Daily Status Mail<button className="btn btn-link">Edit</button>
+                Daily Status Mail
+                <button className="btn btn-link" onClick={this.handleEditShow}>
+                  Edit
+                </button>
               </div>
+              <EmailConfigModal
+                state={this.state}
+                handleClose={this.handleEditClose}
+              />
               <div className="col-md-6 no-padding d-inline-block">
                 <div className="float-right">
                   <button

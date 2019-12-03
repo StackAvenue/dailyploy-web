@@ -25,11 +25,22 @@ const AddAdminModal = props => {
             placeholder="Search for User"
             className="form-control input"
             name="addAdminEmail"
+            onChange={props.onChange}
+            value={props.state.addAdminEmail}
           />
+          <div
+            className={`auto-search ${
+              props.state.suggestions.length > 0 ? "border-add" : null
+            }`}
+          >
+            {props.autoSearchSuggestion()}
+          </div>
         </div>
         <div className="col-md-12 btn-box">
           <div className="col-md-7 no-padding ml-auto">
-            <button className="btn btn-primary add">Add</button>
+            <button className="btn btn-primary add" onClick={props.addAdmin}>
+              Add
+            </button>
             <button
               className="btn btn-primary cancel"
               onClick={props.handleClose}
