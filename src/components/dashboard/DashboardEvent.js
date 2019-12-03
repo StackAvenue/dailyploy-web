@@ -6,7 +6,7 @@ import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import TaskBottomPopup from "./../dashboard/TaskBottomPopup";
-
+import Timer from "./../dashboard/Timer";
 
 
 class DashboardEvent extends Component {
@@ -41,6 +41,16 @@ class DashboardEvent extends Component {
     //   }
     // } catch (e) {
     // }
+
+    var startOn = localStorage.getItem('startOn')
+    var taskId = localStorage.getItem('taskId')
+    if (taskId === this.props.event.id && startOn !== "") {
+      this.setState({
+        status: true,
+        startOn: startOn,
+        icon: 'pause'
+      })
+    }
   }
 
   handleClick = () => {
@@ -50,18 +60,16 @@ class DashboardEvent extends Component {
         this.setState({ runningTime: 0, endOn: endOn });
         this.saveTaskTrackingTime(endOn)
         this.handleReset()
+        this.props.handleTaskBottomPopup("")
       } else {
         var startOn = Date.now()
         this.setState({ startOn: startOn })
-        const startTime = startOn - this.state.runningTime;
-        this.timer = setInterval(() => {
-          this.setState({ runningTime: Date.now() - startTime });
-        });
+        localStorage.setItem('startOn', startOn)
+        localStorage.setItem('taskId', this.props.event.id)
+        localStorage.setItem('colorCode', this.props.bgColor)
+        localStorage.setItem('taskTitle', this.props.titleText)
+        this.props.handleTaskBottomPopup(this.state.startOn)
       }
-      localStorage.setItem('startOn', startOn)
-      localStorage.setItem('taskId', this.props.event.id)
-      localStorage.setItem('colorCode', this.props.bgColor)
-      localStorage.setItem('taskTitle', this.props.titleText)
       var icon = this.state.icon
       return {
         status: !state.status,
@@ -70,12 +78,6 @@ class DashboardEvent extends Component {
       };
     });
   };
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (this.state.startOn !== prevState.startOn) {
-      // this.props.handleTaskBottomPopup(this.state.startOn)
-    }
-  }
 
   async saveTaskTrackingTime(endOn) {
     var taskData = {
@@ -98,10 +100,10 @@ class DashboardEvent extends Component {
   handleReset = () => {
     clearInterval(this.timer);
     this.setState({ runningTime: 0, status: false, startOn: "" });
-    localStorage.setItem('startOn', "")
     localStorage.setItem('taskId', "")
     localStorage.setItem('colorCode', "")
     localStorage.setItem('taskTitle', "")
+    localStorage.setItem('startOn', "")
   };
 
   formattedSeconds = (ms) => {
@@ -185,7 +187,12 @@ class DashboardEvent extends Component {
               </div>
               <div className="d-inline-block">
                 <div className={`d-inline-block ${this.state.icon !== "check" ? "task-ongoing" : "task-compete"}`} ></div>
-                <div className="d-inline-block task-timer">{this.formattedSeconds(this.state.runningTime)}</div>
+                <div className="d-inline-block task-timer">
+                  <Timer
+                    startOn={this.state.startOn}
+                    isStart={this.state.status}
+                  />
+                </div>
                 {this.state.icon === 'pause' ?
                   <div
                     style={{ pointerEvents: this.isToday ? "" : "none" }}

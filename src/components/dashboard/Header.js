@@ -65,7 +65,7 @@ class Header extends Component {
       }
     }
 
-    if (this.props.workspaceId !== prevProps.workspaceId) {
+    if (this.props.workspaceId !== prevProps.workspaceId && this.props.workspaceId !== undefined) {
       try {
         const { data } = await get(
           `workspaces/${this.props.workspaceId}/members/${this.state.userId}`

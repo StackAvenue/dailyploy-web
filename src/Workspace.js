@@ -12,6 +12,7 @@ import { get, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
+import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
 
 class Workspace extends Component {
   constructor(props) {
@@ -73,6 +74,7 @@ class Workspace extends Component {
       taskTitle: "",
       showPopup: false,
       runningTime: 0,
+      isStart: false,
     };
   }
 
@@ -110,24 +112,26 @@ class Workspace extends Component {
       taskId: taskId,
       colorCode: colorCode,
       taskTitle: taskTitle,
-      workspaceId: workspaceId
+      workspaceId: workspaceId,
+      isStart: this.isBottomPopup(),
     });
 
   }
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.startOn !== this.state.startOn) {
-      var startOn = localStorage.getItem('startOn')
-      var taskId = localStorage.getItem('taskId')
-      var colorCode = localStorage.getItem('colorCode')
-      var taskTitle = localStorage.getItem('taskTitle')
+      // var startOn = localStorage.getItem('startOn')
+      // var taskId = localStorage.getItem('taskId')
+      // var colorCode = localStorage.getItem('colorCode')
+      // var taskTitle = localStorage.getItem('taskTitle')
 
-      this.setState({
-        startOn: startOn,
-        taskId: taskId,
-        colorCode: colorCode,
-        taskTitle: taskTitle,
-      });
+      // this.setState({
+      //   startOn: startOn,
+      //   taskId: taskId,
+      //   colorCode: colorCode,
+      //   taskTitle: taskTitle,
+      //   isStart: this.isBottomPopup(),
+      // });
     }
   }
 
@@ -173,19 +177,34 @@ class Workspace extends Component {
       handleSearchFilterResult: this.handleSearchFilterResult,
       searchProjectIds: this.state.searchProjectIds,
       searchUserDetails: this.state.searchUserDetails,
+      handleTaskBottomPopup: this.handleTaskBottomPopup,
       handleLoading: this.handleLoad,
     };
     var newProps = { ...props, ...props1 };
     if (title !== "login" && title !== "signup" && title !== "landing") {
+      console.log("iff", title)
       return (
         <RouteComponent {...newProps} />
       )
     }
+    console.log("else")
     return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
   };
 
-  handleTaskBottomPopup = (startOn) => {
-    this.setState({ startOn: startOn })
+  handleTaskBottomPopup = startOn => {
+    // this.setState({ startOn: startOn })
+    var startOn = localStorage.getItem('startOn')
+    var taskId = localStorage.getItem('taskId')
+    var colorCode = localStorage.getItem('colorCode')
+    var taskTitle = localStorage.getItem('taskTitle')
+
+    this.setState({
+      startOn: startOn,
+      taskId: taskId,
+      colorCode: colorCode,
+      taskTitle: taskTitle,
+      isStart: this.isBottomPopup(),
+    });
   }
 
   handleReset = () => {
@@ -256,6 +275,16 @@ class Workspace extends Component {
           </div>
 
         </div>
+        {this.isBottomPopup() ?
+          <TaskBottomPopup
+            bgColor={this.state.colorCode}
+            taskTitle={this.state.taskTitle}
+            taskId={this.state.taskId}
+            startOn={this.state.startOn}
+            isStart={this.isBottomPopup()}
+          />
+          : null}
+
       </div>
     );
   }
