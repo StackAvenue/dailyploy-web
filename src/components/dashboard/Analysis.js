@@ -97,7 +97,7 @@ class Analysis extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "analysis") {
       return "analysisTrue";
     } else {

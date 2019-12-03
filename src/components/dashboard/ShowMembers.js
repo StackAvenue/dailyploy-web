@@ -165,7 +165,7 @@ class ShowMembers extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "members") {
       return "membersTrue";
     } else {
@@ -329,6 +329,22 @@ class ShowMembers extends Component {
     });
   };
 
+  // handleCheck = (e, project) => {
+  //   let checked = e.target.checked;
+  //   let arrProject = [];
+  //   if (checked) {
+  //     arrProject = [...this.state.selectMemberArr, ...[project]];
+  //   } else {
+  //     let filterProjectArr = this.state.selectMemberArr.filter(
+  //       item => item.id !== project.id
+  //     );
+  //     arrProject = filterProjectArr;
+  //   }
+  //   this.setState({ selectMemberArr: arrProject });
+  // };
+
+  // };
+
   handleCheck = (e, project) => {
     let checked = e.target.checked;
     let arrProject = [];
@@ -343,7 +359,7 @@ class ShowMembers extends Component {
     this.setState({ selectMemberArr: arrProject });
   };
 
-  deleteProject = (e, member) => {};
+  deleteProject = (e, member) => { };
 
   render() {
     var userRole = localStorage.getItem("userRole");
@@ -370,8 +386,8 @@ class ShowMembers extends Component {
               {this.state.isAllChecked ? (
                 <span>selected</span>
               ) : (
-                <span>Select All</span>
-              )}
+                  <span>Select All</span>
+                )}
             </label>
             {this.state.selectMemberArr.length > 0 ? (
               <>
@@ -445,29 +461,29 @@ class ShowMembers extends Component {
                         {this.countProject(member.projects)}
                       </span>
                       {this.state.isProjectListShow &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <div className="project-count-list-show">
-                          <div className="close-div">
-                            <a onClick={this.countProjectViewClose}>
-                              <i className="fa fa-times" aria-hidden="true"></i>
-                            </a>
+                        this.state.projectShowMemberId === member.id ? (
+                          <div className="project-count-list-show">
+                            <div className="close-div">
+                              <a onClick={this.countProjectViewClose}>
+                                <i className="fa fa-times" aria-hidden="true"></i>
+                              </a>
+                            </div>
+                            <div className="project-body-box">
+                              {member.projects.map(project => (
+                                <div className="project-body-text">
+                                  {project.name}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <div className="project-body-box">
-                            {member.projects.map(project => (
-                              <div className="project-body-text">
-                                {project.name}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
+                        ) : null}
                     </td>
                     <td className={"text-titlize"}>
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
-                        <p className="text-blue">Invited</p>
-                      )}
+                          <p className="text-blue">Invited</p>
+                        )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td className={userRole === "member" ? "d-none" : null}>
@@ -478,15 +494,15 @@ class ShowMembers extends Component {
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       {this.state.show &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <EditMemberModal
-                          show={this.state.show}
-                          handleClose={this.handleClose}
-                          state={this.state}
-                          editMemberHandleChange={this.editMemberHandleChange}
-                          editMember={this.editMember}
-                        />
-                      ) : null}
+                        this.state.projectShowMemberId === member.id ? (
+                          <EditMemberModal
+                            show={this.state.show}
+                            handleClose={this.handleClose}
+                            state={this.state}
+                            editMemberHandleChange={this.editMemberHandleChange}
+                            editMember={this.editMember}
+                          />
+                        ) : null}
                     </td>
                   </tr>
                 );

@@ -1,18 +1,63 @@
 import React, { Component } from "react";
-import { withRouter, Redirect } from "react-router-dom";
+import { Route, withRouter, Switch, Redirect } from "react-router-dom";
+import Dashboard from "./containers/Dashboard";
+import NotFound from "./components/NoMatch";
+import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
-import { ToastContainer } from "react-toastify";
-import Sidebar from "./components/dashboard/Sidebar";
+import Analysis from "./components/dashboard/Analysis";
+import Reports from "./components/dashboard/Reports";
+import ShowProjects from "./components/dashboard/ShowProjects";
+import ShowMembers from "./components/dashboard/ShowMembers";
 import { get, logout } from "./utils/API";
+import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
-import { WORKSPACE_ID } from "./utils/Constants";
-import "./assets/css/loading.scss";
-import TaskBottomPopup from "./../src/components/dashboard/TaskBottomPopup";
-import { pipelineTopicExpression } from "@babel/types";
+import { ToastContainer } from "react-toastify";
 
-class LoggedInLayout extends Component {
+class Workspace extends Component {
   constructor(props) {
     super(props);
+    this.Routes = [
+      {
+        path: "/dashboard",
+        exact: false,
+        component: Dashboard,
+        title: "dashboard",
+      },
+      {
+        path: "/settings",
+        exact: true,
+        component: Settings,
+        title: "settings",
+      },
+      {
+        path: "/analysis",
+        exact: true,
+        component: Analysis,
+        title: "analysis",
+      },
+      {
+        path: "/projects",
+        exact: true,
+        component: ShowProjects,
+        title: "showProjects",
+      },
+      {
+        path: "/members",
+        exact: true,
+        component: ShowMembers,
+        title: "showMembers",
+      },
+      {
+        path: "/reports",
+        exact: true,
+        component: Reports,
+        title: "reports",
+      },
+      {
+        component: NotFound,
+        title: "pageNotFound",
+      },
+    ];
     this.state = {
       workspaceId: null,
       workspaces: [],
@@ -41,7 +86,8 @@ class LoggedInLayout extends Component {
       console.log("err", e);
     }
 
-    this.getWorkspaceParams();
+    var workspaceId = this.props.match.params.workspaceId;
+
     // workspace Listing
     try {
       const { data } = await get("workspaces");
@@ -64,6 +110,7 @@ class LoggedInLayout extends Component {
       taskId: taskId,
       colorCode: colorCode,
       taskTitle: taskTitle,
+      workspaceId: workspaceId
     });
 
   }
@@ -84,31 +131,9 @@ class LoggedInLayout extends Component {
     }
   }
 
-  getWorkspaceParams = () => {
-    const { workspaceId } = this.props.match.params;
-    this.setState({ workspaceId: workspaceId });
-  };
-
   logout = async () => {
     await logout();
     this.props.history.push("/login");
-  };
-
-  mainComponent = () => {
-    const { props, RouteComponent, title } = this.props;
-    var props1 = {
-      setSearchOptions: this.setSearchOptions,
-      handleSearchFilterResult: this.handleSearchFilterResult,
-      searchProjectIds: this.state.searchProjectIds,
-      searchUserDetails: this.state.searchUserDetails,
-      handleLoading: this.handleLoad,
-      handleTaskBottomPopup: this.handleTaskBottomPopup,
-    };
-    var newProps = { ...props, ...props1 };
-    if (title !== "login" && title !== "signup" && title !== "landing") {
-      return <RouteComponent {...newProps} />;
-    }
-    return <Redirect to={`/dashboard/${WORKSPACE_ID}`} />;
   };
 
   handleSearchFilterResult = data => {
@@ -138,8 +163,25 @@ class LoggedInLayout extends Component {
   };
 
   classNameRoute = () => {
-    let route = this.props.history.location.pathname;
-    return route.split("/")[1];
+    let route = this.props.props.history.location.pathname;
+    return route.split("/")[3];
+  };
+
+  isAllowed = (props, RouteComponent, title) => {
+    var props1 = {
+      setSearchOptions: this.setSearchOptions,
+      handleSearchFilterResult: this.handleSearchFilterResult,
+      searchProjectIds: this.state.searchProjectIds,
+      searchUserDetails: this.state.searchUserDetails,
+      handleLoading: this.handleLoad,
+    };
+    var newProps = { ...props, ...props1 };
+    if (title !== "login" && title !== "signup" && title !== "landing") {
+      return (
+        <RouteComponent {...newProps} />
+      )
+    }
+    return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
   };
 
   handleTaskBottomPopup = (startOn) => {
@@ -177,10 +219,7 @@ class LoggedInLayout extends Component {
 
   render() {
     return (
-      <>
-        {this.state.isLoading ? (
-          <div className="loading">Loading&#8230;</div>
-        ) : null}
+      <div>
 
         <ToastContainer />
         <div className="row no-margin">
@@ -188,7 +227,6 @@ class LoggedInLayout extends Component {
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
           />
-
           <div className="dashboard-main no-padding">
             <Header
               logout={this.logout}
@@ -199,22 +237,28 @@ class LoggedInLayout extends Component {
               pathname={this.classNameRoute()}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
-
-            {this.mainComponent()}
-            {console.log(this.isBottomPopup())}
-            {this.state.taskTitle && this.state.startOn && this.state.taskId && this.state.colorCode ?
-              <TaskBottomPopup
-                bgColor={this.state.colorCode}
-                taskTitle={this.state.taskTitle}
-                taskId={this.state.taskId}
-                startOn={this.state.startOn}
-              />
-              : null}
+            {this.state.isLoading ? (
+              <div className="loader"></div>
+            ) : null}
+            <Switch>
+              {this.Routes.map((route, i) => (
+                <Route
+                  key={i}
+                  exact={route.exact}
+                  path={this.props.props.match.path + route.path}
+                  render={props =>
+                    this.isAllowed(props, route.component, route.title)
+                  }
+                />
+              ))}
+              <Route />
+            </Switch>
           </div>
+
         </div>
-      </>
+      </div>
     );
   }
 }
 
-export default withRouter(LoggedInLayout);
+export default withRouter(Workspace);
