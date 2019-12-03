@@ -29,7 +29,7 @@ class AddMemberModal extends Component {
     super(props);
     this.hours = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
     this.state = {
-      value: [],
+      value: []
     };
   }
 
@@ -42,7 +42,8 @@ class AddMemberModal extends Component {
               return (
                 <li
                   key={idx}
-                  onClick={() => this.props.selectAutoSuggestion(option)}>
+                  onClick={() => this.props.selectAutoSuggestion(option)}
+                >
                   {option}
                 </li>
               );
@@ -65,13 +66,15 @@ class AddMemberModal extends Component {
           dialogClassName="modal-90w member-modal"
           aria-labelledby="example-custom-modal-styling-title"
           show={this.props.state.memberShow}
-          onHide={this.props.handleClose}>
+          onHide={this.props.handleClose}
+        >
           <div className="row no-margin">
             <div className="col-md-12 header">
               <span>Add New Member</span>
               <button
                 className="btn btn-link float-right"
-                onClick={this.props.handleClose}>
+                onClick={this.props.handleClose}
+              >
                 <img src={Close} alt="close" />
               </button>
             </div>
@@ -115,10 +118,11 @@ class AddMemberModal extends Component {
                       className="form-control role"
                       name="memberRole"
                       value={this.props.state.memberRole}
-                      onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select Role</option>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
+                      <option value="">Select</option>
                       <option value="1">Admin</option>
-                      <option value="2">Member</option>
+                      <option value="2">User</option>
                     </select>
                   </td>
                   <td>
@@ -126,8 +130,9 @@ class AddMemberModal extends Component {
                       className="form-control role"
                       name="memberWorkingHours"
                       value={this.props.state.memberWorkingHours}
-                      onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select Hours</option>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
+                      <option value="">Select</option>
                       {this.hours.map((hour, index) => (
                         <option key={index} value={hour}>
                           {hour}
@@ -149,7 +154,7 @@ class AddMemberModal extends Component {
                       ))}
                     </select> */}
                     <Select
-                      placeholder=""
+                      placeholder="Select"
                       color="#0074D9"
                       searchBy="name"
                       dropdownHandle={true}
@@ -163,7 +168,6 @@ class AddMemberModal extends Component {
                       noDataLabel="No matches found"
                       closeOnSelect={true}
                       name="memberProject"
-                      separator={true}
                       dropdownHeight="100px"
                     />
                     {/* <SelectSearch
@@ -195,13 +199,15 @@ class AddMemberModal extends Component {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
-                  onClick={this.props.addMember}>
+                  onClick={this.props.addMember}
+                >
                   Add
                 </button>
                 <button
                   type="button"
                   className="btn col-md-6 button2 btn-primary"
-                  onClick={this.props.handleClose}>
+                  onClick={this.props.handleClose}
+                >
                   Cancel
                 </button>
               </div>
