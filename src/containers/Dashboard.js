@@ -353,7 +353,7 @@ class Dashboard extends Component {
   auth = () => {
     const token = cookie.load("authToken");
     if (token !== "undefined") {
-      return this.props.history.push(`/dashboard/${this.state.workspaceId}`);
+      return this.props.history.push(`/workspace/${this.state.workspaceId}/dashboard`);
     } else {
       return this.props.history.push("/login");
     }
@@ -538,7 +538,7 @@ class Dashboard extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "dashboard") {
       return "dashboardTrue";
     } else {

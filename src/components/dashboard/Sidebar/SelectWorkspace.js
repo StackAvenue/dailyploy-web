@@ -5,7 +5,7 @@ const SelectWorkspace = props => {
     return (
       <li key={props.index}>
         <div className="workspace-box text-titlize active">
-          <a className="btn btn-default" href={`/dashboard/${props.item.id}`}>
+          <a className="btn btn-default" href={`/workspace/${props.item.id}/dashboard`}>
             {props.nameFirstLetters(props.item.name)}
             {}
           </a>
@@ -19,7 +19,7 @@ const SelectWorkspace = props => {
     return (
       <li key={props.index}>
         <div className="workspace-box text-titlize">
-          <a className="btn btn-default" href={`/dashboard/${props.item.id}`}>
+          <a className="btn btn-default" href={`/workspace/${props.item.id}/dashboard`}>
             {props.nameFirstLetters(props.item.name)}
             {}
           </a>

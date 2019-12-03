@@ -73,7 +73,6 @@ class Reports extends Component {
   displayMessage = () => {
     var role = this.state.userRole;
     var frequency = this.textTitlize(this.returnFrequency());
-    console.log("this.props.searchUserDetails", this.props.searchUserDetails === [])
     if (
       role == "admin" &&
       this.props.searchProjectIds.length !== 0 &&
@@ -457,7 +456,7 @@ class Reports extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "reports") {
       return "reportsTrue";
     } else {

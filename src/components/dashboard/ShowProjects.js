@@ -158,7 +158,7 @@ class ShowProjects extends Component {
         );
         var projectsData = data.projects;
         this.props.handleLoading(false);
-      } catch (e) {}
+      } catch (e) { }
 
       this.setState({
         projects: projectsData,
@@ -234,7 +234,7 @@ class ShowProjects extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "projects") {
       return "projectsTrue";
     } else {
@@ -600,32 +600,32 @@ class ShowProjects extends Component {
                                 <i className="fas fa-pencil-alt"></i>
                               </button>
                               {this.state.show &&
-                              this.state.projectId === project.id ? (
-                                <AddProjectModal
-                                  state={this.state}
-                                  handleClose={this.handleEditClose}
-                                  btnText={"Save"}
-                                  headText={project.name}
-                                  ownerClassName={""}
-                                  handleChangeInput={this.handleChangeInput}
-                                  handleDateFrom={this.handleDateFrom}
-                                  handleDateTo={this.handleDateTo}
-                                  handleUndefinedToDate={
-                                    this.handleUndefinedToDate
-                                  }
-                                  workspaceId={this.state.workspaceId}
-                                  handleChangeColor={this.handleChangeColor}
-                                  handleChangeComplete={
-                                    this.handleChangeComplete
-                                  }
-                                  colors={this.colors}
-                                  handleChangeMember={this.handleChangeMember}
-                                  emailOptions={
-                                    this.state.isLogedInUserEmailArr
-                                  }
-                                  addProject={this.editProject}
-                                />
-                              ) : null}
+                                this.state.projectId === project.id ? (
+                                  <AddProjectModal
+                                    state={this.state}
+                                    handleClose={this.handleEditClose}
+                                    btnText={"Save"}
+                                    headText={project.name}
+                                    ownerClassName={""}
+                                    handleChangeInput={this.handleChangeInput}
+                                    handleDateFrom={this.handleDateFrom}
+                                    handleDateTo={this.handleDateTo}
+                                    handleUndefinedToDate={
+                                      this.handleUndefinedToDate
+                                    }
+                                    workspaceId={this.state.workspaceId}
+                                    handleChangeColor={this.handleChangeColor}
+                                    handleChangeComplete={
+                                      this.handleChangeComplete
+                                    }
+                                    colors={this.colors}
+                                    handleChangeMember={this.handleChangeMember}
+                                    emailOptions={
+                                      this.state.isLogedInUserEmailArr
+                                    }
+                                    addProject={this.editProject}
+                                  />
+                                ) : null}
                             </td>
                           </tr>
                         );

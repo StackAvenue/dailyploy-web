@@ -73,7 +73,7 @@ export default class MenuBar extends Component {
     try {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   addProject = async () => {
@@ -272,7 +272,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => {};
+  handleProjectByUser = () => { };
 
   render() {
     this.handleProjectByUser();

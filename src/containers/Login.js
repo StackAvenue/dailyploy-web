@@ -57,7 +57,7 @@ class Signin extends Component {
           const { data } = await get("workspaces");
           console.log("data workspacesss", data);
           cookie.save("workspaceId", data.workspaces[0].id, { path: "/" });
-          this.props.history.push(`/dashboard/${data.workspaces[0].id}`);
+          this.props.history.push(`/workspace/${data.workspaces[0].id}/dashboard`);
         } catch (e) {
           console.log("error", e);
         }

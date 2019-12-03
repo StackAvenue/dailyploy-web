@@ -163,7 +163,7 @@ class ShowMembers extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "members") {
       return "membersTrue";
     } else {
@@ -392,29 +392,29 @@ class ShowMembers extends Component {
                         {this.countProject(member.projects)}
                       </span>
                       {this.state.isProjectListShow &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <div className="project-count-list-show">
-                          <div className="close-div">
-                            <a onClick={this.countProjectViewClose}>
-                              <i className="fa fa-times" aria-hidden="true"></i>
-                            </a>
+                        this.state.projectShowMemberId === member.id ? (
+                          <div className="project-count-list-show">
+                            <div className="close-div">
+                              <a onClick={this.countProjectViewClose}>
+                                <i className="fa fa-times" aria-hidden="true"></i>
+                              </a>
+                            </div>
+                            <div className="project-body-box">
+                              {member.projects.map(project => (
+                                <div className="project-body-text">
+                                  {project.name}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <div className="project-body-box">
-                            {member.projects.map(project => (
-                              <div className="project-body-text">
-                                {project.name}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
+                        ) : null}
                     </td>
                     <td className={"text-titlize"}>
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
-                        <p className="text-blue">Invited</p>
-                      )}
+                          <p className="text-blue">Invited</p>
+                        )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td className={userRole === "member" ? "d-none" : null}>
@@ -424,15 +424,15 @@ class ShowMembers extends Component {
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       {this.state.show &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <EditMemberModal
-                          show={this.state.show}
-                          handleClose={this.handleClose}
-                          state={this.state}
-                          editMemberHandleChange={this.editMemberHandleChange}
-                          editMember={this.editMember}
-                        />
-                      ) : null}
+                        this.state.projectShowMemberId === member.id ? (
+                          <EditMemberModal
+                            show={this.state.show}
+                            handleClose={this.handleClose}
+                            state={this.state}
+                            editMemberHandleChange={this.editMemberHandleChange}
+                            editMember={this.editMember}
+                          />
+                        ) : null}
                     </td>
                   </tr>
                 );

@@ -133,9 +133,6 @@ class Calendar extends Component {
 
   async componentDidMount() {
     this.renderData();
-    let date = document.querySelector(".header3-text");
-
-    console.log("data", date);
   }
 
   async componentDidUpdate(prevProps, prevState) {
