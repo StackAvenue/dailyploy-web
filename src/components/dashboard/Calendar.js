@@ -71,7 +71,8 @@ class Calendar extends Component {
         taskName: "Task Name",
         agendaViewHeader: "Agenda",
         nonAgendaDayCellHeaderFormat: "ha",
-        nonAgendaOtherCellHeaderFormat: "ddd DD MMM",
+        nonAgendaMonthCellHeaderFormat: "ddd DD MMM",
+        nonAgendaOtherCellHeaderFormat: "DD MMM",
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
         // calenderViewType: "dropdown",
@@ -81,22 +82,22 @@ class Calendar extends Component {
             viewName: "Day",
             viewType: ViewTypes.Day,
             showAgenda: false,
-            isEventPerspective: false,
+            isEventPerspective: false
           },
           {
             viewName: "Week",
             viewType: ViewTypes.Week,
             showAgenda: false,
-            isEventPerspective: false,
+            isEventPerspective: false
           },
           {
             viewName: "Month",
             viewType: ViewTypes.Month,
             showAgenda: false,
-            isEventPerspective: false,
-          },
-        ],
-      },
+            isEventPerspective: false
+          }
+        ]
+      }
     );
 
     this.state = {
@@ -106,7 +107,7 @@ class Calendar extends Component {
       eventsForCustomStyle: [],
       eventsForTaskView: [],
       show: false,
-      setShow: false,
+      setShow: false
     };
   }
 
@@ -154,7 +155,7 @@ class Calendar extends Component {
     schedulerData,
     item,
     formattedDateItems,
-    style,
+    style
   ) => {
     let datetime = schedulerData.localeMoment(item.time);
     let isCurrentDate = false;
@@ -175,7 +176,7 @@ class Calendar extends Component {
           <div
             key={index}
             dangerouslySetInnerHTML={{
-              __html: formattedItem.replace(/[0-9]/g, "<b>$&</b>"),
+              __html: formattedItem.replace(/[0-9]/g, "<b>$&</b>")
             }}
           />
         ))}
@@ -230,7 +231,7 @@ class Calendar extends Component {
     title,
     start,
     end,
-    statusColor,
+    statusColor
   ) => {
     let totalSeconds = end.diff(start, "seconds");
     totalSeconds = Number(totalSeconds);
@@ -249,7 +250,8 @@ class Calendar extends Component {
         <div className="project">
           <div
             className="status-dot d-inline-block"
-            style={{ backgroundColor: `${eventItem.bgColor}` }}></div>
+            style={{ backgroundColor: `${eventItem.bgColor}` }}
+          ></div>
           <div className="d-inline-block">{eventItem.projectName}</div>
         </div>
         <div className="time">
@@ -266,11 +268,11 @@ class Calendar extends Component {
     schedulerData.prev();
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
-      schedulerData.startDate,
+      schedulerData.startDate
     );
   };
 
@@ -278,11 +280,11 @@ class Calendar extends Component {
     schedulerData.next();
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
-      schedulerData.startDate,
+      schedulerData.startDate
     );
   };
 
@@ -291,15 +293,15 @@ class Calendar extends Component {
     schedulerData.setViewType(
       view.viewType,
       view.showAgenda,
-      view.isEventPerspective,
+      view.isEventPerspective
     );
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
-      schedulerData.startDate,
+      schedulerData.startDate
     );
   };
 
@@ -307,11 +309,11 @@ class Calendar extends Component {
     schedulerData.setDate(date);
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
-      schedulerData.startDate,
+      schedulerData.startDate
     );
   };
 
@@ -322,13 +324,13 @@ class Calendar extends Component {
 
   ops1 = (schedulerData, event) => {
     alert(
-      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`,
+      `You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`
     );
   };
 
   ops2 = (schedulerData, event) => {
     alert(
-      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`,
+      `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`
     );
   };
 
@@ -339,26 +341,26 @@ class Calendar extends Component {
   updateEventStart = (schedulerData, event, newStart) => {
     if (
       window.confirm(
-        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`,
+        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
       )
     ) {
       schedulerData.updateEventStart(event, newStart);
     }
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
   };
 
   updateEventEnd = (schedulerData, event, newEnd) => {
     if (
       window.confirm(
-        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`,
+        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
       )
     ) {
       schedulerData.updateEventEnd(event, newEnd);
     }
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
   };
 
@@ -366,7 +368,7 @@ class Calendar extends Component {
     console.log(schedulerData, event, slotId, slotName, start, end);
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
   };
 
@@ -375,7 +377,7 @@ class Calendar extends Component {
       schedulerData.next();
       schedulerData.setEvents(this.state.events);
       this.setState({
-        viewModel: schedulerData,
+        viewModel: schedulerData
       });
 
       schedulerContent.scrollLeft = maxScrollLeft - 10;
@@ -387,7 +389,7 @@ class Calendar extends Component {
       schedulerData.prev();
       schedulerData.setEvents(this.state.events);
       this.setState({
-        viewModel: schedulerData,
+        viewModel: schedulerData
       });
 
       schedulerContent.scrollLeft = 10;
@@ -410,12 +412,12 @@ class Calendar extends Component {
     isEnd,
     mustAddCssClass,
     mustBeHeight,
-    agendaMaxEventWidth,
+    agendaMaxEventWidth
   ) => {
     let backgroundColor = bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
-      event,
+      event
     );
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start).format("HH:mm");
@@ -423,7 +425,7 @@ class Calendar extends Component {
     let divStyle = {
       borderRadius: "2px",
       backgroundColor: backgroundColor,
-      height: mustBeHeight,
+      height: mustBeHeight
     };
     if (!!agendaMaxEventWidth)
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
@@ -434,7 +436,8 @@ class Calendar extends Component {
           <div className="row item">
             <div
               className="col-md-12 item-heading text-wraper rk"
-              style={{ padding: "7px 7px 0px 7px" }}>
+              style={{ padding: "7px 7px 0px 7px" }}
+            >
               {titleText}
             </div>
             <div className="col-md-12 no-padding">
@@ -451,7 +454,8 @@ class Calendar extends Component {
           <div className="row item">
             <div
               className="col-md-12 item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}>
+              style={{ padding: "5px 5px 0px 5px" }}
+            >
               {titleText}
             </div>
             <div className="col-md-12 no-padding">
@@ -471,7 +475,8 @@ class Calendar extends Component {
           <div className="row item">
             <div
               className="col-md-12 item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}>
+              style={{ padding: "5px 5px 0px 5px" }}
+            >
               {titleText}
             </div>
           </div>
@@ -492,7 +497,7 @@ class Calendar extends Component {
   toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId);
     this.setState({
-      viewModel: schedulerData,
+      viewModel: schedulerData
     });
   };
 }

@@ -23,7 +23,7 @@ class ShowProjects extends Component {
       "#ffc6ac",
       "#ffa2a2",
       "#e9ff71",
-      "#d7a0ff",
+      "#d7a0ff"
     ];
     this.state = {
       workspaces: [],
@@ -48,7 +48,8 @@ class ShowProjects extends Component {
       displayColorPicker: false,
       selectedTags: [],
       worksapceUsers: [],
-      projectsLength: null,
+      selectProjectArr: [],
+      isAllChecked: false
     };
   }
 
@@ -100,10 +101,10 @@ class ShowProjects extends Component {
           : [];
       var searchData = {
         user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds)
       };
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`,
+        `workspaces/${this.state.workspaceId}/projects`
       );
       var projectsData = data.projects;
       this.props.handleLoading(false);
@@ -114,12 +115,12 @@ class ShowProjects extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`,
+        `workspaces/${this.state.workspaceId}/members`
       );
       var worksapceUsers = data.members;
       var userArr = data.members.map(user => user.email);
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email,
+        user => user.email !== loggedInData.email
       );
       // .map(user => user.email);
     } catch (e) {
@@ -134,7 +135,7 @@ class ShowProjects extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
-      worksapceUsers: worksapceUsers,
+      worksapceUsers: worksapceUsers
     });
     this.createUserProjectList();
   }
@@ -151,17 +152,17 @@ class ShowProjects extends Component {
             : [];
         var searchData = {
           user_ids: JSON.stringify(userIds),
-          project_ids: JSON.stringify(this.props.searchProjectIds),
+          project_ids: JSON.stringify(this.props.searchProjectIds)
         };
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/projects`,
+          `workspaces/${this.state.workspaceId}/projects`
         );
         var projectsData = data.projects;
         this.props.handleLoading(false);
       } catch (e) { }
 
       this.setState({
-        projects: projectsData,
+        projects: projectsData
       });
     }
   }
@@ -174,7 +175,7 @@ class ShowProjects extends Component {
           value: project.name,
           project_id: project.id,
           type: "project",
-          id: (index += 1),
+          id: (index += 1)
         });
       });
     }
@@ -188,7 +189,7 @@ class ShowProjects extends Component {
           member_id: member.id,
           email: member.email,
           type: "member",
-          role: member.role,
+          role: member.role
         });
       });
     }
@@ -202,7 +203,6 @@ class ShowProjects extends Component {
   };
 
   onSelectSort = value => {
-    console.log("selected value ", value);
     this.setState({ sort: value });
   };
 
@@ -242,37 +242,11 @@ class ShowProjects extends Component {
     }
   };
 
-  checkAll = e => {
-    const allCheckboxChecked = e.target.checked;
-    var checkboxes = document.getElementsByName("isChecked");
-    console.log("checkboxes", checkboxes);
-
-    if (allCheckboxChecked) {
-      for (let i in checkboxes) {
-        if (checkboxes[i].checked === false) {
-          checkboxes[i].checked = true;
-        }
-      }
-    } else {
-      for (let i in checkboxes) {
-        if (checkboxes[i].checked === true) {
-          checkboxes[i].checked = false;
-        }
-      }
-    }
-  };
-
-  handleCheck = e => {
-    const value = e.target.checked;
-    console.log("value", value);
-  };
-
   handleLoad = value => {
     this.setState({ isLoading: value });
   };
 
   handleEditShow = (e, project) => {
-    console.log("Project", project);
     this.setState({
       show: true,
       setShow: true,
@@ -283,13 +257,13 @@ class ShowProjects extends Component {
       dateTo: new Date(project.end_date),
       background: project.color_code,
       selectedTags: project.members,
-      projectMembers: project.members.map(project => project.id),
+      projectMembers: project.members.map(project => project.id)
     });
   };
 
   handleEditClose = () => {
     this.setState({
-      show: false,
+      show: false
     });
   };
 
@@ -315,14 +289,14 @@ class ShowProjects extends Component {
     this.setState({
       disabledDateTo: !this.state.disabledDateTo,
       disableColor: disableColor,
-      dateTo: null,
+      dateTo: null
     });
   };
 
   handleChangeComplete = (color, event) => {
     this.setState({
       background: color.hex,
-      displayColorPicker: !this.state.displayColorPicker,
+      displayColorPicker: !this.state.displayColorPicker
     });
   };
 
@@ -347,13 +321,13 @@ class ShowProjects extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         members: this.state.projectMembers,
-        color_code: this.state.background,
-      },
+        color_code: this.state.background
+      }
     };
     try {
       const { data } = await put(
         projectData,
-        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}`,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}`
       );
       this.setState({ show: false });
       this.manageProjectListing(data.project);
@@ -363,7 +337,7 @@ class ShowProjects extends Component {
           message="Project added successfully!"
           status="success"
         />,
-        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
     } catch (e) {
       console.log("Error", e);
@@ -374,7 +348,7 @@ class ShowProjects extends Component {
             message={`Project Name ${errors.project_name_workspace_uniqueness}`}
             status="error"
           />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       } else if (errors && errors.name) {
         toast(
@@ -382,7 +356,7 @@ class ShowProjects extends Component {
             message={`Project name ${errors.name}`}
             status="error"
           />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       } else {
         this.setState({ show: false });
@@ -393,10 +367,13 @@ class ShowProjects extends Component {
   handleCheckAll = (e, projects) => {
     const allCheckboxChecked = e.target.checked;
     let projectsLength = projects.length;
-    console.log("projects", projectsLength, allCheckboxChecked);
+    var arrProject;
+    if (allCheckboxChecked === true) {
+      arrProject = projects;
+    } else {
+      arrProject = [];
+    }
     var checkboxes = document.getElementsByName("isChecked");
-    console.log("checkboxes", checkboxes);
-
     if (allCheckboxChecked) {
       for (let i in checkboxes) {
         if (checkboxes[i].checked === false) {
@@ -410,12 +387,27 @@ class ShowProjects extends Component {
         }
       }
     }
+    this.setState({
+      selectProjectArr: arrProject,
+      isAllChecked: allCheckboxChecked
+    });
   };
 
   handleCheck = (e, project) => {
     let checked = e.target.checked;
-    console.log("Project", project, checked);
+    let arrProject = [];
+    if (checked) {
+      arrProject = [...this.state.selectProjectArr, ...[project]];
+    } else {
+      let filterProjectArr = this.state.selectProjectArr.filter(
+        item => item.id !== project.id
+      );
+      arrProject = filterProjectArr;
+    }
+    this.setState({ selectProjectArr: arrProject });
   };
+
+  deleteProject = (e, project) => {};
 
   render() {
     var userRole = localStorage.getItem("userRole");
@@ -432,10 +424,8 @@ class ShowProjects extends Component {
         <div className="show-projects">
           <div className="views">
             <Tabs>
-              <div className="col-md-12">
-                <div
-                  className="d-inline-block"
-                  style={{ position: "relative", left: "43px" }}>
+              <div className="row no-margin">
+                <div className="col-md-6 select">
                   <input
                     className="styled-checkbox"
                     id={`styled-checkbox`}
@@ -443,16 +433,33 @@ class ShowProjects extends Component {
                     name="chk[]"
                     onChange={e => this.handleCheckAll(e, this.state.projects)}
                   />
-                  <label htmlFor={`styled-checkbox`}>Select All</label>
-                  {/* <div className="col-md-2 d-inline-block">
-                    <button className="btn btn-primary menubar-button">
-                      Delete
-                    </button>
-                  </div> */}
+                  <label htmlFor={`styled-checkbox`}>
+                    {this.state.isAllChecked ? (
+                      <span>selected</span>
+                    ) : (
+                      <span>Select All</span>
+                    )}
+                  </label>
+                  {this.state.selectProjectArr.length > 0 ? (
+                    <>
+                      <div className="d-inline-block">
+                        <button
+                          className="btn btn-primary delete-button"
+                          onClick={e =>
+                            this.deleteProject(e, this.state.selectProjectArr)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <div className="d-inline-block select-project-text">
+                        {this.state.selectProjectArr.length +
+                          " Project Selected"}
+                      </div>
+                    </>
+                  ) : null}
                 </div>
-                <div
-                  className="col-md-2 offset-5 d-inline-block"
-                  style={{ position: "relative" }}>
+                <div className="col-md-6 tab">
                   <TabList>
                     <Tab>
                       <i className="fas fa-th"></i>
@@ -477,6 +484,7 @@ class ShowProjects extends Component {
                             monthDiff={this.monthDiff}
                             getDate={this.getDate}
                             countIncrese={this.countIncrese}
+                            handleCheck={this.handleCheck}
                           />
                         );
                       })}
@@ -538,7 +546,8 @@ class ShowProjects extends Component {
                                 onChange={e => this.handleCheck(e, project)}
                               />
                               <label
-                                htmlFor={`styled-checkbox-${index}`}></label>
+                                htmlFor={`styled-checkbox-${index}`}
+                              ></label>
                               {`${"P-00"}${index + 1}`}
                             </td>
                             <td>{project.name}</td>
@@ -546,8 +555,9 @@ class ShowProjects extends Component {
                               <div
                                 className="color-block"
                                 style={{
-                                  backgroundColor: `${project.color_code}`,
-                                }}></div>
+                                  backgroundColor: `${project.color_code}`
+                                }}
+                              ></div>
                             </td>
                             <td>{project.owner ? project.owner.name : ""}</td>
                             <td>
@@ -561,7 +571,7 @@ class ShowProjects extends Component {
                             <td>
                               {this.monthDiff(
                                 this.getDate(project.start_date),
-                                this.getDate(project.end_date),
+                                this.getDate(project.end_date)
                               )}
                             </td>
                             <td>
@@ -586,17 +596,19 @@ class ShowProjects extends Component {
                               </span>
                               <span>
                                 {this.countIncrese(
-                                  project.members.map(user => user.name),
+                                  project.members.map(user => user.name)
                                 )}
                               </span>
                             </td>
                             <td
                               className={
                                 userRole === "member" ? "d-none" : null
-                              }>
+                              }
+                            >
                               <button
                                 className="btn btn-link edit-btn"
-                                onClick={e => this.handleEditShow(e, project)}>
+                                onClick={e => this.handleEditShow(e, project)}
+                              >
                                 <i className="fas fa-pencil-alt"></i>
                               </button>
                               {this.state.show &&
