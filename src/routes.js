@@ -11,7 +11,7 @@ import Analysis from "./components/dashboard/Analysis";
 import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
-import WorkspaceSettings from "./components/dashboard/WorkspaceSettings";
+// import WorkspaceSettings from "./components/dashboard/WorkspaceSettings";
 import { WORKSPACE_ID } from "./utils/Constants";
 import LoggedInLayout from "./LoggedInLayout";
 
@@ -23,66 +23,66 @@ class Routes extends Component {
         path: "/",
         exact: true,
         component: Landing,
-        title: "landing",
+        title: "landing"
       },
       {
         path: "/login",
         exact: true,
         component: Login,
-        title: "login",
+        title: "login"
       },
       {
         path: "/dashboard/:workspaceId",
         exact: false,
         component: Dashboard,
-        title: "dashboard",
+        title: "dashboard"
       },
       {
         path: "/signup/:tokenId?",
         exact: false,
         component: SignUp,
-        title: "signup",
+        title: "signup"
       },
       {
         path: "/settings/:workspaceId",
         exact: true,
         component: Settings,
-        title: "settings",
+        title: "settings"
       },
       {
         path: "/analysis/:workspaceId",
         exact: true,
         component: Analysis,
-        title: "analysis",
+        title: "analysis"
       },
       {
         path: "/projects/:workspaceId",
         exact: true,
         component: ShowProjects,
-        title: "showProjects",
+        title: "showProjects"
       },
       {
         path: "/members/:workspaceId",
         exact: true,
         component: ShowMembers,
-        title: "showMembers",
+        title: "showMembers"
       },
-      {
-        path: "/workspace/:workspaceId/settings",
-        exact: true,
-        component: WorkspaceSettings,
-        title: "workspaceSettings",
-      },
+      // {
+      //   path: "/workspace/:workspaceId/settings",
+      //   exact: true,
+      //   component: WorkspaceSettings,
+      //   title: "workspaceSettings",
+      // },
       {
         path: "/reports/:workspaceId",
         exact: true,
         component: Reports,
-        title: "reports",
+        title: "reports"
       },
       {
         component: NotFound,
-        title: "pageNotFound",
-      },
+        title: "pageNotFound"
+      }
     ];
   }
 

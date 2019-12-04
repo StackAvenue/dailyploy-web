@@ -39,6 +39,10 @@ class WorkspaceSettings extends Component {
     }
   }
 
+  handleChangeAdminUsers = arr => {
+    this.setState({ adminUserArr: arr });
+  };
+
   worskpaceNameHandler = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -78,6 +82,7 @@ class WorkspaceSettings extends Component {
               state={this.state}
               updateWorkspaceName={this.updateWorkspaceName}
               adminUserArr={this.props.state.adminUserArr}
+              handleChangeAdminUsers={this.handleChangeAdminUsers}
             />
           </TabPanel>
           <TabPanel>

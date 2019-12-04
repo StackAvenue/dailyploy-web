@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import EmailConfigurationModal from "../WorkspaceSettings/EmailConfigurationModal";
-import DeleteWorkspaceModal from "../WorkspaceSettings/DeleteWorkspaceModal";
+import EmailConfigurationModal from "./EmailConfigurationModal";
+import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
 import AddAdminModal from "./AddAdminModal";
 import { firstTwoLetter } from "../../../utils/function";
 import { post } from "../../../utils/API";
@@ -38,7 +38,8 @@ class GeneralSettings extends Component {
       bccSearchText: "",
       bccEmailSuggestions: [],
       selectBccMembers: [],
-      emailText: ""
+      emailText: "",
+      addAdminData: null
     };
   }
 
@@ -51,7 +52,10 @@ class GeneralSettings extends Component {
         user => user.email === this.state.addAdminEmail
       );
       let addAdminId = selectedUser[0] ? selectedUser[0].id : null;
-      this.setState({ addAdminId: addAdminId });
+      this.setState({
+        addAdminId: addAdminId,
+        allUserArr: this.props.state.adminUserArr
+      });
     }
   };
 
@@ -451,41 +455,54 @@ class GeneralSettings extends Component {
     );
   };
 
-  addAdmin = () => {
+  addAdmin = async () => {
     const addAdminData = {
       user_id: this.state.addAdminId
     };
     try {
-      const { data } = post(
+      const { data } = await post(
         addAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
       );
-
+      console.log("data", data);
+      let filterData = this.props.state.userArr.members.filter(
+        user => user.id === this.state.addAdminId
+      );
+      let addData = [...this.props.state.adminUserArr, ...filterData];
+      this.props.handleChangeAdminUsers(addData);
       toast(
         <DailyPloyToast message="Admin add Successful" status="success" />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-      this.setState({ addAdminShow: false });
+      this.setState({ addAdminShow: false, allUserArr: addData });
     } catch (e) {
       console.log("error", e);
     }
   };
 
-  removeAdmin = () => {
+  removeAdmin = async () => {
     const removeAdminData = {
       user_id: this.state.showRemoveAdminId
     };
 
     try {
-      const { data } = post(
+      const { data } = await post(
         removeAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/adminship_removal/`
       );
+      let removeData = this.props.state.adminUserArr.filter(
+        user => user.id !== this.state.showRemoveAdminId
+      );
+      this.props.handleChangeAdminUsers(removeData);
       toast(<DailyPloyToast message="Remove Admenship" status="success" />, {
         autoClose: 2000,
         position: toast.POSITION.TOP_CENTER
       });
-      this.setState({ removeShow: false, isShowRemoveAdmin: false });
+      this.setState({
+        removeShow: false,
+        isShowRemoveAdmin: false,
+        allUserArr: removeData
+      });
     } catch (e) {
       console.log("error", e);
     }
