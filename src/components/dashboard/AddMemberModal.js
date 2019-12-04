@@ -60,6 +60,7 @@ class AddMemberModal extends Component {
   // };
 
   render() {
+    const props = this.props.state;
     return (
       <>
         <Modal
@@ -81,10 +82,10 @@ class AddMemberModal extends Component {
             <table className="table heading">
               <thead>
                 <tr>
-                  <th scope="col">Name*</th>
-                  <th scope="col">Email ID*</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Working Hours</th>
+                  <th scope="col">Name<span className="error-warning">*</span></th>
+                  <th scope="col">Email ID<span className="error-warning">*</span></th>
+                  <th scope="col">Role<span className="error-warning">*</span></th>
+                  <th scope="col">Working Hours<span className="error-warning">*</span></th>
                   <th scope="col">Project</th>
                 </tr>
               </thead>
@@ -170,26 +171,6 @@ class AddMemberModal extends Component {
                       name="memberProject"
                       dropdownHeight="100px"
                     />
-                    {/* <SelectSearch
-                      name="memberProject"
-                      mode="input"
-                      value={this.props.state.memberProject}
-                      options={["Arpit", "Jain"]}
-                      placeholder="Projects"
-                    /> */}
-                    {/* <input list="project" placeholder="Start typing..." />
-                    <datalist id="project">
-                      <option value="My wife"></option>
-                      <option value="Carsten"></option>
-                      <option value="@imogenf"></option>
-                      <option value="@stereobooster"></option>
-                      <option value="@fabien0102"></option>
-                      <option value="@mpotomin"></option>
-                      <option value="@mweststrate"></option>
-                      <option value="@cpojer"></option>
-                      <option value="@dabit3"></option>
-                      <option value="@_darkfadr"></option>
-                    </datalist> */}
                   </td>
                 </tr>
               </tbody>
@@ -199,6 +180,7 @@ class AddMemberModal extends Component {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
+                  disabled={`${this.props.state.memberWorkingHours && this.props.state.memberRole && this.props.state.memberEmail && this.props.state.memberName ? "" : "disabled"}`}
                   onClick={this.props.addMember}
                 >
                   Add

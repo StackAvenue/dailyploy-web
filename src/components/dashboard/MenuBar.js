@@ -129,17 +129,19 @@ export default class MenuBar extends Component {
   };
 
   addMember = async () => {
-    const memberData = {
+    var memberData = {
       invitation: {
         name: `${this.state.memberName}`,
         email: `${this.state.memberEmail}`,
         status: "Pending",
-        project_id: `${this.state.memberProject}`,
-        workspace_id: `${this.props.workspaceId}`,
-        role_id: `${this.state.memberRole}`,
-        working_hours: `${this.state.memberWorkingHours}`,
+        workspace_id: Number(this.props.workspaceId),
+        role_id: Number(this.state.memberRole),
+        working_hours: Number(this.state.memberWorkingHours),
       },
     };
+    if (this.state.memberProject) {
+      memberData.invitation['project_id'] = this.state.memberProject
+    }
     try {
       const { data } = await post(memberData, "invitations");
       toast(
@@ -149,12 +151,22 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
       );
+      this.clearAddMemberModaldata()
       this.setState({ memberShow: false });
       this.props.handleLoad(true);
     } catch (e) {
       this.setState({ memberShow: false });
     }
   };
+
+  clearAddMemberModaldata = () => {
+    this.setState({
+      memberName: "",
+      memberEmail: "",
+      memberRole: "",
+      memberWorkingHours: ""
+    })
+  }
 
   handleChangeMember = (selected, selectedTags) => {
     this.setState({ projectMembers: selected, selectedTags: selectedTags });
@@ -205,6 +217,7 @@ export default class MenuBar extends Component {
       memberRole: memberRole,
       memberWorkingHours: filterArr[0].working_hours,
       projectsListing: memberProjects,
+      suggestions: [],
     });
   };
 
