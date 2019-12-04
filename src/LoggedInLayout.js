@@ -19,7 +19,7 @@ class LoggedInLayout extends Component {
       searchOptions: [],
       searchProjectIds: [],
       searchUserDetails: [],
-      isLoading: false,
+      isLoading: false
     };
   }
 
@@ -46,7 +46,7 @@ class LoggedInLayout extends Component {
     this.setState({
       workspaces: workspacesData,
       loggedInUserInfo: userData,
-      isLoading: false,
+      isLoading: false
     });
   }
 
@@ -67,7 +67,7 @@ class LoggedInLayout extends Component {
       handleSearchFilterResult: this.handleSearchFilterResult,
       searchProjectIds: this.state.searchProjectIds,
       searchUserDetails: this.state.searchUserDetails,
-      handleLoading: this.handleLoad,
+      handleLoading: this.handleLoad
     };
     var newProps = { ...props, ...props1 };
     if (title !== "login" && title !== "signup" && title !== "landing") {
@@ -90,7 +90,7 @@ class LoggedInLayout extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails,
+      searchUserDetails: searchUserDetails
     });
   };
 

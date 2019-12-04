@@ -25,19 +25,22 @@ const EmailConfigModal = props => {
               <div className="col-md-2 label">To</div>
               <div className="col-md-10 no-padding d-inline-block">
                 <div className="project-member-search">
-                  {/* <div>
-                      <div className="d-inline-block selected-tags text-titlize">
-                        {this.renderSelectedMembers()}
-                      </div>
-                      <input className="d-inline-block"
-                        type="text" value={this.state.memberSearchText}
-                        placeholder="Select Memebrs"
-                        onChange={this.onSearchMemberTextChange}
-                      />
+                  <div>
+                    <div className="d-inline-block selected-tags text-titlize">
+                      {props.renderSelectedToMembers()}
                     </div>
-                    <div className="suggestion-holder">
-                      {this.renderMembersSearchSuggestion()}
-                    </div> */}
+                    <input
+                      className="d-inline-block"
+                      name="toSearchText"
+                      type="text"
+                      value={props.state.toSearchText}
+                      placeholder="Select Memebrs"
+                      onChange={props.handleToChange}
+                    />
+                  </div>
+                  <div className="suggestion-holder">
+                    {props.renderToSuggestions()}
+                  </div>
                 </div>
               </div>
             </div>
@@ -45,19 +48,22 @@ const EmailConfigModal = props => {
               <div className="col-md-2 label">Cc</div>
               <div className="col-md-10 no-padding d-inline-block">
                 <div className="project-member-search">
-                  {/* <div>
-                      <div className="d-inline-block selected-tags text-titlize">
-                        {this.renderSelectedMembers()}
-                      </div>
-                      <input className="d-inline-block"
-                        type="text" value={this.state.memberSearchText}
-                        placeholder="Select Memebrs"
-                        onChange={this.onSearchMemberTextChange}
-                      />
+                  <div>
+                    <div className="d-inline-block selected-tags text-titlize">
+                      {props.renderSelectedCcMembers()}
                     </div>
-                    <div className="suggestion-holder">
-                      {this.renderMembersSearchSuggestion()}
-                    </div> */}
+                    <input
+                      className="d-inline-block"
+                      name="ccSearchText"
+                      type="text"
+                      value={props.state.ccSearchText}
+                      placeholder="Select Memebrs"
+                      onChange={props.handleCcChange}
+                    />
+                  </div>
+                  <div className="suggestion-holder">
+                    {props.renderCcSuggestions()}
+                  </div>
                 </div>
               </div>
             </div>
@@ -65,26 +71,33 @@ const EmailConfigModal = props => {
               <div className="col-md-2 label">Bcc</div>
               <div className="col-md-10 no-padding d-inline-block">
                 <div className="project-member-search">
-                  {/* <div>
-                      <div className="d-inline-block selected-tags text-titlize">
-                        {this.renderSelectedMembers()}
-                      </div>
-                      <input className="d-inline-block"
-                        type="text" value={this.state.memberSearchText}
-                        placeholder="Select Memebrs"
-                        onChange={this.onSearchMemberTextChange}
-                      />
+                  <div>
+                    <div className="d-inline-block selected-tags text-titlize">
+                      {props.renderSelectedBccMembers()}
                     </div>
-                    <div className="suggestion-holder">
-                      {this.renderMembersSearchSuggestion()}
-                    </div> */}
+                    <input
+                      className="d-inline-block"
+                      name="bccSearchText"
+                      type="text"
+                      value={props.state.bccSearchText}
+                      placeholder="Select Memebrs"
+                      onChange={props.handleBccChange}
+                    />
+                  </div>
+                  <div className="suggestion-holder">
+                    {props.renderBccSuggestions()}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="col-md-12 input-row">
               <div className="col-md-2 label">Email text</div>
               <div className="col-md-10 no-padding d-inline-block">
-                <textarea></textarea>
+                <textarea
+                  name="emailText"
+                  value={props.emailText}
+                  onChange={props.handleEmailText}
+                ></textarea>
               </div>
             </div>
             <div className="col-md-12 no-padding input-row">
@@ -92,6 +105,7 @@ const EmailConfigModal = props => {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
+                  onClick={props.configEmailStatus}
                 >
                   Save
                 </button>

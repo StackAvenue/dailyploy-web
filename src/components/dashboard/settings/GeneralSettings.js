@@ -28,7 +28,17 @@ class GeneralSettings extends Component {
       allUserArr: [],
       suggestions: [],
       isShowRemoveAdmin: false,
-      showRemoveAdminId: ""
+      showRemoveAdminId: "",
+      toSearchText: "",
+      toEmailSuggestions: [],
+      selectToMembers: [],
+      ccSearchText: "",
+      ccEmailSuggestions: [],
+      selectCcMembers: [],
+      bccSearchText: "",
+      bccEmailSuggestions: [],
+      selectBccMembers: [],
+      emailText: ""
     };
   }
 
@@ -149,6 +159,298 @@ class GeneralSettings extends Component {
     );
   };
 
+  handleToChange = e => {
+    const { name, value } = e.target;
+    let toEmailSuggestions = [];
+    var searchOptions = this.props.state.userArr.members.map(user => user);
+    console.log(
+      "this.props.state.userArr.members",
+      this.props.state.userArr.members,
+      "searchOptions",
+      searchOptions
+    );
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      toEmailSuggestions = searchOptions
+        .sort()
+        .filter(v => regex.test(v.email));
+    }
+    console.log("toEmailSuggestions", toEmailSuggestions);
+    this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
+  };
+
+  renderToSuggestions = () => {
+    return (
+      <>
+        {this.state.toEmailSuggestions ? (
+          <ul>
+            {this.state.toEmailSuggestions.map((option, idx) => {
+              return (
+                <li
+                  key={idx}
+                  onClick={() => this.handleSelectToMembers(option)}
+                >
+                  <span className="right-left-space-5">
+                    <span className="text-titlize">{option.name}</span>(
+                    {option.email})
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </>
+    );
+  };
+
+  handleSelectToMembers = option => {
+    var selectToMembers = new Array(...this.state.selectToMembers);
+    selectToMembers.push(option);
+    var toEmailSuggestions = this.state.toEmailSuggestions.map(
+      user => !selectToMembers.map(m => m.id).includes(user.id)
+    );
+    this.setState({
+      toEmailSuggestions: [],
+      toSearchText: "",
+      selectToMembers: selectToMembers
+    });
+  };
+
+  removeSelectedToTag = index => {
+    var selectToMembers = this.state.selectToMembers;
+    selectToMembers = selectToMembers.filter((_, idx) => idx !== index);
+    this.setState({
+      selectToMembers: selectToMembers
+    });
+  };
+
+  initalChar = str => {
+    var matches = str.match(/\b(\w)/g);
+    return matches.join("").toUpperCase();
+  };
+
+  renderSelectedToMembers = () => {
+    return (
+      <>
+        {this.state.selectToMembers.map((option, index) => {
+          return (
+            <div className="select-member" key={index}>
+              <div className="member-title d-inline-block">
+                {this.initalChar(option.name)}
+              </div>
+              <div className="right-left-space-5 d-inline-block">
+                {option.name}
+              </div>
+              <a
+                className="right-left-space-5 d-inline-block"
+                onClick={() => this.removeSelectedToTag(index)}
+              >
+                {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
+                  this.placeCloseIcon(option, state)
+                ) : ( */}
+                <i className="fa fa-close "></i>
+                {/* )} */}
+              </a>
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
+  handleCcChange = e => {
+    const { name, value } = e.target;
+    let ccEmailSuggestions = [];
+    var searchOptions = this.props.state.userArr.members.map(user => user);
+    console.log(
+      "this.props.state.userArr.members",
+      this.props.state.userArr.members,
+      "searchOptions",
+      searchOptions
+    );
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      ccEmailSuggestions = searchOptions
+        .sort()
+        .filter(v => regex.test(v.email));
+    }
+    console.log("toEmailSuggestions", ccEmailSuggestions);
+    this.setState({ [name]: value, ccEmailSuggestions: ccEmailSuggestions });
+  };
+
+  renderCcSuggestions = () => {
+    return (
+      <>
+        {this.state.ccEmailSuggestions ? (
+          <ul>
+            {this.state.ccEmailSuggestions.map((option, idx) => {
+              return (
+                <li
+                  key={idx}
+                  onClick={() => this.handleSelectCcMembers(option)}
+                >
+                  <span className="right-left-space-5">
+                    <span className="text-titlize">{option.name}</span>(
+                    {option.email})
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </>
+    );
+  };
+
+  handleSelectCcMembers = option => {
+    var selectCcMembers = new Array(...this.state.selectCcMembers);
+    selectCcMembers.push(option);
+    var ccEmailSuggestions = this.state.ccEmailSuggestions.map(
+      user => !selectCcMembers.map(m => m.id).includes(user.id)
+    );
+    this.setState({
+      ccEmailSuggestions: [],
+      ccSearchText: "",
+      selectCcMembers: selectCcMembers
+    });
+  };
+
+  removeSelectedCcTag = index => {
+    var selectCcMembers = this.state.selectCcMembers;
+    selectCcMembers = selectCcMembers.filter((_, idx) => idx !== index);
+    this.setState({
+      selectCcMembers: selectCcMembers
+    });
+  };
+
+  initalChar = str => {
+    var matches = str.match(/\b(\w)/g);
+    return matches.join("").toUpperCase();
+  };
+
+  renderSelectedCcMembers = () => {
+    return (
+      <>
+        {this.state.selectCcMembers.map((option, index) => {
+          return (
+            <div className="select-member" key={index}>
+              <div className="member-title d-inline-block">
+                {this.initalChar(option.name)}
+              </div>
+              <div className="right-left-space-5 d-inline-block">
+                {option.name}
+              </div>
+              <a
+                className="right-left-space-5 d-inline-block"
+                onClick={() => this.removeSelectedCcTag(index)}
+              >
+                {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
+                  this.placeCloseIcon(option, state)
+                ) : ( */}
+                <i className="fa fa-close "></i>
+                {/* )} */}
+              </a>
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
+  handleBccChange = e => {
+    const { name, value } = e.target;
+    let bccEmailSuggestions = [];
+    var searchOptions = this.props.state.userArr.members.map(user => user);
+    console.log(
+      "this.props.state.userArr.members",
+      this.props.state.userArr.members,
+      "searchOptions",
+      searchOptions
+    );
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      bccEmailSuggestions = searchOptions
+        .sort()
+        .filter(v => regex.test(v.email));
+    }
+    console.log("toEmailSuggestions", bccEmailSuggestions);
+    this.setState({ [name]: value, bccEmailSuggestions: bccEmailSuggestions });
+  };
+
+  renderBccSuggestions = () => {
+    return (
+      <>
+        {this.state.bccEmailSuggestions ? (
+          <ul>
+            {this.state.bccEmailSuggestions.map((option, idx) => {
+              return (
+                <li
+                  key={idx}
+                  onClick={() => this.handleSelectBccMembers(option)}
+                >
+                  <span className="right-left-space-5">
+                    <span className="text-titlize">{option.name}</span>(
+                    {option.email})
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </>
+    );
+  };
+
+  handleSelectBccMembers = option => {
+    var selectBccMembers = new Array(...this.state.selectBccMembers);
+    selectBccMembers.push(option);
+    var bccEmailSuggestions = this.state.bccEmailSuggestions.map(
+      user => !selectBccMembers.map(m => m.id).includes(user.id)
+    );
+    this.setState({
+      bccEmailSuggestions: [],
+      bccSearchText: "",
+      selectBccMembers: selectBccMembers
+    });
+  };
+
+  removeSelectedBccTag = index => {
+    var selectBccMembers = this.state.selectBccMembers;
+    selectBccMembers = selectBccMembers.filter((_, idx) => idx !== index);
+    this.setState({
+      selectBccMembers: selectBccMembers
+    });
+  };
+
+  renderSelectedBccMembers = () => {
+    return (
+      <>
+        {this.state.selectBccMembers.map((option, index) => {
+          return (
+            <div className="select-member" key={index}>
+              <div className="member-title d-inline-block">
+                {this.initalChar(option.name)}
+              </div>
+              <div className="right-left-space-5 d-inline-block">
+                {option.name}
+              </div>
+              <a
+                className="right-left-space-5 d-inline-block"
+                onClick={() => this.removeSelectedBccTag(index)}
+              >
+                {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
+                  this.placeCloseIcon(option, state)
+                ) : ( */}
+                <i className="fa fa-close "></i>
+                {/* )} */}
+              </a>
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
   addAdmin = () => {
     const addAdminData = {
       user_id: this.state.addAdminId
@@ -189,8 +491,33 @@ class GeneralSettings extends Component {
     }
   };
 
+  configEmailStatus = async () => {
+    const configEmailStatusData = {
+      is_active: true,
+      to_mails: this.state.selectToMembers,
+      cc_mails: this.state.selectCcMembers,
+      bcc_mails: this.state.handleSelectBccMembers,
+      email_text: this.state.emailText
+    };
+    try {
+      const { data } = await post(
+        configEmailStatusData,
+        `workspaces/${this.props.state.workspaceId}/workspace_settings/daily_status_mail_settings/`
+      );
+
+      console.log("Data", data);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
   handleRemoveAdmin = (value, id) => {
     this.setState({ showRemoveAdminId: id, isShowRemoveAdmin: value });
+  };
+
+  handleEmailText = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -284,6 +611,17 @@ class GeneralSettings extends Component {
               <EmailConfigModal
                 state={this.state}
                 handleClose={this.handleEditClose}
+                handleToChange={this.handleToChange}
+                renderToSuggestions={this.renderToSuggestions}
+                renderSelectedToMembers={this.renderSelectedToMembers}
+                handleCcChange={this.handleCcChange}
+                renderCcSuggestions={this.renderCcSuggestions}
+                renderSelectedCcMembers={this.renderSelectedCcMembers}
+                handleBccChange={this.handleBccChange}
+                renderBccSuggestions={this.renderBccSuggestions}
+                renderSelectedBccMembers={this.renderSelectedBccMembers}
+                handleEmailText={this.handleEmailText}
+                configEmailStatus={this.configEmailStatus}
               />
               <div className="col-md-6 no-padding d-inline-block">
                 <div className="float-right">
