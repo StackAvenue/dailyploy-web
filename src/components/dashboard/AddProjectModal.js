@@ -182,7 +182,7 @@ class AddProjectModal extends Component {
           show={props.state.show}
           onHide={props.handleClose}>
           <div className="row no-margin">
-            <div className="col-md-12 header">
+            <div className="col-md-12 header text-titlize">
               <span>{props.headText}</span>
               <button
                 className="btn btn-link float-right"
@@ -196,7 +196,7 @@ class AddProjectModal extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Owner Name
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div className="col-md-10 d-inline-block text-titlize">
                   {props.state.projectOwner}
                 </div>
               </div>
@@ -249,6 +249,7 @@ class AddProjectModal extends Component {
                     </div>
                     <div className="col-md-9 d-inline-block">
                       <DatePicker
+                        minDate={props.state.dateFrom}
                         selected={props.state.dateTo}
                         onChange={props.handleDateTo}
                         placeholderText="Select Date"
@@ -263,6 +264,7 @@ class AddProjectModal extends Component {
                       type="checkbox"
                       className="custom-control-input d-inline-block"
                       id="endDateUndefined"
+                      checked={props.state.disabledDateTo ? true : false}
                       onChange={props.handleUndefinedToDate}
                     />
                     <label
