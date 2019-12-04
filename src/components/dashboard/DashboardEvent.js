@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
 import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
-import TaskBottomPopup from "./../dashboard/TaskBottomPopup";
 import Timer from "./../dashboard/Timer";
 
 
@@ -42,8 +40,8 @@ class DashboardEvent extends Component {
     // } catch (e) {
     // }
 
-    var startOn = localStorage.getItem('startOn')
-    var taskId = localStorage.getItem('taskId')
+    var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`)
+    var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`)
     if (taskId === this.props.event.id && startOn !== "") {
       this.setState({
         status: true,
@@ -64,10 +62,10 @@ class DashboardEvent extends Component {
       } else {
         var startOn = Date.now()
         this.setState({ startOn: startOn })
-        localStorage.setItem('startOn', startOn)
-        localStorage.setItem('taskId', this.props.event.id)
-        localStorage.setItem('colorCode', this.props.bgColor)
-        localStorage.setItem('taskTitle', this.props.titleText)
+        localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn)
+        localStorage.setItem(`taskId-${this.props.workspaceId}`, this.props.event.id)
+        localStorage.setItem(`colorCode-${this.props.workspaceId}`, this.props.bgColor)
+        localStorage.setItem(`taskTitle-${this.props.workspaceId}`, this.props.titleText)
         this.props.handleTaskBottomPopup(this.state.startOn)
       }
       var icon = this.state.icon
@@ -100,19 +98,11 @@ class DashboardEvent extends Component {
   handleReset = () => {
     clearInterval(this.timer);
     this.setState({ runningTime: 0, status: false, startOn: "" });
-    localStorage.setItem('taskId', "")
-    localStorage.setItem('colorCode', "")
-    localStorage.setItem('taskTitle', "")
-    localStorage.setItem('startOn', "")
+    localStorage.setItem(`startOn-${this.props.workspaceId}`, "")
+    localStorage.setItem(`taskId-${this.props.workspaceId}`, "")
+    localStorage.setItem(`colorCode-${this.props.workspaceId}`, "")
+    localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "")
   };
-
-  formattedSeconds = (ms) => {
-    var totalSeconds = (ms / 1000)
-    var h = Math.floor(totalSeconds / 3600);
-    var m = Math.floor((totalSeconds % 3600) / 60);
-    var s = Math.floor((totalSeconds % 3600) % 60);
-    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
-  }
 
   showEventPopUp = () => {
     this.setState({ showPopup: !this.state.showPopup })
@@ -130,13 +120,6 @@ class DashboardEvent extends Component {
     this.setState({ clickEventId: id, showAction: !this.state.showAction, showPopup: false })
   }
 
-  handlePlayEvent = (id) => {
-    var icon = this.state.icon
-    this.setState({
-      showPopup: false,
-      icon: icon == "pause" ? "play" : icon == "play" ? "pause" : "check",
-    })
-  }
 
   async markCompleteTask(id) {
     if (id) {
@@ -272,14 +255,6 @@ class DashboardEvent extends Component {
           {this.state.showPopup ? this.props.eventItemPopoverTemplateResolver(schedulerData, event, titleText, start, end, this.props.bgColor)
             : null}
         </div>
-        {/* {this.state.icon === 'pause' ?
-          <TaskBottomPopup
-            formattedSeconds={this.formattedSeconds}
-            bgColor={this.props.bgColor}
-            taskTitle={titleText}
-            runningTime={this.state.runningTime}
-          />
-          : null} */}
       </>
     );
   }

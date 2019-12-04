@@ -758,6 +758,7 @@ class Dashboard extends Component {
           closeTaskModal={this.closeTaskModal}
           handleProjectSelect={this.handleProjectSelect}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+          onGoingTask={this.props.state.onGoingTask}
         />
         <div>
           <button className="btn menubar-task-btn" onClick={this.showTaskModal}>

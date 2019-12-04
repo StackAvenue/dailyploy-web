@@ -75,6 +75,7 @@ class Workspace extends Component {
       showPopup: false,
       runningTime: 0,
       isStart: false,
+      onGoingTask: false,
     };
   }
 
@@ -99,10 +100,10 @@ class Workspace extends Component {
       console.log("err", e);
     }
 
-    var startOn = localStorage.getItem('startOn')
-    var taskId = localStorage.getItem('taskId')
-    var colorCode = localStorage.getItem('colorCode')
-    var taskTitle = localStorage.getItem('taskTitle')
+    var startOn = localStorage.getItem(`startOn-${workspaceId}`)
+    var taskId = localStorage.getItem(`taskId-${workspaceId}`)
+    var colorCode = localStorage.getItem(`colorCode-${workspaceId}`)
+    var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`)
 
     this.setState({
       workspaces: workspacesData,
@@ -116,23 +117,6 @@ class Workspace extends Component {
       isStart: this.isBottomPopup(),
     });
 
-  }
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.startOn !== this.state.startOn) {
-      // var startOn = localStorage.getItem('startOn')
-      // var taskId = localStorage.getItem('taskId')
-      // var colorCode = localStorage.getItem('colorCode')
-      // var taskTitle = localStorage.getItem('taskTitle')
-
-      // this.setState({
-      //   startOn: startOn,
-      //   taskId: taskId,
-      //   colorCode: colorCode,
-      //   taskTitle: taskTitle,
-      //   isStart: this.isBottomPopup(),
-      // });
-    }
   }
 
   logout = async () => {
@@ -179,24 +163,23 @@ class Workspace extends Component {
       searchUserDetails: this.state.searchUserDetails,
       handleTaskBottomPopup: this.handleTaskBottomPopup,
       handleLoading: this.handleLoad,
+      state: this.state
     };
     var newProps = { ...props, ...props1 };
     if (title !== "login" && title !== "signup" && title !== "landing") {
-      console.log("iff", title)
       return (
         <RouteComponent {...newProps} />
       )
     }
-    console.log("else")
     return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
   };
 
   handleTaskBottomPopup = startOn => {
-    // this.setState({ startOn: startOn })
-    var startOn = localStorage.getItem('startOn')
-    var taskId = localStorage.getItem('taskId')
-    var colorCode = localStorage.getItem('colorCode')
-    var taskTitle = localStorage.getItem('taskTitle')
+    // this.setState({ onGoingTask: !this.state.onGoingTask })
+    var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`)
+    var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`)
+    var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`)
+    var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`)
 
     this.setState({
       startOn: startOn,
@@ -204,31 +187,6 @@ class Workspace extends Component {
       colorCode: colorCode,
       taskTitle: taskTitle,
       isStart: this.isBottomPopup(),
-    });
-  }
-
-  handleReset = () => {
-    clearInterval(this.timer);
-    this.setState({ runningTime: 0 });
-  };
-
-  formattedSeconds = (ms) => {
-    var totalSeconds = (ms / 1000)
-    var h = Math.floor(totalSeconds / 3600);
-    var m = Math.floor((totalSeconds % 3600) / 60);
-    var s = Math.floor((totalSeconds % 3600) % 60);
-    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
-  }
-
-  runningFormattedTimer = () => {
-    this.setState(state => {
-      const startTime = state.runningTask.startOn - this.state.runningTime;
-      // this.timer = setInterval(() => {
-      //   this.setState({ runningTime: Date.now() - startTime });
-      // });
-      return {
-        showPopup: !state.showPopup,
-      };
     });
   }
 

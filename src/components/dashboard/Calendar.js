@@ -114,7 +114,8 @@ class Calendar extends Component {
       eventsForCustomStyle: [],
       eventsForTaskView: [],
       show: false,
-      setShow: false
+      setShow: false,
+      onGoingTask: false,
     };
   }
 
@@ -456,17 +457,17 @@ class Calendar extends Component {
           isStart={isStart}
           isEnd={isEnd}
           mustAddCssClass={mustAddCssClass}
-          mustBeHeight={mustBeHeight}
           agendaMaxEventWidth={agendaMaxEventWidth}
           titleText={titleText}
           start={start}
           end={end}
-          mustAddCssClass={mustAddCssClass}
           divStyle={divStyle}
           scheduler={this.schedulerData}
           hideOverPopup={this.hideOverPopup}
           times={this.times}
+          workspaceId={this.props.workspaceId}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+          onGoingTask={this.props.onGoingTask}
           eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
         />
       </>
