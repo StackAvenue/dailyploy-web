@@ -36,6 +36,8 @@ class ShowMembers extends Component {
       memberHours: "",
       memberProjects: null,
       isDeleteShow: false,
+      selectMemberArr: [],
+      isAllChecked: false
     };
   }
   logout = async () => {
@@ -65,7 +67,7 @@ class ShowMembers extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`,
+        `workspaces/${this.state.workspaceId}/projects`
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -79,21 +81,21 @@ class ShowMembers extends Component {
           : [];
       var searchData = {
         user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds)
       };
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`,
+        `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members;
       var worksapceUser = data.members.filter(
-        user => user.email === loggedInData.email,
+        user => user.email === loggedInData.email
       );
       var memberArr = data.members.filter(
-        user => user.email !== loggedInData.email,
+        user => user.email !== loggedInData.email
       );
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email,
+        user => user.email !== loggedInData.email
       );
       // .map(user => user.email);
       this.props.handleLoading(false);
@@ -112,7 +114,7 @@ class ShowMembers extends Component {
       userRole: worksapceUser[0].role,
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
-      members: memberArr,
+      members: memberArr
     });
     this.createUserProjectList();
   }
@@ -129,16 +131,16 @@ class ShowMembers extends Component {
           : [];
       var searchData = {
         user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds)
       };
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/members`,
+          `workspaces/${this.state.workspaceId}/members`
         );
         var userArr = data.members.map(user => user.email);
         var worksapceUsers = data.members;
         var memberArr = data.members.filter(
-          user => user.email !== this.state.userEmail,
+          user => user.email !== this.state.userEmail
         );
       } catch (e) {
         console.log("users Error", e);
@@ -147,7 +149,7 @@ class ShowMembers extends Component {
       this.setState({
         users: userArr,
         worksapceUsers: worksapceUsers,
-        members: memberArr,
+        members: memberArr
       });
     }
   }
@@ -171,9 +173,9 @@ class ShowMembers extends Component {
     }
   };
 
-  handleCheck = e => {
-    const value = e.target.checked;
-  };
+  // handleCheck = e => {
+  //   const value = e.target.checked;
+  // };
 
   displayProjects = projects => {
     let arr = projects.map(project => project.name);
@@ -196,7 +198,6 @@ class ShowMembers extends Component {
   };
 
   countProjectView = (e, id) => {
-    console.log("member id", id);
     this.setState({ isProjectListShow: true, projectShowMemberId: id });
   };
 
@@ -206,7 +207,7 @@ class ShowMembers extends Component {
 
   handleClose = () => {
     this.setState({
-      show: false,
+      show: false
     });
   };
 
@@ -219,14 +220,14 @@ class ShowMembers extends Component {
       memberEmail: member.email,
       memberRole: member.role,
       memberHours: member.working_hours,
-      memberProjects: member.projects,
+      memberProjects: member.projects
     });
   };
 
   editMemberHandleChange = e => {
     const { name, value } = e.target;
     this.setState({
-      [name]: value,
+      [name]: value
     });
   };
 
@@ -235,7 +236,7 @@ class ShowMembers extends Component {
       id: this.state.projectShowMemberId,
       role_id: this.state.memberRole,
       working_hours: this.state.memberHours,
-      workspace_id: this.state.workspaceId,
+      workspace_id: this.state.workspaceId
     };
     try {
       const { data } = await mockPost(editMemberData, "editMember");
@@ -259,7 +260,7 @@ class ShowMembers extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails,
+      searchUserDetails: searchUserDetails
     });
   };
 
@@ -272,7 +273,7 @@ class ShowMembers extends Component {
             value: project.name,
             project_id: project.id,
             type: "project",
-            id: (index += 1),
+            id: (index += 1)
           });
         });
       }
@@ -287,7 +288,7 @@ class ShowMembers extends Component {
           member_id: member.id,
           email: member.email,
           type: "member",
-          role: member.role,
+          role: member.role
         });
       });
     }
@@ -299,8 +300,15 @@ class ShowMembers extends Component {
     this.setState({ isLoading: value });
   };
 
-  handleCheckAll = e => {
+  handleCheckAll = (e, projects) => {
     const allCheckboxChecked = e.target.checked;
+    let projectsLength = projects.length;
+    var arrProject;
+    if (allCheckboxChecked === true) {
+      arrProject = projects;
+    } else {
+      arrProject = [];
+    }
     var checkboxes = document.getElementsByName("isChecked");
     if (allCheckboxChecked) {
       for (let i in checkboxes) {
@@ -315,8 +323,27 @@ class ShowMembers extends Component {
         }
       }
     }
-    this.setState({ isDeleteShow: true });
+    this.setState({
+      selectMemberArr: arrProject,
+      isAllChecked: allCheckboxChecked
+    });
   };
+
+  handleCheck = (e, project) => {
+    let checked = e.target.checked;
+    let arrProject = [];
+    if (checked) {
+      arrProject = [...this.state.selectMemberArr, ...[project]];
+    } else {
+      let filterProjectArr = this.state.selectMemberArr.filter(
+        item => item.id !== project.id
+      );
+      arrProject = filterProjectArr;
+    }
+    this.setState({ selectMemberArr: arrProject });
+  };
+
+  deleteProject = (e, member) => {};
 
   render() {
     var userRole = localStorage.getItem("userRole");
@@ -330,7 +357,7 @@ class ShowMembers extends Component {
           state={this.state}
         />
         <div className="show-projects">
-          <div className="members" style={{ padding: "24px 0px 0px 56px" }}>
+          <div className="members" style={{ padding: "14px 0px 0px 60px" }}>
             {" "}
             <input
               className="styled-checkbox"
@@ -339,7 +366,30 @@ class ShowMembers extends Component {
               name="chk[]"
               onChange={e => this.handleCheckAll(e, this.state.members)}
             />
-            <label htmlFor={`styled-checkbox`}>Select All</label>
+            <label htmlFor={`styled-checkbox`}>
+              {this.state.isAllChecked ? (
+                <span>selected</span>
+              ) : (
+                <span>Select All</span>
+              )}
+            </label>
+            {this.state.selectMemberArr.length > 0 ? (
+              <>
+                <div className="d-inline-block">
+                  <button
+                    className="btn btn-primary delete-button"
+                    onClick={e =>
+                      this.deleteProject(e, this.state.selectMemberArr)
+                    }
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div className="d-inline-block select-project-text">
+                  {this.state.selectMemberArr.length + " Member Selected"}
+                </div>
+              </>
+            ) : null}
           </div>
           <table className="table">
             <thead>
@@ -368,12 +418,14 @@ class ShowMembers extends Component {
                   <tr key={index}>
                     <td
                       className="text-titlize"
-                      style={{ paddingLeft: "60px" }}>
+                      style={{ paddingLeft: "60px" }}
+                    >
                       <input
                         className="styled-checkbox"
                         id={`styled-checkbox-${index}`}
                         type="checkbox"
                         name="isChecked"
+                        onChange={e => this.handleCheck(e, member)}
                       />
                       <label htmlFor={`styled-checkbox-${index}`}></label>
                       {member.name}
@@ -388,7 +440,8 @@ class ShowMembers extends Component {
                       <span
                         className="project-count"
                         style={{ pointer: "cursor" }}
-                        onMouseMove={e => this.countProjectView(e, member.id)}>
+                        onMouseMove={e => this.countProjectView(e, member.id)}
+                      >
                         {this.countProject(member.projects)}
                       </span>
                       {this.state.isProjectListShow &&
@@ -420,7 +473,8 @@ class ShowMembers extends Component {
                     <td className={userRole === "member" ? "d-none" : null}>
                       <button
                         className="btn btn-link edit-btn"
-                        onClick={e => this.handleShow(e, member)}>
+                        onClick={e => this.handleShow(e, member)}
+                      >
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       {this.state.show &&

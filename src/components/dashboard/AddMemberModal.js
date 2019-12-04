@@ -29,7 +29,7 @@ class AddMemberModal extends Component {
     super(props);
     this.hours = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
     this.state = {
-      value: [],
+      value: []
     };
   }
 
@@ -42,7 +42,8 @@ class AddMemberModal extends Component {
               return (
                 <li
                   key={idx}
-                  onClick={() => this.props.selectAutoSuggestion(option)}>
+                  onClick={() => this.props.selectAutoSuggestion(option)}
+                >
                   {option}
                 </li>
               );
@@ -59,29 +60,32 @@ class AddMemberModal extends Component {
   // };
 
   render() {
+    const props = this.props.state;
     return (
       <>
         <Modal
           dialogClassName="modal-90w member-modal"
           aria-labelledby="example-custom-modal-styling-title"
           show={this.props.state.memberShow}
-          onHide={this.props.handleClose}>
+          onHide={this.props.handleClose}
+        >
           <div className="row no-margin">
             <div className="col-md-12 header">
               <span>Add New Member</span>
               <button
                 className="btn btn-link float-right"
-                onClick={this.props.handleClose}>
+                onClick={this.props.handleClose}
+              >
                 <img src={Close} alt="close" />
               </button>
             </div>
             <table className="table heading">
               <thead>
                 <tr>
-                  <th scope="col">Name*</th>
-                  <th scope="col">Email ID*</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Working Hours</th>
+                  <th scope="col">Name<span className="error-warning">*</span></th>
+                  <th scope="col">Email ID<span className="error-warning">*</span></th>
+                  <th scope="col">Role<span className="error-warning">*</span></th>
+                  <th scope="col">Working Hours<span className="error-warning">*</span></th>
                   <th scope="col">Project</th>
                 </tr>
               </thead>
@@ -115,10 +119,11 @@ class AddMemberModal extends Component {
                       className="form-control role"
                       name="memberRole"
                       value={this.props.state.memberRole}
-                      onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select Role</option>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
+                      <option value="">Select</option>
                       <option value="1">Admin</option>
-                      <option value="2">Member</option>
+                      <option value="2">User</option>
                     </select>
                   </td>
                   <td>
@@ -126,8 +131,9 @@ class AddMemberModal extends Component {
                       className="form-control role"
                       name="memberWorkingHours"
                       value={this.props.state.memberWorkingHours}
-                      onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select Hours</option>
+                      onChange={this.props.handleChangeMemberInput}
+                    >
+                      <option value="">Select</option>
                       {this.hours.map((hour, index) => (
                         <option key={index} value={hour}>
                           {hour}
@@ -149,7 +155,7 @@ class AddMemberModal extends Component {
                       ))}
                     </select> */}
                     <Select
-                      placeholder=""
+                      placeholder="Select"
                       color="#0074D9"
                       searchBy="name"
                       dropdownHandle={true}
@@ -163,29 +169,8 @@ class AddMemberModal extends Component {
                       noDataLabel="No matches found"
                       closeOnSelect={true}
                       name="memberProject"
-                      separator={true}
                       dropdownHeight="100px"
                     />
-                    {/* <SelectSearch
-                      name="memberProject"
-                      mode="input"
-                      value={this.props.state.memberProject}
-                      options={["Arpit", "Jain"]}
-                      placeholder="Projects"
-                    /> */}
-                    {/* <input list="project" placeholder="Start typing..." />
-                    <datalist id="project">
-                      <option value="My wife"></option>
-                      <option value="Carsten"></option>
-                      <option value="@imogenf"></option>
-                      <option value="@stereobooster"></option>
-                      <option value="@fabien0102"></option>
-                      <option value="@mpotomin"></option>
-                      <option value="@mweststrate"></option>
-                      <option value="@cpojer"></option>
-                      <option value="@dabit3"></option>
-                      <option value="@_darkfadr"></option>
-                    </datalist> */}
                   </td>
                 </tr>
               </tbody>
@@ -195,13 +180,16 @@ class AddMemberModal extends Component {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
-                  onClick={this.props.addMember}>
+                  disabled={`${this.props.state.memberWorkingHours && this.props.state.memberRole && this.props.state.memberEmail && this.props.state.memberName ? "" : "disabled"}`}
+                  onClick={this.props.addMember}
+                >
                   Add
                 </button>
                 <button
                   type="button"
                   className="btn col-md-6 button2 btn-primary"
-                  onClick={this.props.handleClose}>
+                  onClick={this.props.handleClose}
+                >
                   Cancel
                 </button>
               </div>

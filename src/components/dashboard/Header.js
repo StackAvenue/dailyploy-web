@@ -29,7 +29,7 @@ class Header extends Component {
       value: "",
       suggestions: [],
       selectedTags: [],
-      selectedMember: null,
+      selectedMember: null
     };
   }
 
@@ -39,7 +39,7 @@ class Header extends Component {
       this.setState({
         userId: data.id,
         userName: data.name,
-        userEmail: data.email,
+        userEmail: data.email
       });
     } catch (e) {
       console.log("err", e);
@@ -50,35 +50,25 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
-
-    // <<<<<<< HEAD
-    //     if (prevProps.searchOptions !== this.props.searchOptions) {
-    //       this.setState({
-    //         selectedTags: this.props.searchOptions.filter(
-    //           option => option.email === this.state.userEmail,
-    //         ),
-    //       });
-    // =======
     if (
       prevProps.searchOptions !== this.props.searchOptions &&
       this.props.pathname === "reports"
     ) {
       var members = this.props.searchOptions.filter(
-        option => option.email === this.state.userEmail,
+        option => option.email === this.state.userEmail
       );
       if (members) {
         this.setState({
           selectedTags: members,
-          selectedMember: members[0],
+          selectedMember: members[0]
         });
       }
-      // >>>>>>> 21a8e66b187a4689eca8ac01c1790af39a642ff4
     }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
       try {
         const { data } = await get(
-          `workspaces/${this.props.workspaceId}/members/${this.state.userId}`,
+          `workspaces/${this.props.workspaceId}/members/${this.state.userId}`
         );
         localStorage.setItem("userRole", data.role);
         this.setState({ userRole: data.role });
@@ -104,7 +94,7 @@ class Header extends Component {
       suggestions = searchOptions
         .sort()
         .filter(
-          v => regex.test(v.value) && !this.state.selectedTags.includes(v),
+          v => regex.test(v.value) && !this.state.selectedTags.includes(v)
         );
     }
     this.setState({ suggestions: suggestions, value: value });
@@ -121,13 +111,13 @@ class Header extends Component {
         selectedTags: newSelectedTags,
         selectedMember: selectedMember,
         suggestions: [],
-        value: "",
+        value: ""
       });
     } else {
       this.setState({
         selectedTags: newSelectedTags,
         suggestions: [],
-        value: "",
+        value: ""
       });
     }
   };
@@ -136,7 +126,7 @@ class Header extends Component {
     var selectedTags = this.state.selectedTags;
     if (this.state.selectedMember) {
       var selectedMemberTags = selectedTags.filter(
-        (item, i) => this.state.selectedMember.id === item.id && i === index,
+        (item, i) => this.state.selectedMember.id === item.id && i === index
       );
     }
     selectedTags = selectedTags.filter((item, i) => i !== index);
@@ -186,7 +176,8 @@ class Header extends Component {
                 <span className="right-left-space-5">{option.value}</span>
                 <a
                   className="remove-tag right-left-space-5"
-                  onClick={() => this.removeSelectedTag(index)}>
+                  onClick={() => this.removeSelectedTag(index)}
+                >
                   <i className="fa fa-close"></i>
                 </a>
               </div>
@@ -198,7 +189,8 @@ class Header extends Component {
                 <span className="right-left-space-5">{option.value}</span>
                 <a
                   className="remove-tag right-left-space-5"
-                  onClick={() => this.removeSelectedTag(index)}>
+                  onClick={() => this.removeSelectedTag(index)}
+                >
                   <i className="fa fa-close"></i>
                 </a>
               </div>
@@ -228,12 +220,14 @@ class Header extends Component {
                 data-target="#navbarTogglerDemo03"
                 aria-controls="navbarTogglerDemo03"
                 aria-expanded="false"
-                aria-label="Toggle navigation">
+                aria-label="Toggle navigation"
+              >
                 <span className="navbar-toggler-icon" />
               </button>
               <a
                 className="navbar-brand logo"
-                href={`/dashboard/${this.props.workspaceId}`}>
+                href={`/dashboard/${this.props.workspaceId}`}
+              >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
               <div className="col-md-7 no-padding header-search-bar">
@@ -245,11 +239,17 @@ class Header extends Component {
                     <input
                       type="text"
                       value={value}
-                      placeholder="Search by people/projects"
+                      placeholder="Search by project/people"
                       onChange={this.onSearchTextChange}
                     />
 
-                    <div className="suggestion-holder">
+                    <div
+                      className={`suggestion-holder ${
+                        this.state.suggestions.length > 0
+                          ? "suggestion-holder-border"
+                          : null
+                        }`}
+                    >
                       {this.renderSearchSuggestion()}
                     </div>
                   </div>
@@ -260,13 +260,15 @@ class Header extends Component {
               </div>
               <div
                 className="collapse navbar-collapse"
-                id="navbarTogglerDemo03">
+                id="navbarTogglerDemo03"
+              >
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="link"
                       id="dropdown-basic"
-                      style={{ padding: "8px 20px 0px 0px" }}>
+                      style={{ padding: "8px 20px 0px 0px" }}
+                    >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
 
@@ -377,7 +379,7 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                      } `}
+                        } `}
                       id="dropdown-basic">
                       {x}
                     </Dropdown.Toggle>
@@ -388,7 +390,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                          } `}>
+                            } `}>
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
@@ -399,7 +401,8 @@ class Header extends Component {
                           <span>{this.state.userEmail}</span>
                           <span
                             className="pull-right close-span"
-                            onClick={this.closeSettingModal}>
+                            onClick={this.closeSettingModal}
+                          >
                             <i className="fa fa-close" aria-hidden="true"></i>
                           </span>
                           <br />
@@ -421,7 +424,8 @@ class Header extends Component {
                       </div>
                       <Dropdown.Item
                         className="workspace-setting"
-                        href={`/settings/${this.props.workspaceId}`}>
+                        href={`/settings/${this.props.workspaceId}`}
+                      >
                         <img
                           alt={"settings"}
                           src={setting}
@@ -434,7 +438,8 @@ class Header extends Component {
                           Not {this.state.userName} ?{" "}
                           <button
                             className="btn btn-link"
-                            onClick={this.props.logout}>
+                            onClick={this.props.logout}
+                          >
                             Logout
                           </button>
                         </span>
