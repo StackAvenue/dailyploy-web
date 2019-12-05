@@ -114,7 +114,8 @@ class Workspace extends Component {
       colorCode: colorCode,
       taskTitle: taskTitle,
       workspaceId: workspaceId,
-      isStart: this.isBottomPopup(),
+      // isStart: this.isBottomPopup(),
+      isStart: taskTitle != "" && startOn != "" && taskId != "" && colorCode != "",
     });
 
   }
@@ -175,7 +176,6 @@ class Workspace extends Component {
   };
 
   handleTaskBottomPopup = startOn => {
-    // this.setState({ onGoingTask: !this.state.onGoingTask })
     var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`)
     var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`)
     var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`)
@@ -186,7 +186,7 @@ class Workspace extends Component {
       taskId: taskId,
       colorCode: colorCode,
       taskTitle: taskTitle,
-      isStart: this.isBottomPopup(),
+      isStart: taskTitle != "" && startOn != "" && taskId != "" && colorCode != "",
     });
   }
 

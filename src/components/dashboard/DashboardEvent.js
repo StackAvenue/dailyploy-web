@@ -5,6 +5,7 @@ import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import Timer from "./../dashboard/Timer";
+import { Alert, UncontrolledAlert } from 'reactstrap';
 
 
 class DashboardEvent extends Component {
@@ -23,6 +24,7 @@ class DashboardEvent extends Component {
       icon: "play",
       timeArr: [
       ],
+      showAlert: false,
     };
   }
 
@@ -53,26 +55,37 @@ class DashboardEvent extends Component {
 
   handleClick = () => {
     this.setState(state => {
+      var icon = this.state.icon
+      var updateIcon = icon
+      var status = state.status
       if (state.status) {
         var endOn = Date.now()
         this.setState({ runningTime: 0, endOn: endOn });
         this.saveTaskTrackingTime(endOn)
         this.handleReset()
         this.props.handleTaskBottomPopup("")
+        updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+        status = !state.status
       } else {
-        var startOn = Date.now()
-        this.setState({ startOn: startOn })
-        localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn)
-        localStorage.setItem(`taskId-${this.props.workspaceId}`, this.props.event.id)
-        localStorage.setItem(`colorCode-${this.props.workspaceId}`, this.props.bgColor)
-        localStorage.setItem(`taskTitle-${this.props.workspaceId}`, this.props.titleText)
-        this.props.handleTaskBottomPopup(this.state.startOn)
+        if (this.props.onGoingTask) {
+          updateIcon = icon;
+          this.setState({ showAlert: !this.state.showAlert })
+        } else {
+          var startOn = Date.now()
+          this.setState({ startOn: startOn })
+          localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn)
+          localStorage.setItem(`taskId-${this.props.workspaceId}`, this.props.event.id)
+          localStorage.setItem(`colorCode-${this.props.workspaceId}`, this.props.bgColor)
+          localStorage.setItem(`taskTitle-${this.props.workspaceId}`, this.props.titleText)
+          this.props.handleTaskBottomPopup(this.state.startOn)
+          var updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+          status = !state.status
+        }
       }
-      var icon = this.state.icon
       return {
-        status: !state.status,
+        status: status,
         showPopup: false,
-        icon: icon == "pause" ? "play" : icon == "play" ? "pause" : "check",
+        icon: updateIcon,
       };
     });
   };
@@ -255,6 +268,12 @@ class DashboardEvent extends Component {
           {this.state.showPopup ? this.props.eventItemPopoverTemplateResolver(schedulerData, event, titleText, start, end, this.props.bgColor)
             : null}
         </div>
+
+        {this.state.showAlert ?
+          <UncontrolledAlert className="task-war-alert" color="warning">
+            one task already ongoing !
+          </UncontrolledAlert>
+          : null}
       </>
     );
   }
