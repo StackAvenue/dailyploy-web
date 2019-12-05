@@ -6,6 +6,7 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
+import DailyPloySelect from "./../DailyPloySelect";
 
 class AddTaskModal extends Component {
   constructor(props) {
@@ -262,6 +263,13 @@ class AddTaskModal extends Component {
                   </div>
                 ) : null}
               </div>
+
+              <DailyPloySelect
+                options={this.props.projects}
+                placeholder="select"
+                iconType="circle"
+                iconType="block"
+              />
 
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">

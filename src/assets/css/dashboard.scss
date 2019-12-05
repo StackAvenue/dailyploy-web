@@ -2993,3 +2993,20 @@ table.scheduler-table tr:last-child td {
   font-size: 12px;
   color: #0075D9;
 }
+.color-block {
+  width: 20px;
+  height: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  vertical-align: sub;
+  border: solid 1px#9b9b9b;
+}
+.color-dot {
+  width: 20px;
+  height: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  vertical-align: sub;
+  border-radius: 20px;
+  border: solid 1px#9b9b9b;
+}
