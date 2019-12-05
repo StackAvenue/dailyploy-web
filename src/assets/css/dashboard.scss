@@ -2877,6 +2877,7 @@ table.scheduler-table tr:last-child td {
   }
 }
 .task-war-alert{
+  position: absolute !important;
   width: 200px;
   text-align: left;
   z-index: 1;
