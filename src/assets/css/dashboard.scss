@@ -2881,7 +2881,7 @@ table.scheduler-table tr:last-child td {
   position: absolute !important;
   width: 200px;
   text-align: left;
-  z-index: 1;
+  z-index: 5500;
   font-family: 'Roboto-Regular', 'Roboto';
   font-weight: 400;
   font-style: normal;
@@ -2965,25 +2965,25 @@ table.scheduler-table tr:last-child td {
 .monthly-timer-dropdown{
   position: absolute;
   width: 123px;
-  top: 189px;
-  left: 16px;
   background-color: #ffffff;
-  border-top: 0;
   z-index: 10082;
   font-family: 'Roboto-Regular', 'Roboto';
   font-weight: 400;
   font-style: normal;
   font-size: 13px;
-  // letter-spacing: normal;
   color: #424242;
+  .border{
+    height: 26px;
+    padding-top: 5px;
+  }
 }
 .monthly-action-dropdown{
-  left: 95px !important;
   width: 98px !important;
   position: absolute;
   z-index: 15546 !important;
   text-align: center;
-  top: 194px !important;
+  right: 0;
+  top: 40px;
   background-color: #ffffff;
   border: 1px solid #e5e5e5;
   border-radius: 5px;

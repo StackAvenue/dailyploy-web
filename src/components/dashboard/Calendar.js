@@ -285,6 +285,8 @@ class Calendar extends Component {
           times={this.times}
           bgColor={eventItem.bgColor}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+          userId={this.props.state.userId}
+          onGoingTask={this.props.onGoingTask}
         />
       );
     }
@@ -486,6 +488,7 @@ class Calendar extends Component {
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.onGoingTask}
           eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
+          userId={this.props.state.userId}
         />
       </>
     );

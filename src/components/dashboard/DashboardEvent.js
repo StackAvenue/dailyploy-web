@@ -21,6 +21,7 @@ class DashboardEvent extends Component {
       clickEventId: "",
       startOn: "",
       endOn: "",
+      canStart: false,
       icon: "play",
       timeArr: [
       ],
@@ -164,6 +165,10 @@ class DashboardEvent extends Component {
     }
   }
 
+  isValidUserDate = (userId) => {
+    return this.isToday && this.props.userId === userId
+  }
+
   render() {
     const { eventItemClick, start, end, event, mustAddCssClass, divStyle, schedulerData, titleText } = this.props;
     const startTime = moment(start).format("HH:mm");
@@ -195,14 +200,14 @@ class DashboardEvent extends Component {
                 </div>
                 {this.state.icon === 'pause' ?
                   <div
-                    style={{ pointerEvents: this.isToday ? "" : "none" }}
+                    style={{ pointerEvents: this.isValidUserDate(event.resourceId) ? "" : "none" }}
                     className="d-inline-block task-play-btn pointer"
                     onClick={() => this.handleClick()}
                   ><i className="fa fa-pause"></i></div> : null}
 
                 {this.state.icon === 'play' ?
                   <div
-                    style={{ pointerEvents: this.isToday ? "" : "none" }}
+                    style={{ pointerEvents: this.isValidUserDate(event.resourceId) ? "" : "none" }}
                     className="d-inline-block task-play-btn pointer"
                     onClick={() => this.handleClick(event.id)}
                   ><i className="fa fa-play"></i></div> : null}

@@ -4,6 +4,7 @@ import Timer from "./../dashboard/Timer";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import moment from "moment";
+import { Alert, UncontrolledAlert } from 'reactstrap';
 
 class MonthlyTaskOverPopup extends Component {
   constructor(props) {
@@ -15,6 +16,8 @@ class MonthlyTaskOverPopup extends Component {
       icon: "play",
       startOn: "",
       status: false,
+      canStart: false,
+      showAlert: false,
     }
   }
 
@@ -145,6 +148,10 @@ class MonthlyTaskOverPopup extends Component {
     this.setState({ showAction: !this.state.showAction })
   }
 
+  isValidUserDate = (userId) => {
+    return this.isToday && this.props.userId === userId
+  }
+
   render() {
     const { event, scheduler, schedulerData, titleText } = this.props;
     return (
@@ -184,14 +191,14 @@ class MonthlyTaskOverPopup extends Component {
 
             {this.state.icon === 'pause' ?
               <div
-                style={{ pointerEvents: this.isToday ? "" : "none", borderColor: "green" }}
+                style={{ pointerEvents: this.isValidUserDate(event.resourceId) ? "" : "none", borderColor: "green" }}
                 className="d-inline-block task-play-btn pointer"
                 onClick={() => this.handleClick()}
               ><i className="fa fa-pause"></i></div> : null}
 
             {this.state.icon === 'play' ?
               <div
-                style={{ pointerEvents: this.isToday ? "" : "none", borderColor: "#1e90ff" }}
+                style={{ pointerEvents: this.isValidUserDate(event.resourceId) ? "" : "none", borderColor: "#1e90ff" }}
                 className="d-inline-block task-play-btn pointer"
                 onClick={() => this.handleClick(event.id)}
               ><i className="fa fa-play"></i></div> : null}
@@ -210,43 +217,48 @@ class MonthlyTaskOverPopup extends Component {
                 onClick={() => this.ToggleTimerDropDown()}
                 readOnly
               />
+              {this.state.showTimerMenu ?
+                <div className="monthly-timer-dropdown">
+                  {this.props.times.map((time, idx) => {
+                    if (idx !== 0) {
+                      return <div className="border"> {time} </div>
+                    }
+                  })}
+                </div>
+                : null}
             </div>
             <div className="col-md-3 no-padding d-inline-block text-right">
               <span className="task-event-action pointer" onClick={() => this.ToggleActionDropDown()}>...</span>
             </div>
+            {this.state.showAction ?
+              <div className="d-inline-block monthly-action-dropdown">
+                {this.state.icon !== "check" ?
+                  <div
+                    className="border-bottom pointer"
+                    style={{ padding: "5px 0px 0px 0px" }}
+                    onClick={() => this.markCompleteTask(event.id)}
+                  >
+                    Mark Complete
+            </div> : null}
+                <div
+                  className="pointer"
+                  style={{ padding: "5px 0px 5px 0px" }}
+                  onClick={() => this.deleteTask(event.id)}
+                >
+                  Delete Task
+            </div>
+              </div>
+              : null
+            }
           </div>
+
         </div>
 
-        {this.state.showTimerMenu ?
-          <div className={`monthly-timer-dropdown`}>
-            {this.props.times.map((time, idx) => {
-              if (idx !== 0) {
-                return <div className="border"> {time} </div>
-              }
-            })}
-          </div>
+        {this.state.showAlert ?
+          <UncontrolledAlert className="task-war-alert" color="warning">
+            one task already ongoing !
+          </UncontrolledAlert>
           : null}
-
-        {this.state.showAction ?
-          <div className="d-inline-block monthly-action-dropdown">
-            {this.state.icon !== "check" ?
-              <div
-                className="border-bottom pointer"
-                style={{ padding: "5px 0px 0px 0px" }}
-                onClick={() => this.markCompleteTask(event.id)}
-              >
-                Mark Complete
-            </div> : null}
-            <div
-              className="pointer"
-              style={{ padding: "5px 0px 5px 0px" }}
-              onClick={() => this.deleteTask(event.id)}
-            >
-              Delete Task
-            </div>
-          </div>
-          : null
-        }
 
       </>
     )
