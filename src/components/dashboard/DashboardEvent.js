@@ -142,8 +142,12 @@ class DashboardEvent extends Component {
       } catch (e) {
       }
       if (isComplete) {
+        var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`)
         this.handleReset()
         this.setState({ icon: "check", showAction: false })
+        if (taskId === id) {
+          this.props.handleTaskBottomPopup("")
+        }
       }
     }
   }

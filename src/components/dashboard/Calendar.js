@@ -8,6 +8,7 @@ import "../../assets/css/dashboard.scss";
 import moment from "moment";
 import DashboardEvent from "./../dashboard/DashboardEvent";
 import Select from "react-dropdown-select";
+import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 
 class Calendar extends Component {
   constructor(props) {
@@ -249,28 +250,44 @@ class Calendar extends Component {
     var s = Math.floor((totalSeconds % 3600) % 60);
 
     var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
-    return (
-      <div className="event-task-hover">
-        <div className="title">
-          <span className="" title={title}>
-            {title}
-          </span>
-        </div>
-        <div className="project">
-          <div
-            className="status-dot d-inline-block"
-            style={{ backgroundColor: `${eventItem.bgColor}` }}
-          ></div>
-          <div className="d-inline-block">{eventItem.projectName}</div>
-        </div>
-        <div className="time">
-          <div className="d-inline-block">
-            {start.format("HH:mm")}-{end.format("HH:mm")}
+    if (schedulerData.viewType !== 2) {
+      return (
+        <div className="event-task-hover">
+          <div className="title">
+            <span className="" title={title}>
+              {title}
+            </span>
           </div>
-          <div className="d-inline-block pull-right">{timeDiff}</div>
+          <div className="project">
+            <div
+              className="status-dot d-inline-block"
+              style={{ backgroundColor: `${eventItem.bgColor}` }}
+            ></div>
+            <div className="d-inline-block">{eventItem.projectName}</div>
+          </div>
+          <div className="time">
+            <div className="d-inline-block">
+              {start.format("HH:mm")}-{end.format("HH:mm")}
+            </div>
+            <div className="d-inline-block pull-right">{timeDiff}</div>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <MonthlyTaskOverPopup
+          event={eventItem}
+          titleText={title}
+          end={end}
+          schedulerData={this.schedulerData}
+          scheduler={this.schedulerData}
+          workspaceId={this.props.workspaceId}
+          times={this.times}
+          bgColor={eventItem.bgColor}
+          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+        />
+      );
+    }
   };
 
   prevClick = schedulerData => {

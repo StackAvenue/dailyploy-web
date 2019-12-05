@@ -36,8 +36,10 @@ class MonthlyEvent extends Component {
     return (
       <div key={event.id} className={mustAddCssClass}
         style={divStyle}
-        onMouseOver={() => this.props.showEventPopUp()}
-        onMouseOut={() => this.props.hideEventPopUp()}
+        // onMouseOver={() => this.props.showEventPopUp()}
+        // onMouseOut={() => this.props.hideEventPopUp()}
+        onMouseEnter={() => this.props.showEventPopUp()}
+      // onMouseLeave={() => this.props.hideEventPopUp()}
       >
         <div className="row item">
           <div
@@ -45,7 +47,6 @@ class MonthlyEvent extends Component {
             style={{ padding: "5px 5px 0px 5px" }}
             onClick={() => { if (!!eventItemClick) eventItemClick(schedulerData, event) }}
           >
-            {/* <i class="fa fa-pencil pull-right" aria-hidden="true"></i> */}
             {titleText}
           </div>
         </div>
