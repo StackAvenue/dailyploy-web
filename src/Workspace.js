@@ -21,42 +21,42 @@ class Workspace extends Component {
         path: "/dashboard",
         exact: false,
         component: Dashboard,
-        title: "dashboard",
+        title: "dashboard"
       },
       {
         path: "/settings",
         exact: true,
         component: Settings,
-        title: "settings",
+        title: "settings"
       },
       {
         path: "/analysis",
         exact: true,
         component: Analysis,
-        title: "analysis",
+        title: "analysis"
       },
       {
         path: "/projects",
         exact: true,
         component: ShowProjects,
-        title: "showProjects",
+        title: "showProjects"
       },
       {
         path: "/members",
         exact: true,
         component: ShowMembers,
-        title: "showMembers",
+        title: "showMembers"
       },
       {
         path: "/reports",
         exact: true,
         component: Reports,
-        title: "reports",
+        title: "reports"
       },
       {
         component: NotFound,
-        title: "pageNotFound",
-      },
+        title: "pageNotFound"
+      }
     ];
     this.state = {
       workspaceId: null,
@@ -66,7 +66,7 @@ class Workspace extends Component {
       searchOptions: [],
       searchProjectIds: [],
       searchUserDetails: [],
-      isLoading: false,
+      isLoading: false
     };
   }
 
@@ -118,7 +118,7 @@ class Workspace extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails,
+      searchUserDetails: searchUserDetails
     });
   };
 
@@ -141,21 +141,18 @@ class Workspace extends Component {
       handleSearchFilterResult: this.handleSearchFilterResult,
       searchProjectIds: this.state.searchProjectIds,
       searchUserDetails: this.state.searchUserDetails,
-      handleLoading: this.handleLoad,
+      handleLoading: this.handleLoad
     };
     var newProps = { ...props, ...props1 };
-    if (title !== "login" && title !== "signup" && title !== "landing") {
-      return (
-        <RouteComponent {...newProps} />
-      )
-    }
-    return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
+    // if (title !== "login" && title !== "signup" && title !== "landing") {
+    return <RouteComponent {...newProps} />;
+    // }
+    // return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
   };
 
   render() {
     return (
       <div>
-
         <ToastContainer />
         <div className="row no-margin">
           <Sidebar
@@ -172,9 +169,7 @@ class Workspace extends Component {
               pathname={this.classNameRoute()}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
-            {this.state.isLoading ? (
-              <div className="loader"></div>
-            ) : null}
+            {this.state.isLoading ? <div className="loader"></div> : null}
             <Switch>
               {this.Routes.map((route, i) => (
                 <Route
@@ -189,7 +184,6 @@ class Workspace extends Component {
               <Route />
             </Switch>
           </div>
-
         </div>
       </div>
     );
