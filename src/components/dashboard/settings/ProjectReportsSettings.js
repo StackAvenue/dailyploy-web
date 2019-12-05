@@ -1,9 +1,19 @@
 import React, { Component } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 class ProjectReportsSettings extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectDate: new Date()
+    };
   }
+
+  handleSelectDate = date => {
+    this.setState({ selectDate: date });
+  };
   render() {
     return (
       <div className="employee-project-settings">
@@ -54,15 +64,15 @@ class ProjectReportsSettings extends Component {
           <div className="col-md-4 report-box">
             <div className="col-md-12 no-padding day-text">Monthly Reports</div>
             <div className="col-md-8 no-padding month-select">
-              <select>
-                <option>Sunday</option>
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thrusday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-              </select>
+              <DatePicker
+                className="form-control"
+                selected={this.state.selectDate}
+                onChange={this.handleSelectDate}
+                placeholderText="Select Date"
+                value={moment(this.state.selectDate).format(
+                  "ddd | YYYY, MMM DD"
+                )}
+              />
             </div>
             <div className="col-md-12 no-padding day-desc">
               Report for Projects below will be mailed monthly on date above.

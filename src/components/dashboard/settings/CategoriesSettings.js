@@ -1,9 +1,38 @@
 import React, { Component } from "react";
-
+import moment from "moment";
 class CategoriesSettings extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isEdit: false,
+      rowId: null,
+      data: [
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" },
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" },
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" },
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" },
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" },
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" },
+        { name: "QA/Testing", task: "11", dateCreated: "15 Jun 2019" }
+      ]
+    };
   }
+
+  handleEditCatogries = id => {
+    this.setState({ isEdit: true, rowId: id });
+  };
+
+  categoryEdit = () => {
+    this.setState({ isEdit: false });
+  };
+
+  addRow = () => {
+    let arr = [
+      { name: null, task: "0", dateCreated: moment().format("DD MMM YYYY") }
+    ];
+    let newArr = [...arr, ...this.state.data];
+    this.setState({ data: newArr, isEdit: true, rowId: 0 });
+  };
   render() {
     return (
       <div className="categories-setting">
@@ -11,7 +40,7 @@ class CategoriesSettings extends Component {
           <div className="col-md-2 heading-text">Categories</div>
           <div className="col-md-1 sub">(10)</div>
           <div className="col-md-9 text-right">
-            <button className="btn btn-primary btn-add">
+            <button className="btn btn-primary btn-add" onClick={this.addRow}>
               <span>+</span> Add
             </button>
           </div>
@@ -36,56 +65,53 @@ class CategoriesSettings extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td scope="row">QA/Testing</td>
-                  <td>11</td>
-                  <td>15 Jun 2019</td>
-                  <td>
-                    <button className="btn btn-link">
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">QA/Testing</td>
-                  <td>11</td>
-                  <td>15 Jun 2019</td>
-                  <td>
-                    <button className="btn btn-link">
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">QA/Testing</td>
-                  <td>11</td>
-                  <td>15 Jun 2019</td>
-                  <td>
-                    <button className="btn btn-link">
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">QA/Testing</td>
-                  <td>11</td>
-                  <td>15 Jun 2019</td>
-                  <td>
-                    <button className="btn btn-link">
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">QA/Testing</td>
-                  <td>11</td>
-                  <td>15 Jun 2019</td>
-                  <td>
-                    <button className="btn btn-link">
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                  </td>
-                </tr>
+                {this.state.data.map((data, index) => {
+                  return (
+                    <tr>
+                      <td scope="row">
+                        {this.state.isEdit && this.state.rowId === index ? (
+                          <input
+                            className="form-control"
+                            type="text"
+                            value={data.name}
+                            placeholder="Category Name"
+                          />
+                        ) : (
+                          data.name
+                        )}
+                      </td>
+                      <td>{data.task}</td>
+                      <td>{data.dateCreated}</td>
+                      <td>
+                        {this.state.isEdit && this.state.rowId === index ? (
+                          <div>
+                            <button
+                              className="btn btn-link"
+                              onClick={this.categoryEdit}
+                            >
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                            <button
+                              className="btn btn-link"
+                              onClick={this.categoryEdit}
+                            >
+                              <span>
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                              </span>
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="btn btn-link"
+                            onClick={() => this.handleEditCatogries(index)}
+                          >
+                            <i className="fas fa-pencil-alt"></i>
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

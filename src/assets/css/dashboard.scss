@@ -2151,9 +2151,27 @@ table.scheduler-table tr:last-child td {
             font-family: $font-family-roboto !important;
             font-size: 13px !important;
             color: #000000 !important;
-            i{
-              font-size: 14px !important;
-            color: $color-text3 !important;
+            input{
+              border: 1px solid rgba(155, 155, 155, 1);
+              height: 30px;
+              border-radius: 5px;
+              color: #000000;
+              box-shadow: 0px 0px 8px rgba(255, 255, 255, 1);
+              font-size: 13px !important;
+              width:300px;
+            }
+            button{
+              padding:0px 10px 0px 0px;
+              i{
+                font-size: 15px !important;
+              color: $color-text3 !important;
+              }
+              span{
+                i{
+                  font-size: 15px !important;
+                  color: $color-success !important;
+                }
+              }
             }
           }
         }
@@ -2204,11 +2222,12 @@ table.scheduler-table tr:last-child td {
       }
       .month-select{
         margin: 15px 0px;
-        select{
+        input{
           width: 220px;
           height: 40px;
           background-color: $color-white;
           border: 1px solid $color-borders;
+          cursor: pointer;
         }
       }
       .day-desc{
