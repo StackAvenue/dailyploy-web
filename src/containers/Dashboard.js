@@ -515,15 +515,22 @@ class Dashboard extends Component {
     this.setState({ [name]: userIdArr });
   };
 
-  handleMemberSelect = members => {
+  handleMemberSelect = member => {
     var errors = this.state.errors
     errors["memberError"] = ""
-    var memberIds = members.map(member => member.id);
-    this.setState({
-      taskUser: memberIds,
-      selectedMembers: members,
-      errors: errors
-    });
+    if (member) {
+      this.setState({
+        taskUser: [member.id],
+        selectedMembers: [member],
+        errors: errors
+      });
+    } else {
+      this.setState({
+        taskUser: [],
+        selectedMembers: [],
+        errors: errors
+      });
+    }
   };
 
   handleInputChange = e => {
@@ -533,64 +540,34 @@ class Dashboard extends Component {
     this.setState({ [name]: value, errors: errors });
   };
 
-  // handleProjectSelect = option => {
-  //   let options = []
-  //   var memberIds = []
-  //   if (this.state.user.role === 'admin') {
-  //     options = option.members
-  //   } else {
-  //     options = option.members.filter(member => member.id === this.state.userId)
-  //   }
-  //   options = Array.from(new Set(options.map(JSON.stringify))).map(JSON.parse);
-  //   console.log("options", options)
-  //   memberIds = this.state.selectedTaskMember.map(member => member.id)
-  //   var m = memberIds.length === 0 ? memberIds.push(this.state.userId) : memberIds
-  //   // memberIds = Array.from(new Set(memberIds));
-  //   console.log("memberIds", memberIds)
-  //   // var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
-  //   var removedMembers = options.filter(member => memberIds.includes(member.id))
-  //   console.log("removedMembers", removedMembers)
-  //   var taskUsers = removedMembers.map(m => m.id)
-  //   var errors = this.state.errors
-  //   errors["projectError"] = ""
-  //   this.setState({
-  //     projectId: option.id,
-  //     selectedMembers: removedMembers,
-  //     project: option,
-  //     taskUser: taskUsers,
-  //     modalMemberSearchOptions: options,
-  //     border: "solid 1px #9b9b9b",
-  //     isBorder: false,
-  //     errors: errors,
-  //   })
-  // }
-
   handleProjectSelect = option => {
     let options = []
     var memberIds = []
-    if (this.state.user.role === 'admin') {
-      options = option.members
-      options.push({ email: this.state.userEmail, id: this.state.userId, name: this.state.userName })
-    } else {
-      options = option.members.filter(member => member.id === this.state.userId)
+    if (option) {
+      if (this.state.user.role === 'admin') {
+        options = option.members
+        options.push({ email: this.state.userEmail, id: this.state.userId, name: this.state.userName })
+      } else {
+        options = option.members.filter(member => member.id === this.state.userId)
+      }
+      options = Array.from(new Set(options.map(JSON.stringify))).map(JSON.parse);
+      memberIds = options.map(member => member.id)
+      memberIds = Array.from(new Set(memberIds));
+      var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
+      var taskUsers = removedMembers.map(m => m.id)
+      var errors = this.state.errors
+      errors["projectError"] = ""
+      this.setState({
+        projectId: option.id,
+        selectedMembers: removedMembers,
+        project: option,
+        taskUser: taskUsers,
+        modalMemberSearchOptions: options,
+        border: "solid 1px #9b9b9b",
+        isBorder: false,
+        errors: errors,
+      })
     }
-    options = Array.from(new Set(options.map(JSON.stringify))).map(JSON.parse);
-    memberIds = options.map(member => member.id)
-    memberIds = Array.from(new Set(memberIds));
-    var removedMembers = this.state.selectedMembers.filter(selecteMember => memberIds.includes(selecteMember.id))
-    var taskUsers = removedMembers.map(m => m.id)
-    var errors = this.state.errors
-    errors["projectError"] = ""
-    this.setState({
-      projectId: option.id,
-      selectedMembers: removedMembers,
-      project: option,
-      taskUser: taskUsers,
-      modalMemberSearchOptions: options,
-      border: "solid 1px #9b9b9b",
-      isBorder: false,
-      errors: errors,
-    })
   }
 
   handleProjectBackspace = () => {
@@ -637,7 +614,7 @@ class Dashboard extends Component {
         project: "",
         projectId: "",
         taskId: "",
-        modalMemberSearchOptions: members,
+        modalMemberSearchOptions: members.length > 0 ? members : selecteMember,
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
         border: "solid 1px #ffffff",
