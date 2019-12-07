@@ -48,6 +48,7 @@ class DailyPloySelect extends Component {
   renderSearchSuggestions = () => {
     const klass = this.props.iconType == "block" ? "color-block" : this.props.iconType == "circle" ? "color-dot" : ""
     const name = this.props.suggesionBy ? this.props.suggesionBy : "name"
+    const icon = this.props.icon
     return (
       <>
         {this.state.suggestions.length > 0 ?
@@ -55,9 +56,12 @@ class DailyPloySelect extends Component {
             {klass != "" ? this.state.suggestions.map((option, idx) => {
               return (
                 <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                  <div
-                    className={`d-inline-block ${klass}`}
-                    style={{ backgroundColor: `${option.color_code}` }}></div>
+                  {icon !== "" && klass === "" ?
+                    < i className={`left-padding-20px ${icon}`}></i>
+                    :
+                    <div
+                      className={`d-inline-block ${klass}`}
+                      style={{ backgroundColor: `${option.color_code}` }}></div>}
                   <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
                 </li>
               )
@@ -65,12 +69,16 @@ class DailyPloySelect extends Component {
               this.state.suggestions.map((option, idx) => {
                 return (
                   <li key={idx} onClick={() => this.selectSuggestion(option)}>
+                    {icon !== "" ?
+                      < i className={` ${icon}`}></i>
+                      : null}
                     <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
                   </li>
                 )
               })}
           </ul>
-          : null}
+          : null
+        }
         < span className={`text-titlize left-padding-20px  ${this.state.notFound}`} >No Match Found</span>
       </>
     )
@@ -80,12 +88,14 @@ class DailyPloySelect extends Component {
     const selected = this.state.selected
     const klass = this.props.iconType == "block" ? "color-block" : this.props.iconType == "circle" ? "color-dot" : ""
     const label = this.props.label ? this.props.label : "name"
+    const icon = this.props.icon
+
     return (
       <>
         {selected != "" ?
           <div className="">
-            <div className={`d-inline-block ${klass}`} style={{ backgroundColor: `${selected.color_code ? selected.color_code : this.state.color}` }}></div>
-            <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
+            {icon !== "" && klass === "" ? <i className={`left-padding-20px ${icon}`}></i> :
+              <div className={`d-inline-block ${klass}`} style={{ backgroundColor: `${selected.color_code ? selected.color_code : this.state.color}` }}></div>}            <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
           </div>
           : null}
       </>
@@ -112,7 +122,7 @@ class DailyPloySelect extends Component {
     const { props } = this;
     return (
       <>
-        <div className={`col-md-12  d-inline-block no-padding ${props.className ? props.className : ""}`}>
+        <div style={{ height: "34px" }} className={`col-md-12   d-inline-block no-padding ${props.className ? props.className : ""}`}>
           <div className=" custom-search-select">
             <div onClick={this.onClickInput}>
               <div className="d-inline-block selected-tags text-titlize">
@@ -152,5 +162,6 @@ export default DailyPloySelect;
   iconType="circle"
   iconType="block"
   name="taskName"
+  icon="fa fa-user"
   onChange={() => { }}
 /> */}

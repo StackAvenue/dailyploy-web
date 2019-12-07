@@ -205,6 +205,7 @@ class AddTaskModal extends Component {
                     placeholder="Select Member"
                     default={this.props.state.selectedMembers[0]}
                     className=""
+                    icon="fa fa-user"
                     onChange={this.props.handleMemberSelect}
                   />
                 </div>
@@ -223,7 +224,7 @@ class AddTaskModal extends Component {
 
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
-                  Duration
+                  Date
                 </div>
                 <div className="col-md-10 d-inline-block no-padding">
                   <div className=" d-inline-block no-padding">
@@ -337,30 +338,30 @@ class AddTaskModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
-                <div className="col-md-10 ml-auto">
+              <div className="no-padding input-row">
+                <div className="action-btn">
                   <button
                     type="button"
-                    className="btn col-md-3 button2 btn-primary"
-                    onClick={props.editTask}
+                    className="button3 btn-primary pull-right"
+                    onClick={this.props.backToTaskInfoModal}
                   >
-                    Delete
+                    Cancel
                   </button>
                   <button
                     type="button"
-                    className="btn col-md-3 button1 btn-primary"
+                    className="button1 btn-primary pull-right"
                     onClick={props.state.taskButton === "Add" ? props.addTask : props.editTask}
                   >
                     {props.state.taskButton}
                   </button>
-
-                  <button
-                    type="button"
-                    className="btn col-md-3 button2 btn-primary"
-                    onClick={props.closeTaskModal}
-                  >
-                    Cancel
-                  </button>
+                  {this.props.state.fromInfoEdit ?
+                    <button
+                      type="button"
+                      className="pull-right button3 btn-primary"
+                      onClick={props.editTask}
+                    >
+                      Delete
+                  </button> : null}
                 </div>
               </div>
             </div>

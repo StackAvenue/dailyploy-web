@@ -96,7 +96,7 @@ class TaskInfoModal extends Component {
     if (option && option.length > 0) {
       return (
         <div className="select-member">
-          <div className="member-title d-inline-block">{this.initalChar(option[0].name)}</div>
+          <div className="member-title d-inline-block"><i className="fa fa-user"></i></div>
           <div className="right-left-space-5 d-inline-block">{option[0].name}</div>
         </div>
       );
@@ -130,8 +130,6 @@ class TaskInfoModal extends Component {
       var status = state.status
       if (state.status) {
         var endOn = Date.now()
-        // this.setState({ runningTime: 0, endOn: endOn });
-        // this.saveTaskTrackingTime(endOn)
         this.handleReset()
         this.props.handleTaskBottomPopup("")
         updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
@@ -200,20 +198,26 @@ class TaskInfoModal extends Component {
           <div className="row no-margin">
             <div className="col-md-12 d-inline-block header text-titlize">
               <div className="d-inline-block" style={{ width: "60%" }}>
-                <span>{props.state.taskName}</span>
+                <span>{"Task Details"}</span>
               </div>
-              {this.state.icon !== "check" ?
-                <>
+              <div className="action-btn d-inline-block">
+                {this.state.icon !== "check" ?
+                  <>
+                    <button
+                      className="d-inline-block btn btn-link"
+                      onClick={() => props.confirmModal('delete')}
+                    > Delete</button>
+                    <button
+                      className="d-inline-block btn btn-link"
+                      onClick={props.taskInfoEdit}
+                    >Edit</button>
+                  </>
+                  :
                   <button
+                    onClick={() => props.confirmModal('resume')}
                     className="d-inline-block btn btn-link"
-                    onClick={props.closeTaskModal}
-                  > Delete</button>
-                  <button
-                    className="d-inline-block btn btn-link"
-                    onClick={props.taskInfoEdit}
-                  >Edit</button>
-                </>
-                : null}
+                  >Resume</button>}
+              </div>
               <button
                 className="d-inline-block btn btn-link float-right"
                 onClick={props.closeTaskModal}
@@ -254,17 +258,22 @@ class TaskInfoModal extends Component {
                     onClick={() => this.markCompleteTask()}
                     className="btn btn-xs button3 btn-primary"
                   >Mark Complete</button>}
-                {this.state.icon === "check" ?
-                  <button
-                    onClick={() => this.resumeCompletedTask()}
-                    className="d-inline-block btn btn-link"
-                  >Resume</button> : null}
               </div>
             </div>
 
 
 
-            <div className="col-md-12 body">
+            <div className="col-md-12 body text-titlize">
+
+              <div className="col-md-12 no-padding ">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Name
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">{props.state.taskName}</span>
+                </div>
+              </div>
+
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Project
@@ -303,7 +312,7 @@ class TaskInfoModal extends Component {
 
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
-                  Duration
+                  Date
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <div className="col-md-12 d-inline-block">
@@ -346,7 +355,7 @@ class TaskInfoModal extends Component {
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
-                  <span>{props.state.taskEvent.comments ? props.state.taskEvent.comments : "---"}</span>
+                  <p className="left-padding-20px">{props.state.taskEvent.comments ? props.state.taskEvent.comments : "---"}</p>
                 </div>
               </div>
             </div>

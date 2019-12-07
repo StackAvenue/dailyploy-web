@@ -15,6 +15,9 @@
   height: 60px !important;
 }
 
+.btn-link:hover{
+  text-decoration: none !important;
+}
 .dashboard-header-container {
   .notification {
     padding-right: 15px !important;
@@ -645,7 +648,7 @@
     .body {
       padding: 5px 49px 10px 49px !important;
       .input-row {
-        padding-top: 20px !important;
+        padding-top: 15px !important;
         .label {
           font-family: $font-family-roboto;
           font-size: 15px;
@@ -702,6 +705,7 @@
           font-weight: 500 !important;
           border: 0 !important;
           margin-left: 7% !important;
+          width: 93px;
         }
         .button2 {
           border-radius: 5px !important;
@@ -712,7 +716,27 @@
           font-weight: 500 !important;
           color: $color-text3 !important;
           margin-left: 7% !important;
+          width: 93px;
         }
+        .button3{
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          color: $color-text3 !important;
+          color:$color-brand3 !important;
+          height: 40px;
+          width: 93px;
+          margin-left: 7% !important;
+        }
+      }
+    }
+    .action-btn{
+      padding: 20px 29px 20px 31px;
+      button{
+        margin-left: 10px;
       }
     }
   }
@@ -3107,7 +3131,7 @@ table.scheduler-table tr:last-child td {
 }
 .task-info-modal{
   .modal-content {
-    width: 658px;
+    width: 626px;
     .header {
       padding: 17px 0 0px 49px !important;
       span {
@@ -3122,6 +3146,9 @@ table.scheduler-table tr:last-child td {
           width: 15px;
           height: 15px;
         }
+      }
+      .action-btn{
+        padding-left: 60px;
       }
     }
     .body {
@@ -3204,6 +3231,13 @@ table.scheduler-table tr:last-child td {
           color: $color-text3 !important;
           color:$color-brand3 !important;
         }
+        .fa-user{
+          width: 8.4px;
+          height: 11px;
+          object-fit: contain;
+          opacity: 0.7;
+          margin-right: 10px;
+        }
       }
     }
   }
@@ -3275,4 +3309,125 @@ table.scheduler-table tr:last-child td {
   background-color: rgba(75, 121, 2, 1);
   color:  #ffffff;
   margin-right: 20px;
+}
+
+.task-delete-confirm-modal{
+  .modal-content {
+    width: 550px;
+    .header {
+      padding: 20px 0 0px 0px !important;
+      span {
+        font-size: 24px;
+        color: $color-brand4 !important;
+        font-family: $font-family-roboto !important;
+        width: 119px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: left;
+        margin-left: 31px;
+      }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+    .confirm-msg{
+      height: 24px;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: normal;
+      text-align: left;
+      color: #707070;
+      margin: 30px 0px 0px 31px;
+    }
+    .task-details{
+      width: 82px;
+      height: 18px;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color-text1;
+      margin-left: 31px;
+    }
+    .body {
+      width: 490px;
+      border-radius: 6px;
+      border: solid 1px #d1d1d1;
+      background-color: #ffffff;
+      margin: 10px 29px 10px 31px;
+      .input-row {
+        padding: 5px 0px 5px 10px !important;
+        .label {
+          width: 100%;
+          // height: 15px;
+          font-family: Roboto;
+          font-size: 13px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.15;
+          letter-spacing: normal;
+          text-align: left;
+        }
+        .date-time{
+          width: 72px;
+          height: 15px;
+          font-family: Roboto;
+          font-size: 13px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.15;
+          letter-spacing: normal;
+          text-align: left;
+          color: $color-heading3;
+        }
+        .comments{
+          width: 341px;
+          height: auto;
+          font-family: Roboto;
+          font-size: 12px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.17;
+          letter-spacing: normal;
+          text-align: left;
+          color: $color-text1;
+        }
+      }
+    }
+    .button3{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      color:$color-brand3 !important;
+      height: 40px;
+    }
+    .action-btn{
+      padding: 20px 29px 20px 31px;
+      button{
+        margin-left: 10px;
+      }
+    }
+  }
 }

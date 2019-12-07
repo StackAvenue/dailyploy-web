@@ -14,6 +14,7 @@ import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
 import { DATE_FORMAT1 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
+import TaskConfirm from "./../components/dashboard/TaskConfirm";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -70,6 +71,9 @@ class Dashboard extends Component {
       selectedTaskMember: [],
       memberProjects: [],
       showInfo: false,
+      fromInfoEdit: false,
+      taskConfirmModal: false,
+      confirmModalText: "",
       errors: {
         taskNameError: "",
         projectError: "",
@@ -458,6 +462,7 @@ class Dashboard extends Component {
     this.setState({
       show: false,
       showInfo: false,
+      taskConfirmModal: false,
       taskUser: [],
       taskButton: "Add",
       modalMemberSearchOptions: [],
@@ -474,6 +479,7 @@ class Dashboard extends Component {
       comments: "",
       border: "solid 1px #ffffff",
       taskEvent: "",
+      fromInfoEdit: false,
     });
   };
 
@@ -489,6 +495,7 @@ class Dashboard extends Component {
       this.setState({ dateFrom: date, errors: errors });
     }
   };
+
   handleDateTo = date => {
     var errors = this.state.errors
     errors["dateToError"] = ""
@@ -575,14 +582,6 @@ class Dashboard extends Component {
     }
   }
 
-  handleProjectBackspace = () => {
-    this.setState({
-      projectId: "",
-      project: "",
-      border: "solid 1px #ffffff",
-    })
-  }
-
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
     let routeName = route.split("/")[3];
@@ -615,7 +614,7 @@ class Dashboard extends Component {
         taskUser: [memberId],
         selectedMembers: selecteMember,
         show: true,
-        calenderTaskModal: true,
+        // calenderTaskModal: true,
         project: "",
         projectId: "",
         taskId: "",
@@ -629,20 +628,6 @@ class Dashboard extends Component {
       });
     }
   };
-
-  renderSelectedProject = () => {
-    var project = this.state.project;
-    let border = this.state.border
-    if (project != "") {
-      return (
-        <span style={{ display: `${this.state.project ? "block" : "none"}` }}>
-          <span className="d-inline-block selected-project-color-code" style={{ backgroundColor: `${project.color_code}`, border: `${border}` }}></span>
-          <span className="d-inline-block right-left-space-5 text-titlize">{project.name}</span>
-        </span>
-      )
-    }
-    return null
-  }
 
   validateTaskModal = () => {
     var errors = {}
@@ -670,7 +655,6 @@ class Dashboard extends Component {
   }
 
   editAddTaskDetails = async (taskId, event) => {
-    console.log("event0", event)
     let members = this.memberSearchOptions(event.resourceId, event.projectId)
     var memberProjects = this.state.projects.filter(project => project.members.map(member => member.id).includes(event.resourceId))
     var project = this.state.projects.filter(project => project.id === event.projectId)
@@ -716,15 +700,34 @@ class Dashboard extends Component {
     }
   };
 
-  managesuggestionBorder = () => {
-    this.setState({ isBorder: true })
-  }
-
   taskInfoEdit = () => {
     this.setState({
       showInfo: false,
-      show: true
+      show: true,
+      fromInfoEdit: true,
     })
+  }
+
+  confirmModal = (modal) => {
+    if (modal != "") {
+      this.setState({
+        confirmModalText: modal,
+        showInfo: false,
+        taskConfirmModal: true,
+      })
+    }
+  }
+
+  backToTaskInfoModal = () => {
+    this.setState({
+      showInfo: true,
+      taskConfirmModal: false,
+      show: false,
+    })
+  }
+
+  resumeOrDeleteTask = () => {
+
   }
 
   render() {
@@ -757,6 +760,7 @@ class Dashboard extends Component {
           <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
             <i className="fas fa-plus" />
           </button>
+          {/* {this.state.show ? */}
           <AddTaskModal
             show={this.state.show}
             state={this.state}
@@ -773,9 +777,7 @@ class Dashboard extends Component {
             handleMemberSelect={this.handleMemberSelect}
             handleProjectSelect={this.handleProjectSelect}
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}
-            renderSelectedProject={this.renderSelectedProject}
-            managesuggestionBorder={this.managesuggestionBorder}
-            handleProjectBackspace={this.handleProjectBackspace}
+            backToTaskInfoModal={this.backToTaskInfoModal}
           />
 
           <TaskInfoModal
@@ -785,7 +787,21 @@ class Dashboard extends Component {
             handleTaskBottomPopup={this.props.handleTaskBottomPopup}
             onGoingTask={this.props.state.isStart}
             taskInfoEdit={this.taskInfoEdit}
+            confirmModal={this.confirmModal}
+            resumeOrDeleteTask={this.resumeOrDeleteTask}
           />
+          {this.state.taskConfirmModal ?
+            <TaskConfirm
+              taskConfirmModal={this.state.taskConfirmModal}
+              state={this.state}
+              closeTaskModal={this.closeTaskModal}
+              handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+              onGoingTask={this.props.state.isStart}
+              taskInfoEdit={this.taskInfoEdit}
+              backToTaskInfoModal={this.backToTaskInfoModal}
+              resumeOrDeleteTask={this.resumeOrDeleteTask}
+            /> :
+            null}
         </div>
         {/* <Footer />  */}
       </>

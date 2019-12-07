@@ -187,7 +187,7 @@ class DashboardEvent extends Component {
                 style={{ padding: "5px 5px 0px 5px" }}
                 onClick={() => { if (!!eventItemClick) eventItemClick(schedulerData, event) }}
               >
-                <i className="fa fa-pencil pull-right" aria-hidden="true"></i>
+                {/* <i className="fa fa-pencil pull-right" aria-hidden="true"></i> */}
                 {titleText}
               </div>
               <div className="d-inline-block">
