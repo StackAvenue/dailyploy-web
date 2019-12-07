@@ -100,7 +100,7 @@ class AddTaskModal extends Component {
         >
           <div className="row no-margin">
             <div className="col-md-12 header text-titlize">
-              <div className={`d-inline-block ${props.state.taskButton === "Add" ? "" : "taskedit-u-line"}`}>
+              <div className={`d-inline-block`}>
                 <span> {props.state.taskButton === "Add" ? "Add New Task" : "Edit Task"}</span>
               </div>
               <button
@@ -226,10 +226,10 @@ class AddTaskModal extends Component {
                   Duration
                 </div>
                 <div className="col-md-10 d-inline-block no-padding">
-                  <div className="col-md-12 d-inline-block no-padding">
-                    <div className="col-md-6 d-inline-block date-picker-container no-padding">
-                      <div className="col-md-3 d-inline-block date-text-light"><span>From:</span></div>
-                      <div className="col-md-9 d-inline-block">
+                  <div className=" d-inline-block no-padding">
+                    <div className="d-inline-block date-picker-container no-padding">
+                      <div className="d-inline-block date-text-light"><span>From:</span></div>
+                      <div className="d-inline-block">
                         <DatePicker
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
@@ -238,9 +238,9 @@ class AddTaskModal extends Component {
                         />
                       </div>
                     </div>
-                    <div className="col-md-6 d-inline-block date-picker-container no-padding">
-                      <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
-                      <div className="col-md-9 d-inline-block">
+                    <div className="d-inline-block date-picker-container no-padding">
+                      <div className="d-inline-block date-text-light "><span>To:</span></div>
+                      <div className="d-inline-block">
                         <DatePicker
                           minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
@@ -338,17 +338,25 @@ class AddTaskModal extends Component {
               </div>
 
               <div className="col-md-12 no-padding input-row">
-                <div className="col-md-4 ml-auto">
+                <div className="col-md-10 ml-auto">
                   <button
                     type="button"
-                    className="btn col-md-5 button1 btn-primary"
+                    className="btn col-md-3 button2 btn-primary"
+                    onClick={props.editTask}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    className="btn col-md-3 button1 btn-primary"
                     onClick={props.state.taskButton === "Add" ? props.addTask : props.editTask}
                   >
                     {props.state.taskButton}
                   </button>
+
                   <button
                     type="button"
-                    className="btn col-md-6 button2 btn-primary"
+                    className="btn col-md-3 button2 btn-primary"
                     onClick={props.closeTaskModal}
                   >
                     Cancel

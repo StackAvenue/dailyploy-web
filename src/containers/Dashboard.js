@@ -13,6 +13,7 @@ import Sidebar from "../components/dashboard/Sidebar";
 import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
 import { DATE_FORMAT1 } from "../utils/Constants";
+import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -55,6 +56,7 @@ class Dashboard extends Component {
       newTask: {},
       project: {},
       taskId: "",
+      taskEvent: "",
       selectedMembers: [],
       user: "",
       modalMemberSearchOptions: [],
@@ -67,6 +69,7 @@ class Dashboard extends Component {
       worksapceUsers: [],
       selectedTaskMember: [],
       memberProjects: [],
+      showInfo: false,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -454,6 +457,7 @@ class Dashboard extends Component {
   closeTaskModal = () => {
     this.setState({
       show: false,
+      showInfo: false,
       taskUser: [],
       taskButton: "Add",
       modalMemberSearchOptions: [],
@@ -469,6 +473,7 @@ class Dashboard extends Component {
       project: {},
       comments: "",
       border: "solid 1px #ffffff",
+      taskEvent: "",
     });
   };
 
@@ -665,6 +670,7 @@ class Dashboard extends Component {
   }
 
   editAddTaskDetails = async (taskId, event) => {
+    console.log("event0", event)
     let members = this.memberSearchOptions(event.resourceId, event.projectId)
     var memberProjects = this.state.projects.filter(project => project.members.map(member => member.id).includes(event.resourceId))
     var project = this.state.projects.filter(project => project.id === event.projectId)
@@ -701,15 +707,24 @@ class Dashboard extends Component {
         projectId: event.projectId,
         project: project[0],
         comments: event.comments,
-        show: true,
+        // show: true,
+        showInfo: true,
         selectedTaskMember: selectedMembers,
         memberProjects: memberProjects,
+        taskEvent: event,
       })
     }
   };
 
   managesuggestionBorder = () => {
     this.setState({ isBorder: true })
+  }
+
+  taskInfoEdit = () => {
+    this.setState({
+      showInfo: false,
+      show: true
+    })
   }
 
   render() {
@@ -737,6 +752,7 @@ class Dashboard extends Component {
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.state.isStart}
         />
+
         <div>
           <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
             <i className="fas fa-plus" />
@@ -760,6 +776,15 @@ class Dashboard extends Component {
             renderSelectedProject={this.renderSelectedProject}
             managesuggestionBorder={this.managesuggestionBorder}
             handleProjectBackspace={this.handleProjectBackspace}
+          />
+
+          <TaskInfoModal
+            showInfo={this.state.showInfo}
+            state={this.state}
+            closeTaskModal={this.closeTaskModal}
+            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+            onGoingTask={this.props.state.isStart}
+            taskInfoEdit={this.taskInfoEdit}
           />
         </div>
         {/* <Footer />  */}
