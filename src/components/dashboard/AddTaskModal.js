@@ -332,7 +332,7 @@ class AddTaskModal extends Component {
                     value={props.state.comments}
                     onChange={props.handleInputChange}
                     className="form-control"
-                    rows="3"
+                    rows="2"
                     placeholder="Write Here"
                   />
                 </div>
@@ -358,7 +358,7 @@ class AddTaskModal extends Component {
                     <button
                       type="button"
                       className="pull-right button3 btn-primary"
-                      onClick={props.editTask}
+                      onClick={() => props.confirmModal('delete')}
                     >
                       Delete
                   </button> : null}

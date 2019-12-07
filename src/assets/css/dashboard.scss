@@ -704,7 +704,7 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           border: 0 !important;
-          margin-left: 7% !important;
+          // margin-left: 7% !important;
           width: 93px;
         }
         .button2 {
@@ -715,7 +715,7 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           color: $color-text3 !important;
-          margin-left: 7% !important;
+          // margin-left: 7% !important;
           width: 93px;
         }
         .button3{
@@ -729,14 +729,14 @@
           color:$color-brand3 !important;
           height: 40px;
           width: 93px;
-          margin-left: 7% !important;
+          // margin-left: 7% !important;
         }
       }
     }
     .action-btn{
-      padding: 20px 29px 20px 31px;
+      padding: 20px 15px 0px 31px;
       button{
-        margin-left: 10px;
+        margin-left: 20px;
       }
     }
   }
@@ -3164,7 +3164,7 @@ table.scheduler-table tr:last-child td {
         input {
           height: 26px !important;
           border: 1px solid $color-borders !important;
-          font-size: 15px !important;
+          font-size: 13px !important;
           font-family: $font-family-roboto !important;
           color: $color-text1 !important;
           padding: 0px !important;
@@ -3213,23 +3213,29 @@ table.scheduler-table tr:last-child td {
         }
         .button2 {
           border-radius: 5px !important;
-          border: solid 1px $color-brand3 !important;
-          background-color: $color-white !important;
-          font-family: $font-family-roboto !important;
-          font-size: 17px !important;
-          font-weight: 500 !important;
-          color: $color-text3 !important;
-          margin-left: 7% !important;
-        }
-        .button3 {
-          border-radius: 5px !important;
+          width: 103px;
           border: solid 1px $color-brand3 !important;
           background-color: $color-white !important;
           font-family: $font-family-roboto !important;
           font-size: 13px !important;
           font-weight: 500 !important;
-          color: $color-text3 !important;
-          color:$color-brand3 !important;
+          color: $color-brand3 !important;
+          height: 25px;
+          text-align: center;
+          padding: 2px;
+        }
+        .button3{
+          border-radius: 5px !important;
+          width: 80px;
+          border: solid 1px #00a031 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          color: #00a031 !important;
+          height: 25px;
+          text-align: center;
+          padding: 2px;
         }
         .fa-user{
           width: 8.4px;
@@ -3239,11 +3245,45 @@ table.scheduler-table tr:last-child td {
           margin-right: 10px;
         }
       }
+      .comments{
+        width: 389px;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color-brandheading2;
+        text-transform: none !important;
+      }
     }
   }
   .task-play-btn {
     position: relative !important;
     right: 0px !important;
+    margin: 0px 10px 0px 10px;
+    height: 26px;
+    width: 26px;
+    .fa-pause{      
+      border: 1px solid #10b857;
+      border-radius: 20px;
+      height: 26px;
+      width: 26px;
+    }
+    .fa-play{
+      border: 1px solid #1e90ff;;
+      border-radius: 20px;
+      height: 26px;
+      width: 26px;
+    }
+    .fa-check{
+      border: 1px solid #10b857;
+      border-radius: 20px;
+      height: 26px;
+      width: 26px;
+    }
   }  
   .header-2{
     padding-left: 30px;
@@ -3276,8 +3316,9 @@ table.scheduler-table tr:last-child td {
     }
     .border{
       height: 26px !important;
-      padding-top: 5px !important;
+      padding-top: 7px !important;
       color: $color-text1 !important;
+      background-color: $color-white;
     }
     input{
       height: 26px !important;
@@ -3412,6 +3453,17 @@ table.scheduler-table tr:last-child td {
         }
       }
     }
+    .button2{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-white !important;
+      height: 40px;
+      min-width: 93px !important;
+    }
     .button3{
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
@@ -3422,11 +3474,25 @@ table.scheduler-table tr:last-child td {
       color: $color-text3 !important;
       color:$color-brand3 !important;
       height: 40px;
+      min-width: 93px !important;
     }
+    .mark-btn{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-white !important;
+      height: 40px;
+      width: 170px !important;
+    }
+
     .action-btn{
       padding: 20px 29px 20px 31px;
       button{
         margin-left: 10px;
+        min-width: 93px !important;
       }
     }
   }

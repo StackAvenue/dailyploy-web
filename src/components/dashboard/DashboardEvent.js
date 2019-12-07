@@ -191,7 +191,7 @@ class DashboardEvent extends Component {
                 {titleText}
               </div>
               <div className="d-inline-block">
-                <div className={`d-inline-block ${this.state.icon !== "check" ? "task-ongoing" : "task-compete"}`} ></div>
+                <div className={`d-inline-block task-ongoing`} ></div>
                 <div className="d-inline-block task-timer">
                   <Timer
                     startOn={this.state.startOn}
@@ -224,10 +224,9 @@ class DashboardEvent extends Component {
                     onMouseOver={() => this.hideEventPopUp(event.id)}
                   />
                 </div>
-                {this.state.icon !== "check" ?
-                  <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                    <span className="task-event-action pointer" onClick={() => this.ToggleActionDropDown(event.id)}>...</span>
-                  </div> : null}
+                <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                  <span className="task-event-action pointer" onClick={() => this.ToggleActionDropDown(event.id)}>...</span>
+                </div>
               </div>
             </div>
           </div>
@@ -255,20 +254,32 @@ class DashboardEvent extends Component {
         {this.state.showAction && this.state.clickEventId === event.id ?
           <div className="d-inline-block event-action-dropdown">
             {this.state.icon !== "check" ?
-              <div
-                className="border-bottom pointer"
-                style={{ padding: "5px 0px 0px 0px" }}
-                onClick={() => this.markCompleteTask(event.id)}
-              >
-                Mark Complete
-            </div> : null}
-            <div
-              className="pointer"
-              style={{ padding: "5px 0px 5px 0px" }}
-              onClick={() => this.deleteTask(event.id)}
-            >
-              Delete Task
+              <>
+                <div
+                  className="border-bottom pointer"
+                  style={{ padding: "5px 0px 0px 0px" }}
+                  onClick={() => this.markCompleteTask(event.id)}
+                  onClick={() => this.props.taskEventResumeConfirm(event, 'mark as completed')}
+                >
+                  Mark Complete
             </div>
+                <div
+                  className="pointer"
+                  style={{ padding: "5px 0px 5px 0px" }}
+                  onClick={() => this.props.taskEventResumeConfirm(event, 'delete')}
+                >
+                  Delete Task
+            </div>
+              </>
+              :
+              <div
+                className="pointer"
+                style={{ padding: "5px 0px 5px 0px" }}
+                onClick={() => this.props.taskEventResumeConfirm(event, 'resume')}
+              >
+                Resume
+            </div>
+            }
           </div>
           : null
         }

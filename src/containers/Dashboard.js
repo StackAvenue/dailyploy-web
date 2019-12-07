@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, post, put, logout } from "../utils/API";
+import { get, post, put, logout, mockGet, mockPost } from "../utils/API";
 import moment from "moment";
 import Header from "../components/dashboard/Header";
 import "../assets/css/dashboard.scss";
@@ -73,7 +73,11 @@ class Dashboard extends Component {
       showInfo: false,
       fromInfoEdit: false,
       taskConfirmModal: false,
+      backFromTaskEvent: true,
       confirmModalText: "",
+      icon: "play",
+      startOn: "",
+      status: false,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -463,6 +467,7 @@ class Dashboard extends Component {
       show: false,
       showInfo: false,
       taskConfirmModal: false,
+      backFromTaskEvent: true,
       taskUser: [],
       taskButton: "Add",
       modalMemberSearchOptions: [],
@@ -671,6 +676,8 @@ class Dashboard extends Component {
       var startTime = moment(data.start_datetime).format("HH:mm:ss");
       var endTime = moment(data.end_datetime).format("HH:mm:ss");
     } catch (e) { }
+    var startOn = localStorage.getItem(`startOn-${this.props.state.workspaceId}`)
+    var eventId = localStorage.getItem(`taskId-${this.props.state.workspaceId}`)
     if (
       this.state.user.role === "admin" ||
       this.state.userId == event.resourceId
@@ -696,6 +703,9 @@ class Dashboard extends Component {
         selectedTaskMember: selectedMembers,
         memberProjects: memberProjects,
         taskEvent: event,
+        icon: startOn != "" && taskId === eventId ? "pause" : "play",
+        taskPlayStatus: startOn != "" && taskId === eventId ? true : false,
+        startOn: startOn
       })
     }
   };
@@ -714,6 +724,7 @@ class Dashboard extends Component {
         confirmModalText: modal,
         showInfo: false,
         taskConfirmModal: true,
+        show: false,
       })
     }
   }
@@ -723,11 +734,109 @@ class Dashboard extends Component {
       showInfo: true,
       taskConfirmModal: false,
       show: false,
+      backFromTaskEvent: true
     })
   }
 
-  resumeOrDeleteTask = () => {
+  taskMarkComplete = (event) => {
+    if (event) {
+      // try {
+      //   const { data } = await mockGet("mark-complete");
+      //   var isComplete = data[0].complete
+      // } catch (e) {
+      // }
+      if (true) {
+        var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`)
+        this.setState({
+          icon: "check",
+          taskConfirmModal: false,
+          backFromTaskEvent: true,
+          showInfo: true,
+        })
+        if (taskId === event.id) {
+          this.handleReset();
+          this.props.handleTaskBottomPopup("");
+        }
+      }
+    }
+  }
 
+  taskDelete = (event) => {
+  }
+
+  taskResume = (event) => {
+    if (event) {
+      // try {
+      //   const { data } = await mockGet("mark-complete");
+      //   var isComplete = data[0].complete
+      // } catch (e) {
+      // }
+      if (true) {
+        this.setState({
+          icon: "play",
+          taskConfirmModal: false,
+          backFromTaskEvent: true,
+          showInfo: true,
+        })
+      }
+    }
+  }
+
+  handleTaskPlay = () => {
+    this.setState({ icon: 'check' })
+  }
+
+  handleTaskStartTop = () => {
+    var icon = this.state.icon
+    var updateIcon = icon
+    var status = this.state.status
+    if (status) {
+      this.handleReset()
+      this.props.handleTaskBottomPopup("")
+      updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+      status = !this.state.status
+    } else if (this.props.onGoingTask) {
+      updateIcon = icon;
+      var startOn = this.props.state.startOn
+    } else {
+      var startOn = Date.now()
+      localStorage.setItem(`startOn-${this.state.workspaceId}`, startOn)
+      localStorage.setItem(`taskId-${this.state.workspaceId}`, this.state.taskEvent.id)
+      localStorage.setItem(`colorCode-${this.state.workspaceId}`, this.state.taskEvent.bgColor)
+      localStorage.setItem(`taskTitle-${this.state.workspaceId}`, this.state.taskEvent.title)
+      this.props.handleTaskBottomPopup(this.state.startOn)
+      updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+      status = !this.state.status
+    }
+    this.setState({
+      status: status,
+      showPopup: false,
+      icon: updateIcon,
+      startOn: startOn,
+    })
+  };
+
+  handleReset = () => {
+    localStorage.setItem(`startOn-${this.state.workspaceId}`, "")
+    localStorage.setItem(`taskId-${this.state.workspaceId}`, "")
+    localStorage.setItem(`colorCode-${this.state.workspaceId}`, "")
+    localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "")
+  };
+
+  taskEventResumeConfirm = (event, modalText) => {
+    this.setState({
+      dateFrom: new Date(event.start),
+      dateTo: new Date(event.end),
+      taskId: event.id,
+      taskName: event.title,
+      projectId: event.projectId,
+      project: { name: event.projectName, color_code: event.bgColor },
+      comments: event.comments,
+      taskConfirmModal: true,
+      backFromTaskEvent: false,
+      taskEvent: event,
+      confirmModalText: modalText,
+    })
   }
 
   render() {
@@ -754,6 +863,7 @@ class Dashboard extends Component {
           handleProjectSelect={this.handleProjectSelect}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.state.isStart}
+          taskEventResumeConfirm={this.taskEventResumeConfirm}
         />
 
         <div>
@@ -778,10 +888,11 @@ class Dashboard extends Component {
             handleProjectSelect={this.handleProjectSelect}
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}
             backToTaskInfoModal={this.backToTaskInfoModal}
+            confirmModal={this.confirmModal}
           />
 
           <TaskInfoModal
-            showInfo={this.state.showInfo}
+            showInfo={this.state.showInfo && this.state.backFromTaskEvent}
             state={this.state}
             closeTaskModal={this.closeTaskModal}
             handleTaskBottomPopup={this.props.handleTaskBottomPopup}
@@ -789,6 +900,9 @@ class Dashboard extends Component {
             taskInfoEdit={this.taskInfoEdit}
             confirmModal={this.confirmModal}
             resumeOrDeleteTask={this.resumeOrDeleteTask}
+            handleTaskPlay={this.handleTaskPlay}
+            icon={this.state.icon}
+            handleTaskStartTop={this.handleTaskStartTop}
           />
           {this.state.taskConfirmModal ?
             <TaskConfirm
@@ -799,7 +913,9 @@ class Dashboard extends Component {
               onGoingTask={this.props.state.isStart}
               taskInfoEdit={this.taskInfoEdit}
               backToTaskInfoModal={this.backToTaskInfoModal}
-              resumeOrDeleteTask={this.resumeOrDeleteTask}
+              taskMarkComplete={this.taskMarkComplete}
+              taskResume={this.taskResume}
+              taskDelete={this.taskDelete}
             /> :
             null}
         </div>

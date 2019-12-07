@@ -48,7 +48,9 @@ class TaskConfirm extends Component {
           <div className="row no-margin">
             <div className="col-md-12 d-inline-block header text-titlize">
               <div className="d-inline-block" style={{ width: "60%" }}>
-                <span>{`${props.state.confirmModalText}  Task`}</span>
+                {this.props.state.confirmModalText === "mark as completed" ?
+                  <span>{`Mark Task as Completed`}</span> :
+                  <span>{`${props.state.confirmModalText}  Task`}</span>}
               </div>
               <button
                 className="d-inline-block btn btn-link float-right"
@@ -62,6 +64,8 @@ class TaskConfirm extends Component {
                 <span>{`Are you sure you want to Resume this task?`}</span> : null}
               {this.props.state.confirmModalText === "delete" ?
                 <span>{`Are you sure you want to Delete this task?`}</span> : null}
+              {this.props.state.confirmModalText === "mark as completed" ?
+                <span>{`Are you sure you want to mark this task as completed?`}</span> : null}
             </div>
             <div className="col-md-12 task-details no-padding">
               <span>Task Details</span>
@@ -125,18 +129,36 @@ class TaskConfirm extends Component {
             <div className="col-md-12 action-btn">
               <button
                 type="button"
-                className="btn col-md-3 pull-right button3 btn-primary"
-                onClick={props.backToTaskInfoModal}
+                className="btn pull-right button3 btn-primary"
+                onClick={() => !props.state.backFromTaskEvent ? this.props.closeTaskModal() : props.backToTaskInfoModal()}
               >
                 Cancel
                   </button>
-              <button
-                type="button"
-                className="btn col-md-3 button pull-right btn-primary text-titlize"
-                onClick={() => props.resumeOrDeleteTask}
-              >
-                {props.state.confirmModalText}
-              </button>
+              {props.state.confirmModalText === "resume" ?
+                <button
+                  type="button"
+                  className=" button2 pull-right btn-primary text-titlize"
+                  onClick={() => props.taskResume(props.state.taskEvent)}
+                >
+                  {props.state.confirmModalText}
+                </button> : null}
+
+              {props.state.confirmModalText === "delete" ?
+                <button
+                  type="button"
+                  className=" button2 pull-right btn-primary text-titlize"
+                  onClick={() => props.taskDelete(props.state.taskEvent)}
+                >
+                  {props.state.confirmModalText}
+                </button> : null}
+              {props.state.confirmModalText === "mark as completed" ?
+                <button
+                  type="button"
+                  className=" mark-btn pull-right btn-primary text-titlize"
+                  onClick={() => props.taskMarkComplete(props.state.taskEvent)}
+                >
+                  {props.state.confirmModalText}
+                </button> : null}
 
             </div>
           </div>

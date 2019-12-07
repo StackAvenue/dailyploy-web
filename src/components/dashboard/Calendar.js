@@ -98,12 +98,12 @@ class Calendar extends Component {
             showAgenda: false,
             isEventPerspective: false
           },
-          {
-            viewName: "Month",
-            viewType: ViewTypes.Month,
-            showAgenda: false,
-            isEventPerspective: false
-          }
+          // {
+          //   viewName: "Month",
+          //   viewType: ViewTypes.Month,
+          //   showAgenda: false,
+          //   isEventPerspective: false
+          // }
         ]
       }
     );
@@ -489,6 +489,7 @@ class Calendar extends Component {
           onGoingTask={this.props.onGoingTask}
           eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
           userId={this.props.state.userId}
+          taskEventResumeConfirm={this.props.taskEventResumeConfirm}
         />
       </>
     );

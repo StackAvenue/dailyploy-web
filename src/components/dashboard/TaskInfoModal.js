@@ -10,7 +10,6 @@ import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
 class TaskInfoModal extends Component {
   constructor(props) {
     super(props);
-    this.isToday = this.isToday()
     this.times = ['18:19 - 20:19', '18:19 - 20:19', '18:19 - 20:19'];
     this.priority = {
       name: "high",
@@ -23,9 +22,6 @@ class TaskInfoModal extends Component {
     this.state = {
       color: "#ffffff",
       showTimerMenu: false,
-      icon: "play",
-      startOn: "",
-      status: false,
     };
   }
 
@@ -40,7 +36,7 @@ class TaskInfoModal extends Component {
       if (isComplete) {
         var taskId = localStorage.getItem(`taskId-${this.props.state.workspaceId}`)
         this.handleReset()
-        this.setState({ icon: "check" })
+        this.props.handleTaskPlay('check')
         if (eventTaskId === taskId) {
           this.props.handleTaskBottomPopup("")
         }
@@ -57,13 +53,14 @@ class TaskInfoModal extends Component {
       } catch (e) {
       }
       if (isComplete) {
-        this.setState({ icon: "play" })
+        // this.setState({ icon: "play" })
+        this.props.handleTaskPlay('play')
       }
     }
   }
 
   isToday = () => {
-    return this.props.state.dateTo ? this.props.state.dateTo.format(DATE_FORMAT1) == moment(new Date()).format(DATE_FORMAT1) : false
+    return this.props.state.dateTo ? moment(this.props.state.dateTo).format(DATE_FORMAT1) == moment(new Date()).format(DATE_FORMAT1) : false
   }
   async componentDidMount() {
     var startOn = localStorage.getItem(`startOn-${this.props.state.workspaceId}`)
@@ -120,12 +117,12 @@ class TaskInfoModal extends Component {
 
   isValidUserDate = () => {
     const props = this.props.state;
-    return this.isToday && props.memberIds && props.memberIds[0] === props.userId
+    return this.isToday() && props.taskEvent.resourceId === props.userId
   }
 
-  handleClick = () => {
+  handleTaskStartTop = () => {
     this.setState(state => {
-      var icon = this.state.icon
+      var icon = this.props.icon
       var updateIcon = icon
       var status = state.status
       if (state.status) {
@@ -201,7 +198,7 @@ class TaskInfoModal extends Component {
                 <span>{"Task Details"}</span>
               </div>
               <div className="action-btn d-inline-block">
-                {this.state.icon !== "check" ?
+                {this.props.icon !== "check" ?
                   <>
                     <button
                       className="d-inline-block btn btn-link"
@@ -230,34 +227,35 @@ class TaskInfoModal extends Component {
               <div className="input-row">
 
                 <div className="d-inline-block">
-                  {this.state.icon === 'pause' ?
+                  {this.props.icon === 'pause' ?
                     <div
                       style={{ pointerEvents: this.isValidUserDate() ? "" : "none" }}
                       className="d-inline-block task-play-btn pointer"
-                      onClick={() => this.handleClick()}
+                      onClick={() => this.props.handleTaskStartTop()}
                     ><i className="fa fa-pause"></i></div> : null}
 
-                  {this.state.icon === 'play' ?
+                  {this.props.icon === 'play' ?
                     <div
                       style={{ pointerEvents: this.isValidUserDate() ? "" : "none" }}
                       className="d-inline-block task-play-btn pointer"
-                      onClick={() => this.handleClick()}
+                      onClick={() => this.props.handleTaskStartTop()}
                     ><i className="fa fa-play"></i></div> : null}
 
-                  {this.state.icon === 'check' ?
+                  {this.props.icon === 'check' ?
                     <div className="d-inline-block task-play-btn"><i className="fa fa-check"></i></div> : null}
                 </div>
                 <div className="d-inline-block header-2" >
                   <span>{"2hr 30mins"}</span>
                 </div>
-                {this.state.icon === "check" ?
-                  <div className="bg-green d-inline-block">Complete</div>
+                {this.props.icon === "check" ?
+                  <div
+                    className="d-inline-block button3"
+                  ><span>Completed</span></div>
                   :
-                  <button
-                    type="button"
-                    onClick={() => this.markCompleteTask()}
-                    className="btn btn-xs button3 btn-primary"
-                  >Mark Complete</button>}
+                  <div
+                    onClick={() => props.confirmModal('mark as completed')}
+                    className="d-inline-block button2 pointer"
+                  ><span>Mark Complete</span></div>}
               </div>
             </div>
 
@@ -316,10 +314,10 @@ class TaskInfoModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <div className="col-md-12 d-inline-block">
-                    <div className="col-md-4 d-inline-block">
+                    <div className="col-md-4 d-inline-block no-padding">
                       {moment(props.state.dateFrom).format(DATE_FORMAT2)}
                     </div>
-                    <div className="col-md-4 d-inline-block">
+                    <div className="col-md-4 d-inline-block no-padding">
                       {moment(props.state.dateTo).format(DATE_FORMAT2)}
                     </div>
                   </div>
@@ -347,15 +345,18 @@ class TaskInfoModal extends Component {
                         </div>
                         : null}
                     </div>
-
                   </div>
+                  <div className="col-md-4 d-inline-block">
+                    <span className="d-inline-block">01h 00min</span>
+                  </div>
+
                 </div>
               </div>
 
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
-                  <p className="left-padding-20px">{props.state.taskEvent.comments ? props.state.taskEvent.comments : "---"}</p>
+                  <p className="left-padding-20px comments">{props.state.taskEvent.comments ? props.state.taskEvent.comments : "---"}</p>
                 </div>
               </div>
             </div>
