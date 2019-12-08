@@ -11,6 +11,10 @@ class TaskConfirm extends Component {
   constructor(props) {
     super(props);
     this.times = ['18:19 - 20:19', '18:19 - 20:19', '18:19 - 20:19'];
+    this.priority = {
+      name: "high",
+      color_code: "#00A031"
+    };
     this.state = {
       color: "#ffffff",
       showTimerMenu: false,
@@ -26,9 +30,22 @@ class TaskConfirm extends Component {
     if (option) {
       const klass = type == "block" ? "color-block" : type == "circle" ? "color-dot" : ""
       return (
-        <div className="">
+        <div className="d-inline-block">
           <div className={`d-inline-block ${klass}`} style={{ backgroundColor: `${option.color_code ? option.color_code : this.state.color}` }}></div>
           <div className="right-left-space-5 d-inline-block">{option.name}</div>
+        </div>
+      )
+    }
+    return ""
+  }
+
+  renderInfoPriority = (option, type) => {
+    if (option) {
+      const klass = type == "block" ? "color-block" : type == "circle" ? "color-dot" : ""
+      return (
+        <div className="d-inline-block pull-right pri-info">
+          <div className={`d-inline-block ${klass}`} style={{ backgroundColor: `${option.color_code ? option.color_code : this.state.color}` }}></div>
+          <div className=" d-inline-block priority">{option.name}</div>
         </div>
       )
     }
@@ -77,9 +94,21 @@ class TaskConfirm extends Component {
                   Name
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">
+                  <span className="left-padding-20px d-inline-block">
                     {this.props.state.taskName}
                   </span>
+                  {this.props.state.icon === "play" ?
+                    <div className="d-inline-block pull-right not-start-btn">
+                      Not started
+                  </div> : null}
+                  {this.props.state.icon === "pause" ?
+                    <div className="d-inline-block pull-right progress-btn">
+                      In progress
+                  </div> : null}
+                  {this.props.state.icon === "check" ?
+                    <div className="d-inline-block pull-right complete-btn">
+                      Completed
+                  </div> : null}
                 </div>
               </div>
 
@@ -89,7 +118,9 @@ class TaskConfirm extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   {this.renderTaskInfo(this.props.state.project, 'block')}
+                  {this.renderInfoPriority(this.priority, 'circle')}
                 </div>
+
               </div>
 
               <div className="col-md-12 no-padding input-row">

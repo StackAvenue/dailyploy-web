@@ -3476,6 +3476,66 @@ table.scheduler-table tr:last-child td {
       height: 40px;
       min-width: 93px !important;
     }
+    .complete-btn{
+      border-radius: 5px !important;
+      border: solid 1px #00a031 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      color:#00a031 !important;
+      height: 25px;
+      min-width: 80px !important;
+      text-align: center;
+      padding: 2px;
+    }
+    .not-start-btn{
+      border-radius: 5px !important;
+      border: solid 1px $color-text3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      height: 25px;
+      min-width: 80px !important;
+      text-align: center;
+      padding: 2px;
+    }
+    .progress-btn{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color:$color-brand3 !important;
+      height: 25px;
+      min-width: 80px !important;
+      text-align: center;
+      padding: 2px;
+    }
+    .pri-info{
+      .color-dot{
+        width: 10px !important;
+        height: 10px !important;
+        margin: 0px 5px 3px 0px !important
+      }
+      .priority{
+        width: 27px;
+        height: 15px;
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.15;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color-heading3;
+      }
+    }
     .mark-btn{
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
