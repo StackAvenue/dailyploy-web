@@ -3516,6 +3516,24 @@ table.scheduler-table tr:last-child td {
       text-align: center;
       padding: 2px;
     }
+    .color-block{
+      width: 15px !important;
+      height: 15px !important;
+    }
+    .log-timer{
+      margin: 19px 0px 44px 31px !important;
+      .time-picker-container{
+        width: 115px !important;
+        height: 40px !important;
+      }
+      .rc-time-picker{
+        input{
+          font-family: Roboto;
+          font-size: 15px !important;
+          text-align: center;
+        }
+      }
+    }
     .pri-info{
       .color-dot{
         width: 10px !important;
@@ -3553,6 +3571,19 @@ table.scheduler-table tr:last-child td {
       button{
         margin-left: 10px;
         min-width: 93px !important;
+      }
+    }
+    .rc-time-picker-panel{
+      .rc-time-picker-panel-inner{
+        .rc-time-picker-panel-input-wrap{
+          .rc-time-picker-panel-input {
+            line-height: 2 !important;
+            font-family: Roboto !important;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            text-align: center !important;
+          }
+        }
       }
     }
   }

@@ -6,6 +6,8 @@ import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT2, HRMIN } from "./../../utils/Constants";
+import TimePicker from "rc-time-picker";
+
 
 class TaskConfirm extends Component {
   constructor(props) {
@@ -84,6 +86,22 @@ class TaskConfirm extends Component {
               {this.props.state.confirmModalText === "mark as completed" ?
                 <span>{`Are you sure you want to mark this task as completed?`}</span> : null}
             </div>
+
+            {this.props.state.confirmModalText === "mark as completed" ?
+              <div className="col-md-12 task-details log-timer no-padding">
+                <span className="d-inline-block">Log Time</span>
+                <div className="d-inline-block time-picker-container no-padding">
+                  <TimePicker
+                    value={this.props.state.timeDateTo}
+                    placeholder="Select"
+                    inputClassName="rk"
+                    showSecond={false}
+                    closeIcon={false}
+                    inputReadOnly={false}
+                  />
+                </div>
+              </div> : null}
+
             <div className="col-md-12 task-details no-padding">
               <span>Task Details</span>
             </div>
