@@ -230,7 +230,7 @@ class AddTaskModal extends Component {
                   <div className=" d-inline-block no-padding">
                     <div className="d-inline-block date-picker-container no-padding">
                       <div className="d-inline-block date-text-light"><span>From:</span></div>
-                      <div className="d-inline-block">
+                      <div className="d-inline-block datepicker">
                         <DatePicker
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
@@ -241,7 +241,7 @@ class AddTaskModal extends Component {
                     </div>
                     <div className="d-inline-block date-picker-container no-padding">
                       <div className="d-inline-block date-text-light "><span>To:</span></div>
-                      <div className="d-inline-block">
+                      <div className="d-inline-block datepicker to-datepicker ">
                         <DatePicker
                           minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
@@ -275,12 +275,12 @@ class AddTaskModal extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Time
                 </div>
-                <div className="col-md-10 d-inline-block no-padding">
+                <div className="col-md-10 d-inline-block">
                   <div className="col-md-12 d-inline-block no-padding">
 
-                    <div className="col-md-4 d-inline-block time-picker-container no-padding">
-                      <div className="col-md-3 d-inline-block date-text-light"><span>From:</span></div>
-                      <div className="col-md-9 d-inline-block" style={{ paddingRight: "0" }}>
+                    <div className="col-md-5 d-inline-block no-padding">
+                      <div className="col-md-3 no-padding d-inline-block"><span>From:</span></div>
+                      <div className="col-md-7 d-inline-block time-picker-container" style={{ paddingRight: "0" }}>
                         <TimePicker
                           placeholder="Select"
                           value={this.props.state.timeDateFrom}
@@ -290,9 +290,10 @@ class AddTaskModal extends Component {
                         />
                       </div>
                     </div>
-                    <div className="col-md-4 d-inline-block time-picker-container no-padding">
-                      <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
-                      <div className="col-md-9 d-inline-block" style={{ paddingRight: "0" }}>
+                    <div className="col-md-1 d-inline-block no-padding">-</div>
+                    <div className="col-md-5 d-inline-block no-padding">
+                      <div className="col-md-2 no-padding d-inline-block"><span>To:</span></div>
+                      <div className="col-md-7 d-inline-block time-picker-container" style={{ paddingRight: "0" }}>
                         <TimePicker
                           value={this.props.state.timeDateTo}
                           placeholder="Select"

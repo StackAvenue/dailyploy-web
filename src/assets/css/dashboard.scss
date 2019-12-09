@@ -739,6 +739,57 @@
         margin-left: 20px;
       }
     }
+    .date-picker-container {
+      height: auto;
+      border-radius: 5px;
+      border: solid 1px #d6d6d6;
+      background-color: #ffffff;
+      margin-left: 15px;
+      .date-text-light{
+        width: auto !important;
+        padding: 0px 20px 0px 10px;
+      }
+      .datepicker{
+        width: 60%;
+      }
+      .to-datepicker{
+        width: 69% !important;
+      }
+      .react-datepicker-wrapper {
+        .react-datepicker__input-container input {
+          border: none !important;
+          padding: 0 0 0 0px !important;
+          width: 81%;
+        }
+        ::after {
+          font-family: "Font Awesome 5 Free" !important;
+          font-weight: 900 !important;
+          content: "\f073" !important;
+          color: #555 !important;
+          padding: 5px 5px 0px 0px;
+          float: right;
+        }
+      }
+    }
+    .time-picker-container {
+      width: 120px !important;
+      height: auto;
+      border-radius: 5px;
+      border: solid 1px #d6d6d6;
+      background-color: #ffffff;
+      padding: 0px !important;
+      .rc-time-picker input {
+        border: none !important;
+        padding: 0 0 0 0px !important;
+        width: 81%;
+      }
+      // .rc-time-picker-input {
+      //   text-align: center;
+      // }
+      // .rc-time-picker-panel-inner {
+      //   position: fixed !important;
+      // }
+    }
   }
 }
 .member-modal {
@@ -3587,4 +3638,9 @@ table.scheduler-table tr:last-child td {
       }
     }
   }
+}
+
+.rc-time-picker-panel-input{
+  text-align: center;
+  font-size: 15px;
 }
