@@ -11,3 +11,12 @@ export const getFisrtDate = (date, type) => {
     .startOf(type)
     .format("YYYY-MM-DD");
 };
+
+export const firstTwoLetter = name => {
+  return name
+    ? name
+        .split(" ")
+        .map(x => x[0])
+        .join("")
+    : null;
+};

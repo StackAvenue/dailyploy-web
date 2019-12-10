@@ -1755,6 +1755,523 @@ table.scheduler-table tr:last-child td {
   }
 }
 
+.email-config-modal{
+  .modal-dialog{
+    max-width: 648px !important;
+    // top: 100px !important;
+    .modal-content{
+      .config-modal-box{
+        padding: 20px 22px 0px 50px;
+        margin:0;
+        .header{
+          padding:0px 0px 44px 0px  !important;
+          span{
+            font-family: $font-family-roboto !important;
+            color: $color-text1;
+            font-size: 20px;
+            font-weight: bold;
+          }
+          button{
+            padding:0;
+          }
+        }
+        .body{
+          padding: 0px !important;
+          .input-row{
+            margin-bottom:21px;
+            padding: 0px !important;
+            .label{
+              font-family: $font-family-roboto !important;
+              color: $color-text3;
+              font-size: 15px;
+              padding: 0px !important;
+              display: inline-block !important;
+              vertical-align: top;
+            }
+            textarea{
+              width: 100%;
+              height: 150px;
+              border: 1px solid #d6d6d6 !important;
+              border-radius: 5px;
+              box-shadow: #d6d6d6;
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 14px;
+              color: #000000;
+              overflow-y: scroll;
+            }
+            .button1 {
+              height: 40px !important;
+              border-radius: 5px !important;
+              background-color: $color-brand3 !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              font-weight: 500 !important;
+              border: 0 !important;
+            }
+            .button2 {
+              border-radius: 5px !important;
+              border: solid 1px $color-brand3 !important;
+              background-color: $color-white !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              font-weight: 500 !important;
+              color: $color-text3 !important;
+              margin-left: 7% !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.add-admin-modal{
+  .modal-dialog{
+    max-width:432px !important;
+      top:251px !important;
+      .modal-content{   
+        .box{
+          padding: 26px 0px 30px 36px;
+          .box-top{
+            padding:0 !important;
+            .heading{
+              font-family: $font-family-roboto !important;
+              color: $color-text1;
+              font-size: 20px;
+              font-weight: bold;
+            }
+            .btn{
+              padding-top:0px;
+              padding-right:20px;
+            }
+          }
+          .input{
+            height: 40px;
+            border-radius: 5px;
+            border: solid 1px $color-borders;
+            background-color: #ffffff;
+            font-family: $font-family-roboto !important;
+            color: $color-text2;
+            font-size: 12px;
+            margin:28px 0px 62px 0px;
+          }
+          .auto-search {
+            position: absolute;
+            top:70px;
+            width: 361px;
+            height: auto;
+            z-index: 1;
+            background-color: #fff;
+            border-radius: 5px;
+            ul {
+              list-style: none;
+              padding-left: 0px;
+              text-align: left;
+              margin-bottom: 0px;
+              li {
+                padding: 10px;
+                font-family: $font-family-roboto !important;
+                color: $color-text2;
+                font-size: 12px;
+              }
+              li:hover {
+                cursor: pointer;
+              }
+            }
+          } 
+          .border-add{
+            border: 1px solid $color-borders;
+          }
+          .btn-box {
+            padding-top: 30px !important;
+            padding-bottom: 21px !important;
+            .add {
+              width: 93px !important;
+              height: 40px !important;
+              border-radius: 5px !important;
+              background-color: $color-brand3 !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              color: $color-white !important;
+            }
+            .cancel {
+              width: 93px !important;
+              height: 40px !important;
+              border-radius: 5px !important;
+              border: solid 1px $color-brand3 !important;
+              background-color: $color-white !important;
+              font-family: $font-family-roboto !important;
+              font-size: 17px !important;
+              color: $color-text2 !important;
+              margin-left: 10px !important;
+            }
+          }
+        }
+      }
+  }
+  
+}
+
+.workspace-settings{
+  .react-tabs__tab--selected {
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid $color-brand3;
+    border-radius: 0px;
+  }
+  .react-tabs__tab{
+    color: $color-text2;
+    font-size: 15px;
+    font-family: $font-family-roboto !important;
+    margin-right: 30px;
+  }
+  .react-tabs__tab-list{
+    border-bottom: 1px solid $color-borders;
+  }
+  .general-setting{
+    .workspace-name{
+      padding-top:40px;
+      .name {
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text3 !important;
+        p {
+          font-weight: bold !important;
+          color: $color-text2 !important;
+        }
+        span {
+          color: $color-failure !important;
+        }
+      }
+      .save-button{
+        height: 40px !important;
+        width: 93px !important;
+        border-radius: 5px !important;
+        border: solid 1px $color-borders !important;
+        background-color: $color-brand3 !important;
+        font-family: $font-family-roboto !important;
+        font-size: 17px !important;
+        color: $color-white !important;
+        white-space: nowrap !important;
+        margin-bottom: 4px;
+      }
+      .input {
+        height: 40px !important;
+        border-radius: 5px !important;
+        border: solid 1px $color-borders !important;
+        background-color: $color-white !important;
+        color: $color-text1 !important;
+        &:disabled{
+          background-color: $color-borders !important;
+          cursor: not-allowed;
+        }
+      }
+    }
+    .admin-add{
+      padding-top:20px;
+      .admin-box{
+        width: 200px;
+        height: 40px;
+        border-radius: 2px;
+        border: solid 1px $color-borders;
+        background-color: #ffffff;
+        display: inline-block;
+        margin: 0px 10px 5px 0px;
+        .img-box{
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background-color: #424242;
+          border: solid 2px #fffcfc;
+          float: left;
+          margin: 6px 10px 6px 10px;
+          font-family: $font-family-roboto !important;
+          font-size: 12px !important;
+          color: $color-white !important;
+          font-weight: 700;
+          padding: 2px 0px 0px 0px;
+          text-align: center;
+        }
+        .text{
+          font-family: $font-family-roboto !important;
+          font-size: 14px !important;
+          color: $color-text2 !important;
+          float: left;
+          padding-top: 8px;
+        }
+        .triple-dot{
+          float: right;
+          padding: 5px 10px 0px 0px;
+          i{
+            font-size: 12px;
+            color: $color-text2;
+          }
+        }
+        .remove-btn{
+          position: relative;
+          width: 62px;
+          height: 25px;
+          padding:0px;
+          border-radius: 5px;
+          box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.15);
+          border: solid 1px $color-borders;
+          background-color: #ffffff;
+          font-family: $font-family-roboto !important;
+          font-size: 12px !important;
+          color: $color-brand4 !important;
+          top: 30px;
+          left: 139px;
+        }
+      }
+      .addnew-button{
+        height: 40px !important;
+        width: 93px !important;
+        border-radius: 5px !important;
+        border: solid 1px $color-borders !important;
+        background-color: $color-brand3 !important;
+        font-family: $font-family-roboto !important;
+        font-size: 14px !important;
+        color: $color-white !important;
+        white-space: nowrap !important;
+        margin-bottom: 4px;
+        display: inline-block;
+        vertical-align: top;
+      }
+      
+      
+    }
+    .hr1{
+      border: 1px solid $color-borders;
+      margin: 50px 0px 30px 0px;
+    }
+    .config-email-box{
+      border-radius: 2px;
+      border: solid 1px $color-borders;
+      background-color: #ffffff;
+      padding: 21px 33px 30px 33px;
+      .workdays-text{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text3 !important;
+        padding:31px 15px 9px 0px;
+        margin-left: 15px;
+        border-bottom: 1px solid $color-borders;
+      }
+      .workdays{
+        table{
+          width: 100% !important;
+          tr{
+            border-bottom: 1px solid $color-borders;
+            td{
+              padding: 10px 0px 10px 0px;
+            }
+            .check{
+              margin-bottom: 0 !important;
+              vertical-align: middle !important;
+            }
+            .text{
+              font-family: $font-family-roboto !important;
+              font-size: 15px !important;
+              color: $color-text2 !important;
+            }
+            select{
+              width: 92px !important;
+              height: 25px !important;
+              border-radius: 5px !important;
+              background-color: #ffffff !important;
+              border: 1px solid $color-borders !important;
+            }
+            .hrs{
+              font-family: $font-family-roboto !important;
+              font-size: 14px !important;
+              color: $color-text2 !important;
+            }
+          }
+        }
+      }
+    }
+    .config-heading{
+      font-family: $font-family-roboto !important;
+      font-size: 20px !important;
+      color: $color-text2 !important;
+      font-weight: bold !important;
+      margin-bottom: 20px !important;
+      padding:0 !important;
+    }
+  }
+  .categories-setting{
+    padding: 50px 60px 0px 60px;
+    .category{
+      .heading-text{
+        font-family: $font-family-roboto !important;
+        font-size: 20px !important;
+        color: $color-text2 !important;
+        font-weight: bold !important;
+      }
+      .sub{
+        font-family: $font-family-roboto !important;
+        font-size: 18px !important;
+        color: $color-text3 !important;
+        font-weight: bold !important;
+        padding:0;
+      }
+      .btn-add{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-white !important;
+        font-weight: bold !important;
+        border:0 !important;
+        background-color: $color-brand3 !important;
+        width: 93px;
+        height: 32px;
+      }
+    }
+    .category-box{
+      border-radius: 2px;
+      border: solid 1px $color-borders;
+      background-color: #ffffff;
+      padding: 10px 20px 0px 20px;
+      margin-top:20px;
+      table{
+        thead{
+          th{
+            border:0;
+            font-family: $font-family-roboto !important;
+            font-size: 14px !important;
+            color: $color-text1 !important;
+            font-weight: 700 !important;
+            i{
+              margin-left:20px;
+              color: $color-text3 !important;
+            }
+          }
+        }
+        tbody{
+          td{
+            font-family: $font-family-roboto !important;
+            font-size: 13px !important;
+            color: #000000 !important;
+            input{
+              border: 1px solid rgba(155, 155, 155, 1);
+              height: 30px;
+              border-radius: 5px;
+              color: #000000;
+              box-shadow: 0px 0px 8px rgba(255, 255, 255, 1);
+              font-size: 13px !important;
+              width:300px;
+            }
+            button{
+              padding:0px 10px 0px 0px;
+              i{
+                font-size: 15px !important;
+              color: $color-text3 !important;
+              }
+              span{
+                i{
+                  font-size: 15px !important;
+                  color: $color-success !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .employee-project-settings{
+    padding: 30px 60px 0px 60px;
+    .email-heading{
+      font-family: $font-family-roboto !important;
+      font-size: 20px !important;
+      color: $color-text2 !important;
+      font-weight: 700 !important;
+      margin-bottom:20px;
+    }
+    .report-box{
+      border-radius: 2px;
+      border: solid 1px $color-brand3;
+      height: 167px;
+      max-width: 279px !important;
+      background-color: #ffffff;
+      padding: 10px 20px 10px 20px;
+      .day-text{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text2 !important;
+      }
+      .day-select{
+        margin: 15px 0px;
+        select{
+          width: 70px;
+          height: 40px;
+          background-color: $color-white;
+          margin-right:5px;
+          border: 1px solid $color-borders;
+        }
+
+      }
+      .week-select{
+        margin: 15px 0px;
+        select{
+          width: 130px;
+          height: 40px;
+          background-color: $color-white;
+          border: 1px solid $color-borders;
+        }
+      }
+      .month-select{
+        margin: 15px 0px;
+        input{
+          width: 220px;
+          height: 40px;
+          background-color: $color-white;
+          border: 1px solid $color-borders;
+          cursor: pointer;
+        }
+      }
+      .day-desc{
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: $color-text3 !important;
+      }
+    }
+    .employee-project-box{
+      border-radius: 2px;
+      border: solid 1px $color-borders;
+      background-color: #ffffff;
+      padding: 10px 20px 0px 20px;
+      margin-top:20px;
+      table{
+        thead{
+          th{
+            border:0;
+            font-family: $font-family-roboto !important;
+            font-size: 14px !important;
+            color: $color-text1 !important;
+            font-weight: 700 !important;
+            i{
+              margin-left:20px;
+              color: $color-text3 !important;
+            }
+          }
+        }
+        tbody{
+          td{
+            font-family: $font-family-roboto !important;
+            font-size: 13px !important;
+            color: #000000 !important;
+            i{
+              font-size: 14px !important;
+            color: $color-text3 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .workspace1-setting {
   box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1) !important;
   background-color: $color-white !important;
@@ -1779,15 +2296,19 @@ table.scheduler-table tr:last-child td {
   }
   .body-tabs {
     background-color: #f9f9f9 !important;
-    height: 650px !important;
+    // height: 650px !important;
+    padding-bottom: 60px;
+    min-height: 650px !important;
     padding-top: 37px !important;
     padding-left: 60px !important;
     padding-right: 60px !important;
     .heading {
       font-family: $font-family-roboto !important;
-      font-size: 20px !important;
+      font-size: 15px !important;
       font-weight: bold !important;
       color: $color-text2 !important;
+      padding-bottom:10px;
+      vertical-align: middle;
       .alert {
         color: $color-failure !important;
         font-family: $font-family-roboto !important;
@@ -1798,13 +2319,16 @@ table.scheduler-table tr:last-child td {
         width: 93px !important;
         height: 35px !important;
         border-radius: 5px !important;
-        background-color: $color-brand3 !important;
-        border: 0 !important;
+        color: $color-text2;
+        font-size: 14px;
+        font-family: $font-family-roboto !important;
+        background-color: $color-white !important;
+        border: 1px solid $color-borders !important;
       }
     }
 
     .box {
-      padding-top: 50px !important;
+      padding-top: 0px !important;
       .time-desc {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
@@ -1844,6 +2368,23 @@ table.scheduler-table tr:last-child td {
           font-family: $font-family-roboto !important;
           font-size: 14px !important;
           color: $color-heading3 !important;
+        }
+      }
+      .access-box{
+        margin-left:178px;
+        .access-text{
+          font-family: $font-family-roboto !important;
+          font-size: 15px !important;
+          color: $color-text3 !important;
+        }
+        .admin-text{
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          color: $color-text2 !important;
+          img{
+            margin: 0px 11px 0px 40px;
+            vertical-align: bottom;
+          }
         }
       }
       .email-btn {
@@ -1900,7 +2441,7 @@ table.scheduler-table tr:last-child td {
         }
       }
       .inner-box {
-        padding-top: 20px !important;
+        padding-top: 30px !important;
         .name {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
@@ -1913,16 +2454,33 @@ table.scheduler-table tr:last-child td {
             color: $color-failure !important;
           }
         }
+        .save-button{
+          height: 40px !important;
+          width: 93px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          color: $color-text3 !important;
+          white-space: nowrap !important;
+          padding-right: 20px !important;
+          padding-left: 20px !important;
+        }
         .input {
           height: 40px !important;
           border-radius: 5px !important;
           border: solid 1px $color-borders !important;
           background-color: $color-white !important;
           color: $color-text1 !important;
+          &:disabled{
+            background-color: $color-borders !important;
+            cursor: not-allowed;
+          }
         }
       }
       .box-btn {
-        padding: 50px 0px 0px 190px !important;
+        padding: 50px 0px 0px 15px !important;
         button {
           height: 40px !important;
           width: auto !important;
@@ -1944,7 +2502,7 @@ table.scheduler-table tr:last-child td {
       margin: 30px 0px 30px 0px !important;
     }
     .delete-text {
-      padding-top: 30px !important;
+      padding:0px !important;
       font-family: $font-family-roboto !important;
       font-size: 15px !important;
       color: $color-text3 !important;

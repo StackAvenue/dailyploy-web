@@ -248,7 +248,7 @@ class Header extends Component {
                         this.state.suggestions.length > 0
                           ? "suggestion-holder-border"
                           : null
-                        }`}
+                      }`}
                     >
                       {this.renderSearchSuggestion()}
                     </div>
@@ -334,53 +334,15 @@ class Header extends Component {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-
-                  {/* <Dropdown>
-                    <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      <i className="fa fa-bars"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item>
-                        <div className="workspace-circle d-inline-block">
-                          {"Gaurav Gandhi"
-                            .split(" ")
-                            .map(x => x[0])
-                            .join("")}
-                        </div>
-                        <div className="workspace-name d-inline-block">
-                          Gaurav Gandhi
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        className="workspace-setting"
-                        href={`/workspace/${this.props.workspaceId}/settings`}>
-                        <img
-                          alt={"setting"}
-                          src={setting}
-                          className="img-responsive"
-                        />
-                        &nbsp;&nbsp;Workspace Settings
-                      </Dropdown.Item>
-                      <Dropdown.Item className="invite">
-                        <img
-                          alt={"invite"}
-                          src={invite}
-                          className="img-responsive"
-                        />
-                        &nbsp;&nbsp;Invite to Workspace
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown> */}
-
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className={`header-auth-btn text-titlize ${
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
-                      id="dropdown-basic">
+                      } `}
+                      id="dropdown-basic"
+                    >
                       {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
@@ -390,7 +352,8 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}>
+                          } `}
+                        >
                           {x}
                         </div>
                         <div className="workspace-name d-inline-block">
