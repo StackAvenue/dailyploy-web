@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
-import { get, logout, mockGet, mockPost } from "../../utils/API";
+import { get, logout, mockGet, mockPost, put } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 import moment from "moment";
@@ -232,14 +232,16 @@ class ShowMembers extends Component {
   };
 
   editMember = async () => {
+    var roleId = this.state.memberRole === "admin" ? 1 : 2;
     const editMemberData = {
-      id: this.state.projectShowMemberId,
-      role_id: this.state.memberRole,
-      working_hours: this.state.memberHours,
-      workspace_id: this.state.workspaceId
+      role_id: roleId,
+      working_hours: Number(this.state.memberHours)
     };
     try {
-      const { data } = await mockPost(editMemberData, "editMember");
+      const { data } = await put(
+        editMemberData,
+        `workspaces/${this.state.workspaceId}/members/${this.state.projectShowMemberId}`
+      );
       console.log("data", data);
     } catch (e) {
       console.log("error", e);
@@ -433,7 +435,7 @@ class ShowMembers extends Component {
                     <td>{member.email}</td>
                     <td className="text-titlize">{member.role}</td>
                     <td className="text-titlize">
-                      {member.workingHours ? member.workingHours : "8"} hours
+                      {member.working_hours ? member.working_hours : "8"} hours
                     </td>
                     <td className="text-titlize">
                       <span>{this.displayProjects(member.projects)}</span>

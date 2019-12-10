@@ -17,16 +17,16 @@ export default class MenuBar extends Component {
     this.sortValues = [
       {
         content: "Daily",
-        value: "day",
+        value: "day"
       },
       {
         content: "Weekly",
-        value: "week",
+        value: "week"
       },
       {
         content: "Monthly",
-        value: "month",
-      },
+        value: "month"
+      }
     ];
     this.colors = [
       "#b9e1ff",
@@ -36,7 +36,7 @@ export default class MenuBar extends Component {
       "#ffc6ac",
       "#ffa2a2",
       "#e9ff71",
-      "#d7a0ff",
+      "#d7a0ff"
     ];
     this.state = {
       projectName: "",
@@ -65,7 +65,7 @@ export default class MenuBar extends Component {
       suggestions: [],
       projectsListing: [],
       userRole: null,
-      selectedTags: [],
+      selectedTags: []
     };
   }
 
@@ -85,13 +85,13 @@ export default class MenuBar extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         members: [...this.state.projectMembers, ...addOwner],
-        color_code: this.state.background,
-      },
+        color_code: this.state.background
+      }
     };
     try {
       const { data } = await post(
         projectData,
-        `workspaces/${this.props.workspaceId}/projects`,
+        `workspaces/${this.props.workspaceId}/projects`
       );
       this.setState({ show: false });
       this.props.manageProjectListing(data.project);
@@ -101,7 +101,7 @@ export default class MenuBar extends Component {
           message="Project added successfully!"
           status="success"
         />,
-        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
     } catch (e) {
       console.log("error", e);
@@ -137,8 +137,8 @@ export default class MenuBar extends Component {
         project_id: `${this.state.memberProject}`,
         workspace_id: `${this.props.workspaceId}`,
         role_id: `${this.state.memberRole}`,
-        working_hours: `${this.state.memberWorkingHours}`,
-      },
+        working_hours: `${this.state.memberWorkingHours}`
+      }
     };
     try {
       const { data } = await post(memberData, "invitations");
@@ -147,7 +147,7 @@ export default class MenuBar extends Component {
           message="Member Invited successfully!"
           status="success"
         />,
-        { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.setState({ memberShow: false });
       this.props.handleLoad(true);
@@ -159,11 +159,11 @@ export default class MenuBar extends Component {
   handleChangeMember = (selected, selectedTags) => {
     this.setState({ projectMembers: selected, selectedTags: selectedTags });
   };
-  sortHandler = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-    this.props.onSelectSort(value);
-  };
+  // sortHandler = e => {
+  //   const { name, value } = e.target;
+  //   this.setState({ [name]: value });
+  //   this.props.onSelectSort(value);
+  // };
 
   handleChangeInput = e => {
     const { name, value } = e.target;
@@ -174,7 +174,7 @@ export default class MenuBar extends Component {
     const { name, value } = e.target;
     let suggestions = [];
     var searchOptions = this.props.state.isLogedInUserEmailArr.map(
-      user => user.name,
+      user => user.name
     );
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
@@ -182,7 +182,7 @@ export default class MenuBar extends Component {
     }
     this.setState({
       [name]: value,
-      suggestions: suggestions,
+      suggestions: suggestions
     });
   };
 
@@ -192,19 +192,19 @@ export default class MenuBar extends Component {
 
   selectAutoSuggestion = option => {
     var filterArr = this.props.state.isLogedInUserEmailArr.filter(
-      user => user.name === option,
+      user => user.name === option
     );
     var filterProjectIds = filterArr[0].projects.map(project => project.id);
     let memberRole = filterArr[0].role === "admin" ? "1" : "2";
     let memberProjects = this.props.state.projects.filter(
-      project => !filterProjectIds.includes(project.id),
+      project => !filterProjectIds.includes(project.id)
     );
     this.setState({
       memberName: filterArr[0].name,
       memberEmail: filterArr[0].email,
       memberRole: memberRole,
       memberWorkingHours: filterArr[0].working_hours,
-      projectsListing: memberProjects,
+      projectsListing: memberProjects
     });
   };
 
@@ -221,33 +221,33 @@ export default class MenuBar extends Component {
 
   handleClose = () => {
     this.setState({
-      show: false,
+      show: false
     });
   };
   handleShow = () => {
     this.setState({
       setShow: true,
-      show: true,
+      show: true
     });
   };
 
   handleMemberClose = () => {
     this.setState({
-      memberShow: false,
+      memberShow: false
     });
   };
   handleMemberShow = () => {
     this.setState({
       memberSetShow: true,
       memberShow: true,
-      projectsListing: this.props.state.projects,
+      projectsListing: this.props.state.projects
     });
   };
 
   handleChangeComplete = (color, event) => {
     this.setState({
       background: color.hex,
-      displayColorPicker: !this.state.displayColorPicker,
+      displayColorPicker: !this.state.displayColorPicker
     });
   };
 
@@ -268,7 +268,7 @@ export default class MenuBar extends Component {
     this.setState({
       disabledDateTo: !this.state.disabledDateTo,
       disableColor: disableColor,
-      dateTo: null,
+      dateTo: null
     });
   };
 
@@ -296,7 +296,8 @@ export default class MenuBar extends Component {
                   <Dropdown className={userRole === "member" ? "d-none" : null}>
                     <Dropdown.Toggle
                       className="menubar-button"
-                      id="dropdown-basic">
+                      id="dropdown-basic"
+                    >
                       <img src={Add} alt="add" />
                       &nbsp;Add
                     </Dropdown.Toggle>
@@ -305,8 +306,9 @@ export default class MenuBar extends Component {
                       <Dropdown.Item
                         onClick={this.handleShow}
                         style={{
-                          borderBottom: "1px solid rgba(210, 210, 210, 1)",
-                        }}>
+                          borderBottom: "1px solid rgba(210, 210, 210, 1)"
+                        }}
+                      >
                         Project
                       </Dropdown.Item>
                       <AddProjectModal
