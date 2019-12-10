@@ -179,7 +179,7 @@ class ShowMembers extends Component {
 
   displayProjects = projects => {
     let arr = projects.map(project => project.name);
-    let projectShow = arr.length > 1 ? arr[0] + "," + arr[1] : arr[0];
+    let projectShow = arr.length > 1 ? arr[0] + ", " + arr[1] : arr[0];
     return projectShow;
   };
 

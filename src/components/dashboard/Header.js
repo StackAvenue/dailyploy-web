@@ -14,6 +14,7 @@ import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
 import Search from "../../assets/images/search.png";
 import SearchImg from "../../assets/images/search.png";
+import { WORKSPACE_ID } from "./../../utils/Constants";
 
 class Header extends Component {
   constructor(props) {
@@ -50,20 +51,20 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
-    if (
-      prevProps.searchOptions !== this.props.searchOptions &&
-      this.props.pathname === "reports"
-    ) {
-      var members = this.props.searchOptions.filter(
-        option => option.email === this.state.userEmail
-      );
-      if (members) {
-        this.setState({
-          selectedTags: members,
-          selectedMember: members[0]
-        });
-      }
-    }
+    // if (
+    //   prevProps.searchOptions !== this.props.searchOptions &&
+    //   this.props.pathname === "reports"
+    // ) {
+    //   var members = this.props.searchOptions.filter(
+    //     option => option.email === this.state.userEmail
+    //   );
+    //   if (members) {
+    //     this.setState({
+    //       selectedTags: members,
+    //       selectedMember: members[0]
+    //     });
+    //   }
+    // }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
       try {
@@ -201,7 +202,14 @@ class Header extends Component {
     );
   };
 
+  textTitlize = text => {
+    return text.replace(/(?:^|\s)\S/g, function(a) {
+      return a.toUpperCase();
+    });
+  };
+
   render() {
+    const WORKSPACE_NAME = cookie.load("workspaceName");
     const { value } = this.state;
     const x = this.state.userName
       .split(" ")
@@ -226,10 +234,21 @@ class Header extends Component {
               </button>
               <a
                 className="navbar-brand logo"
-                href={`/dashboard/${this.props.workspaceId}`}
+                href={`/workspace/${WORKSPACE_ID}/dashboard`}
               >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
+              <div className="header-ws-name">
+                <span className="bar">|</span>
+                {WORKSPACE_NAME ? (
+                  <span
+                    className="text-titlize"
+                    title={this.textTitlize(WORKSPACE_NAME)}
+                  >
+                    {WORKSPACE_NAME}
+                  </span>
+                ) : null}
+              </div>
               <div className="col-md-7 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
                   <div className="user-project-search text-titlize">
@@ -239,7 +258,11 @@ class Header extends Component {
                     <input
                       type="text"
                       value={value}
-                      placeholder="Search by project/people"
+                      placeholder={
+                        this.state.selectedTags.length > 0
+                          ? ""
+                          : "Search by projects"
+                      }
                       onChange={this.onSearchTextChange}
                     />
 
@@ -343,7 +366,7 @@ class Header extends Component {
                       } `}
                       id="dropdown-basic"
                     >
-                      {x}
+                      {x.toUpperCase()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
@@ -354,7 +377,7 @@ class Header extends Component {
                               : "member-circle"
                           } `}
                         >
-                          {x}
+                          {x.toUpperCase()}
                         </div>
                         <div className="workspace-name d-inline-block">
                           <span className="text-titlize big">

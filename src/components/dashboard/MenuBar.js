@@ -73,7 +73,7 @@ export default class MenuBar extends Component {
     try {
       const { data } = await get("logged_in_user");
       this.setState({ logedInUserEmail: data.email });
-    } catch (e) { }
+    } catch (e) {}
   }
 
   addProject = async () => {
@@ -129,18 +129,21 @@ export default class MenuBar extends Component {
   };
 
   addMember = async () => {
-    const memberData = {
+    var memberData = {
       invitation: {
         name: `${this.state.memberName}`,
         email: `${this.state.memberEmail}`,
         status: "Pending",
-        project_id: `${this.state.memberProject}`,
-        workspace_id: `${this.props.workspaceId}`,
-        role_id: `${this.state.memberRole}`,
-        working_hours: `${this.state.memberWorkingHours}`
+        workspace_id: Number(this.props.workspaceId),
+        role_id: Number(this.state.memberRole),
+        working_hours: Number(this.state.memberWorkingHours)
       }
     };
+    if (this.state.memberProject) {
+      memberData.invitation["project_id"] = this.state.memberProject;
+    }
     try {
+      this.setState({ isLoading: true });
       const { data } = await post(memberData, "invitations");
       toast(
         <DailyPloyToast
@@ -149,11 +152,21 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-      this.setState({ memberShow: false });
-      this.props.handleLoad(true);
+      this.clearAddMemberModaldata();
+      this.setState({ memberShow: false, isLoading: false });
+      // this.props.handleLoad(true);
     } catch (e) {
       this.setState({ memberShow: false });
     }
+  };
+
+  clearAddMemberModaldata = () => {
+    this.setState({
+      memberName: "",
+      memberEmail: "",
+      memberRole: "",
+      memberWorkingHours: ""
+    });
   };
 
   handleChangeMember = (selected, selectedTags) => {
@@ -204,7 +217,8 @@ export default class MenuBar extends Component {
       memberEmail: filterArr[0].email,
       memberRole: memberRole,
       memberWorkingHours: filterArr[0].working_hours,
-      projectsListing: memberProjects
+      projectsListing: memberProjects,
+      suggestions: []
     });
   };
 
@@ -272,7 +286,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => { };
+  handleProjectByUser = () => {};
 
   render() {
     this.handleProjectByUser();

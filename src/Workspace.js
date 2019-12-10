@@ -13,6 +13,8 @@ import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
 import { WORKSPACE_ID } from "./utils/Constants";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 class Workspace extends Component {
   constructor(props) {
@@ -175,7 +177,15 @@ class Workspace extends Component {
               pathname={this.classNameRoute()}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
-            {this.state.isLoading ? <div className="loader"></div> : null}
+            {this.state.isLoading ? (
+              <Loader
+                type="Oval"
+                color="#1f8354"
+                height={50}
+                width={50}
+                className="d-inline-block dailyploy-loader"
+              />
+            ) : null}
             <Switch>
               {this.Routes.map((route, i) => (
                 <Route

@@ -23,6 +23,8 @@ class AddTaskModal extends Component {
       border: "solid 1px #d1d1d1",
       notFound: "hide",
       memberNotFound: "hide",
+      fromDateOpen: false,
+      toDateOpen: false,
     };
   }
 
@@ -212,6 +214,14 @@ class AddTaskModal extends Component {
     return []
   }
 
+  toggleDateFromPicker = () => {
+    this.setState({ fromDateOpen: !this.state.fromDateOpen, toDateOpen: false })
+  }
+
+  toggleDateToPicker = () => {
+    this.setState({ toDateOpen: !this.state.toDateOpen, fromDateOpen: false })
+  }
+
   render() {
     const { props } = this
     return (
@@ -358,7 +368,9 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block no-padding">
                   <div className="col-md-12 d-inline-block no-padding">
-                    <div className="col-md-6 d-inline-block date-picker-container no-padding">
+                    <div className="col-md-6 d-inline-block date-picker-container no-padding"
+                      onClick={this.toggleDateFromPicker}
+                    >
                       <div className="col-md-3 d-inline-block date-text-light"><span>From:</span></div>
                       <div className="col-md-9 d-inline-block">
                         <DatePicker
@@ -366,10 +378,13 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
+                          open={this.state.fromDateOpen}
                         />
                       </div>
                     </div>
-                    <div className="col-md-6 d-inline-block date-picker-container no-padding">
+                    <div className="col-md-6 d-inline-block date-picker-container no-padding"
+                      onClick={this.toggleDateToPicker}
+                    >
                       <div className="col-md-3 d-inline-block date-text-light "><span>To:</span></div>
                       <div className="col-md-9 d-inline-block">
                         <DatePicker
@@ -378,6 +393,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
                           disabled={props.state.disabledDateTo}
+                          open={this.state.toDateOpen}
                         />
                       </div>
                     </div>

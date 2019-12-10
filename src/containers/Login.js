@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Landing/Header";
 import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import axios from "axios";
 
 class Signin extends Component {
@@ -18,9 +20,10 @@ class Signin extends Component {
       password: "",
       errors: {
         emailError: null,
-        passwordError: null,
+        passwordError: null
       },
       error: "",
+      isLoading: false
     };
   }
 
@@ -38,14 +41,21 @@ class Signin extends Component {
     }
   }
 
+  nameSplit = name => {
+    let nameArr = name;
+    let nameSplit = nameArr.split(" ").slice(2);
+    return nameSplit.join(" ");
+  };
+
   login = async e => {
     e.preventDefault();
     this.validateAllInputs();
     if (this.isPresentAllInputs()) {
       const loginData = {
         email: this.state.email,
-        password: this.state.password,
+        password: this.state.password
       };
+      this.setState({ isLoading: true });
       try {
         const { data } = await login(loginData);
         cookie.save("accessToken", data.access_token, { path: "/" });
@@ -56,13 +66,22 @@ class Signin extends Component {
         try {
           const { data } = await get("workspaces");
           console.log("data workspacesss", data);
-          cookie.save("workspaceId", data.workspaces[0].id, { path: "/" });
-          this.props.history.push(`/workspace/${data.workspaces[0].id}/dashboard`);
+          const workspace = data.workspaces[0];
+          cookie.save("workspaceId", workspace.id, { path: "/" });
+          if (workspace && workspace.type === "company") {
+            cookie.save("workspaceName", workspace.company.name, { path: "/" });
+          } else {
+            cookie.save("workspaceName", this.nameSplit(workspace.name), {
+              path: "/"
+            });
+          }
+          this.props.history.push(`/dashboard/${workspace.id}`);
+          this.setState({ isLoading: false });
         } catch (e) {
           console.log("error", e);
         }
       } catch (e) {
-        this.setState({ error: e.response.data.error });
+        this.setState({ error: e.response.data.error, isLoading: false });
       }
     } else {
       return "Enter valid email address and password";
@@ -70,7 +89,7 @@ class Signin extends Component {
   };
   validateAllInputs = () => {
     const errors = {
-      passwordError: null,
+      passwordError: null
     };
     errors.emailError = validateEmail(this.state.email);
     this.setState({ errors });
@@ -85,6 +104,10 @@ class Signin extends Component {
     const isEnabled = this.isPresentAllInputs();
     return (
       <>
+        {/* {this.state.isLoading ? (
+          <div className="lds-dual-ring loader-pos">Loading&#8230;</div>
+        ) : null} */}
+
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         <div className="container-fluid">
           <div className="main-container">
@@ -146,8 +169,20 @@ class Signin extends Component {
                     </div>
                     <br />
                     <div className="col-md-12 no-padding text-center">
-                      <button disabled={!isEnabled} className="btn form-btn">
-                        Sign In
+                      <button
+                        disabled={!isEnabled}
+                        className="d-inline-block btn form-btn"
+                      >
+                        <span>Sign In &nbsp;&nbsp;</span>
+                        {this.state.isLoading ? (
+                          <Loader
+                            type="Oval"
+                            color="#FFFFFF"
+                            height={20}
+                            width={20}
+                            className="d-inline-block login-signup-loader"
+                          />
+                        ) : null}
                       </button>
                     </div>
                   </div>

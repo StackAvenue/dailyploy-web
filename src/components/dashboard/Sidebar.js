@@ -7,20 +7,20 @@ class Sidebar extends Component {
     super(props);
     this.state = {
       show: false,
-      setShow: false,
+      setShow: false
     };
   }
 
   showTaskModal = () => {
     this.setState({
       setShow: true,
-      show: true,
+      show: true
     });
   };
 
   closeTaskModal = () => {
     this.setState({
-      show: false,
+      show: false
     });
   };
 
@@ -34,9 +34,10 @@ class Sidebar extends Component {
     let nameArr = this.nameSplit(name);
     let splitName = nameArr
       .split(" ")
+      .slice(0, 2)
       .map(x => x[0])
       .join("");
-    return splitName;
+    return splitName.toUpperCase();
   };
 
   render() {
@@ -62,7 +63,7 @@ class Sidebar extends Component {
                   +
                 </button>
               </div>
-              <div className="workspace-text">Add New</div>
+              <div className="workspace-add-btn">Add New</div>
               <AddWorkspaceModal
                 state={this.state}
                 onHideModal={this.closeTaskModal}
