@@ -18,9 +18,9 @@ class Signin extends Component {
       password: "",
       errors: {
         emailError: null,
-        passwordError: null,
+        passwordError: null
       },
-      error: "",
+      error: ""
     };
   }
 
@@ -38,13 +38,19 @@ class Signin extends Component {
     }
   }
 
+  nameSplit = name => {
+    let nameArr = name;
+    let nameSplit = nameArr.split(" ").slice(2);
+    return nameSplit.join(" ");
+  };
+
   login = async e => {
     e.preventDefault();
     this.validateAllInputs();
     if (this.isPresentAllInputs()) {
       const loginData = {
         email: this.state.email,
-        password: this.state.password,
+        password: this.state.password
       };
       try {
         const { data } = await login(loginData);
@@ -56,8 +62,16 @@ class Signin extends Component {
         try {
           const { data } = await get("workspaces");
           console.log("data workspacesss", data);
-          cookie.save("workspaceId", data.workspaces[0].id, { path: "/" });
-          this.props.history.push(`/dashboard/${data.workspaces[0].id}`);
+          var workspace = data.workspaces[0];
+          cookie.save("workspaceId", workspace.id, { path: "/" });
+          if (workspace && workspace.type === "company") {
+            cookie.save("workspaceName", workspace.company.name, { path: "/" });
+          } else {
+            cookie.save("workspaceName", this.nameSplit(workspace.name), {
+              path: "/"
+            });
+          }
+          this.props.history.push(`/dashboard/${workspace.id}`);
         } catch (e) {
           console.log("error", e);
         }
@@ -70,7 +84,7 @@ class Signin extends Component {
   };
   validateAllInputs = () => {
     const errors = {
-      passwordError: null,
+      passwordError: null
     };
     errors.emailError = validateEmail(this.state.email);
     this.setState({ errors });

@@ -201,7 +201,14 @@ class Header extends Component {
     );
   };
 
+  textTitlize = text => {
+    return text.replace(/(?:^|\s)\S/g, function(a) {
+      return a.toUpperCase();
+    });
+  };
+
   render() {
+    const WORKSPACE_NAME = cookie.load("workspaceName");
     const { value } = this.state;
     const x = this.state.userName
       .split(" ")
@@ -230,6 +237,17 @@ class Header extends Component {
               >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
+              <div className="header-ws-name">
+                <span className="bar">|</span>
+                {WORKSPACE_NAME ? (
+                  <span
+                    className="text-titlize"
+                    title={this.textTitlize(WORKSPACE_NAME)}
+                  >
+                    {WORKSPACE_NAME}
+                  </span>
+                ) : null}
+              </div>
               <div className="col-md-7 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
                   <div className="user-project-search text-titlize">
@@ -248,7 +266,7 @@ class Header extends Component {
                         this.state.suggestions.length > 0
                           ? "suggestion-holder-border"
                           : null
-                        }`}
+                      }`}
                     >
                       {this.renderSearchSuggestion()}
                     </div>
@@ -379,9 +397,10 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
-                      id="dropdown-basic">
-                      {x}
+                      } `}
+                      id="dropdown-basic"
+                    >
+                      {x.toUpperCase()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
@@ -390,8 +409,9 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}>
-                          {x}
+                          } `}
+                        >
+                          {x.toUpperCase()}
                         </div>
                         <div className="workspace-name d-inline-block">
                           <span className="text-titlize big">

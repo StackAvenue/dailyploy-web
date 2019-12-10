@@ -158,7 +158,7 @@
     }
   }
   .header-search-bar {
-    margin-left: 23% !important;
+    margin-left: 2%;
     border-radius: 5px !important;
     border: solid 1px $color-brandheading1 !important;
     background-color: $color-white !important;
@@ -180,6 +180,25 @@
         border: 0 !important;
       }
     }
+  }
+  .header-ws-name{
+    .bar{
+      padding:0px 15px 0px 15px !important;
+    }
+    width: 25% !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    height: 19px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.19;
+    letter-spacing: normal;
+    text-align: left;
+    color: $color-text2;
   }
 }
 
@@ -2011,7 +2030,8 @@ table.scheduler-table tr:last-child td {
 .workspace-list {
   width: 4.6%;
   box-shadow: 0px -3px 20px rgba(0, 0, 0, 0.0470588235294118);
-  background-color: rgba(2, 40, 17, 0.5);
+  // background-color: #ffffff;
+    background-color: rgba(2, 40, 17, 0.5);
   border-right: 1px solid $color-borders;
   display: inline-flex;
   position: fixed;
@@ -2025,7 +2045,7 @@ table.scheduler-table tr:last-child td {
     list-style-type: none !important;
     padding: 0 !important;
     li {
-      margin: 25% !important;
+      margin: 20% !important;
       .workspace-box {
         padding-top: 4px;
         width: 40px;
@@ -2034,6 +2054,7 @@ table.scheduler-table tr:last-child td {
         background-color: $color-background;
         float: left;
         text-align: center;
+        margin-bottom: 5px;
         a {
           padding: 0px 2px 2px 2px;
           font-family: $font-family-roboto !important;
@@ -2070,13 +2091,32 @@ table.scheduler-table tr:last-child td {
         }
       }
       .workspace-text {
-        width: 40px;
+        width: 50px;
         font-family: $font-family-roboto !important;
-        font-size: 12px !important;
+        font-size: 10px !important;
+        // color: $color-text2 !important;
         color: $color-white !important;
-        text-align: center !important;
-        font-weight: 400;
+        font-weight: normal;
+        font-stretch: normal;
         font-style: normal;
+        line-height: 1.1;
+        text-align: center;
+        letter-spacing: normal;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        text-overflow: ellipsis !important;
+      }
+      .workspace-add-btn{
+        width: 45px;
+        font-family: $font-family-roboto !important;
+        font-size: 10px !important;
+        // color: $color-text2 !important;
+        color: $color-white !important;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.1;
+        letter-spacing: normal;
       }
     }
   }
