@@ -12,6 +12,7 @@ import { get, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
+import { WORKSPACE_ID } from "./utils/Constants";
 
 class Workspace extends Component {
   constructor(props) {
@@ -144,10 +145,15 @@ class Workspace extends Component {
       handleLoading: this.handleLoad
     };
     var newProps = { ...props, ...props1 };
-    // if (title !== "login" && title !== "signup" && title !== "landing") {
-    return <RouteComponent {...newProps} />;
-    // }
-    // return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
+    if (
+      title !== "login" &&
+      title !== "signup" &&
+      title !== "landing" &&
+      title !== "pageNotFound"
+    ) {
+      return <RouteComponent {...newProps} />;
+    }
+    return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
   };
 
   render() {
