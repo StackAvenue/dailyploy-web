@@ -50,15 +50,6 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
-
-    // <<<<<<< HEAD
-    //     if (prevProps.searchOptions !== this.props.searchOptions) {
-    //       this.setState({
-    //         selectedTags: this.props.searchOptions.filter(
-    //           option => option.email === this.state.userEmail,
-    //         ),
-    //       });
-    // =======
     if (
       prevProps.searchOptions !== this.props.searchOptions &&
       this.props.pathname === "reports"
@@ -72,7 +63,6 @@ class Header extends Component {
           selectedMember: members[0]
         });
       }
-      // >>>>>>> 21a8e66b187a4689eca8ac01c1790af39a642ff4
     }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
@@ -344,45 +334,6 @@ class Header extends Component {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-
-                  {/* <Dropdown>
-                    <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      <i className="fa fa-bars"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item>
-                        <div className="workspace-circle d-inline-block">
-                          {"Gaurav Gandhi"
-                            .split(" ")
-                            .map(x => x[0])
-                            .join("")}
-                        </div>
-                        <div className="workspace-name d-inline-block">
-                          Gaurav Gandhi
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        className="workspace-setting"
-                        href={`/workspace/${this.props.workspaceId}/settings`}>
-                        <img
-                          alt={"setting"}
-                          src={setting}
-                          className="img-responsive"
-                        />
-                        &nbsp;&nbsp;Workspace Settings
-                      </Dropdown.Item>
-                      <Dropdown.Item className="invite">
-                        <img
-                          alt={"invite"}
-                          src={invite}
-                          className="img-responsive"
-                        />
-                        &nbsp;&nbsp;Invite to Workspace
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown> */}
-
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className={`header-auth-btn text-titlize ${
