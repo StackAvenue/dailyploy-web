@@ -34,13 +34,24 @@ class Routes extends Component {
         exact: false,
         component: Workspace,
         title: "workspace"
+      },
+      {
+        path: "",
+        exact: false,
+        component: "",
+        title: ""
       }
     ];
   }
 
   isAllowed = (props, RouteComponent, title) => {
     if (this.isCurrentUser()) {
-      if (title !== "login" && title !== "signup" && title !== "landing") {
+      if (
+        title !== "login" &&
+        title !== "signup" &&
+        title !== "landing" &&
+        title === "workspace"
+      ) {
         return (
           <Workspace
             props={props}
