@@ -5,7 +5,7 @@ import { signUp, get } from "../utils/API";
 import {
   checkPassword,
   validateName,
-  validateEmail,
+  validateEmail
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,16 +26,17 @@ class Signup extends Component {
       email: "",
       password: "",
       confirmPassword: "",
+      isLoading: false,
       errors: {
         nameError: null,
         companyNameError: null,
         emailError: null,
         passwordError: null,
-        confirmPasswordError: null,
+        confirmPasswordError: null
       },
       isCompany: false,
       tokenId: "",
-      isDisabled: false,
+      isDisabled: false
     };
   }
 
@@ -71,7 +72,7 @@ class Signup extends Component {
         tokenId: tokenId,
         name: userName,
         email: userEmail,
-        isDisabled: isDisabled,
+        isDisabled: isDisabled
       });
     }
   }
@@ -93,9 +94,9 @@ class Signup extends Component {
             is_company_present: this.state.isCompany,
             company: {
               name: this.state.companyName,
-              email: this.state.email,
-            },
-          },
+              email: this.state.email
+            }
+          }
         };
       } else if (!this.state.tokenId) {
         message = "User Created Successfully!";
@@ -106,8 +107,8 @@ class Signup extends Component {
             password: this.state.password,
             password_confirmation: this.state.confirmPassword,
             is_company_present: this.state.isCompany,
-            invitation_status: false,
-          },
+            invitation_status: false
+          }
         };
       } else {
         message = "Successfully added in Workspace";
@@ -120,23 +121,26 @@ class Signup extends Component {
             is_company_present: this.state.isCompany,
             invitation_status: true,
             invitee_details: {
-              token_id: this.state.tokenId,
-            },
-          },
+              token_id: this.state.tokenId
+            }
+          }
         };
       }
+      this.setState({ isLoading: true });
       try {
         const { signUpData } = await signUp(signupData);
         toast(<DailyPloyToast message={message} status="success" />, {
           autoClose: 2000,
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_CENTER
         });
-        setTimeout(() => this.props.history.push("/login"), 3000);
+        setTimeout(() => this.props.history.push("/login"), 1000);
+        this.setState({ isLoading: false });
       } catch (e) {
+        this.setState({ isLoading: false });
         if (e.response.status === 500) {
           toast(
             <DailyPloyToast message={"Internal Server Error"} status="error" />,
-            { autoClose: 2000 },
+            { autoClose: 2000 }
           );
         } else if (e.response.data.errors.email) {
           toast(
@@ -144,7 +148,7 @@ class Signup extends Component {
               message={"email " + `${e.response.data.errors.email}`}
               status="error"
             />,
-            { autoClose: 2000 },
+            { autoClose: 2000 }
           );
         } else if (e.response.data.errors.detail) {
           toast(
@@ -152,7 +156,7 @@ class Signup extends Component {
               message={"email " + `${e.response.data.errors.detail}`}
               status="error"
             />,
-            { autoClose: 2000 },
+            { autoClose: 2000 }
           );
         }
       }
@@ -174,14 +178,14 @@ class Signup extends Component {
       companyNameError: null,
       emailError: null,
       passwordError: null,
-      confirmPasswordError: null,
+      confirmPasswordError: null
     };
     errors.nameError = validateName(this.state.name);
     errors.passwordError = checkPassword(this.state.password);
     errors.emailError = validateEmail(this.state.email);
     errors.confirmPasswordError = this.validatePassword(
       this.state.password,
-      this.state.confirmPassword,
+      this.state.confirmPassword
     );
     this.setState({ errors });
   };
@@ -192,11 +196,11 @@ class Signup extends Component {
       this.state.name.length >= 3 &&
       this.state.email &&
       this.state.email.match(
-        /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+        /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
       ) &&
       this.state.password &&
       this.state.password.match(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
       ) &&
       this.state.confirmPassword &&
       this.state.password === this.state.confirmPassword
@@ -236,7 +240,8 @@ class Signup extends Component {
                   defaultActiveKey="individual"
                   className="col-md-10 offset-1 main-tabs"
                   id="uncontrolled-tab-example"
-                  onSelect={key => this.companyFlag(key)}>
+                  onSelect={key => this.companyFlag(key)}
+                >
                   <Tab eventKey="individual" title="Individual">
                     <Individual
                       state={this.state}
@@ -249,7 +254,8 @@ class Signup extends Component {
                     eventKey="company"
                     title="Organization"
                     style={{ border: "0" }}
-                    disabled={this.state.isDisabled}>
+                    disabled={this.state.isDisabled}
+                  >
                     <Company
                       state={this.state}
                       enable={isEnabled}

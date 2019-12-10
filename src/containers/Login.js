@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Landing/Header";
 import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import axios from "axios";
 
 class Signin extends Component {
@@ -20,7 +22,8 @@ class Signin extends Component {
         emailError: null,
         passwordError: null
       },
-      error: ""
+      error: "",
+      isLoading: false
     };
   }
 
@@ -52,6 +55,7 @@ class Signin extends Component {
         email: this.state.email,
         password: this.state.password
       };
+      this.setState({ isLoading: true });
       try {
         const { data } = await login(loginData);
         cookie.save("accessToken", data.access_token, { path: "/" });
@@ -72,11 +76,12 @@ class Signin extends Component {
             });
           }
           this.props.history.push(`/dashboard/${workspace.id}`);
+          this.setState({ isLoading: false });
         } catch (e) {
           console.log("error", e);
         }
       } catch (e) {
-        this.setState({ error: e.response.data.error });
+        this.setState({ error: e.response.data.error, isLoading: false });
       }
     } else {
       return "Enter valid email address and password";
@@ -99,6 +104,10 @@ class Signin extends Component {
     const isEnabled = this.isPresentAllInputs();
     return (
       <>
+        {/* {this.state.isLoading ? (
+          <div className="lds-dual-ring loader-pos">Loading&#8230;</div>
+        ) : null} */}
+
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         <div className="container-fluid">
           <div className="main-container">
@@ -160,8 +169,20 @@ class Signin extends Component {
                     </div>
                     <br />
                     <div className="col-md-12 no-padding text-center">
-                      <button disabled={!isEnabled} className="btn form-btn">
-                        Sign In
+                      <button
+                        disabled={!isEnabled}
+                        className="d-inline-block btn form-btn"
+                      >
+                        <span>Sign In &nbsp;&nbsp;</span>
+                        {this.state.isLoading ? (
+                          <Loader
+                            type="Oval"
+                            color="#FFFFFF"
+                            height={20}
+                            width={20}
+                            className="d-inline-block login-signup-loader"
+                          />
+                        ) : null}
                       </button>
                     </div>
                   </div>

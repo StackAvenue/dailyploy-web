@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../assets/images/close.svg";
 import Select from "react-dropdown-select";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const RadioOptions = ({ options, selected, onChange }) => {
   return (
@@ -198,7 +200,16 @@ class AddMemberModal extends Component {
                   }`}
                   onClick={this.props.addMember}
                 >
-                  Add
+                  <span>Add</span>
+                  {this.props.state.isLoading ? (
+                    <Loader
+                      type="Oval"
+                      color="#FFFFFF"
+                      height={20}
+                      width={20}
+                      className="d-inline-block login-signup-loader"
+                    />
+                  ) : null}
                 </button>
                 <button
                   type="button"
