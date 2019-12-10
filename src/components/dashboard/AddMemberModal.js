@@ -27,7 +27,7 @@ const RadioOptions = ({ options, selected, onChange }) => {
 class AddMemberModal extends Component {
   constructor(props) {
     super(props);
-    this.hours = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    this.hours = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     this.state = {
       value: []
     };
@@ -82,10 +82,18 @@ class AddMemberModal extends Component {
             <table className="table heading">
               <thead>
                 <tr>
-                  <th scope="col">Name<span className="error-warning">*</span></th>
-                  <th scope="col">Email ID<span className="error-warning">*</span></th>
-                  <th scope="col">Role<span className="error-warning">*</span></th>
-                  <th scope="col">Working Hours<span className="error-warning">*</span></th>
+                  <th scope="col">
+                    Name<span className="error-warning">*</span>
+                  </th>
+                  <th scope="col">
+                    Email ID<span className="error-warning">*</span>
+                  </th>
+                  <th scope="col">
+                    Role<span className="error-warning">*</span>
+                  </th>
+                  <th scope="col">
+                    Working Hours<span className="error-warning">*</span>
+                  </th>
                   <th scope="col">Project</th>
                 </tr>
               </thead>
@@ -180,7 +188,14 @@ class AddMemberModal extends Component {
                 <button
                   type="button"
                   className="btn col-md-5 button1 btn-primary"
-                  disabled={`${this.props.state.memberWorkingHours && this.props.state.memberRole && this.props.state.memberEmail && this.props.state.memberName ? "" : "disabled"}`}
+                  disabled={`${
+                    this.props.state.memberWorkingHours &&
+                    this.props.state.memberRole &&
+                    this.props.state.memberEmail &&
+                    this.props.state.memberName
+                      ? ""
+                      : "disabled"
+                  }`}
                   onClick={this.props.addMember}
                 >
                   Add

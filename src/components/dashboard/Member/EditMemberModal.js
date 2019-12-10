@@ -2,25 +2,29 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
 
+const hours = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 const EditMemberModal = props => {
   const {
     memberName,
     memberEmail,
     memberRole,
     memberHours,
-    memberProjects,
+    memberProjects
   } = props.state;
   return (
     <Modal
       className="edit-member-modal"
       show={props.show}
-      onHide={props.handleClose}>
+      onHide={props.handleClose}
+    >
       <div className="row no-margin">
         <div className="col-md-12 header">
           <span>Edit Member</span>
           <button
             className="btn btn-link float-right"
-            onClick={props.handleClose}>
+            onClick={props.handleClose}
+          >
             <img src={Close} alt="close" />
           </button>
         </div>
@@ -61,7 +65,8 @@ const EditMemberModal = props => {
               <select
                 value={memberRole}
                 name="memberRole"
-                onChange={props.editMemberHandleChange}>
+                onChange={props.editMemberHandleChange}
+              >
                 <option value="admin">Admin</option>
                 <option value="member">Member</option>
               </select>
@@ -75,16 +80,19 @@ const EditMemberModal = props => {
               <select
                 value={memberHours}
                 name="memberHours"
-                onChange={props.editMemberHandleChange}>
-                <option value="8">8hr</option>
-                <option value="9">9hr</option>
+                onChange={props.editMemberHandleChange}
+              >
+                {hours.map(value => (
+                  <option value={value}>{`${value}hr`}</option>
+                ))}
               </select>
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">
             <div
               className="col-md-3 d-inline-block no-padding label"
-              style={{ verticalAlign: "top" }}>
+              style={{ verticalAlign: "top" }}
+            >
               Projects
             </div>
             <div className="col-md-7 d-inline-block">
@@ -96,13 +104,15 @@ const EditMemberModal = props => {
               <button
                 type="button"
                 className="btn col-md-5 button1 btn-primary"
-                onClick={props.editMember}>
+                onClick={props.editMember}
+              >
                 Save
               </button>
               <button
                 type="button"
                 className="btn col-md-6 button2 btn-primary"
-                onClick={props.handleClose}>
+                onClick={props.handleClose}
+              >
                 Cancel
               </button>
             </div>
