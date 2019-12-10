@@ -50,20 +50,20 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
-    if (
-      prevProps.searchOptions !== this.props.searchOptions &&
-      this.props.pathname === "reports"
-    ) {
-      var members = this.props.searchOptions.filter(
-        option => option.email === this.state.userEmail
-      );
-      if (members) {
-        this.setState({
-          selectedTags: members,
-          selectedMember: members[0]
-        });
-      }
-    }
+    // if (
+    //   prevProps.searchOptions !== this.props.searchOptions &&
+    //   this.props.pathname === "reports"
+    // ) {
+    //   var members = this.props.searchOptions.filter(
+    //     option => option.email === this.state.userEmail
+    //   );
+    //   if (members) {
+    //     this.setState({
+    //       selectedTags: members,
+    //       selectedMember: members[0]
+    //     });
+    //   }
+    // }
 
     if (this.props.workspaceId !== prevProps.workspaceId) {
       try {
@@ -257,7 +257,11 @@ class Header extends Component {
                     <input
                       type="text"
                       value={value}
-                      placeholder="Search by project/people"
+                      placeholder={
+                        this.state.selectedTags.length > 0
+                          ? ""
+                          : "Search by projects"
+                      }
                       onChange={this.onSearchTextChange}
                     />
 
