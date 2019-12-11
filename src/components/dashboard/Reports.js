@@ -8,6 +8,7 @@ import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 import ReportTable from "./Reports/ReportTable";
 import DatePicker from "react-datepicker";
+import cookie from "react-cookies";
 import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
@@ -213,11 +214,14 @@ class Reports extends Component {
 
   async componentDidMount() {
     this.props.handleLoading(true);
-    try {
-      const { data } = await get("logged_in_user");
-      var loggedInData = data;
-    } catch (e) {
-      console.log("err", e);
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var loggedInData = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Listing

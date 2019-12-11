@@ -4,6 +4,7 @@ import Close from "../../assets/images/close.svg";
 import DatePicker from "react-datepicker";
 import { get } from "../../utils/API";
 import { TwitterPicker, ChromePicker } from "react-color";
+import cookie from "react-cookies";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
@@ -24,11 +25,14 @@ class AddProjectModal extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const { data } = await get("logged_in_user");
-      var logedInUser = data;
-    } catch (e) {
-      console.log("err", e);
+    var logedInUser = cookie.load("loggedInUser");
+    if (!logedInUser) {
+      try {
+        const { data } = await get("logged_in_user");
+        var logedInUser = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Member Listing

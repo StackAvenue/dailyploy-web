@@ -11,6 +11,7 @@ import moment from "moment";
 import AddProjectModal from "./AddProjectModal";
 import DailyPloyToast from "../DailyPloyToast";
 import { toast } from "react-toastify";
+import cookie from "react-cookies";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -32,7 +33,6 @@ class ShowProjects extends Component {
       sort: "week",
       projects: [],
       isChecked: true,
-      isLoading: false,
       isLogedInUserEmailArr: [],
       userId: "",
       users: [],
@@ -73,13 +73,15 @@ class ShowProjects extends Component {
   };
 
   async componentDidMount() {
-    this.setState({ isLoading: true });
     this.props.handleLoading(true);
-    try {
-      const { data } = await get("logged_in_user");
-      var loggedInData = data;
-    } catch (e) {
-      console.log("err", e);
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var loggedInData = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Listing
@@ -159,7 +161,7 @@ class ShowProjects extends Component {
         );
         var projectsData = data.projects;
         this.props.handleLoading(false);
-      } catch (e) { }
+      } catch (e) {}
 
       this.setState({
         projects: projectsData
@@ -242,10 +244,6 @@ class ShowProjects extends Component {
     }
   };
 
-  handleLoad = value => {
-    this.setState({ isLoading: value });
-  };
-
   handleEditShow = (e, project) => {
     this.setState({
       show: true,
@@ -261,17 +259,17 @@ class ShowProjects extends Component {
     });
   };
 
-  handleDateToDisable = (project) => {
+  handleDateToDisable = project => {
     if (project.end_date) {
-      return new Date(project.end_date)
+      return new Date(project.end_date);
     } else {
       this.setState({
         disabledDateTo: true,
-        disableColor: "#eaeaed",
+        disableColor: "#eaeaed"
       });
-      return null
+      return null;
     }
-  }
+  };
 
   handleEditClose = () => {
     this.setState({
@@ -316,15 +314,14 @@ class ShowProjects extends Component {
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   };
 
-  manageProjectListing = project => {
-  };
+  manageProjectListing = project => {};
 
   manageUpdateProjectListing = project => {
     project["owner"] = { name: `${this.state.userName}` };
-    var projects = this.state.projects.filter(proj => proj.id !== project.id)
+    var projects = this.state.projects.filter(proj => proj.id !== project.id);
     var filterdProjects = [...projects, ...[project]];
     this.setState({ projects: filterdProjects });
-  }
+  };
 
   handleChangeMember = (selected, selectedTags) => {
     this.setState({ projectMembers: selected, selectedTags: selectedTags });
@@ -423,7 +420,7 @@ class ShowProjects extends Component {
     this.setState({ selectProjectArr: arrProject });
   };
 
-  deleteProject = (e, project) => { };
+  deleteProject = (e, project) => {};
 
   render() {
     var userRole = localStorage.getItem("userRole");
@@ -453,8 +450,8 @@ class ShowProjects extends Component {
                     {this.state.isAllChecked ? (
                       <span>selected</span>
                     ) : (
-                        <span>Select All</span>
-                      )}
+                      <span>Select All</span>
+                    )}
                   </label>
                   {this.state.selectProjectArr.length > 0 ? (
                     <>
@@ -628,32 +625,32 @@ class ShowProjects extends Component {
                                 <i className="fas fa-pencil-alt"></i>
                               </button>
                               {this.state.show &&
-                                this.state.projectId === project.id ? (
-                                  <AddProjectModal
-                                    state={this.state}
-                                    handleClose={this.handleEditClose}
-                                    btnText={"Save"}
-                                    headText={project.name}
-                                    ownerClassName={""}
-                                    handleChangeInput={this.handleChangeInput}
-                                    handleDateFrom={this.handleDateFrom}
-                                    handleDateTo={this.handleDateTo}
-                                    handleUndefinedToDate={
-                                      this.handleUndefinedToDate
-                                    }
-                                    workspaceId={this.state.workspaceId}
-                                    handleChangeColor={this.handleChangeColor}
-                                    handleChangeComplete={
-                                      this.handleChangeComplete
-                                    }
-                                    colors={this.colors}
-                                    handleChangeMember={this.handleChangeMember}
-                                    emailOptions={
-                                      this.state.isLogedInUserEmailArr
-                                    }
-                                    addProject={this.editProject}
-                                  />
-                                ) : null}
+                              this.state.projectId === project.id ? (
+                                <AddProjectModal
+                                  state={this.state}
+                                  handleClose={this.handleEditClose}
+                                  btnText={"Save"}
+                                  headText={project.name}
+                                  ownerClassName={""}
+                                  handleChangeInput={this.handleChangeInput}
+                                  handleDateFrom={this.handleDateFrom}
+                                  handleDateTo={this.handleDateTo}
+                                  handleUndefinedToDate={
+                                    this.handleUndefinedToDate
+                                  }
+                                  workspaceId={this.state.workspaceId}
+                                  handleChangeColor={this.handleChangeColor}
+                                  handleChangeComplete={
+                                    this.handleChangeComplete
+                                  }
+                                  colors={this.colors}
+                                  handleChangeMember={this.handleChangeMember}
+                                  emailOptions={
+                                    this.state.isLogedInUserEmailArr
+                                  }
+                                  addProject={this.editProject}
+                                />
+                              ) : null}
                             </td>
                           </tr>
                         );

@@ -16,6 +16,7 @@ import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
 import { WORKSPACE_ID } from "./utils/Constants";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { workspaceNameSplit } from "./utils/function";
 
 class Workspace extends Component {
   constructor(props) {
@@ -100,6 +101,12 @@ class Workspace extends Component {
       const { data } = await get("workspaces");
       var workspacesData = data.workspaces;
       this.setState({ isLoading: true });
+      var workspace = workspacesData.filter(ws => ws.id == workspaceId);
+      if (workspace.length > 0 && workspace[0]) {
+        cookie.save("workspaceName", workspaceNameSplit(workspace[0].name), {
+          path: "/"
+        });
+      }
     } catch (e) {
       console.log("err", e);
     }
@@ -119,8 +126,7 @@ class Workspace extends Component {
       taskTitle: taskTitle,
       workspaceId: workspaceId,
       // isStart: this.isBottomPopup(),
-      isStart:
-        taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
+      isStart: taskTitle && startOn && taskId && colorCode
     });
   }
 
@@ -193,17 +199,16 @@ class Workspace extends Component {
       taskId: taskId,
       colorCode: colorCode,
       taskTitle: taskTitle,
-      isStart:
-        taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
+      isStart: taskTitle && startOn && taskId && colorCode
     });
   };
 
   isBottomPopup = () => {
     return (
-      this.state.taskTitle != "" &&
-      this.state.startOn != "" &&
-      this.state.taskId != "" &&
-      this.state.colorCode != ""
+      this.state.taskTitle &&
+      this.state.startOn &&
+      this.state.taskId &&
+      this.state.colorCode
     );
   };
 
@@ -250,13 +255,13 @@ class Workspace extends Component {
             </Switch>
           </div>
         </div>
-        {this.isBottomPopup() ? (
+        {this.state.isStart ? (
           <TaskBottomPopup
             bgColor={this.state.colorCode}
             taskTitle={this.state.taskTitle}
             taskId={this.state.taskId}
             startOn={this.state.startOn}
-            isStart={this.isBottomPopup()}
+            isStart={this.state.isStart}
           />
         ) : null}
       </div>

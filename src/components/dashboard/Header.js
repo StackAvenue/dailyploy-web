@@ -35,15 +35,24 @@ class Header extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const { data } = await get("logged_in_user");
+    const loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        this.setState({
+          userId: data.id,
+          userName: data.name,
+          userEmail: data.email
+        });
+      } catch (e) {
+        console.log("err", e);
+      }
+    } else {
       this.setState({
-        userId: data.id,
-        userName: data.name,
-        userEmail: data.email
+        userId: loggedInData.id,
+        userName: loggedInData.name,
+        userEmail: loggedInData.email
       });
-    } catch (e) {
-      console.log("err", e);
     }
   }
 

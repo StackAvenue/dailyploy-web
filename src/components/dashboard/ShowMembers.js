@@ -6,6 +6,7 @@ import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 import moment from "moment";
 import AddMemberModal from "./AddMemberModal";
+import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
 
 class ShowMembers extends Component {
@@ -46,11 +47,14 @@ class ShowMembers extends Component {
   };
   async componentDidMount() {
     this.props.handleLoading(true);
-    try {
-      const { data } = await get("logged_in_user");
-      var loggedInData = data;
-    } catch (e) {
-      console.log("err", e);
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var loggedInData = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Listing
@@ -237,12 +241,16 @@ class ShowMembers extends Component {
       role_id: roleId,
       working_hours: Number(this.state.memberHours)
     };
+    this.setState({ isLoading: true });
     try {
       const { data } = await put(
         editMemberData,
         `workspaces/${this.state.workspaceId}/members/${this.state.projectShowMemberId}`
       );
-      console.log("data", data);
+      this.setState({
+        show: false,
+        isLoading: false
+      });
     } catch (e) {
       console.log("error", e);
     }

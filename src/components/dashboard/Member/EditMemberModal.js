@@ -34,14 +34,7 @@ const EditMemberModal = props => {
               Member Name
             </div>
             <div className="col-md-7 d-inline-block">
-              <input
-                type="text"
-                name="memberName"
-                value={memberName}
-                onChange={props.editMemberHandleChange}
-                placeholder="Write Member Name here"
-                className="form-control"
-              />
+              <span className="text-titlize">{memberName}</span>
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">
@@ -49,14 +42,7 @@ const EditMemberModal = props => {
               Email ID
             </div>
             <div className="col-md-7 d-inline-block">
-              <input
-                type="text"
-                name="memberEmail"
-                value={memberEmail}
-                onChange={props.editMemberHandleChange}
-                placeholder="Write Member Email ID here"
-                className="form-control"
-              />
+              <span>{memberEmail}</span>
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">
@@ -95,7 +81,7 @@ const EditMemberModal = props => {
             >
               Projects
             </div>
-            <div className="col-md-7 d-inline-block">
+            <div className="col-md-7 d-inline-block text-titlize">
               <MemberProject projects={memberProjects} />
             </div>
           </div>
