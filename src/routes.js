@@ -5,6 +5,7 @@ import SignUp from "./containers/Signup";
 import Landing from "./containers/Landing";
 import cookie from "react-cookies";
 import Workspace from "./Workspace";
+import { WORKSPACE_ID } from "./utils/Constants";
 
 class Routes extends Component {
   constructor(props) {
@@ -14,26 +15,32 @@ class Routes extends Component {
         path: "/",
         exact: true,
         component: Landing,
-        title: "landing",
+        title: "landing"
       },
       {
         path: "/login",
         exact: true,
         component: Login,
-        title: "login",
+        title: "login"
       },
       {
         path: "/signup/:tokenId?",
         exact: false,
         component: SignUp,
-        title: "signup",
+        title: "signup"
       },
       {
         path: "/workspace/:workspaceId",
         exact: false,
         component: Workspace,
-        title: "workspace",
+        title: "workspace"
       },
+      {
+        path: "",
+        exact: false,
+        component: "",
+        title: ""
+      }
     ];
   }
 
@@ -59,13 +66,21 @@ class Routes extends Component {
 
   isAllowed = (props, RouteComponent, title) => {
     if (this.isCurrentUser()) {
-      return (
-        <Workspace
-          props={props}
-          RouteComponent={RouteComponent}
-          title={title}
-        />
-      );
+      if (
+        title !== "login" &&
+        title !== "signup" &&
+        title !== "landing" &&
+        title === "workspace"
+      ) {
+        return (
+          <Workspace
+            props={props}
+            RouteComponent={RouteComponent}
+            title={title}
+          />
+        );
+      }
+      return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
     } else {
       if (title === "signup") {
         return <SignUp {...props} />;

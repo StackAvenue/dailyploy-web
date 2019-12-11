@@ -14,6 +14,7 @@ import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
 import Search from "../../assets/images/search.png";
 import SearchImg from "../../assets/images/search.png";
+import { WORKSPACE_ID } from "./../../utils/Constants";
 
 class Header extends Component {
   constructor(props) {
@@ -50,22 +51,25 @@ class Header extends Component {
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
-    if (
-      prevProps.searchOptions !== this.props.searchOptions &&
-      this.props.pathname === "reports"
-    ) {
-      var members = this.props.searchOptions.filter(
-        option => option.email === this.state.userEmail
-      );
-      if (members) {
-        this.setState({
-          selectedTags: members,
-          selectedMember: members[0]
-        });
-      }
-    }
+    // if (
+    //   prevProps.searchOptions !== this.props.searchOptions &&
+    //   this.props.pathname === "reports"
+    // ) {
+    //   var members = this.props.searchOptions.filter(
+    //     option => option.email === this.state.userEmail
+    //   );
+    //   if (members) {
+    //     this.setState({
+    //       selectedTags: members,
+    //       selectedMember: members[0]
+    //     });
+    //   }
+    // }
 
-    if (this.props.workspaceId !== prevProps.workspaceId && this.props.workspaceId !== undefined) {
+    if (
+      this.props.workspaceId !== prevProps.workspaceId &&
+      this.props.workspaceId !== undefined
+    ) {
       try {
         const { data } = await get(
           `workspaces/${this.props.workspaceId}/members/${this.state.userId}`
@@ -201,7 +205,14 @@ class Header extends Component {
     );
   };
 
+  textTitlize = text => {
+    return text.replace(/(?:^|\s)\S/g, function(a) {
+      return a.toUpperCase();
+    });
+  };
+
   render() {
+    const WORKSPACE_NAME = cookie.load("workspaceName");
     const { value } = this.state;
     const x = this.state.userName
       .split(" ")
@@ -226,10 +237,21 @@ class Header extends Component {
               </button>
               <a
                 className="navbar-brand logo"
-                href={`/dashboard/${this.props.workspaceId}`}
+                href={`/workspace/${WORKSPACE_ID}/dashboard`}
               >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>
+              <div className="header-ws-name">
+                <span className="bar">|</span>
+                {WORKSPACE_NAME ? (
+                  <span
+                    className="text-titlize"
+                    title={this.textTitlize(WORKSPACE_NAME)}
+                  >
+                    {WORKSPACE_NAME}
+                  </span>
+                ) : null}
+              </div>
               <div className="col-md-7 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
                   <div className="user-project-search text-titlize">
@@ -239,7 +261,11 @@ class Header extends Component {
                     <input
                       type="text"
                       value={value}
-                      placeholder="Search by project/people"
+                      placeholder={
+                        this.state.selectedTags.length > 0
+                          ? ""
+                          : "Search by projects"
+                      }
                       onChange={this.onSearchTextChange}
                     />
 
@@ -248,7 +274,7 @@ class Header extends Component {
                         this.state.suggestions.length > 0
                           ? "suggestion-holder-border"
                           : null
-                        }`}
+                      }`}
                     >
                       {this.renderSearchSuggestion()}
                     </div>
@@ -334,54 +360,16 @@ class Header extends Component {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-
-                  {/* <Dropdown>
-                    <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      <i className="fa fa-bars"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className="dropdown-position">
-                      <Dropdown.Item>
-                        <div className="workspace-circle d-inline-block">
-                          {"Gaurav Gandhi"
-                            .split(" ")
-                            .map(x => x[0])
-                            .join("")}
-                        </div>
-                        <div className="workspace-name d-inline-block">
-                          Gaurav Gandhi
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        className="workspace-setting"
-                        href={`/workspace/${this.props.workspaceId}/settings`}>
-                        <img
-                          alt={"setting"}
-                          src={setting}
-                          className="img-responsive"
-                        />
-                        &nbsp;&nbsp;Workspace Settings
-                      </Dropdown.Item>
-                      <Dropdown.Item className="invite">
-                        <img
-                          alt={"invite"}
-                          src={invite}
-                          className="img-responsive"
-                        />
-                        &nbsp;&nbsp;Invite to Workspace
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown> */}
-
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className={`header-auth-btn text-titlize ${
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
-                      id="dropdown-basic">
-                      {x}
+                      } `}
+                      id="dropdown-basic"
+                    >
+                      {x.toUpperCase()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
@@ -390,8 +378,9 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}>
-                          {x}
+                          } `}
+                        >
+                          {x.toUpperCase()}
                         </div>
                         <div className="workspace-name d-inline-block">
                           <span className="text-titlize big">
@@ -424,7 +413,7 @@ class Header extends Component {
                       </div>
                       <Dropdown.Item
                         className="workspace-setting"
-                        href={`/settings/${this.props.workspaceId}`}
+                        href={`settings`}
                       >
                         <img
                           alt={"settings"}

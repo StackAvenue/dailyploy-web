@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
-// import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
-import Scheduler, { SchedulerData, ViewTypes } from "./../../../src/react-big-scheduler";
+import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
+// import Scheduler, { SchedulerData, ViewTypes } from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import { Dropdown } from "react-bootstrap";
 import "../../assets/css/dashboard.scss";
@@ -13,7 +13,7 @@ import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.times = ['18:19 - 20:19', '18:19 - 20:19', '18:19 - 20:19'];
+    this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -97,7 +97,7 @@ class Calendar extends Component {
             viewType: ViewTypes.Week,
             showAgenda: false,
             isEventPerspective: false
-          },
+          }
           // {
           //   viewName: "Month",
           //   viewType: ViewTypes.Month,
@@ -116,7 +116,7 @@ class Calendar extends Component {
       eventsForTaskView: [],
       show: false,
       setShow: false,
-      onGoingTask: false,
+      onGoingTask: false
     };
   }
 
@@ -487,7 +487,9 @@ class Calendar extends Component {
           workspaceId={this.props.workspaceId}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.onGoingTask}
-          eventItemPopoverTemplateResolver={this.eventItemPopoverTemplateResolver}
+          eventItemPopoverTemplateResolver={
+            this.eventItemPopoverTemplateResolver
+          }
           userId={this.props.state.userId}
           taskEventResumeConfirm={this.props.taskEventResumeConfirm}
         />
@@ -510,6 +512,5 @@ class Calendar extends Component {
       viewModel: schedulerData
     });
   };
-
 }
 export default withDragDropContext(Calendar);

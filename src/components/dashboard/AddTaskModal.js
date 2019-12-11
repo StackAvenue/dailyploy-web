@@ -15,7 +15,8 @@ class AddTaskModal extends Component {
       {
         name: "high",
         color_code: "#00A031"
-      }, {
+      },
+      {
         name: "medium",
         color_code: "#FF7F00"
       },
@@ -23,12 +24,13 @@ class AddTaskModal extends Component {
         name: "low",
         color_code: "#9B9B9B"
       }
-    ]
+    ];
     this.categories = [
       {
         name: "call",
         color_code: "#9B9B9B"
-      }, {
+      },
+      {
         name: "meeting",
         color_code: "#9B9B9B"
       },
@@ -44,7 +46,7 @@ class AddTaskModal extends Component {
         name: "category 3",
         color_code: "#9B9B9B"
       }
-    ]
+    ];
     this.state = {
       members: [],
       project: "",
@@ -58,6 +60,8 @@ class AddTaskModal extends Component {
       border: "solid 1px #d1d1d1",
       notFound: "hide",
       memberNotFound: "hide",
+      fromDateOpen: false,
+      toDateOpen: false
     };
   }
 
@@ -67,29 +71,40 @@ class AddTaskModal extends Component {
   // }
 
   disabledHours = () => {
-    var time = this.props.state.timeFrom
+    var time = this.props.state.timeFrom;
     if (time) {
-      var hr = time.split(':')[0]
-      hr = Number(hr)
-      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k)
-      return hoursArr
+      var hr = time.split(":")[0];
+      hr = Number(hr);
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
+      return hoursArr;
     }
-    return []
-  }
+    return [];
+  };
 
   disabledMinutes = () => {
-    var time = this.props.state.timeFrom
+    var time = this.props.state.timeFrom;
     if (time) {
-      var min = time.split(':')[1]
-      min = Number(min) + 1
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k)
-      return minArr
+      var min = time.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
     }
-    return []
-  }
+    return [];
+  };
+
+  toggleDateFromPicker = () => {
+    this.setState({
+      fromDateOpen: !this.state.fromDateOpen,
+      toDateOpen: false
+    });
+  };
+
+  toggleDateToPicker = () => {
+    this.setState({ toDateOpen: !this.state.toDateOpen, fromDateOpen: false });
+  };
 
   render() {
-    const { props } = this
+    const { props } = this;
     return (
       <>
         <Modal
@@ -101,7 +116,12 @@ class AddTaskModal extends Component {
           <div className="row no-margin">
             <div className="col-md-12 header text-titlize">
               <div className={`d-inline-block`}>
-                <span> {props.state.taskButton === "Add" ? "Add New Task" : "Edit Task"}</span>
+                <span>
+                  {" "}
+                  {props.state.taskButton === "Add"
+                    ? "Add New Task"
+                    : "Edit Task"}
+                </span>
               </div>
               <button
                 className="btn btn-link float-right"
@@ -128,8 +148,7 @@ class AddTaskModal extends Component {
 
                 {this.props.state.errors.taskNameError ? (
                   <div className="col-md-12">
-                    <div className="col-md-2 d-inline-block no-padding">
-                    </div>
+                    <div className="col-md-2 d-inline-block no-padding"></div>
                     <div className="col-md- d-inline-block no-padding">
                       <span className="error-warning">
                         {this.props.state.errors.taskNameError}
@@ -155,8 +174,7 @@ class AddTaskModal extends Component {
                 </div>
                 {this.props.state.errors.projectError ? (
                   <div className="col-md-12">
-                    <div className="col-md-2 d-inline-block no-padding">
-                    </div>
+                    <div className="col-md-2 d-inline-block no-padding"></div>
                     <div className="col-md-10 d-inline-block no-padding">
                       <span className="error-warning">
                         {this.props.state.errors.projectError}
@@ -175,7 +193,7 @@ class AddTaskModal extends Component {
                     options={this.categories}
                     placeholder="Select category"
                     iconType="block"
-                    onChange={() => { }}
+                    onChange={() => {}}
                   />
                 </div>
               </div>
@@ -190,7 +208,7 @@ class AddTaskModal extends Component {
                     placeholder="Select priority"
                     iconType="circle"
                     name="priorityName"
-                    onChange={() => { }}
+                    onChange={() => {}}
                   />
                 </div>
               </div>
@@ -211,8 +229,7 @@ class AddTaskModal extends Component {
                 </div>
                 {this.props.state.errors.memberError ? (
                   <div className="col-md-12">
-                    <div className="col-md-2 d-inline-block no-padding">
-                    </div>
+                    <div className="col-md-2 d-inline-block no-padding"></div>
                     <div className="col-md- d-inline-block no-padding">
                       <span className="error-warning">
                         {this.props.state.errors.memberError}
@@ -227,36 +244,48 @@ class AddTaskModal extends Component {
                   Date
                 </div>
                 <div className="col-md-10 d-inline-block no-padding">
-                  <div className=" d-inline-block no-padding">
-                    <div className="d-inline-block date-picker-container no-padding">
-                      <div className="d-inline-block date-text-light"><span>From:</span></div>
-                      <div className="d-inline-block datepicker">
+                  <div className="col-md-12 d-inline-block no-padding">
+                    <div
+                      className="col-md-6 d-inline-block date-picker-container no-padding"
+                      onClick={this.toggleDateFromPicker}
+                    >
+                      <div className="col-md-3 d-inline-block date-text-light">
+                        <span>From:</span>
+                      </div>
+                      <div className="col-md-9 d-inline-block">
                         <DatePicker
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
+                          open={this.state.fromDateOpen}
                         />
                       </div>
                     </div>
-                    <div className="d-inline-block date-picker-container no-padding">
-                      <div className="d-inline-block date-text-light "><span>To:</span></div>
-                      <div className="d-inline-block datepicker to-datepicker ">
+                    <div
+                      className="col-md-6 d-inline-block date-picker-container no-padding"
+                      onClick={this.toggleDateToPicker}
+                    >
+                      <div className="col-md-3 d-inline-block date-text-light ">
+                        <span>To:</span>
+                      </div>
+                      <div className="col-md-9 d-inline-block">
                         <DatePicker
                           minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
                           disabled={props.state.disabledDateTo}
+                          open={this.state.toDateOpen}
                         />
                       </div>
                     </div>
                   </div>
                 </div>
-                {this.props.state.errors.dateFromError || this.props.state.errors.dateToError ? (
+                {this.props.state.errors.dateFromError ||
+                this.props.state.errors.dateToError ? (
                   <div className="col-md-12">
-                    <div className="col-md-2 d-inline-block no-padding">
-                    </div>
+                    <div className="col-md-2 d-inline-block no-padding"></div>
                     <div className="col-md-5 d-inline-block no-padding">
                       <span className="error-warning">
                         {this.props.state.errors.dateFromError}
@@ -277,10 +306,14 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <div className="col-md-12 d-inline-block no-padding">
-
                     <div className="col-md-5 d-inline-block no-padding">
-                      <div className="col-md-3 no-padding d-inline-block"><span>From:</span></div>
-                      <div className="col-md-7 d-inline-block time-picker-container" style={{ paddingRight: "0" }}>
+                      <div className="col-md-3 no-padding d-inline-block">
+                        <span>From:</span>
+                      </div>
+                      <div
+                        className="col-md-7 d-inline-block time-picker-container"
+                        style={{ paddingRight: "0" }}
+                      >
                         <TimePicker
                           placeholder="Select"
                           value={this.props.state.timeDateFrom}
@@ -292,8 +325,13 @@ class AddTaskModal extends Component {
                     </div>
                     <div className="col-md-1 d-inline-block no-padding">-</div>
                     <div className="col-md-5 d-inline-block no-padding">
-                      <div className="col-md-2 no-padding d-inline-block"><span>To:</span></div>
-                      <div className="col-md-7 d-inline-block time-picker-container" style={{ paddingRight: "0" }}>
+                      <div className="col-md-2 no-padding d-inline-block">
+                        <span>To:</span>
+                      </div>
+                      <div
+                        className="col-md-7 d-inline-block time-picker-container"
+                        style={{ paddingRight: "0" }}
+                      >
                         <TimePicker
                           value={this.props.state.timeDateTo}
                           placeholder="Select"
@@ -308,7 +346,8 @@ class AddTaskModal extends Component {
                   </div>
                 </div>
 
-                {this.props.state.errors.timeFromError || this.props.state.errors.timeToError ? (
+                {this.props.state.errors.timeFromError ||
+                this.props.state.errors.timeToError ? (
                   <div className="col-md-12 d-inline-block no-padding">
                     <div className="col-md-2 d-inline-block no-padding"></div>
                     <div className="col-md-4 d-inline-block no-padding">
@@ -351,18 +390,23 @@ class AddTaskModal extends Component {
                   <button
                     type="button"
                     className="button1 btn-primary pull-right"
-                    onClick={props.state.taskButton === "Add" ? props.addTask : props.editTask}
+                    onClick={
+                      props.state.taskButton === "Add"
+                        ? props.addTask
+                        : props.editTask
+                    }
                   >
                     {props.state.taskButton}
                   </button>
-                  {this.props.state.fromInfoEdit ?
+                  {this.props.state.fromInfoEdit ? (
                     <button
                       type="button"
                       className="pull-right button3 btn-primary"
-                      onClick={() => props.confirmModal('delete')}
+                      onClick={() => props.confirmModal("delete")}
                     >
                       Delete
-                  </button> : null}
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -371,6 +415,6 @@ class AddTaskModal extends Component {
       </>
     );
   }
-};
+}
 
 export default AddTaskModal;

@@ -96,79 +96,18 @@
 .text-green {
   color: #008135;
 }
+
 .left-padding-20px {
   padding-left: 20px !important;
 }
-.loader,
-.loader:before,
-.loader:after {
-  background: #1f8354;
-  -webkit-animation: load1 1s infinite ease-in-out;
-  animation: load1 1s infinite ease-in-out;
-  width: 1em;
-  height: 4em;
-}
-.loader {
-  color: #1f8354;
-  text-indent: -9999em;
-  margin-top: 20%;
-  margin-left: 45%;
+.login-signup-loader{
   position: absolute;
-  font-size: 11px;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-  z-index: 1000;
+  z-index: 500;
+  padding-left: 10px;
 }
-.loader:before,
-.loader:after {
+.dailyploy-loader{
   position: absolute;
-  top: 500 px;
-  left: 500 px;
-  content: '';
-}
-.loader:before {
-  left: -1.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.loader:after {
-  left: 1.5em;
-}
-@-webkit-keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-@keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-.left-padding-20px {
-  padding-left: 20px !important;
-}
-.label{
-  font-family: 'Roboto-Regular', 'Roboto';
-  font-weight: 400;
-  font-style: normal;
-  font-size: 15px !important;
-  color: #555555 !important;
-  line-height: 11px !important;
+  z-index: 500;
+  left: 50%;
+  top: 50%;
 }

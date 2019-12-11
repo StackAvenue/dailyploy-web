@@ -13,6 +13,9 @@ import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
 import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
+import { WORKSPACE_ID } from "./utils/Constants";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 class Workspace extends Component {
   constructor(props) {
@@ -22,42 +25,42 @@ class Workspace extends Component {
         path: "/dashboard",
         exact: false,
         component: Dashboard,
-        title: "dashboard",
+        title: "dashboard"
       },
       {
         path: "/settings",
         exact: true,
         component: Settings,
-        title: "settings",
+        title: "settings"
       },
       {
         path: "/analysis",
         exact: true,
         component: Analysis,
-        title: "analysis",
+        title: "analysis"
       },
       {
         path: "/projects",
         exact: true,
         component: ShowProjects,
-        title: "showProjects",
+        title: "showProjects"
       },
       {
         path: "/members",
         exact: true,
         component: ShowMembers,
-        title: "showMembers",
+        title: "showMembers"
       },
       {
         path: "/reports",
         exact: true,
         component: Reports,
-        title: "reports",
+        title: "reports"
       },
       {
         component: NotFound,
-        title: "pageNotFound",
-      },
+        title: "pageNotFound"
+      }
     ];
     this.state = {
       workspaceId: null,
@@ -76,6 +79,7 @@ class Workspace extends Component {
       runningTime: 0,
       isStart: false,
       onGoingTask: false,
+      isLoading: false
     };
   }
 
@@ -100,10 +104,10 @@ class Workspace extends Component {
       console.log("err", e);
     }
 
-    var startOn = localStorage.getItem(`startOn-${workspaceId}`)
-    var taskId = localStorage.getItem(`taskId-${workspaceId}`)
-    var colorCode = localStorage.getItem(`colorCode-${workspaceId}`)
-    var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`)
+    var startOn = localStorage.getItem(`startOn-${workspaceId}`);
+    var taskId = localStorage.getItem(`taskId-${workspaceId}`);
+    var colorCode = localStorage.getItem(`colorCode-${workspaceId}`);
+    var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`);
 
     this.setState({
       workspaces: workspacesData,
@@ -115,9 +119,9 @@ class Workspace extends Component {
       taskTitle: taskTitle,
       workspaceId: workspaceId,
       // isStart: this.isBottomPopup(),
-      isStart: taskTitle != "" && startOn != "" && taskId != "" && colorCode != "",
+      isStart:
+        taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
     });
-
   }
 
   logout = async () => {
@@ -139,7 +143,7 @@ class Workspace extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails,
+      searchUserDetails: searchUserDetails
     });
   };
 
@@ -167,37 +171,45 @@ class Workspace extends Component {
       state: this.state
     };
     var newProps = { ...props, ...props1 };
-    if (title !== "login" && title !== "signup" && title !== "landing") {
-      return (
-        <RouteComponent {...newProps} />
-      )
+    if (
+      title !== "login" &&
+      title !== "signup" &&
+      title !== "landing" &&
+      title !== "pageNotFound"
+    ) {
+      return <RouteComponent {...newProps} />;
     }
-    return <Redirect to={`/workspace/${this.state.workspaceId}/dashboard`} />;
+    return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
   };
 
   handleTaskBottomPopup = startOn => {
-    var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`)
-    var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`)
-    var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`)
-    var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`)
+    var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`);
+    var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
+    var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`);
+    var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`);
 
     this.setState({
       startOn: startOn,
       taskId: taskId,
       colorCode: colorCode,
       taskTitle: taskTitle,
-      isStart: taskTitle != "" && startOn != "" && taskId != "" && colorCode != "",
+      isStart:
+        taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
     });
-  }
+  };
 
   isBottomPopup = () => {
-    return this.state.taskTitle != "" && this.state.startOn != "" && this.state.taskId != "" && this.state.colorCode != ""
-  }
+    return (
+      this.state.taskTitle != "" &&
+      this.state.startOn != "" &&
+      this.state.taskId != "" &&
+      this.state.colorCode != ""
+    );
+  };
 
   render() {
     return (
       <div>
-
         <ToastContainer />
         <div className="row no-margin">
           <Sidebar
@@ -215,7 +227,13 @@ class Workspace extends Component {
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
             {this.state.isLoading ? (
-              <div className="loader"></div>
+              <Loader
+                type="Oval"
+                color="#1f8354"
+                height={50}
+                width={50}
+                className="d-inline-block dailyploy-loader"
+              />
             ) : null}
             <Switch>
               {this.Routes.map((route, i) => (
@@ -231,9 +249,8 @@ class Workspace extends Component {
               <Route />
             </Switch>
           </div>
-
         </div>
-        {this.isBottomPopup() ?
+        {this.isBottomPopup() ? (
           <TaskBottomPopup
             bgColor={this.state.colorCode}
             taskTitle={this.state.taskTitle}
@@ -241,8 +258,7 @@ class Workspace extends Component {
             startOn={this.state.startOn}
             isStart={this.isBottomPopup()}
           />
-          : null}
-
+        ) : null}
       </div>
     );
   }

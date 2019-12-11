@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Header from "./Header";
-import { get, logout, mockGet } from "../../utils/API";
+import { get, logout } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Nav } from "react-bootstrap";
-import GeneralSettings from "./UserSettings/GeneralSettings";
-import PrivacySettings from "./UserSettings/PrivacySettings";
-import Sidebar from "./Sidebar";
+import UserSettings from "./settings/UserSettings";
+import WorkspaceSettings from "./settings/WorkspaceSettings";
 
 class Settings extends Component {
   constructor(props) {
@@ -20,13 +18,17 @@ class Settings extends Component {
       isLogedInUserEmailArr: [],
       projects: [],
       userId: "",
+      userName: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
       users: [],
+      isDisableName: false,
+      adminUserArr: [],
+      allMembers: []
     };
   }
-  logout = async () => {
-    await logout();
-    this.props.history.push("/login");
-  };
+
   async componentDidMount() {
     try {
       const { data } = await get("logged_in_user");
@@ -49,7 +51,7 @@ class Settings extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`,
+        `workspaces/${this.state.workspaceId}/projects`
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -59,12 +61,14 @@ class Settings extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`,
+        `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
       var emailArr = data.members
         .filter(user => user.email !== loggedInData.email)
         .map(user => user.email);
+      var adminUserArr = data.members.filter(user => user.role === "admin");
+      var allMembers = data;
     } catch (e) {
       console.log("users Error", e);
     }
@@ -77,6 +81,8 @@ class Settings extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
+      adminUserArr: adminUserArr,
+      allMembers: allMembers
     });
   }
 
@@ -100,7 +106,25 @@ class Settings extends Component {
     }
   };
 
+  handleUserChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  updateUserInfo = async () => {
+    const userData = {
+      name: this.state.userName
+    };
+  };
+
+  save = () => {
+    this.setState({ isDisableName: true });
+  };
+
   render() {
+    let filterArr = this.state.workspaces.filter(
+      workspace => workspace.id == this.state.workspaceId
+    );
     return (
       <>
         <MenuBar
@@ -114,10 +138,13 @@ class Settings extends Component {
             <div className="col-md-2 side-tabs">
               <Nav variant="link" className="flex-column">
                 <Nav.Item>
-                  <Nav.Link eventKey="first">General</Nav.Link>
+                  <Nav.Link eventKey="first">User Settings</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="second">Privacy</Nav.Link>
+                  <Nav.Link eventKey="second">Workspace Settings</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="third">Preferences</Nav.Link>
                 </Nav.Item>
               </Nav>
             </div>
@@ -125,11 +152,20 @@ class Settings extends Component {
               <div className="col-md-12 body-tabs">
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <GeneralSettings />
+                    <UserSettings
+                      handleChange={this.handleUserChange}
+                      state={this.state}
+                      role={localStorage.getItem("userRole")}
+                      save={this.save}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <PrivacySettings />
+                    <WorkspaceSettings
+                      workspaceObj={filterArr[0]}
+                      state={this.state}
+                    />
                   </Tab.Pane>
+                  <Tab.Pane eventKey="third">Prefrences</Tab.Pane>
                 </Tab.Content>
               </div>
             </div>

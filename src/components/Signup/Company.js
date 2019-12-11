@@ -1,4 +1,6 @@
 import React from "react";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const Company = props => {
   const {
@@ -7,7 +9,7 @@ const Company = props => {
     email,
     password,
     confirmPassword,
-    isDisabled,
+    isDisabled
   } = props.state;
   return (
     <>
@@ -80,7 +82,8 @@ const Company = props => {
               <span
                 className="error-warning text-wraping "
                 data-toggle="tooltip"
-                title="Min 8 characters at least 1 number and 1 special character">
+                title="Min 8 characters at least 1 number and 1 special character"
+              >
                 Must be Valid
               </span>
             ) : null}
@@ -135,8 +138,18 @@ const Company = props => {
             <button
               disabled={!props.enable}
               onClick={props.signup}
-              className="btn form-btn">
-              Signup
+              className="btn form-btn"
+            >
+              <span>Signup</span>
+              {props.state.isLoading ? (
+                <Loader
+                  type="Oval"
+                  color="#FFFFFF"
+                  height={20}
+                  width={20}
+                  className="d-inline-block login-signup-loader"
+                />
+              ) : null}
             </button>
           </div>
         </div>

@@ -9,7 +9,7 @@ class ReportTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalTime: 0,
+      totalTime: 0
     };
   }
 
@@ -39,7 +39,7 @@ class ReportTable extends Component {
       {
         tasks.map((task, idx) => {
           totalSec += Math.abs(
-            new Date(task.start_datetime) - new Date(task.end_datetime),
+            new Date(task.start_datetime) - new Date(task.end_datetime)
           );
         });
       }
@@ -89,10 +89,13 @@ class ReportTable extends Component {
   tableHeader = () => {
     return (
       <>
-        <th scope="col">Time</th>
-        <th scope="col">Task Name</th>
-        <th scope="col">Project Name</th>
-        <th scope="col">Duration</th>
+        <th scope="col-md-1">Status</th>
+        <th scope="col-md-2">Time</th>
+        <th scope="col-md-3">Task Name</th>
+        <th scope="col-md-3">Project Name</th>
+        <th scope="col-md-1">Category</th>
+        <th scope="col-md-1">Priority</th>
+        <th scope="col-md-1">Duration</th>
       </>
     );
   };
@@ -159,7 +162,8 @@ class ReportTable extends Component {
               </span>
             </div>
             <table className="table">
-              {!this.checkProject() ? this.table1() : this.table2()}
+              {/* {!this.checkProject() ? this.table1() : this.table2()} */}
+              {this.table1()}
             </table>
           </div>
         </div>
