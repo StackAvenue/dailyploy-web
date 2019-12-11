@@ -6,7 +6,7 @@
 }
   
 .reports-container {
-  width: 70%;
+  width: 95%;
   margin: auto;
 }
 
@@ -15,7 +15,7 @@
   width: 100%;
   .report-caleneder-btn{
     display: inline-block;
-    padding-left: 265px;
+    padding-left: 600px;
     button{
       width: auto;
       height: 30px;
@@ -184,6 +184,67 @@
   }
 }
 
+.priority-high{
+  width: 10px;
+  height: 10px;
+  background-color: #00a031;
+  margin-right: 15px;
+  border-radius: 20px;
+}
+.priority-medium{
+  width: 10px;
+  height: 10px;
+  background-color: #ff7f00;
+  margin-right: 15px;
+  border-radius: 20px;
+}
+.priority-low{
+  width: 10px;
+  height: 10px;
+  background-color: #555555;
+  margin-right: 15px;
+  border-radius: 20px;
+}
+.complete-btn{
+  border-radius: 5px !important;
+  border: solid 1px #00A031 !important;
+  background-color: $color-white !important;
+  font-family: $font-family-roboto !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: $color-text3 !important;
+  color:#00a031 !important;
+  height: 25px;
+  max-width: 80px !important;
+  text-align: center;
+  padding: 2px;
+}
+.not-start-btn{
+  border-radius: 5px !important;
+  border: solid 1px $color-text3 !important;
+  background-color: $color-white !important;
+  font-family: $font-family-roboto !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: $color-text3 !important;
+  height: 25px;
+  max-width: 80px !important;
+  text-align: center;
+  padding: 2px;
+}
+.progress-btn{
+  border-radius: 5px !important;
+  border: solid 1px $color-brand3 !important;
+  background-color: $color-white !important;
+  font-family: $font-family-roboto !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color:$color-brand3 !important;
+  height: 25px;
+  max-width: 80px !important;
+  text-align: center;
+  padding: 2px;
+}
 .task-error{
   text-align: center;
   font-size: 25px;

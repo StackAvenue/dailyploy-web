@@ -48,7 +48,7 @@ class Reports extends Component {
       searchProjectIds: [],
       taskDetails: {},
       message: "My Daily Report",
-      frequency: "daily",
+      frequency: "daily"
     };
   }
 
@@ -64,7 +64,7 @@ class Reports extends Component {
 
   fetchProjectName = () => {
     var projects = this.state.projects.filter(project =>
-      this.props.searchProjectIds.includes(project.id),
+      this.props.searchProjectIds.includes(project.id)
     );
     var projectNames = projects.map(project => project.name);
     return this.textTitlize(projectNames.join(", "));
@@ -73,7 +73,6 @@ class Reports extends Component {
   displayMessage = () => {
     var role = this.state.userRole;
     var frequency = this.textTitlize(this.returnFrequency());
-    console.log("this.props.searchUserDetails", this.props.searchUserDetails === [])
     if (
       role == "admin" &&
       this.props.searchProjectIds.length !== 0 &&
@@ -86,10 +85,14 @@ class Reports extends Component {
         `${this.fetchProjectName()}`
       );
     } else if (
-      role === "member" && this.props.searchUserDetails.length === 0 ||
-      (role === 'member' && this.props.searchUserDetails.length > 0 && this.props.searchUserDetails[0].email === this.state.userEmail) ||
+      (role === "member" && this.props.searchUserDetails.length === 0) ||
+      (role === "member" &&
+        this.props.searchUserDetails.length > 0 &&
+        this.props.searchUserDetails[0].email === this.state.userEmail) ||
       (role === "admin" && this.props.searchUserDetails.length === 0) ||
-      (role === 'admin' && this.props.searchUserDetails && this.props.searchUserDetails[0].email === this.state.userEmail)
+      (role === "admin" &&
+        this.props.searchUserDetails &&
+        this.props.searchUserDetails[0].email === this.state.userEmail)
     ) {
       return "My " + `${frequency}` + " Report";
     } else if (role == "admin" && this.props.searchUserDetails !== []) {
@@ -106,7 +109,7 @@ class Reports extends Component {
   };
 
   textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function (a) {
+    return text.replace(/(?:^|\s)\S/g, function(a) {
       return a.toUpperCase();
     });
   };
@@ -121,7 +124,7 @@ class Reports extends Component {
         weekly: false,
         daily: true,
         monthly: false,
-        frequency: "daily",
+        frequency: "daily"
       });
     }
     if (name == "monthly") {
@@ -129,7 +132,7 @@ class Reports extends Component {
         weekly: false,
         daily: false,
         monthly: true,
-        frequency: "monthly",
+        frequency: "monthly"
       });
       this.handleMonthlyDateFrom(new Date());
     }
@@ -138,7 +141,7 @@ class Reports extends Component {
         weekly: true,
         daily: false,
         monthly: false,
-        frequency: "weekly",
+        frequency: "weekly"
       });
       this.handleDayChange(new Date());
     }
@@ -159,7 +162,7 @@ class Reports extends Component {
         moment(weekdays[6]).format(fm) +
         " (Week " +
         week +
-        ")",
+        ")"
     });
   };
 
@@ -169,7 +172,7 @@ class Reports extends Component {
       days.push(
         moment(weekStart)
           .add(i, "days")
-          .toDate(),
+          .toDate()
       );
     }
     return days;
@@ -182,7 +185,7 @@ class Reports extends Component {
         .toDate(),
       to: moment(date)
         .endOf("week")
-        .toDate(),
+        .toDate()
     };
   };
 
@@ -199,7 +202,7 @@ class Reports extends Component {
         moment(weekdays[6]).format(MONTH_FORMAT) +
         "(Week" +
         this.state.weekNumber +
-        ")",
+        ")"
     });
   };
 
@@ -231,7 +234,7 @@ class Reports extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`,
+        `workspaces/${this.state.workspaceId}/projects`
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -241,15 +244,15 @@ class Reports extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`,
+        `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members;
       var worksapceUser = data.members.filter(
-        user => user.email === loggedInData.email,
+        user => user.email === loggedInData.email
       );
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email,
+        user => user.email !== loggedInData.email
       );
       // .map(user => user.email);
     } catch (e) {
@@ -261,19 +264,19 @@ class Reports extends Component {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
       user_id: loggedInData.id,
       frequency: "daily",
-      project_ids: JSON.stringify(this.props.searchProjectIds),
+      project_ids: JSON.stringify(this.props.searchProjectIds)
     };
 
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/reports`,
-        searchData,
+        searchData
       );
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
       this.props.handleLoading(false);
-    } catch (e) { }
+    } catch (e) {}
 
     this.setState({
       userId: loggedInData.id,
@@ -287,7 +290,7 @@ class Reports extends Component {
       worksapceUser: worksapceUser,
       taskDetails: taskDetails,
       userRole: worksapceUser[0].role,
-      totalTime: totalTime,
+      totalTime: totalTime
     });
 
     this.createUserProjectList();
@@ -318,28 +321,29 @@ class Reports extends Component {
     ) {
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        user_id: this.props.searchUserDetails.length > 0
-          ? this.props.searchUserDetails[0].member_id
-          : this.state.userId,
+        user_id:
+          this.props.searchUserDetails.length > 0
+            ? this.props.searchUserDetails[0].member_id
+            : this.state.userId,
         frequency: this.returnFrequency(),
-        project_ids: JSON.stringify(this.props.searchProjectIds),
+        project_ids: JSON.stringify(this.props.searchProjectIds)
       };
 
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/reports`,
-          searchData,
+          searchData
         );
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) { }
+      } catch (e) {}
       var message = this.displayMessage();
 
       this.setState({
         taskDetails: taskDetails,
         message: message,
-        totalTime: totalTime,
+        totalTime: totalTime
       });
     }
   }
@@ -370,11 +374,14 @@ class Reports extends Component {
 
   calculateTotalSecond = (date, tasks) => {
     var totalSec = 0;
-    if (this.state.userRole === "admin" && this.props.searchUserDetails === []) {
+    if (
+      this.state.userRole === "admin" &&
+      this.props.searchUserDetails === []
+    ) {
       tasks.map((task, idx) => {
         task.members.map(member => {
-          totalSec += this.totalSeconds(tasks, date)
-        })
+          totalSec += this.totalSeconds(tasks, date);
+        });
       });
     } else {
       totalSec += this.totalSeconds(tasks, date);
@@ -409,39 +416,39 @@ class Reports extends Component {
             value: project.name,
             project_id: project.id,
             type: "project",
-            id: (index += 1),
+            id: (index += 1)
           });
         });
       }
     }
 
     var index = searchOptions.length;
-    if (this.state.userRole === "admin" && this.state.worksapceUsers) {
-      // var otherMembers = this.state.worksapceUsers.filter(
-      //   user => user.email !== this.state.userEmail,
-      // );
-      {
-        this.state.worksapceUsers.map((member, idx) => {
-          searchOptions.push({
-            value: member.name,
-            id: (index += 1),
-            member_id: member.id,
-            email: member.email,
-            type: "member",
-            role: member.role,
-          });
-        });
-      }
-    } else {
-      searchOptions.push({
-        value: this.state.userName,
-        id: (index += 1),
-        member_id: this.state.userId,
-        email: this.state.userEmail,
-        type: "member",
-        role: this.state.userRole,
-      });
-    }
+    // if (this.state.userRole === "admin" && this.state.worksapceUsers) {
+    //   // var otherMembers = this.state.worksapceUsers.filter(
+    //   //   user => user.email !== this.state.userEmail,
+    //   // );
+    //   {
+    //     this.state.worksapceUsers.map((member, idx) => {
+    //       searchOptions.push({
+    //         value: member.name,
+    //         id: (index += 1),
+    //         member_id: member.id,
+    //         email: member.email,
+    //         type: "member",
+    //         role: member.role
+    //       });
+    //     });
+    //   }
+    // } else {
+    //   searchOptions.push({
+    //     value: this.state.userName,
+    //     id: (index += 1),
+    //     member_id: this.state.userId,
+    //     email: this.state.userEmail,
+    //     type: "member",
+    //     role: this.state.userRole
+    //   });
+    // }
     this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
   };
@@ -457,7 +464,7 @@ class Reports extends Component {
 
   classNameRoute = () => {
     let route = this.props.history.location.pathname;
-    let routeName = route.split("/")[1];
+    let routeName = route.split("/")[3];
     if (routeName === "reports") {
       return "reportsTrue";
     } else {
@@ -477,7 +484,7 @@ class Reports extends Component {
     this.setState({
       dateFrom: new Date(startDate),
       dateTo: new Date(endDate),
-      selectedDays: days,
+      selectedDays: days
     });
   };
 
@@ -505,7 +512,7 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(prevDate),
         dateTo: new Date(prevDate),
-        selectedDays: [new Date(prevDate)],
+        selectedDays: [new Date(prevDate)]
       });
     } else if (this.state.weekly) {
       const format = "DD MMM";
@@ -525,7 +532,7 @@ class Reports extends Component {
           moment(weekEnd).format(format) +
           " (Week " +
           weekNumber +
-          ")",
+          ")"
       });
     } else if (this.state.monthly) {
       const output = startOfDate.subtract(1, "days").format(DATE_FORMAT1);
@@ -539,7 +546,7 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
-        selectedDays: monthDays,
+        selectedDays: monthDays
       });
     }
   };
@@ -554,7 +561,7 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(nextDate),
         dateTo: new Date(nextDate),
-        selectedDays: [new Date(nextDate)],
+        selectedDays: [new Date(nextDate)]
       });
     } else if (this.state.weekly) {
       const format = "DD MMM";
@@ -574,7 +581,7 @@ class Reports extends Component {
           moment(weekEnd).format(format) +
           " (Week " +
           weekNumber +
-          ")",
+          ")"
       });
     } else if (this.state.monthly) {
       const output = endOfDate.add(1, "days").format(DATE_FORMAT1);
@@ -588,7 +595,7 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
-        selectedDays: monthDays,
+        selectedDays: monthDays
       });
     }
   };
@@ -651,7 +658,8 @@ class Reports extends Component {
                 <div className="SelectedWeekExample">
                   <button
                     onClick={this.setPreviousDate}
-                    className="arrow-button">
+                    className="arrow-button"
+                  >
                     <i className="fa fa-angle-left"></i>
                   </button>
                   {this.state.daily ? <Daily /> : null}
@@ -665,19 +673,22 @@ class Reports extends Component {
                   <button
                     name="daily"
                     onClick={this.calenderButtonHandle}
-                    className={this.state.daily ? "active" : ""}>
+                    className={this.state.daily ? "active" : ""}
+                  >
                     Daily
                   </button>
                   <button
                     name="weekly"
                     className={this.state.weekly ? "active" : ""}
-                    onClick={this.calenderButtonHandle}>
+                    onClick={this.calenderButtonHandle}
+                  >
                     Weekly
                   </button>
                   <button
                     name="monthly"
                     onClick={this.calenderButtonHandle}
-                    className={this.state.monthly ? "active" : ""}>
+                    className={this.state.monthly ? "active" : ""}
+                  >
                     {" "}
                     Monthly
                   </button>
@@ -685,7 +696,8 @@ class Reports extends Component {
                 <div className="report-download">
                   <button
                     className="btn btn-sm btn-default"
-                    onClick={this.showTaskModal}>
+                    onClick={this.showTaskModal}
+                  >
                     <i className="fas fa-download right-left-space-5"></i>
                     Download
                   </button>

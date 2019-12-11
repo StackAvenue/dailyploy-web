@@ -6,7 +6,7 @@
   font-family: $font-family-roboto;
   text-align: $text-left;
   font-size: $font-14;
-  margin-left: 15px;
+  margin-left: 5px;
 }
 
 .tooltip {
@@ -96,6 +96,18 @@
 .text-green {
   color: #008135;
 }
+
 .left-padding-20px {
   padding-left: 20px !important;
+}
+.login-signup-loader{
+  position: absolute;
+  z-index: 500;
+  padding-left: 10px;
+}
+.dailyploy-loader{
+  position: absolute;
+  z-index: 500;
+  left: 50%;
+  top: 50%;
 }

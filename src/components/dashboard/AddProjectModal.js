@@ -18,6 +18,8 @@ class AddProjectModal extends Component {
       displayCustomColorPicker: false,
       background: "#b9e1ff",
       value: "",
+      dateFromOpen: false,
+      dateToOpen: false
     };
   }
 
@@ -32,10 +34,10 @@ class AddProjectModal extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.props.workspaceId}/members`,
+        `workspaces/${this.props.workspaceId}/members`
       );
       var membersArr = data.members.filter(
-        user => user.email !== logedInUser.email,
+        user => user.email !== logedInUser.email
       );
     } catch (e) {
       console.log("users Error", e);
@@ -48,11 +50,12 @@ class AddProjectModal extends Component {
     let suggestions = [];
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
-      var selectedIds = this.props.state.selectedTags.map(m => m.id)
-      suggestions = this.state.members.filter(m => !selectedIds.includes(m.id))
+      var selectedIds = this.props.state.selectedTags.map(m => m.id);
+      suggestions = this.state.members
+        .filter(m => !selectedIds.includes(m.id))
         .sort()
         .filter(
-          m => regex.test(m.name) && !this.props.state.selectedTags.includes(m),
+          m => regex.test(m.name) && !this.props.state.selectedTags.includes(m)
         );
     }
     this.setState({ suggestions: suggestions, value: value });
@@ -65,7 +68,7 @@ class AddProjectModal extends Component {
     this.setState({
       // selectedTags: newSelectedTags,
       suggestions: [],
-      value: "",
+      value: ""
     });
     this.props.handleChangeMember(memberIds, newSelectedTags);
   };
@@ -118,7 +121,8 @@ class AddProjectModal extends Component {
               </div>
               <a
                 className="remove-tag right-left-space-5 d-inline-block"
-                onClick={() => this.removeSelectedTag(index)}>
+                onClick={() => this.removeSelectedTag(index)}
+              >
                 <i className="fa fa-close"></i>
               </a>
             </div>
@@ -132,11 +136,11 @@ class AddProjectModal extends Component {
     if (this.state.displayCustomColorPicker) {
       this.setState({
         displayColorPicker: !this.state.displayColorPicker,
-        displayCustomColorPicker: !this.state.displayCustomColorPicker,
+        displayCustomColorPicker: !this.state.displayCustomColorPicker
       });
     } else {
       this.setState({
-        displayColorPicker: !this.state.displayColorPicker,
+        displayColorPicker: !this.state.displayColorPicker
       });
     }
   };
@@ -162,7 +166,7 @@ class AddProjectModal extends Component {
 
   setColorPicker = () => {
     this.setState({
-      displayCustomColorPicker: !this.state.displayCustomColorPicker,
+      displayCustomColorPicker: !this.state.displayCustomColorPicker
     });
   };
 
@@ -170,6 +174,17 @@ class AddProjectModal extends Component {
     this.setState({ background: color });
     this.handleChangeColor();
     this.props.handleChangeComplete(color, event);
+  };
+
+  toggleDateFrom = () => {
+    this.setState({
+      dateFromOpen: !this.state.dateFromOpen,
+      dateToOpen: false
+    });
+  };
+
+  toggleDateTo = () => {
+    this.setState({ dateToOpen: !this.state.dateToOpen, dateFromOpen: false });
   };
 
   render() {
@@ -180,23 +195,26 @@ class AddProjectModal extends Component {
         <Modal
           className="project-modal"
           show={props.state.show}
-          onHide={props.handleClose}>
+          onHide={props.handleClose}
+        >
           <div className="row no-margin">
-            <div className="col-md-12 header">
+            <div className="col-md-12 header text-titlize">
               <span>{props.headText}</span>
               <button
                 className="btn btn-link float-right"
-                onClick={props.handleClose}>
+                onClick={props.handleClose}
+              >
                 <img src={Close} alt="close" />
               </button>
             </div>
             <div className="col-md-12 body">
               <div
-                className={`col-md-12 no-padding input-row ${props.ownerClassName}`}>
+                className={`col-md-12 no-padding input-row ${props.ownerClassName}`}
+              >
                 <div className="col-md-2 d-inline-block no-padding label">
                   Owner Name
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div className="col-md-10 d-inline-block text-titlize">
                   {props.state.projectOwner}
                 </div>
               </div>
@@ -221,7 +239,10 @@ class AddProjectModal extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Start Date
                 </div>
-                <div className="col-md-6 d-inline-block date-picker-container no-padding">
+                <div
+                  className="col-md-6 d-inline-block date-picker-container no-padding"
+                  onClick={this.toggleDateFrom}
+                >
                   <div className="col-md-3 d-inline-block date-text-light">
                     <span>From:</span>
                   </div>
@@ -231,6 +252,7 @@ class AddProjectModal extends Component {
                       onChange={props.handleDateFrom}
                       placeholderText="Select Date"
                       value={props.state.dateFrom}
+                      open={this.state.dateFromOpen}
                     />
                   </div>
                 </div>
@@ -243,17 +265,21 @@ class AddProjectModal extends Component {
                 <div className="col-md-10 d-inline-block no-padding">
                   <div
                     className="col-md-6 d-inline-block date-picker-container no-padding"
-                    style={{ backgroundColor: props.state.disableColor }}>
+                    onClick={this.toggleDateTo}
+                    style={{ backgroundColor: props.state.disableColor }}
+                  >
                     <div className="col-md-3 d-inline-block date-text-light ">
                       <span>To:</span>
                     </div>
                     <div className="col-md-9 d-inline-block">
                       <DatePicker
+                        minDate={props.state.dateFrom}
                         selected={props.state.dateTo}
                         onChange={props.handleDateTo}
                         placeholderText="Select Date"
                         disabled={props.state.disabledDateTo}
                         value={props.state.dateTo}
+                        open={this.state.dateToOpen}
                       />
                     </div>
                   </div>
@@ -263,11 +289,13 @@ class AddProjectModal extends Component {
                       type="checkbox"
                       className="custom-control-input d-inline-block"
                       id="endDateUndefined"
+                      checked={props.state.disabledDateTo ? true : false}
                       onChange={props.handleUndefinedToDate}
                     />
                     <label
                       className="custom-control-label d-inline-block"
-                      htmlFor="endDateUndefined">
+                      htmlFor="endDateUndefined"
+                    >
                       Undefined
                     </label>
                   </div>
@@ -279,7 +307,8 @@ class AddProjectModal extends Component {
                 </div>
                 <div
                   className="col-md-5 d-inline-block"
-                  style={{ maxWidth: "240px" }}>
+                  style={{ maxWidth: "240px" }}
+                >
                   <input
                     type="text"
                     placeholder="Enter amount"
@@ -293,7 +322,7 @@ class AddProjectModal extends Component {
                   <button
                     className="btn btn-default btn-color-picker"
                     style={{
-                      backgroundColor: `${props.state.background}`,
+                      backgroundColor: `${props.state.background}`
                     }}
                     onClick={this.handleChangeColor}
                   />
@@ -303,18 +332,19 @@ class AddProjectModal extends Component {
                         color={props.state.background}
                         colors={props.colors}
                         onChangeComplete={this.handleChangeComplete}
-                        value={props.state.background}></TwitterPicker>
+                        value={props.state.background}
+                      ></TwitterPicker>
                     </div>
                   ) : null}
                   {this.state.displayCustomColorPicker ? (
                     <div
                       className="custom-color-picker"
-                      onClick={this.setColorPicker}>
+                      onClick={this.setColorPicker}
+                    >
                       <ChromePicker
                         color={this.state.background}
-                        onChangeComplete={
-                          this.handleChangeComplete
-                        }></ChromePicker>
+                        onChangeComplete={this.handleChangeComplete}
+                      ></ChromePicker>
                     </div>
                   ) : null}
                 </div>
@@ -345,13 +375,15 @@ class AddProjectModal extends Component {
                   <button
                     type="button"
                     className="btn col-md-5 button1 btn-primary"
-                    onClick={props.addProject}>
+                    onClick={props.addProject}
+                  >
                     {props.btnText}
                   </button>
                   <button
                     type="button"
                     className="btn col-md-6 button2 btn-primary"
-                    onClick={props.handleClose}>
+                    onClick={props.handleClose}
+                  >
                     Cancel
                   </button>
                 </div>
