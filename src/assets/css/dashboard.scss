@@ -4249,3 +4249,12 @@ table.scheduler-table tr:last-child td {
   text-align: center;
   font-size: 15px;
 }
+.disable-project-select{
+  pointer-events: none;
+  .custom-search-select{
+    background-color: darkgray !important;
+  }
+  input{
+    background-color: darkgray !important;
+  }
+}

@@ -162,7 +162,13 @@ class AddTaskModal extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Project
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div
+                  className={`col-md-10 d-inline-block ${
+                    props.state.taskButton !== "Add"
+                      ? "disable-project-select"
+                      : ""
+                  }`}
+                >
                   <DailyPloySelect
                     options={this.props.state.memberProjects}
                     placeholder="Select project"
