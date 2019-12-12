@@ -391,12 +391,20 @@ class ShowProjects extends Component {
       for (let i in checkboxes) {
         if (checkboxes[i].checked === false) {
           checkboxes[i].checked = true;
+          var parent = checkboxes[i].closest(".grid-div");
+          if (parent) {
+            parent.className += " active";
+          }
         }
       }
     } else {
       for (let i in checkboxes) {
         if (checkboxes[i].checked === true) {
           checkboxes[i].checked = false;
+          var parent = checkboxes[i].closest(".grid-div");
+          if (parent) {
+            parent.classList.remove("active");
+          }
         }
       }
     }
@@ -408,14 +416,21 @@ class ShowProjects extends Component {
 
   handleCheck = (e, project) => {
     let checked = e.target.checked;
+    var parent = e.target.closest(".grid-div");
     let arrProject = [];
     if (checked) {
       arrProject = [...this.state.selectProjectArr, ...[project]];
+      if (parent) {
+        parent.className += " active";
+      }
     } else {
       let filterProjectArr = this.state.selectProjectArr.filter(
         item => item.id !== project.id
       );
       arrProject = filterProjectArr;
+      if (parent) {
+        parent.classList.remove("active");
+      }
     }
     this.setState({ selectProjectArr: arrProject });
   };
@@ -438,7 +453,7 @@ class ShowProjects extends Component {
           <div className="views">
             <Tabs>
               <div className="row no-margin">
-                <div className="col-md-6 select">
+                <div className="select col-md-2 d-inline-block">
                   <input
                     className="styled-checkbox"
                     id={`styled-checkbox`}
@@ -448,23 +463,24 @@ class ShowProjects extends Component {
                   />
                   <label htmlFor={`styled-checkbox`}>
                     {this.state.isAllChecked ? (
-                      <span>selected</span>
+                      <span>All Selected</span>
                     ) : (
                       <span>Select All</span>
                     )}
                   </label>
+                </div>
+
+                <div className="select col-md-4 d-inline-block no-padding">
                   {this.state.selectProjectArr.length > 0 ? (
                     <>
-                      <div className="d-inline-block">
-                        <button
-                          className="btn btn-primary delete-button"
-                          onClick={e =>
-                            this.deleteProject(e, this.state.selectProjectArr)
-                          }
-                        >
-                          Delete
-                        </button>
-                      </div>
+                      <button
+                        className="btn btn-primary delete-button"
+                        onClick={e =>
+                          this.deleteProject(e, this.state.selectProjectArr)
+                        }
+                      >
+                        Delete
+                      </button>
                       <div className="d-inline-block select-project-text">
                         {this.state.selectProjectArr.length +
                           " Project Selected"}
@@ -485,7 +501,7 @@ class ShowProjects extends Component {
               </div>
               <div className="project-view">
                 <TabPanel>
-                  <div style={{ margin: "0px 30px 0px 30px" }}>
+                  <div>
                     <div className="row grid-view no-margin">
                       {this.state.projects.map((project, index) => {
                         return (
