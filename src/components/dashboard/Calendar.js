@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
 import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
-// import Scheduler, { SchedulerData, ViewTypes } from "./../../../src/react-big-scheduler";
+// import Scheduler, {
+//   SchedulerData,
+//   ViewTypes
+// } from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import { Dropdown } from "react-bootstrap";
 import "../../assets/css/dashboard.scss";
@@ -83,7 +86,7 @@ class Calendar extends Component {
         nonAgendaOtherCellHeaderFormat: "DD MMM",
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
-        // calenderViewType: "dropdown",
+        calenderViewType: "customview",
 
         views: [
           {
@@ -230,6 +233,7 @@ class Calendar extends Component {
             eventItemPopoverTemplateResolver={
               this.eventItemPopoverTemplateResolver
             }
+            customeVeiwTypeButtons={this.viewTypeButtons}
           />
         </div>
       </div>
@@ -494,6 +498,38 @@ class Calendar extends Component {
           taskEventResumeConfirm={this.props.taskEventResumeConfirm}
         />
       </>
+    );
+  };
+
+  viewTypeButtons = (config, viewFunction) => {
+    const type = this.schedulerData.viewType;
+    return (
+      <div className="viewtype-btns d-inline-block">
+        {config.views.map(function(item) {
+          console.log("y", item.viewType);
+          var value =
+            "" +
+            item.viewType +
+            (item.showAgenda ? 1 : 0) +
+            (item.isEventPerspective ? 1 : 0);
+          return (
+            <div
+              className={`d-inline-block ${
+                type === item.viewType ? "active" : ""
+              }`}
+              key={
+                "" +
+                item.viewType +
+                (item.showAgenda ? 1 : 0) +
+                (item.isEventPerspective ? 1 : 0)
+              }
+              onClick={e => viewFunction(value)}
+            >
+              {item.viewName}
+            </div>
+          );
+        })}
+      </div>
     );
   };
 

@@ -3009,7 +3009,7 @@ table.scheduler-table tr:last-child td {
   margin-left: 15px;
   .rc-time-picker input {
     border: none !important;
-    padding: 0 0 0 0px !important;
+    padding: 10px 0 0 0px !important;
     width: 81%;
   }
   .rc-time-picker-input {
@@ -4256,6 +4256,9 @@ table.scheduler-table tr:last-child td {
           text-align: center;
         }
       }
+      .rc-time-picker-clear{
+        top: 6px !important;
+      }
     }
     .pri-info{
       .color-dot{
@@ -4334,5 +4337,40 @@ table.scheduler-table tr:last-child td {
 .suggestion-z-index-100{
   .suggestions{
     z-index: 100;
+  }
+}
+
+.viewtype-btns{
+  position: relative;
+  top: -48px;
+  right: 170px;
+  div{
+    width: 80px;
+    height: 36px;
+    background-color: #ffffff;
+    border: solid 1px $color-borders;
+    text-align: center;
+    padding-top: 5px;
+    font-family: $font-family-roboto !important;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    cursor: pointer;
+  }
+  :first-child{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  :last-child{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .active{
+    border: solid 1px $color-brand3 !important;
+    background-color: $color-brand3 !important;
+    color: $color-white !important;
   }
 }
