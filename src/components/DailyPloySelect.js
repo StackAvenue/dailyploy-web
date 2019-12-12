@@ -12,7 +12,7 @@ class DailyPloySelect extends Component {
       canBack: false,
       border: "solid 1px #d1d1d1",
       color: "#d1d1d1",
-      notFound: "hide",
+      notFound: "hide"
     };
   }
 
@@ -20,139 +20,186 @@ class DailyPloySelect extends Component {
     this.setState({
       suggestions: this.props.options ? this.props.options : [],
       selected: this.props.default ? this.props.default : ""
-    })
-  }
+    });
+  };
 
   onClickInput = () => {
-    this.setState({ show: !this.state.show, suggestions: this.props.options })
-  }
+    this.setState({ show: !this.state.show, suggestions: this.props.options });
+  };
 
-  onSearchTextChange = (e) => {
-    const value = e.target.value
-    const searchBy = this.props.searchBy ? this.props.searchBy : "name"
-    let suggestions = []
+  onSearchTextChange = e => {
+    const value = e.target.value;
+    const searchBy = this.props.searchBy ? this.props.searchBy : "name";
+    let suggestions = [];
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, 'i');
-      suggestions = this.props.options.filter(s => regex.test(`${s[searchBy]}`))
+      const regex = new RegExp(`^${value}`, "i");
+      suggestions = this.props.options.filter(s =>
+        regex.test(`${s[searchBy]}`)
+      );
     } else {
-      suggestions = this.props.options
+      suggestions = this.props.options;
     }
     this.setState({
       suggestions: suggestions,
       searchText: value,
       show: true,
-      notFound: suggestions.length > 0 ? "hide" : "show",
+      notFound: suggestions.length > 0 ? "hide" : "show"
     });
-  }
+  };
 
   renderSearchSuggestions = () => {
-    const klass = this.props.iconType == "block" ? "color-block" : this.props.iconType == "circle" ? "color-dot" : ""
-    const name = this.props.suggesionBy ? this.props.suggesionBy : "name"
-    const icon = this.props.icon
+    const klass =
+      this.props.iconType == "block"
+        ? "color-block"
+        : this.props.iconType == "circle"
+        ? "color-dot"
+        : "";
+    const name = this.props.suggesionBy ? this.props.suggesionBy : "name";
+    const icon = this.props.icon;
     return (
       <>
-        {this.state.suggestions.length > 0 ?
+        {this.state.suggestions.length > 0 ? (
           <ul>
-            {klass != "" ? this.state.suggestions.map((option, idx) => {
-              return (
-                <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                  {icon !== "" && klass === "" ?
-                    < i className={`left-padding-20px ${icon}`}></i>
-                    :
-                    <div
-                      className={`d-inline-block ${klass}`}
-                      style={{ backgroundColor: `${option.color_code}` }}></div>}
-                  <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
-                </li>
-              )
-            }) :
-              this.state.suggestions.map((option, idx) => {
-                return (
-                  <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                    {icon !== "" ?
-                      < i className={` ${icon}`}></i>
-                      : null}
-                    <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
-                  </li>
-                )
-              })}
+            {klass != ""
+              ? this.state.suggestions.map((option, idx) => {
+                  return (
+                    <li key={idx} onClick={() => this.selectSuggestion(option)}>
+                      {icon !== "" && klass === "" ? (
+                        <i className={`left-padding-20px ${icon}`}></i>
+                      ) : (
+                        <div
+                          className={`d-inline-block ${klass}`}
+                          style={{ backgroundColor: `${option.color_code}` }}
+                        ></div>
+                      )}
+                      <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
+                    </li>
+                  );
+                })
+              : this.state.suggestions.map((option, idx) => {
+                  return (
+                    <li key={idx} onClick={() => this.selectSuggestion(option)}>
+                      {icon !== "" ? <i className={` ${icon}`}></i> : null}
+                      <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
+                    </li>
+                  );
+                })}
           </ul>
-          : null
-        }
-        < span className={`text-titlize left-padding-20px  ${this.state.notFound}`} >No Match Found</span>
+        ) : null}
+        <span
+          className={`text-titlize left-padding-20px  ${this.state.notFound}`}
+        >
+          No Match Found
+        </span>
       </>
-    )
-  }
+    );
+  };
 
   renderSelectedSuggestion = () => {
-    const selected = this.state.selected
-    const klass = this.props.iconType == "block" ? "color-block" : this.props.iconType == "circle" ? "color-dot" : ""
-    const label = this.props.label ? this.props.label : "name"
-    const icon = this.props.icon
+    const selected = this.state.selected;
+    const klass =
+      this.props.iconType == "block"
+        ? "color-block"
+        : this.props.iconType == "circle"
+        ? "color-dot"
+        : "";
+    const label = this.props.label ? this.props.label : "name";
+    const icon = this.props.icon;
 
     return (
       <>
-        {selected != "" ?
+        {selected != "" ? (
           <div className="">
-            {icon !== "" && klass === "" ? <i className={`left-padding-20px ${icon}`}></i> :
-              <div className={`d-inline-block ${klass}`} style={{ backgroundColor: `${selected.color_code ? selected.color_code : this.state.color}` }}></div>}            <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
+            {icon !== "" && klass === "" ? (
+              <i className={`left-padding-20px ${icon}`}></i>
+            ) : (
+              <div
+                className={`d-inline-block ${klass}`}
+                style={{
+                  backgroundColor: `${
+                    selected.color_code ? selected.color_code : this.state.color
+                  }`
+                }}
+              ></div>
+            )}{" "}
+            <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
           </div>
-          : null}
+        ) : null}
       </>
-    )
-  }
+    );
+  };
 
-  selectSuggestion = (option) => {
-    this.setState({ selected: option, show: false, searchText: "" })
-    this.props.onChange(option)
-  }
+  selectSuggestion = option => {
+    this.setState({ selected: option, show: false, searchText: "" });
+    this.props.onChange(option);
+  };
 
-  handleBackSpace = (event) => {
+  handleBackSpace = event => {
     if (event.keyCode === 8 && this.state.searchText.length === 0) {
       this.setState({
         canBack: true,
         selected: "",
         suggestions: this.props.options
-      })
-      this.props.onChange(null)
+      });
+      this.props.onChange(null);
     }
-  }
+  };
+
+  closeSuggestion = () => {
+    if (this.state.show) {
+      this.setState({ show: false });
+    }
+  };
 
   render() {
     const { props } = this;
     return (
       <>
-        <div style={{ height: "34px" }} className={`col-md-12   d-inline-block no-padding ${props.className ? props.className : ""}`}>
+        <div
+          style={{ height: "34px" }}
+          className={`col-md-12   d-inline-block no-padding ${
+            props.className ? props.className : ""
+          }`}
+        >
           <div className=" custom-search-select">
             <div onClick={this.onClickInput}>
               <div className="d-inline-block selected-tags text-titlize">
                 {this.renderSelectedSuggestion()}
               </div>
-              <input className="d-inline-block"
-                type="text" value={this.state.searchText}
-                placeholder={`${this.state.selected ? "" : props.placeholder ? props.placeholder : ""}`}
+              <input
+                className="d-inline-block"
+                type="text"
+                value={this.state.searchText}
+                placeholder={`${
+                  this.state.selected
+                    ? ""
+                    : props.placeholder
+                    ? props.placeholder
+                    : ""
+                }`}
                 onChange={this.onSearchTextChange}
                 onKeyUp={this.handleBackSpace}
               />
-              {this.state.show ?
-                <div className="suggestions" >
+              {this.state.show ? (
+                <div className="suggestions">
                   {this.renderSearchSuggestions()}
                 </div>
-                : null}
-              <span className="down-icon"><i className="fa fa-angle-down"></i></span>
+              ) : null}
+              <span className="down-icon">
+                <i className="fa fa-angle-down"></i>
+              </span>
             </div>
-
           </div>
         </div>
       </>
     );
   }
-};
+}
 
 export default DailyPloySelect;
 
-
-{/* <DailyPloySelect
+{
+  /* <DailyPloySelect
   options={this.props.projects}
   placeholder="select"
   label="name"
@@ -164,4 +211,5 @@ export default DailyPloySelect;
   name="taskName"
   icon="fa fa-user"
   onChange={() => { }}
-/> */}
+/> */
+}

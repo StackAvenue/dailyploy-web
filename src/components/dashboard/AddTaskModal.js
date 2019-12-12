@@ -173,6 +173,7 @@ class AddTaskModal extends Component {
                     options={this.props.state.memberProjects}
                     placeholder="Select project"
                     label="name"
+                    className="suggestion-z-index-100"
                     default={this.props.state.project}
                     iconType="block"
                     onChange={this.props.handleProjectSelect}
@@ -199,6 +200,7 @@ class AddTaskModal extends Component {
                     options={this.categories}
                     placeholder="Select category"
                     iconType="block"
+                    className="suggestion-z-index-50"
                     onChange={() => {}}
                   />
                 </div>

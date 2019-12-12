@@ -4325,3 +4325,14 @@ table.scheduler-table tr:last-child td {
     background-color: darkgray !important;
   }
 }
+
+.suggestion-z-index-50{
+  .suggestions{
+    z-index: 50;
+  }
+}
+.suggestion-z-index-100{
+  .suggestions{
+    z-index: 100;
+  }
+}
