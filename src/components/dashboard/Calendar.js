@@ -506,7 +506,6 @@ class Calendar extends Component {
     return (
       <div className="viewtype-btns d-inline-block">
         {config.views.map(function(item) {
-          console.log("y", item.viewType);
           var value =
             "" +
             item.viewType +

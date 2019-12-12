@@ -65,7 +65,6 @@ class Signin extends Component {
           : "";
         try {
           const { data } = await get("workspaces");
-          console.log("data workspacesss", data);
           const workspace = data.workspaces[0];
           cookie.save("workspaceId", workspace.id, { path: "/" });
           if (workspace && workspace.type === "company") {
@@ -75,8 +74,14 @@ class Signin extends Component {
               path: "/"
             });
           }
-          this.props.history.push(`/dashboard/${workspace.id}`);
+          try {
+            const { data } = await get("logged_in_user");
+            cookie.save("loggedInUser", data);
+          } catch (e) {
+            console.log("err", e);
+          }
           this.setState({ isLoading: false });
+          this.props.history.push(`/workspace/${workspace.id}/dashboard`);
         } catch (e) {
           console.log("error", e);
         }

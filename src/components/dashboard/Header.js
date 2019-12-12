@@ -35,7 +35,7 @@ class Header extends Component {
   }
 
   async componentDidMount() {
-    const loggedInData = cookie.load("loggedInUser");
+    var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
         const { data } = await get("logged_in_user");
