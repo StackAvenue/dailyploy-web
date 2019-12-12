@@ -1417,7 +1417,6 @@ table.scheduler-table tr:last-child td {
     width: 1140px !important;
   }
   .heading {
-    margin: 15px 35px 17px 35px !important;
     border: 0 !important;
     thead {
       tr {
@@ -1435,25 +1434,6 @@ table.scheduler-table tr:last-child td {
       .name {
         width: 170px !important;
       }
-      .auto-search {
-        // position: absolute;
-        width: 170px;
-        height: auto;
-        z-index: 1;
-        background-color: #f8f9fa;
-        border-radius: 0px;
-        ul {
-          list-style: none;
-          padding-left: 0px;
-          text-align: left;
-          li {
-            padding: 10px;
-          }
-          li:hover {
-            cursor: pointer;
-          }
-        }
-      }
       .email {
         width: 220px !important;
       }
@@ -1461,40 +1441,18 @@ table.scheduler-table tr:last-child td {
         width: 120px !important;
       }
       .project {
-        width: 160px !important;
+        width: 250px !important;
       }
-      input {
-        border-radius: 5px !important;
-        border: solid 1px $color-borders !important;
-        font-size: 15px !important;
-        font-family: $font-family-roboto !important;
-        color: $color-text1 !important;
-      }
-      .css-12zlm52-ReactDropdownSelect {
-        border: 1px solid $color-borders !important;
-        width: 210px !important;
-        padding: 0px 0px 0px 10px !important;
-        height: 36.5px !important;
-        border-radius: 5px;
-        .css-v1jrxw-ContentComponent {
-          .react-dropdown-select-input {
-            border-radius: 0px !important;
-            border: 0 !important;
-            // width: 30px !important;
-            background-color: transparent;
+      .select-memeber-project{
+        .down-icon{
+          position: absolute !important;
+          right: 5px !important;
+          top: 5px !important;
+        }
+        .custom-search-select{
+          input{
+            width: 50% !important;
           }
-        }
-        .css-6wsm8k-DropdownHandleComponent {
-          margin: 0 5px 0 5px !important;
-        }
-        .css-194s1d4-DropdownHandleComponent {
-          margin: 0 5px 0 5px !important;
-        }
-        .css-1yhm9ls-DropDown {
-          top: 43.5px !important;
-          border: 1px solid #ccc !important;
-          width: 210px !important;
-          padding: 0 !important;
         }
       }
       label {

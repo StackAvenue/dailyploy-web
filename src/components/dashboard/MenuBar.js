@@ -208,7 +208,7 @@ export default class MenuBar extends Component {
   };
 
   handleChangeProjectSelect = value => {
-    this.setState({ memberProject: value[0].id });
+    this.setState({ memberProject: value ? value.id : "" });
   };
 
   selectAutoSuggestion = option => {
