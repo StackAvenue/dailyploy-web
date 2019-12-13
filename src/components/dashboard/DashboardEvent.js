@@ -5,13 +5,14 @@ import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import Timer from "./../dashboard/Timer";
-import { Alert, UncontrolledAlert } from 'reactstrap';
-
+import { Alert, UncontrolledAlert } from "reactstrap";
 
 class DashboardEvent extends Component {
   constructor(props) {
-    super(props)
-    this.isToday = this.props.end.format(DATE_FORMAT1) == moment(new Date()).format(DATE_FORMAT1)
+    super(props);
+    this.isToday =
+      this.props.end.format(DATE_FORMAT1) ==
+      moment(new Date()).format(DATE_FORMAT1);
     this.state = {
       status: false,
       runningTime: 0,
@@ -23,9 +24,8 @@ class DashboardEvent extends Component {
       endOn: "",
       canStart: false,
       icon: "play",
-      timeArr: [
-      ],
-      showAlert: false,
+      timeArr: [],
+      showAlert: false
     };
   }
 
@@ -43,50 +43,61 @@ class DashboardEvent extends Component {
     // } catch (e) {
     // }
 
-    var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`)
-    var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`)
+    var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
+    var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
     if (taskId === this.props.event.id && startOn !== "") {
       this.setState({
         status: true,
         startOn: startOn,
-        icon: 'pause'
-      })
+        icon: "pause"
+      });
     }
   }
 
   handleClick = () => {
     this.setState(state => {
-      var icon = this.state.icon
-      var updateIcon = icon
-      var status = state.status
+      var icon = this.state.icon;
+      var updateIcon = icon;
+      var status = state.status;
       if (state.status) {
-        var endOn = Date.now()
+        var endOn = Date.now();
         this.setState({ runningTime: 0, endOn: endOn });
-        this.saveTaskTrackingTime(endOn)
-        this.handleReset()
-        this.props.handleTaskBottomPopup("")
-        updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-        status = !state.status
+        this.saveTaskTrackingTime(endOn);
+        this.handleReset();
+        this.props.handleTaskBottomPopup("");
+        updateIcon =
+          icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+        status = !state.status;
       } else {
         if (this.props.onGoingTask) {
           updateIcon = icon;
-          this.setState({ showAlert: !this.state.showAlert })
+          this.setState({ showAlert: !this.state.showAlert });
         } else {
-          var startOn = Date.now()
-          this.setState({ startOn: startOn })
-          localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn)
-          localStorage.setItem(`taskId-${this.props.workspaceId}`, this.props.event.id)
-          localStorage.setItem(`colorCode-${this.props.workspaceId}`, this.props.bgColor)
-          localStorage.setItem(`taskTitle-${this.props.workspaceId}`, this.props.titleText)
-          this.props.handleTaskBottomPopup(this.state.startOn)
-          var updateIcon = icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-          status = !state.status
+          var startOn = Date.now();
+          this.setState({ startOn: startOn });
+          localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
+          localStorage.setItem(
+            `taskId-${this.props.workspaceId}`,
+            this.props.event.id
+          );
+          localStorage.setItem(
+            `colorCode-${this.props.workspaceId}`,
+            this.props.bgColor
+          );
+          localStorage.setItem(
+            `taskTitle-${this.props.workspaceId}`,
+            this.props.titleText
+          );
+          this.props.handleTaskBottomPopup(this.state.startOn);
+          var updateIcon =
+            icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+          status = !state.status;
         }
       }
       return {
         status: status,
         showPopup: false,
-        icon: updateIcon,
+        icon: updateIcon
       };
     });
   };
@@ -95,59 +106,64 @@ class DashboardEvent extends Component {
     var taskData = {
       startdate: new Date(this.state.startOn),
       enddate: new Date(endOn)
-    }
+    };
     try {
       const { data } = await mockPost(taskData, "task-track");
       if (data) {
-        var timeArr = [this.state.timeArr, ...[]]
-        var sTime = moment(data.startdate).format("HH:mm")
-        var eTime = moment(data.enddate).format("HH:mm")
-        timeArr.push(`${sTime} - ${eTime}`)
-        this.setState({ timeArr: timeArr })
+        var timeArr = [this.state.timeArr, ...[]];
+        var sTime = moment(data.startdate).format("HH:mm");
+        var eTime = moment(data.enddate).format("HH:mm");
+        timeArr.push(`${sTime} - ${eTime}`);
+        this.setState({ timeArr: timeArr });
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   handleReset = () => {
     clearInterval(this.timer);
     this.setState({ runningTime: 0, status: false, startOn: "" });
-    localStorage.setItem(`startOn-${this.props.workspaceId}`, "")
-    localStorage.setItem(`taskId-${this.props.workspaceId}`, "")
-    localStorage.setItem(`colorCode-${this.props.workspaceId}`, "")
-    localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "")
+    localStorage.setItem(`startOn-${this.props.workspaceId}`, "");
+    localStorage.setItem(`taskId-${this.props.workspaceId}`, "");
+    localStorage.setItem(`colorCode-${this.props.workspaceId}`, "");
+    localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "");
   };
 
   showEventPopUp = () => {
-    this.setState({ showPopup: !this.state.showPopup })
-  }
+    this.setState({ showPopup: !this.state.showPopup });
+  };
 
   hideEventPopUp = () => {
-    this.setState({ showPopup: false })
-  }
+    this.setState({ showPopup: false });
+  };
 
-  ToggleTimerDropDown = (id) => {
-    this.setState({ clickEventId: id, showTimerMenu: !this.state.showTimerMenu, showPopup: false })
-  }
+  ToggleTimerDropDown = id => {
+    this.setState({
+      clickEventId: id,
+      showTimerMenu: !this.state.showTimerMenu,
+      showPopup: false
+    });
+  };
 
-  ToggleActionDropDown = (id) => {
-    this.setState({ clickEventId: id, showAction: !this.state.showAction, showPopup: false })
-  }
-
+  ToggleActionDropDown = id => {
+    this.setState({
+      clickEventId: id,
+      showAction: !this.state.showAction,
+      showPopup: false
+    });
+  };
 
   async markCompleteTask(id) {
     if (id) {
       try {
         const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete
-      } catch (e) {
-      }
+        var isComplete = data[0].complete;
+      } catch (e) {}
       if (isComplete) {
-        var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`)
-        this.handleReset()
-        this.setState({ icon: "check", showAction: false })
+        var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
+        this.handleReset();
+        this.setState({ icon: "check", showAction: false });
         if (taskId === id) {
-          this.props.handleTaskBottomPopup("")
+          this.props.handleTaskBottomPopup("");
         }
       }
     }
@@ -157,26 +173,36 @@ class DashboardEvent extends Component {
     if (id) {
       try {
         const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete
-      } catch (e) {
-      }
+        var isComplete = data[0].complete;
+      } catch (e) {}
       if (isComplete) {
       }
     }
   }
 
-  isValidUserDate = (userId) => {
-    return this.isToday && this.props.userId === userId
-  }
+  isValidUserDate = userId => {
+    return this.isToday && this.props.userId === userId;
+  };
 
   render() {
-    const { eventItemClick, start, end, event, mustAddCssClass, divStyle, schedulerData, titleText } = this.props;
+    const {
+      eventItemClick,
+      start,
+      end,
+      event,
+      mustAddCssClass,
+      divStyle,
+      schedulerData,
+      titleText
+    } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
     return (
       <>
-        {schedulerData.viewType === 0 || schedulerData.viewType === 1 ?
-          <div key={event.id} className={mustAddCssClass}
+        {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
+          <div
+            key={event.id}
+            className={mustAddCssClass}
             style={divStyle}
             onMouseOver={() => this.showEventPopUp()}
             onMouseOut={() => this.hideEventPopUp()}
@@ -185,115 +211,163 @@ class DashboardEvent extends Component {
               <div
                 className="col-md-12 pointer item-heading text-wraper"
                 style={{ padding: "5px 5px 0px 5px" }}
-                onClick={() => { if (!!eventItemClick) eventItemClick(schedulerData, event) }}
+                onClick={() => {
+                  if (!!eventItemClick) eventItemClick(schedulerData, event);
+                }}
               >
                 {/* <i className="fa fa-pencil pull-right" aria-hidden="true"></i> */}
                 {titleText}
               </div>
               <div className="d-inline-block">
-                <div className={`d-inline-block task-ongoing`} ></div>
+                <div className={`d-inline-block task-ongoing`}></div>
                 <div className="d-inline-block task-timer">
                   <Timer
                     startOn={this.state.startOn}
                     isStart={this.state.status}
                   />
                 </div>
-                {this.state.icon === 'pause' ?
+                {this.state.icon === "pause" ? (
                   <div
-                    style={{ pointerEvents: this.isValidUserDate(event.resourceId) ? "" : "none" }}
+                    style={{
+                      pointerEvents: this.isValidUserDate(event.resourceId)
+                        ? ""
+                        : "none"
+                    }}
                     className="d-inline-block task-play-btn pointer"
                     onClick={() => this.handleClick()}
-                  ><i className="fa fa-pause"></i></div> : null}
+                  >
+                    <i className="fa fa-pause"></i>
+                  </div>
+                ) : null}
 
-                {this.state.icon === 'play' ?
+                {this.state.icon === "play" ? (
                   <div
-                    style={{ pointerEvents: this.isValidUserDate(event.resourceId) ? "" : "none" }}
+                    style={{
+                      pointerEvents: this.isValidUserDate(event.resourceId)
+                        ? ""
+                        : "none"
+                    }}
                     className="d-inline-block task-play-btn pointer"
                     onClick={() => this.handleClick(event.id)}
-                  ><i className="fa fa-play"></i></div> : null}
+                  >
+                    <i className="fa fa-play"></i>
+                  </div>
+                ) : null}
 
-                {this.state.icon === 'check' ?
-                  <div className="d-inline-block task-play-btn"><i className="fa fa-check"></i></div> : null}
+                {this.state.icon === "check" ? (
+                  <div className="d-inline-block task-play-btn">
+                    <i className="fa fa-check"></i>
+                  </div>
+                ) : null}
               </div>
               <div className="col-md-12 no-padding">
                 <div className="col-md-6 no-padding d-inline-block item-time">
-                  <input className="form-control  timer-dropdown d-inline-block"
-                    style={{ backgroundColor: this.state.showTimerMenu ? "#ffffff" : this.props.bgColor, borderColor: this.props.bgColor }}
+                  <input
+                    className="form-control  timer-dropdown d-inline-block"
+                    style={{
+                      backgroundColor: this.state.showTimerMenu
+                        ? "#ffffff"
+                        : this.props.bgColor,
+                      borderColor: this.props.bgColor
+                    }}
                     defaultValue={this.props.times ? this.props.times[0] : ""}
                     onClick={() => this.ToggleTimerDropDown(event.id)}
                     onMouseOver={() => this.hideEventPopUp(event.id)}
                   />
                 </div>
                 <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                  <span className="task-event-action pointer" onClick={() => this.ToggleActionDropDown(event.id)}>...</span>
+                  <span
+                    className="task-event-action pointer"
+                    onClick={() => this.ToggleActionDropDown(event.id)}
+                  >
+                    ...
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-          : <MonthlyEvent
+        ) : (
+          <MonthlyEvent
             state={this.props}
             hideEventPopUp={this.hideEventPopUp}
             showEventPopUp={this.showEventPopUp}
-          />}
+          />
+        )}
 
-
-        {this.state.showTimerMenu && this.state.clickEventId === event.id ?
+        {this.state.showTimerMenu && this.state.clickEventId === event.id ? (
           <div className={`dropdown-div `}>
             {this.props.times.map((time, idx) => {
               if (idx !== 0) {
-                return <div className="hover-border"> {time} </div>
+                return <div className="hover-border"> {time} </div>;
               }
             })}
-            {this.state.timeArr ?
-              this.state.timeArr.map(time => {
-                return <div className="hover-border"> {time} </div>
-              }) : null}
+            {this.state.timeArr
+              ? this.state.timeArr.map(time => {
+                  return <div className="hover-border"> {time} </div>;
+                })
+              : null}
           </div>
-          : null}
+        ) : null}
 
-        {this.state.showAction && this.state.clickEventId === event.id ?
+        {this.state.showAction && this.state.clickEventId === event.id ? (
           <div className="d-inline-block event-action-dropdown">
-            {this.state.icon !== "check" ?
+            {this.state.icon !== "check" ? (
               <>
                 <div
                   className="border-bottom pointer"
                   style={{ padding: "5px 0px 0px 0px" }}
                   onClick={() => this.markCompleteTask(event.id)}
-                  onClick={() => this.props.taskEventResumeConfirm(event, 'mark as completed')}
+                  onClick={() =>
+                    this.props.taskEventResumeConfirm(
+                      event,
+                      "mark as completed"
+                    )
+                  }
                 >
                   Mark Complete
-            </div>
+                </div>
                 <div
                   className="pointer"
                   style={{ padding: "5px 0px 5px 0px" }}
-                  onClick={() => this.props.taskEventResumeConfirm(event, 'delete')}
+                  onClick={() =>
+                    this.props.taskEventResumeConfirm(event, "delete")
+                  }
                 >
                   Delete Task
-            </div>
+                </div>
               </>
-              :
+            ) : (
               <div
                 className="pointer"
                 style={{ padding: "5px 0px 5px 0px" }}
-                onClick={() => this.props.taskEventResumeConfirm(event, 'resume')}
+                onClick={() =>
+                  this.props.taskEventResumeConfirm(event, "resume")
+                }
               >
                 Resume
-            </div>
-            }
+              </div>
+            )}
           </div>
-          : null
-        }
+        ) : null}
 
         <div className="custom-event-popup">
-          {this.state.showPopup ? this.props.eventItemPopoverTemplateResolver(schedulerData, event, titleText, start, end, this.props.bgColor)
+          {this.state.showPopup
+            ? this.props.eventItemPopoverTemplateResolver(
+                schedulerData,
+                event,
+                titleText,
+                start,
+                end,
+                this.props.bgColor
+              )
             : null}
         </div>
 
-        {this.state.showAlert ?
+        {this.state.showAlert ? (
           <UncontrolledAlert className="task-war-alert" color="warning">
             one task already ongoing !
           </UncontrolledAlert>
-          : null}
+        ) : null}
       </>
     );
   }

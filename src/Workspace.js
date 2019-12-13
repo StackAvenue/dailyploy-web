@@ -128,7 +128,6 @@ class Workspace extends Component {
       colorCode: colorCode,
       taskTitle: taskTitle,
       workspaceId: workspaceId,
-      // isStart: this.isBottomPopup(),
       isStart: taskTitle && startOn && taskId && colorCode
     });
   }
@@ -215,6 +214,23 @@ class Workspace extends Component {
     );
   };
 
+  stopOnGoingTask = () => {
+    if (this.state.isStart) {
+      localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
+      localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
+      localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
+      localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
+
+      this.setState({
+        startOn: "",
+        taskId: "",
+        colorCode: "",
+        taskTitle: "",
+        isStart: false
+      });
+    }
+  };
+
   render() {
     return (
       <div>
@@ -265,6 +281,7 @@ class Workspace extends Component {
             taskId={this.state.taskId}
             startOn={this.state.startOn}
             isStart={this.state.isStart}
+            stopOnGoingTask={this.stopOnGoingTask}
           />
         ) : null}
       </div>
