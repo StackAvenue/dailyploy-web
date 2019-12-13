@@ -10,7 +10,7 @@ import { Dropdown } from "react-bootstrap";
 import "../../assets/css/dashboard.scss";
 import moment from "moment";
 import DashboardEvent from "./../dashboard/DashboardEvent";
-import Select from "react-dropdown-select";
+import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 
 class Calendar extends Component {
@@ -234,6 +234,7 @@ class Calendar extends Component {
               this.eventItemPopoverTemplateResolver
             }
             customeVeiwTypeButtons={this.viewTypeButtons}
+            customeDatePicker={this.customeDatePicker}
           />
         </div>
       </div>
@@ -528,6 +529,25 @@ class Calendar extends Component {
             </div>
           );
         })}
+      </div>
+    );
+  };
+
+  customeDatePicker = () => {
+    var viewType = this.schedulerData.viewType;
+    return (
+      <div
+        className={`dashboard-calender ${
+          viewType == "1" ? "week-format-width" : "day-format-width"
+        }`}
+      >
+        <DailyPloyDatePicker
+          onSelectDate={this.onSelectDate}
+          pickerType={viewType}
+          schedulerData={this.schedulerData}
+          prev={true}
+          next={true}
+        />
       </div>
     );
   };

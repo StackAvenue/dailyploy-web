@@ -4335,3 +4335,43 @@ table.scheduler-table tr:last-child td {
     color: $color-white !important;
   }
 }
+.day-format-width{
+  .react-datepicker-wrapper{
+    input{
+      width: 130px !important;
+      border: none;
+    }
+  }
+  .react-datepicker-popper{
+    left: -50px !important;
+    div{
+      color: #555555 !important;
+    }
+    .react-datepicker__day--selected, .react-datepicker__day--in-range {
+      color: $color-white !important;
+    }
+  }
+}
+.week-format-width{
+  .react-datepicker-wrapper{
+    input{
+      width: 216px !important;
+      border: none;
+    }
+  }
+  .react-datepicker-popper{
+    left: -30px !important;
+    div{
+      color: #555555 !important;
+    }
+    .react-datepicker__day--selected, .react-datepicker__day--in-range {
+      color: $color-white !important;
+    }
+  }
+}
+.arrow-button{
+  padding: 0px 15px 0px 15px;
+  border: none;
+  background: none;
+  font-size: 20px !important;
+}
