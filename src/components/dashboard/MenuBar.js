@@ -9,6 +9,7 @@ import AddMemberModal from "./AddMemberModal";
 import Tabs from "./MenuBar/Tabs";
 import ConditionalElements from "./MenuBar/ConditionalElements";
 import DailyPloyToast from "./../DailyPloyToast";
+import cookie from "react-cookies";
 import { USER_ROLE } from "../../utils/Constants";
 
 export default class MenuBar extends Component {
@@ -70,10 +71,17 @@ export default class MenuBar extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const { data } = await get("logged_in_user");
-      this.setState({ logedInUserEmail: data.email });
-    } catch (e) {}
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        this.setState({ logedInUserEmail: data.email });
+      } catch (e) {
+        console.log("err", e);
+      }
+    } else {
+      this.setState({ logedInUserEmail: loggedInData.email });
+    }
   }
 
   addProject = async () => {
@@ -200,7 +208,7 @@ export default class MenuBar extends Component {
   };
 
   handleChangeProjectSelect = value => {
-    this.setState({ memberProject: value[0].id });
+    this.setState({ memberProject: value ? value.id : "" });
   };
 
   selectAutoSuggestion = option => {

@@ -4,6 +4,7 @@ import Close from "../../assets/images/close.svg";
 import Select from "react-dropdown-select";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import DailyPloySelect from "./../DailyPloySelect";
 
 const RadioOptions = ({ options, selected, onChange }) => {
   return (
@@ -54,12 +55,7 @@ class AddMemberModal extends Component {
         ) : null}
       </>
     );
-    // console.log("suggestions 1", this.props.state.suggestions);
   };
-
-  // selectAutoSuggestion = option => {
-  //   console.log("option", option);
-  // };
 
   render() {
     const props = this.props.state;
@@ -152,34 +148,13 @@ class AddMemberModal extends Component {
                     </select>
                   </td>
                   <td>
-                    {/* <select
-                      className="form-control project text-titlize"
-                      name="memberProject"
-                      value={this.props.state.memberProject}
-                      onChange={this.props.handleChangeMemberInput}>
-                      <option value="">Select Project</option>
-                      {this.props.projects.map((project, index) => (
-                        <option key={index} value={project.id}>
-                          {project.name}
-                        </option>
-                      ))}
-                    </select> */}
-                    <Select
-                      placeholder="Select"
-                      color="#0074D9"
-                      searchBy="name"
-                      dropdownHandle={true}
-                      direction="ltr"
-                      labelField="name"
-                      valueField="id"
+                    <DailyPloySelect
+                      className="select-memeber-project project"
                       options={this.props.projects}
+                      placeholder="Select project"
                       onChange={value =>
                         this.props.handleChangeProjectSelect(value)
                       }
-                      noDataLabel="No matches found"
-                      closeOnSelect={true}
-                      name="memberProject"
-                      dropdownHeight="100px"
                     />
                   </td>
                 </tr>

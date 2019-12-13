@@ -5,6 +5,7 @@ import MenuBar from "./MenuBar";
 import { Tab, Nav } from "react-bootstrap";
 import UserSettings from "./settings/UserSettings";
 import WorkspaceSettings from "./settings/WorkspaceSettings";
+import cookie from "react-cookies";
 
 class Settings extends Component {
   constructor(props) {
@@ -30,11 +31,14 @@ class Settings extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const { data } = await get("logged_in_user");
-      var loggedInData = data;
-    } catch (e) {
-      console.log("err", e);
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var loggedInData = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Listing

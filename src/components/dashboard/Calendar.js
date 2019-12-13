@@ -1,15 +1,22 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
 import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
+// import Scheduler, {
+//   SchedulerData,
+//   ViewTypes
+// } from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
-import { post } from "../../utils/API";
+import { Dropdown } from "react-bootstrap";
 import "../../assets/css/dashboard.scss";
-import AddTaskModal from "../../components/dashboard/AddTaskModal";
 import moment from "moment";
+import DashboardEvent from "./../dashboard/DashboardEvent";
+import DailyPloyDatePicker from "./../DailyPloyDatePicker";
+import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
+    this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -21,17 +28,19 @@ class Calendar extends Component {
         schedulerMaxHeight: 0,
         tableHeaderHeight: 34,
 
-        agendaResourceTableWidth: 160,
-        agendaMaxEventWidth: 100,
+        // agendaResourceTableWidth: 160,
+        agendaResourceTableWidth: 218,
+        agendaMaxEventWidth: 153,
 
         dayResourceTableWidth: 218,
-        weekResourceTableWidth: "16%",
+        weekResourceTableWidth: 140,
+        // weekResourceTableWidth: "16%",
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
 
-        dayCellWidth: 30,
+        dayCellWidth: 40,
         weekCellWidth: "12%",
-        monthCellWidth: 80,
+        monthCellWidth: 40,
         customCellWidth: 80,
 
         dayMaxEvents: 99,
@@ -39,7 +48,8 @@ class Calendar extends Component {
         monthMaxEvents: 99,
         customMaxEvents: 99,
 
-        eventItemHeight: 45,
+        eventItemHeight: 85,
+        // eventItemHeight: 45,
         eventItemLineHeight: this.calculateResouceHeight(),
         nonAgendaSlotMinHeight: 0,
         dayStartFrom: 0,
@@ -59,7 +69,7 @@ class Calendar extends Component {
         crossResourceMove: true,
         checkConflict: false,
         scrollToSpecialMomentEnabled: true,
-        eventItemPopoverEnabled: true,
+        eventItemPopoverEnabled: false,
         calendarPopoverEnabled: true,
         recurringEventsEnabled: true,
         headerEnabled: true,
@@ -69,19 +79,20 @@ class Calendar extends Component {
 
         resourceName: "",
         taskName: "Task Name",
-        agendaViewHeader: "Agenda",
+        agendaViewHeader: "",
         nonAgendaDayCellHeaderFormat: "ha",
-        nonAgendaMonthCellHeaderFormat: "ddd DD MMM",
+        nonAgendaWeekCellHeaderFormat: "ddd DD MMM",
+        nonAgendaMonthCellHeaderFormat: "DD",
         nonAgendaOtherCellHeaderFormat: "DD MMM",
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
-        // calenderViewType: "dropdown",
+        calenderViewType: "customview",
 
         views: [
           {
             viewName: "Day",
             viewType: ViewTypes.Day,
-            showAgenda: false,
+            showAgenda: true,
             isEventPerspective: false
           },
           {
@@ -89,13 +100,13 @@ class Calendar extends Component {
             viewType: ViewTypes.Week,
             showAgenda: false,
             isEventPerspective: false
-          },
-          {
-            viewName: "Month",
-            viewType: ViewTypes.Month,
-            showAgenda: false,
-            isEventPerspective: false
           }
+          // {
+          //   viewName: "Month",
+          //   viewType: ViewTypes.Month,
+          //   showAgenda: false,
+          //   isEventPerspective: false
+          // }
         ]
       }
     );
@@ -107,7 +118,8 @@ class Calendar extends Component {
       eventsForCustomStyle: [],
       eventsForTaskView: [],
       show: false,
-      setShow: false
+      setShow: false,
+      onGoingTask: false
     };
   }
 
@@ -127,7 +139,8 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 50;
+      // return 50;
+      return 85;
     }
     return height;
   };
@@ -220,6 +233,8 @@ class Calendar extends Component {
             eventItemPopoverTemplateResolver={
               this.eventItemPopoverTemplateResolver
             }
+            customeVeiwTypeButtons={this.viewTypeButtons}
+            customeDatePicker={this.customeDatePicker}
           />
         </div>
       </div>
@@ -240,28 +255,46 @@ class Calendar extends Component {
     var s = Math.floor((totalSeconds % 3600) % 60);
 
     var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
-    return (
-      <div className="event-task-hover">
-        <div className="title">
-          <span className="" title={title}>
-            {title}
-          </span>
-        </div>
-        <div className="project">
-          <div
-            className="status-dot d-inline-block"
-            style={{ backgroundColor: `${eventItem.bgColor}` }}
-          ></div>
-          <div className="d-inline-block">{eventItem.projectName}</div>
-        </div>
-        <div className="time">
-          <div className="d-inline-block">
-            {start.format("HH:mm")}-{end.format("HH:mm")}
+    if (schedulerData.viewType !== 2) {
+      return (
+        <div className="event-task-hover">
+          <div className="title">
+            <span className="" title={title}>
+              {title}
+            </span>
           </div>
-          <div className="d-inline-block pull-right">{timeDiff}</div>
+          <div className="project">
+            <div
+              className="status-dot d-inline-block"
+              style={{ backgroundColor: `${eventItem.bgColor}` }}
+            ></div>
+            <div className="d-inline-block">{eventItem.projectName}</div>
+          </div>
+          <div className="time">
+            <div className="d-inline-block">
+              {start.format("HH:mm")}-{end.format("HH:mm")}
+            </div>
+            <div className="d-inline-block pull-right">{timeDiff}</div>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <MonthlyTaskOverPopup
+          event={eventItem}
+          titleText={title}
+          end={end}
+          schedulerData={this.schedulerData}
+          scheduler={this.schedulerData}
+          workspaceId={this.props.workspaceId}
+          times={this.times}
+          bgColor={eventItem.bgColor}
+          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+          userId={this.props.state.userId}
+          onGoingTask={this.props.onGoingTask}
+        />
+      );
+    }
   };
 
   prevClick = schedulerData => {
@@ -296,6 +329,13 @@ class Calendar extends Component {
       view.isEventPerspective
     );
     schedulerData.setEvents(this.state.events);
+    if (view.viewType === 0) {
+      schedulerData.setEventItemHeight(85);
+    } else if (view.viewType === 1) {
+      schedulerData.setEventItemHeight(85);
+    } else if (view.viewType === 2) {
+      schedulerData.setEventItemHeight(51);
+    }
     this.setState({
       viewModel: schedulerData
     });
@@ -405,6 +445,7 @@ class Calendar extends Component {
   };
 
   eventItemTemplateResolver = (
+    eventItemClick,
     schedulerData,
     event,
     bgColor,
@@ -420,8 +461,8 @@ class Calendar extends Component {
       event
     );
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
-    var start = moment(event.start).format("HH:mm");
-    var end = moment(event.end).format("HH:mm");
+    var start = moment(event.start);
+    var end = moment(event.end);
     let divStyle = {
       borderRadius: "2px",
       backgroundColor: backgroundColor,
@@ -430,59 +471,85 @@ class Calendar extends Component {
     if (!!agendaMaxEventWidth)
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
-    if (schedulerData.viewType === 0) {
-      return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle}>
-          <div className="row item">
+    return (
+      <>
+        <DashboardEvent
+          eventItemClick={eventItemClick}
+          schedulerData={schedulerData}
+          event={event}
+          bgColor={bgColor}
+          isStart={isStart}
+          isEnd={isEnd}
+          mustAddCssClass={mustAddCssClass}
+          agendaMaxEventWidth={agendaMaxEventWidth}
+          titleText={titleText}
+          start={start}
+          end={end}
+          divStyle={divStyle}
+          scheduler={this.schedulerData}
+          hideOverPopup={this.hideOverPopup}
+          times={this.times}
+          workspaceId={this.props.workspaceId}
+          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+          onGoingTask={this.props.onGoingTask}
+          eventItemPopoverTemplateResolver={
+            this.eventItemPopoverTemplateResolver
+          }
+          userId={this.props.state.userId}
+          taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+        />
+      </>
+    );
+  };
+
+  viewTypeButtons = (config, viewFunction) => {
+    const type = this.schedulerData.viewType;
+    return (
+      <div className="viewtype-btns d-inline-block">
+        {config.views.map(function(item) {
+          var value =
+            "" +
+            item.viewType +
+            (item.showAgenda ? 1 : 0) +
+            (item.isEventPerspective ? 1 : 0);
+          return (
             <div
-              className="col-md-12 item-heading text-wraper rk"
-              style={{ padding: "7px 7px 0px 7px" }}
+              className={`d-inline-block ${
+                type === item.viewType ? "active" : ""
+              }`}
+              key={
+                "" +
+                item.viewType +
+                (item.showAgenda ? 1 : 0) +
+                (item.isEventPerspective ? 1 : 0)
+              }
+              onClick={e => viewFunction(value)}
             >
-              {titleText}
+              {item.viewName}
             </div>
-            <div className="col-md-12 no-padding">
-              <div className="col-md-6 no-padding d-inline-block item-time pull-right text-right">
-                {this.getTimeDifference(moment(event.start), moment(event.end))}
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (schedulerData.viewType === 1) {
-      return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle}>
-          <div className="row item">
-            <div
-              className="col-md-12 item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}
-            >
-              {titleText}
-            </div>
-            <div className="col-md-12 no-padding">
-              <div className="col-md-6 no-padding d-inline-block item-time">
-                {`${start} - ${end}`}
-              </div>
-              <div className="col-md-6 no-padding d-inline-block item-time text-right">
-                {this.getTimeDifference(moment(event.start), moment(event.end))}
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (schedulerData.viewType === 2) {
-      return (
-        <div key={event.id} className={mustAddCssClass} style={divStyle}>
-          <div className="row item">
-            <div
-              className="col-md-12 item-heading text-wraper"
-              style={{ padding: "5px 5px 0px 5px" }}
-            >
-              {titleText}
-            </div>
-          </div>
-        </div>
-      );
-    }
+          );
+        })}
+      </div>
+    );
+  };
+
+  customeDatePicker = () => {
+    var viewType = this.schedulerData.viewType;
+    return (
+      <div
+        className={`dashboard-calender ${
+          viewType == "1" ? "week-format-width" : "day-format-width"
+        }`}
+      >
+        <DailyPloyDatePicker
+          onSelectDate={this.onSelectDate}
+          pickerType={viewType}
+          schedulerData={this.schedulerData}
+          prev={true}
+          next={true}
+        />
+      </div>
+    );
   };
 
   getTimeDifference = (start, end) => {

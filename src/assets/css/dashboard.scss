@@ -15,6 +15,9 @@
   height: 60px !important;
 }
 
+.btn-link:hover{
+  text-decoration: none !important;
+}
 .dashboard-header-container {
   .notification {
     padding-right: 15px !important;
@@ -61,6 +64,9 @@
       cursor: pointer;
       i {
         font-size: 20px !important;
+        position: absolute;
+        top: 10px;
+        right: 10px;
       }
     }
     .workspace-name {
@@ -412,7 +418,7 @@
           color: $color-text3;
         }
         input {
-          height: 40px !important;
+          height: 34px !important;
           border-radius: 5px !important;
           border: 1px solid $color-borders;
           font-size: 15px !important;
@@ -577,7 +583,7 @@
           color: $color-text2;
         }
         input {
-          height: 40px !important;
+          height: 34px !important;
           border-radius: 5px !important;
           border: 1px solid $color-borders;
           font-size: 15px !important;
@@ -647,7 +653,7 @@
 
 .task-modal {
   .modal-content {
-    width: 658px;
+    width: 626px;
     .header {
       padding: 17px 0 0px 49px !important;
       span {
@@ -667,14 +673,14 @@
     .body {
       padding: 5px 49px 10px 49px !important;
       .input-row {
-        padding-top: 20px !important;
+        padding-top: 15px !important;
         .label {
           font-family: $font-family-roboto;
           font-size: 15px;
           color: $color-text3;
         }
         input {
-          height: 40px !important;
+          height: 34px !important;
           border-radius: 5px !important;
           border: 1px solid $color-borders;
           font-size: 15px !important;
@@ -723,6 +729,8 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           border: 0 !important;
+          // margin-left: 7% !important;
+          width: 93px;
         }
         .button2 {
           border-radius: 5px !important;
@@ -732,9 +740,80 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           color: $color-text3 !important;
-          margin-left: 7% !important;
+          // margin-left: 7% !important;
+          width: 93px;
+        }
+        .button3{
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          color: $color-text3 !important;
+          color:$color-brand3 !important;
+          height: 40px;
+          width: 93px;
+          // margin-left: 7% !important;
         }
       }
+    }
+    .action-btn{
+      padding: 20px 15px 0px 31px;
+      button{
+        margin-left: 20px;
+      }
+    }
+    .date-picker-container {
+      height: auto;
+      border-radius: 5px;
+      border: solid 1px #d6d6d6;
+      background-color: #ffffff;
+      margin-left: 15px;
+      .date-text-light{
+        width: auto !important;
+        padding: 0px 20px 0px 10px;
+      }
+      .datepicker{
+        width: 60%;
+      }
+      .to-datepicker{
+        width: 69% !important;
+      }
+      .react-datepicker-wrapper {
+        .react-datepicker__input-container input {
+          border: none !important;
+          padding: 0 0 0 0px !important;
+          width: 81%;
+        }
+        ::after {
+          font-family: "Font Awesome 5 Free" !important;
+          font-weight: 900 !important;
+          content: "\f073" !important;
+          color: #555 !important;
+          padding: 5px 5px 0px 0px;
+          float: right;
+        }
+      }
+    }
+    .time-picker-container {
+      width: 120px !important;
+      height: auto;
+      border-radius: 5px;
+      border: solid 1px #d6d6d6;
+      background-color: #ffffff;
+      padding: 0px !important;
+      .rc-time-picker input {
+        border: none !important;
+        padding: 0 0 0 0px !important;
+        width: 81%;
+      }
+      // .rc-time-picker-input {
+      //   text-align: center;
+      // }
+      // .rc-time-picker-panel-inner {
+      //   position: fixed !important;
+      // }
     }
     .react-datepicker-popper{
       left: -85px !important;
@@ -770,7 +849,7 @@
           color: $color-text3;
         }
         input {
-          height: 40px !important;
+          height: 34px !important;
           border-radius: 5px;
           border: 1px solid $color-borders;
           font-size: 15px !important;
@@ -839,6 +918,9 @@
 .day-event-container {
   text-align: left;
   padding: 5px 5px 0 5px;
+  .dropdown-div{
+    margin: 3px !important;
+  }
 }
 
 .round-all {
@@ -1133,8 +1215,7 @@ table.scheduler-table tr:last-child td {
 }
 
 .event-item {
-  margin: 2px;
-  width: 100%;
+  margin: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1219,8 +1300,6 @@ table.scheduler-table tr:last-child td {
 
 .resource-table {
   tbody {
-    background-color: $color-background;
-    // opacity:0.4;
     border: 1px solid $color-borders;
     .header2-text {
       color: $color-text2 !important;
@@ -1310,6 +1389,10 @@ table.scheduler-table tr:last-child td {
   .item-heading {
     font-size: 13px !important;
     font-weight: 900 !important;
+    .fa-pencil{
+      right: 0px;
+      position: absolute
+    }
   }
   .item-time {
     font-size: 12px !important;
@@ -1334,7 +1417,6 @@ table.scheduler-table tr:last-child td {
     width: 1140px !important;
   }
   .heading {
-    margin: 15px 35px 17px 35px !important;
     border: 0 !important;
     thead {
       tr {
@@ -1352,25 +1434,6 @@ table.scheduler-table tr:last-child td {
       .name {
         width: 170px !important;
       }
-      .auto-search {
-        // position: absolute;
-        width: 170px;
-        height: auto;
-        z-index: 1;
-        background-color: #f8f9fa;
-        border-radius: 0px;
-        ul {
-          list-style: none;
-          padding-left: 0px;
-          text-align: left;
-          li {
-            padding: 10px;
-          }
-          li:hover {
-            cursor: pointer;
-          }
-        }
-      }
       .email {
         width: 220px !important;
       }
@@ -1378,40 +1441,18 @@ table.scheduler-table tr:last-child td {
         width: 120px !important;
       }
       .project {
-        width: 160px !important;
+        width: 250px !important;
       }
-      input {
-        border-radius: 5px !important;
-        border: solid 1px $color-borders !important;
-        font-size: 15px !important;
-        font-family: $font-family-roboto !important;
-        color: $color-text1 !important;
-      }
-      .css-12zlm52-ReactDropdownSelect {
-        border: 1px solid $color-borders !important;
-        width: 210px !important;
-        padding: 0px 0px 0px 10px !important;
-        height: 36.5px !important;
-        border-radius: 5px;
-        .css-v1jrxw-ContentComponent {
-          .react-dropdown-select-input {
-            border-radius: 0px !important;
-            border: 0 !important;
-            // width: 30px !important;
-            background-color: transparent;
+      .select-memeber-project{
+        .down-icon{
+          position: absolute !important;
+          right: 5px !important;
+        }
+        .custom-search-select{
+          input{
+            width: 50% !important;
+            height: 34px !important;
           }
-        }
-        .css-6wsm8k-DropdownHandleComponent {
-          margin: 0 5px 0 5px !important;
-        }
-        .css-194s1d4-DropdownHandleComponent {
-          margin: 0 5px 0 5px !important;
-        }
-        .css-1yhm9ls-DropDown {
-          top: 43.5px !important;
-          border: 1px solid #ccc !important;
-          width: 210px !important;
-          padding: 0 !important;
         }
       }
       label {
@@ -1491,9 +1532,10 @@ table.scheduler-table tr:last-child td {
     padding: 10px 0px 10px 0px;
     // border-bottom: 2px solid $color-borders;
     .select{
-      padding: 10px 0px 0px 60px;
+      padding: 10px 0px 10px 60px;
       label{
         font-size: 14px !important;
+        margin-bottom: 0 !important;
         span{
           vertical-align: text-bottom !important;
         }
@@ -1534,8 +1576,7 @@ table.scheduler-table tr:last-child td {
     box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.0470588235294118);
   }
   .grid-view {
-    padding: 15px 0px 30px 40px !important;
-    background-color: rgba(242, 242, 242, 1);
+    padding: 15px 0px 30px 70px !important;
     .grid-div {
       width: 240px !important;
       height: 160px;
@@ -1546,7 +1587,7 @@ table.scheduler-table tr:last-child td {
       padding: 10px !important;
       margin: 10px 24px 24px 26px !important;
       &:hover {
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.298039215686275) !important;
+        border: 1px solid $color-brand3 !important;
       }
       .id {
         font-family: $font-family-roboto !important;
@@ -1607,6 +1648,73 @@ table.scheduler-table tr:last-child td {
         margin-left: -3px;
         font-weight: bold;
       }
+      .styled-checkbox {
+        position: absolute; // take it out of document flow
+        opacity: 0; // hide it
+      
+        & + label {
+          position: relative;
+          cursor: pointer;
+          padding: 0;
+        }
+      
+        // Box.
+        & + label:before {
+          content: "";
+          margin-right: 10px;
+          display: inline-block;
+          vertical-align: text-top;
+          width: 18px;
+          height: 18px;
+          border-radius: 50px;
+          background: white;
+          border: 1px solid $color-text3;
+        }
+      
+        // Box hover
+        &:hover + label:before {
+        }
+      
+        // Box focus
+        &:focus + label:before {
+          // box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+        }
+      
+        // Box checked
+        &:checked + label:before {
+          background: #33a1ff;
+        }
+      
+        // Disabled state label.
+        &:disabled + label {
+          color: #b8b8b8;
+          cursor: auto;
+        }
+      
+        // Disabled box.
+        &:disabled + label:before {
+          box-shadow: none;
+          background: #ddd;
+        }
+      
+        // Checkmark. Could be replaced with an image
+        &:checked + label:after {
+          content: "";
+          position: absolute;
+          left: 3.5px;
+          top: 8px;
+          background: $color-white;
+          width: 2px;
+          height: 2px;
+          box-shadow: 2px 0 0 $color-white, 4px 0 0 $color-white,
+            4px -2px 0 $color-white, 4px -4px 0 $color-white, 4px -6px 0 $color-white,
+            4px -7px 0 $color-white;
+          transform: rotate(45deg);
+        }
+      }
+    }
+    .active{
+      border-color: $color-brand3 !important;
     }
   }
   table {
@@ -2829,7 +2937,8 @@ table.scheduler-table tr:last-child td {
   }
 }
 .date-picker-container {
-  width: 210px !important;
+  // width: 210px !important;
+  width: 196px !important;
   height: auto;
   border-radius: 5px;
   border: solid 1px #d6d6d6;
@@ -2861,7 +2970,7 @@ table.scheduler-table tr:last-child td {
   margin-left: 15px;
   .rc-time-picker input {
     border: none !important;
-    padding: 0 0 0 0px !important;
+    padding: 10px 0 0 0px !important;
     width: 81%;
   }
   .rc-time-picker-input {
@@ -3176,10 +3285,10 @@ table.scheduler-table tr:last-child td {
     margin-right: 10px;
     display: inline-block;
     vertical-align: text-top;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     background: white;
-    border: 1px solid $color-text2;
+    border: 1px solid $color-text3;
   }
 
   // Box hover
@@ -3193,7 +3302,7 @@ table.scheduler-table tr:last-child td {
 
   // Box checked
   &:checked + label:before {
-    background: #fff;
+    background: $color-brand3;
   }
 
   // Disabled state label.
@@ -3214,12 +3323,12 @@ table.scheduler-table tr:last-child td {
     position: absolute;
     left: 2px;
     top: 8px;
-    background: $color-text2;
+    background: $color-white;
     width: 2px;
     height: 2px;
-    box-shadow: 2px 0 0 $color-text2, 4px 0 0 $color-text2,
-      4px -2px 0 $color-text2, 4px -4px 0 $color-text2, 4px -6px 0 $color-text2,
-      4px -7px 0 $color-text2;
+    box-shadow: 2px 0 0 $color-white, 4px 0 0 $color-white,
+      4px -2px 0 $color-white, 4px -4px 0 $color-white, 4px -6px 0 $color-white,
+      4px -7px 0 $color-white;
     transform: rotate(45deg);
   }
 }
@@ -3234,4 +3343,1035 @@ table.scheduler-table tr:last-child td {
 }
 .show{
   display: block !important;
+}
+.task-ongoing{
+  width: 10px;
+  height: 10px;
+  background-color: #ff8c00;
+  border: solid 1px #ffffff;
+  border-radius: 5px
+}
+.task-compete{
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border: solid 1px #ffffff;
+  border-radius: 5px
+}
+.task-play-btn{
+  border-radius: 15px;
+  height: 25px;
+  width: 25px;
+  background-color: #ffffff;
+  position: absolute;
+  right: 10px;
+  border: 1px solid #ffffff;
+}
+.fa-pause{
+  color: green !important;
+  padding: 5px;
+}
+.fa-play{
+  color: #1e90ff;
+  padding: 5px 0px 0 7px;
+}
+.fa-check{
+  color: green;
+  padding: 5px;
+}
+.task-timer{
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #424242;
+  text-align: right;
+  line-height: 9px;
+  padding: 0px 15px 0px 25px;
+}
+.task-event-action{
+  font-size: 20px;
+}
+.day-event-container{
+  padding: 0px !important;
+  .day-event{
+    margin: 0px !important;
+  }
+}
+
+.timeline-event{
+  left: 1 px!important;
+  padding: 2px !important;
+}
+.event-container{
+  .event-item{
+    margin: 0 !important;
+  }
+}
+.border-top {
+  border-top:  solid 1px rgba(155, 155, 155, 1) !important;
+}
+#RBS-Scheduler-root a{
+  cursor: text !important;
+}
+.pointer{
+  cursor: pointer !important;
+}
+
+.dropdown-div{
+  position: absolute;
+  width: 98px;
+  border: 1px solid #ffffff;
+  top: 73px;
+  left: 13px;
+  background-color: #ffffff;
+  border-top: 0;
+  z-index: 1;
+  font-size: 12px !important;
+}
+
+.timer-dropdown{
+  width: 100px !important;
+  height: 26px !important;
+  border-radius: 0px !important;
+  padding-left: 0px !important;
+  text-align: left;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  color: #424242;
+  line-height: 9px;
+  cursor: pointer;
+  &:hover{
+    border-color: #ffffff !important;
+  }
+}
+.hover-border{
+  &:hover{
+    border: 1px solid #505050;
+  }
+}
+.event-action-dropdown{
+  width: 98px;
+  position: absolute;
+  z-index: 1;
+  text-align: center;
+  margin-left: 52px;
+  top: 80px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #0075D9;
+}
+.custom-event-popup {
+  width: 200px;
+  border-radius: 5px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  position: absolute;
+  z-index: 1;
+  .event-task-hover {
+    padding: 10px;
+    text-transform: capitalize;
+    .title {
+      width: 145px;
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.15;
+      letter-spacing: normal;
+      text-align: left;
+      color: #424242;
+    }
+    .project {
+      height: 15px;
+      padding-top: 5px;
+      div {
+        padding-left: 10px;
+      }
+    }
+    .time {
+      padding-top: 15px;
+    }
+  }
+}
+.border-bottom{
+  border-bottom: 1px solid rgb(214, 214, 214);
+}
+.task-b-popup{
+  position: fixed;
+  right: 94px;
+  bottom: 20px;
+  z-index: 1111;
+  width: 457px;
+  height: 40px;
+  background: inherit;
+  background-color: rgba(255, 255, 255, 1);
+  box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(51, 161, 255, 1);
+  border-radius: 0px;
+  .color-code{
+    width: 20px;
+    height: 20px;
+    margin-top: 8px;
+    // margin-left: 135px;
+    vertical-align: sub;
+    box-sizing: border-box;
+    border: 1px solid rgba(155, 155, 155, 1);
+  }
+  .task-pause-btn{
+    margin: 0px 10px 0px 10px;
+    height: 26px;
+    width: 26px;
+    border-radius: 20px;
+    border: 1px solid  rgba(16, 184, 87, 1);
+  }
+  .task-title{
+    font-family: 'Roboto-Regular', 'Roboto';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #424242;
+    text-align: right;
+    line-height: 9px;
+    margin: 0px 10px 0px 5px;
+  }
+  .title{
+    width: 161px;
+    text-align: left !important;
+  }
+  .timer-dropdown{
+    float: right;
+    margin-right: 40px;
+    margin-top: 6px;
+    &:after {
+      content: "▼";
+      padding: 15px 8px;
+      position: absolute;
+      right: 10px;
+      top: 0;
+      z-index: 1;
+      text-align: center;
+      height: 100%;
+      pointer-events: none;
+    }
+    .border{
+      border: 1px solid #505050;
+    }
+    input{
+      height: 26px;
+      width: 123px;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+  .dropdown{
+    position: absolute;
+    right: 17px;
+    bottom: 31px;
+    z-index: 500;
+    width: 123px;
+    height: auto;
+    background-color: #ffffff;
+    .border{
+      border: 1px solid #505050;
+    }
+  }
+}
+.task-war-alert{
+  position: absolute !important;
+  width: 154px;
+  top:55px;
+  text-align: left;
+  z-index: 5500;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  padding: 0px 20px 20px 5px !important;
+}
+
+.alert-dismissible .close {
+  padding: 0.60rem 0.80rem !important;
+}
+.month-task-popup{
+  border-width: 0px;
+  position: absolute;
+  z-index: 500;
+  background-color: rgba(255, 255, 255, 1);
+  box-sizing: border-box;
+  border: 1px solid rgba(209, 209, 209, 1);
+  border-radius: 5px;
+  width: 200px;
+  height: auto;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  line-height: 14px;
+  font-size: 13px;
+  letter-spacing: normal;
+  text-align: left;
+  color: #424242;
+  font-size: 13px;
+  .title {
+    padding: 10px 15px 0px 15px;
+  }
+  .comments{
+    padding: 10px 15px 0px 15px;
+  }
+  .project {
+    padding: 10px 15px 0px 15px;
+    height: 15px;
+    .status-dot{
+      margin-right: 20px;
+    }
+  }
+  .dot-timer-btn{
+    padding: 0px 15px 0px 15px;
+    .task-pause-btn{
+      border-radius: 18px;
+      border: 1px solid green;
+      width: 26px;
+      height: 26px;
+    }
+    .task-timer{
+      padding: 0px 15px 0px 70px !important;
+    }
+  }
+  .timer-dropdown-action{
+    padding: 10px 15px 15px 15px;
+    .down-icon{
+      &:after {
+        content: "▼";
+        padding: 2px 2px;
+        position: absolute;
+        right: 10px;
+        top: 0;
+        z-index: 1;
+        text-align: center;
+        height: 100%;
+        pointer-events: none;
+      }
+    }
+    .border{
+      border: 1px solid #505050;
+    }
+    input{
+      height: 26px;
+      width: 123px;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+}
+.monthly-timer-dropdown{
+  position: absolute;
+  width: 123px;
+  background-color: #ffffff;
+  z-index: 10082;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 13px;
+  color: #424242;
+  .border{
+    height: 26px;
+    padding-top: 5px;
+  }
+}
+.monthly-action-dropdown{
+  width: 98px !important;
+  position: absolute;
+  z-index: 15546 !important;
+  text-align: center;
+  right: 0;
+  top: 40px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  font-family: 'Roboto-Regular', 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #0075D9;
+}
+.color-block {
+  width: 20px;
+  height: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  vertical-align: sub;
+  border: solid 1px#9b9b9b;
+}
+.color-dot {
+  width: 15px;
+  height: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
+  vertical-align: sub;
+  border-radius: 20px;
+  border: solid 1px#9b9b9b;
+}
+.custom-search-select {
+  width: 100%;
+  border: 1px solid #d6d6d6 !important;
+  border-radius: 5px;
+  box-shadow: #d6d6d6;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #000000;
+  input {
+    width: auto;
+    border: none !important;
+    outline: 0px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #33a1ff;
+    padding: 10px 5px;
+  }
+  ul {
+    list-style-type: none;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    padding: 10px 5px;
+    border-bottom: 1px solid rgba(209, 209, 209, 1);
+  }
+  .suggestions {
+    position: absolute;
+    width: 100%;
+    margin-top: 2px;
+    max-height: 200px;
+    z-index: 1;
+    border: 1px solid rgba(209, 209, 209, 1);
+    border-radius: 5px;
+    overflow-y: auto;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17);
+    background-color: #ffffff;
+    li:hover {
+      cursor: pointer;
+      background-color: $color-dropdown;
+    }
+  }
+  .selected-tags {
+    display: inline-block;
+    .select-member {
+      width: auto;
+      height: 24px;
+      margin: 5px;
+      border-radius: 24px;
+      border: solid 1px #bfbfbf;
+      background-color: #ffffff;
+      display: inline-block !important;
+    }
+  }
+  .remove-tag:hover {
+    cursor: pointer;
+  }
+  .remove-tag {
+    cursor: pointer;
+    padding: 0 5px 0px 10px;
+    opacity: 0.5;
+  }
+  .member-title {
+    width: 22px;
+    height: 22px;
+    border-radius: 20px;
+    background-color: #e5e5e5;
+    margin-right: 10px;
+    text-align: center;
+  }
+  .task-project-color-code {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    vertical-align: sub;
+    border: solid 1px#9b9b9b;
+  }
+  .selected-project-color-code {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    vertical-align: sub;
+  }
+  .down-icon {
+    margin: 5px !important;
+    float: right !important;
+    font-size: 22px !important;
+  }
+}
+.task-info-modal{
+  .modal-content {
+    width: 626px;
+    .header {
+      padding: 17px 0 0px 49px !important;
+      span {
+        font-size: 20px;
+        font-weight: bold;
+        color: $color-text1 !important;
+        font-family: $font-family-roboto !important;
+      }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
+        }
+      }
+      .action-btn{
+        padding-left: 60px;
+      }
+    }
+    .body {
+      padding: 5px 49px 10px 49px !important;
+      .input-row {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        .label {
+          font-family: $font-family-roboto;
+          font-size: 15px;
+          color: $color-text3;
+        }
+        input {
+          height: 26px !important;
+          border: 1px solid $color-borders !important;
+          font-size: 13px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text1 !important;
+          padding: 0px !important;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        select {
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: 1px solid $color-borders;
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text3 !important;
+          padding: 0.375rem 0.75rem;
+        }
+        textarea {
+          font-size: 15px !important;
+          font-family: $font-family-roboto !important;
+          color: $color-text1 !important;
+          &::placeholder {
+            font-size: 15px !important;
+            font-family: $font-family-roboto !important;
+            color: $color-text3 !important;
+          }
+        }
+        .textarea {
+          height: 90px !important;
+        }
+        .btn-color-picker {
+          width: 35px !important;
+          height: 35px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+        }
+        .button1 {
+          height: 40px !important;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          font-weight: 500 !important;
+          border: 0 !important;
+        }
+        .button2 {
+          border-radius: 5px !important;
+          width: 103px;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          color: $color-brand3 !important;
+          height: 25px;
+          text-align: center;
+          padding: 2px;
+        }
+        .button3{
+          border-radius: 5px !important;
+          width: 80px;
+          border: solid 1px #00a031 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          color: #00a031 !important;
+          height: 25px;
+          text-align: center;
+          padding: 2px;
+        }
+        .fa-user{
+          width: 8.4px;
+          height: 11px;
+          object-fit: contain;
+          opacity: 0.7;
+          margin-right: 10px;
+        }
+      }
+      .comments{
+        width: 389px;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color-brandheading2;
+        text-transform: none !important;
+      }
+    }
+  }
+  .task-play-btn {
+    position: relative !important;
+    right: 0px !important;
+    margin: 0px 10px 0px 10px;
+    height: 26px;
+    width: 26px;
+    .fa-pause{      
+      border: 1px solid #10b857;
+      border-radius: 20px;
+      height: 26px;
+      width: 26px;
+    }
+    .fa-play{
+      border: 1px solid #1e90ff;;
+      border-radius: 20px;
+      height: 26px;
+      width: 26px;
+    }
+    .fa-check{
+      border: 1px solid #10b857;
+      border-radius: 20px;
+      height: 26px;
+      width: 26px;
+    }
+  }  
+  .header-2{
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .select-member{
+    padding-left: 20px !important;
+  }
+  .timer-dropdown{
+    width: 123px !important;
+    background-color: #ffffff !important;
+    z-index: 10082;
+    font-family: 'Roboto-Regular', 'Roboto';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #424242;
+    margin-right: 40px;
+    margin-top: 6px;
+    &:after {
+      content: "▼";
+      padding: 15px 8px;
+      position: absolute;
+      right: 10px;
+      top: 0;
+      z-index: 1;
+      text-align: center;
+      height: 100%;
+      pointer-events: none;
+    }
+    .border{
+      height: 26px !important;
+      padding-top: 7px !important;
+      color: $color-text1 !important;
+      background-color: $color-white;
+    }
+    input{
+      height: 26px !important;
+      width: 100% !important;
+      box-shadow: none !important;
+      border: none !important;
+      font-family: "Roboto-Regular", "Roboto" !important;
+      border: 1px solid #505050 !important; 
+      font-size: 15px !important; 
+      padding: 0px !important;
+    }
+  }
+  .dropdown{
+    position: absolute;
+    left: 15px;
+    top: 31px;
+    bottom: 31px;
+    z-index: 500;
+    width: 123px;
+    height: auto;
+    background-color: #ffffff !important;
+  }
+}
+.bg-green{
+  width: 86px;
+  height: 25px;
+  text-align: center;
+  background: inherit;
+  background-color: rgba(75, 121, 2, 1);
+  color:  #ffffff;
+  margin-right: 20px;
+}
+
+.task-delete-confirm-modal{
+  .modal-content {
+    width: 550px;
+    .header {
+      padding: 20px 0 0px 0px !important;
+      span {
+        font-size: 24px;
+        color: $color-brand4 !important;
+        font-family: $font-family-roboto !important;
+        width: 119px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: left;
+        margin-left: 31px;
+      }
+      button {
+        padding: 0 22px 0 0 !important;
+        img {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+    .confirm-msg{
+      height: 24px;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: normal;
+      text-align: left;
+      color: #707070;
+      margin: 30px 0px 0px 31px;
+    }
+    .task-details{
+      width: 82px;
+      height: 18px;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color-text1;
+      margin-left: 31px;
+    }
+    .body {
+      width: 490px;
+      border-radius: 6px;
+      border: solid 1px #d1d1d1;
+      background-color: #ffffff;
+      margin: 10px 29px 10px 31px;
+      .input-row {
+        padding: 5px 0px 5px 10px !important;
+        .label {
+          width: 100%;
+          // height: 15px;
+          font-family: Roboto;
+          font-size: 13px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.15;
+          letter-spacing: normal;
+          text-align: left;
+        }
+        .date-time{
+          width: 72px;
+          height: 15px;
+          font-family: Roboto;
+          font-size: 13px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.15;
+          letter-spacing: normal;
+          text-align: left;
+          color: $color-heading3;
+        }
+        .comments{
+          width: 341px;
+          height: auto;
+          font-family: Roboto;
+          font-size: 12px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.17;
+          letter-spacing: normal;
+          text-align: left;
+          color: $color-text1;
+        }
+      }
+    }
+    .button2{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-white !important;
+      height: 40px;
+      min-width: 93px !important;
+    }
+    .button3{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      color:$color-brand3 !important;
+      height: 40px;
+      min-width: 93px !important;
+    }
+    .complete-btn{
+      border-radius: 5px !important;
+      border: solid 1px #00a031 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      color:#00a031 !important;
+      height: 25px;
+      min-width: 80px !important;
+      text-align: center;
+      padding: 2px;
+    }
+    .not-start-btn{
+      border-radius: 5px !important;
+      border: solid 1px $color-text3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      height: 25px;
+      min-width: 80px !important;
+      text-align: center;
+      padding: 2px;
+    }
+    .progress-btn{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color:$color-brand3 !important;
+      height: 25px;
+      min-width: 80px !important;
+      text-align: center;
+      padding: 2px;
+    }
+    .color-block{
+      width: 15px !important;
+      height: 15px !important;
+    }
+    .log-timer{
+      margin: 19px 0px 44px 31px !important;
+      .time-picker-container{
+        width: 115px !important;
+        height: 40px !important;
+      }
+      .rc-time-picker{
+        input{
+          font-family: Roboto;
+          font-size: 15px !important;
+          text-align: center;
+        }
+      }
+      .rc-time-picker-clear{
+        top: 6px !important;
+      }
+    }
+    .pri-info{
+      .color-dot{
+        width: 10px !important;
+        height: 10px !important;
+        margin: 0px 5px 3px 0px !important
+      }
+      .priority{
+        width: 27px;
+        height: 15px;
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.15;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color-heading3;
+      }
+    }
+    .mark-btn{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-white !important;
+      height: 40px;
+      width: 170px !important;
+    }
+
+    .action-btn{
+      padding: 20px 29px 20px 31px;
+      button{
+        margin-left: 10px;
+        min-width: 93px !important;
+      }
+    }
+    .rc-time-picker-panel{
+      .rc-time-picker-panel-inner{
+        .rc-time-picker-panel-input-wrap{
+          .rc-time-picker-panel-input {
+            line-height: 2 !important;
+            font-family: Roboto !important;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            text-align: center !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.rc-time-picker-panel-input{
+  text-align: center;
+  font-size: 15px;
+}
+.disable-project-select{
+  pointer-events: none;
+  .custom-search-select{
+    background-color: darkgray !important;
+  }
+  input{
+    background-color: darkgray !important;
+  }
+}
+
+.suggestion-z-index-50{
+  .suggestions{
+    z-index: 50;
+  }
+}
+.suggestion-z-index-100{
+  .suggestions{
+    z-index: 100;
+  }
+}
+
+.viewtype-btns{
+  position: relative;
+  top: -48px;
+  right: 170px;
+  div{
+    width: 80px;
+    height: 36px;
+    background-color: #ffffff;
+    border: solid 1px $color-borders;
+    text-align: center;
+    padding-top: 5px;
+    font-family: $font-family-roboto !important;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    cursor: pointer;
+  }
+  :first-child{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  :last-child{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .active{
+    border: solid 1px $color-brand3 !important;
+    background-color: $color-brand3 !important;
+    color: $color-white !important;
+  }
+}
+.day-format-width{
+  .react-datepicker-wrapper{
+    input{
+      width: 130px !important;
+      border: none;
+    }
+  }
+  .react-datepicker-popper{
+    left: -50px !important;
+    div{
+      color: #555555 !important;
+    }
+    .react-datepicker__day--selected, .react-datepicker__day--in-range {
+      color: $color-white !important;
+    }
+  }
+}
+.week-format-width{
+  .react-datepicker-wrapper{
+    input{
+      width: 216px !important;
+      border: none;
+    }
+  }
+  .react-datepicker-popper{
+    left: -30px !important;
+    div{
+      color: #555555 !important;
+    }
+    .react-datepicker__day--selected, .react-datepicker__day--in-range {
+      color: $color-white !important;
+    }
+  }
+}
+.arrow-button{
+  padding: 0px 15px 0px 15px;
+  border: none;
+  background: none;
+  font-size: 20px !important;
 }

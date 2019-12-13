@@ -6,6 +6,7 @@ import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
 import moment from "moment";
 import AddMemberModal from "./AddMemberModal";
+import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
 
 class ShowMembers extends Component {
@@ -46,11 +47,14 @@ class ShowMembers extends Component {
   };
   async componentDidMount() {
     this.props.handleLoading(true);
-    try {
-      const { data } = await get("logged_in_user");
-      var loggedInData = data;
-    } catch (e) {
-      console.log("err", e);
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var loggedInData = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Listing
@@ -237,12 +241,16 @@ class ShowMembers extends Component {
       role_id: roleId,
       working_hours: Number(this.state.memberHours)
     };
+    this.setState({ isLoading: true });
     try {
       const { data } = await put(
         editMemberData,
         `workspaces/${this.state.workspaceId}/members/${this.state.projectShowMemberId}`
       );
-      console.log("data", data);
+      this.setState({
+        show: false,
+        isLoading: false
+      });
     } catch (e) {
       console.log("error", e);
     }
@@ -359,40 +367,49 @@ class ShowMembers extends Component {
           state={this.state}
         />
         <div className="show-projects">
-          <div className="members" style={{ padding: "14px 0px 0px 60px" }}>
-            {" "}
-            <input
-              className="styled-checkbox"
-              id={`styled-checkbox`}
-              type="checkbox"
-              name="chk[]"
-              onChange={e => this.handleCheckAll(e, this.state.members)}
-            />
-            <label htmlFor={`styled-checkbox`}>
-              {this.state.isAllChecked ? (
-                <span>selected</span>
-              ) : (
-                <span>Select All</span>
-              )}
-            </label>
-            {this.state.selectMemberArr.length > 0 ? (
-              <>
-                <div className="d-inline-block">
-                  <button
-                    className="btn btn-primary delete-button"
-                    onClick={e =>
-                      this.deleteProject(e, this.state.selectMemberArr)
-                    }
-                  >
-                    Delete
-                  </button>
-                </div>
-                <div className="d-inline-block select-project-text">
-                  {this.state.selectMemberArr.length + " Member Selected"}
-                </div>
-              </>
-            ) : null}
+          <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
+            <div className="row no-margin">
+              <div
+                className="col-md-2 d-inline-block no-padding"
+                style={{ marginTop: "10px" }}
+              >
+                <input
+                  className="styled-checkbox"
+                  id={`styled-checkbox`}
+                  type="checkbox"
+                  name="chk[]"
+                  onChange={e => this.handleCheckAll(e, this.state.members)}
+                />
+                <label htmlFor={`styled-checkbox`}>
+                  {this.state.isAllChecked ? (
+                    <span>All Selected</span>
+                  ) : (
+                    <span>Select All</span>
+                  )}
+                </label>
+              </div>
+              <div className="col-md-4 d-inline-block no-margin no-padding">
+                {this.state.selectMemberArr.length > 0 ? (
+                  <>
+                    <div className="d-inline-block">
+                      <button
+                        className="btn btn-primary delete-button"
+                        onClick={e =>
+                          this.deleteProject(e, this.state.selectMemberArr)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div className="d-inline-block select-project-text">
+                      {this.state.selectMemberArr.length + " Member Selected"}
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            </div>
           </div>
+
           <table className="table">
             <thead>
               <tr>
@@ -447,29 +464,29 @@ class ShowMembers extends Component {
                         {this.countProject(member.projects)}
                       </span>
                       {this.state.isProjectListShow &&
-                        this.state.projectShowMemberId === member.id ? (
-                          <div className="project-count-list-show">
-                            <div className="close-div">
-                              <a onClick={this.countProjectViewClose}>
-                                <i className="fa fa-times" aria-hidden="true"></i>
-                              </a>
-                            </div>
-                            <div className="project-body-box">
-                              {member.projects.map(project => (
-                                <div className="project-body-text">
-                                  {project.name}
-                                </div>
-                              ))}
-                            </div>
+                      this.state.projectShowMemberId === member.id ? (
+                        <div className="project-count-list-show">
+                          <div className="close-div">
+                            <a onClick={this.countProjectViewClose}>
+                              <i className="fa fa-times" aria-hidden="true"></i>
+                            </a>
                           </div>
-                        ) : null}
+                          <div className="project-body-box">
+                            {member.projects.map(project => (
+                              <div className="project-body-text">
+                                {project.name}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
                     </td>
                     <td className={"text-titlize"}>
                       {!member.is_invited ? (
                         <p className="text-green">Accepted</p>
                       ) : (
-                          <p className="text-blue">Invited</p>
-                        )}
+                        <p className="text-blue">Invited</p>
+                      )}
                     </td>
                     <td>{moment(member.created_at).format("DD MMM YY")}</td>
                     <td className={userRole === "member" ? "d-none" : null}>
@@ -480,15 +497,15 @@ class ShowMembers extends Component {
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       {this.state.show &&
-                        this.state.projectShowMemberId === member.id ? (
-                          <EditMemberModal
-                            show={this.state.show}
-                            handleClose={this.handleClose}
-                            state={this.state}
-                            editMemberHandleChange={this.editMemberHandleChange}
-                            editMember={this.editMember}
-                          />
-                        ) : null}
+                      this.state.projectShowMemberId === member.id ? (
+                        <EditMemberModal
+                          show={this.state.show}
+                          handleClose={this.handleClose}
+                          state={this.state}
+                          editMemberHandleChange={this.editMemberHandleChange}
+                          editMember={this.editMember}
+                        />
+                      ) : null}
                     </td>
                   </tr>
                 );

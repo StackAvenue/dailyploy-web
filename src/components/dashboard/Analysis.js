@@ -4,6 +4,7 @@ import Header from "./Header";
 import { get, logout } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
+import cookie from "react-cookies";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import MemberAnalysis from "./Analysis/MemberAnalysis";
@@ -22,7 +23,7 @@ class Analysis extends Component {
       isLogedInUserEmailArr: [],
       projects: [],
       userId: "",
-      users: [],
+      users: []
     };
   }
   logout = async () => {
@@ -31,11 +32,14 @@ class Analysis extends Component {
   };
   async componentDidMount() {
     this.props.handleLoading(true);
-    try {
-      const { data } = await get("logged_in_user");
-      var loggedInData = data;
-    } catch (e) {
-      console.log("err", e);
+    var loggedInData = cookie.load("loggedInUser");
+    if (!loggedInData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var loggedInData = data;
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     // workspace Listing
@@ -52,7 +56,7 @@ class Analysis extends Component {
     // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`,
+        `workspaces/${this.state.workspaceId}/projects`
       );
       var projectsData = data.projects;
     } catch (e) {
@@ -62,11 +66,11 @@ class Analysis extends Component {
     // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`,
+        `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email,
+        user => user.email !== loggedInData.email
       );
       // .map(user => user.email);
       this.props.handleLoading(false);
@@ -81,7 +85,7 @@ class Analysis extends Component {
       workspaces: workspacesData,
       projects: projectsData,
       users: userArr,
-      isLogedInUserEmailArr: emailArr,
+      isLogedInUserEmailArr: emailArr
     });
   }
 

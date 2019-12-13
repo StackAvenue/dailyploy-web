@@ -12,9 +12,11 @@ import { get, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
+import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
 import { WORKSPACE_ID } from "./utils/Constants";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { workspaceNameSplit } from "./utils/function";
 
 class Workspace extends Component {
   constructor(props) {
@@ -69,18 +71,30 @@ class Workspace extends Component {
       searchOptions: [],
       searchProjectIds: [],
       searchUserDetails: [],
+      isLoading: false,
+      startOn: "",
+      colorCode: "",
+      taskId: "",
+      taskTitle: "",
+      showPopup: false,
+      runningTime: 0,
+      isStart: false,
+      onGoingTask: false,
       isLoading: false
     };
   }
 
   async componentDidMount() {
     //Logged In User
-    try {
-      const { data } = await get("logged_in_user");
-      var userData = data;
-      cookie.save("loggedInUser", data);
-    } catch (e) {
-      console.log("err", e);
+    var userData = cookie.load("loggedInUser");
+    if (!userData) {
+      try {
+        const { data } = await get("logged_in_user");
+        var userData = data;
+        cookie.save("loggedInUser", data);
+      } catch (e) {
+        console.log("err", e);
+      }
     }
 
     var workspaceId = this.props.match.params.workspaceId;
@@ -90,15 +104,31 @@ class Workspace extends Component {
       const { data } = await get("workspaces");
       var workspacesData = data.workspaces;
       this.setState({ isLoading: true });
+      var workspace = workspacesData.filter(ws => ws.id == workspaceId);
+      if (workspace.length > 0 && workspace[0]) {
+        cookie.save("workspaceName", workspaceNameSplit(workspace[0].name), {
+          path: "/"
+        });
+      }
     } catch (e) {
       console.log("err", e);
     }
+
+    var startOn = localStorage.getItem(`startOn-${workspaceId}`);
+    var taskId = localStorage.getItem(`taskId-${workspaceId}`);
+    var colorCode = localStorage.getItem(`colorCode-${workspaceId}`);
+    var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`);
 
     this.setState({
       workspaces: workspacesData,
       loggedInUserInfo: userData,
       isLoading: false,
-      workspaceId: workspaceId
+      startOn: startOn,
+      taskId: taskId,
+      colorCode: colorCode,
+      taskTitle: taskTitle,
+      workspaceId: workspaceId,
+      isStart: taskTitle && startOn && taskId && colorCode
     });
   }
 
@@ -144,7 +174,9 @@ class Workspace extends Component {
       handleSearchFilterResult: this.handleSearchFilterResult,
       searchProjectIds: this.state.searchProjectIds,
       searchUserDetails: this.state.searchUserDetails,
-      handleLoading: this.handleLoad
+      handleTaskBottomPopup: this.handleTaskBottomPopup,
+      handleLoading: this.handleLoad,
+      state: this.state
     };
     var newProps = { ...props, ...props1 };
     if (
@@ -156,6 +188,47 @@ class Workspace extends Component {
       return <RouteComponent {...newProps} />;
     }
     return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
+  };
+
+  handleTaskBottomPopup = startOn => {
+    var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`);
+    var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
+    var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`);
+    var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`);
+
+    this.setState({
+      startOn: startOn,
+      taskId: taskId,
+      colorCode: colorCode,
+      taskTitle: taskTitle,
+      isStart: taskTitle && startOn && taskId && colorCode
+    });
+  };
+
+  isBottomPopup = () => {
+    return (
+      this.state.taskTitle &&
+      this.state.startOn &&
+      this.state.taskId &&
+      this.state.colorCode
+    );
+  };
+
+  stopOnGoingTask = () => {
+    if (this.state.isStart) {
+      localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
+      localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
+      localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
+      localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
+
+      this.setState({
+        startOn: "",
+        taskId: "",
+        colorCode: "",
+        taskTitle: "",
+        isStart: false
+      });
+    }
   };
 
   render() {
@@ -201,6 +274,16 @@ class Workspace extends Component {
             </Switch>
           </div>
         </div>
+        {this.state.isStart ? (
+          <TaskBottomPopup
+            bgColor={this.state.colorCode}
+            taskTitle={this.state.taskTitle}
+            taskId={this.state.taskId}
+            startOn={this.state.startOn}
+            isStart={this.state.isStart}
+            stopOnGoingTask={this.stopOnGoingTask}
+          />
+        ) : null}
       </div>
     );
   }

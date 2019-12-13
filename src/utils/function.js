@@ -20,3 +20,9 @@ export const firstTwoLetter = name => {
         .join("")
     : null;
 };
+
+export const workspaceNameSplit = name => {
+  let nameArr = name;
+  let nameSplit = nameArr.split(" ").slice(2);
+  return nameSplit.join(" ");
+};
