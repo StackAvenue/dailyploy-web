@@ -367,40 +367,49 @@ class ShowMembers extends Component {
           state={this.state}
         />
         <div className="show-projects">
-          <div className="members" style={{ padding: "14px 0px 0px 60px" }}>
-            {" "}
-            <input
-              className="styled-checkbox"
-              id={`styled-checkbox`}
-              type="checkbox"
-              name="chk[]"
-              onChange={e => this.handleCheckAll(e, this.state.members)}
-            />
-            <label htmlFor={`styled-checkbox`}>
-              {this.state.isAllChecked ? (
-                <span>selected</span>
-              ) : (
-                <span>Select All</span>
-              )}
-            </label>
-            {this.state.selectMemberArr.length > 0 ? (
-              <>
-                <div className="d-inline-block">
-                  <button
-                    className="btn btn-primary delete-button"
-                    onClick={e =>
-                      this.deleteProject(e, this.state.selectMemberArr)
-                    }
-                  >
-                    Delete
-                  </button>
-                </div>
-                <div className="d-inline-block select-project-text">
-                  {this.state.selectMemberArr.length + " Member Selected"}
-                </div>
-              </>
-            ) : null}
+          <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
+            <div className="row no-margin">
+              <div
+                className="col-md-2 d-inline-block no-padding"
+                style={{ marginTop: "10px" }}
+              >
+                <input
+                  className="styled-checkbox"
+                  id={`styled-checkbox`}
+                  type="checkbox"
+                  name="chk[]"
+                  onChange={e => this.handleCheckAll(e, this.state.members)}
+                />
+                <label htmlFor={`styled-checkbox`}>
+                  {this.state.isAllChecked ? (
+                    <span>All Selected</span>
+                  ) : (
+                    <span>Select All</span>
+                  )}
+                </label>
+              </div>
+              <div className="col-md-4 d-inline-block no-margin no-padding">
+                {this.state.selectMemberArr.length > 0 ? (
+                  <>
+                    <div className="d-inline-block">
+                      <button
+                        className="btn btn-primary delete-button"
+                        onClick={e =>
+                          this.deleteProject(e, this.state.selectMemberArr)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div className="d-inline-block select-project-text">
+                      {this.state.selectMemberArr.length + " Member Selected"}
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            </div>
           </div>
+
           <table className="table">
             <thead>
               <tr>

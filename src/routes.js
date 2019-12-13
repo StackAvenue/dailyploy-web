@@ -44,26 +44,6 @@ class Routes extends Component {
     ];
   }
 
-  // isAllowed = (props, RouteComponent, title) => {
-  //   if (this.isCurrentUser()) {
-  //     return (
-  //       <Workspace
-  //         props={props}
-  //         RouteComponent={RouteComponent}
-  //         title={title}
-  //       />
-  //     );
-  //   } else {
-  //     if (title === "signup") {
-  //       return <SignUp {...props} />;
-  //     } else if (title === "landing") {
-  //       return <Landing {...props} />;
-  //     } else {
-  //       return <Login {...props} />;
-  //     }
-  //   }
-  // };
-
   isAllowed = (props, RouteComponent, title) => {
     if (this.isCurrentUser()) {
       if (
