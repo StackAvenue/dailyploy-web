@@ -12,7 +12,7 @@ import cookie from "react-cookies";
 import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
-// import from"../../LoggedInLayout"
+import DailyPloySelect from "./../DailyPloySelect";
 
 class Reports extends Component {
   constructor(props) {
@@ -21,6 +21,45 @@ class Reports extends Component {
     this.now = moment()
       .hour(0)
       .minute(0);
+    this.priorities = [
+      {
+        name: "high",
+        color_code: "#00A031"
+      },
+      {
+        name: "medium",
+        color_code: "#FF7F00"
+      },
+      {
+        name: "low",
+        color_code: "#9B9B9B"
+      },
+      {
+        name: "all priority"
+      }
+    ];
+    this.categories = [
+      {
+        name: "call",
+        color_code: "#9B9B9B"
+      },
+      {
+        name: "meeting",
+        color_code: "#9B9B9B"
+      },
+      {
+        name: "category 1",
+        color_code: "#9B9B9B"
+      },
+      {
+        name: "category 2",
+        color_code: "#9B9B9B"
+      },
+      {
+        name: "category 3",
+        color_code: "#9B9B9B"
+      }
+    ];
     this.state = {
       workspaces: [],
       workspaceId: "",
@@ -115,10 +154,10 @@ class Reports extends Component {
     });
   };
 
-  calenderButtonHandle = e => {
-    const name = e.target.name;
+  calenderButtonHandle = name => {
+    // const name = e.target.name;
+    console.log("yoyoy", name);
     var self = this;
-    console.log("name", name);
     if (name == "daily") {
       self.setState({
         selectedDays: [new Date()],
@@ -673,29 +712,54 @@ class Reports extends Component {
                     <i className="fa fa-angle-right"></i>
                   </button>
                 </div>
-                <div className="report-caleneder-btn">
-                  <button
+
+                <div className="viewtype-btns d-inline-block">
+                  <div
+                    onClick={() => this.calenderButtonHandle("daily")}
                     name="daily"
-                    onClick={this.calenderButtonHandle}
-                    className={this.state.daily ? "active" : ""}
+                    className={`d-inline-block ${
+                      this.state.daily ? "active" : ""
+                    }`}
                   >
                     Daily
-                  </button>
-                  <button
+                  </div>
+                  <div
+                    onClick={() => this.calenderButtonHandle("weekly")}
                     name="weekly"
-                    className={this.state.weekly ? "active" : ""}
-                    onClick={this.calenderButtonHandle}
+                    className={`d-inline-block ${
+                      this.state.weekly ? "active" : ""
+                    }`}
                   >
                     Weekly
-                  </button>
-                  <button
+                  </div>
+                  <div
+                    onClick={() => this.calenderButtonHandle("monthly")}
                     name="monthly"
-                    onClick={this.calenderButtonHandle}
-                    className={this.state.monthly ? "active" : ""}
+                    className={`d-inline-block ${
+                      this.state.monthly ? "active" : ""
+                    }`}
                   >
-                    {" "}
                     Monthly
-                  </button>
+                  </div>
+                </div>
+
+                <div className="report-caleneder-btn">
+                  <div className="d-inline-block report-category">
+                    <DailyPloySelect
+                      placeholder="search for category"
+                      options={this.categories}
+                      onChange={() => {}}
+                      iconType="circle"
+                    />
+                  </div>
+                  <div className="d-inline-block report-priority">
+                    <DailyPloySelect
+                      placeholder="select priority"
+                      onChange={() => {}}
+                      iconType="circle"
+                      options={this.priorities}
+                    />
+                  </div>
                 </div>
                 <div className="report-download">
                   <button
