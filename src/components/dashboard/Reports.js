@@ -771,7 +771,7 @@ class Reports extends Component {
               </div>
 
               <div className="summary-reports">
-                <span>Summuary Reports Comming Soon...!</span>
+                <span>Summary Reports Comming Soon...!</span>
               </div>
 
               <div className="report-table">

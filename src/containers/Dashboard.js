@@ -111,11 +111,12 @@ class Dashboard extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (
-      prevState.taskStartDate !== this.state.taskStartDate ||
-      prevState.taskFrequency !== this.state.taskFrequency ||
-      prevState.newTask !== this.state.newTask ||
-      prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      prevProps.searchUserDetails !== this.props.searchUserDetails
+      (prevState.taskStartDate !== this.state.taskStartDate ||
+        prevState.taskFrequency !== this.state.taskFrequency ||
+        prevState.newTask !== this.state.newTask ||
+        prevProps.searchProjectIds !== this.props.searchProjectIds ||
+        prevProps.searchUserDetails !== this.props.searchUserDetails) &&
+      this.state.workspaceId != ""
     ) {
       try {
         this.props.handleLoading(true);
