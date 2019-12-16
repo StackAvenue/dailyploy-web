@@ -155,8 +155,6 @@ class Reports extends Component {
   };
 
   calenderButtonHandle = name => {
-    // const name = e.target.name;
-    console.log("yoyoy", name);
     var self = this;
     if (name == "daily") {
       self.setState({
@@ -713,7 +711,7 @@ class Reports extends Component {
                   </button>
                 </div>
 
-                <div className="viewtype-btns d-inline-block">
+                <div className="report-viewtype-btns d-inline-block">
                   <div
                     onClick={() => this.calenderButtonHandle("daily")}
                     name="daily"
@@ -772,13 +770,19 @@ class Reports extends Component {
                 </div>
               </div>
 
-              <ReportTable
-                taskDetails={this.state.taskDetails}
-                state={this.state}
-                searchProjectIds={this.props.searchProjectIds}
-                searchUserDetails={this.props.searchUserDetails}
-                frequency={this.returnFrequency()}
-              />
+              <div className="summary-reports">
+                <span>Summuary Reports Comming Soon...!</span>
+              </div>
+
+              <div className="report-table">
+                <ReportTable
+                  taskDetails={this.state.taskDetails}
+                  state={this.state}
+                  searchProjectIds={this.props.searchProjectIds}
+                  searchUserDetails={this.props.searchUserDetails}
+                  frequency={this.returnFrequency()}
+                />
+              </div>
             </div>
           </div>
         </div>
