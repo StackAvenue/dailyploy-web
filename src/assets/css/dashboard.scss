@@ -48,7 +48,6 @@
     width: 300px !important;
     height: 187px !important;
     border-radius: 5px !important;
-
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17) !important;
     border: solid 1px rgba(155, 155, 155, 1) !important;
     background-color: $color-white !important;
@@ -4338,7 +4337,7 @@ table.scheduler-table tr:last-child td {
 .day-format-width{
   .react-datepicker-wrapper{
     input{
-      width: 130px !important;
+      width: 135px !important;
       border: none;
     }
   }
@@ -4355,7 +4354,7 @@ table.scheduler-table tr:last-child td {
 .week-format-width{
   .react-datepicker-wrapper{
     input{
-      width: 216px !important;
+      width: 230px !important;
       border: none;
     }
   }
@@ -4369,9 +4368,50 @@ table.scheduler-table tr:last-child td {
     }
   }
 }
-.arrow-button{
-  padding: 0px 15px 0px 15px;
-  border: none;
-  background: none;
-  font-size: 20px !important;
+.dashboard-calender{
+  .react-datepicker-wrapper {
+    .react-datepicker__input-container input {
+      font-family: Roboto !important;
+      font-size: 15px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: normal;
+      text-align: left;
+    }
+    ::before {
+      font-family: "Font Awesome 5 Free" !important;
+      font-weight: 900 !important;
+      content: "\f073" !important;
+      color: #555 !important;
+      padding: 5px 10px 5px 10px;
+    }
+    ::after {
+      content: "▼";
+      padding: 0px 8px;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      text-align: center;
+      height: 100%;
+      pointer-events: none;
+    }
+  }
+  .arrow-button{
+    // margin-right: 25px;
+    margin-left: 25px;
+    padding: 0px !important;
+    border: none;
+    background: none;
+    font-size: 20px !important;
+    .fa-angle-right{
+      margin-left: 25px;
+      margin-right: 25px;
+    }
+    .fa-angle-left{
+      margin-left: 25px;
+      margin-right: 25px;
+    }
+  }
 }
