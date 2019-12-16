@@ -391,7 +391,11 @@ class AddTaskModal extends Component {
                   <button
                     type="button"
                     className="button3 btn-primary pull-right"
-                    onClick={this.props.backToTaskInfoModal}
+                    onClick={
+                      props.state.taskButton !== "Add"
+                        ? this.props.backToTaskInfoModal
+                        : this.props.closeTaskModal
+                    }
                   >
                     Cancel
                   </button>
