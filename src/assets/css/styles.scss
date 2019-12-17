@@ -111,3 +111,8 @@
   left: 50%;
   top: 50%;
 }
+.week-hover-bg .react-datepicker__week:hover .react-datepicker__day {
+  background-color: #1d5d90;;
+  border-radius: 5px;
+  color: $color-white !important;
+}

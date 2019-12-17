@@ -4385,18 +4385,18 @@ table.scheduler-table tr:last-child td {
       font-weight: 900 !important;
       content: "\f073" !important;
       color: #555 !important;
-      padding: 5px 10px 5px 10px;
+      padding: 5px 10px 5px 0px;
     }
-    ::after {
-      content: "▼";
-      padding: 0px 8px;
-      position: absolute;
-      top: 0;
-      z-index: 1;
-      text-align: center;
-      height: 100%;
-      pointer-events: none;
-    }
+    // ::after {
+    //   content: "▼";
+    //   padding: 0px 8px;
+    //   position: absolute;
+    //   top: 0;
+    //   z-index: 1;
+    //   text-align: center;
+    //   height: 100%;
+    //   pointer-events: none;
+    // }
   }
   .arrow-button{
     // margin-right: 25px;

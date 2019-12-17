@@ -671,15 +671,17 @@ class Reports extends Component {
     const Weekly = props => {
       return (
         <>
-          <DatePicker
-            showWeekNumbers
-            onChange={this.handleDayChange}
-            startDate={this.state.selectedDays[0]}
-            endDate={this.state.selectedDays[6]}
-            onWeekSelect={this.handleWeekClick}
-            value={this.state.displayWeek}
-            showWeekNumbers
-          />
+          <div className="week-hover-bg d-inline-block">
+            <DatePicker
+              showWeekNumbers
+              onChange={this.handleDayChange}
+              startDate={this.state.selectedDays[0]}
+              endDate={this.state.selectedDays[6]}
+              onWeekSelect={this.handleWeekClick}
+              value={this.state.displayWeek}
+              showWeekNumbers
+            />
+          </div>
         </>
       );
     };

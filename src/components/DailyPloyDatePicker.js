@@ -300,15 +300,17 @@ class DailyPloyDatePicker extends Component {
       return (
         <>
           {this.previous()}
-          <DatePicker
-            showWeekNumbers
-            onChange={this.handleWeekDayChange}
-            startDate={this.state.selectedDays[0]}
-            endDate={this.state.selectedDays[6]}
-            onWeekSelect={this.handleWeekClick}
-            value={this.state.displayWeek}
-            selected={this.state.dateFrom}
-          />
+          <div className="week-hover-bg d-inline-block">
+            <DatePicker
+              showWeekNumbers
+              onChange={this.handleWeekDayChange}
+              startDate={this.state.selectedDays[0]}
+              endDate={this.state.selectedDays[6]}
+              onWeekSelect={this.handleWeekClick}
+              value={this.state.displayWeek}
+              selected={this.state.dateFrom}
+            />
+          </div>
           {this.next()}
         </>
       );
