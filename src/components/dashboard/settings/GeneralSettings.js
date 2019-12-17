@@ -39,7 +39,8 @@ class GeneralSettings extends Component {
       bccEmailSuggestions: [],
       selectBccMembers: [],
       emailText: "",
-      addAdminData: null
+      addAdminData: null,
+      adminUserName: ""
     };
   }
 
@@ -89,7 +90,8 @@ class GeneralSettings extends Component {
   handleAddAdminShow = () => {
     this.setState({
       addAdminShow: true,
-      addAdminSetShow: true
+      addAdminSetShow: true,
+      addAdminEmail: ""
     });
   };
 
@@ -528,8 +530,12 @@ class GeneralSettings extends Component {
     }
   };
 
-  handleRemoveAdmin = (value, id) => {
-    this.setState({ showRemoveAdminId: id, isShowRemoveAdmin: value });
+  handleRemoveAdmin = (value, id, name) => {
+    this.setState({
+      showRemoveAdminId: id,
+      isShowRemoveAdmin: !this.state.isShowRemoveAdmin,
+      adminUserName: name
+    });
   };
 
   handleEmailText = e => {
@@ -571,10 +577,16 @@ class GeneralSettings extends Component {
             {this.props.state.adminUserArr.map((admin, index) => (
               <div className="admin-box" key={index}>
                 <div className="img-box">{firstTwoLetter(admin.name)}</div>
-                <div className="text">{admin.name}</div>
+                <div className="text text-titlize">{admin.name}</div>
                 <button
                   className="btn btn-link triple-dot"
-                  onClick={() => this.handleRemoveAdmin(true, admin.id)}
+                  onClick={() =>
+                    this.handleRemoveAdmin(
+                      this.state.isShowRemoveAdmin,
+                      admin.id,
+                      admin.name
+                    )
+                  }
                   // onBlur={() => this.handleRemoveAdmin(false, admin.id)}
                 >
                   <i className="fas fa-ellipsis-v"></i>
@@ -895,8 +907,12 @@ class GeneralSettings extends Component {
           <div className="col-md-12 delete-text">
             Deleting a Dailyploy workspace cannot be undone. All data will be
             deleted and irretrievable.
-            <button className="btn btn-link" onClick={this.handleDeleteShow}>
-              Delete Team
+            <button
+              className="btn btn-link"
+              style={{ pointerEvents: "none" }}
+              onClick={this.handleDeleteShow}
+            >
+              comming soon...!
             </button>
             <DeleteWorkspaceModal
               state={this.state}

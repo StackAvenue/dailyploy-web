@@ -18,7 +18,7 @@ class EmployeeReportsSettings extends Component {
     return (
       <div className="employee-project-settings">
         <div className="email-heading">Email Employee Reports</div>
-        <div className="row no-margin">
+        <div className="row">
           <div className="col-md-4 report-box">
             <div className="col-md-12 no-padding day-text">Daily Reports</div>
             <div className="col-md-8 no-padding day-select">
@@ -43,7 +43,7 @@ class EmployeeReportsSettings extends Component {
           </div>
           <div
             className="col-md-4 report-box"
-            style={{ margin: "0px 15px 0px 15px" }}
+            // style={{ margin: "0px 15px 0px 15px" }}
           >
             <div className="col-md-12 no-padding day-text">Weekly Reports</div>
             <div className="col-md-8 no-padding week-select">

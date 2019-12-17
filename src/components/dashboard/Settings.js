@@ -147,9 +147,9 @@ class Settings extends Component {
                 <Nav.Item>
                   <Nav.Link eventKey="second">Workspace Settings</Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                {/* <Nav.Item>
                   <Nav.Link eventKey="third">Preferences</Nav.Link>
-                </Nav.Item>
+                </Nav.Item> */}
               </Nav>
             </div>
             <div className="col-md-10">
@@ -169,7 +169,7 @@ class Settings extends Component {
                       state={this.state}
                     />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="third">Prefrences</Tab.Pane>
+                  {/* <Tab.Pane eventKey="third">Prefrences</Tab.Pane> */}
                 </Tab.Content>
               </div>
             </div>
