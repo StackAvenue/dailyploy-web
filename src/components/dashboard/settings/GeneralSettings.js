@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import EmailConfigurationModal from "./EmailConfigurationModal";
 import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
 import AddAdminModal from "./AddAdminModal";
-import { firstTwoLetter } from "../../../utils/function";
+import { firstTwoLetter, textTitlize } from "../../../utils/function";
 import { post } from "../../../utils/API";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../../DailyPloyToast";
@@ -25,6 +25,7 @@ class GeneralSettings extends Component {
       editSetShow: false,
       addAdminEmail: "",
       addAdminId: "",
+      addAdminName: "",
       allUserArr: [],
       suggestions: [],
       isShowRemoveAdmin: false,
@@ -52,9 +53,13 @@ class GeneralSettings extends Component {
       let selectedUser = this.props.state.userArr.members.filter(
         user => user.email === this.state.addAdminEmail
       );
-      let addAdminId = selectedUser[0] ? selectedUser[0].id : null;
+      let addAdminId =
+        selectedUser && selectedUser[0] ? selectedUser[0].id : null;
+      let addAdminName =
+        selectedUser && selectedUser[0] ? selectedUser[0].name : null;
       this.setState({
         addAdminId: addAdminId,
+        addAdminName: addAdminName,
         allUserArr: this.props.state.adminUserArr
       });
     }
@@ -473,7 +478,10 @@ class GeneralSettings extends Component {
       let addData = [...this.props.state.adminUserArr, ...filterData];
       this.props.handleChangeAdminUsers(addData);
       toast(
-        <DailyPloyToast message="Admin add Successful" status="success" />,
+        <DailyPloyToast
+          message={`${textTitlize(this.state.addAdminName)} added as a Admin`}
+          status="success"
+        />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.setState({ addAdminShow: false, allUserArr: addData });
@@ -496,10 +504,18 @@ class GeneralSettings extends Component {
         user => user.id !== this.state.showRemoveAdminId
       );
       this.props.handleChangeAdminUsers(removeData);
-      toast(<DailyPloyToast message="Remove Admenship" status="success" />, {
-        autoClose: 2000,
-        position: toast.POSITION.TOP_CENTER
-      });
+      toast(
+        <DailyPloyToast
+          message={`Removed ${textTitlize(
+            this.state.adminUserName
+          )} As Admin User`}
+          status="success"
+        />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        }
+      );
       this.setState({
         removeShow: false,
         isShowRemoveAdmin: false,
