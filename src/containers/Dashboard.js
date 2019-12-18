@@ -78,6 +78,8 @@ class Dashboard extends Component {
       icon: "play",
       startOn: "",
       status: false,
+      taskCategories: [],
+      taskCategorie: "",
       errors: {
         taskNameError: "",
         projectError: "",
@@ -85,7 +87,8 @@ class Dashboard extends Component {
         dateFromError: "",
         dateToError: "",
         timeFromError: "",
-        timeToError: ""
+        timeToError: "",
+        categoryError: ""
       }
     };
   }
@@ -264,6 +267,12 @@ class Dashboard extends Component {
       console.log("users Error", e);
     }
 
+    // Category Listing
+    try {
+      const { data } = await get("task_category");
+      var taskCategories = data.task_categories;
+    } catch (e) {}
+
     // workspace Tasks Listing
     try {
       var userIds =
@@ -331,7 +340,8 @@ class Dashboard extends Component {
       user: user,
       selectedMembers: [loggedInData],
       taskUser: [loggedInData.id],
-      worksapceUsers: worksapceUsers
+      worksapceUsers: worksapceUsers,
+      taskCategories: taskCategories
     });
     this.createUserProjectList();
     this.props.handleLoading(false);
@@ -454,7 +464,8 @@ class Dashboard extends Component {
         start_datetime: new Date(startDateTime),
         end_datetime: new Date(endDateTime),
         comments: this.state.comments,
-        project_id: this.state.project.id
+        project_id: this.state.project.id,
+        category_id: this.state.taskCategorie.task_category_id
       }
     };
     return taskData;
@@ -688,6 +699,9 @@ class Dashboard extends Component {
     errors["dateFromError"] = this.state.dateFrom
       ? ""
       : "please select date from";
+    errors["categoryError"] = this.state.taskCategorie
+      ? ""
+      : "please select category";
     if (!this.state.dateTo && this.state.dateFrom) {
       if (
         moment(this.state.dateFrom).format(DATE_FORMAT1) ===
@@ -711,6 +725,7 @@ class Dashboard extends Component {
       this.state.timeTo &&
       this.state.timeFrom &&
       this.state.dateFrom &&
+      this.state.taskCategorie &&
       flag
     );
   };
@@ -739,6 +754,7 @@ class Dashboard extends Component {
       var endDate = new Date(data.end_datetime);
       var startTime = moment(data.start_datetime).format("HH:mm:ss");
       var endTime = moment(data.end_datetime).format("HH:mm:ss");
+      var taskCategorie = data.category;
     } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
@@ -766,7 +782,7 @@ class Dashboard extends Component {
         projectId: event.projectId,
         project: project[0],
         comments: event.comments,
-        // show: true,
+        taskCategorie: taskCategorie,
         showInfo: true,
         selectedTaskMember: selectedMembers,
         memberProjects: memberProjects,
@@ -917,6 +933,10 @@ class Dashboard extends Component {
     });
   };
 
+  handleCategoryChange = option => {
+    this.setState({ taskCategorie: option });
+  };
+
   render() {
     return (
       <>
@@ -967,6 +987,7 @@ class Dashboard extends Component {
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}
             backToTaskInfoModal={this.backToTaskInfoModal}
             confirmModal={this.confirmModal}
+            handleCategoryChange={this.handleCategoryChange}
           />
 
           <TaskInfoModal

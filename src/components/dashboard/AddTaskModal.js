@@ -197,13 +197,23 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <DailyPloySelect
-                    options={this.categories}
+                    options={this.props.state.taskCategories}
                     placeholder="Select category"
-                    iconType="block"
                     className="suggestion-z-index-50"
-                    onChange={() => {}}
+                    default={this.props.state.taskCategorie}
+                    onChange={this.props.handleCategoryChange}
                   />
                 </div>
+                {this.props.state.errors.categoryError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding"></div>
+                    <div className="col-md-10 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.categoryError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="col-md-12 no-padding input-row">
