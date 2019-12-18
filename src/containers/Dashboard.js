@@ -290,11 +290,11 @@ class Dashboard extends Component {
             var startDateTime =
               moment(dateWiseTasks.date).format("YYYY-MM-DD") +
               " " +
-              moment(task.start_datetime).format("HH:mm");
+              moment(new Date(task.start_datetime)).format("HH:mm");
             var endDateTime =
               moment(dateWiseTasks.date).format("YYYY-MM-DD") +
               " " +
-              moment(task.end_datetime).format("HH:mm");
+              moment(new Date(task.end_datetime)).format("HH:mm");
             var tasksObj = {
               id: task.id + "-" + index,
               start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
@@ -744,12 +744,8 @@ class Dashboard extends Component {
       );
       var startDate = new Date(data.start_datetime);
       var endDate = new Date(data.end_datetime);
-      var startTime = moment(this.convertUTCDateToLocalDate(startDate)).format(
-        "HH:mm:ss"
-      );
-      var endTime = moment(this.convertUTCDateToLocalDate(endDate)).format(
-        "HH:mm:ss"
-      );
+      var startTime = moment(startDate).format("HH:mm:ss");
+      var endTime = moment(endDate).format("HH:mm:ss");
     } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
