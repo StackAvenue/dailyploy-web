@@ -21,8 +21,14 @@ export const firstTwoLetter = name => {
     : null;
 };
 
+export const textTitlize = text => {
+  return text.replace(/(?:^|\s)\S/g, function(a) {
+    return a.toUpperCase();
+  });
+};
+
 export const workspaceNameSplit = name => {
   let nameArr = name;
   let nameSplit = nameArr.split(" ").slice(2);
-  return nameSplit.join(" ");
+  return textTitlize(nameSplit.join(" "));
 };
