@@ -439,6 +439,7 @@ class ShowProjects extends Component {
 
   render() {
     var userRole = localStorage.getItem("userRole");
+
     return (
       <>
         <MenuBar
@@ -449,235 +450,243 @@ class ShowProjects extends Component {
           manageProjectListing={this.manageProjectListing}
           state={this.state}
         />
-        <div className="show-projects">
-          <div className="views">
-            <Tabs>
-              <div className="row no-margin">
-                <div className="select col-md-2 d-inline-block">
-                  <input
-                    className="styled-checkbox"
-                    id={`styled-checkbox`}
-                    type="checkbox"
-                    name="chk[]"
-                    onChange={e => this.handleCheckAll(e, this.state.projects)}
-                  />
-                  <label htmlFor={`styled-checkbox`}>
-                    {this.state.isAllChecked ? (
-                      <span>All Selected</span>
-                    ) : (
-                      <span>Select All</span>
-                    )}
-                  </label>
-                </div>
-
-                <div className="select col-md-4 d-inline-block no-padding">
-                  {this.state.selectProjectArr.length > 0 ? (
-                    <>
-                      <button
-                        className="btn btn-primary delete-button"
-                        onClick={e =>
-                          this.deleteProject(e, this.state.selectProjectArr)
-                        }
-                      >
-                        Delete
-                      </button>
-                      <div className="d-inline-block select-project-text">
-                        {this.state.selectProjectArr.length +
-                          " Project Selected"}
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-                <div className="col-md-6 tab">
-                  <TabList>
-                    <Tab>
-                      <i className="fas fa-th"></i>
-                    </Tab>
-                    <Tab>
-                      <i className="fa fa-bars"></i>
-                    </Tab>
-                  </TabList>
-                </div>
-              </div>
-              <div className="project-view">
-                <TabPanel>
-                  <div>
-                    <div className="row grid-view no-margin">
-                      {this.state.projects.map((project, index) => {
-                        return (
-                          <GridBlock
-                            key={index}
-                            project={project}
-                            index={index}
-                            projectUser={this.projectUser}
-                            monthDiff={this.monthDiff}
-                            getDate={this.getDate}
-                            countIncrese={this.countIncrese}
-                            handleCheck={this.handleCheck}
-                          />
-                        );
-                      })}
-                    </div>
+        {this.state.projects.length > 0 ? (
+          <div className="show-projects">
+            <div className="views">
+              <Tabs>
+                <div className="row no-margin">
+                  <div className="select col-md-2 d-inline-block">
+                    <input
+                      className="styled-checkbox"
+                      id={`styled-checkbox`}
+                      type="checkbox"
+                      name="chk[]"
+                      onChange={e =>
+                        this.handleCheckAll(e, this.state.projects)
+                      }
+                    />
+                    <label htmlFor={`styled-checkbox`}>
+                      {this.state.isAllChecked ? (
+                        <span>All Selected</span>
+                      ) : (
+                        <span>Select All</span>
+                      )}
+                    </label>
                   </div>
-                </TabPanel>
-                <TabPanel>
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" style={{ paddingLeft: "60px" }}>
-                          Project ID{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col" style={{ width: "195px" }}>
-                          Project Name{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          Colour{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          Project Owner{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          Start Date{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          End Date{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          Duration{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          Created Date{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                        <th scope="col">
-                          Project Members{" "}
-                          <i className="fa fa-sort" aria-hidden="true"></i>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-titlize">
-                      {this.state.projects.map((project, index) => {
-                        return (
-                          <tr key={index}>
-                            <td style={{ paddingLeft: "60px" }}>
-                              <input
-                                className="styled-checkbox"
-                                id={`styled-checkbox-${index}`}
-                                type="checkbox"
-                                name="isChecked"
-                                onChange={e => this.handleCheck(e, project)}
-                              />
-                              <label
-                                htmlFor={`styled-checkbox-${index}`}
-                              ></label>
-                              {`${"P-00"}${index + 1}`}
-                            </td>
-                            <td>{project.name}</td>
-                            <td>
-                              <div
-                                className="color-block"
-                                style={{
-                                  backgroundColor: `${project.color_code}`
-                                }}
-                              ></div>
-                            </td>
-                            <td>{project.owner ? project.owner.name : ""}</td>
-                            <td>
-                              {moment(project.start_date).format("DD MMM YY")}
-                            </td>
-                            <td>
-                              {project.end_date
-                                ? moment(project.end_date).format("DD MMM YY")
-                                : "---"}
-                            </td>
-                            <td>
-                              {this.monthDiff(
-                                this.getDate(project.start_date),
-                                this.getDate(project.end_date)
-                              )}
-                            </td>
-                            <td>
-                              {moment(project.start_date).format("DD MMM YY")}
-                            </td>{" "}
-                            <td>
-                              <span>
-                                {project.members
-                                  .slice(0, 4)
-                                  .map((user, index) => {
-                                    return (
-                                      <div key={index} className="user-block">
-                                        <span>
-                                          {user.name
-                                            .split(" ")
-                                            .map(x => x[0])
-                                            .join("")}
-                                        </span>
-                                      </div>
-                                    );
-                                  })}
-                              </span>
-                              <span>
-                                {this.countIncrese(
-                                  project.members.map(user => user.name)
-                                )}
-                              </span>
-                            </td>
-                            <td
-                              className={
-                                userRole === "member" ? "d-none" : null
-                              }
-                            >
-                              <button
-                                className="btn btn-link edit-btn"
-                                onClick={e => this.handleEditShow(e, project)}
-                              >
-                                <i className="fas fa-pencil-alt"></i>
-                              </button>
-                              {this.state.show &&
-                              this.state.projectId === project.id ? (
-                                <AddProjectModal
-                                  state={this.state}
-                                  handleClose={this.handleEditClose}
-                                  btnText={"Save"}
-                                  headText={project.name}
-                                  ownerClassName={""}
-                                  handleChangeInput={this.handleChangeInput}
-                                  handleDateFrom={this.handleDateFrom}
-                                  handleDateTo={this.handleDateTo}
-                                  handleUndefinedToDate={
-                                    this.handleUndefinedToDate
-                                  }
-                                  workspaceId={this.state.workspaceId}
-                                  handleChangeColor={this.handleChangeColor}
-                                  handleChangeComplete={
-                                    this.handleChangeComplete
-                                  }
-                                  colors={this.colors}
-                                  handleChangeMember={this.handleChangeMember}
-                                  emailOptions={
-                                    this.state.isLogedInUserEmailArr
-                                  }
-                                  addProject={this.editProject}
+
+                  <div className="select col-md-4 d-inline-block no-padding">
+                    {this.state.selectProjectArr.length > 0 ? (
+                      <>
+                        <button
+                          className="btn btn-primary delete-button"
+                          onClick={e =>
+                            this.deleteProject(e, this.state.selectProjectArr)
+                          }
+                        >
+                          Delete
+                        </button>
+                        <div className="d-inline-block select-project-text">
+                          {this.state.selectProjectArr.length +
+                            " Project Selected"}
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                  <div className="col-md-6 tab">
+                    <TabList>
+                      <Tab>
+                        <i className="fas fa-th"></i>
+                      </Tab>
+                      <Tab>
+                        <i className="fa fa-bars"></i>
+                      </Tab>
+                    </TabList>
+                  </div>
+                </div>
+                <div className="project-view">
+                  <TabPanel>
+                    <div>
+                      <div className="row grid-view no-margin">
+                        {this.state.projects.map((project, index) => {
+                          return (
+                            <GridBlock
+                              key={index}
+                              project={project}
+                              index={index}
+                              projectUser={this.projectUser}
+                              monthDiff={this.monthDiff}
+                              getDate={this.getDate}
+                              countIncrese={this.countIncrese}
+                              handleCheck={this.handleCheck}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" style={{ paddingLeft: "60px" }}>
+                            Project ID{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col" style={{ width: "195px" }}>
+                            Project Name{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            Colour{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            Project Owner{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            Start Date{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            End Date{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            Duration{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            Created Date{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                          <th scope="col">
+                            Project Members{" "}
+                            <i className="fa fa-sort" aria-hidden="true"></i>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-titlize">
+                        {this.state.projects.map((project, index) => {
+                          return (
+                            <tr key={index}>
+                              <td style={{ paddingLeft: "60px" }}>
+                                <input
+                                  className="styled-checkbox"
+                                  id={`styled-checkbox-${index}`}
+                                  type="checkbox"
+                                  name="isChecked"
+                                  onChange={e => this.handleCheck(e, project)}
                                 />
-                              ) : null}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </TabPanel>
-              </div>
-            </Tabs>
+                                <label
+                                  htmlFor={`styled-checkbox-${index}`}
+                                ></label>
+                                {`${"P-00"}${index + 1}`}
+                              </td>
+                              <td>{project.name}</td>
+                              <td>
+                                <div
+                                  className="color-block"
+                                  style={{
+                                    backgroundColor: `${project.color_code}`
+                                  }}
+                                ></div>
+                              </td>
+                              <td>{project.owner ? project.owner.name : ""}</td>
+                              <td>
+                                {moment(project.start_date).format("DD MMM YY")}
+                              </td>
+                              <td>
+                                {project.end_date
+                                  ? moment(project.end_date).format("DD MMM YY")
+                                  : "---"}
+                              </td>
+                              <td>
+                                {this.monthDiff(
+                                  this.getDate(project.start_date),
+                                  this.getDate(project.end_date)
+                                )}
+                              </td>
+                              <td>
+                                {moment(project.start_date).format("DD MMM YY")}
+                              </td>{" "}
+                              <td>
+                                <span>
+                                  {project.members
+                                    .slice(0, 4)
+                                    .map((user, index) => {
+                                      return (
+                                        <div key={index} className="user-block">
+                                          <span>
+                                            {user.name
+                                              .split(" ")
+                                              .map(x => x[0])
+                                              .join("")}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                </span>
+                                <span>
+                                  {this.countIncrese(
+                                    project.members.map(user => user.name)
+                                  )}
+                                </span>
+                              </td>
+                              <td
+                                className={
+                                  userRole === "member" ? "d-none" : null
+                                }
+                              >
+                                <button
+                                  className="btn btn-link edit-btn"
+                                  onClick={e => this.handleEditShow(e, project)}
+                                >
+                                  <i className="fas fa-pencil-alt"></i>
+                                </button>
+                                {this.state.show &&
+                                this.state.projectId === project.id ? (
+                                  <AddProjectModal
+                                    state={this.state}
+                                    handleClose={this.handleEditClose}
+                                    btnText={"Save"}
+                                    headText={project.name}
+                                    ownerClassName={""}
+                                    handleChangeInput={this.handleChangeInput}
+                                    handleDateFrom={this.handleDateFrom}
+                                    handleDateTo={this.handleDateTo}
+                                    handleUndefinedToDate={
+                                      this.handleUndefinedToDate
+                                    }
+                                    workspaceId={this.state.workspaceId}
+                                    handleChangeColor={this.handleChangeColor}
+                                    handleChangeComplete={
+                                      this.handleChangeComplete
+                                    }
+                                    colors={this.colors}
+                                    handleChangeMember={this.handleChangeMember}
+                                    emailOptions={
+                                      this.state.isLogedInUserEmailArr
+                                    }
+                                    addProject={this.editProject}
+                                  />
+                                ) : null}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </TabPanel>
+                </div>
+              </Tabs>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="list-not-found">
+            <span>Please Add Projects</span>
+          </div>
+        )}
       </>
     );
   }

@@ -125,3 +125,11 @@
 .input-normal-border{
   border: 1px solid $color-borders !important;
 }
+.list-not-found{
+  box-shadow: 0 -16px 20px 0 rgba(0, 0, 0, 0.1) !important;
+  text-align: center;
+  padding-top: 20px;
+  span{
+    color: $color-text3;
+  }
+}

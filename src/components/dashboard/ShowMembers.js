@@ -357,6 +357,7 @@ class ShowMembers extends Component {
 
   render() {
     var userRole = localStorage.getItem("userRole");
+    var isShowMember = this.state.members.length > 1;
     return (
       <>
         <MenuBar
@@ -366,153 +367,163 @@ class ShowMembers extends Component {
           handleLoad={this.handleLoad}
           state={this.state}
         />
-        <div className="show-projects">
-          <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
-            <div className="row no-margin">
-              <div
-                className="col-md-2 d-inline-block no-padding"
-                style={{ marginTop: "10px" }}
-              >
-                <input
-                  className="styled-checkbox"
-                  id={`styled-checkbox`}
-                  type="checkbox"
-                  name="chk[]"
-                  onChange={e => this.handleCheckAll(e, this.state.members)}
-                />
-                <label htmlFor={`styled-checkbox`}>
-                  {this.state.isAllChecked ? (
-                    <span>All Selected</span>
-                  ) : (
-                    <span>Select All</span>
-                  )}
-                </label>
-              </div>
-              <div className="col-md-4 d-inline-block no-margin no-padding">
-                {this.state.selectMemberArr.length > 0 ? (
-                  <>
-                    <div className="d-inline-block">
-                      <button
-                        className="btn btn-primary delete-button"
-                        onClick={e =>
-                          this.deleteProject(e, this.state.selectMemberArr)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </div>
-                    <div className="d-inline-block select-project-text">
-                      {this.state.selectMemberArr.length + " Member Selected"}
-                    </div>
-                  </>
-                ) : null}
+        {isShowMember ? (
+          <div className="show-projects">
+            <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
+              <div className="row no-margin">
+                <div
+                  className="col-md-2 d-inline-block no-padding"
+                  style={{ marginTop: "10px" }}
+                >
+                  <input
+                    className="styled-checkbox"
+                    id={`styled-checkbox`}
+                    type="checkbox"
+                    name="chk[]"
+                    onChange={e => this.handleCheckAll(e, this.state.members)}
+                  />
+                  <label htmlFor={`styled-checkbox`}>
+                    {this.state.isAllChecked ? (
+                      <span>All Selected</span>
+                    ) : (
+                      <span>Select All</span>
+                    )}
+                  </label>
+                </div>
+                <div className="col-md-4 d-inline-block no-margin no-padding">
+                  {this.state.selectMemberArr.length > 0 ? (
+                    <>
+                      <div className="d-inline-block">
+                        <button
+                          className="btn btn-primary delete-button"
+                          onClick={e =>
+                            this.deleteProject(e, this.state.selectMemberArr)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <div className="d-inline-block select-project-text">
+                        {this.state.selectMemberArr.length + " Member Selected"}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col" style={{ paddingLeft: "60px" }}>
-                  Name <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-                <th scope="col">
-                  Email <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-                <th scope="col">Role</th>
-                <th scope="col">
-                  Working Hours{" "}
-                  <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-                <th scope="col">Projects</th>
-                <th scope="col">Invitation</th>
-                <th scope="col">
-                  Date Created <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.members.map((member, index) => {
-                return (
-                  <tr key={index}>
-                    <td
-                      className="text-titlize"
-                      style={{ paddingLeft: "60px" }}
-                    >
-                      <input
-                        className="styled-checkbox"
-                        id={`styled-checkbox-${index}`}
-                        type="checkbox"
-                        name="isChecked"
-                        onChange={e => this.handleCheck(e, member)}
-                      />
-                      <label htmlFor={`styled-checkbox-${index}`}></label>
-                      {member.name}
-                    </td>
-                    <td>{member.email}</td>
-                    <td className="text-titlize">{member.role}</td>
-                    <td className="text-titlize">
-                      {member.working_hours ? member.working_hours : "8"} hours
-                    </td>
-                    <td className="text-titlize">
-                      <span>{this.displayProjects(member.projects)}</span>
-                      <span
-                        className="project-count"
-                        style={{ pointer: "cursor" }}
-                        onMouseMove={e => this.countProjectView(e, member.id)}
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ paddingLeft: "60px" }}>
+                    Name <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                  <th scope="col">
+                    Email <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                  <th scope="col">Role</th>
+                  <th scope="col">
+                    Working Hours{" "}
+                    <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                  <th scope="col">Projects</th>
+                  <th scope="col">Invitation</th>
+                  <th scope="col">
+                    Date Created{" "}
+                    <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.members.map((member, index) => {
+                  return (
+                    <tr key={index}>
+                      <td
+                        className="text-titlize"
+                        style={{ paddingLeft: "60px" }}
                       >
-                        {this.countProject(member.projects)}
-                      </span>
-                      {this.state.isProjectListShow &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <div className="project-count-list-show">
-                          <div className="close-div">
-                            <a onClick={this.countProjectViewClose}>
-                              <i className="fa fa-times" aria-hidden="true"></i>
-                            </a>
-                          </div>
-                          <div className="project-body-box">
-                            {member.projects.map(project => (
-                              <div className="project-body-text">
-                                {project.name}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                    </td>
-                    <td className={"text-titlize"}>
-                      {!member.is_invited ? (
-                        <p className="text-green">Accepted</p>
-                      ) : (
-                        <p className="text-blue">Invited</p>
-                      )}
-                    </td>
-                    <td>{moment(member.created_at).format("DD MMM YY")}</td>
-                    <td className={userRole === "member" ? "d-none" : null}>
-                      <button
-                        className="btn btn-link edit-btn"
-                        onClick={e => this.handleShow(e, member)}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      {this.state.show &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <EditMemberModal
-                          show={this.state.show}
-                          handleClose={this.handleClose}
-                          state={this.state}
-                          editMemberHandleChange={this.editMemberHandleChange}
-                          editMember={this.editMember}
+                        <input
+                          className="styled-checkbox"
+                          id={`styled-checkbox-${index}`}
+                          type="checkbox"
+                          name="isChecked"
+                          onChange={e => this.handleCheck(e, member)}
                         />
-                      ) : null}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                        <label htmlFor={`styled-checkbox-${index}`}></label>
+                        {member.name}
+                      </td>
+                      <td>{member.email}</td>
+                      <td className="text-titlize">{member.role}</td>
+                      <td className="text-titlize">
+                        {member.working_hours ? member.working_hours : "8"}{" "}
+                        hours
+                      </td>
+                      <td className="text-titlize">
+                        <span>{this.displayProjects(member.projects)}</span>
+                        <span
+                          className="project-count"
+                          style={{ pointer: "cursor" }}
+                          onMouseMove={e => this.countProjectView(e, member.id)}
+                        >
+                          {this.countProject(member.projects)}
+                        </span>
+                        {this.state.isProjectListShow &&
+                        this.state.projectShowMemberId === member.id ? (
+                          <div className="project-count-list-show">
+                            <div className="close-div">
+                              <a onClick={this.countProjectViewClose}>
+                                <i
+                                  className="fa fa-times"
+                                  aria-hidden="true"
+                                ></i>
+                              </a>
+                            </div>
+                            <div className="project-body-box">
+                              {member.projects.map(project => (
+                                <div className="project-body-text">
+                                  {project.name}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+                      </td>
+                      <td className={"text-titlize"}>
+                        {!member.is_invited ? (
+                          <p className="text-green">Accepted</p>
+                        ) : (
+                          <p className="text-blue">Invited</p>
+                        )}
+                      </td>
+                      <td>{moment(member.created_at).format("DD MMM YY")}</td>
+                      <td className={userRole === "member" ? "d-none" : null}>
+                        <button
+                          className="btn btn-link edit-btn"
+                          onClick={e => this.handleShow(e, member)}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                        {this.state.show &&
+                        this.state.projectShowMemberId === member.id ? (
+                          <EditMemberModal
+                            show={this.state.show}
+                            handleClose={this.handleClose}
+                            state={this.state}
+                            editMemberHandleChange={this.editMemberHandleChange}
+                            editMember={this.editMember}
+                          />
+                        ) : null}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="list-not-found">
+            <span>Please Add Members</span>
+          </div>
+        )}
       </>
     );
   }
