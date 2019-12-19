@@ -4334,10 +4334,10 @@ table.scheduler-table tr:last-child td {
 .disable-project-select{
   pointer-events: none;
   .custom-search-select{
-    background-color: darkgray !important;
+    background-color: $color-disable !important;
   }
   input{
-    background-color: darkgray !important;
+    background-color: $color-disable !important;
   }
 }
 

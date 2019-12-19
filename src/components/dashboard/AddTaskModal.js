@@ -25,28 +25,6 @@ class AddTaskModal extends Component {
         color_code: "#9B9B9B"
       }
     ];
-    this.categories = [
-      {
-        name: "call",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "meeting",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 1",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 2",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 3",
-        color_code: "#9B9B9B"
-      }
-    ];
     this.state = {
       members: [],
       project: "",
@@ -64,11 +42,6 @@ class AddTaskModal extends Component {
       toDateOpen: false
     };
   }
-
-  // initalChar = (str) => {
-  //   var matches = str.match(/\b(\w)/g);
-  //   return matches.join('').toUpperCase();
-  // }
 
   disabledHours = () => {
     var time = this.props.state.timeFrom;

@@ -312,8 +312,8 @@ class TaskInfoModal extends Component {
               </div>
             </div>
 
-            <div className="col-md-12 body text-titlize">
-              <div className="col-md-12 no-padding ">
+            <div className="col-md-12 body text-titlize ">
+              <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Name
                 </div>
@@ -339,9 +339,9 @@ class TaskInfoModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <span className="left-padding-20px">
-                    {props.state.taskCategorie.name
+                    {props.state.taskCategorie
                       ? props.state.taskCategorie.name
-                      : ""}
+                      : "---"}
                   </span>
                 </div>
               </div>
