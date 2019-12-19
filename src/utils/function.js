@@ -18,7 +18,14 @@ export const firstTwoLetter = name => {
         .split(" ")
         .map(x => x[0])
         .join("")
+        .toUpperCase()
     : null;
+};
+
+export const textTitlize = text => {
+  return text.replace(/(?:^|\s)\S/g, function(a) {
+    return a.toUpperCase();
+  });
 };
 
 export const workspaceNameSplit = name => {

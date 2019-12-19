@@ -1960,7 +1960,7 @@ table.scheduler-table tr:last-child td {
 .add-admin-modal{
   .modal-dialog{
     max-width:432px !important;
-      top:251px !important;
+      top: 235px !important;
       .modal-content{   
         .box{
           padding: 26px 0px 30px 36px;
@@ -1985,7 +1985,7 @@ table.scheduler-table tr:last-child td {
             font-family: $font-family-roboto !important;
             color: $color-text2;
             font-size: 12px;
-            margin:28px 0px 62px 0px;
+            margin:28px 0px 40px 0px;
           }
           .auto-search {
             position: absolute;
@@ -2016,7 +2016,7 @@ table.scheduler-table tr:last-child td {
           }
           .btn-box {
             padding-top: 30px !important;
-            padding-bottom: 21px !important;
+            // padding-bottom: 21px !important;
             .add {
               width: 93px !important;
               height: 40px !important;
@@ -2041,7 +2041,6 @@ table.scheduler-table tr:last-child td {
         }
       }
   }
-  
 }
 
 .workspace-settings{
@@ -2173,7 +2172,7 @@ table.scheduler-table tr:last-child td {
       
     }
     .hr1{
-      border: 1px solid $color-borders;
+      border-bottom: 1px solid $color-borders;
       margin: 50px 0px 30px 0px;
     }
     .config-email-box{
@@ -2312,7 +2311,7 @@ table.scheduler-table tr:last-child td {
   }
 
   .employee-project-settings{
-    padding: 30px 60px 0px 60px;
+    padding: 30px 45px 0px 30px;
     .email-heading{
       font-family: $font-family-roboto !important;
       font-size: 20px !important;
@@ -2327,6 +2326,7 @@ table.scheduler-table tr:last-child td {
       max-width: 279px !important;
       background-color: #ffffff;
       padding: 10px 20px 10px 20px;
+      margin: auto;
       .day-text{
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
@@ -2417,7 +2417,7 @@ table.scheduler-table tr:last-child td {
       font-family: $font-family-roboto !important;
       font-size: 15px !important;
       color: $color-workspace !important;
-      padding-bottom: 30px !important;
+      padding: 0px 0px 30px 0px !important;
     }
     .nav-link .active {
       font-family: $font-family-roboto !important;
@@ -2648,46 +2648,53 @@ table.scheduler-table tr:last-child td {
 }
 
 .modal-box {
-  padding-left: 30px !important;
-  .heading {
-    font-family: $font-family-roboto !important;
-    font-size: 20px !important;
-    font-weight: bold !important;
-    color: $color-brand4 !important;
-    padding-top: 20px !important;
-  }
-  .body {
-    font-family: $font-family-roboto !important;
-    font-size: 15px !important;
-    color: #707070 !important;
-    padding-top: 50px !important;
-    padding-bottom: 50px !important;
-    span {
-      font-weight: bold !important;
-    }
-  }
-  .btn-box {
-    padding-top: 30px !important;
-    padding-bottom: 21px !important;
-    .ok {
-      width: 93px !important;
-      height: 40px !important;
-      border-radius: 5px !important;
-      background-color: $color-brand3 !important;
-      font-family: $font-family-roboto !important;
-      font-size: 17px !important;
-      color: $color-white !important;
-    }
-    .cancel {
-      width: 93px !important;
-      height: 40px !important;
-      border-radius: 5px !important;
-      border: solid 1px $color-brand3 !important;
-      background-color: $color-white !important;
-      font-family: $font-family-roboto !important;
-      font-size: 17px !important;
-      color: $color-text2 !important;
-      margin-left: 10px !important;
+  .modal-dialog{
+    padding-left: 20px !important;
+    max-width:432px !important;
+    top: 100px !important;
+    height: 251px;
+    .modal-content{   
+      .heading {
+        font-family: $font-family-roboto !important;
+        font-size: 20px !important;
+        font-weight: bold !important;
+        color: $color-brand4 !important;
+        padding-top: 20px !important;
+      }
+      .body {
+        font-family: $font-family-roboto !important;
+        font-size: 15px !important;
+        color: #707070 !important;
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+        span {
+          font-weight: bold !important;
+        }
+      }
+      .btn-box {
+        padding-top: 30px !important;
+        padding-bottom: 21px !important;
+        .ok {
+          width: 93px !important;
+          height: 40px !important;
+          border-radius: 5px !important;
+          background-color: $color-brand3 !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          color: $color-white !important;
+        }
+        .cancel {
+          width: 93px !important;
+          height: 40px !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-brand3 !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          color: $color-text2 !important;
+          margin-left: 10px !important;
+        }
+      }
     }
   }
 }

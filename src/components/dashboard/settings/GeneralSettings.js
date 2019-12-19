@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import EmailConfigurationModal from "./EmailConfigurationModal";
 import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
 import AddAdminModal from "./AddAdminModal";
-import { firstTwoLetter } from "../../../utils/function";
+import { firstTwoLetter, textTitlize } from "../../../utils/function";
 import { post } from "../../../utils/API";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../../DailyPloyToast";
@@ -25,6 +25,7 @@ class GeneralSettings extends Component {
       editSetShow: false,
       addAdminEmail: "",
       addAdminId: "",
+      addAdminName: "",
       allUserArr: [],
       suggestions: [],
       isShowRemoveAdmin: false,
@@ -39,7 +40,8 @@ class GeneralSettings extends Component {
       bccEmailSuggestions: [],
       selectBccMembers: [],
       emailText: "",
-      addAdminData: null
+      addAdminData: null,
+      adminUserName: ""
     };
   }
 
@@ -51,9 +53,13 @@ class GeneralSettings extends Component {
       let selectedUser = this.props.state.userArr.members.filter(
         user => user.email === this.state.addAdminEmail
       );
-      let addAdminId = selectedUser[0] ? selectedUser[0].id : null;
+      let addAdminId =
+        selectedUser && selectedUser[0] ? selectedUser[0].id : null;
+      let addAdminName =
+        selectedUser && selectedUser[0] ? selectedUser[0].name : null;
       this.setState({
         addAdminId: addAdminId,
+        addAdminName: addAdminName,
         allUserArr: this.props.state.adminUserArr
       });
     }
@@ -89,7 +95,8 @@ class GeneralSettings extends Component {
   handleAddAdminShow = () => {
     this.setState({
       addAdminShow: true,
-      addAdminSetShow: true
+      addAdminSetShow: true,
+      addAdminEmail: ""
     });
   };
 
@@ -471,7 +478,10 @@ class GeneralSettings extends Component {
       let addData = [...this.props.state.adminUserArr, ...filterData];
       this.props.handleChangeAdminUsers(addData);
       toast(
-        <DailyPloyToast message="Admin add Successful" status="success" />,
+        <DailyPloyToast
+          message={`${textTitlize(this.state.addAdminName)} added as a Admin`}
+          status="success"
+        />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.setState({ addAdminShow: false, allUserArr: addData });
@@ -494,10 +504,18 @@ class GeneralSettings extends Component {
         user => user.id !== this.state.showRemoveAdminId
       );
       this.props.handleChangeAdminUsers(removeData);
-      toast(<DailyPloyToast message="Remove Admenship" status="success" />, {
-        autoClose: 2000,
-        position: toast.POSITION.TOP_CENTER
-      });
+      toast(
+        <DailyPloyToast
+          message={`Removed ${textTitlize(
+            this.state.adminUserName
+          )} As Admin User`}
+          status="success"
+        />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        }
+      );
       this.setState({
         removeShow: false,
         isShowRemoveAdmin: false,
@@ -528,8 +546,12 @@ class GeneralSettings extends Component {
     }
   };
 
-  handleRemoveAdmin = (value, id) => {
-    this.setState({ showRemoveAdminId: id, isShowRemoveAdmin: value });
+  handleRemoveAdmin = (value, id, name) => {
+    this.setState({
+      showRemoveAdminId: id,
+      isShowRemoveAdmin: !this.state.isShowRemoveAdmin,
+      adminUserName: name
+    });
   };
 
   handleEmailText = e => {
@@ -571,10 +593,16 @@ class GeneralSettings extends Component {
             {this.props.state.adminUserArr.map((admin, index) => (
               <div className="admin-box" key={index}>
                 <div className="img-box">{firstTwoLetter(admin.name)}</div>
-                <div className="text">{admin.name}</div>
+                <div className="text text-titlize">{admin.name}</div>
                 <button
                   className="btn btn-link triple-dot"
-                  onClick={() => this.handleRemoveAdmin(true, admin.id)}
+                  onClick={() =>
+                    this.handleRemoveAdmin(
+                      this.state.isShowRemoveAdmin,
+                      admin.id,
+                      admin.name
+                    )
+                  }
                   // onBlur={() => this.handleRemoveAdmin(false, admin.id)}
                 >
                   <i className="fas fa-ellipsis-v"></i>
@@ -895,8 +923,12 @@ class GeneralSettings extends Component {
           <div className="col-md-12 delete-text">
             Deleting a Dailyploy workspace cannot be undone. All data will be
             deleted and irretrievable.
-            <button className="btn btn-link" onClick={this.handleDeleteShow}>
-              Delete Team
+            <button
+              className="btn btn-link"
+              style={{ pointerEvents: "none" }}
+              onClick={this.handleDeleteShow}
+            >
+              comming soon...!
             </button>
             <DeleteWorkspaceModal
               state={this.state}

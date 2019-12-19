@@ -204,8 +204,6 @@ class Signin extends Component {
                   </Link>
                 </div>
                 <br />
-                <br />
-                <br />
                 <div className="col-md-8 offset-2 googleIcon">
                   <span>New to DailyPloy?</span>
                   <Link to={`/signup`} className="link">

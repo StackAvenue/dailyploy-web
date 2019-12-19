@@ -291,11 +291,11 @@ class Dashboard extends Component {
             var startDateTime =
               moment(dateWiseTasks.date).format("YYYY-MM-DD") +
               " " +
-              moment(task.start_datetime).format("HH:mm");
+              moment(new Date(task.start_datetime)).format("HH:mm");
             var endDateTime =
               moment(dateWiseTasks.date).format("YYYY-MM-DD") +
               " " +
-              moment(task.end_datetime).format("HH:mm");
+              moment(new Date(task.end_datetime)).format("HH:mm");
             var tasksObj = {
               id: task.id + "-" + index,
               start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
@@ -440,20 +440,18 @@ class Dashboard extends Component {
   taskDetails = () => {
     var startDateTime =
       moment(this.state.dateFrom).format(DATE_FORMAT1) +
-      " " +
-      this.state.timeFrom;
+      (this.state.timeFrom ? " " + this.state.timeFrom : " 00:00:00");
     var endDateTime =
       moment(this.state.dateTo ? this.state.dateTo : new Date()).format(
         DATE_FORMAT1
-      ) +
-      " " +
-      this.state.timeTo;
+      ) + (this.state.timeTo ? " " + this.state.timeTo : " 00:00:00");
+
     var taskData = {
       task: {
         name: this.state.taskName,
         member_ids: this.state.taskUser,
-        start_datetime: new Date(startDateTime),
-        end_datetime: new Date(endDateTime),
+        start_datetime: startDateTime,
+        end_datetime: endDateTime,
         comments: this.state.comments,
         project_id: this.state.project.id
       }
@@ -700,20 +698,29 @@ class Dashboard extends Component {
         flag = false;
       }
     }
-    errors["timeFromError"] = this.state.timeFrom
-      ? ""
-      : "please select time from";
-    errors["timeToError"] = this.state.timeTo ? "" : "please select time to";
+    // errors["timeFromError"] = this.state.timeFrom
+    //   ? ""
+    //   : "please select time from";
+    // errors["timeToError"] = this.state.timeTo ? "" : "please select time to";
     this.setState({ errors: errors });
     return (
       this.state.taskName &&
       this.state.projectId &&
       this.state.taskUser.length > 0 &&
-      this.state.timeTo &&
-      this.state.timeFrom &&
+      // this.state.timeTo &&
+      // this.state.timeFrom &&
       this.state.dateFrom &&
       flag
     );
+  };
+
+  convertUTCDateToLocalDate = date => {
+    var newDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    );
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+    return newDate;
   };
 
   editAddTaskDetails = async (taskId, event) => {
@@ -738,8 +745,8 @@ class Dashboard extends Component {
       );
       var startDate = new Date(data.start_datetime);
       var endDate = new Date(data.end_datetime);
-      var startTime = moment(data.start_datetime).format("HH:mm:ss");
-      var endTime = moment(data.end_datetime).format("HH:mm:ss");
+      var startTime = moment(startDate).format("HH:mm:ss");
+      var endTime = moment(endDate).format("HH:mm:ss");
     } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
