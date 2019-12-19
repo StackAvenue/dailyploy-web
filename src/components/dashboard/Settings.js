@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, logout } from "../../utils/API";
+import { get, post, put } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Nav } from "react-bootstrap";
 import UserSettings from "./settings/UserSettings";
 import WorkspaceSettings from "./settings/WorkspaceSettings";
 import cookie from "react-cookies";
+import { checkPassword, validateName } from "../../utils/validation";
+import { toast } from "react-toastify";
+import DailyPloyToast from "../../../src/components/DailyPloyToast";
 
 class Settings extends Component {
   constructor(props) {
@@ -26,19 +29,20 @@ class Settings extends Component {
       users: [],
       isDisableName: false,
       adminUserArr: [],
-      allMembers: []
+      allMembers: [],
+      nameError: null,
+      oldPasswordError: null,
+      passwordError: null,
+      confirmPasswordError: null
     };
   }
 
   async componentDidMount() {
-    var loggedInData = cookie.load("loggedInUser");
-    if (!loggedInData) {
-      try {
-        const { data } = await get("logged_in_user");
-        var loggedInData = data;
-      } catch (e) {
-        console.log("err", e);
-      }
+    try {
+      const { data } = await get("logged_in_user");
+      var loggedInData = data;
+    } catch (e) {
+      console.log("err", e);
     }
 
     // workspace Listing
@@ -96,7 +100,6 @@ class Settings extends Component {
   };
 
   onSelectSort = value => {
-    console.log("selected value ", value);
     this.setState({ sort: value });
   };
 
@@ -121,8 +124,114 @@ class Settings extends Component {
     };
   };
 
-  save = () => {
-    this.setState({ isDisableName: true });
+  updateUserName = async e => {
+    e.preventDefault();
+    this.validateUserName();
+    if (this.state.userName && this.state.userName.length >= 3) {
+      var userData = {
+        user: {
+          name: this.state.userName
+        }
+      };
+      try {
+        const { data } = await put(userData, `users/${this.state.userId}`);
+        toast(<DailyPloyToast message="User Name Updated" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        });
+      } catch (e) {
+        if (e.response.status) {
+          toast(
+            <DailyPloyToast message={"Internal Server Error"} status="error" />,
+            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+          );
+        }
+      }
+    }
+  };
+
+  updatePassword = async e => {
+    console.log("update pass");
+    e.preventDefault();
+    this.validateAllInputs();
+    if (this.validityCheck()) {
+      var userData = {
+        user: {
+          name: this.state.userName,
+          password: this.state.newPassword,
+          password_confirmation: this.state.confirmPassword,
+          old_password: this.state.oldPassword
+        }
+      };
+      try {
+        const { data } = await put(userData, `users/${this.state.userId}`);
+        toast(
+          <DailyPloyToast message="User Setting Updated" status="success" />,
+          {
+            autoClose: 2000,
+            position: toast.POSITION.TOP_CENTER
+          }
+        );
+      } catch (e) {
+        if (e.response.status === 500) {
+          toast(
+            <DailyPloyToast message={"Internal Server Error"} status="error" />,
+            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+          );
+        } else if (e.response.data.error) {
+          toast(
+            <DailyPloyToast
+              message="Old Password does not match"
+              status="error"
+            />,
+            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+          );
+        }
+      }
+    }
+  };
+
+  validityCheck = () => {
+    return (
+      this.state.userName &&
+      this.state.userName.length >= 3 &&
+      this.state.newPassword &&
+      this.state.newPassword.match(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+      ) &&
+      this.state.confirmPassword &&
+      this.state.newPassword === this.state.confirmPassword
+    );
+  };
+
+  validateUserName = () => {
+    this.setState({ nameError: validateName(this.state.userName) });
+  };
+
+  validateAllInputs = () => {
+    const errors = {
+      nameError: null,
+      oldPasswordError: null,
+      passwordError: null,
+      confirmPasswordError: null
+    };
+    errors.nameError = validateName(this.state.userName);
+    errors.passwordError = checkPassword(this.state.newPassword);
+    errors.oldPasswordError = validateName(this.state.oldPassword);
+    errors.confirmPasswordError = this.validatePassword(
+      this.state.newPassword,
+      this.state.confirmPassword
+    );
+    this.setState(errors);
+  };
+
+  validatePassword = (password, confirmPassword) => {
+    if (password === "" && confirmPassword === "") {
+      return true;
+    } else if (password === confirmPassword) {
+      return;
+    }
+    return "Didn't Match, Try Again.";
   };
 
   render() {
@@ -160,7 +269,8 @@ class Settings extends Component {
                       handleChange={this.handleUserChange}
                       state={this.state}
                       role={localStorage.getItem("userRole")}
-                      save={this.save}
+                      updateUserName={this.updateUserName}
+                      updatePassword={this.updatePassword}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">

@@ -22,19 +22,25 @@ const UserSettings = props => {
             </div>
           </div>
           <div className="col-md-8 d-inline-block no-padding inner-box">
-            <div className="col-md-2 name">
+            <div className="col-md-6 name d-inline-block">
               Name<span> *</span>
+              {props.state.nameError ? (
+                <span className="error-warning d-inline-block">
+                  {props.state.nameError}
+                </span>
+              ) : null}
             </div>
             <div className="col-md-12">
               <div className="col-md-6 d-inline-block no-padding">
                 <input
                   type="text"
                   placeholder="Name"
-                  className="form-control input"
+                  className={`form-control input ${
+                    props.state.nameError ? " input-error-border" : ""
+                  }`}
                   name="userName"
                   value={props.state.userName}
                   onChange={props.handleChange}
-                  disabled={props.state.isDisableName}
                 />
               </div>
               <div
@@ -43,7 +49,7 @@ const UserSettings = props => {
               >
                 <button
                   className="btn btn-primary save-button"
-                  onClick={props.save}
+                  onClick={props.updateUserName}
                 >
                   Save
                 </button>
@@ -69,29 +75,6 @@ const UserSettings = props => {
         </div>
       </div>
       <div className="col-md-12 hr"></div>
-      {/* <div className="col-md-12 box no-padding">
-          <div className="col-md-12 inner-box">
-            <div className="col-md-2 d-inline-block no-padding name">
-              Email<span> *</span>
-            </div>
-            <div className="col-md-5 d-inline-block">
-              <input
-                type="email"
-                placeholder="Email"
-                className="form-control input"
-              />
-            </div>
-          </div>
-          <div className="col-md-12 inner-box">
-            <div className="col-md-2 d-inline-block no-padding name">
-              Access
-            </div>
-            <div className="col-md-5 d-inline-block">Admin</div>
-          </div>
-          <div className="col-md-12 box-btn">
-            <button className="btn btn-default button">Save</button>
-          </div>
-        </div> */}
       <div className="col-md-12 heading">Change Password</div>
       <div className="col-md-12 box no-padding">
         <div className="col-md-12 inner-box">
@@ -102,28 +85,57 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="Old Password"
-              className="form-control input"
+              className={`form-control input ${
+                props.state.oldPasswordError ? " input-error-border" : ""
+              }`}
               name="oldPassword"
               value={props.state.oldPassword}
               onChange={props.handleChange}
             />
           </div>
         </div>
+        {props.state.oldPasswordError ? (
+          <div className="col-md-12">
+            <div className="col-md-2 d-inline-block no-padding"></div>
+            <div className="col-md-5 d-inline-block ">
+              <span className="error-warning d-inline-block">
+                {props.state.oldPasswordError}
+              </span>
+            </div>
+          </div>
+        ) : null}
         <div className="col-md-12 inner-box">
           <div className="col-md-2 d-inline-block no-padding name">
             New Password<span> *</span>
+            <i className="fa fa-info-circle tooltip d-inline-block">
+              <div class="tooltiptext">
+                Min 8 characters at least 1 number and 1 special character
+              </div>
+            </i>
           </div>
           <div className="col-md-5 d-inline-block">
             <input
               type="password"
               placeholder="New Password"
-              className="form-control input"
+              className={`form-control input ${
+                props.state.passwordError ? " input-error-border" : ""
+              }`}
               name="newPassword"
               value={props.state.newPassword}
               onChange={props.handleChange}
             />
           </div>
         </div>
+        {props.state.passwordError ? (
+          <div className="col-md-12">
+            <div className="col-md-2 d-inline-block no-padding"></div>
+            <div className="col-md-5 d-inline-block ">
+              <span className="error-warning d-inline-block">
+                {props.state.passwordError}
+              </span>
+            </div>
+          </div>
+        ) : null}
         <div className="col-md-12 inner-box">
           <div className="col-md-2 d-inline-block no-padding name">
             Confirm Password<span> *</span>
@@ -132,15 +144,32 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="Confirm Password"
-              className="form-control input"
+              className={`form-control input ${
+                props.state.confirmPasswordError ? " input-error-border" : ""
+              }`}
               name="confirmPassword"
               value={props.state.confirmPassword}
               onChange={props.handleChange}
             />
           </div>
         </div>
+        {props.state.confirmPasswordError ? (
+          <div className="col-md-12">
+            <div className="col-md-2 d-inline-block no-padding"></div>
+            <div className="col-md-5 d-inline-block ">
+              <span className="error-warning d-inline-block">
+                {props.state.confirmPasswordError}
+              </span>
+            </div>
+          </div>
+        ) : null}
         <div className="col-md-12 box-btn">
-          <button className="btn btn-default button">Save & Confirm</button>
+          <button
+            className="btn btn-default button"
+            onClick={props.updatePassword}
+          >
+            Save & Confirm
+          </button>
         </div>
       </div>
     </>

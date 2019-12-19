@@ -31,5 +31,5 @@ export const textTitlize = text => {
 export const workspaceNameSplit = name => {
   let nameArr = name;
   let nameSplit = nameArr.split(" ").slice(2);
-  return nameSplit.join(" ");
+  return textTitlize(nameSplit.join(" "));
 };

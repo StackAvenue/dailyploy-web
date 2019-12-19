@@ -338,7 +338,11 @@ class TaskInfoModal extends Component {
                   Category
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(this.category, "block")}
+                  <span className="left-padding-20px">
+                    {props.state.taskCategorie.name
+                      ? props.state.taskCategorie.name
+                      : ""}
+                  </span>
                 </div>
               </div>
 
