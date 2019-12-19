@@ -2633,6 +2633,17 @@ table.scheduler-table tr:last-child td {
           padding-right: 20px !important;
           padding-left: 20px !important;
         }
+        .btn-blue:hover {
+          background-color: $color-brand4 !important;
+          color: $color-white !important;
+        }
+        .btn-blue{
+          background-color: $color-brand3 !important;
+          color: $color-white !important;
+        }
+        .btn-disable{
+          pointer-events: none;
+        }
       }
     }
     .hr {

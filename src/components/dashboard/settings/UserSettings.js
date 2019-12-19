@@ -43,12 +43,11 @@ const UserSettings = props => {
                   onChange={props.handleChange}
                 />
               </div>
-              <div
-                className="d-inline-block"
-                style={{ verticalAlign: "top", paddingLeft: "15px" }}
-              >
+              <div className="d-inline-block box-btn">
                 <button
-                  className="btn btn-primary save-button"
+                  className={`btn btn-primary save-button ${
+                    props.state.isSaveEnable ? "btn-blue" : "btn-disable"
+                  }`}
                   onClick={props.updateUserName}
                 >
                   Save
@@ -122,7 +121,7 @@ const UserSettings = props => {
               }`}
               name="newPassword"
               value={props.state.newPassword}
-              onChange={props.handleChange}
+              onChange={props.handlePasswordChange}
             />
           </div>
         </div>
@@ -149,7 +148,7 @@ const UserSettings = props => {
               }`}
               name="confirmPassword"
               value={props.state.confirmPassword}
-              onChange={props.handleChange}
+              onChange={props.handleConfirmPassChange}
             />
           </div>
         </div>
@@ -163,13 +162,18 @@ const UserSettings = props => {
             </div>
           </div>
         ) : null}
-        <div className="col-md-12 box-btn">
-          <button
-            className="btn btn-default button"
-            onClick={props.updatePassword}
-          >
-            Save & Confirm
-          </button>
+        <div className="col-md-12 inner-box box-btn">
+          <div className="col-md-2 d-inline-block no-padding name"></div>
+          <div className="col-md-5 d-inline-block">
+            <button
+              className={`btn btn-default button ${
+                props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
+              }`}
+              onClick={props.updatePassword}
+            >
+              Save & Confirm
+            </button>
+          </div>
         </div>
       </div>
     </>

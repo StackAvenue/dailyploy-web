@@ -33,7 +33,9 @@ class Settings extends Component {
       nameError: null,
       oldPasswordError: null,
       passwordError: null,
-      confirmPasswordError: null
+      confirmPasswordError: null,
+      isSaveEnable: false,
+      isSaveConfirmEnable: false
     };
   }
 
@@ -115,7 +117,37 @@ class Settings extends Component {
 
   handleUserChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    if (name == "userName" && value != "") {
+      this.setState({ [name]: value, isSaveEnable: true });
+    } else {
+      this.setState({ [name]: value, isSaveConfirmEnable: true });
+    }
+  };
+
+  handleConfirmPassChange = e => {
+    const { name, value } = e.target;
+    if (this.state.newPassword && value != this.state.newPassword) {
+      this.setState({
+        [name]: value,
+        isSaveConfirmEnable: true,
+        confirmPasswordError: "Didn't Match, Try Again."
+      });
+    } else {
+      this.setState({ [name]: value, confirmPasswordError: "" });
+    }
+  };
+
+  handlePasswordChange = e => {
+    const { name, value } = e.target;
+    if (value != "" && checkPassword(value)) {
+      this.setState({
+        [name]: value,
+        isSaveConfirmEnable: true,
+        passwordError: checkPassword(value)
+      });
+    } else {
+      this.setState({ [name]: value, passwordError: "" });
+    }
   };
 
   updateUserInfo = async () => {
@@ -151,7 +183,6 @@ class Settings extends Component {
   };
 
   updatePassword = async e => {
-    console.log("update pass");
     e.preventDefault();
     this.validateAllInputs();
     if (this.validityCheck()) {
@@ -179,13 +210,14 @@ class Settings extends Component {
             { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
           );
         } else if (e.response.data.error) {
-          toast(
-            <DailyPloyToast
-              message="Old Password does not match"
-              status="error"
-            />,
-            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-          );
+          this.setState({ oldPasswordError: "Old Password is not correct" });
+          // toast(
+          //   <DailyPloyToast
+          //     message="Old Password does not match"
+          //     status="error"
+          //   />,
+          //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+          // );
         }
       }
     }
@@ -199,7 +231,7 @@ class Settings extends Component {
       this.state.newPassword.match(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
       ) &&
-      this.state.confirmPassword &&
+      this.state.oldPassword &&
       this.state.newPassword === this.state.confirmPassword
     );
   };
@@ -217,7 +249,9 @@ class Settings extends Component {
     };
     errors.nameError = validateName(this.state.userName);
     errors.passwordError = checkPassword(this.state.newPassword);
-    errors.oldPasswordError = validateName(this.state.oldPassword);
+    errors.oldPasswordError = this.state.oldPassword
+      ? ""
+      : "Old Password cannot blank";
     errors.confirmPasswordError = this.validatePassword(
       this.state.newPassword,
       this.state.confirmPassword
@@ -271,6 +305,8 @@ class Settings extends Component {
                       role={localStorage.getItem("userRole")}
                       updateUserName={this.updateUserName}
                       updatePassword={this.updatePassword}
+                      handleConfirmPassChange={this.handleConfirmPassChange}
+                      handlePasswordChange={this.handlePasswordChange}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
