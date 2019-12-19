@@ -760,14 +760,9 @@ class Dashboard extends Component {
       );
       var startDate = new Date(data.start_datetime);
       var endDate = new Date(data.end_datetime);
-<<<<<<< HEAD
-      var startTime = moment(startDate).format("HH:mm:ss");
-      var endTime = moment(endDate).format("HH:mm:ss");
-=======
       var startTime = moment(data.start_datetime).format("HH:mm:ss");
       var endTime = moment(data.end_datetime).format("HH:mm:ss");
       var taskCategorie = data.category;
->>>>>>> feature/taskCategoryIntegration
     } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
