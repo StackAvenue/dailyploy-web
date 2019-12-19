@@ -121,10 +121,7 @@ class ShowProjects extends Component {
       );
       var worksapceUsers = data.members;
       var userArr = data.members.map(user => user.email);
-      var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email
-      );
-      // .map(user => user.email);
+      var emailArr = data.members;
     } catch (e) {
       console.log("users Error", e);
     }
@@ -316,7 +313,11 @@ class ShowProjects extends Component {
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   };
 
-  manageProjectListing = project => {};
+  manageProjectListing = project => {
+    project["owner"] = { name: `${this.state.userName}` };
+    var filterdProjects = [...this.state.projects, ...[project]];
+    this.setState({ projects: filterdProjects });
+  };
 
   manageUpdateProjectListing = project => {
     project["owner"] = { name: `${this.state.userName}` };
@@ -346,7 +347,7 @@ class ShowProjects extends Component {
       );
       this.setState({ show: false });
       this.manageUpdateProjectListing(data.project);
-      this.handleLoad(true);
+      // this.handleLoad(true);
       toast(
         <DailyPloyToast
           message="Project update successfully!"
@@ -355,7 +356,7 @@ class ShowProjects extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
     } catch (e) {
-      console.log("Error", e);
+      console.log("Error", e.response);
       var errors = e.response.data.errors;
       if (errors && errors.project_name_workspace_uniqueness) {
         toast(

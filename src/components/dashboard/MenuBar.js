@@ -92,7 +92,9 @@ export default class MenuBar extends Component {
         name: this.state.projectName,
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
-        members: [...this.state.projectMembers, ...addOwner],
+        members: !this.state.projectMembers.includes(this.props.state.userId)
+          ? [...this.state.projectMembers, ...addOwner]
+          : this.state.projectMembers,
         color_code: this.state.background
       }
     };

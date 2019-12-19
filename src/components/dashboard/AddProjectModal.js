@@ -40,9 +40,10 @@ class AddProjectModal extends Component {
       const { data } = await get(
         `workspaces/${this.props.workspaceId}/members`
       );
-      var membersArr = data.members.filter(
-        user => user.email !== logedInUser.email
-      );
+      // var membersArr = data.members.filter(
+      //   user => user.email !== logedInUser.email
+      // );
+      var membersArr = data.members;
     } catch (e) {
       console.log("users Error", e);
     }
