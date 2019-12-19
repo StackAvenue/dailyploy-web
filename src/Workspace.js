@@ -86,15 +86,12 @@ class Workspace extends Component {
 
   async componentDidMount() {
     //Logged In User
-    var userData = cookie.load("loggedInUser");
-    if (!userData) {
-      try {
-        const { data } = await get("logged_in_user");
-        var userData = data;
-        cookie.save("loggedInUser", data);
-      } catch (e) {
-        console.log("err", e);
-      }
+    try {
+      const { data } = await get("logged_in_user");
+      cookie.save("loggedInUser", data);
+      var userData = data;
+    } catch (e) {
+      console.log("err", e);
     }
 
     var workspaceId = this.props.match.params.workspaceId;
