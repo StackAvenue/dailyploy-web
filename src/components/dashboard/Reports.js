@@ -38,28 +38,6 @@ class Reports extends Component {
         name: "all priority"
       }
     ];
-    this.categories = [
-      {
-        name: "call",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "meeting",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 1",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 2",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 3",
-        color_code: "#9B9B9B"
-      }
-    ];
     this.state = {
       workspaces: [],
       workspaceId: "",
@@ -88,7 +66,8 @@ class Reports extends Component {
       searchProjectIds: [],
       taskDetails: {},
       message: "My Daily Report",
-      frequency: "daily"
+      frequency: "daily",
+      taskCategories: []
     };
   }
 
@@ -319,6 +298,12 @@ class Reports extends Component {
       this.props.handleLoading(false);
     } catch (e) {}
 
+    // Category Listing
+    try {
+      const { data } = await get("task_category");
+      var taskCategories = data.task_categories;
+    } catch (e) {}
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -331,7 +316,8 @@ class Reports extends Component {
       worksapceUser: worksapceUser,
       taskDetails: taskDetails,
       userRole: worksapceUser[0].role,
-      totalTime: totalTime
+      totalTime: totalTime,
+      taskCategories: taskCategories
     });
 
     this.createUserProjectList();
@@ -747,9 +733,8 @@ class Reports extends Component {
                   <div className="d-inline-block report-category">
                     <DailyPloySelect
                       placeholder="search for category"
-                      options={this.categories}
+                      options={this.state.taskCategories}
                       onChange={() => {}}
-                      iconType="circle"
                     />
                   </div>
                   <div className="d-inline-block report-priority">

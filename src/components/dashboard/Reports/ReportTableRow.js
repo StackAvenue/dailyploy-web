@@ -106,7 +106,9 @@ class ReportTableRow extends Component {
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
           <td className="text-titlize">{task.name}</td>
           <td className="text-titlize">{task.project.name}</td>
-          <td className="text-titlize">{"Category 1"}</td>
+          <td className="text-titlize">
+            {task.category ? task.category.name : "---"}
+          </td>
           <td className="text-titlize">{this.showCategory()}</td>
           <td>
             {this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}
