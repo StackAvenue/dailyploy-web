@@ -642,6 +642,13 @@
           color: $color-text3 !important;
           margin-left: 7% !important;
         }
+        .react-datepicker-wrapper {
+          .react-datepicker__input-container input {
+          }
+          ::after {
+            padding: 5px 5px 0px 0px !important;  
+          }
+        }
       }
     }
     .react-datepicker-popper{
@@ -790,7 +797,7 @@
           font-weight: 900 !important;
           content: "\f073" !important;
           color: #555 !important;
-          padding: 5px 5px 0px 0px;
+          padding: 5px 5px 0px 0px; 
           float: right;
         }
       }

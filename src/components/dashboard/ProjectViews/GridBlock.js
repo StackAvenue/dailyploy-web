@@ -1,4 +1,5 @@
 import React from "react";
+import { firstTwoLetter } from "../../../utils/function";
 
 const GridBlock = props => {
   return (
@@ -20,10 +21,7 @@ const GridBlock = props => {
       <div className="col-md-12 no-padding">
         <div className="col-md-2 d-inline-block no-padding">
           <div className="owner-block">
-            {props.project.owner.name
-              .split(" ")
-              .map(x => x[0])
-              .join("")}
+            {firstTwoLetter(props.project.owner.name)}
           </div>
         </div>
         <div className="col-md-8 d-inline-block no-padding">
@@ -31,12 +29,7 @@ const GridBlock = props => {
             {props.project.members.slice(0, 4).map((user, index) => {
               return (
                 <div key={index} className="user-block">
-                  <span>
-                    {user.name
-                      .split(" ")
-                      .map(x => x[0])
-                      .join("")}
-                  </span>
+                  <span>{firstTwoLetter(user.name)}</span>
                 </div>
               );
             })}
@@ -57,7 +50,8 @@ const GridBlock = props => {
       </div>
       <div className="col-md-12 no-padding">
         <div className="col-md-8 d-inline-block date">
-          {props.project.start_date} - {props.project.end_date}
+          {props.project.start_date} -{" "}
+          {props.project.end_date ? props.project.end_date : "undefined"}
         </div>
         <div className="col-md-4 d-inline-block duration">
           {props.monthDiff(

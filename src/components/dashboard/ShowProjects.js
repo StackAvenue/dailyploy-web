@@ -222,14 +222,16 @@ class ShowProjects extends Component {
     var monthDuration = moment(d2).diff(d1, "months");
     var yearDuration = moment(d2).diff(d1, "year");
     let duration;
-    if (dayDuration > 30 && monthDuration < 12) {
+    if (dayDuration < 0 || monthDuration < 0 || yearDuration < 0) {
+      duration = "0 days";
+    } else if (dayDuration > 30 && monthDuration < 12) {
       duration = monthDuration + " months";
     } else if (dayDuration === 0) {
-      duration = "undefined";
+      duration = "1 days";
     } else if (monthDuration > 12) {
       duration = yearDuration + " year";
     } else {
-      duration = dayDuration + " days";
+      duration = dayDuration + 1 + " days";
     }
     return duration;
   };

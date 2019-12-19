@@ -16,6 +16,7 @@ export const firstTwoLetter = name => {
   return name
     ? name
         .split(" ")
+        .slice(0, 2)
         .map(x => x[0])
         .join("")
         .toUpperCase()
