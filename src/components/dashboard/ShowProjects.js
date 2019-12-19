@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Header from "./Header";
 import { get, logout, put } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
 import GridBlock from "./ProjectViews/GridBlock";
-import Sidebar from "./Sidebar";
-import moment from "moment";
 import AddProjectModal from "./AddProjectModal";
+import { firstTwoLetter } from "../../utils/function";
 import DailyPloyToast from "../DailyPloyToast";
+import moment from "moment";
 import { toast } from "react-toastify";
 import cookie from "react-cookies";
+import "react-tabs/style/react-tabs.css";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -440,6 +439,13 @@ class ShowProjects extends Component {
 
   deleteProject = (e, project) => {};
 
+  countProjectView = (e, id) => {
+    this.setState({ showMemberList: true, showMemberProjectId: id });
+  };
+  countMemberViewClose = () => {
+    this.setState({ showMemberList: false });
+  };
+
   render() {
     var userRole = localStorage.getItem("userRole");
 
@@ -621,20 +627,45 @@ class ShowProjects extends Component {
                                       return (
                                         <div key={index} className="user-block">
                                           <span>
-                                            {user.name
-                                              .split(" ")
-                                              .map(x => x[0])
-                                              .join("")}
+                                            {firstTwoLetter(user.name)}
                                           </span>
                                         </div>
                                       );
                                     })}
                                 </span>
-                                <span>
+                                <span
+                                  onMouseMove={e =>
+                                    this.countProjectView(e, project.id)
+                                  }
+                                >
                                   {this.countIncrese(
                                     project.members.map(user => user.name)
                                   )}
                                 </span>
+                                {this.state.showMemberList &&
+                                this.state.showMemberProjectId ===
+                                  project.id ? (
+                                  <div
+                                    className="project-count-list-show"
+                                    style={{ right: "70px" }}
+                                  >
+                                    <div className="close-div">
+                                      <a onClick={this.countMemberViewClose}>
+                                        <i
+                                          className="fa fa-times"
+                                          aria-hidden="true"
+                                        ></i>
+                                      </a>
+                                    </div>
+                                    <div className="project-body-box">
+                                      {project.members.map(member => (
+                                        <div className="project-body-text">
+                                          {member.name}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
                               </td>
                               <td
                                 className={
