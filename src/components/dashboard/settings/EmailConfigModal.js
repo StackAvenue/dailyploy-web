@@ -43,6 +43,14 @@ const EmailConfigModal = props => {
                   </div>
                 </div>
               </div>
+              {props.state.toError ? (
+                <>
+                  <div className="col-md-2 label"></div>
+                  <div className="col-md-10 no-padding d-inline-block">
+                    <span className="error">{props.state.toError}</span>
+                  </div>
+                </>
+              ) : null}
             </div>
             <div className="col-md-12 input-row">
               <div className="col-md-2 label">Cc</div>
@@ -95,10 +103,18 @@ const EmailConfigModal = props => {
               <div className="col-md-10 no-padding d-inline-block">
                 <textarea
                   name="emailText"
-                  value={props.emailText}
+                  value={props.state.emailText}
                   onChange={props.handleEmailText}
                 ></textarea>
               </div>
+              {props.state.emailTextError ? (
+                <>
+                  <div className="col-md-2 label"></div>
+                  <div className="col-md-10 no-padding d-inline-block">
+                    <span className="error">{props.state.emailTextError}</span>
+                  </div>
+                </>
+              ) : null}
             </div>
             <div className="col-md-12 no-padding input-row">
               <div className="col-md-4 ml-auto no-padding">

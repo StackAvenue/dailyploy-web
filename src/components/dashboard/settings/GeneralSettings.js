@@ -3,11 +3,12 @@ import EmailConfigurationModal from "./EmailConfigurationModal";
 import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
 import AddAdminModal from "./AddAdminModal";
 import { firstTwoLetter, textTitlize } from "../../../utils/function";
-import { post } from "../../../utils/API";
+import { post, get, put } from "../../../utils/API";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../../DailyPloyToast";
 import RemoveAdminModal from "./RemoveAdminModal";
 import EmailConfigModal from "./EmailConfigModal";
+import { async } from "q";
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -41,11 +42,19 @@ class GeneralSettings extends Component {
       selectBccMembers: [],
       emailText: "",
       addAdminData: null,
-      adminUserName: ""
+      adminUserName: "",
+      bccMails: [],
+      ccMails: [],
+      toMails: [],
+      isConfig: true,
+      isActive: true,
+      activeStatus: "",
+      toError: "",
+      emailTextError: ""
     };
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = async (prevProps, prevState) => {
     if (
       prevProps.state.userArr !== this.props.state.userArr ||
       prevState.addAdminEmail !== this.state.addAdminEmail
@@ -63,6 +72,81 @@ class GeneralSettings extends Component {
         allUserArr: this.props.state.adminUserArr
       });
     }
+    if (
+      prevProps.workspaceId !== this.props.workspaceId &&
+      this.props.workspaceId != ""
+    ) {
+      try {
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/members`
+        );
+        var members = data.members;
+      } catch (e) {
+        console.log("users Error", e);
+      }
+      this.setState({ members: members });
+
+      try {
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/workspace_settings/show_daily_status_mail`
+        );
+        if (data) {
+          this.setState({
+            toMails: data.to_mails,
+            bccMails: data.bcc_mails,
+            ccMails: data.cc_mails,
+            selectToMembers:
+              data.to_mails.length > 0
+                ? this.filterEmailMember(data.to_mails, members)
+                : [],
+            selectBccMembers:
+              data.bcc_mails.length > 0
+                ? this.filterEmailMember(data.bcc_mails, members)
+                : [],
+            selectCcMembers:
+              data.cc_mails.length > 0
+                ? this.filterEmailMember(data.cc_mails, members)
+                : [],
+            isActive: data.is_active,
+            emailText: data.email_text,
+            isConfig: false,
+            members: members
+          });
+        } else {
+          this.setState({ isConfig: true });
+        }
+      } catch (e) {
+        this.setState({ isConfig: true });
+      }
+    }
+  };
+
+  filterEmailMember = (emails, members) => {
+    var filterMembers = [];
+    emails.map(email => {
+      var filterMember = members.filter(member => member.email === email);
+      if (filterMember.length > 0) {
+        filterMembers.push(...filterMember);
+      }
+    });
+    return [...filterMembers];
+  };
+
+  displayEmails = emails => {
+    return emails.map(email => {
+      var emailName = textTitlize(email.split("@")[0]);
+      var emailInitial = email
+        .split("")
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+      return (
+        <div className="email-box" style={{ marginRight: "5px" }}>
+          <div className="email-icon">{emailInitial}</div>
+          <span className="text-titlize">{emailName}</span>
+        </div>
+      );
+    });
   };
 
   handleRemoveShow = () => {
@@ -106,10 +190,11 @@ class GeneralSettings extends Component {
     });
   };
 
-  handleResumeShow = () => {
+  handleResumeShow = status => {
     this.setState({
       resumeShow: true,
-      resumeSetShow: true
+      resumeSetShow: true,
+      activeStatus: status
     });
   };
 
@@ -174,19 +259,12 @@ class GeneralSettings extends Component {
     const { name, value } = e.target;
     let toEmailSuggestions = [];
     var searchOptions = this.props.state.userArr.members.map(user => user);
-    console.log(
-      "this.props.state.userArr.members",
-      this.props.state.userArr.members,
-      "searchOptions",
-      searchOptions
-    );
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       toEmailSuggestions = searchOptions
         .sort()
         .filter(v => regex.test(v.email));
     }
-    console.log("toEmailSuggestions", toEmailSuggestions);
     this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
   };
 
@@ -384,7 +462,6 @@ class GeneralSettings extends Component {
         .sort()
         .filter(v => regex.test(v.email));
     }
-    console.log("toEmailSuggestions", bccEmailSuggestions);
     this.setState({ [name]: value, bccEmailSuggestions: bccEmailSuggestions });
   };
 
@@ -526,24 +603,89 @@ class GeneralSettings extends Component {
     }
   };
 
-  configEmailStatus = async () => {
-    const configEmailStatusData = {
-      is_active: true,
-      to_mails: this.state.selectToMembers,
-      cc_mails: this.state.selectCcMembers,
-      bcc_mails: this.state.handleSelectBccMembers,
-      email_text: this.state.emailText
+  emailConfigObject = () => {
+    var configEmailStatusData = {
+      is_active: this.state.isActive
     };
-    try {
-      const { data } = await post(
-        configEmailStatusData,
-        `workspaces/${this.props.state.workspaceId}/workspace_settings/daily_status_mail_settings/`
-      );
+    var toMember = this.state.selectToMembers.map(e => e.email);
+    var bccMember = this.state.selectBccMembers.map(e => e.email);
+    var ccMember = this.state.selectCcMembers.map(e => e.email);
 
-      console.log("Data", data);
-    } catch (e) {
-      console.log("error", e);
+    toMember =
+      toMember.length > 0 ? (configEmailStatusData["to_mails"] = toMember) : "";
+    bccMember =
+      bccMember.length > 0
+        ? (configEmailStatusData["bcc_mails"] = bccMember)
+        : "";
+    ccMember =
+      ccMember.length > 0 ? (configEmailStatusData["cc_mails"] = ccMember) : "";
+    var emailText = this.state.emailText
+      ? (configEmailStatusData["email_text"] = this.state.emailText)
+      : "";
+    return configEmailStatusData;
+  };
+
+  checkValidate = () => {
+    var toError = "";
+    var emailTextError = "";
+    if (this.state.selectToMembers.length == 0) {
+      toError = "please select to emails";
     }
+    if (this.state.emailText == "") {
+      emailTextError = "please enter email text";
+    }
+    this.setState({ toError: toError, emailTextError: emailTextError });
+    return this.state.selectToMembers.length > 0 && this.state.emailText !== "";
+  };
+
+  configEmailStatus = async () => {
+    var emailData = this.emailConfigObject();
+    if (this.state.isConfig && this.checkValidate()) {
+      try {
+        const { data } = await post(
+          emailData,
+          `workspaces/${this.props.state.workspaceId}/workspace_settings/daily_status_mail_settings/`
+        );
+        this.setEmailState(data);
+      } catch (e) {
+        console.log("error", e);
+      }
+    } else if (!this.state.isConfig && this.checkValidate()) {
+      try {
+        const { data } = await put(
+          emailData,
+          `workspaces/${this.props.state.workspaceId}/update_daily_status_mail`
+        );
+        this.setEmailState(data);
+      } catch (e) {
+        console.log("error", e);
+      }
+    }
+  };
+
+  setEmailState = data => {
+    this.setState({
+      toMails: data.to_mails,
+      bccMails: data.bcc_mails,
+      ccMails: data.cc_mails,
+      selectToMembers:
+        data.to_mails.length > 0
+          ? this.filterEmailMember(data.to_mails, this.state.members)
+          : [],
+      selectBccMembers:
+        data.bcc_mails.length > 0
+          ? this.filterEmailMember(data.bcc_mails, this.state.members)
+          : [],
+      selectCcMembers:
+        data.cc_mails.length > 0
+          ? this.filterEmailMember(data.cc_mails, this.state.members)
+          : [],
+      isActive: data.is_active,
+      emailText: data.email_text,
+      editShow: false,
+      editSetShow: false,
+      isConfig: false
+    });
   };
 
   handleRemoveAdmin = (value, id, name) => {
@@ -557,6 +699,22 @@ class GeneralSettings extends Component {
   handleEmailText = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  };
+
+  toggleActiveFlag = async flag => {
+    try {
+      const { data } = await put(
+        { is_active: flag },
+        `workspaces/${this.props.state.workspaceId}/update_daily_status_mail/`
+      );
+      this.setState({
+        isActive: flag,
+        resumeShow: false,
+        resumeSetShow: false
+      });
+    } catch (e) {
+      console.log("error", e);
+    }
   };
 
   render() {
@@ -650,7 +808,7 @@ class GeneralSettings extends Component {
               <div className="col-md-6 no-padding d-inline-block">
                 Daily Status Mail
                 <button className="btn btn-link" onClick={this.handleEditShow}>
-                  Edit
+                  {this.state.isConfig ? "configure" : "Edit"}
                 </button>
               </div>
               <EmailConfigModal
@@ -670,15 +828,25 @@ class GeneralSettings extends Component {
               />
               <div className="col-md-6 no-padding d-inline-block">
                 <div className="float-right">
-                  <button
-                    className="btn btn-primary resume-btn"
-                    onClick={this.handleResumeShow}
-                  >
-                    Suspend
-                  </button>
+                  {this.state.isActive ? (
+                    <button
+                      className="btn btn-primary suspend-btn"
+                      onClick={() => this.handleResumeShow("suspend")}
+                    >
+                      Suspend
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary resume-btn"
+                      onClick={() => this.handleResumeShow("resume")}
+                    >
+                      Resume
+                    </button>
+                  )}
                   <EmailConfigurationModal
                     state={this.state}
                     handleClose={this.handleResumeClose}
+                    toggleActiveFlag={this.toggleActiveFlag}
                   />
                 </div>
               </div>
@@ -692,10 +860,9 @@ class GeneralSettings extends Component {
                   To
                 </div>
                 <div className="col-md-9 no-padding d-inline-block">
-                  <div className="email-box">
-                    <div className="email-icon">AJ</div>
-                    <span>Arpit Jain</span>
-                  </div>
+                  {this.state.toMails.length > 0
+                    ? this.displayEmails(this.state.toMails)
+                    : ""}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -703,10 +870,9 @@ class GeneralSettings extends Component {
                   Cc
                 </div>
                 <div className="col-md-9 no-padding d-inline-block">
-                  <div className="email-box">
-                    <div className="email-icon">AJ</div>
-                    <span>Arpit Jain</span>
-                  </div>
+                  {this.state.ccMails.length > 0
+                    ? this.displayEmails(this.state.ccMails)
+                    : ""}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -714,24 +880,14 @@ class GeneralSettings extends Component {
                   Bcc
                 </div>
                 <div className="col-md-9 no-padding d-inline-block">
-                  <div className="email-box">
-                    <div className="email-icon">AJ</div>
-                    <span>Arpit Jain</span>
-                  </div>
+                  {this.state.bccMails.length > 0
+                    ? this.displayEmails(this.state.bccMails)
+                    : ""}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
-                <div className="col-md-1 no-padding time-desc">Email Text</div>
-                <div className="email-format">
-                  <br />
-                  Lorem ipsum is dummy text in typesetting industry. Lorem ipsum
-                  is dummy text in typesetting industry. Lorem ipsum is dummy
-                  text in typesetting industry. Lorem ipsum is dummy text in
-                  typesetting industry. <br />
-                  <br />
-                  Regards,
-                  <br /> Aishwarya Chandan
-                </div>
+                <div className="col-md-2 no-padding time-desc">Email Text</div>
+                <div className="email-format">{this.state.emailText}</div>
               </div>
             </div>
           </div>

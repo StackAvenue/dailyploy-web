@@ -64,8 +64,8 @@ class WorkspaceSettings extends Component {
       console.log("error", e);
     }
   };
+
   render() {
-    // console.log("UserArr", this.state.userArr);
     return (
       <div className="workspace-settings">
         <Tabs>
@@ -80,6 +80,8 @@ class WorkspaceSettings extends Component {
             <GeneralSettings
               worskpaceNameHandler={this.worskpaceNameHandler}
               state={this.state}
+              workspaceId={this.props.state.workspaceId}
+              members={this.state.userArr}
               updateWorkspaceName={this.updateWorkspaceName}
               adminUserArr={this.props.state.adminUserArr}
               handleChangeAdminUsers={this.handleChangeAdminUsers}

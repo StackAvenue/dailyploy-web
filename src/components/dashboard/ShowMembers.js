@@ -357,7 +357,7 @@ class ShowMembers extends Component {
 
   render() {
     var userRole = localStorage.getItem("userRole");
-    var isShowMember = this.state.members.length > 1;
+    var isShowMember = this.state.members.length > 0;
     return (
       <>
         <MenuBar
