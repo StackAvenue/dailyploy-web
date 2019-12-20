@@ -88,7 +88,7 @@ class WorkspaceSettings extends Component {
             />
           </TabPanel>
           <TabPanel>
-            <CategoriesSettings />
+            <CategoriesSettings workspaceId={this.props.state.workspaceId} />
           </TabPanel>
           <TabPanel>
             <EmployeeReportsSettings />

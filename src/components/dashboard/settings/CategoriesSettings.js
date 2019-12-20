@@ -53,7 +53,7 @@ class CategoriesSettings extends Component {
       try {
         const { data } = await post(
           { name: this.state.categoryName },
-          "task_category"
+          `workspaces/${this.props.workspaceId}/task_category`
         );
         var taskCategory = data;
         toast(<DailyPloyToast message="Category Added" status="success" />, {
@@ -122,6 +122,7 @@ class CategoriesSettings extends Component {
   };
 
   render() {
+    console.log("this.props", this.props);
     return (
       <div className="categories-setting">
         <div className="row no-margin category">
