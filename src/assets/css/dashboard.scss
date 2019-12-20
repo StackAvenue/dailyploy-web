@@ -2182,6 +2182,7 @@ table.scheduler-table tr:last-child td {
       border: solid 1px $color-borders;
       background-color: #ffffff;
       padding: 21px 33px 30px 33px;
+      width: 876px;
       .workdays-text{
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
@@ -2495,12 +2496,14 @@ table.scheduler-table tr:last-child td {
             color: $color-heading3 !important;
             padding-top: 1px;
             padding-left: 1px;
+            text-align: center;
           }
         }
         .email-format {
           font-family: $font-family-roboto !important;
           font-size: 14px !important;
           color: $color-heading3 !important;
+          padding-top: 10px !important;
         }
       }
       .access-box{

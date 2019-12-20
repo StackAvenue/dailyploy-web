@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import EmailConfigurationModal from "./EmailConfigurationModal";
 import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
 import AddAdminModal from "./AddAdminModal";
-import { firstTwoLetter } from "../../../utils/function";
-import { post } from "../../../utils/API";
+import { firstTwoLetter, textTitlize } from "../../../utils/function";
+import { post, get } from "../../../utils/API";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../../DailyPloyToast";
 import RemoveAdminModal from "./RemoveAdminModal";
@@ -39,11 +39,15 @@ class GeneralSettings extends Component {
       bccEmailSuggestions: [],
       selectBccMembers: [],
       emailText: "",
-      addAdminData: null
+      addAdminData: null,
+      bccMails: [],
+      ccMails: [],
+      toMails: [],
+      isConfig: true
     };
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = async (prevProps, prevState) => {
     if (
       prevProps.state.userArr !== this.props.state.userArr ||
       prevState.addAdminEmail !== this.state.addAdminEmail
@@ -57,6 +61,76 @@ class GeneralSettings extends Component {
         allUserArr: this.props.state.adminUserArr
       });
     }
+    if (
+      prevProps.workspaceId !== this.props.workspaceId &&
+      this.props.workspaceId != ""
+    ) {
+      try {
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/members`
+        );
+        var members = data.members;
+      } catch (e) {
+        console.log("users Error", e);
+      }
+      this.setState({ members: members });
+
+      try {
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/workspace_settings/show_daily_status_mail`
+        );
+        if (data) {
+          this.setState({
+            toMails: data.to_mails,
+            bccMails: data.bcc_mails.bcc_mails,
+            ccMails: data.cc_mails.cc_mails,
+            selectToMembers: this.filterEmailMember(data.to_mails, members),
+            selectBccMembers: this.filterEmailMember(
+              data.bcc_mails.bcc_mails,
+              members
+            ),
+            selectCcMembers: this.filterEmailMember(
+              data.cc_mails.cc_mails,
+              members
+            ),
+            isActive: data.is_active,
+            emailText: data.email_description,
+            isConfig: false,
+            members: members
+          });
+        } else {
+          this.setState({ isConfig: true });
+        }
+      } catch (e) {}
+    }
+  };
+
+  filterEmailMember = (emails, members) => {
+    var filterMembers = [];
+    emails.map(email => {
+      var filterMember = members.filter(member => member.email === email);
+      if (filterMember.length > 0) {
+        filterMembers.push(...filterMember);
+      }
+    });
+    return [...filterMembers];
+  };
+
+  displayEmails = emails => {
+    return emails.map(email => {
+      var emailName = textTitlize(email.split("@")[0]);
+      var emailInitial = email
+        .split("")
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+      return (
+        <div className="email-box" style={{ marginRight: "5px" }}>
+          <div className="email-icon">{emailInitial}</div>
+          <span className="text-titlize">{emailName}</span>
+        </div>
+      );
+    });
   };
 
   handleRemoveShow = () => {
@@ -167,19 +241,12 @@ class GeneralSettings extends Component {
     const { name, value } = e.target;
     let toEmailSuggestions = [];
     var searchOptions = this.props.state.userArr.members.map(user => user);
-    console.log(
-      "this.props.state.userArr.members",
-      this.props.state.userArr.members,
-      "searchOptions",
-      searchOptions
-    );
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       toEmailSuggestions = searchOptions
         .sort()
         .filter(v => regex.test(v.email));
     }
-    console.log("toEmailSuggestions", toEmailSuggestions);
     this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
   };
 
@@ -377,7 +444,6 @@ class GeneralSettings extends Component {
         .sort()
         .filter(v => regex.test(v.email));
     }
-    console.log("toEmailSuggestions", bccEmailSuggestions);
     this.setState({ [name]: value, bccEmailSuggestions: bccEmailSuggestions });
   };
 
@@ -511,9 +577,9 @@ class GeneralSettings extends Component {
   configEmailStatus = async () => {
     const configEmailStatusData = {
       is_active: true,
-      to_mails: this.state.selectToMembers,
-      cc_mails: this.state.selectCcMembers,
-      bcc_mails: this.state.handleSelectBccMembers,
+      to_mails: this.state.selectToMembers.map(e => e.email),
+      cc_mails: this.state.selectCcMembers.map(e => e.email),
+      bcc_mails: this.state.selectBccMembers.map(e => e.email),
       email_text: this.state.emailText
     };
     try {
@@ -521,7 +587,6 @@ class GeneralSettings extends Component {
         configEmailStatusData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/daily_status_mail_settings/`
       );
-
       console.log("Data", data);
     } catch (e) {
       console.log("error", e);
@@ -622,7 +687,7 @@ class GeneralSettings extends Component {
               <div className="col-md-6 no-padding d-inline-block">
                 Daily Status Mail
                 <button className="btn btn-link" onClick={this.handleEditShow}>
-                  Edit
+                  {this.isConfig ? "configure" : "Edit"}
                 </button>
               </div>
               <EmailConfigModal
@@ -664,10 +729,9 @@ class GeneralSettings extends Component {
                   To
                 </div>
                 <div className="col-md-9 no-padding d-inline-block">
-                  <div className="email-box">
-                    <div className="email-icon">AJ</div>
-                    <span>Arpit Jain</span>
-                  </div>
+                  {this.state.toMails.length > 0
+                    ? this.displayEmails(this.state.toMails)
+                    : ""}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -675,10 +739,9 @@ class GeneralSettings extends Component {
                   Cc
                 </div>
                 <div className="col-md-9 no-padding d-inline-block">
-                  <div className="email-box">
-                    <div className="email-icon">AJ</div>
-                    <span>Arpit Jain</span>
-                  </div>
+                  {this.state.ccMails.length > 0
+                    ? this.displayEmails(this.state.ccMails)
+                    : ""}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -686,24 +749,14 @@ class GeneralSettings extends Component {
                   Bcc
                 </div>
                 <div className="col-md-9 no-padding d-inline-block">
-                  <div className="email-box">
-                    <div className="email-icon">AJ</div>
-                    <span>Arpit Jain</span>
-                  </div>
+                  {this.state.bccMails.length > 0
+                    ? this.displayEmails(this.state.bccMails)
+                    : ""}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
-                <div className="col-md-1 no-padding time-desc">Email Text</div>
-                <div className="email-format">
-                  <br />
-                  Lorem ipsum is dummy text in typesetting industry. Lorem ipsum
-                  is dummy text in typesetting industry. Lorem ipsum is dummy
-                  text in typesetting industry. Lorem ipsum is dummy text in
-                  typesetting industry. <br />
-                  <br />
-                  Regards,
-                  <br /> Aishwarya Chandan
-                </div>
+                <div className="col-md-2 no-padding time-desc">Email Text</div>
+                <div className="email-format">{this.state.emailText}</div>
               </div>
             </div>
           </div>

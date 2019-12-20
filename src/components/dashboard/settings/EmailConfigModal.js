@@ -95,7 +95,7 @@ const EmailConfigModal = props => {
               <div className="col-md-10 no-padding d-inline-block">
                 <textarea
                   name="emailText"
-                  value={props.emailText}
+                  value={props.state.emailText}
                   onChange={props.handleEmailText}
                 ></textarea>
               </div>
