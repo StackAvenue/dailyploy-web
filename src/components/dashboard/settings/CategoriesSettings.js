@@ -240,14 +240,13 @@ class CategoriesSettings extends Component {
                               </span>
                             </button>
                           </div>
-                        ) : (
-                          <button
-                            className="btn btn-link"
-                            onClick={() => this.handleEditCatogries(category)}
-                          >
-                            <i className="fas fa-pencil-alt"></i>
-                          </button>
-                        )}
+                        ) : // <button
+                        //   className="btn btn-link"
+                        //   onClick={() => this.handleEditCatogries(category)}
+                        // >
+                        //   <i className="fas fa-pencil-alt"></i>
+                        // </button>
+                        null}
                       </td>
                     </tr>
                   );

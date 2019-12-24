@@ -79,7 +79,9 @@ class DailyPloySelect extends Component {
               : this.state.suggestions.map((option, idx) => {
                   return (
                     <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                      {icon !== "" ? <i className={` ${icon}`}></i> : null}
+                      {icon !== "" ? (
+                        <i className={`left-padding-20px ${icon}`}></i>
+                      ) : null}
                       <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
                     </li>
                   );

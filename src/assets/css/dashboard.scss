@@ -3789,15 +3789,15 @@ table.scheduler-table tr:last-child td {
   width: 20px;
   height: 20px;
   margin-left: 20px;
-  margin-right: 20px;
-  vertical-align: sub;
+  margin-right: 10px;
+  vertical-align: top;
   border: solid 1px#9b9b9b;
 }
 .color-dot {
   width: 15px;
   height: 15px;
   margin-left: 20px;
-  margin-right: 20px;
+  margin-right: 10px;
   vertical-align: sub;
   border-radius: 20px;
   border: solid 1px#9b9b9b;
@@ -3827,7 +3827,7 @@ table.scheduler-table tr:last-child td {
     padding: 0;
   }
   li {
-    padding: 10px 5px;
+    padding: 10px 0px;
     border-bottom: 1px solid rgba(209, 209, 209, 1);
   }
   .suggestions {

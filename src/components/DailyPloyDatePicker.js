@@ -33,9 +33,9 @@ class DailyPloyDatePicker extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.pickerType != this.props.pickerType) {
       if (this.props.pickerType == "0") {
-        this.handleDateFrom(this.state.dateFrom);
+        this.handleDateFrom(new Date());
       } else if (this.props.pickerType == "1") {
-        this.handleWeekDayChange(this.state.dateFrom);
+        this.handleWeekDayChange(new Date());
       }
     }
   };
