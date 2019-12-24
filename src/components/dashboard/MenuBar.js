@@ -3,6 +3,7 @@ import "../../assets/css/dashboard.scss";
 import { Dropdown } from "react-bootstrap";
 import Add from "../../assets/images/add.svg";
 import { get, post, mockPost } from "../../utils/API";
+import { validateEmail } from "../../utils/validation";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
@@ -66,7 +67,13 @@ export default class MenuBar extends Component {
       suggestions: [],
       projectsListing: [],
       userRole: null,
-      selectedTags: []
+      selectedTags: [],
+      btnEnable: true,
+      error: "",
+      memberWorkingHoursError: "",
+      memberRoleError: "",
+      memberEmailError: "",
+      memberNameError: ""
     };
   }
 
@@ -115,26 +122,26 @@ export default class MenuBar extends Component {
       );
     } catch (e) {
       console.log("error", e);
-      // var errors = e.response.data.errors;
-      // if (errors && errors.project_name_workspace_uniqueness) {
-      //   toast(
-      //     <DailyPloyToast
-      //       message={`Project Name ${errors.project_name_workspace_uniqueness}`}
-      //       status="error"
-      //     />,
-      //     { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
-      //   );
-      // } else if (errors && errors.name) {
-      //   toast(
-      //     <DailyPloyToast
-      //       message={`Project name ${errors.name}`}
-      //       status="error"
-      //     />,
-      //     { autoClose: 2000, position: toast.POSITION.TOP_CENTER },
-      //   );
-      // } else {
-      //   this.setState({ show: false });
-      // }
+      var errors = e.response.data.errors;
+      if (errors && errors.project_name_workspace_uniqueness) {
+        toast(
+          <DailyPloyToast
+            message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      } else if (errors && errors.name) {
+        toast(
+          <DailyPloyToast
+            message={`Project name ${errors.name}`}
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      } else {
+        this.setState({ show: false });
+      }
     }
   };
 
@@ -153,7 +160,7 @@ export default class MenuBar extends Component {
       memberData.invitation["project_id"] = this.state.memberProject;
     }
     try {
-      this.setState({ isLoading: true });
+      this.setState({ isLoading: true, btnEnable: false });
       const { data } = await post(memberData, "invitations");
       toast(
         <DailyPloyToast
@@ -163,10 +170,34 @@ export default class MenuBar extends Component {
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.clearAddMemberModaldata();
-      this.setState({ memberShow: false, isLoading: false });
+      this.setState({ memberShow: false, isLoading: false, error: "" });
       // this.props.handleLoad(true);
     } catch (e) {
-      this.setState({ memberShow: false });
+      if (e.response.data && e.response.status === 404) {
+        // toast(
+        //   <DailyPloyToast message={`${e.response.data}`} status="error" />,
+        //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        // );
+        this.setState({ isLoading: false, error: e.response.data });
+      } else if (
+        e.response.data &&
+        e.response.data.user_already_exists &&
+        e.response.status === 402
+      ) {
+        // toast(
+        //   <DailyPloyToast
+        //     message="User already exists in workspace."
+        //     status="error"
+        //   />,
+        //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        // );
+        this.setState({
+          isLoading: false,
+          error: "User already exists in workspace."
+        });
+      } else {
+        this.setState({ isLoading: false, error: "" });
+      }
     }
   };
 
@@ -195,18 +226,62 @@ export default class MenuBar extends Component {
 
   handleChangeMemberInput = e => {
     const { name, value } = e.target;
-    let suggestions = [];
-    var searchOptions = this.props.state.isLogedInUserEmailArr.map(
-      user => user.name
-    );
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      suggestions = searchOptions.sort().filter(v => regex.test(v));
+    if (name === "memberName") {
+      let suggestions = [];
+      var searchOptions = this.props.state.isLogedInUserEmailArr.map(
+        user => user.name
+      );
+      if (value.length > 0) {
+        const regex = new RegExp(`^${value}`, "i");
+        suggestions = searchOptions.sort().filter(v => regex.test(v));
+        this.setState({
+          [name]: value,
+          suggestions: suggestions,
+          btnEnable: true,
+          error: "",
+          [`${name}Error`]: ""
+        });
+      } else {
+        this.setState({
+          [name]: value,
+          suggestions: suggestions,
+          btnEnable: true,
+          [`${name}Error`]: "please select"
+        });
+      }
+    } else if (name === "memberEmail") {
+      let suggestions = [];
+      var searchOptions = this.props.state.isLogedInUserEmailArr.map(
+        user => user.name
+      );
+      if (value.length > 0) {
+        const regex = new RegExp(`^${value}`, "i");
+        suggestions = searchOptions.sort().filter(v => regex.test(v));
+        var error = validateEmail(value);
+        this.setState({
+          [name]: value,
+          suggestions: suggestions,
+          btnEnable: true,
+          error: "",
+          [`${name}Error`]: error,
+          btnEnable: error ? false : true
+        });
+      } else {
+        this.setState({
+          [name]: value,
+          suggestions: suggestions,
+          btnEnable: true,
+          [`${name}Error`]: "please select"
+        });
+      }
+    } else {
+      console.log("else", name, value, value != "");
+      this.setState({
+        [name]: value,
+        btnEnable: true,
+        [`${name}Error`]: value != "" ? "" : "please select"
+      });
     }
-    this.setState({
-      [name]: value,
-      suggestions: suggestions
-    });
   };
 
   handleChangeProjectSelect = value => {
@@ -228,7 +303,8 @@ export default class MenuBar extends Component {
       memberRole: memberRole,
       memberWorkingHours: filterArr[0].working_hours,
       projectsListing: memberProjects,
-      suggestions: []
+      suggestions: [],
+      memberEmailError: ""
     });
   };
 

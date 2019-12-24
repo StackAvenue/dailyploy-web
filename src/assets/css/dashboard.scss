@@ -872,7 +872,7 @@
         select {
           height: 40px !important;
           border-radius: 5px !important;
-          border: 1px solid $color-borders;
+          border: 1px solid $color-borders !important;
           font-size: 15px !important;
           font-family: $font-family-roboto !important;
           color: $color-text3 !important;
@@ -1468,7 +1468,7 @@ table.scheduler-table tr:last-child td {
       }
       select {
         border-radius: 5px !important;
-        border: solid 1px $color-borders !important;
+        border: solid 1px $color-borders;
         font-size: 15px !important;
         font-family: $font-family-roboto !important;
         color: $color-text2 !important;
@@ -1500,6 +1500,35 @@ table.scheduler-table tr:last-child td {
       margin-left: 7% !important;
     }
   }
+  .auto-search {
+    position: absolute;
+    top: 144px;
+    width: 170px;
+    border: solid 1px;
+    border-color: $color-white;
+    height: auto;
+    z-index: 1;
+    background-color: #fff;
+    border-radius: 5px;
+    ul {
+      list-style: none;
+      padding-left: 0px;
+      text-align: left;
+      margin-bottom: 0px;
+      li {
+        padding: 5px 0px 0px 10px;
+        font-family: $font-family-roboto !important;
+        color: $color-text2;
+        height: 34px;
+        font-size: 15px !important;
+        font-family: $font-family-roboto !important;
+        color: $color-text2 !important;
+      }
+      li:hover {
+        cursor: pointer;
+      }
+    }
+  } 
 }
 
 .show-projects {
@@ -3819,6 +3848,7 @@ table.scheduler-table tr:last-child td {
     font-size: 14px;
     color: #33a1ff;
     padding: 10px 5px;
+    border-radius: 5px;
   }
   ul {
     list-style-type: none;
