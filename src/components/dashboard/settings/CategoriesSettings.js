@@ -122,15 +122,16 @@ class CategoriesSettings extends Component {
   };
 
   render() {
-    console.log("this.props", this.props);
     return (
       <div className="categories-setting">
         <div className="row no-margin category">
-          <div className="col-md-2 heading-text">Categories</div>
-          <div className="col-md-1 sub">
-            ({this.state.taskCategories.length})
+          <div className="d-inline-block col-md-4 heading-text">
+            Task Categories
+            <span className="d-inline-block category-cnt">
+              ({this.state.taskCategories.length})
+            </span>
           </div>
-          <div className="col-md-9 text-right">
+          <div className="col-md-8 text-right">
             <button
               className="btn btn-primary btn-add"
               onClick={this.toggleAddCategoryRow}

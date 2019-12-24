@@ -73,7 +73,7 @@ class WorkspaceSettings extends Component {
             <Tab>General</Tab>
             <Tab>Categories</Tab>
             <Tab>Employee Reports</Tab>
-            <Tab>Project Reports</Tab>
+            {/* <Tab>Project Reports</Tab> */}
           </TabList>
 
           <TabPanel>
@@ -93,9 +93,9 @@ class WorkspaceSettings extends Component {
           <TabPanel>
             <EmployeeReportsSettings />
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <ProjectReportsSettings />
-          </TabPanel>
+          </TabPanel> */}
         </Tabs>
       </div>
     );

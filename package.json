@@ -15,7 +15,7 @@
     "interactjs": "^1.4.12",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.0",
     "randomcolor": "^0.5.4",
     "rc-time-picker": "^3.7.1",
     "react": "^16.12.0",

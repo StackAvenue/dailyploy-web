@@ -2241,6 +2241,10 @@ table.scheduler-table tr:last-child td {
   .categories-setting{
     padding: 50px 60px 0px 60px;
     .category{
+      .category-cnt{
+        padding-left: 20px;
+        color: $color-text3 !important;
+      }
       .heading-text{
         font-family: $font-family-roboto !important;
         font-size: 20px !important;
@@ -2619,8 +2623,11 @@ table.scheduler-table tr:last-child td {
           padding-right: 20px !important;
           padding-left: 20px !important;
         }
+        .save-conf-btn{
+          padding-top: 30px;
+        }
         .input {
-          height: 40px !important;
+          height: 34px !important;
           border-radius: 5px !important;
           border: solid 1px $color-borders;
           background-color: $color-white !important;
@@ -2632,7 +2639,7 @@ table.scheduler-table tr:last-child td {
         }
       }
       .box-btn {
-        padding: 50px 0px 0px 15px !important;
+        padding: 10px 0px 0px 15px !important;
         button {
           height: 40px !important;
           width: auto !important;

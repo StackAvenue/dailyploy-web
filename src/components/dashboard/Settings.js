@@ -167,6 +167,9 @@ class Settings extends Component {
       };
       try {
         const { data } = await put(userData, `users/${this.state.userId}`);
+        if (data) {
+          this.setState({ isSaveEnable: false });
+        }
         toast(<DailyPloyToast message="User Name Updated" status="success" />, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
@@ -196,6 +199,9 @@ class Settings extends Component {
       };
       try {
         const { data } = await put(userData, `users/${this.state.userId}`);
+        if (data) {
+          this.setState({ isSaveConfirmEnable: false });
+        }
         toast(
           <DailyPloyToast message="User Setting Updated" status="success" />,
           {

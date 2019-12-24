@@ -164,7 +164,7 @@ const UserSettings = props => {
         ) : null}
         <div className="col-md-12 inner-box box-btn">
           <div className="col-md-2 d-inline-block no-padding name"></div>
-          <div className="col-md-5 d-inline-block">
+          <div className="col-md-5 d-inline-block save-conf-btn">
             <button
               className={`btn btn-default button ${
                 props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
