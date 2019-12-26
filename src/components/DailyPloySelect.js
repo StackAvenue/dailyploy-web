@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import onClickOutside from "react-onclickoutside";
 
 class DailyPloySelect extends Component {
   constructor(props) {
@@ -153,6 +154,10 @@ class DailyPloySelect extends Component {
     }
   };
 
+  handleClickOutside = () => {
+    this.setState({ show: false });
+  };
+
   render() {
     const { props } = this;
     return (
@@ -198,7 +203,7 @@ class DailyPloySelect extends Component {
   }
 }
 
-export default DailyPloySelect;
+export default onClickOutside(DailyPloySelect);
 
 {
   /* <DailyPloySelect
