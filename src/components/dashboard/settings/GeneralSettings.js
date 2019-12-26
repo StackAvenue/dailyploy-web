@@ -735,9 +735,13 @@ class GeneralSettings extends Component {
                 onChange={this.props.worskpaceNameHandler}
               />
             </div>
-            <div className="d-inline-block">
+            <div className="d-inline-block box-btn">
               <button
-                className="btn btn-primary save-button"
+                className={`btn btn-primary save-button ${
+                  this.props.state.isSaveWorkspaceName
+                    ? "btn-blue"
+                    : "btn-disable"
+                }`}
                 onClick={this.props.updateWorkspaceName}
               >
                 Save

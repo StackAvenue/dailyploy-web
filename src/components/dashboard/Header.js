@@ -9,6 +9,7 @@ import setting from "../../assets/images/setting.png";
 import invite from "../../assets/images/invite.png";
 import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
+import { firstTwoLetter } from "../../utils/function";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
@@ -221,13 +222,8 @@ class Header extends Component {
   };
 
   render() {
-    const WORKSPACE_NAME = cookie.load("workspaceName");
     const { value } = this.state;
-    const x = this.state.userName
-      .split(" ")
-      .splice(0, 2)
-      .map(x => x[0])
-      .join("");
+    const x = firstTwoLetter(this.props.loggedInUserName);
     return (
       <>
         <div className="container-fluid dashbaord-header-bg no-padding">
@@ -252,12 +248,12 @@ class Header extends Component {
               </a>
               <div className="header-ws-name">
                 <span className="bar">|</span>
-                {WORKSPACE_NAME ? (
+                {this.props.workspaceName ? (
                   <span
                     className="text-titlize"
-                    title={this.textTitlize(WORKSPACE_NAME)}
+                    title={this.textTitlize(this.props.workspaceName)}
                   >
-                    {WORKSPACE_NAME}
+                    {this.props.workspaceName}
                   </span>
                 ) : null}
               </div>
@@ -378,7 +374,7 @@ class Header extends Component {
                       } `}
                       id="dropdown-basic"
                     >
-                      {x.toUpperCase()}
+                      {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
@@ -389,11 +385,12 @@ class Header extends Component {
                               : "member-circle"
                           } `}
                         >
-                          {x.toUpperCase()}
+                          {x}
                         </div>
                         <div className="workspace-name d-inline-block">
                           <span className="text-titlize big">
-                            {this.state.userName}
+                            {/* {this.state.userName} */}
+                            {this.props.loggedInUserName}
                           </span>
                           <br />
                           <span>{this.state.userEmail}</span>
@@ -433,7 +430,8 @@ class Header extends Component {
                       </Dropdown.Item>
                       <div className="col-md-12 logout-user">
                         <span className="text-titlize">
-                          Not {this.state.userName} ?{" "}
+                          {/* Not {this.state.userName} ?{" "} */}
+                          Not {this.props.loggedInUserName} ?{" "}
                           <button
                             className="btn btn-link"
                             onClick={this.props.logout}

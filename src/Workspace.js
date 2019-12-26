@@ -80,7 +80,9 @@ class Workspace extends Component {
       runningTime: 0,
       isStart: false,
       onGoingTask: false,
-      isLoading: false
+      isLoading: false,
+      workspaceName: "",
+      loggedInUserName: ""
     };
   }
 
@@ -125,7 +127,12 @@ class Workspace extends Component {
       colorCode: colorCode,
       taskTitle: taskTitle,
       workspaceId: workspaceId,
-      isStart: taskTitle && startOn && taskId && colorCode
+      isStart: taskTitle && startOn && taskId && colorCode,
+      workspaceName:
+        workspace.length > 0 && workspace[0]
+          ? workspaceNameSplit(workspace[0].name)
+          : "",
+      loggedInUserName: userData.name
     });
   }
 
@@ -165,6 +172,10 @@ class Workspace extends Component {
     return route.split("/")[3];
   };
 
+  workspaceNameUpdate = (name, value) => {
+    this.setState({ [name]: value });
+  };
+
   isAllowed = (props, RouteComponent, title) => {
     var props1 = {
       setSearchOptions: this.setSearchOptions,
@@ -173,6 +184,7 @@ class Workspace extends Component {
       searchUserDetails: this.state.searchUserDetails,
       handleTaskBottomPopup: this.handleTaskBottomPopup,
       handleLoading: this.handleLoad,
+      workspaceNameUpdate: this.workspaceNameUpdate,
       state: this.state
     };
     var newProps = { ...props, ...props1 };
@@ -236,6 +248,7 @@ class Workspace extends Component {
           <Sidebar
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
+            workspaceName={this.state.workspaceName}
           />
           <div className="dashboard-main no-padding">
             <Header
@@ -245,6 +258,8 @@ class Workspace extends Component {
               userData={this.state.loggedInUserInfo}
               searchOptions={this.state.searchOptions}
               pathname={this.classNameRoute()}
+              workspaceName={this.state.workspaceName}
+              loggedInUserName={this.state.loggedInUserName}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
             {this.state.isLoading ? (

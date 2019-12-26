@@ -6,7 +6,10 @@ import GeneralSettings from "./GeneralSettings";
 import CategoriesSettings from "./CategoriesSettings";
 import EmployeeReportsSettings from "./EmployeeReportsSettings";
 import ProjectReportsSettings from "./ProjectReportsSettings";
+import { toast } from "react-toastify";
+import DailyPloyToast from "../../DailyPloyToast";
 import { put } from "../../../utils/API";
+import cookie from "react-cookies";
 
 class WorkspaceSettings extends Component {
   constructor(props) {
@@ -15,7 +18,8 @@ class WorkspaceSettings extends Component {
       workspaceName: "",
       adminUserArr: [],
       workspaceId: "",
-      userArr: []
+      userArr: [],
+      isSaveWorkspaceName: false
     };
   }
 
@@ -45,7 +49,10 @@ class WorkspaceSettings extends Component {
 
   worskpaceNameHandler = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    this.setState({
+      [name]: value,
+      isSaveWorkspaceName: value ? true : false
+    });
   };
 
   updateWorkspaceName = async () => {
@@ -59,7 +66,16 @@ class WorkspaceSettings extends Component {
         updateWorkspaceName,
         `workspaces/${this.props.workspaceObj.id}/workspace_settings/${this.props.workspaceObj.id}`
       );
-      console.log("Data", data);
+      cookie.save("workspaceName", data.workspace_role, { path: "/" });
+      toast(
+        <DailyPloyToast message="Workspace Name Updated" status="success" />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        }
+      );
+      this.setState({ isSaveWorkspaceName: false });
+      this.props.workspaceNameUpdate("workspaceName", data.workspace_role);
     } catch (e) {
       console.log("error", e);
     }
@@ -80,6 +96,7 @@ class WorkspaceSettings extends Component {
             <GeneralSettings
               worskpaceNameHandler={this.worskpaceNameHandler}
               state={this.state}
+              workspaceName={this.props.workspaceName}
               workspaceId={this.props.state.workspaceId}
               members={this.state.userArr}
               updateWorkspaceName={this.updateWorkspaceName}

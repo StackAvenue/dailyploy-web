@@ -510,7 +510,7 @@
   color: grey !important;
   text-align: center !important;
   font-size: 15px !important;
-  padding-left: 10px !important;
+  padding: 5px 8px 5px 8px !important;
 }
 .admin-circle {
   border: solid 2px $color-alert !important;
@@ -2131,6 +2131,33 @@ table.scheduler-table tr:last-child td {
         &:disabled{
           background-color: $color-borders !important;
           cursor: not-allowed;
+        }
+      }
+      .box-btn {
+        padding: 10px 0px 0px 15px !important;
+        button {
+          height: 40px !important;
+          width: auto !important;
+          border-radius: 5px !important;
+          border: solid 1px $color-borders !important;
+          background-color: $color-white !important;
+          font-family: $font-family-roboto !important;
+          font-size: 17px !important;
+          color: $color-text3 !important;
+          white-space: nowrap !important;
+          padding-right: 20px !important;
+          padding-left: 20px !important;
+        }
+        .btn-blue:hover {
+          background-color: $color-brand4 !important;
+          color: $color-white !important;
+        }
+        .btn-blue{
+          background-color: $color-brand3 !important;
+          color: $color-white !important;
+        }
+        .btn-disable{
+          pointer-events: none;
         }
       }
     }

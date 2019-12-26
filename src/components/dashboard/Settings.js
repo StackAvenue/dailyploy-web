@@ -169,6 +169,10 @@ class Settings extends Component {
         const { data } = await put(userData, `users/${this.state.userId}`);
         if (data) {
           this.setState({ isSaveEnable: false });
+          this.props.workspaceNameUpdate(
+            "loggedInUserName",
+            data.user ? data.user.name : this.props.state.loggedInUserName
+          );
         }
         toast(<DailyPloyToast message="User Name Updated" status="success" />, {
           autoClose: 2000,
@@ -319,6 +323,8 @@ class Settings extends Component {
                     <WorkspaceSettings
                       workspaceObj={filterArr[0]}
                       state={this.state}
+                      workspaceName={this.props.state.workspaceName}
+                      workspaceNameUpdate={this.props.workspaceNameUpdate}
                     />
                   </Tab.Pane>
                   {/* <Tab.Pane eventKey="third">Prefrences</Tab.Pane> */}
