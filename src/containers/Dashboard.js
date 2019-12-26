@@ -213,7 +213,6 @@ class Dashboard extends Component {
   }
 
   async componentDidMount() {
-    this.props.handleLoading(true);
     // Logged In User Info
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -234,14 +233,11 @@ class Dashboard extends Component {
     }
 
     //get workspace Id
-    this.getWorkspaceParams();
-    this.auth();
+    var workspaceId = this.props.match.params.workspaceId;
 
     // worksapce project Listing
     try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
-      );
+      const { data } = await get(`workspaces/${workspaceId}/projects`);
       var projectsData = data.projects;
     } catch (e) {
       console.log("err", e);
@@ -249,16 +245,14 @@ class Dashboard extends Component {
     // role api
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members/${loggedInData.id}`
+        `workspaces/${workspaceId}/members/${loggedInData.id}`
       );
       var user = data;
     } catch (e) {}
 
     // workspace Member Listing
     try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
-      );
+      const { data } = await get(`workspaces/${workspaceId}/members`);
       var worksapceUsers = data.members;
       var userArr = data.members.map(user => user);
       var emailArr = data.members.filter(
@@ -273,6 +267,7 @@ class Dashboard extends Component {
       const { data } = await get("task_category");
       var taskCategories = data.task_categories;
     } catch (e) {}
+    this.props.handleLoading(true);
 
     // workspace Tasks Listing
     try {
@@ -285,7 +280,7 @@ class Dashboard extends Component {
         project_ids: JSON.stringify(this.props.searchProjectIds)
       };
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
+        `workspaces/${workspaceId}/user_tasks?frequency=${
           this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`
       );
@@ -324,6 +319,7 @@ class Dashboard extends Component {
       });
       var tasksResources = tasksUser.map(user => user.usersObj);
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+      this.props.handleLoading(false);
     } catch (e) {
       console.log("error", e);
     }
@@ -342,10 +338,11 @@ class Dashboard extends Component {
       selectedMembers: [loggedInData],
       taskUser: [loggedInData.id],
       worksapceUsers: worksapceUsers,
-      taskCategories: taskCategories
+      taskCategories: taskCategories,
+      workspaceId: workspaceId
     });
     this.createUserProjectList();
-    this.props.handleLoading(false);
+    // this.props.handleLoading(false);
   }
 
   createUserProjectList = () => {
