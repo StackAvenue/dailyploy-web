@@ -174,7 +174,7 @@ class DashboardEvent extends Component {
   };
 
   returnTime = time => {
-    return `${moment(time.start_time).format("HH.mm")}- ${moment(
+    return `${moment(time.start_time).format("HH.mm")} - ${moment(
       time.end_time
     ).format("HH.mm")}`;
   };

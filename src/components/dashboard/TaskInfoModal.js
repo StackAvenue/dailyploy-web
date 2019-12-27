@@ -218,6 +218,38 @@ class TaskInfoModal extends Component {
     ).format("HH.mm")}`;
   };
 
+  displayTotalTime = () => {
+    if (this.props.state.timeTracked.length > 0) {
+      var totalSec = 0;
+      this.props.state.timeTracked.map(time => {
+        totalSec += time.duration;
+        console.log(time.duration, totalSec);
+      });
+      var h = Math.floor(totalSec / 3600);
+      var m = Math.floor((totalSec % 3600) / 60);
+      var s = Math.floor((totalSec % 3600) % 60);
+
+      return (
+        ("0" + h).slice(-2) +
+        ":" +
+        ("0" + m).slice(-2) +
+        ":" +
+        ("0" + s).slice(-2) +
+        " h"
+      );
+    } else {
+      // var start = this.props.state.taskEvent.start_datetime;
+      // var end = this.props.state.taskEvent.end_datetime;
+      // var totalSeconds = end.diff(start, "seconds");
+      // totalSeconds = Number(totalSeconds);
+      // var h = Math.floor(totalSeconds / 3600);
+      // var m = Math.floor((totalSeconds % 3600) / 60);
+      // var s = Math.floor((totalSeconds % 3600) % 60);
+      // return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
+      return "00:00:00 h";
+    }
+  };
+
   render() {
     const { props } = this;
     return (
@@ -318,8 +350,8 @@ class TaskInfoModal extends Component {
               </div>
             </div>
 
-            <div className="col-md-12 body text-titlize ">
-              <div className="col-md-12 no-padding input-row">
+            <div className="col-md-12 body">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Name
                 </div>
@@ -330,7 +362,7 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Project
                 </div>
@@ -339,7 +371,7 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Category
                 </div>
@@ -352,7 +384,7 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Priority
                 </div>
@@ -370,7 +402,7 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Date
                 </div>
@@ -399,7 +431,7 @@ class TaskInfoModal extends Component {
                         defaultValue={
                           this.props.state.timeTracked.length > 0
                             ? this.returnTime(this.props.state.timeTracked[0])
-                            : ""
+                            : "00:00 - 00:00"
                         }
                         onClick={() => this.ToggleTimerDropDown()}
                         readOnly
@@ -421,12 +453,14 @@ class TaskInfoModal extends Component {
                     </div>
                   </div>
                   <div className="col-md-4 d-inline-block">
-                    <span className="d-inline-block">01h 00min</span>
+                    <span className="d-inline-block">
+                      {this.displayTotalTime()}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="col-md-12 row no-margin no-padding input-row">
+              <div className="col-md-12 row no-margin no-padding input-row text-titlize">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
                   <p className="left-padding-20px comments">

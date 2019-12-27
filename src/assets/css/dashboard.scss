@@ -3609,6 +3609,8 @@ table.scheduler-table tr:last-child td {
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   position: absolute;
+  top: 0px;
+  right: 159px;
   z-index: 1;
   .event-task-hover {
     padding: 10px;
