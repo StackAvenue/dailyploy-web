@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import moment from "moment";
-import { post, mockGet, mockPost } from "../../utils/API";
+import { post, put, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import Timer from "./../dashboard/Timer";
 import { Alert, UncontrolledAlert } from "reactstrap";
@@ -24,25 +24,12 @@ class DashboardEvent extends Component {
       endOn: "",
       canStart: false,
       icon: "play",
-      timeArr: [],
+      taskTimerLog: [],
       showAlert: false
     };
   }
 
   async componentDidMount() {
-    // try {
-    //   const { data } = await mockGet("task-track");
-    //   if (data) {
-    //     var timeArr = []
-    //     data.map(date => {
-    //       var sTime = moment(date.startdate).format("HH:mm")
-    //       var eTime = moment(date.enddate).format("HH:mm")
-    //       timeArr.push(`${sTime} - ${eTime}`)
-    //     })
-    //   }
-    // } catch (e) {
-    // }
-
     var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
     var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
     if (taskId === this.props.event.id && startOn !== "") {
@@ -62,7 +49,7 @@ class DashboardEvent extends Component {
       if (state.status) {
         var endOn = Date.now();
         this.setState({ runningTime: 0, endOn: endOn });
-        this.saveTaskTrackingTime(endOn);
+        this.handleTaskTrackingStop(this.props.event.id, endOn);
         this.handleReset();
         this.props.handleTaskBottomPopup("");
         updateIcon =
@@ -92,6 +79,7 @@ class DashboardEvent extends Component {
           var updateIcon =
             icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
           status = !state.status;
+          this.props.handleTaskTracking("start", this.props.event.id, startOn);
         }
       }
       return {
@@ -102,22 +90,23 @@ class DashboardEvent extends Component {
     });
   };
 
-  async saveTaskTrackingTime(endOn) {
-    var taskData = {
-      startdate: new Date(this.state.startOn),
-      enddate: new Date(endOn)
-    };
-    try {
-      const { data } = await mockPost(taskData, "task-track");
-      if (data) {
-        var timeArr = [this.state.timeArr, ...[]];
-        var sTime = moment(data.startdate).format("HH:mm");
-        var eTime = moment(data.enddate).format("HH:mm");
-        timeArr.push(`${sTime} - ${eTime}`);
-        this.setState({ timeArr: timeArr });
-      }
-    } catch (e) {}
-  }
+  handleTaskTrackingStop = async (taskId, dateTime) => {
+    if (taskId && dateTime) {
+      taskId = taskId.split("-")[0];
+      var taskDate = {
+        end_time: new Date(dateTime),
+        status: "stopped"
+      };
+      try {
+        const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+        if (data) {
+          var taskTimerLog = [...this.state.taskTimerLog, ...[data]];
+          console.log("taskTimerLog", taskTimerLog);
+          this.setState({ taskTimerLog: taskTimerLog });
+        }
+      } catch (e) {}
+    }
+  };
 
   handleReset = () => {
     clearInterval(this.timer);
@@ -182,6 +171,12 @@ class DashboardEvent extends Component {
 
   isValidUserDate = userId => {
     return this.isToday && this.props.userId === userId;
+  };
+
+  returnTime = time => {
+    return `${moment(time.start_time).format("HH.mm")}- ${moment(
+      time.end_time
+    ).format("HH.mm")}`;
   };
 
   render() {
@@ -270,7 +265,11 @@ class DashboardEvent extends Component {
                         : this.props.bgColor,
                       borderColor: this.props.bgColor
                     }}
-                    defaultValue={this.props.times ? this.props.times[0] : ""}
+                    defaultValue={
+                      this.props.event.timeTracked.length > 0
+                        ? this.returnTime(this.props.event.timeTracked[0])
+                        : ""
+                    }
                     onClick={() => this.ToggleTimerDropDown(event.id)}
                     onMouseOver={() => this.hideEventPopUp(event.id)}
                   />
@@ -296,14 +295,22 @@ class DashboardEvent extends Component {
 
         {this.state.showTimerMenu && this.state.clickEventId === event.id ? (
           <div className={`dropdown-div `}>
-            {this.props.times.map((time, idx) => {
+            {this.props.event.timeTracked.map((time, idx) => {
               if (idx !== 0) {
-                return <div className="hover-border"> {time} </div>;
+                return (
+                  <div className="hover-border" key={time.id}>
+                    {this.returnTime(time)}
+                  </div>
+                );
               }
             })}
-            {this.state.timeArr
-              ? this.state.timeArr.map(time => {
-                  return <div className="hover-border"> {time} </div>;
+            {this.state.taskTimerLog.length > 0
+              ? this.state.taskTimerLog.map(time => {
+                  return (
+                    <div className="hover-border" key={time.id}>
+                      {this.returnTime(time)}
+                    </div>
+                  );
                 })
               : null}
           </div>

@@ -79,6 +79,7 @@ class Dashboard extends Component {
       startOn: "",
       status: false,
       taskCategories: [],
+      timeTracked: [],
       taskCategorie: "",
       errors: {
         taskNameError: "",
@@ -167,7 +168,8 @@ class Dashboard extends Component {
                 bgColor: task.project.color_code,
                 projectName: task.project.name,
                 comments: task.comments,
-                projectId: task.project.id
+                projectId: task.project.id,
+                timeTracked: task.time_tracked
               };
               return tasksObj;
             });
@@ -309,7 +311,8 @@ class Dashboard extends Component {
               bgColor: task.project.color_code,
               projectName: task.project.name,
               comments: task.comments,
-              projectId: task.project.id
+              projectId: task.project.id,
+              timeTracked: task.time_tracked
             };
             return tasksObj;
           });
@@ -513,7 +516,8 @@ class Dashboard extends Component {
       comments: "",
       border: "solid 1px #ffffff",
       taskEvent: "",
-      fromInfoEdit: false
+      fromInfoEdit: false,
+      timeTracked: []
     });
   };
 
@@ -752,14 +756,13 @@ class Dashboard extends Component {
       memberIds.includes(member.id)
     );
     try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
-      );
+      const { data } = await get(`tasks/${taskId}`);
       var startDate = new Date(data.start_datetime);
       var endDate = new Date(data.end_datetime);
       var startTime = moment(data.start_datetime).format("HH:mm:ss");
       var endTime = moment(data.end_datetime).format("HH:mm:ss");
       var taskCategorie = data.category;
+      var timeTracked = data.time_tracked;
     } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
@@ -794,7 +797,8 @@ class Dashboard extends Component {
         taskEvent: event,
         icon: startOn != "" && taskId === eventId ? "pause" : "play",
         taskPlayStatus: startOn != "" && taskId === eventId ? true : false,
-        startOn: startOn
+        startOn: startOn,
+        timeTracked: timeTracked
       });
     }
   };
@@ -881,6 +885,7 @@ class Dashboard extends Component {
     if (status) {
       this.handleReset();
       this.props.handleTaskBottomPopup("");
+      this.handleTaskTracking("stop", this.state.taskId, Date.now());
       updateIcon =
         icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
       status = !this.state.status;
@@ -903,6 +908,7 @@ class Dashboard extends Component {
         this.state.taskEvent.title
       );
       this.props.handleTaskBottomPopup(this.state.startOn);
+      this.handleTaskTracking("start", this.state.taskId, startOn);
       updateIcon =
         icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
       status = !this.state.status;
@@ -942,6 +948,34 @@ class Dashboard extends Component {
     this.setState({ taskCategorie: option });
   };
 
+  handleTaskTracking = async (taskType, taskId, dateTime) => {
+    if (taskType && taskId && dateTime) {
+      taskId = taskId.split("-")[0];
+      if (taskType === "start") {
+        var taskDate = {
+          start_time: new Date(dateTime),
+          status: "running"
+        };
+        try {
+          const { data } = await post(
+            taskDate,
+            `tasks/${taskId}/start-tracking`
+          );
+        } catch (e) {}
+      } else if (taskType === "stop") {
+        var taskDate = {
+          end_time: new Date(dateTime),
+          status: "stopped"
+        };
+        try {
+          const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+          var timeTracked = [...this.state.timeTracked, ...[data]];
+          this.setState({ timeTracked: timeTracked });
+        } catch (e) {}
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -967,6 +1001,7 @@ class Dashboard extends Component {
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.state.isStart}
           taskEventResumeConfirm={this.taskEventResumeConfirm}
+          handleTaskTracking={this.handleTaskTracking}
         />
 
         <div>

@@ -488,7 +488,7 @@ class Calendar extends Component {
           divStyle={divStyle}
           scheduler={this.schedulerData}
           hideOverPopup={this.hideOverPopup}
-          times={this.times}
+          // times={this.times}
           workspaceId={this.props.workspaceId}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.onGoingTask}
@@ -497,6 +497,7 @@ class Calendar extends Component {
           }
           userId={this.props.state.userId}
           taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+          handleTaskTracking={this.props.handleTaskTracking}
         />
       </>
     );

@@ -212,6 +212,12 @@ class TaskInfoModal extends Component {
     localStorage.setItem(`taskTitle-${this.props.state.workspaceId}`, "");
   };
 
+  returnTime = time => {
+    return `${moment(time.start_time).format("HH.mm")} - ${moment(
+      time.end_time
+    ).format("HH.mm")}`;
+  };
+
   render() {
     const { props } = this;
     return (
@@ -390,14 +396,25 @@ class TaskInfoModal extends Component {
                       <input
                         className="d-inline-block"
                         className={this.state.showTimerMenu ? "border" : ""}
-                        defaultValue={this.times ? this.times[0] : ""}
+                        defaultValue={
+                          this.props.state.timeTracked.length > 0
+                            ? this.returnTime(this.props.state.timeTracked[0])
+                            : ""
+                        }
                         onClick={() => this.ToggleTimerDropDown()}
                         readOnly
                       />
                       {this.state.showTimerMenu ? (
                         <div className="dropdown">
-                          {this.times.map((time, idx) => {
-                            return <div className="border"> {time} </div>;
+                          {this.props.state.timeTracked.map((time, idx) => {
+                            if (idx != 0) {
+                              return (
+                                <div className="border" key={time.id}>
+                                  {" "}
+                                  {this.returnTime(time)}{" "}
+                                </div>
+                              );
+                            }
                           })}
                         </div>
                       ) : null}

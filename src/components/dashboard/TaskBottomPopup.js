@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Timer from "./../dashboard/Timer";
+import moment from "moment";
 
 class TaskBottomPopup extends Component {
   constructor(props) {
@@ -14,6 +15,12 @@ class TaskBottomPopup extends Component {
 
   ToggleTimerDropDown = id => {
     this.setState({ showTimerMenu: !this.state.showTimerMenu });
+  };
+
+  returnTime = time => {
+    return `${moment(time.start_time).format("HH.mm")} - ${moment(
+      time.end_time
+    ).format("HH.mm")}`;
   };
 
   render() {
@@ -44,16 +51,24 @@ class TaskBottomPopup extends Component {
             <input
               className="d-inline-block"
               className={this.state.showTimerMenu ? "border" : ""}
-              defaultValue={this.times ? this.times[0] : ""}
+              defaultValue={
+                this.props.timeTracked.length > 0
+                  ? this.returnTime(this.props.timeTracked[0])
+                  : ""
+              }
               onClick={() => this.ToggleTimerDropDown()}
               readOnly
             />
           </div>
           {this.state.showTimerMenu && this.times.length > 1 ? (
             <div className="dropdown">
-              {this.times.map((time, idx) => {
+              {this.props.timeTracked.map((time, idx) => {
                 if (idx !== 0) {
-                  return <div className="border"> {time} </div>;
+                  return (
+                    <div className="border" key={time.id}>
+                      {this.returnTime(time)}
+                    </div>
+                  );
                 }
               })}
             </div>

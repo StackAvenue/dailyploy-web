@@ -8,7 +8,7 @@ import Analysis from "./components/dashboard/Analysis";
 import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
-import { get, logout } from "./utils/API";
+import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
@@ -82,7 +82,8 @@ class Workspace extends Component {
       onGoingTask: false,
       isLoading: false,
       workspaceName: "",
-      loggedInUserName: ""
+      loggedInUserName: "",
+      timeTracked: []
     };
   }
 
@@ -117,6 +118,14 @@ class Workspace extends Component {
     var taskId = localStorage.getItem(`taskId-${workspaceId}`);
     var colorCode = localStorage.getItem(`colorCode-${workspaceId}`);
     var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`);
+    var timeTracked = [];
+    if (taskId) {
+      taskId = taskId.split("-")[0];
+      try {
+        const { data } = await get(`tasks/${taskId}`);
+        timeTracked = data.time_tracked;
+      } catch (e) {}
+    }
 
     this.setState({
       workspaces: workspacesData,
@@ -132,7 +141,8 @@ class Workspace extends Component {
         workspace.length > 0 && workspace[0]
           ? workspaceNameSplit(workspace[0].name)
           : "",
-      loggedInUserName: userData.name
+      loggedInUserName: userData.name,
+      timeTracked: timeTracked
     });
   }
 
@@ -223,20 +233,34 @@ class Workspace extends Component {
     );
   };
 
-  stopOnGoingTask = () => {
+  stopOnGoingTask = async () => {
     if (this.state.isStart) {
-      localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
-      localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
-      localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
-      localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
+      var localTaskId = localStorage.getItem(
+        `taskId-${this.state.workspaceId}`
+      );
+      localTaskId = localTaskId.split("-")[0];
+      if (localTaskId == this.state.taskId) {
+        var taskDate = {
+          end_time: new Date(),
+          status: "stopped"
+        };
+        var taskId = this.state.taskId.split("-")[0];
+        try {
+          const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+        } catch (e) {}
+        localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
+        localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
+        localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
+        localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
 
-      this.setState({
-        startOn: "",
-        taskId: "",
-        colorCode: "",
-        taskTitle: "",
-        isStart: false
-      });
+        this.setState({
+          startOn: "",
+          taskId: "",
+          colorCode: "",
+          taskTitle: "",
+          isStart: false
+        });
+      }
     }
   };
 
@@ -293,6 +317,7 @@ class Workspace extends Component {
             taskId={this.state.taskId}
             startOn={this.state.startOn}
             isStart={this.state.isStart}
+            timeTracked={this.state.timeTracked}
             stopOnGoingTask={this.stopOnGoingTask}
           />
         ) : null}
