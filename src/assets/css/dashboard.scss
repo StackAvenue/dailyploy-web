@@ -642,17 +642,29 @@
           color: $color-text3 !important;
           margin-left: 7% !important;
         }
-        .react-datepicker-wrapper {
-          .react-datepicker__input-container input {
-          }
-          ::after {
-            padding: 5px 5px 0px 0px !important;  
+        .date-text-light{
+          width: 50px !important;
+        }
+        .calender-icon{
+          width: 205px;
+          .react-datepicker-wrapper {
+            .react-datepicker__input-container input {
+              width: 90%;
+            }
+            ::after {
+              font-family: "Font Awesome 5 Free" !important;
+              font-weight: 900 !important;
+              content: "\f073" !important;
+              color: #555 !important;
+              position: relative;
+              right: 25px;
+            }
           }
         }
       }
     }
     .react-datepicker-popper{
-      left: -84px !important;
+      left: -33px !important;
     }
   }
 }
@@ -770,38 +782,30 @@
         margin-left: 20px;
       }
     }
-    .date-picker-container {
-      height: auto;
-      border-radius: 5px;
-      border: solid 1px #d6d6d6;
-      background-color: #ffffff;
-      margin-left: 15px;
-      .date-text-light{
-        width: auto !important;
-        padding: 0px 20px 0px 10px;
+    .task-datepicker{
+      .label{
+        width: 30% !important;
       }
-      .datepicker{
-        width: 60%;
-      }
-      .to-datepicker{
-        width: 69% !important;
+      .picker{
+        width: 70% !important;
       }
       .react-datepicker-wrapper {
         .react-datepicker__input-container input {
-          border: none !important;
           padding: 0 0 0 0px !important;
-          width: 81%;
+          width: 100%;
         }
         ::after {
           font-family: "Font Awesome 5 Free" !important;
           font-weight: 900 !important;
           content: "\f073" !important;
           color: #555 !important;
-          padding: 5px 5px 0px 0px; 
-          float: right;
+          position: absolute;
+          right: 10px;
+          top:5px;
         }
       }
     }
+
     .time-picker-container {
       width: 120px !important;
       height: auto;
@@ -814,15 +818,9 @@
         padding: 0 0 0 0px !important;
         width: 81%;
       }
-      // .rc-time-picker-input {
-      //   text-align: center;
-      // }
-      // .rc-time-picker-panel-inner {
-      //   position: fixed !important;
-      // }
     }
     .react-datepicker-popper{
-      left: -85px !important;
+      left: -50px !important;
     }
   }
 }

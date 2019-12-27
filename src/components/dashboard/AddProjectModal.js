@@ -18,9 +18,7 @@ class AddProjectModal extends Component {
       displayColorPicker: false,
       displayCustomColorPicker: false,
       background: "#b9e1ff",
-      value: "",
-      dateFromOpen: false,
-      dateToOpen: false
+      value: ""
     };
   }
 
@@ -181,17 +179,6 @@ class AddProjectModal extends Component {
     this.props.handleChangeComplete(color, event);
   };
 
-  toggleDateFrom = () => {
-    this.setState({
-      dateFromOpen: !this.state.dateFromOpen,
-      dateToOpen: false
-    });
-  };
-
-  toggleDateTo = () => {
-    this.setState({ dateToOpen: !this.state.dateToOpen, dateFromOpen: false });
-  };
-
   render() {
     const { props } = this;
 
@@ -244,20 +231,16 @@ class AddProjectModal extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Start Date
                 </div>
-                <div
-                  className="col-md-6 d-inline-block date-picker-container no-padding"
-                  onClick={this.toggleDateFrom}
-                >
-                  <div className="col-md-3 d-inline-block date-text-light">
+                <div className="col-md-10 d-inline-block">
+                  <div className="d-inline-block date-text-light">
                     <span>From:</span>
                   </div>
-                  <div className="col-md-9 d-inline-block">
+                  <div className="d-inline-block calender-icon">
                     <DatePicker
                       selected={props.state.dateFrom}
                       onChange={props.handleDateFrom}
                       placeholderText="Select Date"
                       value={props.state.dateFrom}
-                      open={this.state.dateFromOpen}
                     />
                   </div>
                 </div>
@@ -269,27 +252,26 @@ class AddProjectModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block no-padding">
                   <div
-                    className="col-md-6 d-inline-block date-picker-container no-padding"
+                    className="col-md-8 d-inline-block"
                     onClick={this.toggleDateTo}
-                    style={{ backgroundColor: props.state.disableColor }}
                   >
-                    <div className="col-md-3 d-inline-block date-text-light ">
+                    <div className="d-inline-block date-text-light">
                       <span>To:</span>
                     </div>
-                    <div className="col-md-9 d-inline-block">
+                    <div className="d-inline-block calender-icon">
                       <DatePicker
+                        style={{ backgroundColor: props.state.disableColor }}
                         minDate={props.state.dateFrom}
                         selected={props.state.dateTo}
                         onChange={props.handleDateTo}
                         placeholderText="Select Date"
                         disabled={props.state.disabledDateTo}
                         value={props.state.dateTo}
-                        open={this.state.dateToOpen}
                       />
                     </div>
                   </div>
 
-                  <div className="col-md-6 d-inline-block left-padding-50px custom-control custom-checkbox">
+                  <div className="col-md-4 d-inline-block custom-control custom-checkbox no-padding">
                     <input
                       type="checkbox"
                       className="custom-control-input d-inline-block"
