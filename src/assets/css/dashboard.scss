@@ -4081,6 +4081,9 @@ table.scheduler-table tr:last-child td {
         color: $color-brandheading2;
         text-transform: none !important;
       }
+      .color-block{
+        vertical-align: text-bottom !important;
+      }
     }
   }
   .task-play-btn {

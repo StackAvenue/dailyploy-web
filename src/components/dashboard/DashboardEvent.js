@@ -75,7 +75,10 @@ class DashboardEvent extends Component {
             `taskTitle-${this.props.workspaceId}`,
             this.props.titleText
           );
-          this.props.handleTaskBottomPopup(this.state.startOn);
+          this.props.handleTaskBottomPopup(
+            this.state.startOn,
+            this.props.event.timeTracked
+          );
           var updateIcon =
             icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
           status = !state.status;
@@ -101,7 +104,6 @@ class DashboardEvent extends Component {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
         if (data) {
           var taskTimerLog = [...this.state.taskTimerLog, ...[data]];
-          console.log("taskTimerLog", taskTimerLog);
           this.setState({ taskTimerLog: taskTimerLog });
         }
       } catch (e) {}

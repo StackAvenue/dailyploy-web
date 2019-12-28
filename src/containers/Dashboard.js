@@ -85,6 +85,7 @@ class Dashboard extends Component {
       taskCategories: [],
       timeTracked: [],
       taskCategorie: "",
+      showAlert: false,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -521,7 +522,8 @@ class Dashboard extends Component {
       border: "solid 1px #ffffff",
       taskEvent: "",
       fromInfoEdit: false,
-      timeTracked: []
+      timeTracked: [],
+      showAlert: false
     });
   };
 
@@ -754,15 +756,12 @@ class Dashboard extends Component {
     var eventTasks = this.state.events.filter(
       taskEvent => taskEvent.id === event.id
     );
-    // var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
     var memberIds = eventTasks.map(filterEvent => filterEvent.resourceId);
     var selectedMembers = this.state.users.filter(member =>
       memberIds.includes(member.id)
     );
     try {
       const { data } = await get(`tasks/${taskId}`);
-      // var startDate = new Date(data.start_datetime);
-      // var endDate = new Date(data.end_datetime);
       var startDate = convertUTCToLocalDate(data.start_datetime);
       var endDate = convertUTCToLocalDate(data.end_datetime);
       var startTime = moment(startDate).format("HH:mm:ss");
@@ -776,6 +775,7 @@ class Dashboard extends Component {
     var eventId = localStorage.getItem(
       `taskId-${this.props.state.workspaceId}`
     );
+    eventId = eventId ? eventId.split("-")[0] : "";
     if (
       this.state.user.role === "admin" ||
       this.state.userId == event.resourceId
@@ -801,8 +801,8 @@ class Dashboard extends Component {
         selectedTaskMember: selectedMembers,
         memberProjects: memberProjects,
         taskEvent: event,
-        icon: startOn != "" && taskId === eventId ? "pause" : "play",
-        taskPlayStatus: startOn != "" && taskId === eventId ? true : false,
+        icon: startOn && taskId === eventId ? "pause" : "play",
+        status: startOn && taskId === eventId ? true : false,
         startOn: startOn,
         timeTracked: timeTracked
       });
@@ -888,16 +888,19 @@ class Dashboard extends Component {
     var icon = this.state.icon;
     var updateIcon = icon;
     var status = this.state.status;
+    var showAlert = false;
     if (status) {
       this.handleReset();
       this.props.handleTaskBottomPopup("");
       this.handleTaskTracking("stop", this.state.taskId, Date.now());
+      this.setState({ events: this.state.events });
       updateIcon =
         icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
       status = !this.state.status;
-    } else if (this.props.onGoingTask) {
+    } else if (this.props.state.isStart) {
       updateIcon = icon;
       var startOn = this.props.state.startOn;
+      var showAlert = !this.state.showAlert;
     } else {
       var startOn = Date.now();
       localStorage.setItem(`startOn-${this.state.workspaceId}`, startOn);
@@ -913,7 +916,10 @@ class Dashboard extends Component {
         `taskTitle-${this.state.workspaceId}`,
         this.state.taskEvent.title
       );
-      this.props.handleTaskBottomPopup(this.state.startOn);
+      this.props.handleTaskBottomPopup(
+        this.state.startOn,
+        this.state.timeTracked
+      );
       this.handleTaskTracking("start", this.state.taskId, startOn);
       updateIcon =
         icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
@@ -923,7 +929,8 @@ class Dashboard extends Component {
       status: status,
       showPopup: false,
       icon: updateIcon,
-      startOn: startOn
+      startOn: startOn,
+      showAlert: showAlert
     });
   };
 

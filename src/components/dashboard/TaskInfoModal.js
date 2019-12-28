@@ -6,11 +6,11 @@ import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
+import { UncontrolledAlert } from "reactstrap";
 
 class TaskInfoModal extends Component {
   constructor(props) {
     super(props);
-    this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.priority = {
       name: "high",
       color_code: "#00A031"
@@ -137,55 +137,6 @@ class TaskInfoModal extends Component {
     return this.isToday() && props.taskEvent.resourceId === props.userId;
   };
 
-  handleTaskStartTop = () => {
-    this.setState(state => {
-      var icon = this.props.icon;
-      var updateIcon = icon;
-      var status = state.status;
-      if (state.status) {
-        var endOn = Date.now();
-        this.handleReset();
-        this.props.handleTaskBottomPopup("");
-        updateIcon =
-          icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-        status = !state.status;
-      } else {
-        if (this.props.onGoingTask) {
-          updateIcon = icon;
-          this.setState({ showAlert: !this.state.showAlert });
-        } else {
-          var startOn = Date.now();
-          this.setState({ startOn: startOn });
-          localStorage.setItem(
-            `startOn-${this.props.state.workspaceId}`,
-            startOn
-          );
-          localStorage.setItem(
-            `taskId-${this.props.state.workspaceId}`,
-            this.props.state.taskEvent.id
-          );
-          localStorage.setItem(
-            `colorCode-${this.props.state.workspaceId}`,
-            this.props.state.taskEvent.bgColor
-          );
-          localStorage.setItem(
-            `taskTitle-${this.props.state.workspaceId}`,
-            this.props.state.taskEvent.title
-          );
-          this.props.handleTaskBottomPopup(this.state.startOn);
-          var updateIcon =
-            icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-          status = !state.status;
-        }
-      }
-      return {
-        status: status,
-        showPopup: false,
-        icon: updateIcon
-      };
-    });
-  };
-
   async saveTaskTrackingTime(endOn) {
     var taskData = {
       startdate: new Date(this.state.startOn),
@@ -223,7 +174,6 @@ class TaskInfoModal extends Component {
       var totalSec = 0;
       this.props.state.timeTracked.map(time => {
         totalSec += time.duration;
-        console.log(time.duration, totalSec);
       });
       var h = Math.floor(totalSec / 3600);
       var m = Math.floor((totalSec % 3600) / 60);
@@ -238,15 +188,22 @@ class TaskInfoModal extends Component {
         " h"
       );
     } else {
-      // var start = this.props.state.taskEvent.start_datetime;
-      // var end = this.props.state.taskEvent.end_datetime;
-      // var totalSeconds = end.diff(start, "seconds");
-      // totalSeconds = Number(totalSeconds);
-      // var h = Math.floor(totalSeconds / 3600);
-      // var m = Math.floor((totalSeconds % 3600) / 60);
-      // var s = Math.floor((totalSeconds % 3600) % 60);
-      // return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
-      return "00:00:00 h";
+      var start = this.props.state.dateFrom;
+      var end = this.props.state.dateTo;
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      totalSeconds = Number(totalSeconds);
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = Math.floor((totalSeconds % 3600) % 60);
+      return (
+        ("0" + h).slice(-2) +
+        ":" +
+        ("0" + m).slice(-2) +
+        ":" +
+        ("0" + s).slice(-2) +
+        " h"
+      );
     }
   };
 
@@ -331,6 +288,15 @@ class TaskInfoModal extends Component {
                       <i className="fa fa-check"></i>
                     </div>
                   ) : null}
+
+                  {this.props.state.showAlert ? (
+                    <UncontrolledAlert
+                      className="task-war-alert"
+                      color="warning"
+                    >
+                      one task already ongoing !
+                    </UncontrolledAlert>
+                  ) : null}
                 </div>
                 <div className="d-inline-block header-2">
                   <span>{"2hr 30mins"}</span>
@@ -393,7 +359,7 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Member
                 </div>

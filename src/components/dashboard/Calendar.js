@@ -16,7 +16,6 @@ import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -62,9 +61,9 @@ class Calendar extends Component {
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
 
-        startResizable: true,
-        endResizable: true,
-        movable: true,
+        startResizable: false,
+        endResizable: false,
+        movable: false,
         creatable: true,
         crossResourceMove: true,
         checkConflict: false,
@@ -488,7 +487,6 @@ class Calendar extends Component {
           divStyle={divStyle}
           scheduler={this.schedulerData}
           hideOverPopup={this.hideOverPopup}
-          // times={this.times}
           workspaceId={this.props.workspaceId}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.onGoingTask}
