@@ -116,10 +116,7 @@ class DailyPloySelect extends Component {
         <>
           {selected != "" ? (
             <div className="">
-              <div
-                className="d-inline-block"
-                style={{ paddingLeft: "12px" }}
-              >{`${selected[label]}`}</div>
+              <div className="l-padding-12px d-inline-block">{`${selected[label]}`}</div>
             </div>
           ) : null}
         </>
@@ -131,8 +128,8 @@ class DailyPloySelect extends Component {
       return (
         <>
           {selected != "" ? (
-            <div style={{ paddingLeft: "12px" }}>
-              <i className={`${icon}`}></i>
+            <div>
+              <i className={`l-padding-12px ${icon}`}></i>
               <div className="left-padding-20px d-inline-block">{`${selected[label]}`}</div>
             </div>
           ) : null}
