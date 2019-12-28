@@ -3844,7 +3844,7 @@ table.scheduler-table tr:last-child td {
 .color-block {
   width: 20px;
   height: 20px;
-  margin-left: 20px;
+  margin-left: 0.75rem;
   margin-right: 10px;
   vertical-align: top;
   border: solid 1px#9b9b9b;
@@ -3852,7 +3852,7 @@ table.scheduler-table tr:last-child td {
 .color-dot {
   width: 15px;
   height: 15px;
-  margin-left: 20px;
+  margin-left: 0.75rem;
   margin-right: 10px;
   vertical-align: sub;
   border-radius: 20px;
@@ -4557,4 +4557,3 @@ table.scheduler-table tr:last-child td {
       margin-right: 25px;
     }
   }
-}

@@ -108,14 +108,44 @@ class DailyPloySelect extends Component {
         : "";
     const label = this.props.label ? this.props.label : "name";
     const icon = this.props.icon;
-
-    return (
-      <>
-        {selected != "" ? (
-          <div className="">
-            {icon !== "" && klass === "" ? (
-              <i className={`left-padding-20px ${icon}`}></i>
-            ) : (
+    if (
+      (icon == undefined || icon == "") &&
+      (klass === undefined || klass === "")
+    ) {
+      return (
+        <>
+          {selected != "" ? (
+            <div className="">
+              <div
+                className="d-inline-block"
+                style={{ paddingLeft: "12px" }}
+              >{`${selected[label]}`}</div>
+            </div>
+          ) : null}
+        </>
+      );
+    } else if (
+      (icon !== undefined || icon !== "") &&
+      (klass === undefined || klass === "")
+    ) {
+      return (
+        <>
+          {selected != "" ? (
+            <div style={{ paddingLeft: "12px" }}>
+              <i className={`${icon}`}></i>
+              <div className="left-padding-20px d-inline-block">{`${selected[label]}`}</div>
+            </div>
+          ) : null}
+        </>
+      );
+    } else if (
+      (icon === undefined || icon === "") &&
+      (klass !== undefined || klass !== "")
+    ) {
+      return (
+        <>
+          {selected != "" ? (
+            <div className="">
               <div
                 className={`d-inline-block ${klass}`}
                 style={{
@@ -124,12 +154,22 @@ class DailyPloySelect extends Component {
                   }`
                 }}
               ></div>
-            )}{" "}
-            <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
-          </div>
-        ) : null}
-      </>
-    );
+              <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
+            </div>
+          ) : null}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {selected != "" ? (
+            <div className="">
+              <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
+            </div>
+          ) : null}
+        </>
+      );
+    }
   };
 
   selectSuggestion = option => {

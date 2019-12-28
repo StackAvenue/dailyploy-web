@@ -200,7 +200,6 @@ class AddTaskModal extends Component {
                     options={this.props.modalMemberSearchOptions}
                     placeholder="Select Member"
                     default={this.props.state.selectedMembers[0]}
-                    className=""
                     icon="fa fa-user"
                     onChange={this.props.handleMemberSelect}
                   />
