@@ -10,7 +10,11 @@ import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import Sidebar from "../components/dashboard/Sidebar";
-import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
+import {
+  getWeekFisrtDate,
+  getFisrtDate,
+  convertUTCToLocalDate
+} from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
 import { DATE_FORMAT1 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
@@ -757,10 +761,12 @@ class Dashboard extends Component {
     );
     try {
       const { data } = await get(`tasks/${taskId}`);
-      var startDate = new Date(data.start_datetime);
-      var endDate = new Date(data.end_datetime);
-      var startTime = moment(data.start_datetime).format("HH:mm:ss");
-      var endTime = moment(data.end_datetime).format("HH:mm:ss");
+      // var startDate = new Date(data.start_datetime);
+      // var endDate = new Date(data.end_datetime);
+      var startDate = convertUTCToLocalDate(data.start_datetime);
+      var endDate = convertUTCToLocalDate(data.end_datetime);
+      var startTime = moment(startDate).format("HH:mm:ss");
+      var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
       var timeTracked = data.time_tracked;
     } catch (e) {}

@@ -34,3 +34,8 @@ export const workspaceNameSplit = name => {
   let nameSplit = nameArr.split(" ");
   return textTitlize(nameSplit.join(" "));
 };
+
+export const convertUTCToLocalDate = date => {
+  var date = new Date(date);
+  return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+};
