@@ -14,6 +14,7 @@ import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 
 class Calendar extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.schedulerData = new SchedulerData(
@@ -145,6 +146,7 @@ class Calendar extends Component {
   };
 
   async componentDidMount() {
+    this._isMounted = true;
     this.renderData();
   }
 
@@ -195,6 +197,10 @@ class Calendar extends Component {
       </th>
     );
   };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render() {
     const { viewModel } = this.state;

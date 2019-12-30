@@ -6,7 +6,7 @@ import { post, put, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import Timer from "./../dashboard/Timer";
 import { Alert, UncontrolledAlert } from "reactstrap";
-import { Overlay, OverlayTrigger } from "react-bootstrap";
+import { OverlayTrigger } from "react-bootstrap";
 
 class DashboardEvent extends Component {
   constructor(props) {
