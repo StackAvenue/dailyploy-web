@@ -681,7 +681,7 @@ class Reports extends Component {
           state={this.state}
         />
         <div className="analysis-box row no-margin">
-          <div className="col-md-12 no-padding analysis-top">
+          <div className="col-md-12 no-padding ">
             <div className="reports-container col-sm-offset-2">
               <div className="reports-btns ">
                 <div className="SelectedWeekExample">

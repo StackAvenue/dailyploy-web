@@ -90,7 +90,8 @@
   .react-datepicker-wrapper {
     .react-datepicker__input-container input{
       border: none;
-      padding: 5px 0 0 5px;
+      padding: 0px 0 0 0px;
+      margin: 4px;
     }::after {
       font-family: "Font Awesome 5 Free" !important;
       font-weight: 900 !important;
@@ -128,11 +129,12 @@
   padding: 0px 15px 0px 15px;
   border: none;
   background: none;
+  vertical-align: bottom;
   font-size: 26px;
 }
 .report-viewtype-btns {
   position: absolute !important;
-  top: -68px !important;
+  top: -48px !important;
   right: 185px !important;
   div{
     width: 80px;
