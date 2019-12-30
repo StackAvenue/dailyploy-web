@@ -146,7 +146,14 @@ class Dashboard extends Component {
           )}`
         );
 
-        var tasksUser = data.users.map(user => {
+        var sortedUsers = data.users.sort((x, y) => {
+          return x.id === this.state.userId
+            ? -1
+            : y.id === this.state.userId
+            ? 1
+            : 0;
+        });
+        var tasksUser = sortedUsers.map(user => {
           var usersObj = {
             id: user.id,
             name:
@@ -184,13 +191,6 @@ class Dashboard extends Component {
         });
         var tasksResources = tasksUser.map(user => user.usersObj);
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-        // tasksResources.sort(function(x, y) {
-        //   return x.id === this.state.userId
-        //     ? -1
-        //     : y.id === this.state.userId
-        //     ? 1
-        //     : 0;
-        // });
         this.setState({
           resources: tasksResources,
           events: taskEvents
@@ -291,7 +291,11 @@ class Dashboard extends Component {
           this.state.taskFrequency
         }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`
       );
-      var tasksUser = data.users.map(user => {
+      var userId = loggedInData.id;
+      var sortedUsers = data.users.sort((x, y) => {
+        return x.id === userId ? -1 : y.id === userId ? 1 : 0;
+      });
+      var tasksUser = sortedUsers.map(user => {
         var usersObj = {
           id: user.id,
           name:
@@ -327,7 +331,6 @@ class Dashboard extends Component {
       });
       var tasksResources = tasksUser.map(user => user.usersObj);
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-      this.props.handleLoading(false);
     } catch (e) {
       console.log("error", e);
     }
@@ -350,7 +353,7 @@ class Dashboard extends Component {
       workspaceId: workspaceId
     });
     this.createUserProjectList();
-    // this.props.handleLoading(false);
+    this.props.handleLoading(false);
   }
 
   createUserProjectList = () => {
