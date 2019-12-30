@@ -6,6 +6,7 @@ import { post, put, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import Timer from "./../dashboard/Timer";
 import { Alert, UncontrolledAlert } from "reactstrap";
+import { Overlay, OverlayTrigger } from "react-bootstrap";
 
 class DashboardEvent extends Component {
   constructor(props) {
@@ -201,8 +202,8 @@ class DashboardEvent extends Component {
             key={event.id}
             className={mustAddCssClass}
             style={divStyle}
-            onMouseOver={() => this.showEventPopUp()}
-            onMouseOut={() => this.hideEventPopUp()}
+            // onMouseOver={() => this.showEventPopUp()}
+            // onMouseOut={() => this.hideEventPopUp()}
           >
             <div className="row item">
               <div
@@ -215,14 +216,36 @@ class DashboardEvent extends Component {
                 {/* <i className="fa fa-pencil pull-right" aria-hidden="true"></i> */}
                 {titleText}
               </div>
+
               <div className="d-inline-block">
-                <div className={`d-inline-block task-ongoing`}></div>
-                <div className="d-inline-block task-timer">
-                  <Timer
-                    startOn={this.state.startOn}
-                    isStart={this.state.status}
-                  />
-                </div>
+                <OverlayTrigger
+                  placement="auto"
+                  trigger="hover"
+                  overlay={this.props.eventItemPopoverTemplateResolver(
+                    schedulerData,
+                    event,
+                    titleText,
+                    start,
+                    end,
+                    this.props.bgColor
+                  )}
+                >
+                  <div
+                    className="d-inline-block"
+                    style={{ position: "relative" }}
+                    // onMouseOver={() => this.showEventPopUp()}
+                    // onMouseOut={() => this.hideEventPopUp()}
+                  >
+                    <div className={`d-inline-block task-ongoing`}></div>
+                    <div className="d-inline-block task-timer">
+                      <Timer
+                        startOn={this.state.startOn}
+                        isStart={this.state.status}
+                      />
+                    </div>
+                  </div>
+                </OverlayTrigger>
+
                 {this.state.icon === "pause" ? (
                   <div
                     style={{

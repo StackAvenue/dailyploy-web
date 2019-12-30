@@ -3609,23 +3609,21 @@ table.scheduler-table tr:last-child td {
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   position: absolute;
-  top: 0px;
-  right: 159px;
-  z-index: 1;
+  z-index: 500;
   .event-task-hover {
     padding: 10px;
     text-transform: capitalize;
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.15;
+    letter-spacing: normal;
+    color: #424242;
     .title {
       width: 145px;
-      font-family: Roboto;
-      font-size: 13px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.15;
-      letter-spacing: normal;
       text-align: left;
-      color: #424242;
     }
     .project {
       height: 15px;
@@ -3636,6 +3634,8 @@ table.scheduler-table tr:last-child td {
     }
     .time {
       padding-top: 15px;
+      font-size: 13px;
+      font-weight: 500;
     }
   }
 }

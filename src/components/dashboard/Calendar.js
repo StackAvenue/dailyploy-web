@@ -256,24 +256,26 @@ class Calendar extends Component {
     var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
     if (schedulerData.viewType !== 2) {
       return (
-        <div className="event-task-hover">
-          <div className="title">
-            <span className="" title={title}>
-              {title}
-            </span>
-          </div>
-          <div className="project">
-            <div
-              className="status-dot d-inline-block"
-              style={{ backgroundColor: `${eventItem.bgColor}` }}
-            ></div>
-            <div className="d-inline-block">{eventItem.projectName}</div>
-          </div>
-          <div className="time">
-            <div className="d-inline-block">
-              {start.format("HH:mm")}-{end.format("HH:mm")}
+        <div className="custom-event-popup">
+          <div className="event-task-hover">
+            <div className="title">
+              <span className="" title={title}>
+                {title}
+              </span>
             </div>
-            <div className="d-inline-block pull-right">{timeDiff}</div>
+            <div className="project">
+              <div
+                className="status-dot d-inline-block"
+                style={{ backgroundColor: `${eventItem.bgColor}` }}
+              ></div>
+              <div className="d-inline-block">{eventItem.projectName}</div>
+            </div>
+            <div className="time">
+              <div className="d-inline-block">
+                {start.format("HH:mm")}-{end.format("HH:mm")}
+              </div>
+              <div className="d-inline-block pull-right">{timeDiff}</div>
+            </div>
           </div>
         </div>
       );
