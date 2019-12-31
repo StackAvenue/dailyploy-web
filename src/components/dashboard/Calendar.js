@@ -148,6 +148,8 @@ class Calendar extends Component {
   async componentDidMount() {
     this._isMounted = true;
     this.renderData();
+    var cal = document.querySelector(".dashboard-calender");
+    cal.getElementsByTagName("input")[0].setAttribute("readonly", "readonly");
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -156,6 +158,10 @@ class Calendar extends Component {
       prevProps.resources !== this.props.resources
     ) {
       this.renderData();
+    }
+    if (prevProps.state.taskFrequency != this.props.state.taskFrequency) {
+      var cal = document.querySelector(".dashboard-calender");
+      cal.getElementsByTagName("input")[0].setAttribute("readonly", "readonly");
     }
   }
 
