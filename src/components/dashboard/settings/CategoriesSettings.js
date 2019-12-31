@@ -60,13 +60,34 @@ class CategoriesSettings extends Component {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
-      } catch (e) {}
-      var newTaskCategories = [...this.state.taskCategories, taskCategory];
-      this.setState({
-        taskCategories: newTaskCategories,
-        showAddCategoryTr: false,
-        categoryName: ""
-      });
+        var newTaskCategories = [...this.state.taskCategories, taskCategory];
+        this.setState({
+          taskCategories: newTaskCategories,
+          showAddCategoryTr: false,
+          categoryName: ""
+        });
+      } catch (e) {
+        if (e.response && e.response.status === 400) {
+          if (
+            e.response.data &&
+            e.response.data.errors &&
+            e.response.data.errors.workspace_task_category_uniqueness
+          ) {
+            toast(
+              <DailyPloyToast
+                message={
+                  e.response.data.errors.workspace_task_category_uniqueness
+                }
+                status="error"
+              />,
+              {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_CENTER
+              }
+            );
+          }
+        }
+      }
     } else {
       this.setState({ categoryError: true });
     }
@@ -199,7 +220,7 @@ class CategoriesSettings extends Component {
                 ) : null}
                 {this.state.taskCategories.map((category, index) => {
                   return (
-                    <tr>
+                    <tr key={category.task_category_id}>
                       <td scope="row">
                         {this.state.isEdit &&
                         this.state.categoryId === category.task_category_id ? (
