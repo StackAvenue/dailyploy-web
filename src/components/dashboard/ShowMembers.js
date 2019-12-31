@@ -433,7 +433,7 @@ class ShowMembers extends Component {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="list-view">
                 {this.state.members.map((member, index) => {
                   return (
                     <tr key={index}>

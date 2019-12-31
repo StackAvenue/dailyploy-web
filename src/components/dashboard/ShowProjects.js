@@ -325,8 +325,9 @@ class ShowProjects extends Component {
     this.setState({ projects: filterdProjects });
   };
 
-  handleChangeMember = (selected, selectedTags) => {
-    this.setState({ projectMembers: selected, selectedTags: selectedTags });
+  handleChangeMember = selectedTags => {
+    var ids = selectedTags.map(option => option.id);
+    this.setState({ projectMembers: ids, selectedTags: selectedTags });
   };
 
   editProject = async () => {
@@ -575,7 +576,7 @@ class ShowProjects extends Component {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="text-titlize">
+                      <tbody className="text-titlize list-view">
                         {this.state.projects.map((project, index) => {
                           return (
                             <tr key={index}>

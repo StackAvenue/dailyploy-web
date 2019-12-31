@@ -276,7 +276,7 @@ class AddTaskModal extends Component {
                 <div className="col-md-10 d-inline-block">
                   <div className="col-md-12 d-inline-block no-padding">
                     <div className="col-md-5 d-inline-block no-padding">
-                      <div className="col-md-3 no-padding d-inline-block">
+                      <div className="col-md-3 no-padding d-inline-block date-text-light">
                         <span>From:</span>
                       </div>
                       <div
@@ -294,7 +294,7 @@ class AddTaskModal extends Component {
                     </div>
                     <div className="col-md-1 d-inline-block no-padding">-</div>
                     <div className="col-md-5 d-inline-block no-padding">
-                      <div className="col-md-2 no-padding d-inline-block">
+                      <div className="col-md-2 no-padding d-inline-block date-text-light">
                         <span>To:</span>
                       </div>
                       <div

@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { get } from "../../utils/API";
 import { TwitterPicker, ChromePicker } from "react-color";
 import cookie from "react-cookies";
+import DailyPloyMultiSelect from "./../DailyPloyMultiSelect";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
@@ -13,12 +14,9 @@ class AddProjectModal extends Component {
     super(props);
     this.state = {
       members: [],
-      suggestions: [],
-      selectedTags: [],
       displayColorPicker: false,
       displayCustomColorPicker: false,
-      background: "#b9e1ff",
-      value: ""
+      background: "#b9e1ff"
     };
   }
 
@@ -47,93 +45,6 @@ class AddProjectModal extends Component {
     }
     this.setState({ members: membersArr });
   }
-
-  onSearchTextChange = e => {
-    const value = e.target.value;
-    let suggestions = [];
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      var selectedIds = this.props.state.selectedTags.map(m => m.id);
-      suggestions = this.state.members
-        .filter(m => !selectedIds.includes(m.id))
-        .sort()
-        .filter(
-          m => regex.test(m.name) && !this.props.state.selectedTags.includes(m)
-        );
-    }
-    this.setState({ suggestions: suggestions, value: value });
-  };
-
-  selectSuggestion = option => {
-    var newSelectedTags = new Array(...this.props.state.selectedTags);
-    newSelectedTags.push(option);
-    var memberIds = newSelectedTags.map(user => user.id);
-    this.setState({
-      // selectedTags: newSelectedTags,
-      suggestions: [],
-      value: ""
-    });
-    this.props.handleChangeMember(memberIds, newSelectedTags);
-  };
-
-  removeSelectedTag = index => {
-    var selectedTags = this.props.state.selectedTags;
-    selectedTags = selectedTags.filter((_, idx) => idx !== index);
-    var memberIds = selectedTags.map(user => user.id);
-    // this.setState({ selectedTags: selectedTags });
-    this.props.handleChangeMember(memberIds, selectedTags);
-  };
-
-  renderSearchSuggestion = () => {
-    return (
-      <>
-        {this.state.suggestions ? (
-          <ul>
-            {this.state.suggestions.map((option, idx) => {
-              return (
-                <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                  <span className="right-left-space-5">
-                    <span className="text-titlize">{option.name}</span> (
-                    {option.email})
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        ) : null}
-      </>
-    );
-  };
-
-  initalChar = str => {
-    var matches = str.match(/\b(\w)/g);
-    return matches.join("").toUpperCase();
-  };
-
-  renderSelectedTags = () => {
-    return (
-      <>
-        {this.props.state.selectedTags.map((option, index) => {
-          return (
-            <div className="select-member" key={index}>
-              <div className="member-title d-inline-block">
-                {this.initalChar(option.name)}
-              </div>
-              <div className="right-left-space-5 d-inline-block">
-                {option.name}
-              </div>
-              <a
-                className="remove-tag right-left-space-5 d-inline-block"
-                onClick={() => this.removeSelectedTag(index)}
-              >
-                <i className="fa fa-close"></i>
-              </a>
-            </div>
-          );
-        })}
-      </>
-    );
-  };
 
   handleChangeColor = () => {
     if (this.state.displayCustomColorPicker) {
@@ -339,21 +250,13 @@ class AddProjectModal extends Component {
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Members</div>
                 <div className="col-md-10">
-                  <div className="project-member-search">
-                    <div className="selected-tags text-titlize">
-                      {this.renderSelectedTags()}
-                    </div>
-                    <input
-                      type="text"
-                      value={this.state.value}
-                      placeholder="Search for member"
-                      onChange={this.onSearchTextChange}
-                    />
-
-                    <div className="suggestion-holder">
-                      {this.renderSearchSuggestion()}
-                    </div>
-                  </div>
+                  <DailyPloyMultiSelect
+                    options={this.state.members}
+                    searchBy="name"
+                    defaultSelected={this.props.state.selectedTags}
+                    selectedIcon="initial"
+                    onChange={this.props.handleChangeMember}
+                  />
                 </div>
               </div>
 
