@@ -68,8 +68,8 @@ const EditMemberModal = props => {
                 name="memberHours"
                 onChange={props.editMemberHandleChange}
               >
-                {hours.map(value => (
-                  <option value={value}>{`${value}hr`}</option>
+                {hours.map((value, index) => (
+                  <option key={index} value={value}>{`${value}hr`}</option>
                 ))}
               </select>
             </div>

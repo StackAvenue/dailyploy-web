@@ -17,7 +17,7 @@ const GridBlock = props => {
           <label htmlFor={`styled-checkbox-${props.index}`}></label>
         </div>
       </div>
-      <div className="col-md-12 name">{props.project.name}</div>
+      <div className="col-md-12 name text-titlize">{props.project.name}</div>
       <div className="col-md-12 no-padding">
         <div className="col-md-2 d-inline-block no-padding">
           <div className="owner-block">

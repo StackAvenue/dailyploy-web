@@ -96,7 +96,7 @@ class AddMemberModal extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr className>
+                <tr>
                   <td>
                     <input
                       className={`form-control name ${

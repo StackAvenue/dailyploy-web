@@ -431,7 +431,7 @@
           }
         }
         select {
-          height: 40px !important;
+          height: 34px !important;
           border-radius: 5px !important;
           border: 1px solid $color-borders;
           font-size: 15px !important;
@@ -831,7 +831,7 @@
   .modal-content {
     width: 658px;
     .header {
-      padding: 17px 0 0px 49px !important;
+      padding: 17px 0 0px 30px !important;
       span {
         font-size: 20px;
         font-weight: bold;
@@ -918,6 +918,9 @@
           margin-left: 7% !important;
         }
       }
+    }
+    .table{
+      margin: 1rem 2rem 1rem 2rem !important;
     }
   }
 }
@@ -1421,34 +1424,43 @@ table.scheduler-table tr:last-child td {
 .member-modal {
   margin: 10% !important;
   .modal-content {
-    width: 1140px !important;
+    width: 1110px !important;
   }
   .heading {
     border: 0 !important;
     thead {
       tr {
+        th:first-child{
+          padding-left: 0px;
+        }
         th {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
-          color: $color-text3 !important;
           font-weight: 500 !important;
           border-top: 0 !important;
+          border-bottom: 1px solid #dee2e6;
         }
       }
+    }
+    td:first-child {
+      padding-left: 0px;
+    }
+    td:last-child {
+      padding-right: 0px;
     }
     td {
       border: 0 !important;
       .name {
-        width: 170px !important;
+        width: 200px !important;
       }
       .email {
-        width: 220px !important;
+        width: 250px !important;
       }
       .role {
-        width: 120px !important;
+        width: 140px !important;
       }
       .project {
-        width: 250px !important;
+        width: 220px !important;
       }
       .select-memeber-project{
         .down-icon{
@@ -1456,6 +1468,7 @@ table.scheduler-table tr:last-child td {
           right: 5px !important;
         }
         .custom-search-select{
+          height: 36px !important;
           input{
             width: 50% !important;
             height: 34px !important;
@@ -1468,11 +1481,15 @@ table.scheduler-table tr:last-child td {
         color: $color-text2 !important;
       }
       select {
+        height: 36px !important;
         border-radius: 5px !important;
         border: solid 1px $color-borders;
         font-size: 15px !important;
         font-family: $font-family-roboto !important;
         color: $color-text2 !important;
+      }
+      input{
+        height: 36px !important;
       }
     }
   }
@@ -1503,8 +1520,8 @@ table.scheduler-table tr:last-child td {
   }
   .auto-search {
     position: absolute;
-    top: 144px;
-    width: 170px;
+    top: 160px;
+    width: 200px;
     border: solid 1px;
     border-color: $color-white;
     height: auto;
