@@ -15,10 +15,6 @@ class TaskInfoModal extends Component {
       name: "high",
       color_code: "#00A031"
     };
-    this.category = {
-      name: "Meeting",
-      color_code: "#9B9B9B"
-    };
     this.state = {
       color: "#ffffff",
       showTimerMenu: false
@@ -134,7 +130,8 @@ class TaskInfoModal extends Component {
 
   isValidUserDate = () => {
     const props = this.props.state;
-    return this.isToday() && props.taskEvent.resourceId === props.userId;
+    // return this.isToday() && props.taskEvent.resourceId === props.userId;
+    return props.taskEvent.resourceId === props.userId;
   };
 
   async saveTaskTrackingTime(endOn) {

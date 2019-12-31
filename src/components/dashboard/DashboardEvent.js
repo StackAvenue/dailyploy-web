@@ -47,10 +47,14 @@ class DashboardEvent extends Component {
       var icon = this.state.icon;
       var updateIcon = icon;
       var status = state.status;
+      var taskTimerLog = [];
       if (state.status) {
         var endOn = Date.now();
         this.setState({ runningTime: 0, endOn: endOn });
-        this.handleTaskTrackingStop(this.props.event.id, endOn);
+        var taskTimerLog = this.handleTaskTrackingStop(
+          this.props.event.id,
+          endOn
+        );
         this.handleReset();
         this.props.handleTaskBottomPopup("");
         updateIcon =
@@ -89,26 +93,34 @@ class DashboardEvent extends Component {
       return {
         status: status,
         showPopup: false,
-        icon: updateIcon
+        icon: updateIcon,
+        taskTimerLog: taskTimerLog
       };
     });
   };
 
   handleTaskTrackingStop = async (taskId, dateTime) => {
+    var taskTimerLog = [];
     if (taskId && dateTime) {
-      taskId = taskId.split("-")[0];
+      var newTaskId = taskId.split("-")[0];
       var taskDate = {
         end_time: new Date(dateTime),
         status: "stopped"
       };
       try {
-        const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+        const { data } = await put(
+          taskDate,
+          `tasks/${newTaskId}/stop-tracking`
+        );
         if (data) {
           var taskTimerLog = [...this.state.taskTimerLog, ...[data]];
-          this.setState({ taskTimerLog: taskTimerLog });
+          // this.setState({
+          //   taskTimerLog: taskTimerLog
+          // });
         }
       } catch (e) {}
     }
+    return taskTimerLog;
   };
 
   handleReset = () => {
@@ -173,7 +185,8 @@ class DashboardEvent extends Component {
   }
 
   isValidUserDate = userId => {
-    return this.isToday && this.props.userId === userId;
+    return this.props.userId === userId;
+    // return this.isToday && this.props.userId === userId;
   };
 
   returnTime = time => {
