@@ -4115,13 +4115,15 @@ table.scheduler-table tr:last-child td {
     }
   }
   .dropdown{
+    min-height: 85px;
+    overflow-y: scroll;
     position: absolute;
     left: 15px;
     top: 31px;
     bottom: 31px;
     z-index: 500;
     width: 110px;
-    height: auto;
+    // height: auto;
     background-color: #ffffff !important;
   }
 }

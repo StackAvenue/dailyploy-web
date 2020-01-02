@@ -243,7 +243,6 @@ class Workspace extends Component {
       var localTaskId = localStorage.getItem(
         `taskId-${this.state.workspaceId}`
       );
-      localTaskId = localTaskId.split("-")[0];
       if (localTaskId == this.state.taskId) {
         var taskDate = {
           end_time: new Date(),
