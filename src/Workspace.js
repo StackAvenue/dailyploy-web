@@ -210,7 +210,7 @@ class Workspace extends Component {
     return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
   };
 
-  handleTaskBottomPopup = (startOn, timeTracked) => {
+  handleTaskBottomPopup = (startOn, event, trackStatus) => {
     var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`);
     var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
     var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`);
@@ -222,8 +222,8 @@ class Workspace extends Component {
       colorCode: colorCode,
       taskTitle: taskTitle,
       timeTracked:
-        startOn != "" && timeTracked && timeTracked.length > 0
-          ? timeTracked
+        startOn != "" && event.timeTracked && event.timeTracked.length > 0
+          ? event.timeTracked
           : [],
       isStart:
         taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""

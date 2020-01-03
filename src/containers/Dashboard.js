@@ -444,10 +444,11 @@ class Dashboard extends Component {
   editTask = async () => {
     if (this.validateTaskModal()) {
       const taskData = this.taskDetails();
+      var taskId = this.state.taskId.split("-")[0];
       try {
         const { data } = await put(
           taskData,
-          `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${this.state.taskId}`
+          `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${taskId}`
         );
         var task = data.task;
         toast(
@@ -870,7 +871,7 @@ class Dashboard extends Component {
         });
         if (taskId === event.id) {
           this.handleReset();
-          this.props.handleTaskBottomPopup("");
+          this.props.handleTaskBottomPopup("", null, "stop");
         }
       }
     }
@@ -907,7 +908,7 @@ class Dashboard extends Component {
     var showAlert = false;
     if (status) {
       this.handleReset();
-      this.props.handleTaskBottomPopup("");
+      this.props.handleTaskBottomPopup("", null, "stop");
       this.handleTaskTracking("stop", this.state.taskId, Date.now());
       this.setState({ events: this.state.events });
       updateIcon =
@@ -934,7 +935,8 @@ class Dashboard extends Component {
       );
       this.props.handleTaskBottomPopup(
         this.state.startOn,
-        this.state.timeTracked
+        this.state.taskEvent,
+        "start"
       );
       this.handleTaskTracking("start", this.state.taskId, startOn);
       updateIcon =

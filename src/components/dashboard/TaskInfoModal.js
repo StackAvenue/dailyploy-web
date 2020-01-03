@@ -35,7 +35,7 @@ class TaskInfoModal extends Component {
         this.handleReset();
         this.props.handleTaskPlay("check");
         if (eventTaskId === taskId) {
-          this.props.handleTaskBottomPopup("");
+          this.props.handleTaskBottomPopup("", null, "stop");
         }
       }
     }

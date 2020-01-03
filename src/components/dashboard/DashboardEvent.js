@@ -42,7 +42,7 @@ class DashboardEvent extends Component {
     }
   }
 
-  componentDidUpdate = (prevProps, prevStatae) => {
+  componentDidUpdate = (prevProps, prevState) => {
     var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
     var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
     if (
@@ -75,65 +75,120 @@ class DashboardEvent extends Component {
     }
   };
 
-  handleClick = () => {
-    this.setState(state => {
-      var icon = this.state.icon;
-      var updateIcon = icon;
-      var status = state.status;
-      var taskTimerLog = [];
-      if (state.status) {
-        var endOn = Date.now();
-        this.setState({ runningTime: 0, endOn: endOn });
-        var taskTimerLog = this.handleTaskTrackingStop(
-          this.props.event.id,
-          endOn
+  // handleClick = event => {
+  //   this.setState(state => {
+  //     var icon = this.state.icon;
+  //     var updateIcon = icon;
+  //     var status = state.status;
+  //     var taskTimerLog = [];
+  //     if (state.status) {
+  //       var endOn = Date.now();
+  //       // this.setState({ runningTime: 0, endOn: endOn });
+  //       var taskTimerLog = this.handleTaskTrackingStop(
+  //         this.props.event.id,
+  //         endOn
+  //       );
+  //       this.handleReset();
+  //       this.props.handleTaskBottomPopup("", event, "stop");
+  //       updateIcon =
+  //         icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+  //       status = !state.status;
+  //     } else {
+  //       if (this.props.onGoingTask) {
+  //         updateIcon = icon;
+  //         this.setState({ showAlert: !this.state.showAlert });
+  //       } else {
+  //         var startOn = Date.now();
+  //         this.setState({ startOn: startOn });
+  //         localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
+  //         localStorage.setItem(
+  //           `taskId-${this.props.workspaceId}`,
+  //           this.props.event.id
+  //         );
+  //         localStorage.setItem(
+  //           `colorCode-${this.props.workspaceId}`,
+  //           this.props.bgColor
+  //         );
+  //         localStorage.setItem(
+  //           `taskTitle-${this.props.workspaceId}`,
+  //           this.props.titleText
+  //         );
+  //         this.props.handleTaskBottomPopup(
+  //           this.state.startOn,
+  //           this.props.event,
+  //           "start"
+  //         );
+  //         var updateIcon =
+  //           icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+  //         status = !state.status;
+  //         this.props.handleTaskTracking("start", this.props.event.id, startOn);
+  //       }
+  //     }
+  //     return {
+  //       status: status,
+  //       showPopup: false,
+  //       icon: updateIcon,
+  //       taskTimerLog: taskTimerLog,
+  //       clickEventId: event.id
+  //     };
+  //   });
+  // };
+
+  handleClick = event => {
+    var icon = this.state.icon;
+    var updateIcon = icon;
+    var status = this.state.status;
+    var taskTimerLog = [];
+    var showAlert = false;
+    var startOn = "";
+    if (status) {
+      var endOn = Date.now();
+      this.handleTaskTrackingStop(this.props.event.id, endOn);
+      this.handleReset();
+      this.props.handleTaskBottomPopup("", event, "stop");
+      updateIcon =
+        icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+      status = !this.state.status;
+    } else {
+      if (this.props.onGoingTask) {
+        updateIcon = icon;
+        showAlert = !this.state.showAlert;
+      } else {
+        startOn = Date.now();
+        localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
+        localStorage.setItem(
+          `taskId-${this.props.workspaceId}`,
+          this.props.event.id
         );
-        this.handleReset();
-        this.props.handleTaskBottomPopup("");
+        localStorage.setItem(
+          `colorCode-${this.props.workspaceId}`,
+          this.props.bgColor
+        );
+        localStorage.setItem(
+          `taskTitle-${this.props.workspaceId}`,
+          this.props.titleText
+        );
+        this.props.handleTaskBottomPopup(
+          this.state.startOn,
+          this.props.event,
+          "start"
+        );
         updateIcon =
           icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-        status = !state.status;
-      } else {
-        if (this.props.onGoingTask) {
-          updateIcon = icon;
-          this.setState({ showAlert: !this.state.showAlert });
-        } else {
-          var startOn = Date.now();
-          this.setState({ startOn: startOn });
-          localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
-          localStorage.setItem(
-            `taskId-${this.props.workspaceId}`,
-            this.props.event.id
-          );
-          localStorage.setItem(
-            `colorCode-${this.props.workspaceId}`,
-            this.props.bgColor
-          );
-          localStorage.setItem(
-            `taskTitle-${this.props.workspaceId}`,
-            this.props.titleText
-          );
-          this.props.handleTaskBottomPopup(
-            this.state.startOn,
-            this.props.event.timeTracked
-          );
-          var updateIcon =
-            icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-          status = !state.status;
-          this.props.handleTaskTracking("start", this.props.event.id, startOn);
-        }
+        status = !this.state.status;
+        this.props.handleTaskTracking("start", this.props.event.id, startOn);
       }
-      return {
-        status: status,
-        showPopup: false,
-        icon: updateIcon,
-        taskTimerLog: taskTimerLog
-      };
+    }
+    this.setState({
+      status: status,
+      showPopup: false,
+      icon: updateIcon,
+      clickEventId: event.id,
+      showAlert: showAlert
     });
   };
 
   handleTaskTrackingStop = async (taskId, dateTime) => {
-    var taskTimerLog = [];
     if (taskId && dateTime) {
       var newTaskId = taskId.split("-")[0];
       var taskDate = {
@@ -145,15 +200,15 @@ class DashboardEvent extends Component {
           taskDate,
           `tasks/${newTaskId}/stop-tracking`
         );
-        if (data) {
-          var taskTimerLog = [...this.state.taskTimerLog, ...[data]];
-          // this.setState({
-          //   taskTimerLog: taskTimerLog
-          // });
+        var trackData = data;
+        if (trackData) {
+          var taskTimerLog = [...this.state.taskTimerLog, ...[trackData]];
+          this.setState({
+            taskTimerLog: taskTimerLog
+          });
         }
       } catch (e) {}
     }
-    return taskTimerLog;
   };
 
   handleReset = () => {
@@ -200,7 +255,7 @@ class DashboardEvent extends Component {
         this.handleReset();
         this.setState({ icon: "check", showAction: false });
         if (taskId === id) {
-          this.props.handleTaskBottomPopup("");
+          this.props.handleTaskBottomPopup("", this.props.event, "stop");
         }
       }
     }
@@ -241,6 +296,7 @@ class DashboardEvent extends Component {
     } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
+    // console.log("taskTimerLog", this.state.taskTimerLog);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
@@ -300,7 +356,7 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.handleClick()}
+                    onClick={() => this.handleClick(event)}
                   >
                     <i className="fa fa-pause"></i>
                   </div>
@@ -314,7 +370,7 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.handleClick(event.id)}
+                    onClick={() => this.handleClick(event)}
                   >
                     <i className="fa fa-play"></i>
                   </div>
