@@ -510,6 +510,7 @@ class Calendar extends Component {
           userId={this.props.state.userId}
           taskEventResumeConfirm={this.props.taskEventResumeConfirm}
           handleTaskTracking={this.props.handleTaskTracking}
+          state={this.props.state}
         />
       </>
     );

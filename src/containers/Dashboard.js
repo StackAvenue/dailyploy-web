@@ -217,6 +217,19 @@ class Dashboard extends Component {
       }
       this.setState({ timeDateTo: endDateTime });
     }
+    if (
+      prevProps.state.isStart != this.props.state.isStart &&
+      this.state.status
+    ) {
+      this.setState({
+        status: this.props.state.isStart
+      });
+    }
+    if (prevProps.state.icon === "pause" && this.props.state.icon === "play") {
+      this.setState({
+        icon: "play"
+      });
+    }
   }
 
   async componentDidMount() {
@@ -792,7 +805,7 @@ class Dashboard extends Component {
         dateTo: endDate,
         timeFrom: startTime,
         timeTo: endTime,
-        taskId: taskId,
+        taskId: event.id,
         selectedMembers: selectedMembers,
         taskName: event.title,
         editProjectId: event.projectId,

@@ -76,6 +76,7 @@ class Workspace extends Component {
       colorCode: "",
       taskId: "",
       taskTitle: "",
+      icon: "",
       showPopup: false,
       runningTime: 0,
       isStart: false,

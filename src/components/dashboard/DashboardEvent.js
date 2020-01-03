@@ -42,6 +42,39 @@ class DashboardEvent extends Component {
     }
   }
 
+  componentDidUpdate = (prevProps, prevStatae) => {
+    var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
+    var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
+    if (
+      this.props.state.status &&
+      this.props.state.status != this.state.status &&
+      this.props.state.showInfo &&
+      taskId === this.props.state.taskId &&
+      this.props.state.taskId === this.props.event.id &&
+      startOn !== ""
+    ) {
+      this.setState({
+        status: true,
+        startOn: startOn,
+        icon: "pause"
+      });
+    }
+    if (
+      !this.props.state.status &&
+      this.props.state.status != this.state.status &&
+      this.props.state.showInfo &&
+      this.props.state.taskId === this.props.event.id &&
+      startOn === "" &&
+      taskId === ""
+    ) {
+      this.setState({
+        status: false,
+        startOn: "",
+        icon: "play"
+      });
+    }
+  };
+
   handleClick = () => {
     this.setState(state => {
       var icon = this.state.icon;
