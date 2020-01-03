@@ -172,7 +172,7 @@ class Dashboard extends Component {
                 " " +
                 moment(task.end_datetime).format("HH:mm");
               var tasksObj = {
-                id: task.id + "-" + index,
+                id: task.id + "-" + dateWiseTasks.date,
                 start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
                 end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
                 resourceId: user.id,
@@ -312,7 +312,7 @@ class Dashboard extends Component {
               " " +
               moment(new Date(task.end_datetime)).format("HH:mm");
             var tasksObj = {
-              id: task.id + "-" + index,
+              id: task.id + "-" + dateWiseTasks.date,
               start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
               end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
               resourceId: user.id,
