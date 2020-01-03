@@ -110,12 +110,7 @@ const EditMemberModal = props => {
 };
 
 const MemberProject = props => {
-  let memberProject = props.projects
-    .slice(0, props.projects.length - 1)
-    .map(project => project.name + ", ");
-  let memberProjects = memberProject.join("");
-  let lastProject = props.projects[props.projects.length - 1].name;
-  return memberProjects + lastProject;
+  return props.projects.map(project => project.name).join(", ");
 };
 
 export default EditMemberModal;
