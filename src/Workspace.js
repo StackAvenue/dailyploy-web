@@ -147,6 +147,13 @@ class Workspace extends Component {
     });
   }
 
+  handleReset = () => {
+    localStorage.setItem(`startOn-${this.props.workspaceId}`, "");
+    localStorage.setItem(`taskId-${this.props.workspaceId}`, "");
+    localStorage.setItem(`colorCode-${this.props.workspaceId}`, "");
+    localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "");
+  };
+
   logout = async () => {
     await logout();
     this.props.history.push("/login");
@@ -253,11 +260,7 @@ class Workspace extends Component {
         try {
           const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
         } catch (e) {}
-        localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
-        localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
-        localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
-        localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
-
+        this.handleReset();
         this.setState({
           startOn: "",
           taskId: "",

@@ -979,9 +979,9 @@ class Dashboard extends Component {
     this.setState({ taskCategorie: option });
   };
 
-  handleTaskTracking = async (taskType, taskId, dateTime) => {
-    if (taskType && taskId && dateTime) {
-      taskId = taskId.split("-")[0];
+  handleTaskTracking = async (taskType, eventTaskId, dateTime) => {
+    if (taskType && eventTaskId && dateTime) {
+      var taskId = eventTaskId.split("-")[0];
       if (taskType === "start") {
         var taskDate = {
           start_time: new Date(dateTime),
@@ -1000,8 +1000,15 @@ class Dashboard extends Component {
         };
         try {
           const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-          var timeTracked = [...this.state.timeTracked, ...[data]];
-          this.setState({ timeTracked: timeTracked });
+          var events = this.state.events.filter(
+            event => event.id !== eventTaskId
+          );
+          var event = this.state.events.find(event => event.id === eventTaskId);
+          var timeTracked = [...event.timeTracked, ...[data]];
+          event["timeTracked"] = timeTracked;
+          var newEvent = [...events, ...[event]];
+          var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
+          this.setState({ events: newEvent, timeTracked: infoTimeTrackLog });
         } catch (e) {}
       }
     }

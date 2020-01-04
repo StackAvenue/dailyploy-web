@@ -134,16 +134,15 @@ class DashboardEvent extends Component {
   //   });
   // };
 
-  handleClick = event => {
+  handleClick = async event => {
     var icon = this.state.icon;
     var updateIcon = icon;
     var status = this.state.status;
-    var taskTimerLog = [];
     var showAlert = false;
     var startOn = "";
     if (status) {
       var endOn = Date.now();
-      this.handleTaskTrackingStop(this.props.event.id, endOn);
+      this.props.handleTaskTracking("stop", event.id, endOn);
       this.handleReset();
       this.props.handleTaskBottomPopup("", event, "stop");
       updateIcon =
@@ -155,24 +154,8 @@ class DashboardEvent extends Component {
         showAlert = !this.state.showAlert;
       } else {
         startOn = Date.now();
-        localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
-        localStorage.setItem(
-          `taskId-${this.props.workspaceId}`,
-          this.props.event.id
-        );
-        localStorage.setItem(
-          `colorCode-${this.props.workspaceId}`,
-          this.props.bgColor
-        );
-        localStorage.setItem(
-          `taskTitle-${this.props.workspaceId}`,
-          this.props.titleText
-        );
-        this.props.handleTaskBottomPopup(
-          this.state.startOn,
-          this.props.event,
-          "start"
-        );
+        this.setLocalStorageValue(startOn);
+        this.props.handleTaskBottomPopup(startOn, this.props.event, "start");
         updateIcon =
           icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
         status = !this.state.status;
@@ -184,31 +167,25 @@ class DashboardEvent extends Component {
       showPopup: false,
       icon: updateIcon,
       clickEventId: event.id,
-      showAlert: showAlert
+      showAlert: showAlert,
+      startOn: startOn
     });
   };
 
-  handleTaskTrackingStop = async (taskId, dateTime) => {
-    if (taskId && dateTime) {
-      var newTaskId = taskId.split("-")[0];
-      var taskDate = {
-        end_time: new Date(dateTime),
-        status: "stopped"
-      };
-      try {
-        const { data } = await put(
-          taskDate,
-          `tasks/${newTaskId}/stop-tracking`
-        );
-        var trackData = data;
-        if (trackData) {
-          var taskTimerLog = [...this.state.taskTimerLog, ...[trackData]];
-          this.setState({
-            taskTimerLog: taskTimerLog
-          });
-        }
-      } catch (e) {}
-    }
+  setLocalStorageValue = startOn => {
+    localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
+    localStorage.setItem(
+      `taskId-${this.props.workspaceId}`,
+      this.props.event.id
+    );
+    localStorage.setItem(
+      `colorCode-${this.props.workspaceId}`,
+      this.props.bgColor
+    );
+    localStorage.setItem(
+      `taskTitle-${this.props.workspaceId}`,
+      this.props.titleText
+    );
   };
 
   handleReset = () => {
@@ -296,7 +273,6 @@ class DashboardEvent extends Component {
     } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
-    // console.log("taskTimerLog", this.state.taskTimerLog);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
