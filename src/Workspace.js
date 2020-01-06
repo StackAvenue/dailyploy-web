@@ -222,19 +222,29 @@ class Workspace extends Component {
     var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
     var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`);
     var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`);
-
-    this.setState({
-      startOn: startOn,
-      taskId: taskId,
-      colorCode: colorCode,
-      taskTitle: taskTitle,
-      timeTracked:
-        startOn != "" && event.timeTracked && event.timeTracked.length > 0
-          ? event.timeTracked
-          : [],
-      isStart:
-        taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
-    });
+    if (trackStatus === "start") {
+      this.setState({
+        startOn: startOn,
+        taskId: taskId,
+        colorCode: colorCode,
+        taskTitle: taskTitle,
+        timeTracked:
+          startOn != "" && event.timeTracked && event.timeTracked.length > 0
+            ? event.timeTracked
+            : [],
+        isStart:
+          taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
+      });
+    } else if (trackStatus === "stop") {
+      this.setState({
+        startOn: "",
+        taskId: "",
+        colorCode: "",
+        taskTitle: "",
+        timeTracked: [],
+        isStart: false
+      });
+    }
   };
 
   isBottomPopup = () => {

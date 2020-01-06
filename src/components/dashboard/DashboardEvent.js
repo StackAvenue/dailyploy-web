@@ -407,15 +407,6 @@ class DashboardEvent extends Component {
                 );
               }
             })}
-            {this.state.taskTimerLog.length > 0
-              ? this.state.taskTimerLog.map(time => {
-                  return (
-                    <div className="hover-border" key={time.id}>
-                      {this.returnTime(time)}
-                    </div>
-                  );
-                })
-              : null}
           </div>
         ) : null}
 

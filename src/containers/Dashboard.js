@@ -992,6 +992,11 @@ class Dashboard extends Component {
             taskDate,
             `tasks/${taskId}/start-tracking`
           );
+          this.setState({
+            status: true,
+            startOn: dateTime,
+            taskId: eventTaskId
+          });
         } catch (e) {}
       } else if (taskType === "stop") {
         var taskDate = {
