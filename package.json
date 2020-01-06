@@ -12,6 +12,7 @@
     "dotenv": "^8.2.0",
     "env-cmd": "^10.0.1",
     "faker": "^4.1.0",
+    "highcharts": "^8.0.0",
     "interactjs": "^1.4.12",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",

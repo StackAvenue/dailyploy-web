@@ -13,6 +13,7 @@ import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
 import DailyPloySelect from "./../DailyPloySelect";
+import SummuryReportCharts from "./Reports/SummuryReportCharts";
 
 class Reports extends Component {
   constructor(props) {
@@ -35,7 +36,8 @@ class Reports extends Component {
         color_code: "#9B9B9B"
       },
       {
-        name: "all priority"
+        name: "all priority",
+        color_code: "#e5e5e5"
       }
     ];
     this.state = {
@@ -757,8 +759,12 @@ class Reports extends Component {
                 </div>
               </div>
 
-              <div className="summary-reports">
-                <span>Summary Reports Comming Soon...!</span>
+              <div className="">
+                <SummuryReportCharts
+                  priorities={this.priorities}
+                  projects={this.state.projects}
+                  state={this.state}
+                />
               </div>
 
               <div className="report-table">
