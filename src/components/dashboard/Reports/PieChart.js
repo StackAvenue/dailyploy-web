@@ -9,11 +9,20 @@ class PieChart extends Component {
 
   generateChartData = () => {
     let data = this.props.data.map((item, idx) => {
-      const container = {};
-      container["name"] = item.name;
-      container["color"] = item.color_code;
-      container["y"] = idx + 1 * 5;
-      return container;
+      return {
+        name: item.name,
+        color: item.color_code,
+        y: idx + 1 * 5,
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontWeight: "bold"
+          },
+          formatter: function() {
+            return "<b class='hour-popup'>" + this.y + "</b> ";
+          }
+        }
+      };
     });
     if (this.props.type === "Projects") {
       data.push({
@@ -21,7 +30,11 @@ class PieChart extends Component {
         y: 7.61,
         color: "#e5e5e5",
         dataLabels: {
-          enabled: false
+          enabled: true,
+          formatter: function() {
+            // return "<b>" + this.point.name + ":</b> " + this.y + "%";
+            return "<span class='hour-popup'>" + this.y + "</span> ";
+          }
         }
       });
     }
@@ -29,13 +42,30 @@ class PieChart extends Component {
   };
 
   generateCategoryChartData = () => {
-    return this.props.data.map((item, idx) => {
-      const container = {};
-      container["name"] = item.name;
-      // container["color"] = item.color_code;
-      container["y"] = idx + 1 * 5;
-      return container;
+    var data = this.props.data.map((item, idx) => {
+      return {
+        name: item.name,
+        y: idx + 1 * 5,
+        dataLabels: {
+          enabled: true,
+          formatter: function() {
+            return "<b>" + this.y + "</b>";
+          }
+        }
+      };
     });
+    data.push({
+      name: "Other",
+      y: 7.61,
+      color: "#e5e5e5",
+      dataLabels: {
+        enabled: true,
+        formatter: function() {
+          return "<b>" + this.y + "</b>";
+        }
+      }
+    });
+    return data;
   };
 
   componentDidMount = () => {
@@ -49,7 +79,8 @@ class PieChart extends Component {
     Highcharts.chart(id, {
       chart: {
         type: "pie",
-        height: 182
+        height: 182,
+        styledMode: true
       },
       title: {
         text: chartType,
@@ -60,7 +91,7 @@ class PieChart extends Component {
       plotOptions: {
         pie: {
           dataLabels: {
-            enabled: false,
+            enabled: true,
             distance: -10,
             style: {
               fontWeight: "bold",
@@ -80,31 +111,13 @@ class PieChart extends Component {
         {
           name: "Name",
           data: data,
-          //   data: [
-          //     ["Chrome", 58.9, "#ffa700"],
-          //     ["Firefox", 13.29],
-          //     ["Internet Explorer", 13],
-          //     ["Edge", 3.78],
-          //     ["Safari", 3.42],
-          //     {
-          //       name: "Other",
-          //       y: 7.61,
-          //       dataLabels: {
-          //         enabled: false
-          //       }
-          //     }
-          //   ],
-          size: "172",
+          size: 182,
           innerSize: "60%",
-          dataLabels: {
-            formatter: function() {
-              // display only if larger than 1
-              // return this.y > 1
-              //   ? "<b>" + this.point.name + ":</b> " + this.y + "%"
-              //   : null;
-              return "<b>" + this.name + ":</b> " + this.y + "%";
-            }
-          },
+          // dataLabels: {
+          //   formatter: function() {
+          //     // return "<b>" + this.point.name + ":</b> " + this.y + "%";
+          //   }
+          // },
           id: "name"
         }
       ],
@@ -120,7 +133,7 @@ class PieChart extends Component {
                 {
                   id: "versions",
                   dataLabels: {
-                    enabled: false
+                    enabled: true
                   }
                 }
               ]
@@ -157,7 +170,7 @@ class PieChart extends Component {
             distance: -10,
             style: {
               fontWeight: "bold",
-              color: "white"
+              border: "solid 1px"
             }
           },
           center: ["50%", "50%"],
@@ -173,31 +186,13 @@ class PieChart extends Component {
         {
           name: "Name",
           data: data,
-          //   data: [
-          //     ["Chrome", 58.9, "#ffa700"],
-          //     ["Firefox", 13.29],
-          //     ["Internet Explorer", 13],
-          //     ["Edge", 3.78],
-          //     ["Safari", 3.42],
-          //     {
-          //       name: "Other",
-          //       y: 7.61,
-          //       dataLabels: {
-          //         enabled: false
-          //       }
-          //     }
-          //   ],
           size: "172",
           innerSize: "60%",
-          dataLabels: {
-            formatter: function() {
-              // display only if larger than 1
-              // return this.y > 1
-              //   ? "<b>" + this.point.name + ":</b> " + this.y + "%"
-              //   : null;
-              return "<b>" + this.name + ":</b> " + this.y + "%";
-            }
-          },
+          // dataLabels: {
+          //   formatter: function() {
+          //     // return "<b>" + this.point.name + ":</b> " + this.y + "%";
+          //   }
+          // },
           id: "name"
         }
       ],

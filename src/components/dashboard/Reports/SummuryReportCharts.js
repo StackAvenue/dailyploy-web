@@ -9,9 +9,6 @@ class SummuryReportCharts extends Component {
     this.state = {};
   }
 
-  componentDidMount = () => {
-    console.log(moment.monthsShort());
-  };
   render() {
     return (
       <div className="summary-reports">
@@ -53,7 +50,7 @@ class SummuryReportCharts extends Component {
             <PieChart
               id="categoryPieChart"
               type="Categories"
-              data={this.props.priorities}
+              data={this.props.state.taskCategories}
             />
           </div>
           <div className="chart d-inline-block">
@@ -65,7 +62,23 @@ class SummuryReportCharts extends Component {
           </div>
         </div>
         <div className="column-chart d-inline-block">
-          <ColumnChart data={this.props.state.selectedDays} />
+          <ColumnChart
+            data={this.props.state.barChartArray.data}
+            barWidth={this.props.state.barChartArray.width}
+            state={this.props.state}
+          />
+        </div>
+        <div className="legend d-inline-block">
+          <div className="d-inline-block">
+            <span className="box d-inline-block"></span>
+            <span className="text">Remaining Scheduled Time (hours)</span>
+          </div>
+          <div className="d-inline-block">
+            <span className="box stripe-2 d-inline-block"></span>
+            <span className="text">
+              All other colours for Projects/ Categories/ Priorities
+            </span>
+          </div>
         </div>
       </div>
     );

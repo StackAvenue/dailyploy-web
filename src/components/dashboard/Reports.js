@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./Header";
 import { get, logout, mockGet } from "../../utils/API";
-import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
+import {
+  DATE_FORMAT1,
+  MONTH_FORMAT,
+  DATE_FORMAT6,
+  MONTH_FORMAT1
+} from "./../../utils/Constants";
 import moment from "moment";
 import MenuBar from "./MenuBar";
 import Sidebar from "./Sidebar";
@@ -33,7 +38,11 @@ class Reports extends Component {
       },
       {
         name: "low",
-        color_code: "#9B9B9B"
+        color_code: "#555555"
+      },
+      {
+        name: "no priority",
+        color_code: "#9b9b9b"
       },
       {
         name: "all priority",
@@ -69,7 +78,8 @@ class Reports extends Component {
       taskDetails: {},
       message: "My Daily Report",
       frequency: "daily",
-      taskCategories: []
+      taskCategories: [],
+      barChartArray: this.generateDailyBarChartData(new Date())
     };
   }
 
@@ -135,6 +145,57 @@ class Reports extends Component {
     });
   };
 
+  generateDailyBarChartData = date => {
+    var weekDays = this.getWeekDays(this.getWeekRange(date).from);
+    var data = [];
+    var dates = weekDays.map(date => {
+      let m = moment(date);
+      data.push(m.format(DATE_FORMAT6));
+      return {
+        startDate: m.format(DATE_FORMAT1),
+        name: m.format(DATE_FORMAT6),
+        frequency: "daily"
+      };
+    });
+    return { data: data, dates: dates, barWidth: 50 };
+  };
+
+  generateWeeklyBarChartData = date => {
+    var weekDays = this.getWeekDays(this.getWeekRange(date).from);
+    let dates = [];
+    let data = [];
+    for (let i = 0; i < 4; i++) {
+      let md = moment(weekDays[0]);
+      let week = `Week ${md.week()}`;
+      data.push(week);
+      dates.push({
+        startDate: md.format(DATE_FORMAT1),
+        name: week,
+        frequency: "weekly"
+      });
+      let newDate = md.subtract(1, "days");
+      weekDays = this.getWeekDays(this.getWeekRange(newDate).from);
+    }
+    return { data: data.reverse(), dates: dates.reverse(), barWidth: 85 };
+  };
+
+  generateMonthlyBarChartData = d => {
+    let year = moment(d).year();
+    let dates = [];
+    let data = [];
+    for (let i = 1; i <= 12; i++) {
+      var date = `${year}-${i}-1`;
+      let month = moment(date).format(MONTH_FORMAT1);
+      data.push(month);
+      dates.push({
+        startDate: date,
+        name: month,
+        frequency: "monthly"
+      });
+    }
+    return { data: data, dates: dates, barWidth: 30 };
+  };
+
   calenderButtonHandle = name => {
     var self = this;
     if (name == "daily") {
@@ -143,6 +204,7 @@ class Reports extends Component {
         weekly: false,
         daily: true,
         monthly: false,
+        barChartArray: this.generateDailyBarChartData(new Date()),
         frequency: "daily"
       });
     }
@@ -151,6 +213,7 @@ class Reports extends Component {
         weekly: false,
         daily: false,
         monthly: true,
+        barChartArray: this.generateMonthlyBarChartData(new Date()),
         frequency: "monthly"
       });
       this.handleMonthlyDateFrom(new Date());
@@ -160,6 +223,7 @@ class Reports extends Component {
         weekly: true,
         daily: false,
         monthly: false,
+        barChartArray: this.generateWeeklyBarChartData(),
         frequency: "weekly"
       });
       this.handleDayChange(new Date());
@@ -181,7 +245,8 @@ class Reports extends Component {
         moment(weekdays[6]).format(fm) +
         " (Week " +
         week +
-        ")"
+        ")",
+      barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
     });
   };
 
@@ -221,7 +286,8 @@ class Reports extends Component {
         moment(weekdays[6]).format(MONTH_FORMAT) +
         "(Week" +
         this.state.weekNumber +
-        ")"
+        ")",
+      barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
     });
   };
 
@@ -284,10 +350,13 @@ class Reports extends Component {
     // MIS report listing
     var searchData = {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      user_id: loggedInData.id,
+      user_ids: loggedInData.id,
       frequency: "daily",
-      project_ids: JSON.stringify(this.props.searchProjectIds)
+      category_id: 1
     };
+    if (this.props.searchProjectIds.length > 0) {
+      searchData["project_ids"] = this.props.searchProjectIds.join(",");
+    }
 
     try {
       const { data } = await get(
@@ -350,13 +419,15 @@ class Reports extends Component {
     ) {
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        user_id:
+        user_ids:
           this.props.searchUserDetails.length > 0
             ? this.props.searchUserDetails[0].member_id
             : this.state.userId,
-        frequency: this.returnFrequency(),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
+        frequency: this.returnFrequency()
       };
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
 
       try {
         const { data } = await get(
@@ -502,7 +573,11 @@ class Reports extends Component {
   };
 
   handleDateFrom = date => {
-    this.setState({ dateFrom: date, selectedDays: [new Date(date)] });
+    this.setState({
+      dateFrom: date,
+      selectedDays: [new Date(date)],
+      barChartArray: this.generateDailyBarChartData(new Date(date))
+    });
   };
 
   handleMonthlyDateFrom = date => {
@@ -513,7 +588,8 @@ class Reports extends Component {
     this.setState({
       dateFrom: new Date(startDate),
       dateTo: new Date(endDate),
-      selectedDays: days
+      selectedDays: days,
+      barChartArray: this.generateMonthlyBarChartData(new Date(startDate))
     });
   };
 
@@ -541,7 +617,8 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(prevDate),
         dateTo: new Date(prevDate),
-        selectedDays: [new Date(prevDate)]
+        selectedDays: [new Date(prevDate)],
+        barChartArray: this.generateDailyBarChartData(new Date(startOfDate))
       });
     } else if (this.state.weekly) {
       const format = "DD MMM";
@@ -561,7 +638,8 @@ class Reports extends Component {
           moment(weekEnd).format(format) +
           " (Week " +
           weekNumber +
-          ")"
+          ")",
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekStart))
       });
     } else if (this.state.monthly) {
       const output = startOfDate.subtract(1, "days").format(DATE_FORMAT1);
@@ -575,7 +653,8 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
-        selectedDays: monthDays
+        selectedDays: monthDays,
+        barChartArray: this.generateMonthlyBarChartData(new Date(endDate))
       });
     }
   };
@@ -590,7 +669,8 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(nextDate),
         dateTo: new Date(nextDate),
-        selectedDays: [new Date(nextDate)]
+        selectedDays: [new Date(nextDate)],
+        barChartArray: this.generateDailyBarChartData(new Date(nextDate))
       });
     } else if (this.state.weekly) {
       const format = "DD MMM";
@@ -610,7 +690,8 @@ class Reports extends Component {
           moment(weekEnd).format(format) +
           " (Week " +
           weekNumber +
-          ")"
+          ")",
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekStart))
       });
     } else if (this.state.monthly) {
       const output = endOfDate.add(1, "days").format(DATE_FORMAT1);
@@ -624,7 +705,8 @@ class Reports extends Component {
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
-        selectedDays: monthDays
+        selectedDays: monthDays,
+        barChartArray: this.generateMonthlyBarChartData(new Date(startDate))
       });
     }
   };
@@ -662,6 +744,7 @@ class Reports extends Component {
           <div className="week-hover-bg d-inline-block">
             <DatePicker
               showWeekNumbers
+              selected={this.state.dateFrom}
               onChange={this.handleDayChange}
               startDate={this.state.selectedDays[0]}
               endDate={this.state.selectedDays[6]}
