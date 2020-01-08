@@ -70,9 +70,6 @@ class ColumnChart extends Component {
       plotOptions: {
         column: {
           stacking: "normal",
-          dataLabels: {
-            enabled: false
-          },
           showInLegend: false
         },
         series: {
@@ -103,7 +100,18 @@ class ColumnChart extends Component {
             {
               y: 5,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               }
             },
             9,
@@ -121,7 +129,18 @@ class ColumnChart extends Component {
             {
               y: 7,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               }
             },
             9,
@@ -139,7 +158,23 @@ class ColumnChart extends Component {
             {
               y: 20,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                // borderRadius: 5,
+                // backgroundColor: "rgba(252, 255, 255, 0.7)",
+                // borderWidth: 1,
+                // color: "#0075d9",
+                // borderColor: "#d6d6d6",
+                // fontSize: 8,
+                style: {
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)",
+                  borderRadius: 5
+                }
               },
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
@@ -166,7 +201,18 @@ class ColumnChart extends Component {
             {
               y: 3,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               }
             }
           ],
@@ -181,7 +227,18 @@ class ColumnChart extends Component {
             {
               y: 5,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               }
             }
           ],
@@ -196,7 +253,18 @@ class ColumnChart extends Component {
             {
               y: 22,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               },
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
@@ -217,7 +285,18 @@ class ColumnChart extends Component {
             {
               y: 5,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               }
             },
             4,
@@ -240,7 +319,18 @@ class ColumnChart extends Component {
             {
               y: 2,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               }
             },
             2,
@@ -263,7 +353,18 @@ class ColumnChart extends Component {
             {
               y: 23,
               dataLabels: {
-                enabled: true
+                formatter: function() {
+                  return "<b>" + this.y + " hours</b>";
+                },
+                enabled: true,
+                style: {
+                  borderRadius: 5,
+                  fontSize: 10,
+                  backgroundColor: "rgba(252, 255, 255, 0.7)",
+                  borderWidth: 1,
+                  color: "#0075d9",
+                  borderColor: "rgba(252, 255, 255, 0.7)"
+                }
               },
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
@@ -355,7 +456,12 @@ class ColumnChart extends Component {
           column: {
             stacking: "normal",
             dataLabels: {
-              enabled: false
+              enabled: false,
+              distance: -10,
+              style: {
+                fontWeight: "bold",
+                color: "white"
+              }
             },
             showInLegend: false
           },
