@@ -16,6 +16,7 @@ import Admin from "../../assets/images/admin.png";
 import Search from "../../assets/images/search.png";
 import SearchImg from "../../assets/images/search.png";
 import { WORKSPACE_ID } from "./../../utils/Constants";
+import SearchFilter from "./../dashboard/SearchFilter";
 
 class Header extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class Header extends Component {
       userRole: "",
       userId: "",
       value: "",
+      searchFlag: "My Reports",
       suggestions: [],
       selectedTags: [],
       selectedMember: null
@@ -221,6 +223,20 @@ class Header extends Component {
     });
   };
 
+  isReports = () => {
+    let routeName = this.props.pathname;
+    if (routeName === "reports") {
+      return true;
+    }
+    return false;
+  };
+
+  toggleSearchBy = text => {
+    this.setState({
+      searchFlag: text
+    });
+  };
+
   render() {
     const { value } = this.state;
     const x = firstTwoLetter(this.props.loggedInUserName);
@@ -257,7 +273,14 @@ class Header extends Component {
                   </span>
                 ) : null}
               </div>
-              <div className="col-md-7 no-padding header-search-bar">
+              <SearchFilter
+                searchOptions={this.props.searchOptions}
+                state={this.state}
+                isReports={this.isReports()}
+                toggleSearchBy={this.toggleSearchBy}
+              />
+
+              {/* <div className="col-md-7 no-padding header-search-bar">
                 <div className="col-md-11 no-padding d-inline-block">
                   <div className="user-project-search text-titlize">
                     <div className="selected-tags">
@@ -288,7 +311,7 @@ class Header extends Component {
                 <div className="col-md-1 d-inline-block">
                   <img alt={"search"} src={SearchImg} />
                 </div>
-              </div>
+              </div> */}
               <div
                 className="collapse navbar-collapse"
                 id="navbarTogglerDemo03"

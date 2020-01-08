@@ -519,39 +519,82 @@ class Reports extends Component {
     return totalSec;
   };
 
+  // createUserProjectList = () => {
+  //   var searchOptions = [];
+  //   if (this.state.projects) {
+  //     {
+  //       this.state.projects.map((project, index) => {
+  //         searchOptions.push({
+  //           value: project.name,
+  //           project_id: project.id,
+  //           type: "project",
+  //           id: (index += 1)
+  //         });
+  //       });
+  //     }
+  //   }
+
+  //   var index = searchOptions.length;
+  //   // if (this.state.userRole === "admin" && this.state.worksapceUsers) {
+  //   //   // var otherMembers = this.state.worksapceUsers.filter(
+  //   //   //   user => user.email !== this.state.userEmail,
+  //   //   // );
+  //   //   {
+  //   //     this.state.worksapceUsers.map((member, idx) => {
+  //   //       searchOptions.push({
+  //   //         value: member.name,
+  //   //         id: (index += 1),
+  //   //         member_id: member.id,
+  //   //         email: member.email,
+  //   //         type: "member",
+  //   //         role: member.role
+  //   //       });
+  //   //     });
+  //   //   }
+  //   // } else {
+  //   //   searchOptions.push({
+  //   //     value: this.state.userName,
+  //   //     id: (index += 1),
+  //   //     member_id: this.state.userId,
+  //   //     email: this.state.userEmail,
+  //   //     type: "member",
+  //   //     role: this.state.userRole
+  //   //   });
+  //   // }
+  //   this.setState({ searchOptions: searchOptions });
+  //   this.props.setSearchOptions(searchOptions);
+  // };
+
   createUserProjectList = () => {
-    var searchOptions = [];
+    var searchOptions = {};
+    let projectList = [];
+    let memberList = [];
     if (this.state.projects) {
       {
         this.state.projects.map((project, index) => {
-          searchOptions.push({
+          projectList.push({
             value: project.name,
             project_id: project.id,
-            type: "project",
-            id: (index += 1)
+            type: "project"
           });
         });
       }
     }
 
-    var index = searchOptions.length;
-    // if (this.state.userRole === "admin" && this.state.worksapceUsers) {
-    //   // var otherMembers = this.state.worksapceUsers.filter(
-    //   //   user => user.email !== this.state.userEmail,
-    //   // );
-    //   {
-    //     this.state.worksapceUsers.map((member, idx) => {
-    //       searchOptions.push({
-    //         value: member.name,
-    //         id: (index += 1),
-    //         member_id: member.id,
-    //         email: member.email,
-    //         type: "member",
-    //         role: member.role
-    //       });
-    //     });
-    //   }
-    // } else {
+    if (this.state.userRole === "admin" && this.state.worksapceUsers) {
+      {
+        this.state.worksapceUsers.map((member, idx) => {
+          memberList.push({
+            value: member.name,
+            member_id: member.id,
+            email: member.email,
+            type: "member",
+            role: member.role
+          });
+        });
+      }
+    }
+    // else {
     //   searchOptions.push({
     //     value: this.state.userName,
     //     id: (index += 1),
@@ -561,10 +604,12 @@ class Reports extends Component {
     //     role: this.state.userRole
     //   });
     // }
-    this.setState({ searchOptions: searchOptions });
+    searchOptions["projects"] = projectList;
+    searchOptions["members"] = memberList;
+
+    // this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
   };
-
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
     this.setState({ workspaceId: workspaceId });
