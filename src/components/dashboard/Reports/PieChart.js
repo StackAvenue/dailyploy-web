@@ -82,6 +82,9 @@ class PieChart extends Component {
         height: 182,
         styledMode: true
       },
+      credits: {
+        enabled: false
+      },
       title: {
         text: chartType,
         align: "center",
@@ -105,7 +108,9 @@ class PieChart extends Component {
         }
       },
       tooltip: {
-        valueSuffix: "%"
+        formatter: function() {
+          return "<b>" + this.point.name + "</b>";
+        }
       },
       series: [
         {
@@ -113,11 +118,6 @@ class PieChart extends Component {
           data: data,
           size: 182,
           innerSize: "60%",
-          // dataLabels: {
-          //   formatter: function() {
-          //     // return "<b>" + this.point.name + ":</b> " + this.y + "%";
-          //   }
-          // },
           id: "name"
         }
       ],
@@ -155,7 +155,10 @@ class PieChart extends Component {
     Highcharts.chart(id, {
       chart: {
         type: "pie",
-        height: 182
+        height: 195
+      },
+      credits: {
+        enabled: false
       },
       title: {
         text: chartType,
@@ -180,17 +183,19 @@ class PieChart extends Component {
         }
       },
       tooltip: {
-        valueSuffix: "%"
+        formatter: function() {
+          return "<b>" + this.point.name + "</b>";
+        }
       },
       series: [
         {
           name: "Name",
           data: data,
-          size: "172",
-          innerSize: "60%",
+          size: 172,
+          innerSize: 100,
           // dataLabels: {
           //   formatter: function() {
-          //     // return "<b>" + this.point.name + ":</b> " + this.y + "%";
+          //     return "<b>" + this.point.name + ":</b> " + this.y + "%";
           //   }
           // },
           id: "name"

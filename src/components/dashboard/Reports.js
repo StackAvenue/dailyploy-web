@@ -6,7 +6,8 @@ import {
   DATE_FORMAT1,
   MONTH_FORMAT,
   DATE_FORMAT6,
-  MONTH_FORMAT1
+  MONTH_FORMAT1,
+  MONTH_FORMAT2
 } from "./../../utils/Constants";
 import moment from "moment";
 import MenuBar from "./MenuBar";
@@ -148,26 +149,30 @@ class Reports extends Component {
   generateDailyBarChartData = date => {
     var weekDays = this.getWeekDays(this.getWeekRange(date).from);
     var data = [];
+    let activeBar = moment(new Date()).format(DATE_FORMAT1);
     var dates = weekDays.map(date => {
       let m = moment(date);
-      data.push(m.format(DATE_FORMAT6));
+      let bar = moment(date).format(DATE_FORMAT1);
+      data.push({ name: m.format(DATE_FORMAT6), activeBar: bar });
       return {
         startDate: m.format(DATE_FORMAT1),
         name: m.format(DATE_FORMAT6),
         frequency: "daily"
       };
     });
-    return { data: data, dates: dates, barWidth: 50 };
+    return { data: data, dates: dates, barWidth: 50, activeBar: activeBar };
   };
 
   generateWeeklyBarChartData = date => {
     var weekDays = this.getWeekDays(this.getWeekRange(date).from);
     let dates = [];
     let data = [];
+    let activeBar = `Week ${moment().week()} ${moment().year()}`;
     for (let i = 0; i < 4; i++) {
       let md = moment(weekDays[0]);
       let week = `Week ${md.week()}`;
-      data.push(week);
+      let bar = `Week ${md.week()} ${md.year()}`;
+      data.push({ name: week, activeBar: bar });
       dates.push({
         startDate: md.format(DATE_FORMAT1),
         name: week,
@@ -176,24 +181,31 @@ class Reports extends Component {
       let newDate = md.subtract(1, "days");
       weekDays = this.getWeekDays(this.getWeekRange(newDate).from);
     }
-    return { data: data.reverse(), dates: dates.reverse(), barWidth: 85 };
+    return {
+      data: data.reverse(),
+      dates: dates.reverse(),
+      barWidth: 85,
+      activeBar: activeBar
+    };
   };
 
   generateMonthlyBarChartData = d => {
     let year = moment(d).year();
     let dates = [];
     let data = [];
+    let activeBar = moment().format(MONTH_FORMAT2);
     for (let i = 1; i <= 12; i++) {
       var date = `${year}-${i}-1`;
       let month = moment(date).format(MONTH_FORMAT1);
-      data.push(month);
+      let bar = moment(date).format(MONTH_FORMAT2);
+      data.push({ name: month, activeBar: bar });
       dates.push({
         startDate: date,
         name: month,
         frequency: "monthly"
       });
     }
-    return { data: data, dates: dates, barWidth: 30 };
+    return { data: data, dates: dates, barWidth: 30, activeBar: activeBar };
   };
 
   calenderButtonHandle = name => {

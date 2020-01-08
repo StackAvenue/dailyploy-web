@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import Highcharts from "highcharts/highstock";
+import Highcharts, { Color } from "highcharts/highstock";
 import moment from "moment";
+import { CHART_COLOR } from "./../../../utils/Constants";
 
 class ColumnChart extends Component {
   constructor(props) {
@@ -11,17 +12,30 @@ class ColumnChart extends Component {
   componentDidMount = () => {
     let data = this.props.data;
     let barWidth = this.props.barWidth;
+    let activeBar = this.props.activeBar;
     let seriesData = this.getXData();
     Highcharts.chart("columnChartContainer", {
       chart: {
         type: "column",
         height: 202
       },
+      credits: {
+        enabled: false
+      },
       title: {
         text: ""
       },
       xAxis: {
-        categories: data
+        categories: data,
+        labels: {
+          formatter() {
+            if (this.value.activeBar === activeBar) {
+              return `<b style="font-weight: bold; color: ${CHART_COLOR.active_color}">${this.value.name}</b>`;
+            } else {
+              return `<span>${this.value.name}</span>`;
+            }
+          }
+        }
       },
       yAxis: {
         max: 24,
@@ -31,12 +45,7 @@ class ColumnChart extends Component {
         stackLabels: {
           enabled: false,
           style: {
-            fontWeight: "bold",
-            color:
-              // theme
-              (Highcharts.defaultOptions.title.style &&
-                Highcharts.defaultOptions.title.style.color) ||
-              "gray"
+            fontWeight: "bold"
           }
         }
       },
@@ -54,20 +63,28 @@ class ColumnChart extends Component {
         shadow: false
       },
       tooltip: {
-        headerFormat: "<b>{point.x}</b><br/>",
-        pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}"
+        headerFormat: "",
+        pointFormat:
+          "{series.name}: {point.y} hours<br/>Total: {point.stackTotal} hours"
       },
       plotOptions: {
         column: {
           stacking: "normal",
           dataLabels: {
-            enabled: true
+            enabled: false
           },
           showInLegend: false
         },
         series: {
           pointWidth: barWidth,
-          pointHeight: "201"
+          pointHeight: "201",
+          color: {
+            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+              [0, CHART_COLOR.worked_0],
+              [1, CHART_COLOR.worked_1]
+            ]
+          }
         }
       },
       series: seriesData
@@ -79,54 +96,195 @@ class ColumnChart extends Component {
       return [
         {
           name: "Capacity",
-          data: [3, 4, 4, 15, 3, 4, 5],
-          color: "#e5e5e5"
+          data: [
+            8,
+            4,
+            5,
+            {
+              y: 5,
+              dataLabels: {
+                enabled: true
+              }
+            },
+            9,
+            6,
+            4
+          ],
+          color: CHART_COLOR.capacity
         },
         {
           name: "Scheduled",
-          data: [2, 2, 3, 3, 2, 2, 3],
-          color: "#9b9b9b"
+          data: [
+            7,
+            4,
+            5,
+            {
+              y: 7,
+              dataLabels: {
+                enabled: true
+              }
+            },
+            9,
+            4,
+            4
+          ],
+          color: CHART_COLOR.scheduled
         },
         {
           name: "Worked",
-          data: [3, 6, 4, 7, 2, 2, 3],
-          color: "#04505e"
+          data: [
+            15,
+            22,
+            20,
+            {
+              y: 20,
+              dataLabels: {
+                enabled: true
+              },
+              color: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                  [0, CHART_COLOR.curr_worked_0],
+                  [1, CHART_COLOR.curr_worked_1]
+                ]
+              }
+            },
+            18,
+            20,
+            22
+          ]
         }
       ];
     } else if (this.props.state.weekly) {
       return [
         {
           name: "Capacity",
-          data: [3, 4, 4, 15],
-          color: "#e5e5e5"
+          data: [
+            5,
+            4,
+            3,
+            {
+              y: 3,
+              dataLabels: {
+                enabled: true
+              }
+            }
+          ],
+          color: CHART_COLOR.capacity
         },
         {
           name: "Scheduled",
-          data: [2, 2, 3, 3],
-          color: "#9b9b9b"
+          data: [
+            3,
+            3,
+            4,
+            {
+              y: 5,
+              dataLabels: {
+                enabled: true
+              }
+            }
+          ],
+          color: CHART_COLOR.scheduled
         },
         {
           name: "Worked",
-          data: [3, 6, 4, 7],
-          color: "#04505e"
+          data: [
+            22,
+            23,
+            23,
+            {
+              y: 22,
+              dataLabels: {
+                enabled: true
+              },
+              color: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                  [0, CHART_COLOR.curr_worked_0],
+                  [1, CHART_COLOR.curr_worked_1]
+                ]
+              }
+            }
+          ]
         }
       ];
     } else if (this.props.state.monthly) {
       return [
         {
           name: "Capacity",
-          data: [3, 4, 4, 15, 3, 4, 4, 10, 3, 4, 4, 15],
-          color: "#e5e5e5"
+          data: [
+            {
+              y: 5,
+              dataLabels: {
+                enabled: true
+              }
+            },
+            4,
+            3,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            4,
+            1
+          ],
+          color: CHART_COLOR.capacity
         },
         {
           name: "Scheduled",
-          data: [2, 2, 3, 3, 3, 4, 4, 10, 3, 4, 4, 15],
-          color: "#9b9b9b"
+          data: [
+            {
+              y: 2,
+              dataLabels: {
+                enabled: true
+              }
+            },
+            2,
+            4,
+            6,
+            7,
+            4,
+            8,
+            5,
+            0,
+            4,
+            6,
+            15
+          ],
+          color: CHART_COLOR.scheduled
         },
         {
           name: "Worked",
-          data: [3, 6, 4, 7, 3, 4, 4, 10, 3, 4, 4, 15],
-          color: "#04505e"
+          data: [
+            {
+              y: 23,
+              dataLabels: {
+                enabled: true
+              },
+              color: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                  [0, CHART_COLOR.curr_worked_0],
+                  [1, CHART_COLOR.curr_worked_1]
+                ]
+              }
+            },
+            24,
+            23,
+            22,
+            20,
+            24,
+            20,
+            20,
+            30,
+            24,
+            21,
+            23
+          ]
         }
       ];
     }
@@ -136,7 +294,7 @@ class ColumnChart extends Component {
     if (prevProps.data != this.props.data) {
       let data = this.props.data;
       let barWidth = this.props.barWidth;
-
+      let activeBar = this.props.activeBar;
       let seriesData = this.getXData();
 
       Highcharts.chart("columnChartContainer", {
@@ -144,11 +302,23 @@ class ColumnChart extends Component {
           type: "column",
           height: 202
         },
+        credits: {
+          enabled: false
+        },
         title: {
           text: ""
         },
         xAxis: {
-          categories: data
+          categories: data,
+          labels: {
+            formatter() {
+              if (this.value.activeBar === activeBar) {
+                return `<b style="font-weight: bold; color: ${CHART_COLOR.active_color}">${this.value.name}</b>`;
+              } else {
+                return `<span>${this.value.name}</span>`;
+              }
+            }
+          }
         },
         yAxis: {
           max: 24,
@@ -157,14 +327,9 @@ class ColumnChart extends Component {
             text: "Time (In hours)"
           },
           stackLabels: {
-            enabled: true,
+            enabled: false,
             style: {
-              fontWeight: "bold",
-              color:
-                // theme
-                (Highcharts.defaultOptions.title.style &&
-                  Highcharts.defaultOptions.title.style.color) ||
-                "gray"
+              fontWeight: "bold"
             }
           }
         },
@@ -182,20 +347,28 @@ class ColumnChart extends Component {
           shadow: false
         },
         tooltip: {
-          headerFormat: "<b>{point.x}</b><br/>",
-          pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}"
+          headerFormat: "",
+          pointFormat:
+            "{series.name}: {point.y} hours<br/>Total: {point.stackTotal} hours"
         },
         plotOptions: {
           column: {
             stacking: "normal",
             dataLabels: {
-              enabled: true
+              enabled: false
             },
             showInLegend: false
           },
           series: {
             pointWidth: barWidth,
-            pointHeight: "201"
+            pointHeight: "201",
+            color: {
+              linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+              stops: [
+                [0, CHART_COLOR.worked_0],
+                [1, CHART_COLOR.worked_1]
+              ]
+            }
           }
         },
         series: seriesData

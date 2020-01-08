@@ -65,6 +65,7 @@ class SummuryReportCharts extends Component {
           <ColumnChart
             data={this.props.state.barChartArray.data}
             barWidth={this.props.state.barChartArray.width}
+            activeBar={this.props.state.barChartArray.activeBar}
             state={this.props.state}
           />
         </div>
