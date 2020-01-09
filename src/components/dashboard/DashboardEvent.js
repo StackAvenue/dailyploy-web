@@ -317,6 +317,9 @@ class DashboardEvent extends Component {
                     <div className={`d-inline-block task-ongoing`}></div>
                     <div className="d-inline-block task-timer">
                       <Timer
+                        totalDuration={this.props.event.timeTracked.map(
+                          log => log.duration
+                        )}
                         startOn={this.state.startOn}
                         isStart={this.state.status}
                       />

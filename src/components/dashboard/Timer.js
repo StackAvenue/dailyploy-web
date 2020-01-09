@@ -42,7 +42,11 @@ class Timer extends Component {
   };
 
   formattedSeconds = ms => {
+    var totalDuration = this.props.totalDuration
+      ? this.props.totalDuration.reduce((a, b) => a + b, 0)
+      : 0;
     var totalSeconds = ms / 1000;
+    totalSeconds += totalDuration;
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
     var s = Math.floor((totalSeconds % 3600) % 60);

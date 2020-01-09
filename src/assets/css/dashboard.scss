@@ -4562,8 +4562,9 @@ table.scheduler-table tr:last-child td {
     }
   }
   .search-icon{
-    float: right;
-    padding: 5px 10px 5px 5px;
+    top: 5px;
+    right: 5px;
+    position: absolute;
   }
   margin-left: 2%;
   border-radius: 5px !important;
@@ -4573,6 +4574,7 @@ table.scheduler-table tr:last-child td {
   max-width: 659px !important;
   input {
     height: 32px !important;
+    max-width: 180px !important;
     background-color: $color-white !important;
     border: 0 !important;
     font-size: 15px !important;

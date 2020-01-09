@@ -229,7 +229,12 @@ class SearchFilter extends Component {
   };
 
   handleClickOutside = () => {
-    this.setState({ show: false, value: "" });
+    this.setState({
+      show: false,
+      value: "",
+      memberSuggestions: [],
+      projectSuggestions: []
+    });
   };
 
   render() {
@@ -274,7 +279,7 @@ class SearchFilter extends Component {
             className=" no-padding d-inline-block"
             onClick={this.onClickInput}
           >
-            <div className="user-project-search text-titlize">
+            <div className="d-inline-block user-project-search text-titlize">
               <div className="selected-tags">
                 {this.renderSelectedTags(
                   this.state.selectedTags.reverse().slice(0, 2),
@@ -302,9 +307,9 @@ class SearchFilter extends Component {
                 {this.renderSearchSuggestion()}
               </div>
             </div>
-          </div>
-          <div className=" d-inline-block search-icon">
-            <img alt={"search"} src={SearchImg} />
+            <div className="search-icon">
+              <img alt={"search"} src={SearchImg} />
+            </div>
           </div>
         </div>
       </>
