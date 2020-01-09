@@ -4527,20 +4527,37 @@ table.scheduler-table tr:last-child td {
     .dropdown{
       button{
         height: 34px;
+        font-size: 15px;
         width: 120px;
-        color: $color-text2;
+        color: $color-brand3;
         background-color: $color-white;
         border-top: none;
         border-left: none;
         border-bottom: none;
         border-right: solid 1px $color-brandheading1 !important; 
+        i{
+          color: $color-text2;
+        }
       }
       .dropdown-menu{
         min-width: 0px !important
       }
+      .dropdown-menu:focus{
+        background-color: $color-white !important;
+        color: $color-brand3 !important;
+      }
       .dropdown-item{
         width: 120px !important;
+        font-size: 15px;
         padding: 5px 5px 5px 10px !important;
+      }
+      .dropdown-item:active {
+        color: $color-brand3 !important;
+        background-color: $color-white !important;
+      }
+      .active{
+        color: $color-brand3 !important;
+        background-color: $color-white !important;
       }
     }
   }
@@ -4573,8 +4590,8 @@ table.scheduler-table tr:last-child td {
   .suggestion-holder {
     position: absolute;
     width: 100% !important;
-    z-index: 1;
-    // max-height: 200px;
+    z-index: 100;
+    max-height: 400px;
     border-radius: 5px;
     overflow-y: auto;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17);
@@ -4588,6 +4605,23 @@ table.scheduler-table tr:last-child td {
     }
     .list-icon{
       padding: 0px 15px 0px 10px;
+    }
+    .extra-selected-tags{
+      display: inline-block;
+      width: 100%;
+      background-color: $color-dropdown;
+      div{
+        width: auto;
+        height: 26px;
+        padding-top: 2px;
+        margin: 5px 0px 0px 5px;
+        vertical-align: middle;
+        margin-right: 10px;
+        border-radius: 4px;
+        border: solid 1px #bfbfbf;
+        background-color: #ffffff;
+        display:inline-block !important;
+      }
     }
   }
   .list-header{
@@ -4606,5 +4640,8 @@ table.scheduler-table tr:last-child td {
       background-color: #ffffff;
       display:inline-block !important;
     }
+  }
+  .search-bar-plus{
+    font-size: 12px;
   }
 }

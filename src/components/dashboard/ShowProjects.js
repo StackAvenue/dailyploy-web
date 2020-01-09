@@ -166,10 +166,11 @@ class ShowProjects extends Component {
   }
 
   createUserProjectList = () => {
-    var searchOptions = [];
+    let memberList = [];
+    let projectList = [];
     if (this.state.projects) {
       this.state.projects.map((project, index) => {
-        searchOptions.push({
+        projectList.push({
           value: project.name,
           project_id: project.id,
           type: "project",
@@ -177,13 +178,10 @@ class ShowProjects extends Component {
         });
       });
     }
-
-    var index = searchOptions.length;
     if (this.state.worksapceUsers) {
       this.state.worksapceUsers.map((member, idx) => {
-        searchOptions.push({
+        memberList.push({
           value: member.name,
-          id: (index += 1),
           member_id: member.id,
           email: member.email,
           type: "member",
@@ -191,7 +189,10 @@ class ShowProjects extends Component {
         });
       });
     }
-    // this.setState({ searchOptions: searchOptions });
+    let searchOptions = {
+      members: memberList,
+      projects: projectList
+    };
     this.props.setSearchOptions(searchOptions);
   };
 
