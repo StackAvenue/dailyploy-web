@@ -543,7 +543,9 @@ class Dashboard extends Component {
       taskEvent: "",
       fromInfoEdit: false,
       timeTracked: [],
-      showAlert: false
+      showAlert: false,
+      logTimeTo: null,
+      logTimeFrom: null
     });
   };
 
@@ -1022,6 +1024,18 @@ class Dashboard extends Component {
     }
   };
 
+  handleLogTimeFrom = value => {
+    this.setState({
+      logTimeFrom: value
+    });
+  };
+
+  handleLogTimeTo = value => {
+    this.setState({
+      logTimeTo: value
+    });
+  };
+
   render() {
     return (
       <>
@@ -1101,6 +1115,8 @@ class Dashboard extends Component {
               taskMarkComplete={this.taskMarkComplete}
               taskResume={this.taskResume}
               taskDelete={this.taskDelete}
+              handleLogTimeFrom={this.handleLogTimeFrom}
+              handleLogTimeTo={this.handleLogTimeTo}
             />
           ) : null}
         </div>

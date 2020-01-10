@@ -4313,13 +4313,14 @@ table.scheduler-table tr:last-child td {
       margin: 19px 0px 44px 31px !important;
       .time-picker-container{
         width: 115px !important;
-        height: 40px !important;
+        height: 34px !important;
       }
       .rc-time-picker{
         input{
           font-family: Roboto;
           font-size: 15px !important;
           text-align: center;
+          padding: 5px 0 0 0px !important;
         }
       }
       .rc-time-picker-clear{

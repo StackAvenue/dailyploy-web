@@ -108,16 +108,36 @@ class TaskConfirm extends Component {
 
             {this.props.state.confirmModalText === "mark as completed" ? (
               <div className="col-md-12 task-details log-timer no-padding">
-                <span className="d-inline-block">Log Time</span>
-                <div className="d-inline-block time-picker-container no-padding">
-                  <TimePicker
-                    value={this.props.state.timeDateTo}
-                    placeholder="Select"
-                    inputClassName=""
-                    showSecond={false}
-                    closeIcon={false}
-                    inputReadOnly={false}
-                  />
+                <span className="col-md-2 d-inline-block no-padding">
+                  Log Time
+                </span>
+                <div className="col-md-5 d-inline-block">
+                  <span className="d-inline-block">From</span>
+                  <div className="d-inline-block time-picker-container no-padding">
+                    <TimePicker
+                      value={props.state.logTimeFrom}
+                      placeholder="Time"
+                      name="logTimeFrom"
+                      showSecond={false}
+                      onChange={props.handleLogTimeFrom}
+                      closeIcon={false}
+                      inputReadOnly={false}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4 d-inline-block no-padding">
+                  <span className="d-inline-block">To</span>
+                  <div className="d-inline-block time-picker-container no-padding">
+                    <TimePicker
+                      value={props.state.logTimeTo}
+                      placeholder="Time"
+                      name="logTimeTo"
+                      showSecond={false}
+                      onChange={props.handleLogTimeTo}
+                      closeIcon={false}
+                      inputReadOnly={false}
+                    />
+                  </div>
                 </div>
               </div>
             ) : null}
