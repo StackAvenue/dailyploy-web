@@ -822,7 +822,7 @@ class Reports extends Component {
           classNameRoute={this.classNameRoute}
           state={this.state}
         />
-        <div className="analysis-box row no-margin">
+        <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
             <div className="reports-container col-sm-offset-2">
               <div className="reports-btns ">

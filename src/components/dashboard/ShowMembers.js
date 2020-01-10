@@ -371,7 +371,7 @@ class ShowMembers extends Component {
           state={this.state}
         />
         {isShowMember ? (
-          <div className="show-projects">
+          <div className="show-projects padding-top-60px">
             <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
               <div className="row no-margin">
                 <div
@@ -523,7 +523,7 @@ class ShowMembers extends Component {
             </table>
           </div>
         ) : (
-          <div className="list-not-found">
+          <div className="list-not-found padding-top-60px">
             <span>Please Add Members</span>
           </div>
         )}

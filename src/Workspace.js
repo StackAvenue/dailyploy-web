@@ -10,6 +10,7 @@ import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
+import MenuBar from "./components/dashboard/MenuBar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
 import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
@@ -304,6 +305,7 @@ class Workspace extends Component {
               loggedInUserName={this.state.loggedInUserName}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
+
             {this.state.isLoading ? (
               <Loader
                 type="Oval"

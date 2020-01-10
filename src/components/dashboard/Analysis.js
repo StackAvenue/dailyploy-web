@@ -125,7 +125,7 @@ class Analysis extends Component {
           classNameRoute={this.classNameRoute}
           state={this.state}
         />
-        <div className="analysis-box row no-margin">
+        <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding analysis-top">
             <Tabs>
               <TabList>

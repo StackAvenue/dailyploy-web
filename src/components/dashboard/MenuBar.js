@@ -378,14 +378,14 @@ export default class MenuBar extends Component {
     var userRole = localStorage.getItem("userRole");
     return (
       <>
-        <div className="container-fluid">
+        <div className="container-fluid sticky-menubar">
           <div className="dashboard-container">
             <div className="row no-margin dashboard-menubar-container">
               <Tabs
                 classNameRoute={this.props.classNameRoute}
                 workspaceId={this.props.workspaceId}
               />
-              <div className="col-md-6 ml-auto text-right">
+              <div className="col-md-7 text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
                   isDeleteShow={this.props.state.isDeleteShow}

@@ -462,7 +462,7 @@ class ShowProjects extends Component {
           state={this.state}
         />
         {this.state.projects.length > 0 ? (
-          <div className="show-projects">
+          <div className="show-projects padding-top-60px">
             <div className="views">
               <Tabs>
                 <div className="row no-margin">
@@ -719,7 +719,7 @@ class ShowProjects extends Component {
             </div>
           </div>
         ) : (
-          <div className="list-not-found">
+          <div className="list-not-found padding-top-60px">
             <span>Please Add Projects</span>
           </div>
         )}

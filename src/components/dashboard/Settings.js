@@ -284,12 +284,12 @@ class Settings extends Component {
     );
     return (
       <>
-        <MenuBar
+        {/* <MenuBar
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
-        />
+        /> */}
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
           <div className="row no-margin workspace1-setting">
             <div className="col-md-2 side-tabs">

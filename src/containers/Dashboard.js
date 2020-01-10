@@ -1046,23 +1046,25 @@ class Dashboard extends Component {
           handleLoad={this.handleLoad}
           state={this.state}
         />
-        <Calendar
-          state={this.state}
-          sortUnit={this.state.sort}
-          workspaceId={this.state.workspaceId}
-          resources={this.state.resources}
-          events={this.state.events}
-          updateTaskDateView={this.updateTaskDateView}
-          setAddTaskDetails={this.setAddTaskDetails}
-          editAddTaskDetails={this.editAddTaskDetails}
-          show={this.state.calenderTaskModal}
-          closeTaskModal={this.closeTaskModal}
-          handleProjectSelect={this.handleProjectSelect}
-          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-          onGoingTask={this.props.state.isStart}
-          taskEventResumeConfirm={this.taskEventResumeConfirm}
-          handleTaskTracking={this.handleTaskTracking}
-        />
+        <div className="padding-top-60px">
+          <Calendar
+            state={this.state}
+            sortUnit={this.state.sort}
+            workspaceId={this.state.workspaceId}
+            resources={this.state.resources}
+            events={this.state.events}
+            updateTaskDateView={this.updateTaskDateView}
+            setAddTaskDetails={this.setAddTaskDetails}
+            editAddTaskDetails={this.editAddTaskDetails}
+            show={this.state.calenderTaskModal}
+            closeTaskModal={this.closeTaskModal}
+            handleProjectSelect={this.handleProjectSelect}
+            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+            onGoingTask={this.props.state.isStart}
+            taskEventResumeConfirm={this.taskEventResumeConfirm}
+            handleTaskTracking={this.handleTaskTracking}
+          />
+        </div>
 
         <div>
           <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
