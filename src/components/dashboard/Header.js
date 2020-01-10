@@ -96,7 +96,7 @@ class Header extends Component {
     return (
       <>
         <div className="container-fluid dashbaord-header-bg no-padding">
-          <div className="dashboard-container dashboard-header-container">
+          <div className="dashboard-container sticky-header dashboard-header-container">
             <nav className="navbar navbar-expand-lg navbar-light">
               <button
                 className="navbar-toggler"

@@ -1,9 +1,12 @@
 @import "./styles";
 
 .dashboard-container {
-  width: 95%;
+  width: 100%;
   margin: auto;
   height: 60px;
+  .navbar{
+    padding: .5rem 5rem 0 2rem;
+  }
 }
 
 .display-flex {
@@ -51,6 +54,7 @@
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17) !important;
     border: solid 1px rgba(155, 155, 155, 1) !important;
     background-color: $color-white !important;
+    transform: translate3d(-145px, 39px, 0px) !important;
     a {
       padding: 5px 0px 5px 31px !important;
     }
@@ -130,6 +134,7 @@
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17) !important;
     border: solid 1px #d1d1d1 !important;
     background-color: $color-white !important;
+    transform: translate3d(-145px, 48px, 0px) !important;
     .notification-heading {
       color: $color-text2 !important;
       font-family: $font-family-roboto !important;
