@@ -4673,3 +4673,55 @@ table.scheduler-table tr:last-child td {
     font-size: 12px;
   }
 }
+
+.confirm-modal{
+  .modal-content {
+    width: 550px;
+    min-height: 180px;
+    padding: 0px 20px; 
+    font-size: 16px;
+    color: $color-text2 !important;
+    font-family: $font-family-roboto !important;
+    font-style: normal;
+    letter-spacing: normal;
+    .header {
+      padding: 20px 0 0px 0px !important;
+      span {
+        font-size: 20px;
+        color: $color-brand4 !important;
+        font-family: $font-family-roboto !important;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: left;
+      }
+    }
+    .button2{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-brand3 !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-white !important;
+      height: 40px;
+      min-width: 93px !important;
+      margin: 20px 15px 0px 0px;
+    }
+    .button3{
+      border-radius: 5px !important;
+      border: solid 1px $color-brand3 !important;
+      background-color: $color-white !important;
+      font-family: $font-family-roboto !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: $color-text3 !important;
+      color:$color-brand3 !important;
+      height: 40px;
+      min-width: 93px !important;
+      margin-top: 20px;
+    }
+  }
+}

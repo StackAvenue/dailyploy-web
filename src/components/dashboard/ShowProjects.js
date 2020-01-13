@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, logout, put } from "../../utils/API";
+import { get, logout, put, del } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import GridBlock from "./ProjectViews/GridBlock";
 import AddProjectModal from "./AddProjectModal";
 import { firstTwoLetter } from "../../utils/function";
 import DailyPloyToast from "../DailyPloyToast";
+import ConfirmModal from "./../ConfirmModal";
 import moment from "moment";
 import { toast } from "react-toastify";
 import cookie from "react-cookies";
@@ -48,7 +49,8 @@ class ShowProjects extends Component {
       selectedTags: [],
       worksapceUsers: [],
       selectProjectArr: [],
-      isAllChecked: false
+      isAllChecked: false,
+      showConfirm: false
     };
   }
 
@@ -439,7 +441,43 @@ class ShowProjects extends Component {
     this.setState({ selectProjectArr: arrProject });
   };
 
-  deleteProject = (e, project) => {};
+  confirmDeleteProject = () => {
+    if (this.state.selectProjectArr.length > 0) {
+      this.setState({ showConfirm: true });
+    }
+  };
+
+  closeModal = () => {
+    this.setState({ showConfirm: false });
+  };
+
+  deleteProjects = async e => {
+    let projectIds = this.state.selectProjectArr.map(p => p.id).join(",");
+    if (projectIds != "") {
+      try {
+        const { data } = await del(
+          `workspaces/${this.state.workspaceId}/projects?ids=${projectIds}`
+        );
+
+        let projects = this.state.projects.filter(
+          p => !this.state.selectProjectArr.includes(p)
+        );
+        toast(
+          <DailyPloyToast
+            message="Project Deleted Succesfully"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+        this.setState({ showConfirm: false, projects: projects });
+      } catch (e) {
+        toast(
+          <DailyPloyToast message="Something went wrong" status="error" />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      }
+    }
+  };
 
   countProjectView = (e, id) => {
     this.setState({ showMemberList: true, showMemberProjectId: id });
@@ -490,9 +528,7 @@ class ShowProjects extends Component {
                       <>
                         <button
                           className="btn btn-primary delete-button"
-                          onClick={e =>
-                            this.deleteProject(e, this.state.selectProjectArr)
-                          }
+                          onClick={this.confirmDeleteProject}
                         >
                           Delete
                         </button>
@@ -619,7 +655,7 @@ class ShowProjects extends Component {
                                 )}
                               </td>
                               <td>
-                                {moment(project.start_date).format("DD MMM YY")}
+                                {moment(project.created_at).format("DD MMM YY")}
                               </td>{" "}
                               <td>
                                 <span>
@@ -723,6 +759,20 @@ class ShowProjects extends Component {
             <span>Please Add Projects</span>
           </div>
         )}
+        {this.state.showConfirm ? (
+          <ConfirmModal
+            title="Delete Project"
+            message={`Are you sure you want to Delete ${
+              this.state.selectProjectArr.length == 1
+                ? " this project"
+                : "these projects"
+            }?`}
+            onClick={this.deleteProjects}
+            closeModal={this.closeModal}
+            buttonText="Delete"
+            show={this.state.showConfirm}
+          />
+        ) : null}
       </>
     );
   }
