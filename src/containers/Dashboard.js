@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, post, put, logout, mockGet, mockPost } from "../utils/API";
+import { get, post, put, logout } from "../utils/API";
 import moment from "moment";
-import Header from "../components/dashboard/Header";
 import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
-import Sidebar from "../components/dashboard/Sidebar";
+import { PRIORITIES, DEFAULT_PRIORITIE } from "./../../src/utils/Constants";
 import {
   getWeekFisrtDate,
   getFisrtDate,
@@ -19,6 +18,7 @@ import DailyPloyToast from "../components/DailyPloyToast";
 import { DATE_FORMAT1 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
+import { DEFAULT_ENCODING } from "crypto";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -95,6 +95,11 @@ class Dashboard extends Component {
         timeFromError: "",
         timeToError: "",
         categoryError: ""
+      },
+      taskPrioritie: {
+        name: "no_priority",
+        color_code: "#9B9B9B",
+        label: "no priority"
       }
     };
   }
@@ -181,7 +186,8 @@ class Dashboard extends Component {
                 projectName: task.project.name,
                 comments: task.comments,
                 projectId: task.project.id,
-                timeTracked: task.time_tracked
+                timeTracked: task.time_tracked,
+                priority: task.priority
               };
               return tasksObj;
             });
@@ -334,7 +340,8 @@ class Dashboard extends Component {
               projectName: task.project.name,
               comments: task.comments,
               projectId: task.project.id,
-              timeTracked: task.time_tracked
+              timeTracked: task.time_tracked,
+              priority: task.priority
             };
             return tasksObj;
           });
@@ -489,7 +496,11 @@ class Dashboard extends Component {
         end_datetime: endDateTime,
         comments: this.state.comments,
         project_id: this.state.project.id,
-        category_id: this.state.taskCategorie.task_category_id
+        category_id: this.state.taskCategorie.task_category_id,
+        priority:
+          this.state.taskPrioritie && this.state.taskPrioritie.name
+            ? this.state.taskPrioritie.name
+            : "no_priority"
       }
     };
     return taskData;
@@ -545,7 +556,8 @@ class Dashboard extends Component {
       timeTracked: [],
       showAlert: false,
       logTimeTo: null,
-      logTimeFrom: null
+      logTimeFrom: null,
+      taskPrioritie: DEFAULT_PRIORITIE
     });
   };
 
@@ -790,6 +802,7 @@ class Dashboard extends Component {
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
       var timeTracked = data.time_tracked;
+      var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
     } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
@@ -826,7 +839,8 @@ class Dashboard extends Component {
         icon: startOn && taskId === eventId ? "pause" : "play",
         status: startOn && taskId === eventId ? true : false,
         startOn: startOn,
-        timeTracked: timeTracked
+        timeTracked: timeTracked,
+        taskPrioritie: taskPrioritie
       });
     }
   };
@@ -984,6 +998,10 @@ class Dashboard extends Component {
     this.setState({ taskCategorie: option });
   };
 
+  handlePrioritiesChange = option => {
+    this.setState({ taskPrioritie: option });
+  };
+
   handleTaskTracking = async (taskType, eventTaskId, dateTime) => {
     if (taskType && eventTaskId && dateTime) {
       var taskId = eventTaskId.split("-")[0];
@@ -1090,6 +1108,7 @@ class Dashboard extends Component {
             backToTaskInfoModal={this.backToTaskInfoModal}
             confirmModal={this.confirmModal}
             handleCategoryChange={this.handleCategoryChange}
+            handlePrioritiesChange={this.handlePrioritiesChange}
           />
 
           <TaskInfoModal

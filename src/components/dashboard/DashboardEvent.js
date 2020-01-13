@@ -75,65 +75,6 @@ class DashboardEvent extends Component {
     }
   };
 
-  // handleClick = event => {
-  //   this.setState(state => {
-  //     var icon = this.state.icon;
-  //     var updateIcon = icon;
-  //     var status = state.status;
-  //     var taskTimerLog = [];
-  //     if (state.status) {
-  //       var endOn = Date.now();
-  //       // this.setState({ runningTime: 0, endOn: endOn });
-  //       var taskTimerLog = this.handleTaskTrackingStop(
-  //         this.props.event.id,
-  //         endOn
-  //       );
-  //       this.handleReset();
-  //       this.props.handleTaskBottomPopup("", event, "stop");
-  //       updateIcon =
-  //         icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-  //       status = !state.status;
-  //     } else {
-  //       if (this.props.onGoingTask) {
-  //         updateIcon = icon;
-  //         this.setState({ showAlert: !this.state.showAlert });
-  //       } else {
-  //         var startOn = Date.now();
-  //         this.setState({ startOn: startOn });
-  //         localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
-  //         localStorage.setItem(
-  //           `taskId-${this.props.workspaceId}`,
-  //           this.props.event.id
-  //         );
-  //         localStorage.setItem(
-  //           `colorCode-${this.props.workspaceId}`,
-  //           this.props.bgColor
-  //         );
-  //         localStorage.setItem(
-  //           `taskTitle-${this.props.workspaceId}`,
-  //           this.props.titleText
-  //         );
-  //         this.props.handleTaskBottomPopup(
-  //           this.state.startOn,
-  //           this.props.event,
-  //           "start"
-  //         );
-  //         var updateIcon =
-  //           icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-  //         status = !state.status;
-  //         this.props.handleTaskTracking("start", this.props.event.id, startOn);
-  //       }
-  //     }
-  //     return {
-  //       status: status,
-  //       showPopup: false,
-  //       icon: updateIcon,
-  //       taskTimerLog: taskTimerLog,
-  //       clickEventId: event.id
-  //     };
-  //   });
-  // };
-
   handleClick = async event => {
     var icon = this.state.icon;
     var updateIcon = icon;
@@ -273,16 +214,11 @@ class DashboardEvent extends Component {
     } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
+    console.log("event.priority", event);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
-          <div
-            key={event.id}
-            className={mustAddCssClass}
-            style={divStyle}
-            // onMouseOver={() => this.showEventPopUp()}
-            // onMouseOut={() => this.hideEventPopUp()}
-          >
+          <div key={event.id} className={mustAddCssClass} style={divStyle}>
             <div className="row item">
               <div
                 className="col-md-12 pointer item-heading text-wraper"
@@ -291,7 +227,6 @@ class DashboardEvent extends Component {
                   if (!!eventItemClick) eventItemClick(schedulerData, event);
                 }}
               >
-                {/* <i className="fa fa-pencil pull-right" aria-hidden="true"></i> */}
                 {titleText}
               </div>
 
@@ -311,10 +246,10 @@ class DashboardEvent extends Component {
                   <div
                     className="d-inline-block"
                     style={{ position: "relative" }}
-                    // onMouseOver={() => this.showEventPopUp()}
-                    // onMouseOut={() => this.hideEventPopUp()}
                   >
-                    <div className={`d-inline-block task-ongoing`}></div>
+                    <div
+                      className={`d-inline-block ${this.props.event.priority}`}
+                    ></div>
                     <div className="d-inline-block task-timer">
                       <Timer
                         totalDuration={this.props.event.timeTracked.map(

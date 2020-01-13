@@ -28,3 +28,30 @@ export const CHART_COLOR = {
   ext_worked_1: "#ebebeb",
   active_color: "#0075d9"
 };
+export const PRIORITIES = [
+  {
+    name: "high",
+    color_code: "#00A031",
+    label: "high"
+  },
+  {
+    name: "medium",
+    color_code: "#FF7F00",
+    label: "medium"
+  },
+  {
+    name: "low",
+    color_code: "#555555",
+    label: "low"
+  },
+  {
+    name: "no_priority",
+    color_code: "#9B9B9B",
+    label: "no priority"
+  }
+];
+export const DEFAULT_PRIORITIE = {
+  name: "no_priority",
+  color_code: "#9B9B9B",
+  label: "no priority"
+};

@@ -3443,18 +3443,32 @@ table.scheduler-table tr:last-child td {
 .show{
   display: block !important;
 }
-.task-ongoing{
+.medium{
   width: 10px;
   height: 10px;
-  background-color: #ff8c00;
-  border: solid 1px #ffffff;
+  background-color: $color-medium-priority;
+  border: solid 1px $color-white;
   border-radius: 5px
 }
-.task-compete{
+.high{
   width: 10px;
   height: 10px;
-  background-color: green;
-  border: solid 1px #ffffff;
+  background-color: $color-high-priority;
+  border: solid 1px $color-white;
+  border-radius: 5px
+}
+.low{
+  width: 10px;
+  height: 10px;
+  background-color: $color-low-priority;
+  border: solid 1px $color-white;
+  border-radius: 5px
+}
+.no_priority{
+  width: 10px;
+  height: 10px;
+  background-color: $color-no-priority;
+  border: solid 1px $color-white;
   border-radius: 5px
 }
 .task-play-btn{

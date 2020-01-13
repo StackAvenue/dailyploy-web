@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
+import { PRIORITIES } from "./../../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
@@ -11,20 +12,6 @@ import DailyPloySelect from "./../DailyPloySelect";
 class AddTaskModal extends Component {
   constructor(props) {
     super(props);
-    this.priorities = [
-      {
-        name: "high",
-        color_code: "#00A031"
-      },
-      {
-        name: "medium",
-        color_code: "#FF7F00"
-      },
-      {
-        name: "low",
-        color_code: "#9B9B9B"
-      }
-    ];
     this.state = {
       members: [],
       project: "",
@@ -182,11 +169,13 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <DailyPloySelect
-                    options={this.priorities}
+                    options={PRIORITIES}
                     placeholder="Select priority"
                     iconType="circle"
+                    default={this.props.state.taskPrioritie}
                     name="priorityName"
-                    onChange={() => {}}
+                    label="label"
+                    onChange={this.props.handlePrioritiesChange}
                   />
                 </div>
               </div>

@@ -107,7 +107,7 @@ class TaskInfoModal extends Component {
     }
   };
 
-  renderTaskInfo = (option, type) => {
+  renderTaskInfo = (option, type, name) => {
     if (option) {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
@@ -121,7 +121,7 @@ class TaskInfoModal extends Component {
               }`
             }}
           ></div>
-          <div className="right-left-space-5 d-inline-block">{option.name}</div>
+          <div className="right-left-space-5 d-inline-block">{`${option[name]}`}</div>
         </div>
       );
     }
@@ -330,7 +330,7 @@ class TaskInfoModal extends Component {
                   Project
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(props.state.project, "block")}
+                  {this.renderTaskInfo(props.state.project, "block", "name")}
                 </div>
               </div>
 
@@ -352,7 +352,11 @@ class TaskInfoModal extends Component {
                   Priority
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(this.priority, "circle")}
+                  {this.renderTaskInfo(
+                    this.props.state.taskPrioritie,
+                    "circle",
+                    "label"
+                  )}
                 </div>
               </div>
 
