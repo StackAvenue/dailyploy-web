@@ -21,7 +21,9 @@ class CategoriesSettings extends Component {
   async componentDidMount() {
     // Category Listing
     try {
-      const { data } = await get("task_category");
+      const { data } = await get(
+        `workspaces/${this.props.workspaceId}/task_category`
+      );
       var taskCategories = data.task_categories;
     } catch (e) {}
 
@@ -149,7 +151,11 @@ class CategoriesSettings extends Component {
           <div className="d-inline-block col-md-4 heading-text">
             Task Categories
             <span className="d-inline-block category-cnt">
-              ({this.state.taskCategories.length})
+              (
+              {this.state.taskCategories
+                ? this.state.taskCategories.length
+                : null}
+              )
             </span>
           </div>
           <div className="col-md-8 text-right">

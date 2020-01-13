@@ -214,7 +214,6 @@ class DashboardEvent extends Component {
     } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
-    console.log("event.priority", event);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
