@@ -362,9 +362,8 @@ class Reports extends Component {
     // MIS report listing
     var searchData = {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      user_ids: loggedInData.id,
-      frequency: "daily",
-      category_id: 1
+      user_id: loggedInData.id,
+      frequency: "daily"
     };
     if (this.props.searchProjectIds.length > 0) {
       searchData["project_ids"] = this.props.searchProjectIds.join(",");
@@ -518,52 +517,6 @@ class Reports extends Component {
     });
     return totalSec;
   };
-
-  // createUserProjectList = () => {
-  //   var searchOptions = [];
-  //   if (this.state.projects) {
-  //     {
-  //       this.state.projects.map((project, index) => {
-  //         searchOptions.push({
-  //           value: project.name,
-  //           project_id: project.id,
-  //           type: "project",
-  //           id: (index += 1)
-  //         });
-  //       });
-  //     }
-  //   }
-
-  //   var index = searchOptions.length;
-  //   // if (this.state.userRole === "admin" && this.state.worksapceUsers) {
-  //   //   // var otherMembers = this.state.worksapceUsers.filter(
-  //   //   //   user => user.email !== this.state.userEmail,
-  //   //   // );
-  //   //   {
-  //   //     this.state.worksapceUsers.map((member, idx) => {
-  //   //       searchOptions.push({
-  //   //         value: member.name,
-  //   //         id: (index += 1),
-  //   //         member_id: member.id,
-  //   //         email: member.email,
-  //   //         type: "member",
-  //   //         role: member.role
-  //   //       });
-  //   //     });
-  //   //   }
-  //   // } else {
-  //   //   searchOptions.push({
-  //   //     value: this.state.userName,
-  //   //     id: (index += 1),
-  //   //     member_id: this.state.userId,
-  //   //     email: this.state.userEmail,
-  //   //     type: "member",
-  //   //     role: this.state.userRole
-  //   //   });
-  //   // }
-  //   this.setState({ searchOptions: searchOptions });
-  //   this.props.setSearchOptions(searchOptions);
-  // };
 
   createUserProjectList = () => {
     var searchOptions = {};
