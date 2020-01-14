@@ -175,6 +175,7 @@ class AddTaskModal extends Component {
                     default={this.props.state.taskPrioritie}
                     name="priorityName"
                     label="label"
+                    suggesionBy="label"
                     onChange={this.props.handlePrioritiesChange}
                   />
                 </div>

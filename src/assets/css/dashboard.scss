@@ -2790,7 +2790,7 @@ table.scheduler-table tr:last-child td {
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
-    z-index: 1;
+    z-index: 1 !important;
     top: -5px;
     left: 110%;
   }
@@ -3482,15 +3482,15 @@ table.scheduler-table tr:last-child td {
 }
 .fa-pause{
   color: green !important;
-  padding: 5px;
+  padding-left: 4.5px;
 }
 .fa-play{
   color: #1e90ff;
-  padding: 5px 0px 0 7px;
+  padding: 5px 6px;
 }
 .fa-check{
   color: green;
-  padding: 5px;
+  padding-left: 3px;
 }
 .task-timer{
   font-family: 'Roboto-Regular', 'Roboto';
@@ -4061,31 +4061,43 @@ table.scheduler-table tr:last-child td {
       .color-block{
         vertical-align: text-bottom !important;
       }
+      .track-time-placeholder{
+        font-size: 12px;
+      }
+      .color-block {
+        margin-left: 0 !important;
+      }
+      .color-dot {
+        margin-left: 0 !important;
+      }
     }
   }
   .task-play-btn {
     position: relative !important;
-    right: 0px !important;
-    margin: 0px 10px 0px 10px;
     height: 26px;
     width: 26px;
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
     .fa-pause{      
       border: 1px solid #10b857;
       border-radius: 20px;
       height: 26px;
       width: 26px;
+      padding: 4.5px 4px 4px 5px;
     }
     .fa-play{
       border: 1px solid #1e90ff;;
       border-radius: 20px;
       height: 26px;
       width: 26px;
+      padding: 5px 5px 5px 7px;
     }
     .fa-check{
       border: 1px solid #10b857;
       border-radius: 20px;
       height: 26px;
       width: 26px;
+      padding: 4px;
     }
   }  
   .header-2{

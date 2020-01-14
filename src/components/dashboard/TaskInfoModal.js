@@ -112,7 +112,7 @@ class TaskInfoModal extends Component {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
-        <div className="">
+        <div className="left-padding-20px">
           <div
             className={`d-inline-block ${klass}`}
             style={{
@@ -168,21 +168,22 @@ class TaskInfoModal extends Component {
 
   displayTotalTime = () => {
     if (this.props.state.timeTracked.length > 0) {
-      var totalSec = 0;
-      this.props.state.timeTracked.map(time => {
-        totalSec += time.duration;
-      });
+      let totalSec = this.props.state.timeTracked
+        .map(time => time.duration)
+        .flat()
+        .reduce((a, b) => a + b, 0);
       var h = Math.floor(totalSec / 3600);
       var m = Math.floor((totalSec % 3600) / 60);
       var s = Math.floor((totalSec % 3600) % 60);
 
       return (
         ("0" + h).slice(-2) +
+        // " hh" +
         ":" +
         ("0" + m).slice(-2) +
+        // " mm" +
         ":" +
-        ("0" + s).slice(-2) +
-        " h"
+        ("0" + s).slice(-2)
       );
     } else {
       var start = this.props.state.dateFrom;
@@ -419,9 +420,12 @@ class TaskInfoModal extends Component {
                       ) : null}
                     </div>
                   </div>
-                  <div className="col-md-4 d-inline-block">
+                  <div className="col-md-6 d-inline-block">
                     <span className="d-inline-block">
                       {this.displayTotalTime()}
+                    </span>
+                    <span className="d-inline-block track-time-placeholder">
+                      (hh:mm:ss)
                     </span>
                   </div>
                 </div>

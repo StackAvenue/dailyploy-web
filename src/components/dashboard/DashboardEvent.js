@@ -218,6 +218,9 @@ class DashboardEvent extends Component {
     } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
+    const totalTrackTime = this.props.event.timeTracked
+      .map(log => log.duration)
+      .flat();
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
@@ -255,9 +258,7 @@ class DashboardEvent extends Component {
                     ></div>
                     <div className="d-inline-block task-timer">
                       <Timer
-                        totalDuration={this.props.event.timeTracked.map(
-                          log => log.duration
-                        )}
+                        totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
                         isStart={this.props.event.startOn ? true : false}
                       />
