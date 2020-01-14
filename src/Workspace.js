@@ -122,9 +122,9 @@ class Workspace extends Component {
     var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`);
     var timeTracked = [];
     if (taskId) {
-      taskId = taskId.split("-")[0];
+      let runningTaskId = taskId.split("-")[0];
       try {
-        const { data } = await get(`tasks/${taskId}`);
+        const { data } = await get(`tasks/${runningTaskId}`);
         timeTracked = data.time_tracked;
       } catch (e) {}
     }
@@ -149,10 +149,10 @@ class Workspace extends Component {
   }
 
   handleReset = () => {
-    localStorage.setItem(`startOn-${this.props.workspaceId}`, "");
-    localStorage.setItem(`taskId-${this.props.workspaceId}`, "");
-    localStorage.setItem(`colorCode-${this.props.workspaceId}`, "");
-    localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "");
+    localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
+    localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
+    localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
+    localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
   };
 
   logout = async () => {
@@ -250,15 +250,15 @@ class Workspace extends Component {
 
   isBottomPopup = () => {
     return (
-      this.state.taskTitle &&
-      this.state.startOn &&
-      this.state.taskId &&
-      this.state.colorCode
+      this.state.taskTitle != "" &&
+      this.state.startOn != "" &&
+      this.state.taskId != "" &&
+      this.state.colorCode != ""
     );
   };
 
   stopOnGoingTask = async () => {
-    if (this.state.isStart) {
+    if (this.isBottomPopup()) {
       var localTaskId = localStorage.getItem(
         `taskId-${this.state.workspaceId}`
       );

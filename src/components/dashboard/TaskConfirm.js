@@ -61,7 +61,7 @@ class TaskConfirm extends Component {
               }`
             }}
           ></div>
-          <div className=" d-inline-block priority">{option.name}</div>
+          <div className=" d-inline-block priority">{option.label}</div>
         </div>
       );
     }
@@ -154,17 +154,17 @@ class TaskConfirm extends Component {
                   <span className="left-padding-20px d-inline-block">
                     {this.props.state.taskName}
                   </span>
-                  {this.props.state.icon === "play" ? (
+                  {this.props.state.taskEvent.status === "not_started" ? (
                     <div className="d-inline-block pull-right not-start-btn">
                       Not started
                     </div>
                   ) : null}
-                  {this.props.state.icon === "pause" ? (
+                  {this.props.state.taskEvent.status === "running" ? (
                     <div className="d-inline-block pull-right progress-btn">
                       In progress
                     </div>
                   ) : null}
-                  {this.props.state.icon === "check" ? (
+                  {this.props.state.taskEvent.status === "completed" ? (
                     <div className="d-inline-block pull-right complete-btn">
                       Completed
                     </div>
@@ -178,7 +178,10 @@ class TaskConfirm extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   {this.renderTaskInfo(this.props.state.project, "block")}
-                  {this.renderInfoPriority(this.priority, "circle")}
+                  {this.renderInfoPriority(
+                    this.props.state.taskPrioritie,
+                    "circle"
+                  )}
                 </div>
               </div>
 
@@ -187,7 +190,9 @@ class TaskConfirm extends Component {
                   Category
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">{`Category 1`}</span>
+                  <span className="left-padding-20px">
+                    {this.props.state.taskCategorie.name}
+                  </span>
                 </div>
               </div>
 

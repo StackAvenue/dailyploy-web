@@ -36,48 +36,58 @@ class DashboardEvent extends Component {
     if (taskId === this.props.event.id && startOn !== "") {
       this.setState({
         status: true,
-        startOn: startOn,
-        icon: "pause"
+        startOn: startOn
+        // icon: "pause"
       });
     }
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
-    var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
-    var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
-    if (
-      this.props.state.status &&
-      this.props.state.status != this.state.status &&
-      this.props.state.showInfo &&
-      taskId === this.props.state.taskId &&
-      this.props.state.taskId === this.props.event.id &&
-      startOn !== ""
-    ) {
-      this.setState({
-        status: true,
-        startOn: startOn,
-        icon: "pause"
-      });
-    }
-    if (
-      !this.props.state.status &&
-      this.props.state.status != this.state.status &&
-      this.props.state.showInfo &&
-      this.props.state.taskId === this.props.event.id &&
-      startOn === "" &&
-      taskId === ""
-    ) {
-      this.setState({
-        status: false,
-        startOn: "",
-        icon: "play"
-      });
-    }
-  };
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
+  //   var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
+  //   if (
+  //     this.props.state.status &&
+  //     this.props.state.status != this.state.status &&
+  //     this.props.state.showInfo &&
+  //     taskId === this.props.state.taskId &&
+  //     this.props.state.taskId === this.props.event.id &&
+  //     startOn !== ""
+  //   ) {
+  //     this.setState({
+  //       status: true,
+  //       startOn: startOn
+  //       // icon: "pause"
+  //     });
+  //   }
+  //   if (
+  //     !this.props.state.status &&
+  //     this.props.state.status != this.state.status &&
+  //     this.props.state.showInfo &&
+  //     this.props.state.taskId === this.props.event.id &&
+  //     startOn === "" &&
+  //     taskId === ""
+  //   ) {
+  //     this.setState({
+  //       status: false,
+  //       startOn: null
+  //       // icon: "play"
+  //     });
+  //   }
+  //   if (
+  //     this.state.status &&
+  //     this.props.event.trackingStatus == "play" &&
+  //     prevProps.event.trackingStatus === "pause"
+  //   ) {
+  //     this.setState({
+  //       status: false,
+  //       startOn: null
+  //       // icon: "play"
+  //     });
+  //   }
+  // };
 
   handleClick = async event => {
     var icon = this.state.icon;
-    var updateIcon = icon;
     var status = this.state.status;
     var showAlert = false;
     var startOn = "";
@@ -86,19 +96,14 @@ class DashboardEvent extends Component {
       this.props.handleTaskTracking("stop", event.id, endOn);
       this.handleReset();
       this.props.handleTaskBottomPopup("", event, "stop");
-      updateIcon =
-        icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
       status = !this.state.status;
     } else {
       if (this.props.onGoingTask) {
-        updateIcon = icon;
         showAlert = !this.state.showAlert;
       } else {
         startOn = Date.now();
         this.setLocalStorageValue(startOn);
         this.props.handleTaskBottomPopup(startOn, this.props.event, "start");
-        updateIcon =
-          icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
         status = !this.state.status;
         this.props.handleTaskTracking("start", this.props.event.id, startOn);
       }
@@ -106,7 +111,6 @@ class DashboardEvent extends Component {
     this.setState({
       status: status,
       showPopup: false,
-      icon: updateIcon,
       clickEventId: event.id,
       showAlert: showAlert,
       startOn: startOn
@@ -254,14 +258,14 @@ class DashboardEvent extends Component {
                         totalDuration={this.props.event.timeTracked.map(
                           log => log.duration
                         )}
-                        startOn={this.state.startOn}
-                        isStart={this.state.status}
+                        startOn={this.props.event.startOn}
+                        isStart={this.props.event.startOn ? true : false}
                       />
                     </div>
                   </div>
                 </OverlayTrigger>
 
-                {this.state.icon === "pause" ? (
+                {event.trackingStatus === "pause" ? (
                   <div
                     style={{
                       pointerEvents: this.isValidUserDate(event.resourceId)
@@ -275,7 +279,7 @@ class DashboardEvent extends Component {
                   </div>
                 ) : null}
 
-                {this.state.icon === "play" ? (
+                {event.trackingStatus === "play" ? (
                   <div
                     style={{
                       pointerEvents: this.isValidUserDate(event.resourceId)
@@ -289,7 +293,7 @@ class DashboardEvent extends Component {
                   </div>
                 ) : null}
 
-                {this.state.icon === "check" ? (
+                {event.status === "completed" ? (
                   <div className="d-inline-block task-play-btn">
                     <i className="fa fa-check"></i>
                   </div>
@@ -349,7 +353,7 @@ class DashboardEvent extends Component {
 
         {this.state.showAction && this.state.clickEventId === event.id ? (
           <div className="d-inline-block event-action-dropdown">
-            {this.state.icon !== "check" ? (
+            {this.props.event.status !== "completed" ? (
               <>
                 <div
                   className="border-bottom pointer"

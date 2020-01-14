@@ -220,7 +220,7 @@ class TaskInfoModal extends Component {
                 <span>{"Task Details"}</span>
               </div>
               <div className="action-btn d-inline-block">
-                {this.props.icon !== "check" ? (
+                {this.props.state.taskEvent.status !== "completed" ? (
                   <>
                     <button
                       className="d-inline-block btn btn-link"
@@ -256,7 +256,7 @@ class TaskInfoModal extends Component {
             <div className="col-md-12 body d-inline-block text-titlize">
               <div className="input-row">
                 <div className="d-inline-block">
-                  {this.props.icon == "pause" ? (
+                  {this.props.state.taskEvent.trackingStatus == "pause" ? (
                     <div
                       style={{
                         pointerEvents: this.isValidUserDate() ? "" : "none"
@@ -268,7 +268,7 @@ class TaskInfoModal extends Component {
                     </div>
                   ) : null}
 
-                  {this.props.icon == "play" ? (
+                  {this.props.state.taskEvent.trackingStatus == "play" ? (
                     <div
                       style={{
                         pointerEvents: this.isValidUserDate() ? "" : "none"
@@ -280,7 +280,7 @@ class TaskInfoModal extends Component {
                     </div>
                   ) : null}
 
-                  {this.props.icon == "check" ? (
+                  {this.props.state.taskEvent.status === "completed" ? (
                     <div className="d-inline-block task-play-btn">
                       <i className="fa fa-check"></i>
                     </div>
@@ -298,7 +298,7 @@ class TaskInfoModal extends Component {
                 <div className="d-inline-block header-2">
                   <span>{"2hr 30mins"}</span>
                 </div>
-                {this.props.icon === "check" ? (
+                {this.props.state.taskEvent.status === "completed" ? (
                   <div className="d-inline-block button3">
                     <span>Completed</span>
                   </div>
