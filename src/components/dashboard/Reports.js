@@ -382,7 +382,9 @@ class Reports extends Component {
 
     // Category Listing
     try {
-      const { data } = await get("task_category");
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/task_category`
+      );
       var taskCategories = data.task_categories;
     } catch (e) {}
 
