@@ -351,19 +351,12 @@ class GeneralSettings extends Component {
     const { name, value } = e.target;
     let ccEmailSuggestions = [];
     var searchOptions = this.props.state.userArr.members.map(user => user);
-    console.log(
-      "this.props.state.userArr.members",
-      this.props.state.userArr.members,
-      "searchOptions",
-      searchOptions
-    );
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       ccEmailSuggestions = searchOptions
         .sort()
         .filter(v => regex.test(v.email));
     }
-    console.log("toEmailSuggestions", ccEmailSuggestions);
     this.setState({ [name]: value, ccEmailSuggestions: ccEmailSuggestions });
   };
 
@@ -450,12 +443,6 @@ class GeneralSettings extends Component {
     const { name, value } = e.target;
     let bccEmailSuggestions = [];
     var searchOptions = this.props.state.userArr.members.map(user => user);
-    console.log(
-      "this.props.state.userArr.members",
-      this.props.state.userArr.members,
-      "searchOptions",
-      searchOptions
-    );
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       bccEmailSuggestions = searchOptions
@@ -548,7 +535,6 @@ class GeneralSettings extends Component {
         addAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
       );
-      console.log("data", data);
       let filterData = this.props.state.userArr.members.filter(
         user => user.id === this.state.addAdminId
       );
@@ -756,19 +742,24 @@ class GeneralSettings extends Component {
               <div className="admin-box" key={index}>
                 <div className="img-box">{firstTwoLetter(admin.name)}</div>
                 <div className="text text-titlize">{admin.name}</div>
-                <button
-                  className="btn btn-link triple-dot"
-                  onClick={() =>
-                    this.handleRemoveAdmin(
-                      this.state.isShowRemoveAdmin,
-                      admin.id,
-                      admin.name
-                    )
-                  }
-                  // onBlur={() => this.handleRemoveAdmin(false, admin.id)}
-                >
-                  <i className="fas fa-ellipsis-v"></i>
-                </button>
+                {(this.props.loggedInUser.role !== "member" &&
+                  this.props.state.adminUserArr.length > 1) ||
+                (this.props.state.adminUserArr.length == 1 &&
+                  this.props.loggedInUser.id ===
+                    this.props.workspace.owner.id) ? (
+                  <button
+                    className="btn btn-link triple-dot"
+                    onClick={() =>
+                      this.handleRemoveAdmin(
+                        this.state.isShowRemoveAdmin,
+                        admin.id,
+                        admin.name
+                      )
+                    }
+                  >
+                    <i className="fas fa-ellipsis-v"></i>
+                  </button>
+                ) : null}
                 <div style={{ position: "absolute" }}>
                   {this.state.isShowRemoveAdmin &&
                   this.state.showRemoveAdminId === admin.id ? (
@@ -789,14 +780,18 @@ class GeneralSettings extends Component {
                 </div>
               </div>
             ))}
-
-            <button
-              className="btn btn-primary addnew-button"
-              onClick={this.handleAddAdminShow}
-            >
-              {" "}
-              + Add New
-            </button>
+            {this.props.loggedInUser.role === "admin" ||
+            (this.props.workspace
+              ? this.props.loggedInUser.id === this.props.workspace.owner.id
+              : false) ? (
+              <button
+                className="btn btn-primary addnew-button"
+                onClick={this.handleAddAdminShow}
+              >
+                {" "}
+                + Add New
+              </button>
+            ) : null}
             <AddAdminModal
               state={this.state}
               handleClose={this.handleAddAdminClose}

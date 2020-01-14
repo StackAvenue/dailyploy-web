@@ -35,7 +35,8 @@ class Settings extends Component {
       passwordError: null,
       confirmPasswordError: null,
       isSaveEnable: false,
-      isSaveConfirmEnable: false
+      isSaveConfirmEnable: false,
+      loggedInUser: ""
     };
   }
 
@@ -79,6 +80,7 @@ class Settings extends Component {
         .map(user => user.email);
       var adminUserArr = data.members.filter(user => user.role === "admin");
       var allMembers = data;
+      var loggedInUser = data.members.find(user => user.id === loggedInData.id);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -87,6 +89,7 @@ class Settings extends Component {
       userId: loggedInData.id,
       userName: loggedInData.name,
       userEmail: loggedInData.email,
+      loggedInUser: loggedInUser,
       workspaces: workspacesData,
       projects: projectsData,
       users: userArr,

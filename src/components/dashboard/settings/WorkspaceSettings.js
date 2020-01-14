@@ -102,6 +102,8 @@ class WorkspaceSettings extends Component {
               updateWorkspaceName={this.updateWorkspaceName}
               adminUserArr={this.props.state.adminUserArr}
               handleChangeAdminUsers={this.handleChangeAdminUsers}
+              workspace={this.props.workspaceObj}
+              loggedInUser={this.props.state.loggedInUser}
             />
           </TabPanel>
           <TabPanel>
