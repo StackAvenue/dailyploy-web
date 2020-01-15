@@ -23,7 +23,7 @@ class Calendar extends Component {
       false,
       false,
       {
-        schedulerWidth: "96%",
+        schedulerWidth: "96.1%",
         besidesWidth: 20,
         schedulerMaxHeight: 0,
         tableHeaderHeight: 34,
@@ -62,11 +62,11 @@ class Calendar extends Component {
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
 
-        startResizable: false,
-        endResizable: false,
-        movable: false,
+        startResizable: true,
+        endResizable: true,
+        movable: true,
         creatable: true,
-        crossResourceMove: true,
+        crossResourceMove: false,
         checkConflict: false,
         scrollToSpecialMomentEnabled: true,
         eventItemPopoverEnabled: false,
@@ -392,36 +392,27 @@ class Calendar extends Component {
   };
 
   updateEventStart = (schedulerData, event, newStart) => {
-    if (
-      window.confirm(
-        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
-      )
-    ) {
-      schedulerData.updateEventStart(event, newStart);
-    }
     this.setState({
       viewModel: schedulerData
     });
+    this.props.updateTaskEvent(event, { start_datetime: newStart });
   };
 
   updateEventEnd = (schedulerData, event, newEnd) => {
-    if (
-      window.confirm(
-        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
-      )
-    ) {
-      schedulerData.updateEventEnd(event, newEnd);
-    }
     this.setState({
       viewModel: schedulerData
     });
+    this.props.updateTaskEvent(event, { end_datetime: newEnd });
   };
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    console.log(schedulerData, event, slotId, slotName, start, end);
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     this.setState({
       viewModel: schedulerData
+    });
+    this.props.updateTaskEvent(event, {
+      start_datetime: start,
+      end_datetime: end
     });
   };
 

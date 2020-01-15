@@ -22,6 +22,7 @@ import {
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
+import { async } from "q";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -496,31 +497,35 @@ class Dashboard extends Component {
     }
   };
 
+  updateTask = async (taskData, taskId, projectId) => {
+    try {
+      const { data } = await put(
+        taskData,
+        `workspaces/${this.state.workspaceId}/projects/${projectId}/tasks/${taskId}`
+      );
+      var task = data.task;
+      toast(
+        <DailyPloyToast
+          message="Task Updated successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
+      this.setState({
+        show: false,
+        newTask: task,
+        border: "solid 1px #ffffff"
+      });
+    } catch (e) {
+      this.setState({ show: false, border: "solid 1px #ffffff" });
+    }
+  };
+
   editTask = async () => {
     if (this.validateTaskModal()) {
       const taskData = this.taskDetails();
       var taskId = this.state.taskId.split("-")[0];
-      try {
-        const { data } = await put(
-          taskData,
-          `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${taskId}`
-        );
-        var task = data.task;
-        toast(
-          <DailyPloyToast
-            message="Task Updated successfully!"
-            status="success"
-          />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-        );
-        this.setState({
-          show: false,
-          newTask: task,
-          border: "solid 1px #ffffff"
-        });
-      } catch (e) {
-        this.setState({ show: false, border: "solid 1px #ffffff" });
-      }
+      this.updateTask(taskData, taskId, this.state.editProjectId);
     }
   };
 
@@ -1144,6 +1149,11 @@ class Dashboard extends Component {
     });
   };
 
+  updateTaskEvent = async (event, date) => {
+    let taskId = event.id.split("-")[0];
+    this.updateTask({ task: date }, taskId, event.projectId);
+  };
+
   render() {
     return (
       <>
@@ -1171,6 +1181,7 @@ class Dashboard extends Component {
             onGoingTask={this.props.state.isStart}
             taskEventResumeConfirm={this.taskEventResumeConfirm}
             handleTaskTracking={this.handleTaskTracking}
+            updateTaskEvent={this.updateTaskEvent}
           />
         </div>
 
