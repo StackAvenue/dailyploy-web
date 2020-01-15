@@ -1,4 +1,5 @@
 import axios from "axios";
+import cookie from "react-cookies";
 import { toast } from "react-toastify";
 import { SERVICE_URL, AUTH_TOKEN } from "./utils/Constants";
 
@@ -8,7 +9,6 @@ const axiosInitializer = {
     axios.defaults.headers.common["Authorization"] = AUTH_TOKEN
       ? `Bearer ${AUTH_TOKEN}`
       : "";
-
     //Request Interceptor
     axios.interceptors.request.use(
       config => {
@@ -16,9 +16,8 @@ const axiosInitializer = {
       },
       error => {
         return Promise.reject(error);
-      },
+      }
     );
-
     //Response Interceptor
     axios.interceptors.response.use(
       response => {
@@ -29,10 +28,19 @@ const axiosInitializer = {
         return response;
       },
       error => {
-        return Promise.reject(error);
-      },
+        if (error.response.status == 401) {
+          cookie.remove("accessToken", { path: "/" });
+          cookie.remove("userRole", { path: "/" });
+          cookie.remove("loggedInUser", { path: "/" });
+          cookie.remove("workspaceId", { path: "/" });
+          cookie.remove("workspaceName", { path: "/" });
+          setTimeout((window.location.href = "/login"), 2000);
+        } else {
+          return Promise.reject(error);
+        }
+      }
     );
-  },
+  }
 };
 
 export default axiosInitializer;
