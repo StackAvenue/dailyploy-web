@@ -1159,6 +1159,17 @@ table.scheduler-table {
 
 table.scheduler-table {
   border: 1px solid $color-borders;
+  tbody{
+    .header2-text{
+      font-family: $font-family-roboto;
+      font-size: 15px;
+      font-weight: 900;
+      color: $color-text2;
+    }
+    tr td:first-child{
+      background-color: #ededed;
+    }
+  }
 }
 
 table.scheduler-content-table {
@@ -1315,12 +1326,14 @@ table.scheduler-table tr:last-child td {
 
 .resource-table {
   tbody {
+    background-color: #ededed;
     border: 1px solid $color-borders;
     .header2-text {
       color: $color-text2 !important;
       font-family: $font-family-roboto !important;
       font-size: 15px !important;
       font-weight: 900;
+      text-align: center !important;
     }
   }
   tr {

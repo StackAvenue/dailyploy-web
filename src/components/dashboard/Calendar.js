@@ -58,7 +58,7 @@ class Calendar extends Component {
         selectedAreaColor: "#7EC2F3",
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
-        nonWorkingTimeBodyBgColor: "#e5e5e54f",
+        nonWorkingTimeBodyBgColor: "#ededed",
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
 
