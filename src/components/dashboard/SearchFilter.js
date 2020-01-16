@@ -82,17 +82,13 @@ class SearchFilter extends Component {
       var projectSearchOptions = this.props.searchOptions.projects;
       var memberSearchOptions = this.props.searchOptions.members;
       if (this.props.state.searchFlag === "Members" && this.props.isReports) {
-        memberSuggestions = memberSearchOptions
-          .sort()
-          .filter(
-            v => regex.test(v.value) && !this.state.selectedTags.includes(v)
-          );
-      }
-      projectSuggestions = projectSearchOptions
-        .sort()
-        .filter(
+        memberSuggestions = memberSearchOptions.filter(
           v => regex.test(v.value) && !this.state.selectedTags.includes(v)
         );
+      }
+      projectSuggestions = projectSearchOptions.filter(
+        v => regex.test(v.value) && !this.state.selectedTags.includes(v)
+      );
     }
     this.setState({
       memberSuggestions: memberSuggestions,
@@ -125,10 +121,7 @@ class SearchFilter extends Component {
           <>
             {this.state.selectedTags.length > 2 ? (
               <div className="extra-selected-tags">
-                {this.renderSelectedTags(
-                  this.state.selectedTags.reverse(),
-                  false
-                )}
+                {this.renderSelectedTags(this.state.selectedTags, false)}
               </div>
             ) : null}
             {this.state.memberSuggestions.length > 0 ? (
@@ -282,7 +275,7 @@ class SearchFilter extends Component {
             <div className="d-inline-block user-project-search text-titlize">
               <div className="selected-tags">
                 {this.renderSelectedTags(
-                  this.state.selectedTags.reverse().slice(0, 2),
+                  this.state.selectedTags.slice(-2).reverse(),
                   true
                 )}
               </div>
