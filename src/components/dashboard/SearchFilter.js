@@ -111,6 +111,15 @@ class SearchFilter extends Component {
   removeSelectedTag = option => {
     var selectedTags = this.state.selectedTags;
     selectedTags = selectedTags.filter(item => item != option);
+    if (this.state.show) {
+      if (option.type == "member") {
+        var newMemberOption = [...this.state.memberSuggestions, option];
+        this.setState({ memberSuggestions: newMemberOption });
+      } else if (option.type == "project") {
+        var newProjectOption = [...this.state.projectSuggestions, option];
+        this.setState({ projectSuggestions: newProjectOption });
+      }
+    }
     this.setState({ selectedTags: selectedTags });
   };
 
