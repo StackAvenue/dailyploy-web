@@ -102,12 +102,16 @@ class ShowProjects extends Component {
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails.map(member => member.member_id)
           : [];
-      var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
-      };
+      var searchData = {};
+      if (userIds.length > 0) {
+        searchData["user_id"] = userIds.join(",");
+      }
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/projects`,
+        searchData
       );
       var projectsData = data.projects;
       this.props.handleLoading(false);
@@ -150,12 +154,16 @@ class ShowProjects extends Component {
           this.props.searchUserDetails.length > 0
             ? this.props.searchUserDetails.map(member => member.member_id)
             : [];
-        var searchData = {
-          user_ids: JSON.stringify(userIds),
-          project_ids: JSON.stringify(this.props.searchProjectIds)
-        };
+        var searchData = {};
+        if (userIds.length > 0) {
+          searchData["user_id"] = userIds.join(",");
+        }
+        if (this.props.searchProjectIds.length > 0) {
+          searchData["project_ids"] = this.props.searchProjectIds.join(",");
+        }
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/projects`
+          `workspaces/${this.state.workspaceId}/projects`,
+          searchData
         );
         var projectsData = data.projects;
         this.props.handleLoading(false);
