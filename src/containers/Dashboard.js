@@ -143,16 +143,14 @@ class Dashboard extends Component {
             ? this.props.searchUserDetails.map(member => member.member_id)
             : [];
         var searchData = {
-          user_ids: JSON.stringify(userIds),
-          project_ids: JSON.stringify(this.props.searchProjectIds)
+          frequency: this.state.taskFrequency,
+          start_date: getFisrtDate(this.state.taskStartDate),
+          user_id: userIds.join(","),
+          project_ids: this.props.searchProjectIds.join(",")
         };
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
-            this.state.taskFrequency
-          }&start_date=${getFisrtDate(
-            this.state.taskStartDate,
-            this.viewType[this.state.taskFrequency]
-          )}`
+          `workspaces/${this.state.workspaceId}/user_tasks`,
+          searchData
         );
 
         var sortedUsers = data.users.sort((x, y) => {
@@ -221,6 +219,26 @@ class Dashboard extends Component {
           events: taskEvents
         });
         this.props.handleLoading(false);
+        let projects = [];
+        this.state.projects.forEach(project => {
+          let flag = true;
+          userIds.map(id => {
+            if (!project.members.map(m => m.id).includes(id)) {
+              flag = false;
+            }
+          });
+          if (flag) {
+            projects.push(project);
+          }
+        });
+        this.createUserProjectList(
+          projects.filter(
+            project => !this.props.searchProjectIds.includes(project.id)
+          ),
+          this.state.worksapceUsers.filter(
+            member => !userIds.includes(member.id)
+          )
+        );
       } catch (e) {}
     }
 
@@ -337,13 +355,14 @@ class Dashboard extends Component {
           ? this.props.searchUserDetails.map(member => member.member_id)
           : [];
       var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
+        frequency: this.state.taskFrequency,
+        start_date: getWeekFisrtDate(this.state.taskStartDate),
+        user_id: userIds.join(","),
+        project_ids: this.props.searchProjectIds.join(",")
       };
       const { data } = await get(
-        `workspaces/${workspaceId}/user_tasks?frequency=${
-          this.state.taskFrequency
-        }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`
+        `workspaces/${workspaceId}/user_tasks`,
+        searchData
       );
       var userId = loggedInData.id;
       var sortedUsers = data.users.sort((x, y) => {
@@ -418,16 +437,16 @@ class Dashboard extends Component {
       taskCategories: taskCategories,
       workspaceId: workspaceId
     });
-    this.createUserProjectList();
+    this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
     this.props.handleLoading(false);
   }
 
-  createUserProjectList = () => {
+  createUserProjectList = (projects, users) => {
     let projectList = [];
     let memberList = [];
 
-    if (this.state.projects) {
-      this.state.projects.map((project, index) => {
+    if (projects) {
+      projects.map((project, index) => {
         projectList.push({
           value: project.name,
           project_id: project.id,
@@ -436,8 +455,8 @@ class Dashboard extends Component {
       });
     }
 
-    if (this.state.worksapceUsers) {
-      this.state.worksapceUsers.map((member, idx) => {
+    if (users) {
+      users.map((member, idx) => {
         memberList.push({
           value: member.name,
           member_id: member.id,
