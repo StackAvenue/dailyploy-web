@@ -33,7 +33,7 @@ class Calendar extends Component {
         agendaMaxEventWidth: 153,
 
         dayResourceTableWidth: 218,
-        weekResourceTableWidth: 140,
+        weekResourceTableWidth: 218,
         // weekResourceTableWidth: "16%",
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
@@ -219,7 +219,7 @@ class Calendar extends Component {
 
     return (
       <div>
-        <div>
+        <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
           <Scheduler
             schedulerData={viewModel}
             prevClick={this.prevClick}

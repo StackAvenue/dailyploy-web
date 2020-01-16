@@ -1125,12 +1125,7 @@
 }
 
 .scheduler-view {
-  border: 1px solid $color-borders;
-  margin: 0 0 0 -1px;
-  // margin: -1px 0 0 -2px;
-  padding: 0;
-  border-bottom-style: none !important;
-  border-right-style: none !important;
+  border-top: 1px solid $color-borders !important;
 }
 
 .scheduler-content {
@@ -1168,6 +1163,7 @@ table.scheduler-table {
     }
     tr td:first-child{
       background-color: #ededed;
+      border-right: solid 2px #d6d6d6 !important;
     }
   }
 }
@@ -1392,7 +1388,7 @@ table.scheduler-table tr:last-child td {
           color: #e5e5e5 !important;
           text-align: center !important;
           height: 35px !important;
-          border-right: 1.3px solid $color-borders !important;
+          border-right: solid 1px $color-borders !important;
           span {
             color: $color-text2 !important;
             font-family: $font-family-roboto !important;
@@ -3535,7 +3531,8 @@ table.scheduler-table tr:last-child td {
   }
 }
 .border-top {
-  border-top:  solid 1px rgba(155, 155, 155, 1) !important;
+  border-top:  solid 1px#dee2e6 !important;
+  border-left: solid 2px #dee2e6 !important;
 }
 #RBS-Scheduler-root a{
   cursor: text !important;
@@ -4519,7 +4516,7 @@ table.scheduler-table tr:last-child td {
   }
 }
 .dashboard-calender{
-  margin-left: 250px;
+  margin-left: 325px;
   .react-datepicker-wrapper {
     .react-datepicker__input-container input {
       font-family: Roboto !important;
@@ -4747,5 +4744,11 @@ table.scheduler-table tr:last-child td {
       min-width: 93px !important;
       margin-top: 20px;
     }
+  }
+}
+.daily-agenda{
+  .border-top{
+    border-top: none !important;
+    border-left: 1px solid #dee2e6 !important;
   }
 }
