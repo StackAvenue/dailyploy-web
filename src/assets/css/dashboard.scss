@@ -2472,13 +2472,16 @@ table.scheduler-table tr:last-child td {
               padding:0px 10px 0px 0px;
               i{
                 font-size: 15px !important;
-              color: $color-text3 !important;
+                color: $color-text3 !important;
               }
               span{
                 i{
                   font-size: 15px !important;
                   color: $color-success !important;
                 }
+              }
+              .fa-close{
+                color: $red-color !important;
               }
             }
           }

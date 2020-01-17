@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { get, post, put } from "./../../../utils/API";
+import { get, post, put, del } from "./../../../utils/API";
 import DailyPloyToast from "./../../../../src/components/DailyPloyToast";
 import { ToastContainer, toast } from "react-toastify";
+import ConfirmModal from "../../ConfirmModal";
 
 class CategoriesSettings extends Component {
   constructor(props) {
@@ -14,7 +15,9 @@ class CategoriesSettings extends Component {
       categoryName: "",
       showAddCategoryTr: false,
       editCategoryError: false,
-      categoryError: false
+      categoryError: false,
+      showConfirm: false,
+      deleteCategory: ""
     };
   }
 
@@ -96,11 +99,11 @@ class CategoriesSettings extends Component {
   };
 
   editCategory = async e => {
-    if (this.state.categoryName != "") {
+    if (this.state.editCategoryName != "") {
       try {
         const { data } = await put(
-          { name: this.state.categoryName },
-          "task_category"
+          { name: this.state.editCategoryName },
+          `workspaces/${this.props.workspaceId}/task_category/${this.state.categoryId}`
         );
         var taskCategory = data;
         toast(
@@ -112,7 +115,7 @@ class CategoriesSettings extends Component {
         );
       } catch (e) {}
       var newTaskCategories = this.state.taskCategories.filter(
-        c => c.task_category_id != taskCategory.task_category_id
+        c => c.task_category_id != this.state.categoryId
       );
       var newTaskCategories = [...newTaskCategories, taskCategory];
       this.setState({
@@ -126,9 +129,39 @@ class CategoriesSettings extends Component {
     }
   };
 
+  deleteCategory = async e => {
+    if (this.state.deleteCategory) {
+      try {
+        const { data } = await del(
+          `workspaces/${this.props.workspaceId}/task_category/${this.state.deleteCategory.task_category_id}`
+        );
+        toast(<DailyPloyToast message="Category deleted" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        });
+        var categories = this.state.taskCategories.filter(
+          c => c.task_category_id != this.state.deleteCategory.task_category_id
+        );
+        this.setState({
+          taskCategories: categories,
+          showConfirm: false
+        });
+      } catch (e) {}
+    }
+  };
+
+  handleDeleteCategory = category => {
+    this.setState({ deleteCategory: category, showConfirm: true });
+  };
+
+  closeConfirmModal = () => {
+    this.setState({ showConfirm: false, deleteCategory: "" });
+  };
+
   handleEnterName = e => {
     var name = e.target.value;
     var categoryError = e.target.name;
+    console.log("handleEnterName", name, categoryError);
     if (categoryError == "categoryError") {
       if (name != "") {
         this.setState({ categoryName: name, categoryError: false });
@@ -253,10 +286,10 @@ class CategoriesSettings extends Component {
                         this.state.categoryId === category.task_category_id ? (
                           <div>
                             <button
-                              className="btn btn-link"
+                              className="btn btn-link error-warning"
                               onClick={this.toggleEditCategoryRow}
                             >
-                              <i class="fa fa-trash" aria-hidden="true"></i>
+                              <i class="fa fa-close" aria-hidden="true"></i>
                             </button>
                             <button
                               className="btn btn-link"
@@ -267,19 +300,39 @@ class CategoriesSettings extends Component {
                               </span>
                             </button>
                           </div>
-                        ) : // <button
-                        //   className="btn btn-link"
-                        //   onClick={() => this.handleEditCatogries(category)}
-                        // >
-                        //   <i className="fas fa-pencil-alt"></i>
-                        // </button>
-                        null}
+                        ) : (
+                          <div>
+                            <button
+                              className="btn btn-link"
+                              onClick={() =>
+                                this.handleDeleteCategory(category)
+                              }
+                            >
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                            <button
+                              className="btn btn-link"
+                              onClick={() => this.handleEditCatogries(category)}
+                            >
+                              <i className="fas fa-pencil-alt"></i>
+                            </button>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+            {this.state.showConfirm ? (
+              <ConfirmModal
+                show={this.state.showConfirm}
+                message="Are you sure to Delete The Category?"
+                buttonText="delete"
+                onClick={this.deleteCategory}
+                closeModal={this.closeConfirmModal}
+              />
+            ) : null}
           </div>
         </div>
       </div>
