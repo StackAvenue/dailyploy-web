@@ -217,7 +217,7 @@
   }
   .selected-tags{
     display: inline-block;
-    div{
+    .search-icon-member, .search-icon-project{
       width: auto;
       height: 26px;
       margin-right: 10px;
@@ -229,7 +229,6 @@
   }
   .remove-tag:hover{
     cursor: pointer;
-    background: #ad2020;
   }
   .remove-tag{
     cursor: pointer;

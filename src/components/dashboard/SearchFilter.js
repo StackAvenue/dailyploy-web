@@ -47,10 +47,11 @@ class SearchFilter extends Component {
       : [];
 
     this.setState({
-      show: !this.state.show,
+      show: true,
       memberSuggestions: memberSuggestions,
       projectSuggestions: projectSuggestions
     });
+    // document.querySelector(".suggessionSearchInput").focus();
   };
 
   async componentDidMount() {}
@@ -66,6 +67,15 @@ class SearchFilter extends Component {
     }
     if (prevState.selectedTags !== this.state.selectedTags) {
       this.props.handleSearchFilterResult(this.state.selectedTags);
+    }
+    if (
+      prevState.memberSuggestions != this.state.memberSuggestions ||
+      prevState.projectSuggestions != this.state.projectSuggestions
+    ) {
+      let input = document.querySelector(".suggessionSearchInput");
+      if (input) {
+        input.focus();
+      }
     }
   }
 
@@ -128,11 +138,22 @@ class SearchFilter extends Component {
       <>
         {this.state.show ? (
           <>
-            {this.state.selectedTags.length > 2 ? (
+            {(this.props.isReports && this.state.selectedTags.length > 3) ||
+            this.state.selectedTags.length > 4 ? (
               <div className="extra-selected-tags">
                 {this.renderSelectedTags(this.state.selectedTags, false)}
               </div>
             ) : null}
+            <div>
+              <input
+                onClick={this.onClickInput}
+                className="suggessionSearchInput"
+                type="text"
+                value={this.state.value}
+                onChange={this.onSearchTextChange}
+                placeholder="search members/projects"
+              />
+            </div>
             {this.state.memberSuggestions.length > 0 ? (
               <ul>
                 <li className="list-header">
@@ -182,6 +203,10 @@ class SearchFilter extends Component {
                 })}
               </ul>
             ) : null}
+            {this.state.projectSuggestions.length == 0 &&
+            this.state.memberSuggestions.length == 0 ? (
+              <div style={{ padding: "10px" }}>record not found</div>
+            ) : null}
           </>
         ) : null}
       </>
@@ -194,11 +219,16 @@ class SearchFilter extends Component {
         {selectedTags.map((option, index) => {
           if (option.type == "member") {
             return (
-              <div className={`search-icon-${option.type}`} key={index}>
-                <i className="fa fa-user right-left-space-5"></i>
-                <span className="right-left-space-5">{option.value}</span>
+              <div
+                className={`search-icon-${option.type} d-inline-block`}
+                key={index}
+              >
+                <i className="fa fa-user member-icon right-left-space-5 d-inline-block"></i>
+                <div className="tag-text right-left-space-5 d-inline-block">
+                  {option.value}
+                </div>
                 <a
-                  className="remove-tag right-left-space-5"
+                  className="remove-tag right-left-space-5 d-inline-block"
                   onClick={() => this.removeSelectedTag(option)}
                 >
                   <i className="fa fa-close"></i>
@@ -207,11 +237,16 @@ class SearchFilter extends Component {
             );
           } else {
             return (
-              <div className={`search-icon-${option.type}`} key={index}>
-                <i className="fa fa-list-alt right-left-space-5"></i>
-                <span className="right-left-space-5">{option.value}</span>
+              <div
+                className={`search-icon-${option.type} d-inline-block`}
+                key={index}
+              >
+                <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i>
+                <div className="tag-text right-left-space-5 d-inline-block">
+                  {option.value}
+                </div>
                 <a
-                  className="remove-tag right-left-space-5"
+                  className="remove-tag right-left-space-5 d-inline-block"
                   onClick={() => this.removeSelectedTag(option)}
                 >
                   <i className="fa fa-close"></i>
@@ -220,12 +255,12 @@ class SearchFilter extends Component {
             );
           }
         })}
-        {isIcon && this.state.selectedTags.length > 2 ? (
+        {/* {isIcon && this.state.selectedTags.length > 2 ? (
           <span search-bar-plus>
             <i className="fa fa-plus"></i>
             {this.state.selectedTags.length - 2}
           </span>
-        ) : null}
+        ) : null} */}
       </>
     );
   };
@@ -278,32 +313,29 @@ class SearchFilter extends Component {
             </div>
           ) : null}
           <div
-            className=" no-padding d-inline-block"
+            className={`no-padding d-inline-block ${
+              this.props.isReports ? "report-search-bar" : "search-bar"
+            }`}
             onClick={this.onClickInput}
           >
+            {this.state.selectedTags.length == 0 ? (
+              <span className="placeholder">select members/projects</span>
+            ) : null}
             <div className="d-inline-block user-project-search text-titlize">
               <div className="selected-tags">
-                {this.renderSelectedTags(
-                  this.state.selectedTags.slice(-2).reverse(),
-                  true
-                )}
+                {this.props.isReports
+                  ? this.renderSelectedTags(
+                      this.state.selectedTags.slice(-3).reverse(),
+                      true
+                    )
+                  : this.renderSelectedTags(
+                      this.state.selectedTags.slice(-4).reverse(),
+                      true
+                    )}
               </div>
-              <input
-                type="text"
-                value={value}
-                placeholder={
-                  this.state.selectedTags.length > 0 ? "" : "Search by projects"
-                }
-                onChange={this.onSearchTextChange}
-              />
-
               <div
-                className={`suggestion-holder ${
-                  (this.state.projectSuggestions.length > 0 ||
-                    this.state.memberSuggestions.length > 0) &&
-                  this.state.show
-                    ? "suggestion-holder-border"
-                    : null
+                className={`suggestion-holder  ${
+                  this.state.show ? "suggestion-holder-border" : null
                 }`}
               >
                 {this.renderSearchSuggestion()}
