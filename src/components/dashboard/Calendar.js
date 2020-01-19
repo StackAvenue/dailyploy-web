@@ -124,7 +124,8 @@ class Calendar extends Component {
   }
 
   calculateResouceHeight = () => {
-    let resourcesLength = this.props.resources.length;
+    let resourcesLength =
+      this.props.resources.length > 0 ? this.props.resources.length : 0;
     let sceenHeight = window.screen.height;
     let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 30) / 10;
     let heights = new Map();
@@ -139,7 +140,6 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      // return 50;
       return 85;
     }
     return height;
