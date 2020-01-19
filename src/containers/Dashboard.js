@@ -215,8 +215,8 @@ class Dashboard extends Component {
         var tasksResources = tasksUser.map(user => user.usersObj);
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
         this.setState({
-          resources: tasksResources,
-          events: taskEvents
+          resources: tasksResources ? tasksResources : [],
+          events: taskEvents ? taskEvents : []
         });
         this.props.handleLoading(false);
         let projects = [];
@@ -428,8 +428,8 @@ class Dashboard extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
-      resources: tasksResources,
-      events: taskEvents,
+      resources: tasksResources ? tasksResources : [],
+      events: taskEvents ? taskEvents : [],
       user: user,
       selectedMembers: [loggedInData],
       taskUser: [loggedInData.id],
