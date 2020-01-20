@@ -7,36 +7,81 @@ class PieChart extends Component {
     this.state = {};
   }
 
+  secondsToHours = seconds => {
+    let totalSeconds = Number(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor((totalSeconds % 3600) % 60);
+    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+  };
+
   generateChartData = () => {
-    let data = this.props.data.map((item, idx) => {
-      return {
-        name: item.name,
-        color: item.color_code,
-        y: idx + 1 * 5,
-        dataLabels: {
-          enabled: true,
-          style: {
-            fontWeight: "bold"
-          },
-          formatter: function() {
-            return "<b class='hour-popup'>" + this.y + "</b> ";
+    if (this.props.type === "Categories") {
+      return this.generateCategoryChartData();
+    } else if (this.props.type === "Projects") {
+      return this.generateProjectData();
+    } else {
+      return this.props.data.map((item, idx) => {
+        return {
+          name: item.name,
+          color: item.color_code,
+          y: idx + 1 * 5,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: "bold"
+            },
+            formatter: function() {
+              return "<b class='hour-popup'>" + this.y + "</b> ";
+            }
           }
-        }
-      };
-    });
-    if (this.props.type === "Projects") {
-      data.push({
-        name: "Other",
-        y: 7.61,
-        color: "#e5e5e5",
-        dataLabels: {
-          enabled: true,
-          formatter: function() {
-            // return "<b>" + this.point.name + ":</b> " + this.y + "%";
-            return "<span class='hour-popup'>" + this.y + "</span> ";
-          }
-        }
+        };
       });
+    }
+  };
+
+  generateProjectData = () => {
+    var data = [];
+    if (this.props.estimateTime && this.props.data) {
+      var estimateTime = this.props.estimateTime;
+      var totalTime = this.props.data
+        .map(item => item.tracked_time)
+        .reduce((a, b) => a + b, 0);
+      data = this.props.data.map((item, idx) => {
+        var time = this.secondsToHours(item.tracked_time);
+        return {
+          name: item.name,
+          color: item.color_code,
+          time: time,
+          y: item.tracked_time,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: "bold"
+            },
+            formatter: function() {
+              return "<b class='hour-popup'>" + time + "</b> ";
+            }
+          }
+        };
+      });
+      if (totalTime < estimateTime) {
+        let diff = estimateTime - totalTime;
+        let time = this.secondsToHours(diff);
+        data.push({
+          name: "Remaining Scheduled Time",
+          y: diff,
+          time: time,
+          color: "#ececec",
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              // return "<b>" + this.point.name + ":</b> " + this.y + "%";
+              return "<span class='hour-popup'>" + time + "</span> ";
+            }
+          }
+        });
+      }
     }
     return data;
   };
@@ -69,11 +114,7 @@ class PieChart extends Component {
   };
 
   componentDidMount = () => {
-    if (this.props.type === "Categories") {
-      var data = this.generateCategoryChartData();
-    } else {
-      var data = this.generateChartData();
-    }
+    var data = this.generateChartData();
     let id = this.props.id;
     let chartType = this.props.type;
     Highcharts.chart(id, {
@@ -109,7 +150,13 @@ class PieChart extends Component {
       },
       tooltip: {
         formatter: function() {
-          return "<b>" + this.point.name + "</b>";
+          return (
+            "<b>" +
+            this.point.name +
+            "</b> <br><span>" +
+            this.point.time +
+            "</span>"
+          );
         }
       },
       series: [
@@ -145,11 +192,7 @@ class PieChart extends Component {
   };
 
   componentDidUpdate = () => {
-    if (this.props.type === "Categories") {
-      var data = this.generateCategoryChartData();
-    } else {
-      var data = this.generateChartData();
-    }
+    var data = this.generateChartData();
     let id = this.props.id;
     let chartType = this.props.type;
     Highcharts.chart(id, {
@@ -184,7 +227,13 @@ class PieChart extends Component {
       },
       tooltip: {
         formatter: function() {
-          return "<b>" + this.point.name + "</b>";
+          return (
+            "<b>" +
+            this.point.name +
+            "</b><br><span>" +
+            this.point.time +
+            " hours</span>"
+          );
         }
       },
       series: [

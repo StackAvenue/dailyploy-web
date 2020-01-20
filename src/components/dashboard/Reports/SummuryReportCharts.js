@@ -43,7 +43,8 @@ class SummuryReportCharts extends Component {
             <PieChart
               id="projectPieChart"
               type="Projects"
-              data={this.props.projects}
+              data={this.props.state.projectReports.data}
+              estimateTime={this.props.state.projectReports.estimateTime}
             />
           </div>
           <div className="chart d-inline-block">

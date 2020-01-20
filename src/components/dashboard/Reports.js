@@ -80,6 +80,7 @@ class Reports extends Component {
       message: "My Daily Report",
       frequency: "daily",
       taskCategories: [],
+      projectReports: [],
       barChartArray: this.generateDailyBarChartData(new Date())
     };
   }
@@ -388,6 +389,23 @@ class Reports extends Component {
       var taskCategories = data.task_categories;
     } catch (e) {}
 
+    // Summury reports Projects
+    let projectSearchData = {
+      start_date: moment(this.state.selectedDays[0]).format(DATE_FORMAT1),
+      end_date: moment(this.state.selectedDays[0]).format(DATE_FORMAT1),
+      user_ids: loggedInData.id
+    };
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/project_summary_report`,
+        projectSearchData
+      );
+      var projectReportData = {
+        data: data.report_data,
+        estimateTime: data.total_estimated_time
+      };
+    } catch (e) {}
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -401,7 +419,8 @@ class Reports extends Component {
       taskDetails: taskDetails,
       userRole: worksapceUser ? worksapceUser.role : null,
       totalTime: totalTime,
-      taskCategories: taskCategories
+      taskCategories: taskCategories,
+      projectReports: projectReportData
     });
 
     this.createUserProjectList();
@@ -430,18 +449,21 @@ class Reports extends Component {
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
       prevProps.searchUserDetails !== this.props.searchUserDetails
     ) {
+      let userIds = this.props.searchUserDetails.map(
+        member => member.member_id
+      );
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
         user_ids:
           this.props.searchUserDetails.length > 0
-            ? this.props.searchUserDetails[0].member_id
+            ? userIds.join(",")
             : this.state.userId,
         frequency: this.returnFrequency()
       };
       if (this.props.searchProjectIds.length > 0) {
         searchData["project_ids"] = this.props.searchProjectIds.join(",");
       }
-
+      // Reports data
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/reports`,
@@ -451,12 +473,29 @@ class Reports extends Component {
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
       } catch (e) {}
+
+      // Summury reports Projects
+      searchData["end_date"] = moment(
+        this.state.selectedDays[this.state.selectedDays.length - 1]
+      ).format(DATE_FORMAT1);
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/project_summary_report`,
+          searchData
+        );
+        var projectReportData = {
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        };
+      } catch (e) {}
+
       var message = this.displayMessage();
 
       this.setState({
         taskDetails: taskDetails,
         message: message,
-        totalTime: totalTime
+        totalTime: totalTime,
+        projectReports: projectReportData ? projectReportData : ""
       });
     }
   }
