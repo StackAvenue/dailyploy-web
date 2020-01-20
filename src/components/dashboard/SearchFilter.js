@@ -66,6 +66,16 @@ class SearchFilter extends Component {
       });
     }
     if (prevState.selectedTags !== this.state.selectedTags) {
+      var projectSuggestions = this.props.searchOptions.projects.filter(
+        v => !this.state.selectedTags.includes(v)
+      );
+      var memberSuggestions = this.props.searchOptions.members.filter(
+        v => !this.state.selectedTags.includes(v)
+      );
+      this.setState({
+        memberSuggestions: memberSuggestions,
+        projectSuggestions: projectSuggestions
+      });
       this.props.handleSearchFilterResult(this.state.selectedTags);
     }
     if (
@@ -81,8 +91,8 @@ class SearchFilter extends Component {
 
   onSearchTextChange = e => {
     const value = e.target.value;
-    let projectSuggestions = [];
-    let memberSuggestions = [];
+    var projectSuggestions = [];
+    var memberSuggestions = [];
     if (
       value.length > 0 &&
       this.props.searchOptions.projects &&
@@ -95,16 +105,26 @@ class SearchFilter extends Component {
         memberSuggestions = memberSearchOptions.filter(
           v => regex.test(v.value) && !this.state.selectedTags.includes(v)
         );
+      } else {
+        memberSuggestions = memberSearchOptions.filter(
+          v => regex.test(v.value) && !this.state.selectedTags.includes(v)
+        );
       }
       projectSuggestions = projectSearchOptions.filter(
         v => regex.test(v.value) && !this.state.selectedTags.includes(v)
       );
+      this.setState({
+        memberSuggestions: memberSuggestions,
+        projectSuggestions: projectSuggestions,
+        value: value
+      });
+    } else {
+      this.setState({
+        memberSuggestions: this.props.searchOptions.members,
+        projectSuggestions: this.props.searchOptions.projects,
+        value: value
+      });
     }
-    this.setState({
-      memberSuggestions: memberSuggestions,
-      projectSuggestions: projectSuggestions,
-      value: value
-    });
   };
 
   selectSuggestion = option => {
@@ -112,8 +132,6 @@ class SearchFilter extends Component {
     newSelectedTags.push(option);
     this.setState({
       selectedTags: newSelectedTags,
-      memberSuggestions: [],
-      projectSuggestions: [],
       value: ""
     });
   };
@@ -146,7 +164,7 @@ class SearchFilter extends Component {
             ) : null}
             <div>
               <input
-                onClick={this.onClickInput}
+                // onClick={this.onClickInput}
                 className="suggessionSearchInput"
                 type="text"
                 value={this.state.value}
