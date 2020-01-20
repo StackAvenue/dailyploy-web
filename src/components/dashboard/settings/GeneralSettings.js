@@ -742,9 +742,11 @@ class GeneralSettings extends Component {
               <div className="admin-box" key={index}>
                 <div className="img-box">{firstTwoLetter(admin.name)}</div>
                 <div className="text text-titlize">{admin.name}</div>
-                {(this.props.loggedInUser.role !== "member" &&
+                {(this.props.loggedInUser &&
+                  this.props.loggedInUser.role !== "member" &&
                   this.props.state.adminUserArr.length > 1) ||
                 (this.props.state.adminUserArr.length == 1 &&
+                  this.props.loggedInUser &&
                   this.props.loggedInUser.id ===
                     this.props.workspace.owner.id) ? (
                   <button
@@ -780,8 +782,9 @@ class GeneralSettings extends Component {
                 </div>
               </div>
             ))}
-            {this.props.loggedInUser.role === "admin" ||
-            (this.props.workspace
+            {(this.props.loggedInUser &&
+              this.props.loggedInUser.role === "admin") ||
+            (this.props.workspace && this.props.loggedInUser
               ? this.props.loggedInUser.id === this.props.workspace.owner.id
               : false) ? (
               <button

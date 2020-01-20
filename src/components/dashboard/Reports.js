@@ -348,7 +348,7 @@ class Reports extends Component {
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members;
-      var worksapceUser = data.members.filter(
+      var worksapceUser = data.members.find(
         user => user.email === loggedInData.email
       );
       var emailArr = data.members.filter(
@@ -399,7 +399,7 @@ class Reports extends Component {
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
       taskDetails: taskDetails,
-      userRole: worksapceUser[0].role,
+      userRole: worksapceUser ? worksapceUser.role : null,
       totalTime: totalTime,
       taskCategories: taskCategories
     });

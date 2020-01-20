@@ -92,7 +92,7 @@ class ShowMembers extends Component {
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members;
-      var worksapceUser = data.members.filter(
+      var worksapceUser = data.members.find(
         user => user.email === loggedInData.email
       );
       var memberArr = data.members.filter(
@@ -115,7 +115,7 @@ class ShowMembers extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
-      userRole: worksapceUser[0].role,
+      userRole: worksapceUser ? worksapceUser.role : null,
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
       members: memberArr
