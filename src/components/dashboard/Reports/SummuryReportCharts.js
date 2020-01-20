@@ -51,7 +51,9 @@ class SummuryReportCharts extends Component {
             <PieChart
               id="categoryPieChart"
               type="Categories"
-              data={this.props.state.taskCategories}
+              // data={this.props.state.taskCategories}
+              data={this.props.state.categoryReports.data}
+              estimateTime={this.props.state.categoryReports.estimateTime}
             />
           </div>
           <div className="chart d-inline-block">

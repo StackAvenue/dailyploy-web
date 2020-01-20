@@ -87,29 +87,43 @@ class PieChart extends Component {
   };
 
   generateCategoryChartData = () => {
-    var data = this.props.data.map((item, idx) => {
-      return {
-        name: item.name,
-        y: idx + 1 * 5,
-        dataLabels: {
-          enabled: true,
-          formatter: function() {
-            return "<b>" + this.y + "</b>";
+    var data = [];
+    if (this.props.estimateTime && this.props.data) {
+      var estimateTime = this.props.estimateTime;
+      var totalTime = this.props.data
+        .map(item => item.tracked_time)
+        .reduce((a, b) => a + b, 0);
+      var data = this.props.data.map((item, idx) => {
+        var time = this.secondsToHours(item.tracked_time);
+        return {
+          name: item.name,
+          time: time,
+          y: item.tracked_time,
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return "<b>" + time + "</b>";
+            }
           }
-        }
-      };
-    });
-    data.push({
-      name: "Other",
-      y: 7.61,
-      color: "#e5e5e5",
-      dataLabels: {
-        enabled: true,
-        formatter: function() {
-          return "<b>" + this.y + "</b>";
-        }
+        };
+      });
+      if (totalTime < estimateTime) {
+        let diff = estimateTime - totalTime;
+        let time = this.secondsToHours(diff);
+        data.push({
+          name: "Remaining Scheduled Time",
+          y: diff,
+          time: time,
+          color: "#e5e5e5",
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return "<span class='hour-popup'>" + time + "</span> ";
+            }
+          }
+        });
       }
-    });
+    }
     return data;
   };
 

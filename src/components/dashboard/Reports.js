@@ -81,6 +81,8 @@ class Reports extends Component {
       frequency: "daily",
       taskCategories: [],
       projectReports: [],
+      categoryReports: [],
+      selectedCategory: null,
       barChartArray: this.generateDailyBarChartData(new Date())
     };
   }
@@ -390,17 +392,27 @@ class Reports extends Component {
     } catch (e) {}
 
     // Summury reports Projects
-    let projectSearchData = {
-      start_date: moment(this.state.selectedDays[0]).format(DATE_FORMAT1),
-      end_date: moment(this.state.selectedDays[0]).format(DATE_FORMAT1),
-      user_ids: loggedInData.id
-    };
+    searchData["end_date"] = moment(this.state.selectedDays[0]).format(
+      DATE_FORMAT1
+    );
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/project_summary_report`,
-        projectSearchData
+        searchData
       );
       var projectReportData = {
+        data: data.report_data,
+        estimateTime: data.total_estimated_time
+      };
+    } catch (e) {}
+
+    // Summury reports Category
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/category_summary_report`,
+        searchData
+      );
+      var categoryReportData = {
         data: data.report_data,
         estimateTime: data.total_estimated_time
       };
@@ -420,7 +432,8 @@ class Reports extends Component {
       userRole: worksapceUser ? worksapceUser.role : null,
       totalTime: totalTime,
       taskCategories: taskCategories,
-      projectReports: projectReportData
+      projectReports: projectReportData,
+      categoryReports: categoryReportData
     });
 
     this.createUserProjectList();
@@ -496,6 +509,49 @@ class Reports extends Component {
         message: message,
         totalTime: totalTime,
         projectReports: projectReportData ? projectReportData : ""
+      });
+    }
+    if (
+      prevState.dateFrom !== this.state.dateFrom ||
+      prevState.dateTo !== this.state.dateTo ||
+      prevState.frequency !== this.state.frequency ||
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetails !== this.props.searchUserDetails ||
+      prevState.selectedCategory !== this.state.selectedCategory
+    ) {
+      let userIds = this.props.searchUserDetails.map(
+        member => member.member_id
+      );
+      var searchData = {
+        start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+        end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
+        user_ids:
+          this.props.searchUserDetails.length > 0
+            ? userIds.join(",")
+            : this.state.userId
+      };
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
+      if (this.state.selectedCategory) {
+        searchData[
+          "category_id"
+        ] = this.state.selectedCategory.task_category_id;
+      }
+      // Summury reports Category
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/category_summary_report`,
+          searchData
+        );
+        var categoryReportData = {
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        };
+      } catch (e) {}
+
+      this.setState({
+        categoryReports: categoryReportData ? categoryReportData : ""
       });
     }
   }
@@ -762,6 +818,11 @@ class Reports extends Component {
     }
   };
 
+  handleCategoryChange = option => {
+    console.log("handleCategoryChange", option);
+    this.setState({ selectedCategory: option });
+  };
+
   render() {
     const Daily = props => {
       return (
@@ -870,7 +931,7 @@ class Reports extends Component {
                     <DailyPloySelect
                       placeholder="search for category"
                       options={this.state.taskCategories}
-                      onChange={() => {}}
+                      onChange={this.handleCategoryChange}
                     />
                   </div>
                   <div className="d-inline-block report-priority">
