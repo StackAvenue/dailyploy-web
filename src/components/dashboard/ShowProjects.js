@@ -104,7 +104,7 @@ class ShowProjects extends Component {
           : [];
       var searchData = {};
       if (userIds.length > 0) {
-        searchData["user_id"] = userIds.join(",");
+        searchData["user_ids"] = userIds.join(",");
       }
       if (this.props.searchProjectIds.length > 0) {
         searchData["project_ids"] = this.props.searchProjectIds.join(",");
@@ -156,7 +156,7 @@ class ShowProjects extends Component {
             : [];
         var searchData = {};
         if (userIds.length > 0) {
-          searchData["user_id"] = userIds.join(",");
+          searchData["user_ids"] = userIds.join(",");
         }
         if (this.props.searchProjectIds.length > 0) {
           searchData["project_ids"] = this.props.searchProjectIds.join(",");
