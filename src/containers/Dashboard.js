@@ -533,6 +533,8 @@ class Dashboard extends Component {
       this.setState({
         show: false,
         newTask: task,
+        taskConfirmModal: false,
+        backFromTaskEvent: true,
         border: "solid 1px #ffffff"
       });
     } catch (e) {
@@ -1049,9 +1051,7 @@ class Dashboard extends Component {
   taskResume = event => {
     if (event) {
       let searchData = {
-        task: {
-          status: "running"
-        }
+        status: "running"
       };
       this.updateTaskEvent(event, searchData);
     }
@@ -1195,9 +1195,9 @@ class Dashboard extends Component {
     });
   };
 
-  updateTaskEvent = async (event, date) => {
+  updateTaskEvent = async (event, data) => {
     let taskId = event.id.split("-")[0];
-    this.updateTask({ task: date }, taskId, event.projectId);
+    this.updateTask({ task: data }, taskId, event.projectId);
   };
 
   render() {
