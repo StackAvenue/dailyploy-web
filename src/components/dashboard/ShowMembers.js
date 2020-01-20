@@ -79,14 +79,6 @@ class ShowMembers extends Component {
     }
 
     try {
-      var userIds =
-        this.props.searchUserDetails.length > 0
-          ? this.props.searchUserDetails.map(member => member.member_id)
-          : [];
-      var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
-      };
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`
       );
@@ -101,7 +93,6 @@ class ShowMembers extends Component {
       var emailArr = data.members.filter(
         user => user.email !== loggedInData.email
       );
-      // .map(user => user.email);
       this.props.handleLoading(false);
     } catch (e) {
       console.log("users Error", e);
@@ -133,13 +124,17 @@ class ShowMembers extends Component {
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails.map(member => member.member_id)
           : [];
-      var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
-      };
+      var searchData = {};
+      if (userIds.length > 0) {
+        searchData["user_ids"] = userIds.join(",");
+      }
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/members`
+          `workspaces/${this.state.workspaceId}/members`,
+          searchData
         );
         var userArr = data.members.map(user => user.email);
         var worksapceUsers = data.members;
@@ -289,9 +284,8 @@ class ShowMembers extends Component {
         });
       }
     }
-
-    if (this.state.worksapceUsers) {
-      this.state.worksapceUsers.map((member, idx) => {
+    if (this.state.members) {
+      this.state.members.map((member, idx) => {
         memberList.push({
           value: member.name,
           member_id: member.id,
@@ -305,6 +299,7 @@ class ShowMembers extends Component {
       members: memberList,
       projects: projectList
     };
+    console.log("searchOptions", searchOptions);
     this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
   };
