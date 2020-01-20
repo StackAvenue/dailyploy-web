@@ -944,31 +944,63 @@ class Dashboard extends Component {
 
   taskMarkComplete = async event => {
     if (event) {
-      let searchData = {
-        task: {
-          status: "completed"
+      if (
+        event.timeTracked.length > 0 ||
+        (this.state.logTimeFrom && this.state.logTimeTo)
+      ) {
+        let searchData = {
+          task: {
+            status: "completed"
+          }
+        };
+        if (this.state.logTimeFrom && this.state.logTimeTo) {
+          var startDateTime =
+            moment(this.state.dateFrom).format(DATE_FORMAT1) +
+            " " +
+            moment(this.state.logTimeFrom).format(HRMIN);
+          var endDateTime =
+            moment(this.state.dateTo).format(DATE_FORMAT1) +
+            " " +
+            moment(this.state.logTimeTo).format(HRMIN);
+          searchData.task["start_datetime"] = startDateTime;
+          searchData.task["end_datetime"] = endDateTime;
         }
-      };
-      if (this.state.logTimeFrom && this.state.logTimeTo) {
-        var startDateTime =
-          moment(this.state.dateFrom).format(DATE_FORMAT1) +
-          " " +
-          moment(this.state.logTimeFrom).format(HRMIN);
-        var endDateTime =
-          moment(this.state.dateTo).format(DATE_FORMAT1) +
-          " " +
-          moment(this.state.logTimeTo).format(HRMIN);
-        searchData.task["start_datetime"] = startDateTime;
-        searchData.task["end_datetime"] = endDateTime;
-      }
-      this.updateTaskEvent(event, searchData);
-      var localTaskId = localStorage.getItem(
-        `taskId-${this.state.workspaceId}`
-      );
-      if (localTaskId === event.id) {
-        this.handleTaskTracking("stop", event.id, Date.now());
-        this.handleReset();
-        this.props.handleTaskBottomPopup("", null, "stop");
+
+        var localTaskId = localStorage.getItem(
+          `taskId-${this.state.workspaceId}`
+        );
+        if (localTaskId == event.id) {
+          this.handleTaskTracking("stop", event.id, Date.now());
+          this.handleReset();
+          this.props.handleTaskBottomPopup("", null, "stop");
+        }
+        let taskId = event.id.split("-")[0];
+        try {
+          const { data } = await put(
+            searchData,
+            `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
+          );
+          var events = this.state.events;
+          var event = events.find(e => e.id === event.id);
+          event["timeTracked"] = data.task.time_tracked;
+          event["status"] = data.task.status;
+          event["trackingStatus"] =
+            data.task.status === "completed" ? "" : "play";
+          this.setState({
+            events: events,
+            taskEvent: event,
+            taskConfirmModal: false,
+            backFromTaskEvent: true,
+            showInfo: true
+          });
+        } catch (e) {}
+      } else {
+        this.setState({
+          logTimeFromError: this.state.logTimeFrom
+            ? ""
+            : "please select time from",
+          logTimeToError: this.state.logTimeTo ? "" : "please select time to"
+        });
       }
     }
   };
@@ -1031,7 +1063,6 @@ class Dashboard extends Component {
 
   handleTaskStartTop = () => {
     var icon = this.state.icon;
-    // var updateIcon = icon;
     var status = this.state.status;
     var showAlert = false;
     var events = this.state.events;
@@ -1039,14 +1070,11 @@ class Dashboard extends Component {
       this.handleReset();
       this.props.handleTaskBottomPopup("", null, "stop");
       this.handleTaskTracking("stop", this.state.taskId, Date.now());
-      // updateIcon =
-      //   icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
       status = !this.state.status;
       var event = events.find(event => event.id === this.state.taskEvent.id);
       event["trackingStatus"] = "play";
       event["startOn"] = null;
     } else if (this.props.state.isStart) {
-      // updateIcon = icon;
       var startOn = this.props.state.startOn;
       var showAlert = !this.state.showAlert;
     } else {
@@ -1054,8 +1082,6 @@ class Dashboard extends Component {
       this.setLocalStorageValue(this.state.taskEvent, startOn);
       this.props.handleTaskBottomPopup(startOn, this.state.taskEvent, "start");
       this.handleTaskTracking("start", this.state.taskId, startOn);
-      // updateIcon =
-      //   icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
       status = !this.state.status;
       var event = events.find(event => event.id === this.state.taskEvent.id);
       event["trackingStatus"] = "pause";
@@ -1064,7 +1090,6 @@ class Dashboard extends Component {
     this.setState({
       status: status,
       showPopup: false,
-      // icon: updateIcon,
       startOn: startOn,
       showAlert: showAlert,
       events: events
@@ -1158,13 +1183,15 @@ class Dashboard extends Component {
 
   handleLogTimeFrom = value => {
     this.setState({
-      logTimeFrom: value
+      logTimeFrom: value,
+      logTimeFromError: ""
     });
   };
 
   handleLogTimeTo = value => {
     this.setState({
-      logTimeTo: value
+      logTimeTo: value,
+      logTimeToError: ""
     });
   };
 

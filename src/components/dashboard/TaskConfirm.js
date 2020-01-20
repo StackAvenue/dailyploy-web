@@ -68,6 +68,30 @@ class TaskConfirm extends Component {
     return "";
   };
 
+  disabledHours = () => {
+    var timeMoment = this.props.state.logTimeFrom;
+    if (timeMoment) {
+      let time = timeMoment.format(HRMIN);
+      var hr = time.split(":")[0];
+      hr = Number(hr);
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
+      return hoursArr;
+    }
+    return [];
+  };
+
+  disabledMinutes = () => {
+    var timeMoment = this.props.state.logTimeFrom;
+    if (timeMoment) {
+      let time = timeMoment.format(HRMIN);
+      var min = time.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    }
+    return [];
+  };
+
   render() {
     const { props } = this;
     return (
@@ -136,9 +160,27 @@ class TaskConfirm extends Component {
                       onChange={props.handleLogTimeTo}
                       closeIcon={false}
                       inputReadOnly={false}
+                      disabledMinutes={this.disabledMinutes}
+                      disabledHours={this.disabledHours}
                     />
                   </div>
                 </div>
+                {this.props.state.logTimeFromError ||
+                this.props.state.logTimeToError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding"></div>
+                    <div className="col-md-5 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.logTimeFromError}
+                      </span>
+                    </div>
+                    <div className="col-md-4 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.logTimeToError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : null}
 
