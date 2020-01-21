@@ -63,6 +63,7 @@ class Reports extends Component {
       categoryReports: [],
       selectedCategory: null,
       selectedPriority: null,
+      columnChartData: [],
       barChartArray: this.generateDailyBarChartData(new Date())
     };
   }
@@ -138,7 +139,9 @@ class Reports extends Component {
       let bar = moment(date).format(DATE_FORMAT1);
       data.push({ name: m.format(DATE_FORMAT6), activeBar: bar });
       return {
+        activeBar: bar,
         startDate: m.format(DATE_FORMAT1),
+        endDate: m.format(DATE_FORMAT1),
         name: m.format(DATE_FORMAT6),
         frequency: "daily"
       };
@@ -153,11 +156,14 @@ class Reports extends Component {
     let activeBar = `Week ${moment().week()} ${moment().year()}`;
     for (let i = 0; i < 4; i++) {
       let md = moment(weekDays[0]);
+      let lmd = moment(weekDays[6]);
       let week = `Week ${md.week()}`;
       let bar = `Week ${md.week()} ${md.year()}`;
       data.push({ name: week, activeBar: bar });
       dates.push({
+        activeBar: bar,
         startDate: md.format(DATE_FORMAT1),
+        endDate: lmd.format(DATE_FORMAT1),
         name: week,
         frequency: "weekly"
       });
@@ -178,12 +184,17 @@ class Reports extends Component {
     let data = [];
     let activeBar = moment().format(MONTH_FORMAT2);
     for (let i = 1; i <= 12; i++) {
-      var date = `${year}-${i}-1`;
-      let month = moment(date).format(MONTH_FORMAT1);
-      let bar = moment(date).format(MONTH_FORMAT2);
+      var startDate = moment(`${year}-${i}-1`).format(DATE_FORMAT1);
+      var endDate = moment(startDate)
+        .endOf("month")
+        .format(DATE_FORMAT1);
+      let month = moment(startDate).format(MONTH_FORMAT1);
+      let bar = moment(startDate).format(MONTH_FORMAT2);
       data.push({ name: month, activeBar: bar });
       dates.push({
-        startDate: date,
+        activeBar: bar,
+        startDate: startDate,
+        endDate: endDate,
         name: month,
         frequency: "monthly"
       });
@@ -200,7 +211,8 @@ class Reports extends Component {
         daily: true,
         monthly: false,
         barChartArray: this.generateDailyBarChartData(new Date()),
-        frequency: "daily"
+        frequency: "daily",
+        columnChartData: []
       });
     }
     if (name == "monthly") {
@@ -209,7 +221,8 @@ class Reports extends Component {
         daily: false,
         monthly: true,
         barChartArray: this.generateMonthlyBarChartData(new Date()),
-        frequency: "monthly"
+        frequency: "monthly",
+        columnChartData: []
       });
       this.handleMonthlyDateFrom(new Date());
     }
@@ -219,7 +232,8 @@ class Reports extends Component {
         daily: false,
         monthly: false,
         barChartArray: this.generateWeeklyBarChartData(),
-        frequency: "weekly"
+        frequency: "weekly",
+        columnChartData: []
       });
       this.handleDayChange(new Date());
     }
@@ -859,6 +873,11 @@ class Reports extends Component {
     this.setState({ selectedPriority: option });
   };
 
+  setColumnChartData = data => {
+    console.log("data", data);
+    this.setState({ columnChartData: data });
+  };
+
   render() {
     const Daily = props => {
       return (
@@ -995,6 +1014,9 @@ class Reports extends Component {
                   priorities={PRIORITIES}
                   projects={this.state.projects}
                   state={this.state}
+                  searchUserDetails={this.props.searchUserDetails}
+                  searchProjectIds={this.props.searchProjectIds}
+                  setColumnChartData={this.setColumnChartData}
                 />
               </div>
 

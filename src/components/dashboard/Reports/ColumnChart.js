@@ -88,311 +88,204 @@ class ColumnChart extends Component {
     });
   };
 
+  sortData = () => {
+    return this.props.columnChartData.sort((a, b) => (a.id > b.id ? 1 : -1));
+  };
+
+  getScheduledDataLabel = (y, time) => {
+    return {
+      y: y,
+      dataLabels: {
+        formatter: function() {
+          return "<b>" + time + " hours</b>";
+        },
+        enabled: true,
+        style: {
+          borderRadius: 5,
+          fontSize: 10,
+          backgroundColor: "rgba(252, 255, 255, 0.7)",
+          borderWidth: 1,
+          color: "#0075d9",
+          borderColor: "rgba(252, 255, 255, 0.7)"
+        }
+      }
+    };
+  };
+
+  getWorkedDataLabel = (y, time) => {
+    return {
+      y: y,
+      dataLabels: {
+        formatter: function() {
+          return "<b>" + time + " hours</b>";
+        },
+        enabled: true,
+        style: {
+          borderRadius: 5,
+          fontSize: 10,
+          backgroundColor: "rgba(252, 255, 255, 0.7)",
+          borderWidth: 1,
+          color: "#0075d9",
+          borderColor: "rgba(252, 255, 255, 0.7)"
+        }
+      },
+      color: {
+        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+        stops: [
+          [0, CHART_COLOR.curr_worked_0],
+          [1, CHART_COLOR.curr_worked_1]
+        ]
+      }
+    };
+  };
+
+  secondsToHours = seconds => {
+    let totalSeconds = Number(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor((totalSeconds % 3600) % 60);
+    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+  };
+
   getXData = () => {
+    var newSortedData = this.sortData();
     if (this.props.state.daily) {
+      var dailyScheduled = [];
+      var dailyWorked = [];
+      newSortedData.map(option => {
+        if (option.totalEstimateTime && option.trackedTime != 0) {
+          let sched = option.totalEstimateTime - option.trackedTime;
+          if (option.activeBar == this.props.activeBar) {
+            dailyScheduled.push(
+              this.getScheduledDataLabel(sched, this.secondsToHours(sched))
+            );
+            dailyWorked.push(
+              this.getWorkedDataLabel(
+                option.trackedTime,
+                this.secondsToHours(option.trackedTime)
+              )
+            );
+          } else {
+            dailyWorked.push(sched);
+            dailyWorked.push(option.trackedTime);
+          }
+        } else {
+          dailyScheduled.push(0);
+          dailyWorked.push(0);
+        }
+      });
       return [
         {
-          name: "Capacity",
-          data: [
-            8,
-            4,
-            5,
-            {
-              y: 5,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              }
-            },
-            9,
-            6,
-            4
-          ],
-          color: CHART_COLOR.capacity
-        },
-        {
           name: "Scheduled",
-          data: [
-            7,
-            4,
-            5,
-            {
-              y: 7,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              }
-            },
-            9,
-            4,
-            4
-          ],
+          data: dailyScheduled,
           color: CHART_COLOR.scheduled
         },
         {
           name: "Worked",
-          data: [
-            15,
-            22,
-            20,
-            {
-              y: 20,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                // borderRadius: 5,
-                // backgroundColor: "rgba(252, 255, 255, 0.7)",
-                // borderWidth: 1,
-                // color: "#0075d9",
-                // borderColor: "#d6d6d6",
-                // fontSize: 8,
-                style: {
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)",
-                  borderRadius: 5
-                }
-              },
-              color: {
-                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                stops: [
-                  [0, CHART_COLOR.curr_worked_0],
-                  [1, CHART_COLOR.curr_worked_1]
-                ]
-              }
-            },
-            18,
-            20,
-            22
-          ]
+          data: dailyWorked,
+          color: {
+            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+              [0, CHART_COLOR.curr_worked_0],
+              [1, CHART_COLOR.curr_worked_1]
+            ]
+          }
         }
       ];
     } else if (this.props.state.weekly) {
+      var weeklyScheduled = [];
+      var weeklyWorked = [];
+      newSortedData.map(option => {
+        if (option.totalEstimateTime && option.trackedTime != 0) {
+          let sched = option.totalEstimateTime - option.trackedTime;
+          if (option.activeBar == this.props.activeBar) {
+            weeklyScheduled.push(
+              this.getScheduledDataLabel(sched, this.secondsToHours(sched))
+            );
+            weeklyWorked.push(
+              this.getWorkedDataLabel(
+                option.trackedTime,
+                this.secondsToHours(option.trackedTime)
+              )
+            );
+          } else {
+            weeklyScheduled.push(sched);
+            weeklyWorked.push(option.trackedTime);
+          }
+        } else {
+          weeklyScheduled.push(0);
+          weeklyWorked.push(0);
+        }
+      });
       return [
         {
-          name: "Capacity",
-          data: [
-            5,
-            4,
-            3,
-            {
-              y: 3,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              }
-            }
-          ],
-          color: CHART_COLOR.capacity
-        },
-        {
           name: "Scheduled",
-          data: [
-            3,
-            3,
-            4,
-            {
-              y: 5,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              }
-            }
-          ],
+          data: weeklyScheduled,
           color: CHART_COLOR.scheduled
         },
         {
           name: "Worked",
-          data: [
-            22,
-            23,
-            23,
-            {
-              y: 22,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              },
-              color: {
-                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                stops: [
-                  [0, CHART_COLOR.curr_worked_0],
-                  [1, CHART_COLOR.curr_worked_1]
-                ]
-              }
-            }
-          ]
+          data: weeklyWorked,
+          color: {
+            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+              [0, CHART_COLOR.curr_worked_0],
+              [1, CHART_COLOR.curr_worked_1]
+            ]
+          }
         }
       ];
     } else if (this.props.state.monthly) {
+      var monthlyScheduled = [];
+      var monthlyWorked = [];
+      newSortedData.map(option => {
+        if (option.totalEstimateTime && option.trackedTime != 0) {
+          let sched = option.totalEstimateTime - option.trackedTime;
+          if (option.activeBar == this.props.activeBar) {
+            monthlyScheduled.push(
+              this.getScheduledDataLabel(sched, this.secondsToHours(sched))
+            );
+            monthlyWorked.push(
+              this.getWorkedDataLabel(
+                option.trackedTime,
+                this.secondsToHours(option.trackedTime)
+              )
+            );
+          } else {
+            monthlyScheduled.push(sched);
+            monthlyWorked.push(option.trackedTime);
+          }
+        } else {
+          monthlyScheduled.push(0);
+          monthlyWorked.push(0);
+        }
+      });
       return [
         {
-          name: "Capacity",
-          data: [
-            {
-              y: 5,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              }
-            },
-            4,
-            3,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            4,
-            1
-          ],
-          color: CHART_COLOR.capacity
-        },
-        {
           name: "Scheduled",
-          data: [
-            {
-              y: 2,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              }
-            },
-            2,
-            4,
-            6,
-            7,
-            4,
-            8,
-            5,
-            0,
-            4,
-            6,
-            15
-          ],
+          data: monthlyScheduled,
           color: CHART_COLOR.scheduled
         },
         {
           name: "Worked",
-          data: [
-            {
-              y: 23,
-              dataLabels: {
-                formatter: function() {
-                  return "<b>" + this.y + " hours</b>";
-                },
-                enabled: true,
-                style: {
-                  borderRadius: 5,
-                  fontSize: 10,
-                  backgroundColor: "rgba(252, 255, 255, 0.7)",
-                  borderWidth: 1,
-                  color: "#0075d9",
-                  borderColor: "rgba(252, 255, 255, 0.7)"
-                }
-              },
-              color: {
-                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                stops: [
-                  [0, CHART_COLOR.curr_worked_0],
-                  [1, CHART_COLOR.curr_worked_1]
-                ]
-              }
-            },
-            24,
-            23,
-            22,
-            20,
-            24,
-            20,
-            20,
-            30,
-            24,
-            21,
-            23
-          ]
+          data: monthlyWorked,
+          color: {
+            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+              [0, CHART_COLOR.curr_worked_0],
+              [1, CHART_COLOR.curr_worked_1]
+            ]
+          }
         }
       ];
     }
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevProps.data != this.props.data) {
+    if (
+      prevProps.data != this.props.data ||
+      prevProps.columnChartData != this.props.columnChartData
+    ) {
       let data = this.props.data;
       let barWidth = this.props.barWidth;
       let activeBar = this.props.activeBar;
