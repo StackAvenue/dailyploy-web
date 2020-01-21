@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ColumnChart from "./ColumnChart";
 import PieChart from "./PieChart";
-import moment from "moment";
 
 class SummuryReportCharts extends Component {
   constructor(props) {
@@ -43,24 +42,48 @@ class SummuryReportCharts extends Component {
             <PieChart
               id="projectPieChart"
               type="Projects"
-              data={this.props.state.projectReports.data}
-              estimateTime={this.props.state.projectReports.estimateTime}
+              data={
+                this.props.state.projectReports
+                  ? this.props.state.projectReports.data
+                  : []
+              }
+              estimateTime={
+                this.props.state.projectReports
+                  ? this.props.state.projectReports.estimateTime
+                  : []
+              }
             />
           </div>
           <div className="chart d-inline-block">
             <PieChart
               id="categoryPieChart"
               type="Categories"
-              // data={this.props.state.taskCategories}
-              data={this.props.state.categoryReports.data}
-              estimateTime={this.props.state.categoryReports.estimateTime}
+              data={
+                this.props.state.categoryReports
+                  ? this.props.state.categoryReports.data
+                  : []
+              }
+              estimateTime={
+                this.props.state.categoryReports
+                  ? this.props.state.categoryReports.estimateTime
+                  : []
+              }
             />
           </div>
           <div className="chart d-inline-block">
             <PieChart
               id="priorityPieChart"
               type="Priorities"
-              data={this.props.priorities}
+              data={
+                this.props.state.priorityReports
+                  ? this.props.state.priorityReports.data
+                  : []
+              }
+              estimateTime={
+                this.props.state.priorityReports
+                  ? this.props.state.priorityReports.estimateTime
+                  : []
+              }
             />
           </div>
         </div>

@@ -7,7 +7,8 @@ import {
   MONTH_FORMAT,
   DATE_FORMAT6,
   MONTH_FORMAT1,
-  MONTH_FORMAT2
+  MONTH_FORMAT2,
+  PRIORITIES
 } from "./../../utils/Constants";
 import moment from "moment";
 import MenuBar from "./MenuBar";
@@ -28,28 +29,6 @@ class Reports extends Component {
     this.now = moment()
       .hour(0)
       .minute(0);
-    this.priorities = [
-      {
-        name: "high",
-        color_code: "#00A031"
-      },
-      {
-        name: "medium",
-        color_code: "#FF7F00"
-      },
-      {
-        name: "low",
-        color_code: "#555555"
-      },
-      {
-        name: "no priority",
-        color_code: "#9b9b9b"
-      },
-      {
-        name: "all priority",
-        color_code: "#e5e5e5"
-      }
-    ];
     this.state = {
       workspaces: [],
       workspaceId: "",
@@ -83,6 +62,7 @@ class Reports extends Component {
       projectReports: [],
       categoryReports: [],
       selectedCategory: null,
+      selectedPriority: null,
       barChartArray: this.generateDailyBarChartData(new Date())
     };
   }
@@ -418,6 +398,18 @@ class Reports extends Component {
       };
     } catch (e) {}
 
+    // Summury reports Priority
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/priority_summary_report`,
+        searchData
+      );
+      var priorityReportData = {
+        data: data.report_data,
+        estimateTime: data.total_estimated_time
+      };
+    } catch (e) {}
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -433,7 +425,8 @@ class Reports extends Component {
       totalTime: totalTime,
       taskCategories: taskCategories,
       projectReports: projectReportData,
-      categoryReports: categoryReportData
+      categoryReports: categoryReportData,
+      priorityReports: priorityReportData
     });
 
     this.createUserProjectList();
@@ -535,7 +528,7 @@ class Reports extends Component {
       }
       if (this.state.selectedCategory) {
         searchData[
-          "category_id"
+          "category_ids"
         ] = this.state.selectedCategory.task_category_id;
       }
       // Summury reports Category
@@ -552,6 +545,47 @@ class Reports extends Component {
 
       this.setState({
         categoryReports: categoryReportData ? categoryReportData : ""
+      });
+    }
+    // Summury reports Priority
+    if (
+      prevState.dateFrom !== this.state.dateFrom ||
+      prevState.dateTo !== this.state.dateTo ||
+      prevState.frequency !== this.state.frequency ||
+      prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      prevProps.searchUserDetails !== this.props.searchUserDetails ||
+      prevState.selectedPriority !== this.state.selectedPriority
+    ) {
+      let userIds = this.props.searchUserDetails.map(
+        member => member.member_id
+      );
+      var searchData = {
+        start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+        end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
+        user_ids:
+          this.props.searchUserDetails.length > 0
+            ? userIds.join(",")
+            : this.state.userId
+      };
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
+      if (this.state.selectedPriority) {
+        searchData["priority"] = this.state.selectedPriority.name;
+      }
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/priority_summary_report`,
+          searchData
+        );
+        var priorityReportData = {
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        };
+      } catch (e) {}
+
+      this.setState({
+        priorityReports: priorityReportData ? priorityReportData : ""
       });
     }
   }
@@ -819,8 +853,10 @@ class Reports extends Component {
   };
 
   handleCategoryChange = option => {
-    console.log("handleCategoryChange", option);
     this.setState({ selectedCategory: option });
+  };
+  handlePriorityChange = option => {
+    this.setState({ selectedPriority: option });
   };
 
   render() {
@@ -937,9 +973,9 @@ class Reports extends Component {
                   <div className="d-inline-block report-priority">
                     <DailyPloySelect
                       placeholder="select priority"
-                      onChange={() => {}}
+                      onChange={this.handlePriorityChange}
                       iconType="circle"
-                      options={this.priorities}
+                      options={PRIORITIES}
                     />
                   </div>
                 </div>
@@ -956,7 +992,7 @@ class Reports extends Component {
 
               <div className="">
                 <SummuryReportCharts
-                  priorities={this.priorities}
+                  priorities={PRIORITIES}
                   projects={this.state.projects}
                   state={this.state}
                 />

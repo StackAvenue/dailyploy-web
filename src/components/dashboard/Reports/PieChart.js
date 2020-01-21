@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Highcharts from "highcharts/highstock";
+import { PRIORITIES } from "../../../utils/Constants";
+import { textTitlize } from "../../../utils/function";
 
 class PieChart extends Component {
   constructor(props) {
@@ -21,22 +23,7 @@ class PieChart extends Component {
     } else if (this.props.type === "Projects") {
       return this.generateProjectData();
     } else {
-      return this.props.data.map((item, idx) => {
-        return {
-          name: item.name,
-          color: item.color_code,
-          y: idx + 1 * 5,
-          dataLabels: {
-            enabled: true,
-            style: {
-              fontWeight: "bold"
-            },
-            formatter: function() {
-              return "<b class='hour-popup'>" + this.y + "</b> ";
-            }
-          }
-        };
-      });
+      return this.generatePriorityData();
     }
   };
 
@@ -50,7 +37,7 @@ class PieChart extends Component {
       data = this.props.data.map((item, idx) => {
         var time = this.secondsToHours(item.tracked_time);
         return {
-          name: item.name,
+          name: textTitlize(item.name),
           color: item.color_code,
           time: time,
           y: item.tracked_time,
@@ -96,13 +83,63 @@ class PieChart extends Component {
       var data = this.props.data.map((item, idx) => {
         var time = this.secondsToHours(item.tracked_time);
         return {
-          name: item.name,
+          name: textTitlize(item.name),
           time: time,
           y: item.tracked_time,
           dataLabels: {
             enabled: true,
             formatter: function() {
               return "<b>" + time + "</b>";
+            }
+          }
+        };
+      });
+      if (totalTime < estimateTime) {
+        let diff = estimateTime - totalTime;
+        let time = this.secondsToHours(diff);
+        data.push({
+          name: "Remaining Scheduled Time",
+          y: diff,
+          time: time,
+          color: "#e5e5e5",
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return "<span class='hour-popup'>" + time + "</span> ";
+            }
+          }
+        });
+      }
+    }
+    return data;
+  };
+
+  selectColorCode = name => {
+    let priority = PRIORITIES.find(p => p.name == name);
+    return priority ? priority.color_code : null;
+  };
+
+  generatePriorityData = () => {
+    var data = [];
+    if (this.props.estimateTime && this.props.data) {
+      var estimateTime = this.props.estimateTime;
+      var totalTime = this.props.data
+        .map(item => item.tracked_time)
+        .reduce((a, b) => a + b, 0);
+      data = this.props.data.map((item, idx) => {
+        var time = this.secondsToHours(item.tracked_time);
+        return {
+          name: textTitlize(item.priority),
+          color: this.selectColorCode(item.priority),
+          time: time,
+          y: item.tracked_time,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: "bold"
+            },
+            formatter: function() {
+              return "<b class='hour-popup'>" + time + "</b> ";
             }
           }
         };
