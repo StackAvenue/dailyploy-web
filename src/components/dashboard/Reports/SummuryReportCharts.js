@@ -86,6 +86,54 @@ class SummuryReportCharts extends Component {
     }
   };
 
+  infoMessage = () => {
+    if (
+      this.props.searchProjectIds &&
+      this.props.searchProjectIds.length > 0 &&
+      !this.props.state.selectedPriority &&
+      !this.props.state.selectedCategory
+    ) {
+      return "Showing results for searched project in all categories and in all priorities.";
+    } else if (
+      this.props.searchProjectIds &&
+      this.props.searchProjectIds.length == 0 &&
+      !this.props.state.selectedPriority &&
+      this.props.state.selectedCategory
+    ) {
+      return "Showing results for all project in selected category and in all priorities.";
+    } else if (
+      this.props.searchProjectIds &&
+      this.props.searchProjectIds.length == 0 &&
+      this.props.state.selectedPriority &&
+      !this.props.state.selectedCategory
+    ) {
+      return "Showing results for all project in all categories and in selected priority.";
+    } else if (
+      this.props.searchProjectIds &&
+      this.props.searchProjectIds.length == 0 &&
+      this.props.state.selectedPriority &&
+      this.props.state.selectedCategory
+    ) {
+      return "Showing results for all project in selected category and in selected priority.";
+    } else if (
+      this.props.searchProjectIds &&
+      this.props.searchProjectIds.length > 0 &&
+      this.props.state.selectedPriority &&
+      !this.props.state.selectedCategory
+    ) {
+      return "Showing results for searched project in all categories and in selected priority.";
+    } else if (
+      this.props.searchProjectIds &&
+      this.props.searchProjectIds.length > 0 &&
+      this.props.state.selectedPriority &&
+      this.props.state.selectedCategory
+    ) {
+      return "Showing results for searched project in selected category and in selected priority.";
+    } else {
+      return "Showing results for all projects in all categories and in all priorities.";
+    }
+  };
+
   render() {
     return (
       <div className="summary-reports">
@@ -95,9 +143,7 @@ class SummuryReportCharts extends Component {
               Summary Report
             </span>
             <i className="fa fa-info-circle tooltip d-inline-block">
-              <span className="tooltiptext">
-                Min 8 characters at least 1 number and 1 special character
-              </span>
+              <span className="tooltiptext">{this.infoMessage()}</span>
             </i>
           </div>
           <div className="col-md-9 summury-info-btn d-inline-block">
