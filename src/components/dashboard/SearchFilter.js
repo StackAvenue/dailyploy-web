@@ -69,9 +69,25 @@ class SearchFilter extends Component {
       var projectSuggestions = this.props.searchOptions.projects.filter(
         v => !this.state.selectedTags.includes(v)
       );
-      var memberSuggestions = this.props.searchOptions.members.filter(
-        v => !this.state.selectedTags.includes(v)
-      );
+
+      if (this.props.state.searchFlag == "Members" && this.props.isReports) {
+        let member = this.state.selectedTags.find(m => m.type == "member");
+        var memberSuggestions = [];
+        if (!member) {
+          var memberSuggestions = this.props.searchOptions.members.filter(
+            v => !this.state.selectedTags.includes(v)
+          );
+        }
+      } else if (
+        this.props.state.searchFlag == "My Reports" &&
+        this.props.isReports
+      ) {
+        var memberSuggestions = [];
+      } else {
+        var memberSuggestions = this.props.searchOptions.members.filter(
+          v => !this.state.selectedTags.includes(v)
+        );
+      }
       this.setState({
         memberSuggestions: memberSuggestions,
         projectSuggestions: projectSuggestions
