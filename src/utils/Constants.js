@@ -24,8 +24,10 @@ export const CHART_COLOR = {
   worked_1: "#e5edee",
   curr_worked_0: "#002329",
   curr_worked_1: "#ccdbde",
-  ext_worked_0: "#270600",
+  ext_worked_0: "#ad867f",
   ext_worked_1: "#ebebeb",
+  curr_ext_worked_0: "#270600",
+  curr_ext_worked_1: "#ebebeb",
   active_color: "#0075d9"
 };
 export const PRIORITIES = [
@@ -55,3 +57,25 @@ export const DEFAULT_PRIORITIE = {
   color_code: "#9B9B9B",
   label: "no priority"
 };
+
+export const PRIORITIES_MAP = new Map();
+PRIORITIES_MAP.set("high", {
+  name: "high",
+  color_code: "#00A031",
+  label: "high"
+});
+PRIORITIES_MAP.set("medium", {
+  name: "medium",
+  color_code: "#FF7F00",
+  label: "medium"
+});
+PRIORITIES_MAP.set("low", {
+  name: "low",
+  color_code: "#555555",
+  label: "low"
+});
+PRIORITIES_MAP.set("no_priority", {
+  name: "no_priority",
+  color_code: "#9B9B9B",
+  label: "no priority"
+});

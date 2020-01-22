@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
-import { DATE_FORMAT2 } from "./../../../utils/Constants";
+import { DATE_FORMAT2, PRIORITIES_MAP } from "./../../../utils/Constants";
 
 class ReportTableRow extends Component {
   constructor(props) {
@@ -85,11 +85,15 @@ class ReportTableRow extends Component {
     );
   };
 
-  showCategory = () => {
+  showCategory = priority => {
+    let priorities = PRIORITIES_MAP.get(priority);
     return (
       <>
-        <span className="d-inline-block priority-medium"></span>
-        <span className="d-inline-block">{"medium"}</span>
+        <span
+          className="d-inline-block priority"
+          style={{ backgroundColor: priorities.color_code }}
+        ></span>
+        <span className="d-inline-block">{priorities.label}</span>
       </>
     );
   };
@@ -99,9 +103,15 @@ class ReportTableRow extends Component {
       return (
         <tr key={index}>
           <td>
-            {true ? <div className="progress-btn">In progress</div> : null}
-            {false ? <div className="complete-btn">Completed</div> : null}
-            {false ? <div className="not-start-btn">Not started</div> : null}
+            {task.status == "running" ? (
+              <div className="progress-btn">In progress</div>
+            ) : null}
+            {task.status == "completed" ? (
+              <div className="complete-btn">Completed</div>
+            ) : null}
+            {task.status == "not_started" ? (
+              <div className="not-start-btn">Not started</div>
+            ) : null}
           </td>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
           <td className="text-titlize">{task.name}</td>
@@ -109,7 +119,7 @@ class ReportTableRow extends Component {
           <td className="text-titlize">
             {task.category ? task.category.name : "---"}
           </td>
-          <td className="text-titlize">{this.showCategory()}</td>
+          <td className="text-titlize">{this.showCategory(task.priority)}</td>
           <td>
             {this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}
           </td>

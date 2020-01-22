@@ -235,24 +235,10 @@
   }
 }
 
-.priority-high{
+.priority{
   width: 10px;
   height: 10px;
-  background-color: #00a031;
-  margin-right: 15px;
-  border-radius: 20px;
-}
-.priority-medium{
-  width: 10px;
-  height: 10px;
-  background-color: #ff7f00;
-  margin-right: 15px;
-  border-radius: 20px;
-}
-.priority-low{
-  width: 10px;
-  height: 10px;
-  background-color: #555555;
+  background-color: #9B9B9B;
   margin-right: 15px;
   border-radius: 20px;
 }
@@ -458,5 +444,8 @@
   .hour-popup{
     border: solid 1px $color-text2 !important;
     background-color: #00A031 !important;
+  }
+  .highcharts-grid-line{
+    display: none;
   }
 }
