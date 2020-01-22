@@ -42,11 +42,8 @@ class ColumnChart extends Component {
         title: {
           text: "Time (In hours)"
         },
-        stackLabels: {
-          enabled: false,
-          style: {
-            fontWeight: "bold"
-          }
+        labels: {
+          enabled: false
         }
       },
       legend: {
@@ -93,25 +90,28 @@ class ColumnChart extends Component {
   };
 
   getScheduledDataLabel = (y, time, total) => {
-    return {
-      y: y,
-      time: time,
-      totalTime: total,
-      dataLabels: {
-        formatter: function() {
-          return "<b>" + time + " hours</b>";
-        },
-        enabled: true,
-        style: {
-          borderRadius: 5,
-          fontSize: 10,
-          backgroundColor: "rgba(252, 255, 255, 0.7)",
-          borderWidth: 1,
-          color: "#0075d9",
-          borderColor: "rgba(252, 255, 255, 0.7)"
+    if (y != 0) {
+      return {
+        y: y,
+        time: time,
+        totalTime: total,
+        dataLabels: {
+          formatter: function() {
+            return "<b>" + time + " hours</b>";
+          },
+          enabled: true,
+          style: {
+            borderRadius: 5,
+            fontSize: 10,
+            backgroundColor: "rgba(252, 255, 255, 0.7)",
+            borderWidth: 1,
+            color: "#0075d9",
+            borderColor: "rgba(252, 255, 255, 0.7)"
+          }
         }
-      }
-    };
+      };
+    }
+    return null;
   };
 
   getWorkedDataLabel = (y, time, total) => {
@@ -547,15 +547,11 @@ class ColumnChart extends Component {
         },
         yAxis: {
           max: 24,
-          visible: true,
           title: {
             text: "Time (In hours)"
           },
-          stackLabels: {
-            enabled: false,
-            style: {
-              fontWeight: "bold"
-            }
+          labels: {
+            enabled: false
           }
         },
         legend: {

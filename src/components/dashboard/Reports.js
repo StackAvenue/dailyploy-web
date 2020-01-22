@@ -469,7 +469,9 @@ class Reports extends Component {
       prevState.dateTo !== this.state.dateTo ||
       prevState.frequency !== this.state.frequency ||
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      prevProps.searchUserDetails !== this.props.searchUserDetails
+      prevProps.searchUserDetails !== this.props.searchUserDetails ||
+      prevState.selectedCategory !== this.state.selectedCategory ||
+      prevState.selectedPriority !== this.state.selectedPriority
     ) {
       let userIds = this.props.searchUserDetails.map(
         member => member.member_id
@@ -484,6 +486,14 @@ class Reports extends Component {
       };
       if (this.props.searchProjectIds.length > 0) {
         searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
+      if (this.state.selectedCategory) {
+        searchData[
+          "category_ids"
+        ] = this.state.selectedCategory.task_category_id;
+      }
+      if (this.state.selectedPriority) {
+        searchData["priorities"] = this.state.selectedPriority.name;
       }
       // Reports data
       try {
@@ -587,7 +597,7 @@ class Reports extends Component {
         searchData["project_ids"] = this.props.searchProjectIds.join(",");
       }
       if (this.state.selectedPriority) {
-        searchData["priority"] = this.state.selectedPriority.name;
+        searchData["priorities"] = this.state.selectedPriority.name;
       }
       try {
         const { data } = await get(
@@ -1042,6 +1052,8 @@ class Reports extends Component {
                     <DailyPloySelect
                       placeholder="select priority"
                       onChange={this.handlePriorityChange}
+                      label="label"
+                      suggesionBy="label"
                       iconType="circle"
                       options={PRIORITIES}
                     />

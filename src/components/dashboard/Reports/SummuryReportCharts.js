@@ -15,17 +15,10 @@ class SummuryReportCharts extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    // if (prevProps.state.userId != this.props.state.userId) {
-    //   var searchData = {
-    //     user_ids: this.props.state.userId
-    //   };
-    //   this.loadMultipleApiData(searchData);
-    // }
-
     if (
-      prevProps.state.barChartArray != this.props.state.barChartArray &&
-      this.props.searchProjectIds &&
-      this.props.searchUserDetails
+      prevProps.state.barChartArray != this.props.state.barChartArray ||
+      prevProps.searchProjectIds != this.props.searchProjectIds ||
+      prevProps.searchUserDetails != this.props.searchUserDetails
     ) {
       var searchData = {};
       if (this.props.searchUserDetails.length > 0) {
