@@ -15,12 +15,12 @@ class SummuryReportCharts extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevProps.state.userId != this.props.state.userId) {
-      var searchData = {
-        user_ids: this.props.state.userId
-      };
-      this.loadMultipleApiData(searchData);
-    }
+    // if (prevProps.state.userId != this.props.state.userId) {
+    //   var searchData = {
+    //     user_ids: this.props.state.userId
+    //   };
+    //   this.loadMultipleApiData(searchData);
+    // }
 
     if (
       prevProps.state.barChartArray != this.props.state.barChartArray &&
@@ -78,6 +78,7 @@ class SummuryReportCharts extends Component {
     await finalResults.then(function(response) {
       newFinalResults = response;
       self.setState({ columnChartData: newFinalResults });
+      self.props.setColumnChartData(newFinalResults);
     });
   };
 
@@ -177,7 +178,7 @@ class SummuryReportCharts extends Component {
             barWidth={this.props.state.barChartArray.width}
             activeBar={this.props.state.barChartArray.activeBar}
             state={this.props.state}
-            columnChartData={this.state.columnChartData}
+            columnChartData={this.props.state.columnChartData}
           />
         </div>
         <div className="legend d-inline-block">

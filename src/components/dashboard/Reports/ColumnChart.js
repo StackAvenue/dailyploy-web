@@ -92,9 +92,11 @@ class ColumnChart extends Component {
     return this.props.columnChartData.sort((a, b) => (a.id > b.id ? 1 : -1));
   };
 
-  getScheduledDataLabel = (y, time) => {
+  getScheduledDataLabel = (y, time, total) => {
     return {
       y: y,
+      time: time,
+      totalTime: total,
       dataLabels: {
         formatter: function() {
           return "<b>" + time + " hours</b>";
@@ -112,9 +114,11 @@ class ColumnChart extends Component {
     };
   };
 
-  getWorkedDataLabel = (y, time) => {
+  getWorkedDataLabel = (y, time, total) => {
     return {
       y: y,
+      time: time,
+      totalTime: total,
       dataLabels: {
         formatter: function() {
           return "<b>" + time + " hours</b>";
@@ -139,12 +143,74 @@ class ColumnChart extends Component {
     };
   };
 
+  getExtremeWorkedDataLabel = (y, time, total) => {
+    return {
+      y: y,
+      time: time,
+      totalTime: total,
+      dataLabels: {
+        formatter: function() {
+          return "<b>" + time + " hours</b>";
+        },
+        enabled: false,
+        style: {
+          borderRadius: 5,
+          fontSize: 10,
+          backgroundColor: "rgba(252, 255, 255, 0.7)",
+          borderWidth: 1,
+          color: "#0075d9",
+          borderColor: "rgba(252, 255, 255, 0.7)"
+        }
+      },
+      color: {
+        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+        stops: [
+          [0, CHART_COLOR.ext_worked_0],
+          [1, CHART_COLOR.ext_worked_1]
+        ]
+      }
+    };
+  };
+
+  getCurrExtremeWorkedDataLabel = (y, time, total) => {
+    return {
+      y: y,
+      time: time,
+      totalTime: total,
+      dataLabels: {
+        formatter: function() {
+          return "<b>" + time + " hours</b>";
+        },
+        enabled: true,
+        style: {
+          borderRadius: 5,
+          fontSize: 10,
+          backgroundColor: "rgba(252, 255, 255, 0.7)",
+          borderWidth: 1,
+          color: "#0075d9",
+          borderColor: "rgba(252, 255, 255, 0.7)"
+        }
+      },
+      color: {
+        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+        stops: [
+          [0, CHART_COLOR.curr_ext_worked_0],
+          [1, CHART_COLOR.curr_ext_worked_1]
+        ]
+      }
+    };
+  };
+
   secondsToHours = seconds => {
     let totalSeconds = Number(seconds);
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
     let s = Math.floor((totalSeconds % 3600) % 60);
     return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+  };
+
+  getPercentageData = (totalTime, trackedTime) => {
+    return (((trackedTime / totalTime) * 100) / 100) * 30;
   };
 
   getXData = () => {
@@ -154,24 +220,75 @@ class ColumnChart extends Component {
       var dailyWorked = [];
       newSortedData.map(option => {
         if (option.totalEstimateTime && option.trackedTime != 0) {
-          let sched = option.totalEstimateTime - option.trackedTime;
-          if (option.activeBar == this.props.activeBar) {
-            dailyScheduled.push(
-              this.getScheduledDataLabel(sched, this.secondsToHours(sched))
+          var total = this.secondsToHours(option.totalEstimateTime);
+          if (option.totalEstimateTime >= option.trackedTime) {
+            var scheduleDiff = option.totalEstimateTime - option.trackedTime;
+            var work = this.getPercentageData(
+              option.totalEstimateTime,
+              option.trackedTime
             );
-            dailyWorked.push(
-              this.getWorkedDataLabel(
-                option.trackedTime,
-                this.secondsToHours(option.trackedTime)
-              )
+            var schedule = this.getPercentageData(
+              option.totalEstimateTime,
+              scheduleDiff
             );
+            if (option.activeBar == this.props.activeBar) {
+              dailyScheduled.push(
+                this.getScheduledDataLabel(
+                  schedule,
+                  this.secondsToHours(scheduleDiff),
+                  total
+                )
+              );
+              dailyWorked.push(
+                this.getWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            } else {
+              dailyScheduled.push({
+                y: schedule,
+                time: this.secondsToHours(scheduleDiff),
+                totalTime: total
+              });
+              dailyWorked.push({
+                y: work,
+                time: this.secondsToHours(option.trackedTime),
+                totalTime: total
+              });
+            }
           } else {
-            dailyWorked.push(sched);
-            dailyWorked.push(option.trackedTime);
+            var schedule = null;
+            var work = 30;
+            var scheduleDiff = null;
+            if (option.activeBar == this.props.activeBar) {
+              dailyScheduled.push(null);
+              dailyWorked.push(
+                this.getCurrExtremeWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            } else {
+              dailyScheduled.push({
+                y: schedule,
+                time: this.secondsToHours(scheduleDiff),
+                totalTime: total
+              });
+              dailyWorked.push(
+                this.getExtremeWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            }
           }
         } else {
-          dailyScheduled.push(0);
-          dailyWorked.push(0);
+          dailyScheduled.push(null);
+          dailyWorked.push(null);
         }
       });
       return [
@@ -186,8 +303,8 @@ class ColumnChart extends Component {
           color: {
             linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
             stops: [
-              [0, CHART_COLOR.curr_worked_0],
-              [1, CHART_COLOR.curr_worked_1]
+              [0, CHART_COLOR.worked_0],
+              [1, CHART_COLOR.worked_1]
             ]
           }
         }
@@ -197,24 +314,81 @@ class ColumnChart extends Component {
       var weeklyWorked = [];
       newSortedData.map(option => {
         if (option.totalEstimateTime && option.trackedTime != 0) {
-          let sched = option.totalEstimateTime - option.trackedTime;
-          if (option.activeBar == this.props.activeBar) {
-            weeklyScheduled.push(
-              this.getScheduledDataLabel(sched, this.secondsToHours(sched))
+          var total = this.secondsToHours(option.totalEstimateTime);
+          if (option.totalEstimateTime >= option.trackedTime) {
+            var scheduleDiff = option.totalEstimateTime - option.trackedTime;
+            var work = this.getPercentageData(
+              option.totalEstimateTime,
+              option.trackedTime
             );
-            weeklyWorked.push(
-              this.getWorkedDataLabel(
-                option.trackedTime,
-                this.secondsToHours(option.trackedTime)
-              )
+            var schedule = this.getPercentageData(
+              option.totalEstimateTime,
+              scheduleDiff
             );
+            if (option.activeBar == this.props.activeBar) {
+              weeklyScheduled.push(
+                this.getScheduledDataLabel(
+                  schedule,
+                  this.secondsToHours(scheduleDiff),
+                  total
+                )
+              );
+              weeklyWorked.push(
+                this.getWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            } else {
+              weeklyScheduled.push({
+                y: schedule,
+                time: this.secondsToHours(scheduleDiff),
+                totalTime: total
+              });
+              weeklyWorked.push({
+                y: work,
+                time: this.secondsToHours(option.trackedTime),
+                totalTime: total
+              });
+            }
           } else {
-            weeklyScheduled.push(sched);
-            weeklyWorked.push(option.trackedTime);
+            var schedule = null;
+            var work = 30;
+            var scheduleDiff = null;
+            if (option.activeBar == this.props.activeBar) {
+              weeklyScheduled.push(
+                this.getScheduledDataLabel(
+                  schedule,
+                  this.secondsToHours(scheduleDiff),
+                  total
+                )
+              );
+              weeklyWorked.push(
+                this.getCurrExtremeWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            } else {
+              weeklyScheduled.push({
+                y: schedule,
+                time: this.secondsToHours(scheduleDiff),
+                totalTime: total
+              });
+              weeklyWorked.push(
+                this.getExtremeWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            }
           }
         } else {
-          weeklyScheduled.push(0);
-          weeklyWorked.push(0);
+          weeklyScheduled.push(null);
+          weeklyWorked.push(null);
         }
       });
       return [
@@ -229,8 +403,8 @@ class ColumnChart extends Component {
           color: {
             linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
             stops: [
-              [0, CHART_COLOR.curr_worked_0],
-              [1, CHART_COLOR.curr_worked_1]
+              [0, CHART_COLOR.worked_0],
+              [1, CHART_COLOR.worked_1]
             ]
           }
         }
@@ -240,24 +414,81 @@ class ColumnChart extends Component {
       var monthlyWorked = [];
       newSortedData.map(option => {
         if (option.totalEstimateTime && option.trackedTime != 0) {
-          let sched = option.totalEstimateTime - option.trackedTime;
-          if (option.activeBar == this.props.activeBar) {
-            monthlyScheduled.push(
-              this.getScheduledDataLabel(sched, this.secondsToHours(sched))
+          var total = this.secondsToHours(option.totalEstimateTime);
+          if (option.totalEstimateTime >= option.trackedTime) {
+            var scheduleDiff = option.totalEstimateTime - option.trackedTime;
+            var work = this.getPercentageData(
+              option.totalEstimateTime,
+              option.trackedTime
             );
-            monthlyWorked.push(
-              this.getWorkedDataLabel(
-                option.trackedTime,
-                this.secondsToHours(option.trackedTime)
-              )
+            var schedule = this.getPercentageData(
+              option.totalEstimateTime,
+              scheduleDiff
             );
+            if (option.activeBar == this.props.activeBar) {
+              monthlyScheduled.push(
+                this.getScheduledDataLabel(
+                  schedule,
+                  this.secondsToHours(scheduleDiff),
+                  total
+                )
+              );
+              monthlyWorked.push(
+                this.getWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            } else {
+              monthlyScheduled.push({
+                y: schedule,
+                time: this.secondsToHours(scheduleDiff),
+                totalTime: total
+              });
+              monthlyWorked.push({
+                y: work,
+                time: this.secondsToHours(option.trackedTime),
+                totalTime: total
+              });
+            }
           } else {
-            monthlyScheduled.push(sched);
-            monthlyWorked.push(option.trackedTime);
+            var schedule = null;
+            var work = 30;
+            var scheduleDiff = null;
+            if (option.activeBar == this.props.activeBar) {
+              monthlyScheduled.push(
+                this.getScheduledDataLabel(
+                  schedule,
+                  this.secondsToHours(scheduleDiff),
+                  total
+                )
+              );
+              monthlyWorked.push(
+                this.getCurrExtremeWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            } else {
+              monthlyScheduled.push({
+                y: schedule,
+                time: this.secondsToHours(scheduleDiff),
+                totalTime: total
+              });
+              monthlyWorked.push(
+                this.getExtremeWorkedDataLabel(
+                  work,
+                  this.secondsToHours(option.trackedTime),
+                  total
+                )
+              );
+            }
           }
         } else {
-          monthlyScheduled.push(0);
-          monthlyWorked.push(0);
+          monthlyScheduled.push(null);
+          monthlyWorked.push(null);
         }
       });
       return [
@@ -272,8 +503,8 @@ class ColumnChart extends Component {
           color: {
             linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
             stops: [
-              [0, CHART_COLOR.curr_worked_0],
-              [1, CHART_COLOR.curr_worked_1]
+              [0, CHART_COLOR.worked_0],
+              [1, CHART_COLOR.worked_1]
             ]
           }
         }
@@ -343,7 +574,7 @@ class ColumnChart extends Component {
         tooltip: {
           headerFormat: "",
           pointFormat:
-            "{series.name}: {point.y} hours<br/>Total: {point.stackTotal} hours"
+            "{series.name}: {point.time} hours<br/>Total: {point.totalTime} hours"
         },
         plotOptions: {
           column: {

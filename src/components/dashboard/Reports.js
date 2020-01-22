@@ -424,6 +424,8 @@ class Reports extends Component {
       };
     } catch (e) {}
 
+    this.loadMultipleApiData({ user_ids: loggedInData.id });
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -874,8 +876,55 @@ class Reports extends Component {
   };
 
   setColumnChartData = data => {
-    console.log("data", data);
     this.setState({ columnChartData: data });
+  };
+
+  loadMultipleApiData = async searchParam => {
+    var results = [];
+    let finalResults = new Promise(async (resolve, reject) => {
+      try {
+        let finalArray = this.state.barChartArray.dates.map(
+          async (option, index) => {
+            let searchData = {
+              start_date: option.startDate,
+              end_date: option.endDate
+            };
+            const searchResult = await get(
+              `workspaces/${this.state.workspaceId}/user_summary_report`,
+              { ...searchData, ...searchParam }
+            );
+            results.push({
+              totalEstimateTime: searchResult.data.total_estimated_time,
+              trackedTime: searchResult.data.total_tracked_time,
+              date: searchData.start_date,
+              id: index + 1,
+              activeBar: this.getActive(searchData.start_date)
+            });
+          }
+        );
+        await Promise.all(finalArray).then(response => {});
+        resolve(results);
+      } catch (err) {
+        reject(err);
+      }
+    });
+    var newFinalResults = [];
+    var self = this;
+    await finalResults.then(function(response) {
+      newFinalResults = response;
+      self.setState({ columnChartData: newFinalResults });
+    });
+  };
+
+  getActive = date => {
+    if (this.state.frequency == "weekly") {
+      let md = moment(date);
+      return `Week ${md.week()} ${md.year()}`;
+    } else if (this.state.frequency == "monthly") {
+      return moment(date).format(MONTH_FORMAT2);
+    } else {
+      return date;
+    }
   };
 
   render() {
