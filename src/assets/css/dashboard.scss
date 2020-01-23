@@ -2954,7 +2954,7 @@ table.scheduler-table tr:last-child td {
   z-index: 1;
   top: 0;
   left: 0;
-  height: 800px;
+  height: 100%;
   padding: 15px 0px 0px 0px;
 
   ul {
@@ -4521,7 +4521,7 @@ table.scheduler-table tr:last-child td {
   // right: 170px;
     position: fixed;
     top: 72px;
-    right: 162px;
+    right: 200px;
     z-index: 10;
   div{
     width: 80px;

@@ -473,6 +473,7 @@ class Reports extends Component {
       prevState.selectedCategory !== this.state.selectedCategory ||
       prevState.selectedPriority !== this.state.selectedPriority
     ) {
+      this.props.handleLoading(true);
       let userIds = this.props.searchUserDetails.map(
         member => member.member_id
       );
@@ -522,40 +523,40 @@ class Reports extends Component {
       } catch (e) {}
 
       var message = this.displayMessage();
-      this.setState({
-        taskDetails: taskDetails,
-        message: message,
-        totalTime: totalTime,
-        projectReports: projectReportData ? projectReportData : ""
-      });
-    }
-    if (
-      prevState.dateFrom !== this.state.dateFrom ||
-      prevState.dateTo !== this.state.dateTo ||
-      prevState.frequency !== this.state.frequency ||
-      prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      prevProps.searchUserDetails !== this.props.searchUserDetails ||
-      prevState.selectedCategory !== this.state.selectedCategory
-    ) {
-      let userIds = this.props.searchUserDetails.map(
-        member => member.member_id
-      );
-      var searchData = {
-        start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
-        user_ids:
-          this.props.searchUserDetails.length > 0
-            ? userIds.join(",")
-            : this.state.userId
-      };
-      if (this.props.searchProjectIds.length > 0) {
-        searchData["project_ids"] = this.props.searchProjectIds.join(",");
-      }
-      if (this.state.selectedCategory) {
-        searchData[
-          "category_ids"
-        ] = this.state.selectedCategory.task_category_id;
-      }
+      // this.setState({
+      //   taskDetails: taskDetails,
+      //   message: message,
+      //   totalTime: totalTime,
+      //   projectReports: projectReportData ? projectReportData : ""
+      // });
+      // }
+      // if (
+      //   prevState.dateFrom !== this.state.dateFrom ||
+      //   prevState.dateTo !== this.state.dateTo ||
+      //   prevState.frequency !== this.state.frequency ||
+      //   prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      //   prevProps.searchUserDetails !== this.props.searchUserDetails ||
+      //   prevState.selectedCategory !== this.state.selectedCategory
+      // ) {
+      //   let userIds = this.props.searchUserDetails.map(
+      //     member => member.member_id
+      //   );
+      //   var searchData = {
+      //     start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+      //     end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
+      //     user_ids:
+      //       this.props.searchUserDetails.length > 0
+      //         ? userIds.join(",")
+      //         : this.state.userId
+      //   };
+      //   if (this.props.searchProjectIds.length > 0) {
+      //     searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      //   }
+      //   if (this.state.selectedCategory) {
+      //     searchData[
+      //       "category_ids"
+      //     ] = this.state.selectedCategory.task_category_id;
+      //   }
       // Summury reports Category
       try {
         const { data } = await get(
@@ -568,36 +569,36 @@ class Reports extends Component {
         };
       } catch (e) {}
 
-      this.setState({
-        categoryReports: categoryReportData ? categoryReportData : ""
-      });
-    }
-    // Summury reports Priority
-    if (
-      prevState.dateFrom !== this.state.dateFrom ||
-      prevState.dateTo !== this.state.dateTo ||
-      prevState.frequency !== this.state.frequency ||
-      prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      prevProps.searchUserDetails !== this.props.searchUserDetails ||
-      prevState.selectedPriority !== this.state.selectedPriority
-    ) {
-      let userIds = this.props.searchUserDetails.map(
-        member => member.member_id
-      );
-      var searchData = {
-        start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-        end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
-        user_ids:
-          this.props.searchUserDetails.length > 0
-            ? userIds.join(",")
-            : this.state.userId
-      };
-      if (this.props.searchProjectIds.length > 0) {
-        searchData["project_ids"] = this.props.searchProjectIds.join(",");
-      }
-      if (this.state.selectedPriority) {
-        searchData["priorities"] = this.state.selectedPriority.name;
-      }
+      //   this.setState({
+      //     categoryReports: categoryReportData ? categoryReportData : ""
+      //   });
+      // }
+      // Summury reports Priority
+      // if (
+      //   prevState.dateFrom !== this.state.dateFrom ||
+      //   prevState.dateTo !== this.state.dateTo ||
+      //   prevState.frequency !== this.state.frequency ||
+      //   prevProps.searchProjectIds !== this.props.searchProjectIds ||
+      //   prevProps.searchUserDetails !== this.props.searchUserDetails ||
+      //   prevState.selectedPriority !== this.state.selectedPriority
+      // ) {
+      //   let userIds = this.props.searchUserDetails.map(
+      //     member => member.member_id
+      //   );
+      //   var searchData = {
+      //     start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+      //     end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
+      //     user_ids:
+      //       this.props.searchUserDetails.length > 0
+      //         ? userIds.join(",")
+      //         : this.state.userId
+      //   };
+      //   if (this.props.searchProjectIds.length > 0) {
+      //     searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      //   }
+      //   if (this.state.selectedPriority) {
+      //     searchData["priorities"] = this.state.selectedPriority.name;
+      //   }
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/priority_summary_report`,
@@ -608,8 +609,15 @@ class Reports extends Component {
           estimateTime: data.total_estimated_time
         };
       } catch (e) {}
+
+      this.props.handleLoading(false);
       this.setState({
-        priorityReports: priorityReportData ? priorityReportData : ""
+        priorityReports: priorityReportData ? priorityReportData : "",
+        categoryReports: categoryReportData ? categoryReportData : "",
+        taskDetails: taskDetails,
+        message: message,
+        totalTime: totalTime,
+        projectReports: projectReportData ? projectReportData : ""
       });
     }
   }
