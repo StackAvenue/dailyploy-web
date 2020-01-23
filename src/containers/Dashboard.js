@@ -946,9 +946,12 @@ class Dashboard extends Component {
 
   taskMarkComplete = async event => {
     if (event) {
+      let start = moment(convertUTCToLocalDate(event.start)).format("HH:mm");
+      let end = moment(convertUTCToLocalDate(event.end)).format("HH:mm");
       if (
         event.timeTracked.length > 0 ||
-        (this.state.logTimeFrom && this.state.logTimeTo)
+        (this.state.logTimeFrom && this.state.logTimeTo) ||
+        (start != "00:00" && end != "00:00")
       ) {
         let searchData = {
           task: {
@@ -967,7 +970,6 @@ class Dashboard extends Component {
           searchData.task["start_datetime"] = startDateTime;
           searchData.task["end_datetime"] = endDateTime;
         }
-
         var localTaskId = localStorage.getItem(
           `taskId-${this.state.workspaceId}`
         );
