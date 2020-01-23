@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Highcharts from "highcharts/highstock";
-import { PRIORITIES } from "../../../utils/Constants";
+import { PRIORITIES, CHART_COLOR } from "../../../utils/Constants";
 import { textTitlize } from "../../../utils/function";
 
 class PieChart extends Component {
@@ -206,6 +206,7 @@ class PieChart extends Component {
             backgroundColor: "#ffffff",
             borderWidth: 1,
             borderColor: "#AAA",
+            color: CHART_COLOR.active_color,
             y: -6
           }
         }
@@ -293,6 +294,7 @@ class PieChart extends Component {
             backgroundColor: "#ffffff",
             borderWidth: 1,
             borderColor: "#AAA",
+            color: CHART_COLOR.active_color,
             y: -6
           }
         }
