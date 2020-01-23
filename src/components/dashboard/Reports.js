@@ -374,7 +374,6 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
-      this.props.handleLoading(false);
     } catch (e) {}
 
     // Category Listing
@@ -423,6 +422,7 @@ class Reports extends Component {
         estimateTime: data.total_estimated_time
       };
     } catch (e) {}
+    this.props.handleLoading(false);
 
     this.loadMultipleApiData({ user_ids: loggedInData.id });
 
@@ -522,7 +522,6 @@ class Reports extends Component {
       } catch (e) {}
 
       var message = this.displayMessage();
-
       this.setState({
         taskDetails: taskDetails,
         message: message,
@@ -609,7 +608,6 @@ class Reports extends Component {
           estimateTime: data.total_estimated_time
         };
       } catch (e) {}
-
       this.setState({
         priorityReports: priorityReportData ? priorityReportData : ""
       });

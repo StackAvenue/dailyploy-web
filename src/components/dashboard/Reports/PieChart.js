@@ -197,6 +197,17 @@ class PieChart extends Component {
           size: "110%",
           shadow: false,
           size: 80
+        },
+        series: {
+          dataLabels: {
+            enabled: true,
+            borderRadius: 5,
+            maxWidth: "100",
+            backgroundColor: "#ffffff",
+            borderWidth: 1,
+            borderColor: "#AAA",
+            y: -6
+          }
         }
       },
       tooltip: {
@@ -274,6 +285,16 @@ class PieChart extends Component {
           size: "110%",
           shadow: false,
           size: 80
+        },
+        series: {
+          dataLabels: {
+            enabled: true,
+            borderRadius: 5,
+            backgroundColor: "#ffffff",
+            borderWidth: 1,
+            borderColor: "#AAA",
+            y: -6
+          }
         }
       },
       tooltip: {

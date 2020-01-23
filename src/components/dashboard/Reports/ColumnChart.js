@@ -101,12 +101,9 @@ class ColumnChart extends Component {
           },
           enabled: true,
           style: {
-            borderRadius: 5,
             fontSize: 10,
-            backgroundColor: "rgba(252, 255, 255, 0.7)",
             borderWidth: 1,
-            color: "#0075d9",
-            borderColor: "rgba(252, 255, 255, 0.7)"
+            color: "#0075d9"
           }
         }
       };
@@ -127,10 +124,7 @@ class ColumnChart extends Component {
         style: {
           borderRadius: 5,
           fontSize: 10,
-          backgroundColor: "rgba(252, 255, 255, 0.7)",
-          borderWidth: 1,
-          color: "#0075d9",
-          borderColor: "rgba(252, 255, 255, 0.7)"
+          color: "#0075d9"
         }
       },
       color: {
@@ -577,11 +571,7 @@ class ColumnChart extends Component {
             stacking: "normal",
             dataLabels: {
               enabled: false,
-              distance: -10,
-              style: {
-                fontWeight: "bold",
-                color: "white"
-              }
+              distance: -10
             },
             showInLegend: false
           },
@@ -594,6 +584,15 @@ class ColumnChart extends Component {
                 [0, CHART_COLOR.worked_0],
                 [1, CHART_COLOR.worked_1]
               ]
+            },
+            dataLabels: {
+              enabled: true,
+              borderRadius: 5,
+              backgroundColor: "#ffffff",
+              borderWidth: 1,
+              height: "10",
+              borderColor: "#AAA",
+              y: -6
             }
           }
         },
