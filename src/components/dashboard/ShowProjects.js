@@ -356,7 +356,12 @@ class ShowProjects extends Component {
         projectData,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}`
       );
-      this.setState({ show: false });
+      this.setState({
+        show: false,
+        projectName: "",
+        dateTo: null,
+        projectMembers: []
+      });
       this.manageUpdateProjectListing(data.project);
       // this.handleLoad(true);
       toast(
@@ -477,7 +482,7 @@ class ShowProjects extends Component {
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
-        this.setState({ showConfirm: false, projects: projects });
+        this.setState({ showConfirm: false, projects: projects, selectProjectArr: [] });
       } catch (e) {
         toast(
           <DailyPloyToast message="Something went wrong" status="error" />,

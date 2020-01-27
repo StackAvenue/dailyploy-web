@@ -110,7 +110,13 @@ export default class MenuBar extends Component {
         projectData,
         `workspaces/${this.props.workspaceId}/projects`
       );
-      this.setState({ show: false });
+      this.setState({
+        show: false,
+        projectName: "",
+        dateTo: null,
+        projectMembers: [],
+        background: "b9e1ff"
+      });
       this.props.manageProjectListing(data.project);
       this.props.handleLoad(true);
       toast(

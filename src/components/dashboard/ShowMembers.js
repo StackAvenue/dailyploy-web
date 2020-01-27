@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Header from "./Header";
-import { get, logout, mockGet, mockPost, put } from "../../utils/API";
+import { get, logout, put, del } from "../../utils/API";
 import MenuBar from "./MenuBar";
-import Sidebar from "./Sidebar";
 import moment from "moment";
-import AddMemberModal from "./AddMemberModal";
+import ConfirmModal from "./../ConfirmModal";
 import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
+import { toast } from "react-toastify";
+import DailyPloyToast from "../DailyPloyToast";
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -38,7 +38,8 @@ class ShowMembers extends Component {
       memberProjects: null,
       isDeleteShow: false,
       selectMemberArr: [],
-      isAllChecked: false
+      isAllChecked: false,
+      showConfirm: false
     };
   }
   logout = async () => {
@@ -351,7 +352,44 @@ class ShowMembers extends Component {
     this.setState({ selectMemberArr: arrProject });
   };
 
-  deleteProject = (e, member) => {};
+  toggleShowConfirm = () => {
+    this.setState({ showConfirm: true });
+  };
+
+  deleteMembers = async e => {
+    let memberIds = this.state.selectMemberArr.map(m => m.id).join(",");
+    if (memberIds != "") {
+      try {
+        const { data } = await del(
+          `workspaces/${this.state.workspaceId}/members?ids=${memberIds}`
+        );
+        let members = this.state.members.filter(
+          m => !this.state.selectMemberArr.includes(m)
+        );
+        toast(
+          <DailyPloyToast
+            message="member Deleted Succesfully"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+        this.setState({
+          showConfirm: false,
+          members: members,
+          selectMemberArr: []
+        });
+      } catch (e) {
+        toast(
+          <DailyPloyToast message="Something went wrong" status="error" />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      }
+    }
+  };
+
+  closeModal = () => {
+    this.setState({ showConfirm: false });
+  };
 
   render() {
     var userRole = localStorage.getItem("userRole");
@@ -367,36 +405,42 @@ class ShowMembers extends Component {
         />
         {isShowMember ? (
           <div className="show-projects padding-top-60px">
-            <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
+            <div className={`${userRole == "admin" ? "members" : ""}`}>
               <div className="row no-margin">
                 <div
                   className="col-md-2 d-inline-block no-padding"
                   style={{ marginTop: "10px" }}
                 >
-                  <input
-                    className="styled-checkbox"
-                    id={`styled-checkbox`}
-                    type="checkbox"
-                    name="chk[]"
-                    onChange={e => this.handleCheckAll(e, this.state.members)}
-                  />
-                  <label htmlFor={`styled-checkbox`}>
-                    {this.state.isAllChecked ? (
-                      <span>All Selected</span>
-                    ) : (
-                      <span>Select All</span>
-                    )}
-                  </label>
+                  {this.state.worksapceUser &&
+                  this.state.worksapceUser.role == "admin" ? (
+                    <>
+                      <input
+                        className="styled-checkbox"
+                        id={`styled-checkbox`}
+                        type="checkbox"
+                        name="chk[]"
+                        onChange={e =>
+                          this.handleCheckAll(e, this.state.members)
+                        }
+                      />
+                      <label htmlFor={`styled-checkbox`}>
+                        {this.state.isAllChecked ? (
+                          <span>All Selected</span>
+                        ) : (
+                          <span>Select All</span>
+                        )}
+                      </label>
+                    </>
+                  ) : null}
                 </div>
                 <div className="col-md-4 d-inline-block no-margin no-padding">
-                  {this.state.selectMemberArr.length > 0 ? (
+                  {this.state.selectMemberArr.length > 0 &&
+                  userRole == "admin" ? (
                     <>
                       <div className="d-inline-block">
                         <button
                           className="btn btn-primary delete-button"
-                          onClick={e =>
-                            this.deleteProject(e, this.state.selectMemberArr)
-                          }
+                          onClick={e => this.toggleShowConfirm()}
                         >
                           Delete
                         </button>
@@ -522,6 +566,20 @@ class ShowMembers extends Component {
             <span>Please Add Members</span>
           </div>
         )}
+        {this.state.showConfirm ? (
+          <ConfirmModal
+            title="Delete Member"
+            message={`Are you sure you want to Delete ${
+              this.state.selectMemberArr.length == 1
+                ? " this member"
+                : "these members"
+            }?`}
+            onClick={this.deleteMembers}
+            closeModal={this.closeModal}
+            buttonText="Delete"
+            show={this.state.showConfirm}
+          />
+        ) : null}
       </>
     );
   }

@@ -508,7 +508,10 @@ class Dashboard extends Component {
         this.setState({
           show: false,
           newTask: task,
-          border: "solid 1px #ffffff"
+          border: "solid 1px #ffffff",
+          taskName: "",
+          project: "",
+          taskCategorie: ""
         });
       } catch (e) {
         this.setState({ show: false, border: "solid 1px #ffffff" });
@@ -628,7 +631,8 @@ class Dashboard extends Component {
       showAlert: false,
       logTimeTo: null,
       logTimeFrom: null,
-      taskPrioritie: DEFAULT_PRIORITIE
+      taskPrioritie: DEFAULT_PRIORITIE,
+      taskCategorie: ""
     });
   };
 
