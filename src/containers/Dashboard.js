@@ -157,8 +157,8 @@ class Dashboard extends Component {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-              ? 1
-              : 0;
+            ? 1
+            : 0;
         });
         let localTaskId = localStorage.getItem(
           `taskId-${this.state.workspaceId}`
@@ -187,8 +187,11 @@ class Dashboard extends Component {
               let newTaskId = task.id + "-" + dateWiseTasks.date;
               var tasksObj = {
                 id: newTaskId,
+                taskId: task.id,
                 start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
                 end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
+                taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+                taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
                 resourceId: user.id,
                 title: task.name,
                 bgColor: task.project.color_code,
@@ -239,7 +242,7 @@ class Dashboard extends Component {
             member => !userIds.includes(member.id)
           )
         );
-      } catch (e) { }
+      } catch (e) {}
     }
 
     if (prevState.timeFrom !== this.state.timeFrom) {
@@ -327,7 +330,7 @@ class Dashboard extends Component {
         `workspaces/${workspaceId}/members/${loggedInData.id}`
       );
       var user = data;
-    } catch (e) { }
+    } catch (e) {}
 
     // workspace Member Listing
     try {
@@ -345,7 +348,7 @@ class Dashboard extends Component {
     try {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
-    } catch (e) { }
+    } catch (e) {}
     this.props.handleLoading(true);
 
     // workspace Tasks Listing
@@ -379,18 +382,21 @@ class Dashboard extends Component {
         var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
           var task = dateWiseTasks.tasks.map(task => {
             var startDateTime =
-              moment(dateWiseTasks.date).format("YYYY-MM-DD") +
+              moment(dateWiseTasks.date).format(DATE_FORMAT1) +
               " " +
               moment(new Date(task.start_datetime)).format("HH:mm");
             var endDateTime =
-              moment(dateWiseTasks.date).format("YYYY-MM-DD") +
+              moment(dateWiseTasks.date).format(DATE_FORMAT1) +
               " " +
               moment(new Date(task.end_datetime)).format("HH:mm");
             let newTaskId = task.id + "-" + dateWiseTasks.date;
             var tasksObj = {
               id: newTaskId,
+              taskId: task.id,
               start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
               end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
+              taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+              taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
               resourceId: user.id,
               title: task.name,
               bgColor: task.project.color_code,
@@ -878,7 +884,7 @@ class Dashboard extends Component {
       var taskCategorie = data.category;
       var timeTracked = data.time_tracked;
       var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
-    } catch (e) { }
+    } catch (e) {}
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
     );
@@ -964,11 +970,11 @@ class Dashboard extends Component {
         };
         if (this.state.logTimeFrom && this.state.logTimeTo) {
           var startDateTime =
-            moment(this.state.dateFrom).format(DATE_FORMAT1) +
+            moment(event.taskStartDate).format(DATE_FORMAT1) +
             " " +
             moment(this.state.logTimeFrom).format(HRMIN);
           var endDateTime =
-            moment(this.state.dateTo).format(DATE_FORMAT1) +
+            moment(event.taskEndDate).format(DATE_FORMAT1) +
             " " +
             moment(this.state.logTimeTo).format(HRMIN);
           searchData.task["start_datetime"] = startDateTime;
@@ -989,11 +995,13 @@ class Dashboard extends Component {
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
           );
           var events = this.state.events;
-          var event = events.find(e => e.id === event.id);
-          event["timeTracked"] = data.task.time_tracked;
-          event["status"] = data.task.status;
-          event["trackingStatus"] =
-            data.task.status === "completed" ? "" : "play";
+          var filterEvents = events.filter(e => e.taskId === event.taskId);
+          filterEvents.map(event => {
+            event["timeTracked"] = data.task.time_tracked;
+            event["status"] = data.task.status;
+            event["trackingStatus"] =
+              data.task.status === "completed" ? "" : "play";
+          });
           this.setState({
             events: events,
             taskEvent: event,
@@ -1001,7 +1009,7 @@ class Dashboard extends Component {
             backFromTaskEvent: true,
             showInfo: true
           });
-        } catch (e) { }
+        } catch (e) {}
       } else {
         this.setState({
           logTimeFromError: this.state.logTimeFrom
@@ -1032,7 +1040,7 @@ class Dashboard extends Component {
         backFromTaskEvent: true,
         showInfo: true
       });
-    } catch (e) { }
+    } catch (e) {}
   };
 
   taskDelete = async event => {
@@ -1050,7 +1058,7 @@ class Dashboard extends Component {
           backFromTaskEvent: false,
           showInfo: false
         });
-      } catch (e) { }
+      } catch (e) {}
     }
   };
 
@@ -1166,7 +1174,7 @@ class Dashboard extends Component {
             taskId: eventTaskId,
             events: events
           });
-        } catch (e) { }
+        } catch (e) {}
       } else if (taskType === "stop") {
         var taskDate = {
           end_time: new Date(dateTime),
@@ -1182,7 +1190,7 @@ class Dashboard extends Component {
           event["trackingStatus"] = "play";
           var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
           this.setState({ events: events, timeTracked: infoTimeTrackLog });
-        } catch (e) { }
+        } catch (e) {}
       }
     }
   };

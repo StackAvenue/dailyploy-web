@@ -512,7 +512,7 @@ class Calendar extends Component {
     const type = this.schedulerData.viewType;
     return (
       <div className="viewtype-btns d-inline-block">
-        {config.views.map(function(item) {
+        {config.views.map(function (item) {
           var value =
             "" +
             item.viewType +
@@ -522,7 +522,7 @@ class Calendar extends Component {
             <div
               className={`d-inline-block ${
                 type === item.viewType ? "active" : ""
-              }`}
+                }`}
               key={
                 "" +
                 item.viewType +
@@ -545,7 +545,7 @@ class Calendar extends Component {
       <div
         className={`dashboard-calender ${
           viewType == "1" ? "week-format-width" : "day-format-width"
-        }`}
+          }`}
       >
         <DailyPloyDatePicker
           onSelectDate={this.onSelectDate}
