@@ -799,8 +799,8 @@ class Dashboard extends Component {
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
         border: "solid 1px #ffffff",
-        timeDateTo: null,
-        timeDateFrom: null,
+        timeDateTo: moment(),
+        timeDateFrom: moment(),
         memberProjects: memberProjects
       });
     }

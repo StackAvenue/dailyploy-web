@@ -42,50 +42,6 @@ class DashboardEvent extends Component {
     }
   }
 
-  // componentDidUpdate = (prevProps, prevState) => {
-  //   var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
-  //   var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
-  //   if (
-  //     this.props.state.status &&
-  //     this.props.state.status != this.state.status &&
-  //     this.props.state.showInfo &&
-  //     taskId === this.props.state.taskId &&
-  //     this.props.state.taskId === this.props.event.id &&
-  //     startOn !== ""
-  //   ) {
-  //     this.setState({
-  //       status: true,
-  //       startOn: startOn
-  //       // icon: "pause"
-  //     });
-  //   }
-  //   if (
-  //     !this.props.state.status &&
-  //     this.props.state.status != this.state.status &&
-  //     this.props.state.showInfo &&
-  //     this.props.state.taskId === this.props.event.id &&
-  //     startOn === "" &&
-  //     taskId === ""
-  //   ) {
-  //     this.setState({
-  //       status: false,
-  //       startOn: null
-  //       // icon: "play"
-  //     });
-  //   }
-  //   if (
-  //     this.state.status &&
-  //     this.props.event.trackingStatus == "play" &&
-  //     prevProps.event.trackingStatus === "pause"
-  //   ) {
-  //     this.setState({
-  //       status: false,
-  //       startOn: null
-  //       // icon: "play"
-  //     });
-  //   }
-  // };
-
   handleClick = async event => {
     var icon = this.state.icon;
     var status = this.state.status;
@@ -301,9 +257,22 @@ class DashboardEvent extends Component {
                 ) : null}
               </div>
               <div className="col-md-12 no-padding">
-                <div className="col-md-6 no-padding d-inline-block item-time">
+                <div
+                  className="col-md-9 no-padding d-inline-block item-time"
+                  onClick={() => this.ToggleTimerDropDown(event.id)}
+                  onMouseOver={() => this.hideEventPopUp(event.id)}
+                >
+                  <i
+                    className={`fa fa-caret-down pull-right ${
+                      schedulerData.viewType === 0
+                        ? "daytimer-log"
+                        : "weektimer-log"
+                    }`}
+                    // style={{ position: "relative", padding: "7px 5px 5px 0px" }}
+                  ></i>
                   <input
                     className="form-control  timer-dropdown d-inline-block"
+                    readOnly
                     style={{
                       backgroundColor: this.state.showTimerMenu
                         ? "#ffffff"
@@ -315,11 +284,11 @@ class DashboardEvent extends Component {
                         ? this.returnTime(this.props.event.timeTracked[0])
                         : ""
                     }
-                    onClick={() => this.ToggleTimerDropDown(event.id)}
-                    onMouseOver={() => this.hideEventPopUp(event.id)}
+                    // onClick={() => this.ToggleTimerDropDown(event.id)}
+                    // onMouseOver={() => this.hideEventPopUp(event.id)}
                   />
                 </div>
-                <div className="col-md-6 no-padding d-inline-block item-time text-right">
+                <div className="col-md-3 no-padding d-inline-block item-time text-right">
                   <span
                     className="task-event-action pointer"
                     onClick={() => this.ToggleActionDropDown(event.id)}
