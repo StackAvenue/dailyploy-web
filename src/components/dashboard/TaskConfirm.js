@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT2, HRMIN } from "./../../utils/Constants";
+import { DATE_FORMAT2, HRMIN, PRIORITIES_MAP } from "./../../utils/Constants";
 import TimePicker from "rc-time-picker";
 
 class TaskConfirm extends Component {
@@ -40,19 +40,25 @@ class TaskConfirm extends Component {
               }`
             }}
           ></div>
-          <div className="right-left-space-5 d-inline-block">{option.name}</div>
+          <div className="right-left-space-5 d-inline-block task-name">
+            {option.name}
+          </div>
         </div>
       );
     }
     return "";
   };
 
-  renderInfoPriority = (option, type) => {
+  renderInfoPriority = (priority, type) => {
+    var option = PRIORITIES_MAP.get(priority);
     if (option) {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
-        <div className="d-inline-block pull-right pri-info">
+        <div
+          className="d-inline-block pull-right pri-info"
+          style={{ paddingRight: "10px" }}
+        >
           <div
             className={`d-inline-block ${klass}`}
             style={{
@@ -61,7 +67,7 @@ class TaskConfirm extends Component {
               }`
             }}
           ></div>
-          <div className=" d-inline-block priority">{option.label}</div>
+          <div className=" d-inline-block priority-dot">{option.label}</div>
         </div>
       );
     }
@@ -193,7 +199,7 @@ class TaskConfirm extends Component {
                   Name
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px d-inline-block">
+                  <span className="d-inline-block task-name">
                     {this.props.state.taskName}
                   </span>
                   {this.props.state.taskEvent.status === "not_started" ? (
@@ -218,10 +224,10 @@ class TaskConfirm extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Project
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div className="col-md-10 d-inline-block no-padding">
                   {this.renderTaskInfo(this.props.state.project, "block")}
                   {this.renderInfoPriority(
-                    this.props.state.taskPrioritie,
+                    this.props.state.taskEvent.priority,
                     "circle"
                   )}
                 </div>
@@ -232,7 +238,7 @@ class TaskConfirm extends Component {
                   Category
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">
+                  <span className="">
                     {this.props.state.taskCategorie.name}
                   </span>
                 </div>
@@ -243,7 +249,7 @@ class TaskConfirm extends Component {
                   Date - Time
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px date-time">
+                  <span className=" date-time">
                     {`${moment(this.props.state.dateFrom).format(
                       DATE_FORMAT2
                     )} - 
@@ -258,7 +264,7 @@ class TaskConfirm extends Component {
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
-                  <p className="left-padding-20px comments">
+                  <p className=" comments">
                     {props.state.taskEvent.comments
                       ? props.state.taskEvent.comments
                       : "---"}

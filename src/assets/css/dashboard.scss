@@ -3914,9 +3914,9 @@ table.scheduler-table tr:last-child td {
 .color-block {
   width: 20px;
   height: 20px;
-  margin-left: 0.75rem;
+  margin-left: 0.90rem;
   margin-right: 10px;
-  vertical-align: top;
+  vertical-align: middle;
   border: solid 1px#9b9b9b;
 }
 .color-dot {
@@ -4320,6 +4320,7 @@ table.scheduler-table tr:last-child td {
       border: solid 1px #d1d1d1;
       background-color: #ffffff;
       margin: 10px 29px 10px 31px;
+      font-family: $font-family-roboto !important;
       .input-row {
         padding: 5px 0px 5px 10px !important;
         .label {
@@ -4359,6 +4360,17 @@ table.scheduler-table tr:last-child td {
           letter-spacing: normal;
           text-align: left;
           color: $color-text1;
+        }
+        .task-name{
+          height: 15px;
+          font-family: $font-family-roboto !important;
+          font-size: 13px;
+          font-weight: 500;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.15;
+          letter-spacing: normal;
+          text-align: left;
         }
       }
     }
@@ -4453,7 +4465,7 @@ table.scheduler-table tr:last-child td {
         height: 10px !important;
         margin: 0px 5px 3px 0px !important
       }
-      .priority{
+      .priority-dot{
         height: 15px;
         font-family: Roboto;
         font-size: 13px;
