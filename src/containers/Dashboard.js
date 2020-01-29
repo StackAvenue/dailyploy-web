@@ -157,8 +157,8 @@ class Dashboard extends Component {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-            ? 1
-            : 0;
+              ? 1
+              : 0;
         });
         let localTaskId = localStorage.getItem(
           `taskId-${this.state.workspaceId}`
@@ -239,7 +239,7 @@ class Dashboard extends Component {
             member => !userIds.includes(member.id)
           )
         );
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (prevState.timeFrom !== this.state.timeFrom) {
@@ -327,7 +327,7 @@ class Dashboard extends Component {
         `workspaces/${workspaceId}/members/${loggedInData.id}`
       );
       var user = data;
-    } catch (e) {}
+    } catch (e) { }
 
     // workspace Member Listing
     try {
@@ -345,7 +345,7 @@ class Dashboard extends Component {
     try {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
     this.props.handleLoading(true);
 
     // workspace Tasks Listing
@@ -878,7 +878,7 @@ class Dashboard extends Component {
       var taskCategorie = data.category;
       var timeTracked = data.time_tracked;
       var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
-    } catch (e) {}
+    } catch (e) { }
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
     );
@@ -1001,7 +1001,7 @@ class Dashboard extends Component {
             backFromTaskEvent: true,
             showInfo: true
           });
-        } catch (e) {}
+        } catch (e) { }
       } else {
         this.setState({
           logTimeFromError: this.state.logTimeFrom
@@ -1032,7 +1032,7 @@ class Dashboard extends Component {
         backFromTaskEvent: true,
         showInfo: true
       });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   taskDelete = async event => {
@@ -1050,7 +1050,7 @@ class Dashboard extends Component {
           backFromTaskEvent: false,
           showInfo: false
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -1166,7 +1166,7 @@ class Dashboard extends Component {
             taskId: eventTaskId,
             events: events
           });
-        } catch (e) {}
+        } catch (e) { }
       } else if (taskType === "stop") {
         var taskDate = {
           end_time: new Date(dateTime),
@@ -1182,7 +1182,7 @@ class Dashboard extends Component {
           event["trackingStatus"] = "play";
           var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
           this.setState({ events: events, timeTracked: infoTimeTrackLog });
-        } catch (e) {}
+        } catch (e) { }
       }
     }
   };

@@ -115,7 +115,7 @@ export default class MenuBar extends Component {
         projectName: "",
         dateTo: null,
         projectMembers: [],
-        background: "b9e1ff"
+        background: "#b9e1ff"
       });
       this.props.manageProjectListing(data.project);
       this.props.handleLoad(true);
@@ -376,7 +376,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => {};
+  handleProjectByUser = () => { };
 
   render() {
     this.handleProjectByUser();
