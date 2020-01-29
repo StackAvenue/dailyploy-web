@@ -6,7 +6,8 @@ import { workspaceNameSplit } from "../utils/function";
 import {
   checkPassword,
   validateName,
-  validateEmail
+  validateEmail,
+  PASSWORDREGX
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -204,8 +205,7 @@ class Signup extends Component {
         /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
       ) &&
       this.state.password &&
-      this.state.password.match(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+      this.state.password.match(PASSWORDREGX
       ) &&
       this.state.confirmPassword &&
       this.state.password === this.state.confirmPassword
