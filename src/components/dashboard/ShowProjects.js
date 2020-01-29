@@ -167,7 +167,7 @@ class ShowProjects extends Component {
         );
         var projectsData = data.projects;
         this.props.handleLoading(false);
-      } catch (e) { }
+      } catch (e) {}
 
       this.setState({
         projects: projectsData
@@ -482,7 +482,11 @@ class ShowProjects extends Component {
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
-        this.setState({ showConfirm: false, projects: projects, selectProjectArr: [] });
+        this.setState({
+          showConfirm: false,
+          projects: projects,
+          selectProjectArr: []
+        });
       } catch (e) {
         toast(
           <DailyPloyToast message="Something went wrong" status="error" />,
@@ -497,6 +501,25 @@ class ShowProjects extends Component {
   };
   countMemberViewClose = () => {
     this.setState({ showMemberList: false });
+  };
+
+  renderMessage = () => {
+    if (
+      this.props.searchProjectIds.length > 0 ||
+      this.props.searchUserDetails.length > 0
+    ) {
+      return (
+        <div className="list-not-found padding-top-60px">
+          <span>Results Not Found</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="list-not-found padding-top-60px">
+          <span>Please Add Projects</span>
+        </div>
+      );
+    }
   };
 
   render() {
@@ -533,15 +556,16 @@ class ShowProjects extends Component {
                           {this.state.isAllChecked ? (
                             <span>All Selected</span>
                           ) : (
-                              <span>Select All</span>
-                            )}
+                            <span>Select All</span>
+                          )}
                         </label>
-                      </>)
-                      : null}
+                      </>
+                    ) : null}
                   </div>
 
                   <div className="select col-md-4 d-inline-block no-padding">
-                    {this.state.selectProjectArr.length > 0 && userRole == "admin" ? (
+                    {this.state.selectProjectArr.length > 0 &&
+                    userRole == "admin" ? (
                       <>
                         <button
                           className="btn btn-primary delete-button"
@@ -698,29 +722,29 @@ class ShowProjects extends Component {
                                   )}
                                 </span>
                                 {this.state.showMemberList &&
-                                  this.state.showMemberProjectId ===
+                                this.state.showMemberProjectId ===
                                   project.id ? (
-                                    <div
-                                      className="project-count-list-show"
-                                      style={{ right: "70px" }}
-                                    >
-                                      <div className="close-div">
-                                        <a onClick={this.countMemberViewClose}>
-                                          <i
-                                            className="fa fa-times"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </a>
-                                      </div>
-                                      <div className="project-body-box">
-                                        {project.members.map(member => (
-                                          <div className="project-body-text">
-                                            {member.name}
-                                          </div>
-                                        ))}
-                                      </div>
+                                  <div
+                                    className="project-count-list-show"
+                                    style={{ right: "70px" }}
+                                  >
+                                    <div className="close-div">
+                                      <a onClick={this.countMemberViewClose}>
+                                        <i
+                                          className="fa fa-times"
+                                          aria-hidden="true"
+                                        ></i>
+                                      </a>
                                     </div>
-                                  ) : null}
+                                    <div className="project-body-box">
+                                      {project.members.map(member => (
+                                        <div className="project-body-text">
+                                          {member.name}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
                               </td>
                               <td
                                 className={
@@ -734,32 +758,32 @@ class ShowProjects extends Component {
                                   <i className="fas fa-pencil-alt"></i>
                                 </button>
                                 {this.state.show &&
-                                  this.state.projectId === project.id ? (
-                                    <AddProjectModal
-                                      state={this.state}
-                                      handleClose={this.handleEditClose}
-                                      btnText={"Save"}
-                                      headText={project.name}
-                                      ownerClassName={""}
-                                      handleChangeInput={this.handleChangeInput}
-                                      handleDateFrom={this.handleDateFrom}
-                                      handleDateTo={this.handleDateTo}
-                                      handleUndefinedToDate={
-                                        this.handleUndefinedToDate
-                                      }
-                                      workspaceId={this.state.workspaceId}
-                                      handleChangeColor={this.handleChangeColor}
-                                      handleChangeComplete={
-                                        this.handleChangeComplete
-                                      }
-                                      colors={this.colors}
-                                      handleChangeMember={this.handleChangeMember}
-                                      emailOptions={
-                                        this.state.isLogedInUserEmailArr
-                                      }
-                                      addProject={this.editProject}
-                                    />
-                                  ) : null}
+                                this.state.projectId === project.id ? (
+                                  <AddProjectModal
+                                    state={this.state}
+                                    handleClose={this.handleEditClose}
+                                    btnText={"Save"}
+                                    headText={project.name}
+                                    ownerClassName={""}
+                                    handleChangeInput={this.handleChangeInput}
+                                    handleDateFrom={this.handleDateFrom}
+                                    handleDateTo={this.handleDateTo}
+                                    handleUndefinedToDate={
+                                      this.handleUndefinedToDate
+                                    }
+                                    workspaceId={this.state.workspaceId}
+                                    handleChangeColor={this.handleChangeColor}
+                                    handleChangeComplete={
+                                      this.handleChangeComplete
+                                    }
+                                    colors={this.colors}
+                                    handleChangeMember={this.handleChangeMember}
+                                    emailOptions={
+                                      this.state.isLogedInUserEmailArr
+                                    }
+                                    addProject={this.editProject}
+                                  />
+                                ) : null}
                               </td>
                             </tr>
                           );
@@ -772,10 +796,8 @@ class ShowProjects extends Component {
             </div>
           </div>
         ) : (
-            <div className="list-not-found padding-top-60px">
-              <span>Please Add Projects</span>
-            </div>
-          )}
+          this.renderMessage()
+        )}
         {this.state.showConfirm ? (
           <ConfirmModal
             title="Delete Project"
@@ -783,7 +805,7 @@ class ShowProjects extends Component {
               this.state.selectProjectArr.length == 1
                 ? " this project"
                 : "these projects"
-              }?`}
+            }?`}
             onClick={this.deleteProjects}
             closeModal={this.closeModal}
             buttonText="Delete"

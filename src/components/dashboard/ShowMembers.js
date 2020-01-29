@@ -391,6 +391,25 @@ class ShowMembers extends Component {
     this.setState({ showConfirm: false });
   };
 
+  renderMessage = () => {
+    if (
+      this.props.searchProjectIds.length > 0 ||
+      this.props.searchUserDetails.length > 0
+    ) {
+      return (
+        <div className="list-not-found padding-top-60px">
+          <span>Results Not Found</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="list-not-found padding-top-60px">
+          <span>Please Add Members</span>
+        </div>
+      );
+    }
+  };
+
   render() {
     var userRole = localStorage.getItem("userRole");
     var isShowMember = this.state.members.length > 0;
@@ -562,9 +581,7 @@ class ShowMembers extends Component {
             </table>
           </div>
         ) : (
-          <div className="list-not-found padding-top-60px">
-            <span>Please Add Members</span>
-          </div>
+          this.renderMessage()
         )}
         {this.state.showConfirm ? (
           <ConfirmModal
