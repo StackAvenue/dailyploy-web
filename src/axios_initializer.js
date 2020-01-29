@@ -29,12 +29,17 @@ const axiosInitializer = {
       },
       error => {
         if (error.response.status == 401) {
-          cookie.remove("accessToken", { path: "/" });
-          cookie.remove("userRole", { path: "/" });
-          cookie.remove("loggedInUser", { path: "/" });
-          cookie.remove("workspaceId", { path: "/" });
-          cookie.remove("workspaceName", { path: "/" });
-          setTimeout((window.location.href = "/login"), 2000);
+          let urlSplit = error.response.config.url.split('/')
+          if (!(urlSplit.includes('sign_in') || urlSplit.includes('sign_up'))) {
+            cookie.remove("accessToken", { path: "/" });
+            cookie.remove("userRole", { path: "/" });
+            cookie.remove("loggedInUser", { path: "/" });
+            cookie.remove("workspaceId", { path: "/" });
+            cookie.remove("workspaceName", { path: "/" });
+            setTimeout((window.location.href = "/login"), 2000);
+          } else {
+            return Promise.reject(error);
+          }
         } else {
           return Promise.reject(error);
         }
