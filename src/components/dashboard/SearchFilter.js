@@ -167,7 +167,30 @@ class SearchFilter extends Component {
     this.setState({ selectedTags: selectedTags });
   };
 
+  returnPlaceHolder = selectedMember => {
+    if (this.props.isReports && this.props.state.searchFlag == "My Reports") {
+      return "search by projects";
+    } else if (
+      this.props.isReports &&
+      this.props.state.searchFlag == "Members" &&
+      selectedMember
+    ) {
+      return "search by projects";
+    } else if (
+      this.props.isReports &&
+      this.props.state.searchFlag == "Members" &&
+      !selectedMember
+    ) {
+      return "search by members/projects";
+    } else {
+      return "search by members/projects";
+    }
+  };
+
   renderSearchSuggestion = () => {
+    let selectedMember = this.state.selectedTags.find(
+      option => option.type === "member"
+    );
     return (
       <>
         {this.state.show ? (
@@ -180,12 +203,12 @@ class SearchFilter extends Component {
             ) : null}
             <div>
               <input
-                // onClick={this.onClickInput}
+                style={{ width: "100%" }}
                 className="suggessionSearchInput"
                 type="text"
                 value={this.state.value}
                 onChange={this.onSearchTextChange}
-                placeholder="search members/projects"
+                placeholder={this.returnPlaceHolder(selectedMember)}
               />
             </div>
             {this.state.memberSuggestions.length > 0 ? (
@@ -311,6 +334,9 @@ class SearchFilter extends Component {
   render() {
     const { value } = this.state;
     const x = firstTwoLetter(this.props.loggedInUserName);
+    let selectedMember = this.state.selectedTags.find(
+      option => option.type === "member"
+    );
     return (
       <>
         <div className="col-md-7 d-inline-block no-padding search-filter-container">
@@ -353,7 +379,9 @@ class SearchFilter extends Component {
             onClick={this.onClickInput}
           >
             {this.state.selectedTags.length == 0 ? (
-              <span className="placeholder">select members/projects</span>
+              <span className="placeholder">
+                {this.returnPlaceHolder(selectedMember)}
+              </span>
             ) : null}
             <div className="d-inline-block user-project-search text-titlize">
               <div className="selected-tags">
