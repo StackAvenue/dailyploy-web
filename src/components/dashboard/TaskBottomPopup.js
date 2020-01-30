@@ -33,28 +33,31 @@ class TaskBottomPopup extends Component {
             <i className="fa fa-pause "></i>
           </span>
           <div className="d-inline-block task-title">
-            <Timer startOn={this.props.startOn} isStart={this.props.isStart} />
+            <Timer
+              startOn={this.props.event.startOn}
+              isStart={this.props.event ? true : false}
+            />
           </div>
           <div className="d-inline-block task-title title text-wraper">
-            {this.props.taskTitle}
+            {this.props.event.title}
           </div>
           <div
             className="d-inline-block color-code"
             style={{
               backgroundColor: `${
-                this.props.bgColor ? this.props.bgColor : "#ffffff"
+                this.props.event ? this.props.event.bgColor : "#ffffff"
               }`
             }}
           ></div>
-          {this.props.timeTracked.length > 0 ? (
+          {this.props.event && this.props.event.timeTracked.length > 0 ? (
             <>
               <div className="d-inline-block timer-dropdown">
                 <input
                   className="d-inline-block"
                   className={this.state.showTimerMenu ? "border" : ""}
                   defaultValue={
-                    this.props.timeTracked.length > 0
-                      ? this.returnTime(this.props.timeTracked[0])
+                    this.props.event && this.props.event.timeTracked.length > 0
+                      ? this.returnTime(this.props.event.timeTracked[0])
                       : ""
                   }
                   onClick={() => this.ToggleTimerDropDown()}
@@ -63,7 +66,7 @@ class TaskBottomPopup extends Component {
               </div>
               {this.state.showTimerMenu ? (
                 <div className="dropdown">
-                  {this.props.timeTracked.map((time, idx) => {
+                  {this.props.event.timeTracked.map((time, idx) => {
                     if (idx !== 0) {
                       return (
                         <div className="border" key={time.id}>

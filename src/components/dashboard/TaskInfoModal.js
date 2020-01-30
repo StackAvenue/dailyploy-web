@@ -263,7 +263,11 @@ class TaskInfoModal extends Component {
                         pointerEvents: this.isValidUserDate() ? "" : "none"
                       }}
                       className="d-inline-block task-play-btn pointer"
-                      onClick={() => this.props.handleTaskStartTop()}
+                      onClick={() =>
+                        this.props.handleTaskStartTop(
+                          this.props.state.taskEvent
+                        )
+                      }
                     >
                       <i className="fa fa-pause"></i>
                     </div>
@@ -275,7 +279,11 @@ class TaskInfoModal extends Component {
                         pointerEvents: this.isValidUserDate() ? "" : "none"
                       }}
                       className="d-inline-block task-play-btn pointer"
-                      onClick={() => this.props.handleTaskStartTop()}
+                      onClick={() =>
+                        this.props.handleTaskStartTop(
+                          this.props.state.taskEvent
+                        )
+                      }
                     >
                       <i className="fa fa-play"></i>
                     </div>
@@ -287,7 +295,9 @@ class TaskInfoModal extends Component {
                     </div>
                   ) : null}
 
-                  {this.props.state.showAlert ? (
+                  {this.props.state.showAlert &&
+                  this.props.state.showEventAlertId ==
+                    this.props.state.taskEvent.id ? (
                     <UncontrolledAlert
                       className="task-war-alert"
                       color="warning"

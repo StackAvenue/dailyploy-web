@@ -85,7 +85,8 @@ class Workspace extends Component {
       isLoading: false,
       workspaceName: "",
       loggedInUserName: "",
-      timeTracked: []
+      timeTracked: [],
+      event: null
     };
   }
 
@@ -116,35 +117,16 @@ class Workspace extends Component {
       console.log("err", e);
     }
 
-    var startOn = localStorage.getItem(`startOn-${workspaceId}`);
-    var taskId = localStorage.getItem(`taskId-${workspaceId}`);
-    var colorCode = localStorage.getItem(`colorCode-${workspaceId}`);
-    var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`);
-    var timeTracked = [];
-    if (taskId) {
-      let runningTaskId = taskId.split("-")[0];
-      try {
-        const { data } = await get(`tasks/${runningTaskId}`);
-        timeTracked = data.time_tracked;
-      } catch (e) {}
-    }
-
     this.setState({
       workspaces: workspacesData,
       loggedInUserInfo: userData,
       isLoading: false,
-      startOn: startOn,
-      taskId: taskId,
-      colorCode: colorCode,
-      taskTitle: taskTitle,
       workspaceId: workspaceId,
-      isStart: taskTitle && startOn && taskId && colorCode,
       workspaceName:
         workspace.length > 0 && workspace[0]
           ? workspaceNameSplit(workspace[0].name)
           : "",
-      loggedInUserName: userData.name,
-      timeTracked: timeTracked
+      loggedInUserName: userData.name
     });
   }
 
@@ -219,31 +201,13 @@ class Workspace extends Component {
   };
 
   handleTaskBottomPopup = (startOn, event, trackStatus) => {
-    var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`);
-    var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
-    var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`);
-    var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`);
     if (trackStatus === "start") {
       this.setState({
-        startOn: startOn,
-        taskId: taskId,
-        colorCode: colorCode,
-        taskTitle: taskTitle,
-        timeTracked:
-          startOn != "" && event.timeTracked && event.timeTracked.length > 0
-            ? event.timeTracked
-            : [],
-        isStart:
-          taskTitle != "" && startOn != "" && taskId != "" && colorCode != ""
+        event: event
       });
     } else if (trackStatus === "stop") {
       this.setState({
-        startOn: "",
-        taskId: "",
-        colorCode: "",
-        taskTitle: "",
-        timeTracked: [],
-        isStart: false
+        event: null
       });
     }
   };
@@ -258,28 +222,19 @@ class Workspace extends Component {
   };
 
   stopOnGoingTask = async () => {
-    if (this.isBottomPopup()) {
-      var localTaskId = localStorage.getItem(
-        `taskId-${this.state.workspaceId}`
-      );
-      if (localTaskId == this.state.taskId) {
-        var taskDate = {
-          end_time: new Date(),
-          status: "stopped"
-        };
-        var taskId = this.state.taskId.split("-")[0];
-        try {
-          const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-        } catch (e) {}
-        this.handleReset();
-        this.setState({
-          startOn: "",
-          taskId: "",
-          colorCode: "",
-          taskTitle: "",
-          isStart: false
-        });
-      }
+    if (this.state.event) {
+      var taskDate = {
+        end_time: new Date(),
+        status: "stopped"
+      };
+      var taskId = this.state.event.id.split("-")[0];
+      try {
+        const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+      } catch (e) {}
+      this.handleReset();
+      this.setState({
+        event: null
+      });
     }
   };
 
@@ -330,14 +285,9 @@ class Workspace extends Component {
             </Switch>
           </div>
         </div>
-        {this.state.isStart ? (
+        {this.state.event ? (
           <TaskBottomPopup
-            bgColor={this.state.colorCode}
-            taskTitle={this.state.taskTitle}
-            taskId={this.state.taskId}
-            startOn={this.state.startOn}
-            isStart={this.state.isStart}
-            timeTracked={this.state.timeTracked}
+            event={this.state.event}
             stopOnGoingTask={this.stopOnGoingTask}
           />
         ) : null}

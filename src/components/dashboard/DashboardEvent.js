@@ -43,8 +43,10 @@ class DashboardEvent extends Component {
   }
 
   handleClick = async event => {
+    console.log(this.props.state.status);
     var icon = this.state.icon;
-    var status = this.state.status;
+    // var status = this.state.status;
+    var status = this.props.state.status;
     var showAlert = false;
     var startOn = "";
     if (status) {
@@ -170,7 +172,8 @@ class DashboardEvent extends Component {
       mustAddCssClass,
       divStyle,
       schedulerData,
-      titleText
+      titleText,
+      state
     } = this.props;
     const startTime = moment(start).format("HH:mm");
     const endTime = moment(end).format("HH:mm");
@@ -230,7 +233,8 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.handleClick(event)}
+                    // onClick={() => this.handleClick(event)}
+                    onClick={() => this.props.handleTaskStartTop(event)}
                   >
                     <i className="fa fa-pause"></i>
                   </div>
@@ -244,7 +248,8 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.handleClick(event)}
+                    // onClick={() => this.handleClick(event)}
+                    onClick={() => this.props.handleTaskStartTop(event)}
                   >
                     <i className="fa fa-play"></i>
                   </div>
@@ -375,7 +380,7 @@ class DashboardEvent extends Component {
             : null}
         </div>
 
-        {this.state.showAlert ? (
+        {state.showAlert && state.showEventAlertId == event.id ? (
           <UncontrolledAlert className="task-war-alert" color="warning">
             one task already ongoing !
           </UncontrolledAlert>
