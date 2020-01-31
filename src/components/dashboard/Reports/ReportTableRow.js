@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import { DATE_FORMAT2, PRIORITIES_MAP } from "./../../../utils/Constants";
+import { convertUTCToLocalDate } from "./../../../utils/function";
 
 class ReportTableRow extends Component {
   constructor(props) {
@@ -10,17 +11,9 @@ class ReportTableRow extends Component {
   }
 
   calculateTime = (startDateTime, endDateTime) => {
-    var s = new Date(startDateTime);
-    var e = new Date(endDateTime);
-    return (
-      ("0" + s.getHours()).slice(-2) +
-      ":" +
-      ("0" + s.getMinutes()).slice(-2) +
-      " - " +
-      ("0" + e.getMinutes()).slice(-2) +
-      ":" +
-      ("0" + e.getMinutes()).slice(-2)
-    );
+    var sTime = moment(convertUTCToLocalDate(startDateTime)).format("HH:mm");
+    var eTime = moment(convertUTCToLocalDate(endDateTime)).format("HH:mm");
+    return sTime + "- " + eTime;
   };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
