@@ -14,10 +14,11 @@ import MenuBar from "./components/dashboard/MenuBar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
 import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
-import { WORKSPACE_ID } from "./utils/Constants";
+import { WORKSPACE_ID, DATE_FORMAT1, HRMIN } from "./utils/Constants";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { workspaceNameSplit } from "./utils/function";
+import moment from "moment";
 
 class Workspace extends Component {
   constructor(props) {
@@ -223,8 +224,11 @@ class Workspace extends Component {
 
   stopOnGoingTask = async () => {
     if (this.state.event) {
+      let d = moment(this.state.event.start).format(DATE_FORMAT1);
+      let t = moment().format(HRMIN);
+      let newDateTime = moment(d + " " + t);
       var taskDate = {
-        end_time: new Date(),
+        end_time: new Date(newDateTime),
         status: "stopped"
       };
       var taskId = this.state.event.id.split("-")[0];

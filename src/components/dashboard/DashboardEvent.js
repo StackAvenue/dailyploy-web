@@ -51,7 +51,7 @@ class DashboardEvent extends Component {
     var startOn = "";
     if (status) {
       var endOn = Date.now();
-      this.props.handleTaskTracking("stop", event.id, endOn);
+      this.props.handleTaskTracking("stop", event, endOn);
       this.handleReset();
       this.props.handleTaskBottomPopup("", event, "stop");
       status = !this.state.status;
@@ -63,7 +63,7 @@ class DashboardEvent extends Component {
         this.setLocalStorageValue(startOn);
         this.props.handleTaskBottomPopup(startOn, this.props.event, "start");
         status = !this.state.status;
-        this.props.handleTaskTracking("start", this.props.event.id, startOn);
+        this.props.handleTaskTracking("start", event, startOn);
       }
     }
     this.setState({
