@@ -290,10 +290,13 @@ class Workspace extends Component {
           </div>
         </div>
         {this.state.event ? (
-          <TaskBottomPopup
-            event={this.state.event}
-            stopOnGoingTask={this.stopOnGoingTask}
-          />
+          <>
+            {console.log("eventssss", this.state.event)}
+            <TaskBottomPopup
+              event={this.state.event}
+              stopOnGoingTask={this.stopOnGoingTask}
+            />
+          </>
         ) : null}
       </div>
     );

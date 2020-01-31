@@ -36,6 +36,7 @@ class TaskBottomPopup extends Component {
             <Timer
               startOn={this.props.event.startOn}
               isStart={this.props.event ? true : false}
+              totalDuration={0}
             />
           </div>
           <div className="d-inline-block task-title title text-wraper">

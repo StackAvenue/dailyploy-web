@@ -297,7 +297,11 @@ class Dashboard extends Component {
 
     if (prevState.status != this.state.status && this.state.status) {
       let event = this.state.events.find(e => e.id == this.state.taskId);
-      this.props.handleTaskBottomPopup(this.state.startOn, event, "start");
+      this.props.handleTaskBottomPopup(
+        this.state.startOn,
+        this.state.trackingEvent,
+        "start"
+      );
     }
 
     if (
