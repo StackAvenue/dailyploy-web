@@ -9,81 +9,81 @@ class ColumnChart extends Component {
     this.state = {};
   }
 
-  componentDidMount = () => {
-    let data = this.props.data;
-    let barWidth = this.props.barWidth;
-    let activeBar = this.props.activeBar;
-    let seriesData = this.getXData();
-    Highcharts.chart("columnChartContainer", {
-      chart: {
-        type: "column",
-        height: 202
-      },
-      credits: {
-        enabled: false
-      },
-      title: {
-        text: ""
-      },
-      xAxis: {
-        categories: data,
-        labels: {
-          formatter() {
-            if (this.value.activeBar === activeBar) {
-              return `<b style="font-weight: bold; color: ${CHART_COLOR.active_color}">${this.value.name}</b>`;
-            } else {
-              return `<span>${this.value.name}</span>`;
-            }
-          }
-        }
-      },
-      yAxis: {
-        max: 24,
-        title: {
-          text: "Time (In hours)"
-        },
-        labels: {
-          enabled: false
-        }
-      },
-      legend: {
-        showInLegend: false,
-        align: "right",
-        x: -30,
-        verticalAlign: "top",
-        y: 25,
-        floating: true,
-        backgroundColor:
-          Highcharts.defaultOptions.legend.backgroundColor || "white",
-        borderColor: "#CCC",
-        borderWidth: 1,
-        shadow: false
-      },
-      tooltip: {
-        headerFormat: "",
-        pointFormat:
-          "{series.name}: {point.y} hours<br/>Total: {point.stackTotal} hours"
-      },
-      plotOptions: {
-        column: {
-          stacking: "normal",
-          showInLegend: false
-        },
-        series: {
-          pointWidth: barWidth,
-          pointHeight: "201",
-          color: {
-            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-            stops: [
-              [0, CHART_COLOR.worked_0],
-              [1, CHART_COLOR.worked_1]
-            ]
-          }
-        }
-      },
-      series: seriesData
-    });
-  };
+  // componentDidMount = () => {
+  //   let data = this.props.data;
+  //   let barWidth = this.props.barWidth;
+  //   let activeBar = this.props.activeBar;
+  //   let seriesData = this.getXData();
+  //   Highcharts.chart("columnChartContainer", {
+  //     chart: {
+  //       type: "column",
+  //       height: 202
+  //     },
+  //     credits: {
+  //       enabled: false
+  //     },
+  //     title: {
+  //       text: ""
+  //     },
+  //     xAxis: {
+  //       categories: data,
+  //       labels: {
+  //         formatter() {
+  //           if (this.value.activeBar === activeBar) {
+  //             return `<b style="font-weight: bold; color: ${CHART_COLOR.active_color}">${this.value.name}</b>`;
+  //           } else {
+  //             return `<span>${this.value.name}</span>`;
+  //           }
+  //         }
+  //       }
+  //     },
+  //     yAxis: {
+  //       max: 24,
+  //       title: {
+  //         text: "Time (In hours)"
+  //       },
+  //       labels: {
+  //         enabled: false
+  //       }
+  //     },
+  //     legend: {
+  //       showInLegend: false,
+  //       align: "right",
+  //       x: -30,
+  //       verticalAlign: "top",
+  //       y: 25,
+  //       floating: true,
+  //       backgroundColor:
+  //         Highcharts.defaultOptions.legend.backgroundColor || "white",
+  //       borderColor: "#CCC",
+  //       borderWidth: 1,
+  //       shadow: false
+  //     },
+  //     tooltip: {
+  //       headerFormat: "",
+  //       pointFormat:
+  //         "{series.name}: {point.y} hours<br/>Total: {point.stackTotal} hours"
+  //     },
+  //     plotOptions: {
+  //       column: {
+  //         stacking: "normal",
+  //         showInLegend: false
+  //       },
+  //       series: {
+  //         pointWidth: barWidth,
+  //         pointHeight: "201",
+  //         color: {
+  //           linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+  //           stops: [
+  //             [0, CHART_COLOR.worked_0],
+  //             [1, CHART_COLOR.worked_1]
+  //           ]
+  //         }
+  //       }
+  //     },
+  //     series: seriesData
+  //   });
+  // };
 
   sortData = () => {
     return this.props.columnChartData.sort((a, b) => (a.id > b.id ? 1 : -1));
@@ -515,7 +515,6 @@ class ColumnChart extends Component {
       let barWidth = this.props.barWidth;
       let activeBar = this.props.activeBar;
       let seriesData = this.getXData();
-
       Highcharts.chart("columnChartContainer", {
         chart: {
           type: "column",
@@ -525,7 +524,9 @@ class ColumnChart extends Component {
           enabled: false
         },
         title: {
-          text: ""
+          text: "",
+          align: "center",
+          verticalAlign: "middle"
         },
         xAxis: {
           categories: data,

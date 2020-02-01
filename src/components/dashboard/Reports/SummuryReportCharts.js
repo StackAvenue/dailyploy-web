@@ -14,67 +14,6 @@ class SummuryReportCharts extends Component {
     };
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.state.barChartArray != this.props.state.barChartArray ||
-      prevProps.searchProjectIds != this.props.searchProjectIds ||
-      prevProps.searchUserDetails != this.props.searchUserDetails
-    ) {
-      var searchData = {};
-      if (this.props.searchUserDetails.length > 0) {
-        let userIds = this.props.searchUserDetails.map(
-          member => member.member_id
-        );
-        searchData["user_ids"] =
-          this.props.searchUserDetails.length > 0
-            ? userIds.join(",")
-            : this.props.state.userId;
-      }
-      if (this.props.searchProjectIds.length > 0) {
-        searchData["project_ids"] = this.props.searchProjectIds.join(",");
-      }
-      this.loadMultipleApiData(searchData);
-    }
-  }
-
-  loadMultipleApiData = async searchParam => {
-    var results = [];
-    let finalResults = new Promise(async (resolve, reject) => {
-      try {
-        let finalArray = this.props.state.barChartArray.dates.map(
-          async (option, index) => {
-            let searchData = {
-              start_date: option.startDate,
-              end_date: option.endDate
-            };
-            const searchResult = await get(
-              `workspaces/${this.props.state.workspaceId}/user_summary_report`,
-              { ...searchData, ...searchParam }
-            );
-            results.push({
-              totalEstimateTime: searchResult.data.total_estimated_time,
-              trackedTime: searchResult.data.total_tracked_time,
-              date: searchData.start_date,
-              id: index + 1,
-              activeBar: this.getActive(searchData.start_date)
-            });
-          }
-        );
-        await Promise.all(finalArray).then(function(response) {});
-        resolve(results);
-      } catch (err) {
-        reject(err);
-      }
-    });
-    var newFinalResults = [];
-    var self = this;
-    await finalResults.then(function(response) {
-      newFinalResults = response;
-      self.setState({ columnChartData: newFinalResults });
-      self.props.setColumnChartData(newFinalResults);
-    });
-  };
-
   getActive = date => {
     if (this.props.state.frequency == "weekly") {
       let md = moment(date);
@@ -135,6 +74,11 @@ class SummuryReportCharts extends Component {
   };
 
   render() {
+    console.log(
+      "filter data",
+      this.props.state.priorityReports,
+      this.props.state.priorityReports != ""
+    );
     return (
       <div className="summary-reports">
         <div className="col-md-12 heading">
@@ -161,7 +105,10 @@ class SummuryReportCharts extends Component {
             </div>
           </div>
         </div>
-        <div className="circle-chart d-inline-block">
+        <div
+          className="circle-chart d-inline-block"
+          style={{ verticalAlign: "top" }}
+        >
           <div className="chart d-inline-block">
             <PieChart
               id="projectPieChart"
@@ -192,6 +139,7 @@ class SummuryReportCharts extends Component {
                   ? this.props.state.categoryReports.estimateTime
                   : []
               }
+              handleLoading={this.props.handleLoading}
             />
           </div>
           <div className="chart d-inline-block">
@@ -208,6 +156,7 @@ class SummuryReportCharts extends Component {
                   ? this.props.state.priorityReports.estimateTime
                   : []
               }
+              handleLoading={this.props.handleLoading}
             />
           </div>
         </div>
@@ -218,6 +167,7 @@ class SummuryReportCharts extends Component {
             activeBar={this.props.state.barChartArray.activeBar}
             state={this.props.state}
             columnChartData={this.props.state.columnChartData}
+            handleLoading={this.props.handleLoading}
           />
         </div>
         <div className="legend d-inline-block">

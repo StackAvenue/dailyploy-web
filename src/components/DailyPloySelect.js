@@ -208,7 +208,22 @@ class DailyPloySelect extends Component {
           <div className=" custom-search-select">
             <div onClick={this.onClickInput}>
               <div className="d-inline-block selected-tags text-titlize">
-                {this.renderSelectedSuggestion()}
+                {this.props.optionPlaceholder && this.state.selected == "" ? (
+                  <div className="">
+                    <div
+                      className="d-inline-block"
+                      style={{
+                        paddingLeft: "5px",
+                        color: "#9b9b9b",
+                        font: "16px"
+                      }}
+                    >
+                      {props.placeholder}
+                    </div>
+                  </div>
+                ) : (
+                  this.renderSelectedSuggestion()
+                )}
               </div>
               <input
                 className="d-inline-block"

@@ -20,7 +20,10 @@ import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
 import DailyPloySelect from "./../DailyPloySelect";
+import { toast } from "react-toastify";
+import DailyPloyToast from "./../DailyPloyToast";
 import SummuryReportCharts from "./Reports/SummuryReportCharts";
+import Loader from "react-loader-spinner";
 
 class Reports extends Component {
   constructor(props) {
@@ -59,12 +62,14 @@ class Reports extends Component {
       message: "My Daily Report",
       frequency: "daily",
       taskCategories: [],
-      projectReports: [],
-      categoryReports: [],
+      projectReports: "",
+      categoryReports: "",
+      priorityReports: "",
       selectedCategory: null,
       selectedPriority: null,
       columnChartData: [],
-      barChartArray: this.generateDailyBarChartData(new Date())
+      barChartArray: this.generateDailyBarChartData(new Date()),
+      isLoading: false
     };
   }
 
@@ -212,30 +217,55 @@ class Reports extends Component {
         monthly: false,
         barChartArray: this.generateDailyBarChartData(new Date()),
         frequency: "daily",
-        columnChartData: []
+        columnChartData: [],
+        dateFrom: new Date(),
+        dateTo: new Date()
       });
     }
     if (name == "monthly") {
+      let startDate = moment()
+        .startOf("month")
+        .format(DATE_FORMAT1);
+      let endDate = moment()
+        .endOf("month")
+        .format(DATE_FORMAT1);
+      let days = this.getMonthDates(startDate, endDate);
       self.setState({
         weekly: false,
         daily: false,
         monthly: true,
-        barChartArray: this.generateMonthlyBarChartData(new Date()),
         frequency: "monthly",
-        columnChartData: []
+        columnChartData: [],
+        dateFrom: new Date(startDate),
+        dateTo: new Date(endDate),
+        selectedDays: days,
+        barChartArray: this.generateMonthlyBarChartData(new Date(startDate))
       });
-      this.handleMonthlyDateFrom(new Date());
     }
     if (name == "weekly") {
+      let week = moment().week();
+      let weekdays = this.getWeekDays(this.getWeekRange(new Date()).from);
+      let fm = "DD MMM";
+      let weekFormated =
+        moment(weekdays[0]).format(fm) +
+        " - " +
+        moment(weekdays[6]).format(fm) +
+        " (Week " +
+        week +
+        ")";
       self.setState({
         weekly: true,
         daily: false,
         monthly: false,
-        barChartArray: this.generateWeeklyBarChartData(),
         frequency: "weekly",
-        columnChartData: []
+        columnChartData: [],
+        selectedDays: weekdays,
+        dateFrom: weekdays[0],
+        dateTo: weekdays[weekdays.length - 1],
+        weekNumber: week,
+        displayWeek: weekFormated,
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
       });
-      this.handleDayChange(new Date());
     }
   };
 
@@ -327,6 +357,7 @@ class Reports extends Component {
 
     //get workspace Id
     this.getWorkspaceParams();
+    const { workspaceId } = this.props.match.params;
 
     // worksapce project Listing
     try {
@@ -390,25 +421,30 @@ class Reports extends Component {
     );
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/project_summary_report`,
+        `workspaces/${workspaceId}/project_summary_report`,
         searchData
       );
-      var projectReportData = {
-        data: data.report_data,
-        estimateTime: data.total_estimated_time
-      };
+      var projectReportData =
+        data.report_data.length > 0
+          ? {
+              data: data.report_data,
+              estimateTime: data.total_estimated_time
+            }
+          : "";
     } catch (e) {}
 
     // Summury reports Category
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/category_summary_report`,
+        `workspaces/${workspaceId}/category_summary_report`,
         searchData
       );
-      var categoryReportData = {
-        data: data.report_data,
-        estimateTime: data.total_estimated_time
-      };
+      var categoryReportData = data.report_data
+        ? {
+            data: data.report_data,
+            estimateTime: data.total_estimated_time
+          }
+        : "";
     } catch (e) {}
 
     // Summury reports Priority
@@ -417,16 +453,17 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/priority_summary_report`,
         searchData
       );
-      var priorityReportData = {
-        data: data.report_data,
-        estimateTime: data.total_estimated_time
-      };
+      var priorityReportData = data.report_data
+        ? {
+            data: data.report_data,
+            estimateTime: data.total_estimated_time
+          }
+        : "";
     } catch (e) {}
+
     this.props.handleLoading(false);
-
-    this.loadMultipleApiData({ user_ids: loggedInData.id });
-
     this.setState({
+      workspaceId: workspaceId,
       userId: loggedInData.id,
       userName: loggedInData.name,
       userEmail: loggedInData.email,
@@ -444,10 +481,8 @@ class Reports extends Component {
       categoryReports: categoryReportData,
       priorityReports: priorityReportData
     });
-
+    this.loadMultipleApiData({ user_ids: loggedInData.id });
     this.createUserProjectList();
-
-    this.props.handleSearchFilterResult(this.handleSearchFilterResult);
   }
 
   checkProject = () => {
@@ -516,109 +551,55 @@ class Reports extends Component {
           `workspaces/${this.state.workspaceId}/project_summary_report`,
           searchData
         );
-        var projectReportData = {
-          data: data.report_data,
-          estimateTime: data.total_estimated_time
-        };
+        var projectReportData = data.report_data
+          ? {
+              data: data.report_data,
+              estimateTime: data.total_estimated_time
+            }
+          : "";
       } catch (e) {}
 
       var message = this.displayMessage();
-      // this.setState({
-      //   taskDetails: taskDetails,
-      //   message: message,
-      //   totalTime: totalTime,
-      //   projectReports: projectReportData ? projectReportData : ""
-      // });
-      // }
-      // if (
-      //   prevState.dateFrom !== this.state.dateFrom ||
-      //   prevState.dateTo !== this.state.dateTo ||
-      //   prevState.frequency !== this.state.frequency ||
-      //   prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      //   prevProps.searchUserDetails !== this.props.searchUserDetails ||
-      //   prevState.selectedCategory !== this.state.selectedCategory
-      // ) {
-      //   let userIds = this.props.searchUserDetails.map(
-      //     member => member.member_id
-      //   );
-      //   var searchData = {
-      //     start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      //     end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
-      //     user_ids:
-      //       this.props.searchUserDetails.length > 0
-      //         ? userIds.join(",")
-      //         : this.state.userId
-      //   };
-      //   if (this.props.searchProjectIds.length > 0) {
-      //     searchData["project_ids"] = this.props.searchProjectIds.join(",");
-      //   }
-      //   if (this.state.selectedCategory) {
-      //     searchData[
-      //       "category_ids"
-      //     ] = this.state.selectedCategory.task_category_id;
-      //   }
-      // Summury reports Category
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/category_summary_report`,
           searchData
         );
-        var categoryReportData = {
-          data: data.report_data,
-          estimateTime: data.total_estimated_time
-        };
+        var categoryReportData = data.report_data
+          ? {
+              data: data.report_data,
+              estimateTime: data.total_estimated_time
+            }
+          : "";
       } catch (e) {}
 
-      //   this.setState({
-      //     categoryReports: categoryReportData ? categoryReportData : ""
-      //   });
-      // }
-      // Summury reports Priority
-      // if (
-      //   prevState.dateFrom !== this.state.dateFrom ||
-      //   prevState.dateTo !== this.state.dateTo ||
-      //   prevState.frequency !== this.state.frequency ||
-      //   prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      //   prevProps.searchUserDetails !== this.props.searchUserDetails ||
-      //   prevState.selectedPriority !== this.state.selectedPriority
-      // ) {
-      //   let userIds = this.props.searchUserDetails.map(
-      //     member => member.member_id
-      //   );
-      //   var searchData = {
-      //     start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      //     end_date: moment(this.state.dateTo).format(DATE_FORMAT1),
-      //     user_ids:
-      //       this.props.searchUserDetails.length > 0
-      //         ? userIds.join(",")
-      //         : this.state.userId
-      //   };
-      //   if (this.props.searchProjectIds.length > 0) {
-      //     searchData["project_ids"] = this.props.searchProjectIds.join(",");
-      //   }
-      //   if (this.state.selectedPriority) {
-      //     searchData["priorities"] = this.state.selectedPriority.name;
-      //   }
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/priority_summary_report`,
           searchData
         );
-        var priorityReportData = {
-          data: data.report_data,
-          estimateTime: data.total_estimated_time
-        };
+        var priorityReportData = data.report_data
+          ? {
+              data: data.report_data,
+              estimateTime: data.total_estimated_time
+            }
+          : "";
       } catch (e) {}
 
+      let filterUserIds =
+        this.props.searchUserDetails.length > 0
+          ? userIds.join(",")
+          : this.state.userId;
       this.props.handleLoading(false);
       this.setState({
-        priorityReports: priorityReportData ? priorityReportData : "",
-        categoryReports: categoryReportData ? categoryReportData : "",
+        priorityReports: priorityReportData,
+        categoryReports: categoryReportData,
         taskDetails: taskDetails,
         message: message,
         totalTime: totalTime,
-        projectReports: projectReportData ? projectReportData : ""
+        projectReports: projectReportData
       });
+      this.loadMultipleApiData({ user_ids: filterUserIds });
     }
   }
 
@@ -696,7 +677,6 @@ class Reports extends Component {
         });
       }
     }
-
     if (this.state.userRole === "admin" && this.state.worksapceUsers) {
       {
         this.state.worksapceUsers.map((member, idx) => {
@@ -710,22 +690,11 @@ class Reports extends Component {
         });
       }
     }
-    // else {
-    //   searchOptions.push({
-    //     value: this.state.userName,
-    //     id: (index += 1),
-    //     member_id: this.state.userId,
-    //     email: this.state.userEmail,
-    //     type: "member",
-    //     role: this.state.userRole
-    //   });
-    // }
     searchOptions["projects"] = projectList;
     searchOptions["members"] = memberList;
-
-    // this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
   };
+
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
     this.setState({ workspaceId: workspaceId });
@@ -895,8 +864,9 @@ class Reports extends Component {
     this.setState({ columnChartData: data });
   };
 
-  loadMultipleApiData = async searchParam => {
+  loadMultipleApiData = async (searchParam, newD) => {
     var results = [];
+    const { workspaceId } = this.props.match.params;
     let finalResults = new Promise(async (resolve, reject) => {
       try {
         let finalArray = this.state.barChartArray.dates.map(
@@ -906,7 +876,7 @@ class Reports extends Component {
               end_date: option.endDate
             };
             const searchResult = await get(
-              `workspaces/${this.state.workspaceId}/user_summary_report`,
+              `workspaces/${workspaceId}/user_summary_report`,
               { ...searchData, ...searchParam }
             );
             results.push({
@@ -928,7 +898,7 @@ class Reports extends Component {
     var self = this;
     await finalResults.then(function(response) {
       newFinalResults = response;
-      self.setState({ columnChartData: newFinalResults });
+      self.setState({ columnChartData: newFinalResults, ...newD });
     });
   };
 
@@ -940,6 +910,53 @@ class Reports extends Component {
       return moment(date).format(MONTH_FORMAT2);
     } else {
       return date;
+    }
+  };
+
+  downloadReportsCsv = async () => {
+    var searchData = {
+      start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+      user_ids:
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails
+              .map(member => member.member_id)
+              .join(",")
+          : this.state.userId,
+      frequency: this.returnFrequency()
+    };
+    if (this.props.searchProjectIds.length > 0) {
+      searchData["project_ids"] = this.props.searchProjectIds.join(",");
+    }
+    if (this.state.selectedCategory) {
+      searchData["category_ids"] = this.state.selectedCategory.task_category_id;
+    }
+    if (this.state.selectedPriority) {
+      searchData["priorities"] = this.state.selectedPriority.name;
+    }
+    try {
+      this.setState({ isLoading: true });
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/csv_download`,
+        searchData
+      );
+      let csvUrl = data.csv_url;
+      var link = document.createElement("a");
+      link.download = "csv download";
+      link.href = csvUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      link.remove();
+      this.setState({ isLoading: false });
+    } catch (e) {
+      toast(<DailyPloyToast message="something went wrong" status="error" />, {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_CENTER
+      });
+      let self = this;
+      setTimeout(function() {
+        self.setState({ isLoading: false });
+      }, 2000);
     }
   };
 
@@ -1061,15 +1078,27 @@ class Reports extends Component {
                       label="label"
                       suggesionBy="label"
                       iconType="circle"
+                      optionPlaceholder={true}
                       options={PRIORITIES}
                     />
                   </div>
                 </div>
                 <div className="report-download">
                   <button
-                    className="btn btn-sm btn-default"
-                    onClick={this.showTaskModal}
+                    className={`btn btn-sm btn-default ${
+                      this.state.isLoading ? "disabled" : ""
+                    }`}
+                    onClick={() => this.downloadReportsCsv()}
                   >
+                    {this.state.isLoading ? (
+                      <Loader
+                        type="Oval"
+                        color="#1f8354"
+                        height={20}
+                        width={20}
+                        className="d-inline-block csv-loader"
+                      />
+                    ) : null}
                     <i className="fas fa-download right-left-space-5"></i>
                     Download
                   </button>
@@ -1084,6 +1113,7 @@ class Reports extends Component {
                   searchUserDetails={this.props.searchUserDetails}
                   searchProjectIds={this.props.searchProjectIds}
                   setColumnChartData={this.setColumnChartData}
+                  handleLoading={this.props.handleLoading}
                 />
               </div>
 

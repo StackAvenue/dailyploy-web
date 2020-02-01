@@ -40,9 +40,15 @@ class AddTaskModal extends Component {
   };
 
   disabledMinutes = () => {
-    var time = this.props.state.timeFrom;
-    if (time) {
-      var min = time.split(":")[1];
+    var fTime = this.props.state.timeFrom;
+    var tTime = this.props.state.timeTo;
+    if (fTime && !tTime) {
+      var min = fTime.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
+      var min = fTime.split(":")[1];
       min = Number(min) + 1;
       var minArr = Array.from({ length: `${min}` }, (v, k) => k);
       return minArr;
