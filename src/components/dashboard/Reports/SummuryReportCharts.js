@@ -109,7 +109,6 @@ class SummuryReportCharts extends Component {
           className="circle-chart d-inline-block"
           style={{ verticalAlign: "top" }}
         >
-          {/* {this.props.state.projectReports != "" ? ( */}
           <div className="chart d-inline-block">
             <PieChart
               id="projectPieChart"
@@ -126,14 +125,6 @@ class SummuryReportCharts extends Component {
               }
             />
           </div>
-          {/* ) : (
-            <>
-              <div className="chart report-not-found d-inline-block">
-                No data found
-              </div>
-            </>
-          )} */}
-          {/* {this.props.state.categoryReports != "" ? ( */}
           <div className="chart d-inline-block">
             <PieChart
               id="categoryPieChart"
@@ -151,14 +142,6 @@ class SummuryReportCharts extends Component {
               handleLoading={this.props.handleLoading}
             />
           </div>
-          {/* ) : (
-            <>
-              <div className="chart report-not-found d-inline-block">
-                No data found
-              </div>
-            </>
-          )} */}
-          {/* {this.props.state.priorityReports != "" ? ( */}
           <div className="chart d-inline-block">
             <PieChart
               id="priorityPieChart"
@@ -176,13 +159,6 @@ class SummuryReportCharts extends Component {
               handleLoading={this.props.handleLoading}
             />
           </div>
-          {/* ) : (
-            <>
-              <div className="chart report-not-found d-inline-block">
-                No data found
-              </div>
-            </>
-          )} */}
         </div>
         <div className="column-chart d-inline-block">
           <ColumnChart

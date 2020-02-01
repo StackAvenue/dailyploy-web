@@ -515,7 +515,6 @@ class ColumnChart extends Component {
       let barWidth = this.props.barWidth;
       let activeBar = this.props.activeBar;
       let seriesData = this.getXData();
-
       Highcharts.chart("columnChartContainer", {
         chart: {
           type: "column",
@@ -525,7 +524,9 @@ class ColumnChart extends Component {
           enabled: false
         },
         title: {
-          text: ""
+          text: "",
+          align: "center",
+          verticalAlign: "middle"
         },
         xAxis: {
           categories: data,

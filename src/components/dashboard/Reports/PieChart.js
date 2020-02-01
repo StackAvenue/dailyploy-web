@@ -268,7 +268,7 @@ class PieChart extends Component {
           enabled: false
         },
         title: {
-          text: chartType,
+          text: data.length > 0 ? chartType : "No data Found",
           align: "center",
           verticalAlign: "middle",
           y: 15
