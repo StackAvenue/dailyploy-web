@@ -15,7 +15,8 @@ export const DATE_FORMAT6 = "DD MMM"; // 27 Oct
 export const YEAR = "YYYY"; // 2019
 export const MONTH_FORMAT1 = "MMM"; // Oct
 export const MONTH_FORMAT2 = "MMM YYYY"; // Oct 2019
-export const HRMIN = "HH:mm"; // 27 Oct 2019
+export const HRMIN = "HH:mm"; // 27:20:19
+export const HHMMSS = "HH:mm:ss"; // 20:34:19
 export const MONTH_FORMAT = "DD MMM"; // November 2019
 export const CHART_COLOR = {
   capacity: "#e5e5e5",

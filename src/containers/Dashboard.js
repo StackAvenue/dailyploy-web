@@ -18,7 +18,8 @@ import {
   PRIORITIES,
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
-  HRMIN
+  HRMIN,
+  HHMMSS
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -1223,7 +1224,7 @@ class Dashboard extends Component {
       var taskId = eventTask.id.split("-")[0];
       if (taskType === "start") {
         let d = moment(eventTask.start).format(DATE_FORMAT1);
-        let t = moment(dateTime).format(HRMIN);
+        let t = moment(dateTime).format(HHMMSS);
         let newDateTime = moment(d + " " + t);
         var taskDate = {
           start_time: new Date(newDateTime),
@@ -1248,7 +1249,7 @@ class Dashboard extends Component {
         } catch (e) {}
       } else if (taskType === "stop") {
         let d = moment(eventTask.start).format(DATE_FORMAT1);
-        let t = moment(dateTime).format(HRMIN);
+        let t = moment(dateTime).format(HHMMSS);
         let newDateTime = moment(d + " " + t);
         var taskDate = {
           end_time: new Date(newDateTime),

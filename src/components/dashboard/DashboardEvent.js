@@ -180,6 +180,7 @@ class DashboardEvent extends Component {
     const totalTrackTime = this.props.event.timeTracked
       .map(log => log.duration)
       .flat();
+    console.log(this.props.event.id, totalTrackTime);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
