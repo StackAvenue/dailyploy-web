@@ -400,7 +400,6 @@ class Dashboard extends Component {
         `workspaces/${workspaceId}/user_tasks`,
         searchData
       );
-      console.log("yes api hit at did mount", this.state.status);
 
       var userId = loggedInData.id;
       var sortedUsers = data.users.sort((x, y) => {
@@ -727,7 +726,11 @@ class Dashboard extends Component {
     errors["timeFromError"] = "";
     this.setState({
       timeFrom: value != null ? value.format("HH:mm:ss") : null,
-      errors: errors
+      errors: errors,
+      timeTo:
+        value != null && value.format("HH:mm:ss") > this.state.timeTo
+          ? null
+          : this.state.timeTo
     });
   };
 
@@ -860,6 +863,8 @@ class Dashboard extends Component {
         border: "solid 1px #ffffff",
         timeDateTo: moment(),
         timeDateFrom: moment(),
+        timeTo: moment().format("HH:mm"),
+        timeFrom: moment().format("HH:mm"),
         memberProjects: memberProjects
       });
     }
@@ -893,21 +898,49 @@ class Dashboard extends Component {
         flag = false;
       }
     }
-    // errors["timeFromError"] = this.state.timeFrom
-    //   ? ""
-    //   : "please select time from";
-    // errors["timeToError"] = this.state.timeTo ? "" : "please select time to";
+    if (!this.state.timeTo && !this.state.timeFrom) {
+      errors["timeFromError"] = "";
+      errors["timeToError"] = "";
+    } else if (
+      (this.state.timeFrom != "" || this.state.timeFrom !== null) &&
+      (this.state.timeTo == "" || this.state.timeTo == null)
+    ) {
+      errors["timeToError"] = "please select time to";
+    } else if (
+      (this.state.timeFrom == "" || this.state.timeFrom == null) &&
+      (this.state.timeTo != "" || this.state.timeTo != null)
+    ) {
+      errors["timeFromError"] = "please select time from";
+    } else {
+      errors["timeFromError"] = "";
+      errors["timeToError"] = "";
+    }
     this.setState({ errors: errors });
     return (
       this.state.taskName &&
       this.state.projectId &&
       this.state.taskUser.length > 0 &&
-      // this.state.timeTo &&
-      // this.state.timeFrom &&
+      this.validateTime() &&
       this.state.dateFrom &&
       this.state.taskCategorie &&
       flag
     );
+  };
+
+  validateTime = () => {
+    if (
+      (this.state.timeFrom != "" || this.state.timeFrom != null) &&
+      (this.state.timeTo == "" || this.state.timeTo == null)
+    ) {
+      return false;
+    } else if (
+      (this.state.timeFrom == "" || this.state.timeFrom == null) &&
+      (this.state.timeTo != "" || this.state.timeTo != null)
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   convertUTCDateToLocalDate = date => {
