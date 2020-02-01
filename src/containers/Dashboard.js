@@ -247,7 +247,7 @@ class Dashboard extends Component {
 
     if (prevState.timeFrom !== this.state.timeFrom) {
       var startDateTime = null;
-      if (this.state.timeFrom !== null) {
+      if (this.state.timeFrom) {
         startDateTime =
           moment().format("YYYY-MM-DD") + " " + this.state.timeFrom;
         startDateTime = moment(startDateTime);
@@ -903,8 +903,8 @@ class Dashboard extends Component {
         modalMemberSearchOptions: members,
         dateFrom: startDate,
         dateTo: endDate,
-        timeFrom: startTime,
-        timeTo: endTime,
+        timeFrom: startTime != "00:00:00" ? startTime : null,
+        timeTo: endTime != "00:00:00" ? endTime : null,
         taskId: event.id,
         selectedMembers: selectedMembers,
         taskName: event.title,
