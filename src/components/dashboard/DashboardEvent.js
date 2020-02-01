@@ -179,8 +179,8 @@ class DashboardEvent extends Component {
     const endTime = moment(end).format("HH:mm");
     const totalTrackTime = this.props.event.timeTracked
       .map(log => log.duration)
-      .flat();
-    console.log(this.props.event.id, totalTrackTime);
+      .flat()
+      .reduce((a, b) => a + b, 0);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (

@@ -212,14 +212,14 @@ class Dashboard extends Component {
                 user.id == this.state.userId &&
                 task.time_tracked.length > 0
               ) {
-                let runningTasks = task.time_tracked.filter(
+                let runningTask = task.time_tracked.find(
                   ttt => ttt.status == "running"
                 );
-                let runningTask = runningTasks.find(
-                  ttt =>
-                    moment(ttt.start_time).format(DATE_FORMAT1) ==
-                    dateWiseTasks.date
-                );
+                // let runningTask = runningTasks.find(
+                //   ttt =>
+                //     moment(ttt.start_time).format(DATE_FORMAT1) ==
+                //     dateWiseTasks.date
+                // );
                 if (runningTask) {
                   var taskStartOn = new Date(runningTask.start_time).getTime();
                   taskRunningObj = {
@@ -315,9 +315,12 @@ class Dashboard extends Component {
         prevProps.state.event &&
         prevProps.state.event.id == this.state.taskId
       ) {
-        var event = events.find(e => e.id == this.state.taskId);
-        event["trackingStatus"] = "play";
-        event["startOn"] = "";
+        let id = this.state.taskId.split("-")[0];
+        var filterEvents = events.filter(e => e.taskId == id);
+        filterEvents.forEach(event => {
+          event["trackingStatus"] = "play";
+          event["startOn"] = "";
+        });
         this.setState({
           status: false,
           startOn: "",
@@ -449,14 +452,14 @@ class Dashboard extends Component {
               startOn: null
             };
             if (user.id == loggedInData.id && task.time_tracked.length > 0) {
-              let runningTasks = task.time_tracked.filter(
+              let runningTask = task.time_tracked.find(
                 ttt => ttt.status == "running"
               );
-              let runningTask = runningTasks.find(
-                ttt =>
-                  moment(ttt.start_time).format(DATE_FORMAT1) ==
-                  dateWiseTasks.date
-              );
+              // let runningTask = runningTasks.find(
+              //   ttt =>
+              //     moment(ttt.start_time).format(DATE_FORMAT1) ==
+              //     dateWiseTasks.date
+              // );
               if (runningTask) {
                 var taskStartOn = new Date(runningTask.start_time).getTime();
                 taskRunningObj = {
@@ -1165,7 +1168,7 @@ class Dashboard extends Component {
     var events = this.state.events;
     var alertEventId = "";
     if (status) {
-      if (this.state.trackingEvent.id == taskEvent.id) {
+      if (this.state.trackingEvent.taskId == taskEvent.taskId) {
         this.props.handleTaskBottomPopup("", null, "stop");
         this.handleTaskTracking("stop", taskEvent, Date.now());
         status = !this.state.status;
@@ -1181,9 +1184,16 @@ class Dashboard extends Component {
       this.props.handleTaskBottomPopup(startOn, taskEvent, "start");
       this.handleTaskTracking("start", taskEvent, startOn);
       status = !this.state.status;
-      var event = events.find(event => event.id === taskEvent.id);
-      event["trackingStatus"] = "pause";
-      event["startOn"] = startOn;
+      // var event = events.find(event => event.id === taskEvent.id);
+      // event["trackingStatus"] = "pause";
+      // event["startOn"] = startOn;
+      var filterEvents = events.filter(
+        event => event.taskId === taskEvent.taskId
+      );
+      filterEvents.forEach(event => {
+        event["trackingStatus"] = "pause";
+        event["startOn"] = startOn;
+      });
     }
     this.setState({
       status: status,
@@ -1223,11 +1233,11 @@ class Dashboard extends Component {
     if (taskType && eventTask && dateTime) {
       var taskId = eventTask.id.split("-")[0];
       if (taskType === "start") {
-        let d = moment(eventTask.start).format(DATE_FORMAT1);
-        let t = moment(dateTime).format(HHMMSS);
-        let newDateTime = moment(d + " " + t);
+        // let d = moment(eventTask.start).format(DATE_FORMAT1);
+        // let t = moment(dateTime).format(HHMMSS);
+        // let newDateTime = moment(d + " " + t);
         var taskDate = {
-          start_time: new Date(newDateTime),
+          start_time: new Date(dateTime),
           status: "running"
         };
         try {
@@ -1236,33 +1246,39 @@ class Dashboard extends Component {
             `tasks/${taskId}/start-tracking`
           );
           var events = this.state.events;
-          var event = events.find(event => event.id === eventTask.id);
-          event["trackingStatus"] = "pause";
-          event["startOn"] = dateTime;
+          var filterEvents = events.filter(event => event.taskId === taskId);
+          filterEvents.forEach(event => {
+            event["trackingStatus"] = "pause";
+            event["startOn"] = dateTime;
+          });
           this.setState({
             status: true,
             startOn: dateTime,
             taskId: eventTask.id,
-            trackingEvent: event,
+            trackingEvent: eventTask,
             events: events
           });
         } catch (e) {}
       } else if (taskType === "stop") {
-        let d = moment(eventTask.start).format(DATE_FORMAT1);
-        let t = moment(dateTime).format(HHMMSS);
-        let newDateTime = moment(d + " " + t);
+        // let d = moment(eventTask.start).format(DATE_FORMAT1);
+        // let t = moment(dateTime).format(HHMMSS);
+        // let newDateTime = moment(d + " " + t);
         var taskDate = {
-          end_time: new Date(newDateTime),
+          end_time: new Date(dateTime),
           status: "stopped"
         };
         try {
           const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
           var events = this.state.events;
-          var event = events.find(event => event.id === eventTask.id);
-          var timeTracked = [...event.timeTracked, ...[data]];
-          event["timeTracked"] = timeTracked;
-          event["startOn"] = null;
-          event["trackingStatus"] = "play";
+          var filterEvents = events.filter(
+            event => event.taskId === eventTask.taskId
+          );
+          filterEvents.forEach(event => {
+            var timeTracked = [...event.timeTracked, ...[data]];
+            event["timeTracked"] = timeTracked;
+            event["startOn"] = null;
+            event["trackingStatus"] = "play";
+          });
           var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
           this.setState({
             events: events,

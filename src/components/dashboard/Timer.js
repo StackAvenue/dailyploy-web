@@ -10,6 +10,7 @@ class Timer extends Component {
   }
 
   componentDidMount = () => {
+    this.handleReset();
     this.handleClick();
   };
 
@@ -41,12 +42,9 @@ class Timer extends Component {
     this.setState({ runningTime: 0 });
   };
 
-  formattedSeconds = ms => {
-    var totalDuration = this.props.totalDuration
-      ? this.props.totalDuration.reduce((a, b) => a + b, 0)
-      : 0;
+  formattedSeconds = (ms, totalDuration) => {
     var totalSeconds = ms / 1000;
-    totalSeconds += totalDuration;
+    var totalSeconds = totalSeconds + totalDuration;
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
     var s = Math.floor((totalSeconds % 3600) % 60);
@@ -60,7 +58,10 @@ class Timer extends Component {
   };
 
   render() {
-    return this.formattedSeconds(this.state.runningTime);
+    return this.formattedSeconds(
+      this.state.runningTime,
+      this.props.totalDuration
+    );
   }
 }
 

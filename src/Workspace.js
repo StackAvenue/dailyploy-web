@@ -224,11 +224,11 @@ class Workspace extends Component {
 
   stopOnGoingTask = async () => {
     if (this.state.event) {
-      let d = moment(this.state.event.start).format(DATE_FORMAT1);
-      let t = moment().format(HHMMSS);
-      let newDateTime = moment(d + " " + t);
+      // let d = moment(this.state.event.start).format(DATE_FORMAT1);
+      // let t = moment().format(HHMMSS);
+      // let newDateTime = moment(d + " " + t);
       var taskDate = {
-        end_time: new Date(newDateTime),
+        end_time: new Date(),
         status: "stopped"
       };
       var taskId = this.state.event.id.split("-")[0];
