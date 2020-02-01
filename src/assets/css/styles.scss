@@ -236,3 +236,6 @@
 .ant-row-flex-space-between{
   justify-content: left;
 }
+.disabled{
+ pointer-events: none !important;
+}

@@ -57,18 +57,23 @@
       width: auto;
       height: 30px;
       border-radius: 5px;
-      border: solid 1px $color-borders;
+      border: solid 1px $color-brand3;
       background-color: $color-white;
       margin-top: 7px;
       box-shadow: none !important;
       color: #212529;
       background-color: white;
       &:hover{
-          background-color: #33a1ff !important;
-          color: #fff !important;
+          // background-color: #33a1ff !important;
+          // color: #fff !important;
           font-weight: bold !important;
       }
       
+    }
+    .csv-loader{
+      position: absolute;
+      z-index: 100;
+      padding-left: 70px;
     }
   }
   .SelectedWeekExample{

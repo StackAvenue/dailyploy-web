@@ -20,7 +20,10 @@ import "../../assets/css/reports.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-tabs/style/react-tabs.css";
 import DailyPloySelect from "./../DailyPloySelect";
+import { toast } from "react-toastify";
+import DailyPloyToast from "./../DailyPloyToast";
 import SummuryReportCharts from "./Reports/SummuryReportCharts";
+import Loader from "react-loader-spinner";
 
 class Reports extends Component {
   constructor(props) {
@@ -65,7 +68,8 @@ class Reports extends Component {
       selectedCategory: null,
       selectedPriority: null,
       columnChartData: [],
-      barChartArray: this.generateDailyBarChartData(new Date())
+      barChartArray: this.generateDailyBarChartData(new Date()),
+      isLoading: false
     };
   }
 
@@ -909,6 +913,53 @@ class Reports extends Component {
     }
   };
 
+  downloadReportsCsv = async () => {
+    var searchData = {
+      start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
+      user_ids:
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails
+              .map(member => member.member_id)
+              .join(",")
+          : this.state.userId,
+      frequency: this.returnFrequency()
+    };
+    if (this.props.searchProjectIds.length > 0) {
+      searchData["project_ids"] = this.props.searchProjectIds.join(",");
+    }
+    if (this.state.selectedCategory) {
+      searchData["category_ids"] = this.state.selectedCategory.task_category_id;
+    }
+    if (this.state.selectedPriority) {
+      searchData["priorities"] = this.state.selectedPriority.name;
+    }
+    try {
+      this.setState({ isLoading: true });
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/csv_download`,
+        searchData
+      );
+      let csvUrl = data.csv_url;
+      var link = document.createElement("a");
+      link.download = "csv download";
+      link.href = csvUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      link.remove();
+      this.setState({ isLoading: false });
+    } catch (e) {
+      toast(<DailyPloyToast message="something went wrong" status="error" />, {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_CENTER
+      });
+      let self = this;
+      setTimeout(function() {
+        self.setState({ isLoading: false });
+      }, 2000);
+    }
+  };
+
   render() {
     const Daily = props => {
       return (
@@ -1033,9 +1084,20 @@ class Reports extends Component {
                 </div>
                 <div className="report-download">
                   <button
-                    className="btn btn-sm btn-default"
-                    onClick={this.showTaskModal}
+                    className={`btn btn-sm btn-default ${
+                      this.state.isLoading ? "disabled" : ""
+                    }`}
+                    onClick={() => this.downloadReportsCsv()}
                   >
+                    {this.state.isLoading ? (
+                      <Loader
+                        type="Oval"
+                        color="#1f8354"
+                        height={20}
+                        width={20}
+                        className="d-inline-block csv-loader"
+                      />
+                    ) : null}
                     <i className="fas fa-download right-left-space-5"></i>
                     Download
                   </button>
