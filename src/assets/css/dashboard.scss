@@ -783,6 +783,16 @@
           // margin-left: 7% !important;
         }
       }
+      .task-add-category{
+        padding: 5px;
+        border-top: solid 1px #e5e5e5;
+        width: 100%;
+        .add-category{
+          color: $color-brand4;
+          cursor: pointer;
+          padding-left: 10px;
+        }
+      }
     }
     .action-btn{
       padding: 20px 15px 0px 31px;

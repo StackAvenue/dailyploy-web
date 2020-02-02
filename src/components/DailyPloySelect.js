@@ -66,7 +66,7 @@ class DailyPloySelect extends Component {
                   return (
                     <li key={idx} onClick={() => this.selectSuggestion(option)}>
                       {icon !== "" && klass === "" ? (
-                        <i className={`left-padding-20px ${icon}`}></i>
+                        <i className={`left-padding-10px ${icon}`}></i>
                       ) : (
                         <div
                           className={`d-inline-block ${klass}`}
@@ -81,19 +81,39 @@ class DailyPloySelect extends Component {
                   return (
                     <li key={idx} onClick={() => this.selectSuggestion(option)}>
                       {icon !== "" ? (
-                        <i className={`left-padding-20px ${icon}`}></i>
+                        <i className={`left-padding-10px ${icon}`}></i>
                       ) : null}
                       <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
                     </li>
                   );
                 })}
           </ul>
-        ) : null}
-        <span
-          className={`text-titlize left-padding-20px  ${this.state.notFound}`}
-        >
-          No Match Found
-        </span>
+        ) : (
+          <>
+            <span
+              className={`text-titlize left-padding-10px  ${this.state.notFound}`}
+              style={{ padding: "5px" }}
+            >
+              No Match Found
+            </span>
+            {this.props.canAdd ? (
+              <span className="d-inline-block task-add-category left-padding-10px">
+                <span>
+                  <i className="fa fa-bars d-inline-block"></i>
+                </span>
+                <span className="left-padding-20px d-inline-block text-titlize">
+                  {this.state.searchText}
+                </span>
+                <span
+                  className="add-category d-inline-block"
+                  onClick={() => this.props.addNew(this.state.searchText)}
+                >
+                  (+ Add New)
+                </span>
+              </span>
+            ) : null}
+          </>
+        )}
       </>
     );
   };
@@ -270,5 +290,7 @@ export default onClickOutside(DailyPloySelect);
   name="taskName"
   icon="fa fa-user"
   onChange={() => { }}
+  canAdd={true}
+  addNew={() => {}}
 /> */
 }

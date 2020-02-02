@@ -1309,6 +1309,48 @@ class Dashboard extends Component {
     this.updateTask({ task: data }, taskId, event.projectId);
   };
 
+  addCategory = async categoryName => {
+    if (categoryName != "") {
+      try {
+        const { data } = await post(
+          { name: categoryName },
+          `workspaces/${this.state.workspaceId}/task_category`
+        );
+        var taskCategory = data;
+        toast(<DailyPloyToast message="Category Added" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        });
+        var newTaskCategories = [...this.state.taskCategories, taskCategory];
+        this.setState({
+          taskCategories: newTaskCategories,
+          taskCategorie: taskCategory
+        });
+      } catch (e) {
+        if (e.response && e.response.status === 400) {
+          if (
+            e.response.data &&
+            e.response.data.errors &&
+            e.response.data.errors.workspace_task_category_uniqueness
+          ) {
+            toast(
+              <DailyPloyToast
+                message={
+                  e.response.data.errors.workspace_task_category_uniqueness
+                }
+                status="error"
+              />,
+              {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_CENTER
+              }
+            );
+          }
+        }
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -1366,6 +1408,7 @@ class Dashboard extends Component {
             confirmModal={this.confirmModal}
             handleCategoryChange={this.handleCategoryChange}
             handlePrioritiesChange={this.handlePrioritiesChange}
+            addCategory={this.addCategory}
           />
 
           <TaskInfoModal

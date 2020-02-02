@@ -155,6 +155,8 @@ class AddTaskModal extends Component {
                     className="suggestion-z-index-50"
                     default={this.props.state.taskCategorie}
                     onChange={this.props.handleCategoryChange}
+                    canAdd={true}
+                    addNew={this.props.addCategory}
                   />
                 </div>
                 {this.props.state.errors.categoryError ? (
