@@ -1,20 +1,17 @@
 import React, { Component } from "react";
 import cookie from "react-cookies";
-import Select from "react-select";
 import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
-import ReactTags from "react-tag-autocomplete";
 import logo from "../../assets/images/logo.png";
 import setting from "../../assets/images/setting.png";
-import invite from "../../assets/images/invite.png";
 import "../../assets/css/dashboard.scss";
 import { get } from "../../utils/API";
+import { firstTwoLetter } from "../../utils/function";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
-import Search from "../../assets/images/search.png";
-import SearchImg from "../../assets/images/search.png";
 import { WORKSPACE_ID } from "./../../utils/Constants";
+import SearchFilter from "./../dashboard/SearchFilter";
 
 class Header extends Component {
   constructor(props) {
@@ -27,10 +24,7 @@ class Header extends Component {
       userEmail: "",
       userRole: "",
       userId: "",
-      value: "",
-      suggestions: [],
-      selectedTags: [],
-      selectedMember: null
+      searchFlag: "My Reports"
     };
   }
 
@@ -57,24 +51,6 @@ class Header extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedTags !== this.state.selectedTags) {
-      this.props.handleSearchFilterResult(this.state.selectedTags);
-    }
-    // if (
-    //   prevProps.searchOptions !== this.props.searchOptions &&
-    //   this.props.pathname === "reports"
-    // ) {
-    //   var members = this.props.searchOptions.filter(
-    //     option => option.email === this.state.userEmail
-    //   );
-    //   if (members) {
-    //     this.setState({
-    //       selectedTags: members,
-    //       selectedMember: members[0]
-    //     });
-    //   }
-    // }
-
     if (
       this.props.workspaceId !== prevProps.workspaceId &&
       this.props.workspaceId !== undefined
@@ -95,143 +71,32 @@ class Header extends Component {
     this.clickClose.current.click();
   };
 
-  onSearchTextChange = e => {
-    const value = e.target.value;
-    let suggestions = [];
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      var searchOptions = this.props.searchOptions;
-      if (this.state.selectedMember && this.props.pathname == "reports") {
-        var searchOptions = searchOptions.filter(v => v.type != "member");
-      }
-      suggestions = searchOptions
-        .sort()
-        .filter(
-          v => regex.test(v.value) && !this.state.selectedTags.includes(v)
-        );
-    }
-    this.setState({ suggestions: suggestions, value: value });
-  };
-
-  selectSuggestion = option => {
-    var newSelectedTags = new Array(...this.state.selectedTags);
-    if (option.type === "member") {
-      var selectedMember = option;
-    }
-    newSelectedTags.push(option);
-    if (selectedMember) {
-      this.setState({
-        selectedTags: newSelectedTags,
-        selectedMember: selectedMember,
-        suggestions: [],
-        value: ""
-      });
-    } else {
-      this.setState({
-        selectedTags: newSelectedTags,
-        suggestions: [],
-        value: ""
-      });
-    }
-  };
-
-  removeSelectedTag = index => {
-    var selectedTags = this.state.selectedTags;
-    if (this.state.selectedMember) {
-      var selectedMemberTags = selectedTags.filter(
-        (item, i) => this.state.selectedMember.id === item.id && i === index
-      );
-    }
-    selectedTags = selectedTags.filter((item, i) => i !== index);
-    if (selectedMemberTags) {
-      this.setState({ selectedTags: selectedTags, selectedMember: null });
-    } else {
-      this.setState({ selectedTags: selectedTags });
-    }
-  };
-
-  renderSearchSuggestion = () => {
-    return (
-      <>
-        {this.state.suggestions ? (
-          <ul>
-            {this.state.suggestions.map((option, idx) => {
-              if (option.type == "member") {
-                return (
-                  <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                    <i className="fa fa-user"></i>
-                    <span className="right-left-space-5">{option.value}</span>
-                  </li>
-                );
-              } else {
-                return (
-                  <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                    <i className="fa fa-list-alt"></i>
-                    <span className="right-left-space-5">{option.value}</span>
-                  </li>
-                );
-              }
-            })}
-          </ul>
-        ) : null}
-      </>
-    );
-  };
-
-  renderSelectedTags = () => {
-    return (
-      <>
-        {this.state.selectedTags.map((option, index) => {
-          if (option.type == "member") {
-            return (
-              <div className={`search-icon-${option.type}`} key={index}>
-                <i className="fa fa-user right-left-space-5"></i>
-                <span className="right-left-space-5">{option.value}</span>
-                <a
-                  className="remove-tag right-left-space-5"
-                  onClick={() => this.removeSelectedTag(index)}
-                >
-                  <i className="fa fa-close"></i>
-                </a>
-              </div>
-            );
-          } else {
-            return (
-              <div className={`search-icon-${option.type}`} key={index}>
-                <i className="fa fa-list-alt right-left-space-5"></i>
-                <span className="right-left-space-5">{option.value}</span>
-                <a
-                  className="remove-tag right-left-space-5"
-                  onClick={() => this.removeSelectedTag(index)}
-                >
-                  <i className="fa fa-close"></i>
-                </a>
-              </div>
-            );
-          }
-        })}
-      </>
-    );
-  };
-
   textTitlize = text => {
     return text.replace(/(?:^|\s)\S/g, function(a) {
       return a.toUpperCase();
     });
   };
 
+  isReports = () => {
+    let routeName = this.props.pathname;
+    if (routeName === "reports") {
+      return true;
+    }
+    return false;
+  };
+
+  toggleSearchBy = text => {
+    this.setState({
+      searchFlag: text
+    });
+  };
+
   render() {
-    const WORKSPACE_NAME = cookie.load("workspaceName");
-    const { value } = this.state;
-    const x = this.state.userName
-      .split(" ")
-      .splice(0, 2)
-      .map(x => x[0])
-      .join("");
+    const x = firstTwoLetter(this.props.loggedInUserName);
     return (
       <>
         <div className="container-fluid dashbaord-header-bg no-padding">
-          <div className="dashboard-container dashboard-header-container">
+          <div className="dashboard-container sticky-header dashboard-header-container">
             <nav className="navbar navbar-expand-lg navbar-light">
               <button
                 className="navbar-toggler"
@@ -252,47 +117,22 @@ class Header extends Component {
               </a>
               <div className="header-ws-name">
                 <span className="bar">|</span>
-                {WORKSPACE_NAME ? (
+                {this.props.workspaceName ? (
                   <span
                     className="text-titlize"
-                    title={this.textTitlize(WORKSPACE_NAME)}
+                    title={this.textTitlize(this.props.workspaceName)}
                   >
-                    {WORKSPACE_NAME}
+                    {this.props.workspaceName}
                   </span>
                 ) : null}
               </div>
-              <div className="col-md-7 no-padding header-search-bar">
-                <div className="col-md-11 no-padding d-inline-block">
-                  <div className="user-project-search text-titlize">
-                    <div className="selected-tags">
-                      {this.renderSelectedTags()}
-                    </div>
-                    <input
-                      type="text"
-                      value={value}
-                      placeholder={
-                        this.state.selectedTags.length > 0
-                          ? ""
-                          : "Search by projects"
-                      }
-                      onChange={this.onSearchTextChange}
-                    />
-
-                    <div
-                      className={`suggestion-holder ${
-                        this.state.suggestions.length > 0
-                          ? "suggestion-holder-border"
-                          : null
-                      }`}
-                    >
-                      {this.renderSearchSuggestion()}
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-1 d-inline-block">
-                  <img alt={"search"} src={SearchImg} />
-                </div>
-              </div>
+              <SearchFilter
+                searchOptions={this.props.searchOptions}
+                state={this.state}
+                isReports={this.isReports()}
+                toggleSearchBy={this.toggleSearchBy}
+                handleSearchFilterResult={this.props.handleSearchFilterResult}
+              />
               <div
                 className="collapse navbar-collapse"
                 id="navbarTogglerDemo03"
@@ -378,7 +218,7 @@ class Header extends Component {
                       } `}
                       id="dropdown-basic"
                     >
-                      {x.toUpperCase()}
+                      {x}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
@@ -389,11 +229,12 @@ class Header extends Component {
                               : "member-circle"
                           } `}
                         >
-                          {x.toUpperCase()}
+                          {x}
                         </div>
                         <div className="workspace-name d-inline-block">
                           <span className="text-titlize big">
-                            {this.state.userName}
+                            {/* {this.state.userName} */}
+                            {this.props.loggedInUserName}
                           </span>
                           <br />
                           <span>{this.state.userEmail}</span>
@@ -433,7 +274,8 @@ class Header extends Component {
                       </Dropdown.Item>
                       <div className="col-md-12 logout-user">
                         <span className="text-titlize">
-                          Not {this.state.userName} ?{" "}
+                          {/* Not {this.state.userName} ?{" "} */}
+                          Not {this.props.loggedInUserName} ?{" "}
                           <button
                             className="btn btn-link"
                             onClick={this.props.logout}

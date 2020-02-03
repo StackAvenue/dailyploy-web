@@ -53,7 +53,7 @@ class ReportTable extends Component {
     return this.props.state.selectedDays.map((date, index) => {
       var date = moment(date).format(DATE_FORMAT1);
       var tasks =
-        this.props.taskDetails[date] !== undefined
+        this.props.taskDetails && this.props.taskDetails[date] !== undefined
           ? this.props.taskDetails[date]
           : [];
       return (

@@ -14,16 +14,16 @@ import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 
 class Calendar extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
-    this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
       false,
       false,
       {
-        schedulerWidth: "96%",
+        schedulerWidth: "96.1%",
         besidesWidth: 20,
         schedulerMaxHeight: 0,
         tableHeaderHeight: 34,
@@ -33,7 +33,7 @@ class Calendar extends Component {
         agendaMaxEventWidth: 153,
 
         dayResourceTableWidth: 218,
-        weekResourceTableWidth: 140,
+        weekResourceTableWidth: 218,
         // weekResourceTableWidth: "16%",
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
@@ -58,7 +58,7 @@ class Calendar extends Component {
         selectedAreaColor: "#7EC2F3",
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
-        nonWorkingTimeBodyBgColor: "#e5e5e54f",
+        nonWorkingTimeBodyBgColor: "#ededed",
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
 
@@ -66,7 +66,7 @@ class Calendar extends Component {
         endResizable: true,
         movable: true,
         creatable: true,
-        crossResourceMove: true,
+        crossResourceMove: false,
         checkConflict: false,
         scrollToSpecialMomentEnabled: true,
         eventItemPopoverEnabled: false,
@@ -124,7 +124,9 @@ class Calendar extends Component {
   }
 
   calculateResouceHeight = () => {
-    let resourcesLength = this.props.resources.length;
+    let resourcesLength = this.props.resources
+      ? this.props.resources.length
+      : 0;
     let sceenHeight = window.screen.height;
     let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 30) / 10;
     let heights = new Map();
@@ -139,14 +141,16 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      // return 50;
       return 85;
     }
     return height;
   };
 
   async componentDidMount() {
+    this._isMounted = true;
     this.renderData();
+    var cal = document.querySelector(".dashboard-calender");
+    cal.getElementsByTagName("input")[0].setAttribute("readonly", "readonly");
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -155,6 +159,10 @@ class Calendar extends Component {
       prevProps.resources !== this.props.resources
     ) {
       this.renderData();
+    }
+    if (prevProps.state.taskFrequency != this.props.state.taskFrequency) {
+      var cal = document.querySelector(".dashboard-calender");
+      cal.getElementsByTagName("input")[0].setAttribute("readonly", "readonly");
     }
   }
 
@@ -197,6 +205,10 @@ class Calendar extends Component {
     );
   };
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
     const { viewModel } = this.state;
     this.renderData();
@@ -208,7 +220,7 @@ class Calendar extends Component {
 
     return (
       <div>
-        <div>
+        <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
           <Scheduler
             schedulerData={viewModel}
             prevClick={this.prevClick}
@@ -257,24 +269,26 @@ class Calendar extends Component {
     var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
     if (schedulerData.viewType !== 2) {
       return (
-        <div className="event-task-hover">
-          <div className="title">
-            <span className="" title={title}>
-              {title}
-            </span>
-          </div>
-          <div className="project">
-            <div
-              className="status-dot d-inline-block"
-              style={{ backgroundColor: `${eventItem.bgColor}` }}
-            ></div>
-            <div className="d-inline-block">{eventItem.projectName}</div>
-          </div>
-          <div className="time">
-            <div className="d-inline-block">
-              {start.format("HH:mm")}-{end.format("HH:mm")}
+        <div className="custom-event-popup">
+          <div className="event-task-hover">
+            <div className="title">
+              <span className="" title={title}>
+                {title}
+              </span>
             </div>
-            <div className="d-inline-block pull-right">{timeDiff}</div>
+            <div className="project">
+              <div
+                className="status-dot d-inline-block"
+                style={{ backgroundColor: `${eventItem.bgColor}` }}
+              ></div>
+              <div className="d-inline-block">{eventItem.projectName}</div>
+            </div>
+            <div className="time">
+              <div className="d-inline-block">
+                {start.format("HH:mm")}-{end.format("HH:mm")}
+              </div>
+              <div className="d-inline-block pull-right">{timeDiff}</div>
+            </div>
           </div>
         </div>
       );
@@ -379,36 +393,27 @@ class Calendar extends Component {
   };
 
   updateEventStart = (schedulerData, event, newStart) => {
-    if (
-      window.confirm(
-        `Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`
-      )
-    ) {
-      schedulerData.updateEventStart(event, newStart);
-    }
     this.setState({
       viewModel: schedulerData
     });
+    this.props.updateTaskEvent(event, { start_datetime: newStart });
   };
 
   updateEventEnd = (schedulerData, event, newEnd) => {
-    if (
-      window.confirm(
-        `Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`
-      )
-    ) {
-      schedulerData.updateEventEnd(event, newEnd);
-    }
     this.setState({
       viewModel: schedulerData
     });
+    this.props.updateTaskEvent(event, { end_datetime: newEnd });
   };
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    console.log(schedulerData, event, slotId, slotName, start, end);
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     this.setState({
       viewModel: schedulerData
+    });
+    this.props.updateTaskEvent(event, {
+      start_datetime: start,
+      end_datetime: end
     });
   };
 
@@ -488,7 +493,6 @@ class Calendar extends Component {
           divStyle={divStyle}
           scheduler={this.schedulerData}
           hideOverPopup={this.hideOverPopup}
-          times={this.times}
           workspaceId={this.props.workspaceId}
           handleTaskBottomPopup={this.props.handleTaskBottomPopup}
           onGoingTask={this.props.onGoingTask}
@@ -497,6 +501,9 @@ class Calendar extends Component {
           }
           userId={this.props.state.userId}
           taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+          handleTaskTracking={this.props.handleTaskTracking}
+          state={this.props.state}
+          handleTaskStartTop={this.props.handleTaskStartTop}
         />
       </>
     );

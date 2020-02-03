@@ -8,15 +8,17 @@ import Analysis from "./components/dashboard/Analysis";
 import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
-import { get, logout } from "./utils/API";
+import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
+import MenuBar from "./components/dashboard/MenuBar";
 import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
 import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
-import { WORKSPACE_ID } from "./utils/Constants";
+import { WORKSPACE_ID, DATE_FORMAT1, HHMMSS } from "./utils/Constants";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { workspaceNameSplit } from "./utils/function";
+import moment from "moment";
 
 class Workspace extends Component {
   constructor(props) {
@@ -76,25 +78,27 @@ class Workspace extends Component {
       colorCode: "",
       taskId: "",
       taskTitle: "",
+      icon: "",
       showPopup: false,
       runningTime: 0,
       isStart: false,
       onGoingTask: false,
-      isLoading: false
+      isLoading: false,
+      workspaceName: "",
+      loggedInUserName: "",
+      timeTracked: [],
+      event: null
     };
   }
 
   async componentDidMount() {
     //Logged In User
-    var userData = cookie.load("loggedInUser");
-    if (!userData) {
-      try {
-        const { data } = await get("logged_in_user");
-        var userData = data;
-        cookie.save("loggedInUser", data);
-      } catch (e) {
-        console.log("err", e);
-      }
+    try {
+      const { data } = await get("logged_in_user");
+      cookie.save("loggedInUser", data);
+      var userData = data;
+    } catch (e) {
+      console.log("err", e);
     }
 
     var workspaceId = this.props.match.params.workspaceId;
@@ -114,23 +118,25 @@ class Workspace extends Component {
       console.log("err", e);
     }
 
-    var startOn = localStorage.getItem(`startOn-${workspaceId}`);
-    var taskId = localStorage.getItem(`taskId-${workspaceId}`);
-    var colorCode = localStorage.getItem(`colorCode-${workspaceId}`);
-    var taskTitle = localStorage.getItem(`taskTitle-${workspaceId}`);
-
     this.setState({
       workspaces: workspacesData,
       loggedInUserInfo: userData,
       isLoading: false,
-      startOn: startOn,
-      taskId: taskId,
-      colorCode: colorCode,
-      taskTitle: taskTitle,
       workspaceId: workspaceId,
-      isStart: taskTitle && startOn && taskId && colorCode
+      workspaceName:
+        workspace.length > 0 && workspace[0]
+          ? workspaceNameSplit(workspace[0].name)
+          : "",
+      loggedInUserName: userData.name
     });
   }
+
+  handleReset = () => {
+    localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
+    localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
+    localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
+    localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
+  };
 
   logout = async () => {
     await logout();
@@ -168,6 +174,10 @@ class Workspace extends Component {
     return route.split("/")[3];
   };
 
+  workspaceNameUpdate = (name, value) => {
+    this.setState({ [name]: value });
+  };
+
   isAllowed = (props, RouteComponent, title) => {
     var props1 = {
       setSearchOptions: this.setSearchOptions,
@@ -176,6 +186,7 @@ class Workspace extends Component {
       searchUserDetails: this.state.searchUserDetails,
       handleTaskBottomPopup: this.handleTaskBottomPopup,
       handleLoading: this.handleLoad,
+      workspaceNameUpdate: this.workspaceNameUpdate,
       state: this.state
     };
     var newProps = { ...props, ...props1 };
@@ -190,43 +201,43 @@ class Workspace extends Component {
     return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
   };
 
-  handleTaskBottomPopup = startOn => {
-    var startOn = localStorage.getItem(`startOn-${this.state.workspaceId}`);
-    var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
-    var colorCode = localStorage.getItem(`colorCode-${this.state.workspaceId}`);
-    var taskTitle = localStorage.getItem(`taskTitle-${this.state.workspaceId}`);
-
-    this.setState({
-      startOn: startOn,
-      taskId: taskId,
-      colorCode: colorCode,
-      taskTitle: taskTitle,
-      isStart: taskTitle && startOn && taskId && colorCode
-    });
+  handleTaskBottomPopup = (startOn, event, trackStatus) => {
+    if (trackStatus === "start") {
+      this.setState({
+        event: event
+      });
+    } else if (trackStatus === "stop") {
+      this.setState({
+        event: null
+      });
+    }
   };
 
   isBottomPopup = () => {
     return (
-      this.state.taskTitle &&
-      this.state.startOn &&
-      this.state.taskId &&
-      this.state.colorCode
+      this.state.taskTitle != "" &&
+      this.state.startOn != "" &&
+      this.state.taskId != "" &&
+      this.state.colorCode != ""
     );
   };
 
-  stopOnGoingTask = () => {
-    if (this.state.isStart) {
-      localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
-      localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
-      localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
-      localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
-
+  stopOnGoingTask = async () => {
+    if (this.state.event) {
+      // let d = moment(this.state.event.start).format(DATE_FORMAT1);
+      // let t = moment().format(HHMMSS);
+      // let newDateTime = moment(d + " " + t);
+      var taskDate = {
+        end_time: new Date(),
+        status: "stopped"
+      };
+      var taskId = this.state.event.id.split("-")[0];
+      try {
+        const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+      } catch (e) {}
+      this.handleReset();
       this.setState({
-        startOn: "",
-        taskId: "",
-        colorCode: "",
-        taskTitle: "",
-        isStart: false
+        event: null
       });
     }
   };
@@ -239,6 +250,7 @@ class Workspace extends Component {
           <Sidebar
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
+            workspaceName={this.state.workspaceName}
           />
           <div className="dashboard-main no-padding">
             <Header
@@ -248,8 +260,11 @@ class Workspace extends Component {
               userData={this.state.loggedInUserInfo}
               searchOptions={this.state.searchOptions}
               pathname={this.classNameRoute()}
+              workspaceName={this.state.workspaceName}
+              loggedInUserName={this.state.loggedInUserName}
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
+
             {this.state.isLoading ? (
               <Loader
                 type="Oval"
@@ -274,15 +289,13 @@ class Workspace extends Component {
             </Switch>
           </div>
         </div>
-        {this.state.isStart ? (
-          <TaskBottomPopup
-            bgColor={this.state.colorCode}
-            taskTitle={this.state.taskTitle}
-            taskId={this.state.taskId}
-            startOn={this.state.startOn}
-            isStart={this.state.isStart}
-            stopOnGoingTask={this.stopOnGoingTask}
-          />
+        {this.state.event ? (
+          <>
+            <TaskBottomPopup
+              event={this.state.event}
+              stopOnGoingTask={this.stopOnGoingTask}
+            />
+          </>
         ) : null}
       </div>
     );

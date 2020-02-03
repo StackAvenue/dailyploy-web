@@ -24,22 +24,6 @@ class Sidebar extends Component {
     });
   };
 
-  nameSplit = name => {
-    let nameArr = name;
-    let nameSplit = nameArr.split(" ").slice(2);
-    return nameSplit.join(" ");
-  };
-
-  nameFirstLetters = name => {
-    let nameArr = this.nameSplit(name);
-    let splitName = nameArr
-      .split(" ")
-      .slice(0, 2)
-      .map(x => x[0])
-      .join("");
-    return splitName.toUpperCase();
-  };
-
   render() {
     let workspacesArr = this.props.workspaces;
     let divideArr = workspacesArr.map(item => item);
@@ -52,9 +36,8 @@ class Sidebar extends Component {
                 item={item}
                 index={index}
                 key={index}
-                nameFirstLetters={this.nameFirstLetters}
-                nameSplit={this.nameSplit}
                 workspaceId={this.props.workspaceId}
+                workspaceName={this.props.workspaceName}
               />
             ))}
             <li>

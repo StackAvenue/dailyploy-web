@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { DATE_FORMAT1, DATE_FORMAT3, MONTH_FORMAT } from "./../utils/Constants";
+import {
+  DATE_FORMAT1,
+  DATE_FORMAT3,
+  DATE_FORMAT4,
+  DATE_FORMAT5,
+  YEAR,
+  MONTH_FORMAT
+} from "./../utils/Constants";
 import moment from "moment";
 
 class DailyPloyDatePicker extends Component {
@@ -26,9 +33,9 @@ class DailyPloyDatePicker extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.pickerType != this.props.pickerType) {
       if (this.props.pickerType == "0") {
-        this.handleDateFrom(this.state.dateFrom);
+        this.handleDateFrom(new Date());
       } else if (this.props.pickerType == "1") {
-        this.handleWeekDayChange(this.state.dateFrom);
+        this.handleWeekDayChange(new Date());
       }
     }
   };
@@ -43,9 +50,11 @@ class DailyPloyDatePicker extends Component {
       dateTo: weekdays[weekdays.length - 1],
       weekNumber: week,
       displayWeek:
-        moment(weekdays[0]).format(DATE_FORMAT3) +
+        moment(weekdays[0]).format(YEAR) +
+        "  |  " +
+        moment(weekdays[0]).format(DATE_FORMAT5) +
         " - " +
-        moment(weekdays[6]).format(fm) +
+        moment(weekdays[6]).format(DATE_FORMAT5) +
         " (Week " +
         week +
         ")"
@@ -95,11 +104,17 @@ class DailyPloyDatePicker extends Component {
   };
 
   handleDateFrom = date => {
+    var dateText =
+      moment(date)
+        .format("ddd")
+        .toUpperCase() +
+      " | " +
+      moment(date).format(DATE_FORMAT4);
     this.setState({
       dateFrom: date,
       dateTo: date,
       displayWeek: "",
-      displayWeek: moment(date).format(DATE_FORMAT3),
+      displayWeek: dateText,
       selectedDays: [new Date(date)]
     });
     this.props.onSelectDate(this.props.schedulerData, date);
@@ -141,7 +156,12 @@ class DailyPloyDatePicker extends Component {
       this.setState({
         dateFrom: new Date(prevDate),
         dateTo: new Date(prevDate),
-        displayWeek: moment(prevDate).format(DATE_FORMAT3),
+        displayWeek:
+          moment(prevDate)
+            .format("ddd")
+            .toUpperCase() +
+          " | " +
+          moment(prevDate).format(DATE_FORMAT4),
         selectedDays: [new Date(prevDate)]
       });
       this.props.onSelectDate(this.props.schedulerData, prevDate);
@@ -158,9 +178,11 @@ class DailyPloyDatePicker extends Component {
         weekNumber: weekNumber,
         selectedDays: this.getWeekDays(new Date(weekStart)),
         displayWeek:
-          moment(weekStart).format(DATE_FORMAT3) +
+          moment(weekStart).format(YEAR) +
+          "  |  " +
+          moment(weekStart).format(DATE_FORMAT5) +
           " - " +
-          moment(weekEnd).format(format) +
+          moment(weekEnd).format(DATE_FORMAT5) +
           " (Week " +
           weekNumber +
           ")"
@@ -194,7 +216,12 @@ class DailyPloyDatePicker extends Component {
       this.setState({
         dateFrom: new Date(nextDate),
         dateTo: new Date(nextDate),
-        displayWeek: moment(nextDate).format(DATE_FORMAT3),
+        displayWeek:
+          moment(nextDate)
+            .format("ddd")
+            .toUpperCase() +
+          " | " +
+          moment(nextDate).format(DATE_FORMAT4),
         selectedDays: [new Date(nextDate)]
       });
       this.props.onSelectDate(this.props.schedulerData, nextDate);
@@ -211,9 +238,11 @@ class DailyPloyDatePicker extends Component {
         weekNumber: weekNumber,
         selectedDays: this.getWeekDays(new Date(weekStart)),
         displayWeek:
-          moment(weekStart).format(DATE_FORMAT3) +
+          moment(weekStart).format(YEAR) +
+          "  |  " +
+          moment(weekStart).format(DATE_FORMAT5) +
           " - " +
-          moment(weekEnd).format(format) +
+          moment(weekEnd).format(DATE_FORMAT5) +
           " (Week " +
           weekNumber +
           ")"
@@ -261,7 +290,8 @@ class DailyPloyDatePicker extends Component {
             selected={this.state.dateFrom}
             onChange={this.handleDateFrom}
             startDate={this.state.dateFrom}
-            dateFormat={this.dayFormat}
+            // dateFormat={this.dayFormat}
+            value={this.state.displayWeek}
           />
           {this.next()}
         </>
@@ -270,15 +300,17 @@ class DailyPloyDatePicker extends Component {
       return (
         <>
           {this.previous()}
-          <DatePicker
-            showWeekNumbers
-            onChange={this.handleWeekDayChange}
-            startDate={this.state.selectedDays[0]}
-            endDate={this.state.selectedDays[6]}
-            onWeekSelect={this.handleWeekClick}
-            value={this.state.displayWeek}
-            selected={this.state.dateFrom}
-          />
+          <div className="week-hover-bg d-inline-block">
+            <DatePicker
+              showWeekNumbers
+              onChange={this.handleWeekDayChange}
+              startDate={this.state.selectedDays[0]}
+              endDate={this.state.selectedDays[6]}
+              onWeekSelect={this.handleWeekClick}
+              value={this.state.displayWeek}
+              selected={this.state.dateFrom}
+            />
+          </div>
           {this.next()}
         </>
       );

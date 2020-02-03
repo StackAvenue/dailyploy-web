@@ -59,6 +59,7 @@
 
 textarea:hover,
 input:hover,
+select:focus,
 textarea:active,
 input:active,
 textarea:focus,
@@ -70,6 +71,6 @@ label:focus,
 .btn:active,
 .btn.active {
   outline: 0px !important;
-  -webkit-appearance: none;
+  /* -webkit-appearance: none;  */
   box-shadow: none !important;
 }

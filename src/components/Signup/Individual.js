@@ -62,15 +62,18 @@ const Individual = props => {
             )}
           </div>
           <div className="form-group">
-            <label>Password</label>
+            <label>
+              Password
+              <i className="fa fa-info-circle tooltip d-inline-block">
+                <span className="tooltiptext">
+                  Min 8 characters at least 1 number and 1 special character
+                </span>
+              </i>
+            </label>
             {props.state.errors.passwordError ? (
-              <span
-                className="error-warning text-wraping "
-                data-toggle="tooltip"
-                title="Min 8 characters at least 1 number and 1 special character"
-              >
+              <div className="d-inline-block info-icon error-warning text-wraping">
                 Must be Valid
-              </span>
+              </div>
             ) : null}
             {props.state.errors.passwordError ? (
               <input

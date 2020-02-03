@@ -4,9 +4,15 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
-import { post, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT2, HRMIN } from "./../../utils/Constants";
+import { put } from "../../utils/API";
+import {
+  DATE_FORMAT2,
+  HRMIN,
+  PRIORITIES_MAP,
+  DATE_FORMAT1
+} from "./../../utils/Constants";
 import TimePicker from "rc-time-picker";
+import EditableSelect from "./../EditableSelect";
 
 class TaskConfirm extends Component {
   constructor(props) {
@@ -22,7 +28,8 @@ class TaskConfirm extends Component {
       icon: "play",
       startOn: "",
       status: false,
-      color: "#ffffff"
+      color: "#ffffff",
+      selected: ""
     };
   }
 
@@ -40,19 +47,25 @@ class TaskConfirm extends Component {
               }`
             }}
           ></div>
-          <div className="right-left-space-5 d-inline-block">{option.name}</div>
+          <div className="right-left-space-5 d-inline-block task-name">
+            {option.name}
+          </div>
         </div>
       );
     }
     return "";
   };
 
-  renderInfoPriority = (option, type) => {
+  renderInfoPriority = (priority, type) => {
+    var option = PRIORITIES_MAP.get(priority);
     if (option) {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
-        <div className="d-inline-block pull-right pri-info">
+        <div
+          className="d-inline-block pull-right pri-info"
+          style={{ paddingRight: "10px" }}
+        >
           <div
             className={`d-inline-block ${klass}`}
             style={{
@@ -61,15 +74,78 @@ class TaskConfirm extends Component {
               }`
             }}
           ></div>
-          <div className=" d-inline-block priority">{option.name}</div>
+          <div className=" d-inline-block priority-dot">{option.label}</div>
         </div>
       );
     }
     return "";
   };
 
+  disabledHours = () => {
+    var timeMoment = this.props.state.logTimeFrom;
+    if (timeMoment) {
+      let time = timeMoment.format(HRMIN);
+      var hr = time.split(":")[0];
+      hr = Number(hr);
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
+      return hoursArr;
+    }
+    return [];
+  };
+
+  disabledMinutes = () => {
+    var timeMoment = this.props.state.logTimeFrom;
+    if (timeMoment) {
+      let time = timeMoment.format(HRMIN);
+      var min = time.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    }
+    return [];
+  };
+
+  selectedOption = option => {
+    this.setState({ selected: option });
+  };
+
+  returnTime = time => {
+    return {
+      id: time.id,
+      name: `${moment(time.start_time).format("HH:mm")} - ${moment(
+        time.end_time
+      ).format("HH:mm")}`,
+      start: time.start_time,
+      end: time.end_time
+    };
+  };
+
+  saveInputEditable = async time => {
+    if (this.state.selected && this.state.selected.id != "" && time != "") {
+      let startOn = time.split("-")[0].trim();
+      let endOn = time.split("-")[1].trim();
+      let newTrack = {
+        start_time: new Date(
+          moment(this.state.selected.start).format(DATE_FORMAT1) + " " + startOn
+        ),
+        end_time: new Date(
+          moment(this.state.selected.end).format(DATE_FORMAT1) + " " + endOn
+        )
+      };
+      try {
+        const { data } = await put(
+          newTrack,
+          `tasks/${this.props.state.taskEvent.taskId}/edit_tracked_time/${this.state.selected.id}`
+        );
+      } catch (e) {}
+    }
+  };
+
   render() {
     const { props } = this;
+    const ligTimes = this.props.state.taskEvent.timeTracked.map((opt, idx) => {
+      return this.returnTime(opt);
+    });
     return (
       <>
         <Modal
@@ -106,17 +182,83 @@ class TaskConfirm extends Component {
               ) : null}
             </div>
 
-            {this.props.state.confirmModalText === "mark as completed" ? (
+            {this.props.state.confirmModalText === "mark as completed" &&
+            this.props.state.taskEvent.timeTracked.length == 0 ? (
               <div className="col-md-12 task-details log-timer no-padding">
-                <span className="d-inline-block">Log Time</span>
-                <div className="d-inline-block time-picker-container no-padding">
-                  <TimePicker
-                    value={this.props.state.timeDateTo}
-                    placeholder="Select"
-                    inputClassName=""
-                    showSecond={false}
-                    closeIcon={false}
-                    inputReadOnly={false}
+                <span className="col-md-2 d-inline-block no-padding">
+                  Log Time
+                </span>
+
+                <div className="col-md-5 d-inline-block">
+                  <span className="d-inline-block">From</span>
+                  <div className="d-inline-block time-picker-container no-padding">
+                    <TimePicker
+                      value={props.state.logTimeFrom}
+                      placeholder="Time"
+                      name="logTimeFrom"
+                      showSecond={false}
+                      onChange={props.handleLogTimeFrom}
+                      closeIcon={false}
+                      inputReadOnly={false}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4 d-inline-block no-padding">
+                  <span className="d-inline-block">To</span>
+                  <div className="d-inline-block time-picker-container no-padding">
+                    <TimePicker
+                      value={props.state.logTimeTo}
+                      placeholder="Time"
+                      name="logTimeTo"
+                      showSecond={false}
+                      onChange={props.handleLogTimeTo}
+                      closeIcon={false}
+                      inputReadOnly={false}
+                      disabledMinutes={this.disabledMinutes}
+                      disabledHours={this.disabledHours}
+                    />
+                  </div>
+                </div>
+
+                {this.props.state.logTimeFromError ||
+                this.props.state.logTimeToError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding"></div>
+                    <div className="col-md-5 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.logTimeFromError}
+                      </span>
+                    </div>
+                    <div className="col-md-4 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.logTimeToError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {this.props.state.confirmModalText === "mark as completed" &&
+            this.props.state.taskEvent.timeTracked.length > 0 ? (
+              <div className="col-md-12 task-details log-timer no-padding">
+                <span className="col-md-2 d-inline-block no-padding">
+                  Log Time
+                </span>
+                <div
+                  className="col-md-8 d-inline-block"
+                  style={{ paddingRight: "0px" }}
+                >
+                  <EditableSelect
+                    options={ligTimes}
+                    value={this.state.selected}
+                    getOptionValue={option => option.id}
+                    getOptionLabel={option => option.name}
+                    createOption={text => {
+                      return { id: 1, name: text };
+                    }}
+                    onChange={this.selectedOption}
+                    saveInputEditable={this.saveInputEditable}
                   />
                 </div>
               </div>
@@ -131,20 +273,20 @@ class TaskConfirm extends Component {
                   Name
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px d-inline-block">
+                  <span className="d-inline-block task-name">
                     {this.props.state.taskName}
                   </span>
-                  {this.props.state.icon === "play" ? (
+                  {this.props.state.taskEvent.status === "not_started" ? (
                     <div className="d-inline-block pull-right not-start-btn">
                       Not started
                     </div>
                   ) : null}
-                  {this.props.state.icon === "pause" ? (
+                  {this.props.state.taskEvent.status === "running" ? (
                     <div className="d-inline-block pull-right progress-btn">
                       In progress
                     </div>
                   ) : null}
-                  {this.props.state.icon === "check" ? (
+                  {this.props.state.taskEvent.status === "completed" ? (
                     <div className="d-inline-block pull-right complete-btn">
                       Completed
                     </div>
@@ -156,9 +298,12 @@ class TaskConfirm extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Project
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div className="col-md-10 d-inline-block no-padding">
                   {this.renderTaskInfo(this.props.state.project, "block")}
-                  {this.renderInfoPriority(this.priority, "circle")}
+                  {this.renderInfoPriority(
+                    this.props.state.taskEvent.priority,
+                    "circle"
+                  )}
                 </div>
               </div>
 
@@ -167,7 +312,9 @@ class TaskConfirm extends Component {
                   Category
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">{`Category 1`}</span>
+                  <span className="">
+                    {this.props.state.taskCategorie.name}
+                  </span>
                 </div>
               </div>
 
@@ -176,7 +323,7 @@ class TaskConfirm extends Component {
                   Date - Time
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px date-time">
+                  <span className=" date-time">
                     {`${moment(this.props.state.dateFrom).format(
                       DATE_FORMAT2
                     )} - 
@@ -191,7 +338,7 @@ class TaskConfirm extends Component {
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
-                  <p className="left-padding-20px comments">
+                  <p className=" comments">
                     {props.state.taskEvent.comments
                       ? props.state.taskEvent.comments
                       : "---"}

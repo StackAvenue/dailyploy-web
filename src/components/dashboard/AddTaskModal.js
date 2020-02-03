@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
+import { PRIORITIES } from "./../../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
@@ -11,42 +12,6 @@ import DailyPloySelect from "./../DailyPloySelect";
 class AddTaskModal extends Component {
   constructor(props) {
     super(props);
-    this.priorities = [
-      {
-        name: "high",
-        color_code: "#00A031"
-      },
-      {
-        name: "medium",
-        color_code: "#FF7F00"
-      },
-      {
-        name: "low",
-        color_code: "#9B9B9B"
-      }
-    ];
-    this.categories = [
-      {
-        name: "call",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "meeting",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 1",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 2",
-        color_code: "#9B9B9B"
-      },
-      {
-        name: "category 3",
-        color_code: "#9B9B9B"
-      }
-    ];
     this.state = {
       members: [],
       project: "",
@@ -59,16 +24,9 @@ class AddTaskModal extends Component {
       isBorder: false,
       border: "solid 1px #d1d1d1",
       notFound: "hide",
-      memberNotFound: "hide",
-      fromDateOpen: false,
-      toDateOpen: false
+      memberNotFound: "hide"
     };
   }
-
-  // initalChar = (str) => {
-  //   var matches = str.match(/\b(\w)/g);
-  //   return matches.join('').toUpperCase();
-  // }
 
   disabledHours = () => {
     var time = this.props.state.timeFrom;
@@ -82,25 +40,20 @@ class AddTaskModal extends Component {
   };
 
   disabledMinutes = () => {
-    var time = this.props.state.timeFrom;
-    if (time) {
-      var min = time.split(":")[1];
+    var fTime = this.props.state.timeFrom;
+    var tTime = this.props.state.timeTo;
+    if (fTime && !tTime) {
+      var min = fTime.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
+      var min = fTime.split(":")[1];
       min = Number(min) + 1;
       var minArr = Array.from({ length: `${min}` }, (v, k) => k);
       return minArr;
     }
     return [];
-  };
-
-  toggleDateFromPicker = () => {
-    this.setState({
-      fromDateOpen: !this.state.fromDateOpen,
-      toDateOpen: false
-    });
-  };
-
-  toggleDateToPicker = () => {
-    this.setState({ toDateOpen: !this.state.toDateOpen, fromDateOpen: false });
   };
 
   render() {
@@ -197,13 +150,25 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <DailyPloySelect
-                    options={this.categories}
+                    options={this.props.state.taskCategories}
                     placeholder="Select category"
-                    iconType="block"
                     className="suggestion-z-index-50"
-                    onChange={() => {}}
+                    default={this.props.state.taskCategorie}
+                    onChange={this.props.handleCategoryChange}
+                    canAdd={true}
+                    addNew={this.props.addCategory}
                   />
                 </div>
+                {this.props.state.errors.categoryError ? (
+                  <div className="col-md-12">
+                    <div className="col-md-2 d-inline-block no-padding"></div>
+                    <div className="col-md-10 d-inline-block no-padding">
+                      <span className="error-warning">
+                        {this.props.state.errors.categoryError}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="col-md-12 no-padding input-row">
@@ -212,11 +177,14 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <DailyPloySelect
-                    options={this.priorities}
+                    options={PRIORITIES}
                     placeholder="Select priority"
                     iconType="circle"
+                    default={this.props.state.taskPrioritie}
                     name="priorityName"
-                    onChange={() => {}}
+                    label="label"
+                    suggesionBy="label"
+                    onChange={this.props.handlePrioritiesChange}
                   />
                 </div>
               </div>
@@ -230,7 +198,6 @@ class AddTaskModal extends Component {
                     options={this.props.modalMemberSearchOptions}
                     placeholder="Select Member"
                     default={this.props.state.selectedMembers[0]}
-                    className=""
                     icon="fa fa-user"
                     onChange={this.props.handleMemberSelect}
                   />
@@ -253,38 +220,30 @@ class AddTaskModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block no-padding">
                   <div className="col-md-12 d-inline-block no-padding">
-                    <div
-                      className="col-md-6 d-inline-block date-picker-container no-padding"
-                      onClick={this.toggleDateFromPicker}
-                    >
-                      <div className="col-md-3 d-inline-block date-text-light">
+                    <div className="col-md-6 d-inline-block task-datepicker">
+                      <div className="d-inline-block label date-text-light">
                         <span>From:</span>
                       </div>
-                      <div className="col-md-9 d-inline-block">
+                      <div className="d-inline-block picker">
                         <DatePicker
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
-                          open={this.state.fromDateOpen}
                         />
                       </div>
                     </div>
-                    <div
-                      className="col-md-6 d-inline-block date-picker-container no-padding"
-                      onClick={this.toggleDateToPicker}
-                    >
-                      <div className="col-md-3 d-inline-block date-text-light ">
+                    <div className="col-md-6 d-inline-block task-datepicker">
+                      <div className="d-inline-block label date-text-light ">
                         <span>To:</span>
                       </div>
-                      <div className="col-md-9 d-inline-block">
+                      <div className="d-inline-block picker">
                         <DatePicker
                           minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
                           disabled={props.state.disabledDateTo}
-                          open={this.state.toDateOpen}
                         />
                       </div>
                     </div>
@@ -315,7 +274,7 @@ class AddTaskModal extends Component {
                 <div className="col-md-10 d-inline-block">
                   <div className="col-md-12 d-inline-block no-padding">
                     <div className="col-md-5 d-inline-block no-padding">
-                      <div className="col-md-3 no-padding d-inline-block">
+                      <div className="col-md-3 no-padding d-inline-block date-text-light">
                         <span>From:</span>
                       </div>
                       <div
@@ -333,7 +292,7 @@ class AddTaskModal extends Component {
                     </div>
                     <div className="col-md-1 d-inline-block no-padding">-</div>
                     <div className="col-md-5 d-inline-block no-padding">
-                      <div className="col-md-2 no-padding d-inline-block">
+                      <div className="col-md-2 no-padding d-inline-block date-text-light">
                         <span>To:</span>
                       </div>
                       <div
@@ -391,7 +350,11 @@ class AddTaskModal extends Component {
                   <button
                     type="button"
                     className="button3 btn-primary pull-right"
-                    onClick={this.props.backToTaskInfoModal}
+                    onClick={
+                      props.state.taskButton !== "Add"
+                        ? this.props.backToTaskInfoModal
+                        : this.props.closeTaskModal
+                    }
                   >
                     Cancel
                   </button>

@@ -16,13 +16,26 @@ export const firstTwoLetter = name => {
   return name
     ? name
         .split(" ")
+        .slice(0, 2)
         .map(x => x[0])
         .join("")
+        .toUpperCase()
     : null;
+};
+
+export const textTitlize = text => {
+  return text.replace(/(?:^|\s)\S/g, function(a) {
+    return a.toUpperCase();
+  });
 };
 
 export const workspaceNameSplit = name => {
   let nameArr = name;
-  let nameSplit = nameArr.split(" ").slice(2);
-  return nameSplit.join(" ");
+  let nameSplit = nameArr.split(" ");
+  return textTitlize(nameSplit.join(" "));
+};
+
+export const convertUTCToLocalDate = date => {
+  var date = new Date(date);
+  return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 };

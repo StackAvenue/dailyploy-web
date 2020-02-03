@@ -1,20 +1,29 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, post, put, logout, mockGet, mockPost } from "../utils/API";
+import { get, post, put, logout, del } from "../utils/API";
 import moment from "moment";
-import Header from "../components/dashboard/Header";
 import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 import { ToastContainer, toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
-import Sidebar from "../components/dashboard/Sidebar";
-import { getWeekFisrtDate, getFisrtDate } from "../utils/function";
+import {
+  getWeekFisrtDate,
+  getFisrtDate,
+  convertUTCToLocalDate
+} from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
-import { DATE_FORMAT1 } from "../utils/Constants";
+import {
+  PRIORITIES,
+  DEFAULT_PRIORITIE,
+  DATE_FORMAT1,
+  HRMIN,
+  HHMMSS
+} from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
+import { async } from "q";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -78,6 +87,10 @@ class Dashboard extends Component {
       icon: "play",
       startOn: "",
       status: false,
+      taskCategories: [],
+      timeTracked: [],
+      taskCategorie: "",
+      showAlert: false,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -85,8 +98,16 @@ class Dashboard extends Component {
         dateFromError: "",
         dateToError: "",
         timeFromError: "",
-        timeToError: ""
-      }
+        timeToError: "",
+        categoryError: ""
+      },
+      taskPrioritie: {
+        name: "no_priority",
+        color_code: "#9B9B9B",
+        label: "no priority"
+      },
+      showEventAlertId: "",
+      trackingEvent: null
     };
   }
 
@@ -111,11 +132,12 @@ class Dashboard extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (
-      prevState.taskStartDate !== this.state.taskStartDate ||
-      prevState.taskFrequency !== this.state.taskFrequency ||
-      prevState.newTask !== this.state.newTask ||
-      prevProps.searchProjectIds !== this.props.searchProjectIds ||
-      prevProps.searchUserDetails !== this.props.searchUserDetails
+      (prevState.taskStartDate !== this.state.taskStartDate ||
+        prevState.taskFrequency !== this.state.taskFrequency ||
+        prevState.newTask !== this.state.newTask ||
+        prevProps.searchProjectIds !== this.props.searchProjectIds ||
+        prevProps.searchUserDetails !== this.props.searchUserDetails) &&
+      this.state.workspaceId != ""
     ) {
       try {
         this.props.handleLoading(true);
@@ -124,19 +146,29 @@ class Dashboard extends Component {
             ? this.props.searchUserDetails.map(member => member.member_id)
             : [];
         var searchData = {
-          user_ids: JSON.stringify(userIds),
-          project_ids: JSON.stringify(this.props.searchProjectIds)
+          frequency: this.state.taskFrequency,
+          start_date: getFisrtDate(this.state.taskStartDate),
+          user_id: userIds.join(","),
+          project_ids: this.props.searchProjectIds.join(",")
         };
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
-            this.state.taskFrequency
-          }&start_date=${getFisrtDate(
-            this.state.taskStartDate,
-            this.viewType[this.state.taskFrequency]
-          )}`
+          `workspaces/${this.state.workspaceId}/user_tasks`,
+          searchData
         );
-
-        var tasksUser = data.users.map(user => {
+        var sortedUsers = data.users.sort((x, y) => {
+          return x.id === this.state.userId
+            ? -1
+            : y.id === this.state.userId
+            ? 1
+            : 0;
+        });
+        var taskRunningObj = {
+          status: this.state.status,
+          startOn: null,
+          taskId: ""
+        };
+        var trackingEvent = this.state.trackingEvent;
+        var tasksUser = sortedUsers.map(user => {
           var usersObj = {
             id: user.id,
             name:
@@ -154,17 +186,57 @@ class Dashboard extends Component {
                 moment(dateWiseTasks.date).format("YYYY-MM-DD") +
                 " " +
                 moment(task.end_datetime).format("HH:mm");
+              let newTaskId = task.id + "-" + dateWiseTasks.date;
               var tasksObj = {
-                id: task.id + "-" + index,
+                id: newTaskId,
+                taskId: task.id,
                 start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
                 end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
+                taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+                taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
                 resourceId: user.id,
                 title: task.name,
                 bgColor: task.project.color_code,
                 projectName: task.project.name,
                 comments: task.comments,
-                projectId: task.project.id
+                projectId: task.project.id,
+                timeTracked: task.time_tracked,
+                priority: task.priority,
+                status: task.status,
+                trackingStatus:
+                  task.status == "completed" ? "completed" : "play",
+                startOn: null
               };
+
+              if (
+                user.id == this.state.userId &&
+                task.time_tracked.length > 0
+              ) {
+                let runningTask = task.time_tracked.find(
+                  ttt => ttt.status == "running"
+                );
+                // let runningTask = runningTasks.find(
+                //   ttt =>
+                //     moment(ttt.start_time).format(DATE_FORMAT1) ==
+                //     dateWiseTasks.date
+                // );
+                if (runningTask) {
+                  var taskStartOn = new Date(runningTask.start_time).getTime();
+                  taskRunningObj = {
+                    status: true,
+                    startOn: taskStartOn,
+                    taskId: newTaskId
+                  };
+                  tasksObj["trackingStatus"] = "pause";
+                  tasksObj["startOn"] = taskStartOn;
+                  trackingEvent = tasksObj;
+                  this.props.handleTaskBottomPopup(
+                    taskStartOn,
+                    tasksObj,
+                    "start"
+                  );
+                }
+              }
               return tasksObj;
             });
             return task;
@@ -173,24 +245,41 @@ class Dashboard extends Component {
         });
         var tasksResources = tasksUser.map(user => user.usersObj);
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
-        // tasksResources.sort(function(x, y) {
-        //   return x.id === this.state.userId
-        //     ? -1
-        //     : y.id === this.state.userId
-        //     ? 1
-        //     : 0;
-        // });
         this.setState({
-          resources: tasksResources,
-          events: taskEvents
+          resources: tasksResources ? tasksResources : [],
+          events: taskEvents ? taskEvents : [],
+          status: taskRunningObj.status,
+          taskId: taskRunningObj.taskId,
+          startOn: taskRunningObj.startOn,
+          trackingEvent: trackingEvent
         });
         this.props.handleLoading(false);
+        let projects = [];
+        this.state.projects.forEach(project => {
+          let flag = true;
+          userIds.map(id => {
+            if (!project.members.map(m => m.id).includes(id)) {
+              flag = false;
+            }
+          });
+          if (flag) {
+            projects.push(project);
+          }
+        });
+        this.createUserProjectList(
+          projects.filter(
+            project => !this.props.searchProjectIds.includes(project.id)
+          ),
+          this.state.worksapceUsers.filter(
+            member => !userIds.includes(member.id)
+          )
+        );
       } catch (e) {}
     }
 
     if (prevState.timeFrom !== this.state.timeFrom) {
       var startDateTime = null;
-      if (this.state.timeFrom !== null) {
+      if (this.state.timeFrom) {
         startDateTime =
           moment().format("YYYY-MM-DD") + " " + this.state.timeFrom;
         startDateTime = moment(startDateTime);
@@ -206,10 +295,43 @@ class Dashboard extends Component {
       }
       this.setState({ timeDateTo: endDateTime });
     }
+
+    if (prevState.status != this.state.status && this.state.status) {
+      let event = this.state.events.find(e => e.id == this.state.taskId);
+      this.props.handleTaskBottomPopup(
+        this.state.startOn,
+        this.state.trackingEvent,
+        "start"
+      );
+    }
+
+    if (
+      prevProps.state.event != this.props.state.event &&
+      this.props.state.event == null &&
+      this.state.status
+    ) {
+      var events = this.state.events;
+      if (
+        prevProps.state.event &&
+        prevProps.state.event.id == this.state.taskId
+      ) {
+        let id = this.state.taskId.split("-")[0];
+        var filterEvents = events.filter(e => e.taskId == id);
+        filterEvents.forEach(event => {
+          event["trackingStatus"] = "play";
+          event["startOn"] = "";
+        });
+        this.setState({
+          status: false,
+          startOn: "",
+          taskId: "",
+          events: events
+        });
+      }
+    }
   }
 
   async componentDidMount() {
-    this.props.handleLoading(true);
     // Logged In User Info
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -230,14 +352,11 @@ class Dashboard extends Component {
     }
 
     //get workspace Id
-    this.getWorkspaceParams();
-    this.auth();
+    var workspaceId = this.props.match.params.workspaceId;
 
     // worksapce project Listing
     try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
-      );
+      const { data } = await get(`workspaces/${workspaceId}/projects`);
       var projectsData = data.projects;
     } catch (e) {
       console.log("err", e);
@@ -245,16 +364,14 @@ class Dashboard extends Component {
     // role api
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members/${loggedInData.id}`
+        `workspaces/${workspaceId}/members/${loggedInData.id}`
       );
       var user = data;
     } catch (e) {}
 
     // workspace Member Listing
     try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
-      );
+      const { data } = await get(`workspaces/${workspaceId}/members`);
       var worksapceUsers = data.members;
       var userArr = data.members.map(user => user);
       var emailArr = data.members.filter(
@@ -264,6 +381,13 @@ class Dashboard extends Component {
       console.log("users Error", e);
     }
 
+    // Category Listing
+    try {
+      const { data } = await get(`workspaces/${workspaceId}/task_category`);
+      var taskCategories = data.task_categories;
+    } catch (e) {}
+    this.props.handleLoading(true);
+
     // workspace Tasks Listing
     try {
       var userIds =
@@ -271,15 +395,27 @@ class Dashboard extends Component {
           ? this.props.searchUserDetails.map(member => member.member_id)
           : [];
       var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
+        frequency: this.state.taskFrequency,
+        start_date: getWeekFisrtDate(this.state.taskStartDate),
+        user_id: userIds.join(","),
+        project_ids: this.props.searchProjectIds.join(",")
       };
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/user_tasks?frequency=${
-          this.state.taskFrequency
-        }&start_date=${getWeekFisrtDate(this.state.taskStartDate)}`
+        `workspaces/${workspaceId}/user_tasks`,
+        searchData
       );
-      var tasksUser = data.users.map(user => {
+
+      var userId = loggedInData.id;
+      var sortedUsers = data.users.sort((x, y) => {
+        return x.id === userId ? -1 : y.id === userId ? 1 : 0;
+      });
+      var taskRunningObj = {
+        status: false,
+        startOn: null,
+        taskId: ""
+      };
+      var trackingEvent = null;
+      var tasksUser = sortedUsers.map(user => {
         var usersObj = {
           id: user.id,
           name:
@@ -288,24 +424,54 @@ class Dashboard extends Component {
         var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
           var task = dateWiseTasks.tasks.map(task => {
             var startDateTime =
-              moment(dateWiseTasks.date).format("YYYY-MM-DD") +
+              moment(dateWiseTasks.date).format(DATE_FORMAT1) +
               " " +
-              moment(task.start_datetime).format("HH:mm");
+              moment(new Date(task.start_datetime)).format("HH:mm");
             var endDateTime =
-              moment(dateWiseTasks.date).format("YYYY-MM-DD") +
+              moment(dateWiseTasks.date).format(DATE_FORMAT1) +
               " " +
-              moment(task.end_datetime).format("HH:mm");
+              moment(new Date(task.end_datetime)).format("HH:mm");
+            let newTaskId = task.id + "-" + dateWiseTasks.date;
             var tasksObj = {
-              id: task.id + "-" + index,
+              id: newTaskId,
+              taskId: task.id,
               start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
               end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
+              taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+              taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
               resourceId: user.id,
               title: task.name,
               bgColor: task.project.color_code,
               projectName: task.project.name,
               comments: task.comments,
-              projectId: task.project.id
+              projectId: task.project.id,
+              timeTracked: task.time_tracked,
+              priority: task.priority,
+              status: task.status,
+              trackingStatus: task.status == "completed" ? "completed" : "play",
+              startOn: null
             };
+            if (user.id == loggedInData.id && task.time_tracked.length > 0) {
+              let runningTask = task.time_tracked.find(
+                ttt => ttt.status == "running"
+              );
+              // let runningTask = runningTasks.find(
+              //   ttt =>
+              //     moment(ttt.start_time).format(DATE_FORMAT1) ==
+              //     dateWiseTasks.date
+              // );
+              if (runningTask) {
+                var taskStartOn = new Date(runningTask.start_time).getTime();
+                taskRunningObj = {
+                  status: true,
+                  startOn: taskStartOn,
+                  taskId: newTaskId
+                };
+                tasksObj["trackingStatus"] = "pause";
+                tasksObj["startOn"] = taskStartOn;
+                trackingEvent = tasksObj;
+              }
+            }
             return tasksObj;
           });
           return task;
@@ -326,36 +492,41 @@ class Dashboard extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
-      resources: tasksResources,
-      events: taskEvents,
+      resources: tasksResources ? tasksResources : [],
+      events: taskEvents ? taskEvents : [],
       user: user,
       selectedMembers: [loggedInData],
       taskUser: [loggedInData.id],
-      worksapceUsers: worksapceUsers
+      worksapceUsers: worksapceUsers,
+      taskCategories: taskCategories,
+      workspaceId: workspaceId,
+      status: taskRunningObj.status,
+      taskId: taskRunningObj.taskId,
+      startOn: taskRunningObj.startOn,
+      trackingEvent: trackingEvent
     });
-    this.createUserProjectList();
+    this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
     this.props.handleLoading(false);
   }
 
-  createUserProjectList = () => {
-    var searchOptions = [];
-    if (this.state.projects) {
-      this.state.projects.map((project, index) => {
-        searchOptions.push({
+  createUserProjectList = (projects, users) => {
+    let projectList = [];
+    let memberList = [];
+
+    if (projects) {
+      projects.map((project, index) => {
+        projectList.push({
           value: project.name,
           project_id: project.id,
-          type: "project",
-          id: (index += 1)
+          type: "project"
         });
       });
     }
 
-    var index = searchOptions.length;
-    if (this.state.worksapceUsers) {
-      this.state.worksapceUsers.map((member, idx) => {
-        searchOptions.push({
+    if (users) {
+      users.map((member, idx) => {
+        memberList.push({
           value: member.name,
-          id: (index += 1),
           member_id: member.id,
           email: member.email,
           type: "member",
@@ -363,6 +534,10 @@ class Dashboard extends Component {
         });
       });
     }
+    var searchOptions = {
+      members: memberList,
+      projects: projectList
+    };
     this.props.setSearchOptions(searchOptions);
   };
 
@@ -401,60 +576,73 @@ class Dashboard extends Component {
         this.setState({
           show: false,
           newTask: task,
-          border: "solid 1px #ffffff"
+          border: "solid 1px #ffffff",
+          taskName: "",
+          project: "",
+          taskCategorie: ""
         });
       } catch (e) {
         this.setState({ show: false, border: "solid 1px #ffffff" });
       }
+    }
+  };
+
+  updateTask = async (taskData, taskId, projectId) => {
+    try {
+      const { data } = await put(
+        taskData,
+        `workspaces/${this.state.workspaceId}/projects/${projectId}/tasks/${taskId}`
+      );
+      var task = data.task;
+      toast(
+        <DailyPloyToast
+          message="Task Updated successfully!"
+          status="success"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
+      this.setState({
+        show: false,
+        newTask: task,
+        taskConfirmModal: false,
+        backFromTaskEvent: true,
+        border: "solid 1px #ffffff"
+      });
+    } catch (e) {
+      this.setState({ show: false, border: "solid 1px #ffffff" });
     }
   };
 
   editTask = async () => {
     if (this.validateTaskModal()) {
       const taskData = this.taskDetails();
-      try {
-        const { data } = await put(
-          taskData,
-          `workspaces/${this.state.workspaceId}/projects/${this.state.editProjectId}/tasks/${this.state.taskId}`
-        );
-        var task = data.task;
-        toast(
-          <DailyPloyToast
-            message="Task Updated successfully!"
-            status="success"
-          />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-        );
-        this.setState({
-          show: false,
-          newTask: task,
-          border: "solid 1px #ffffff"
-        });
-      } catch (e) {
-        this.setState({ show: false, border: "solid 1px #ffffff" });
-      }
+      var taskId = this.state.taskId.split("-")[0];
+      this.updateTask(taskData, taskId, this.state.editProjectId);
     }
   };
 
   taskDetails = () => {
     var startDateTime =
       moment(this.state.dateFrom).format(DATE_FORMAT1) +
-      " " +
-      this.state.timeFrom;
+      (this.state.timeFrom ? " " + this.state.timeFrom : " 00:00:00");
     var endDateTime =
       moment(this.state.dateTo ? this.state.dateTo : new Date()).format(
         DATE_FORMAT1
-      ) +
-      " " +
-      this.state.timeTo;
+      ) + (this.state.timeTo ? " " + this.state.timeTo : " 00:00:00");
+
     var taskData = {
       task: {
         name: this.state.taskName,
         member_ids: this.state.taskUser,
-        start_datetime: new Date(startDateTime),
-        end_datetime: new Date(endDateTime),
+        start_datetime: startDateTime,
+        end_datetime: endDateTime,
         comments: this.state.comments,
-        project_id: this.state.project.id
+        project_id: this.state.project.id,
+        category_id: this.state.taskCategorie.task_category_id,
+        priority:
+          this.state.taskPrioritie && this.state.taskPrioritie.name
+            ? this.state.taskPrioritie.name
+            : "no_priority"
       }
     };
     return taskData;
@@ -506,7 +694,13 @@ class Dashboard extends Component {
       comments: "",
       border: "solid 1px #ffffff",
       taskEvent: "",
-      fromInfoEdit: false
+      fromInfoEdit: false,
+      timeTracked: [],
+      showAlert: false,
+      logTimeTo: null,
+      logTimeFrom: null,
+      taskPrioritie: DEFAULT_PRIORITIE,
+      taskCategorie: ""
     });
   };
 
@@ -536,7 +730,11 @@ class Dashboard extends Component {
     errors["timeFromError"] = "";
     this.setState({
       timeFrom: value != null ? value.format("HH:mm:ss") : null,
-      errors: errors
+      errors: errors,
+      timeTo:
+        value != null && value.format("HH:mm:ss") > this.state.timeTo
+          ? null
+          : this.state.timeTo
     });
   };
 
@@ -667,8 +865,10 @@ class Dashboard extends Component {
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
         border: "solid 1px #ffffff",
-        timeDateTo: null,
-        timeDateFrom: null,
+        timeDateTo: moment(),
+        timeDateFrom: moment(),
+        timeTo: moment().format("HH:mm"),
+        timeFrom: moment().format("HH:mm"),
         memberProjects: memberProjects
       });
     }
@@ -688,6 +888,9 @@ class Dashboard extends Component {
     errors["dateFromError"] = this.state.dateFrom
       ? ""
       : "please select date from";
+    errors["categoryError"] = this.state.taskCategorie
+      ? ""
+      : "please select category";
     if (!this.state.dateTo && this.state.dateFrom) {
       if (
         moment(this.state.dateFrom).format(DATE_FORMAT1) ===
@@ -699,20 +902,58 @@ class Dashboard extends Component {
         flag = false;
       }
     }
-    errors["timeFromError"] = this.state.timeFrom
-      ? ""
-      : "please select time from";
-    errors["timeToError"] = this.state.timeTo ? "" : "please select time to";
+    if (!this.state.timeTo && !this.state.timeFrom) {
+      errors["timeFromError"] = "";
+      errors["timeToError"] = "";
+    } else if (
+      (this.state.timeFrom != "" || this.state.timeFrom !== null) &&
+      (this.state.timeTo == "" || this.state.timeTo == null)
+    ) {
+      errors["timeToError"] = "please select time to";
+    } else if (
+      (this.state.timeFrom == "" || this.state.timeFrom == null) &&
+      (this.state.timeTo != "" || this.state.timeTo != null)
+    ) {
+      errors["timeFromError"] = "please select time from";
+    } else {
+      errors["timeFromError"] = "";
+      errors["timeToError"] = "";
+    }
     this.setState({ errors: errors });
     return (
       this.state.taskName &&
       this.state.projectId &&
       this.state.taskUser.length > 0 &&
-      this.state.timeTo &&
-      this.state.timeFrom &&
+      this.validateTime() &&
       this.state.dateFrom &&
+      this.state.taskCategorie &&
       flag
     );
+  };
+
+  validateTime = () => {
+    if (
+      (this.state.timeFrom != "" || this.state.timeFrom != null) &&
+      (this.state.timeTo == "" || this.state.timeTo == null)
+    ) {
+      return false;
+    } else if (
+      (this.state.timeFrom == "" || this.state.timeFrom == null) &&
+      (this.state.timeTo != "" || this.state.timeTo != null)
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  convertUTCDateToLocalDate = date => {
+    var newDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    );
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+    return newDate;
   };
 
   editAddTaskDetails = async (taskId, event) => {
@@ -726,26 +967,20 @@ class Dashboard extends Component {
     var eventTasks = this.state.events.filter(
       taskEvent => taskEvent.id === event.id
     );
-    // var memberIds = this.state.user.role === 'admin' ? eventTasks.map(filterEvent => filterEvent.resourceId) : [event.resourceId]
     var memberIds = eventTasks.map(filterEvent => filterEvent.resourceId);
     var selectedMembers = this.state.users.filter(member =>
       memberIds.includes(member.id)
     );
     try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
-      );
-      var startDate = new Date(data.start_datetime);
-      var endDate = new Date(data.end_datetime);
-      var startTime = moment(data.start_datetime).format("HH:mm:ss");
-      var endTime = moment(data.end_datetime).format("HH:mm:ss");
+      const { data } = await get(`tasks/${taskId}`);
+      var startDate = convertUTCToLocalDate(data.start_datetime);
+      var endDate = convertUTCToLocalDate(data.end_datetime);
+      var startTime = moment(startDate).format("HH:mm:ss");
+      var endTime = moment(endDate).format("HH:mm:ss");
+      var taskCategorie = data.category;
+      var timeTracked = data.time_tracked;
+      var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
     } catch (e) {}
-    var startOn = localStorage.getItem(
-      `startOn-${this.props.state.workspaceId}`
-    );
-    var eventId = localStorage.getItem(
-      `taskId-${this.props.state.workspaceId}`
-    );
     if (
       this.state.user.role === "admin" ||
       this.state.userId == event.resourceId
@@ -757,23 +992,22 @@ class Dashboard extends Component {
         modalMemberSearchOptions: members,
         dateFrom: startDate,
         dateTo: endDate,
-        timeFrom: startTime,
-        timeTo: endTime,
-        taskId: taskId,
+        timeFrom: startTime != "00:00:00" ? startTime : null,
+        timeTo: endTime != "00:00:00" ? endTime : null,
+        taskId: event.id,
         selectedMembers: selectedMembers,
         taskName: event.title,
         editProjectId: event.projectId,
         projectId: event.projectId,
         project: project[0],
         comments: event.comments,
-        // show: true,
+        taskCategorie: taskCategorie,
         showInfo: true,
         selectedTaskMember: selectedMembers,
         memberProjects: memberProjects,
         taskEvent: event,
-        icon: startOn != "" && taskId === eventId ? "pause" : "play",
-        taskPlayStatus: startOn != "" && taskId === eventId ? true : false,
-        startOn: startOn
+        timeTracked: timeTracked,
+        taskPrioritie: taskPrioritie
       });
     }
   };
@@ -806,46 +1040,121 @@ class Dashboard extends Component {
     });
   };
 
-  taskMarkComplete = event => {
+  taskMarkComplete = async event => {
     if (event) {
-      // try {
-      //   const { data } = await mockGet("mark-complete");
-      //   var isComplete = data[0].complete
-      // } catch (e) {
-      // }
-      if (true) {
-        var taskId = localStorage.getItem(`taskId-${this.state.workspaceId}`);
-        this.setState({
-          icon: "check",
-          taskConfirmModal: false,
-          backFromTaskEvent: true,
-          showInfo: true
-        });
-        if (taskId === event.id) {
-          this.handleReset();
-          this.props.handleTaskBottomPopup("");
+      let start = moment(convertUTCToLocalDate(event.start)).format("HH:mm");
+      let end = moment(convertUTCToLocalDate(event.end)).format("HH:mm");
+      if (
+        event.timeTracked.length > 0 ||
+        (this.state.logTimeFrom && this.state.logTimeTo) ||
+        (start != "00:00" && end != "00:00")
+      ) {
+        let searchData = {
+          task: {
+            status: "completed"
+          }
+        };
+        if (this.state.logTimeFrom && this.state.logTimeTo) {
+          var startDateTime =
+            moment(event.taskStartDate).format(DATE_FORMAT1) +
+            " " +
+            moment(this.state.logTimeFrom).format(HRMIN);
+          var endDateTime =
+            moment(event.taskEndDate).format(DATE_FORMAT1) +
+            " " +
+            moment(this.state.logTimeTo).format(HRMIN);
+          searchData.task["start_datetime"] = startDateTime;
+          searchData.task["end_datetime"] = endDateTime;
         }
+        if (
+          this.state.status &&
+          this.state.trackingEvent &&
+          this.state.trackingEvent.id == event.id
+        ) {
+          this.handleTaskTracking("stop", event, Date.now());
+          this.handleReset();
+          this.props.handleTaskBottomPopup("", null, "stop");
+        }
+        let taskId = event.id.split("-")[0];
+        try {
+          const { data } = await put(
+            searchData,
+            `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
+          );
+          var events = this.state.events;
+          var filterEvents = events.filter(e => e.taskId === event.taskId);
+          filterEvents.map(event => {
+            event["timeTracked"] = data.task.time_tracked;
+            event["status"] = data.task.status;
+            event["trackingStatus"] =
+              data.task.status === "completed" ? "" : "play";
+          });
+          this.setState({
+            events: events,
+            taskEvent: event,
+            taskConfirmModal: false,
+            backFromTaskEvent: true,
+            showInfo: true
+          });
+        } catch (e) {}
+      } else {
+        this.setState({
+          logTimeFromError: this.state.logTimeFrom
+            ? ""
+            : "please select time from",
+          logTimeToError: this.state.logTimeTo ? "" : "please select time to"
+        });
       }
     }
   };
 
-  taskDelete = event => {};
+  updateTaskEvent = async (event, taskData) => {
+    let taskId = event.id.split("-")[0];
+    try {
+      const { data } = await put(
+        taskData,
+        `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
+      );
+      var events = this.state.events;
+      var event = events.find(e => e.id === event.id);
+      event["timeTracked"] = data.task.time_tracked;
+      event["status"] = data.task.status;
+      event["trackingStatus"] = data.task.status === "completed" ? "" : "play";
+      this.setState({
+        events: events,
+        taskEvent: event,
+        taskConfirmModal: false,
+        backFromTaskEvent: true,
+        showInfo: true
+      });
+    } catch (e) {}
+  };
+
+  taskDelete = async event => {
+    if (event) {
+      let taskId = event.id.split("-")[0];
+      try {
+        const { data } = await del(
+          `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
+        );
+        var events = this.state.events.filter(e => e.id !== event.id);
+        this.setState({
+          events: events,
+          taskEvent: "",
+          taskConfirmModal: false,
+          backFromTaskEvent: false,
+          showInfo: false
+        });
+      } catch (e) {}
+    }
+  };
 
   taskResume = event => {
     if (event) {
-      // try {
-      //   const { data } = await mockGet("mark-complete");
-      //   var isComplete = data[0].complete
-      // } catch (e) {
-      // }
-      if (true) {
-        this.setState({
-          icon: "play",
-          taskConfirmModal: false,
-          backFromTaskEvent: true,
-          showInfo: true
-        });
-      }
+      let searchData = {
+        status: "running"
+      };
+      this.updateTaskEvent(event, searchData);
     }
   };
 
@@ -853,52 +1162,47 @@ class Dashboard extends Component {
     this.setState({ icon: "check" });
   };
 
-  handleTaskStartTop = () => {
-    var icon = this.state.icon;
-    var updateIcon = icon;
+  handleTaskStartTop = taskEvent => {
     var status = this.state.status;
+    var showAlert = false;
+    var events = this.state.events;
+    var alertEventId = "";
     if (status) {
-      this.handleReset();
-      this.props.handleTaskBottomPopup("");
-      updateIcon =
-        icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-      status = !this.state.status;
-    } else if (this.props.onGoingTask) {
-      updateIcon = icon;
-      var startOn = this.props.state.startOn;
+      if (this.state.trackingEvent.taskId == taskEvent.taskId) {
+        this.props.handleTaskBottomPopup("", null, "stop");
+        this.handleTaskTracking("stop", taskEvent, Date.now());
+        status = !this.state.status;
+        var event = events.find(event => event.id === taskEvent.id);
+        event["trackingStatus"] = "play";
+        event["startOn"] = null;
+      } else {
+        showAlert = true;
+        alertEventId = taskEvent.id;
+      }
     } else {
       var startOn = Date.now();
-      localStorage.setItem(`startOn-${this.state.workspaceId}`, startOn);
-      localStorage.setItem(
-        `taskId-${this.state.workspaceId}`,
-        this.state.taskEvent.id
-      );
-      localStorage.setItem(
-        `colorCode-${this.state.workspaceId}`,
-        this.state.taskEvent.bgColor
-      );
-      localStorage.setItem(
-        `taskTitle-${this.state.workspaceId}`,
-        this.state.taskEvent.title
-      );
-      this.props.handleTaskBottomPopup(this.state.startOn);
-      updateIcon =
-        icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
+      this.props.handleTaskBottomPopup(startOn, taskEvent, "start");
+      this.handleTaskTracking("start", taskEvent, startOn);
       status = !this.state.status;
+      // var event = events.find(event => event.id === taskEvent.id);
+      // event["trackingStatus"] = "pause";
+      // event["startOn"] = startOn;
+      var filterEvents = events.filter(
+        event => event.taskId === taskEvent.taskId
+      );
+      filterEvents.forEach(event => {
+        event["trackingStatus"] = "pause";
+        event["startOn"] = startOn;
+      });
     }
     this.setState({
       status: status,
       showPopup: false,
-      icon: updateIcon,
-      startOn: startOn
+      startOn: startOn,
+      showAlert: showAlert,
+      events: events,
+      showEventAlertId: alertEventId
     });
-  };
-
-  handleReset = () => {
-    localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
-    localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
-    localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
-    localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
   };
 
   taskEventResumeConfirm = (event, modalText) => {
@@ -917,6 +1221,136 @@ class Dashboard extends Component {
     });
   };
 
+  handleCategoryChange = option => {
+    this.setState({ taskCategorie: option });
+  };
+
+  handlePrioritiesChange = option => {
+    this.setState({ taskPrioritie: option });
+  };
+
+  handleTaskTracking = async (taskType, eventTask, dateTime) => {
+    if (taskType && eventTask && dateTime) {
+      var taskId = eventTask.id.split("-")[0];
+      if (taskType === "start") {
+        // let d = moment(eventTask.start).format(DATE_FORMAT1);
+        // let t = moment(dateTime).format(HHMMSS);
+        // let newDateTime = moment(d + " " + t);
+        var taskDate = {
+          start_time: new Date(dateTime),
+          status: "running"
+        };
+        try {
+          const { data } = await post(
+            taskDate,
+            `tasks/${taskId}/start-tracking`
+          );
+          var events = this.state.events;
+          var filterEvents = events.filter(event => event.taskId === taskId);
+          filterEvents.forEach(event => {
+            event["trackingStatus"] = "pause";
+            event["startOn"] = dateTime;
+          });
+          this.setState({
+            status: true,
+            startOn: dateTime,
+            taskId: eventTask.id,
+            trackingEvent: eventTask,
+            events: events
+          });
+        } catch (e) {}
+      } else if (taskType === "stop") {
+        // let d = moment(eventTask.start).format(DATE_FORMAT1);
+        // let t = moment(dateTime).format(HHMMSS);
+        // let newDateTime = moment(d + " " + t);
+        var taskDate = {
+          end_time: new Date(dateTime),
+          status: "stopped"
+        };
+        try {
+          const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+          var events = this.state.events;
+          var filterEvents = events.filter(
+            event => event.taskId === eventTask.taskId
+          );
+          filterEvents.forEach(event => {
+            var timeTracked = [...event.timeTracked, ...[data]];
+            event["timeTracked"] = timeTracked;
+            event["startOn"] = null;
+            event["trackingStatus"] = "play";
+          });
+          var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
+          this.setState({
+            events: events,
+            timeTracked: infoTimeTrackLog,
+            trackingEvent: null
+          });
+        } catch (e) {}
+      }
+    }
+  };
+
+  handleLogTimeFrom = value => {
+    this.setState({
+      logTimeFrom: value,
+      logTimeFromError: ""
+    });
+  };
+
+  handleLogTimeTo = value => {
+    this.setState({
+      logTimeTo: value,
+      logTimeToError: ""
+    });
+  };
+
+  updateTaskEvent = async (event, data) => {
+    let taskId = event.id.split("-")[0];
+    this.updateTask({ task: data }, taskId, event.projectId);
+  };
+
+  addCategory = async categoryName => {
+    if (categoryName != "") {
+      try {
+        const { data } = await post(
+          { name: categoryName },
+          `workspaces/${this.state.workspaceId}/task_category`
+        );
+        var taskCategory = data;
+        toast(<DailyPloyToast message="Category Added" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        });
+        var newTaskCategories = [...this.state.taskCategories, taskCategory];
+        this.setState({
+          taskCategories: newTaskCategories,
+          taskCategorie: taskCategory
+        });
+      } catch (e) {
+        if (e.response && e.response.status === 400) {
+          if (
+            e.response.data &&
+            e.response.data.errors &&
+            e.response.data.errors.workspace_task_category_uniqueness
+          ) {
+            toast(
+              <DailyPloyToast
+                message={
+                  e.response.data.errors.workspace_task_category_uniqueness
+                }
+                status="error"
+              />,
+              {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_CENTER
+              }
+            );
+          }
+        }
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -927,22 +1361,27 @@ class Dashboard extends Component {
           handleLoad={this.handleLoad}
           state={this.state}
         />
-        <Calendar
-          state={this.state}
-          sortUnit={this.state.sort}
-          workspaceId={this.state.workspaceId}
-          resources={this.state.resources}
-          events={this.state.events}
-          updateTaskDateView={this.updateTaskDateView}
-          setAddTaskDetails={this.setAddTaskDetails}
-          editAddTaskDetails={this.editAddTaskDetails}
-          show={this.state.calenderTaskModal}
-          closeTaskModal={this.closeTaskModal}
-          handleProjectSelect={this.handleProjectSelect}
-          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-          onGoingTask={this.props.state.isStart}
-          taskEventResumeConfirm={this.taskEventResumeConfirm}
-        />
+        <div className="padding-top-60px">
+          <Calendar
+            state={this.state}
+            sortUnit={this.state.sort}
+            workspaceId={this.state.workspaceId}
+            resources={this.state.resources}
+            events={this.state.events}
+            updateTaskDateView={this.updateTaskDateView}
+            setAddTaskDetails={this.setAddTaskDetails}
+            editAddTaskDetails={this.editAddTaskDetails}
+            show={this.state.calenderTaskModal}
+            closeTaskModal={this.closeTaskModal}
+            handleProjectSelect={this.handleProjectSelect}
+            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+            onGoingTask={this.props.state.isStart}
+            taskEventResumeConfirm={this.taskEventResumeConfirm}
+            handleTaskTracking={this.handleTaskTracking}
+            updateTaskEvent={this.updateTaskEvent}
+            handleTaskStartTop={this.handleTaskStartTop}
+          />
+        </div>
 
         <div>
           <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
@@ -967,6 +1406,9 @@ class Dashboard extends Component {
             modalMemberSearchOptions={this.state.modalMemberSearchOptions}
             backToTaskInfoModal={this.backToTaskInfoModal}
             confirmModal={this.confirmModal}
+            handleCategoryChange={this.handleCategoryChange}
+            handlePrioritiesChange={this.handlePrioritiesChange}
+            addCategory={this.addCategory}
           />
 
           <TaskInfoModal
@@ -994,6 +1436,8 @@ class Dashboard extends Component {
               taskMarkComplete={this.taskMarkComplete}
               taskResume={this.taskResume}
               taskDelete={this.taskDelete}
+              handleLogTimeFrom={this.handleLogTimeFrom}
+              handleLogTimeTo={this.handleLogTimeTo}
             />
           ) : null}
         </div>

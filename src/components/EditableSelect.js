@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import onClickOutside from "react-onclickoutside";
 
-class DailyPloySelect extends Component {
+class EditableSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +13,9 @@ class DailyPloySelect extends Component {
       canBack: false,
       border: "solid 1px #d1d1d1",
       color: "#d1d1d1",
-      notFound: "hide"
+      notFound: "hide",
+      editable: false,
+      beforeEdit: false
     };
   }
 
@@ -59,7 +61,7 @@ class DailyPloySelect extends Component {
     const icon = this.props.icon;
     return (
       <>
-        {this.state.suggestions.length > 0 ? (
+        {this.state.suggestions.length > 0 && !this.state.editable ? (
           <ul>
             {klass != ""
               ? this.state.suggestions.map((option, idx) => {
@@ -88,32 +90,7 @@ class DailyPloySelect extends Component {
                   );
                 })}
           </ul>
-        ) : (
-          <>
-            <span
-              className={`text-titlize left-padding-10px  ${this.state.notFound}`}
-              style={{ padding: "5px" }}
-            >
-              No Match Found
-            </span>
-            {this.props.canAdd ? (
-              <span className="d-inline-block task-add-category left-padding-10px">
-                <span>
-                  <i className="fa fa-bars d-inline-block"></i>
-                </span>
-                <span className="left-padding-20px d-inline-block text-titlize">
-                  {this.state.searchText}
-                </span>
-                <span
-                  className="add-category d-inline-block"
-                  onClick={() => this.props.addNew(this.state.searchText)}
-                >
-                  (+ Add New)
-                </span>
-              </span>
-            ) : null}
-          </>
-        )}
+        ) : null}
       </>
     );
   };
@@ -190,8 +167,25 @@ class DailyPloySelect extends Component {
   };
 
   selectSuggestion = option => {
-    this.setState({ selected: option, show: false, searchText: "" });
+    this.setState({
+      selected: option,
+      show: false,
+      searchText: "",
+      editable: true,
+      selectedText: option.name,
+      beforeEdit: false
+    });
     this.props.onChange(option);
+  };
+
+  editSelecedOption = e => {
+    let text = e.target.value;
+    let regex = /^([0-9- :]*)$/;
+    if (text.match(regex)) {
+      this.setState({
+        selectedText: text
+      });
+    }
   };
 
   handleBackSpace = event => {
@@ -212,7 +206,16 @@ class DailyPloySelect extends Component {
   };
 
   handleClickOutside = () => {
-    this.setState({ show: false });
+    this.setState({
+      show: false,
+      editable: false,
+      searchText: this.state.selectedText,
+      beforeEdit: false
+    });
+  };
+
+  makeInputEditable = () => {
+    this.setState({ beforeEdit: true });
   };
 
   render() {
@@ -221,46 +224,37 @@ class DailyPloySelect extends Component {
       <>
         <div
           style={{ height: "34px" }}
-          className={`col-md-12   d-inline-block no-padding ${
+          className={`col-md-12 d-inline-block no-padding ${
             props.className ? props.className : ""
           }`}
         >
-          <div className=" custom-search-select">
-            <div onClick={this.onClickInput}>
-              <div className="d-inline-block selected-tags text-titlize">
-                {this.props.optionPlaceholder && this.state.selected == "" ? (
-                  <div className="">
-                    <div
-                      className="d-inline-block"
-                      style={{
-                        paddingLeft: "5px",
-                        color: "#9b9b9b",
-                        font: "16px"
-                      }}
-                    >
-                      {props.placeholder}
-                    </div>
-                  </div>
-                ) : (
-                  this.renderSelectedSuggestion()
-                )}
-              </div>
+          <div
+            className="d-inline-block custom-search-select"
+            style={{ width: "80%" }}
+          >
+            <div
+              onClick={this.onClickInput}
+              className={`${this.state.beforeEdit ? "editable-focus" : ""}`}
+            >
               <input
-                className="d-inline-block"
+                className={`d-inline-block`}
+                style={{ color: "#000000" }}
                 type="text"
-                value={this.state.searchText}
-                placeholder={`${
-                  this.state.selected
-                    ? ""
-                    : props.placeholder
-                    ? props.placeholder
-                    : ""
-                }`}
-                onChange={this.onSearchTextChange}
-                onKeyUp={this.handleBackSpace}
+                placeholder="hh.mm - hh.mm"
+                value={
+                  this.state.editable
+                    ? this.state.selectedText
+                    : this.state.searchText
+                }
+                onChange={
+                  this.state.editable
+                    ? this.editSelecedOption
+                    : this.onSearchTextChange
+                }
+                readOnly={this.state.beforeEdit ? false : true}
               />
               {this.state.show ? (
-                <div className="suggestions">
+                <div className="suggestions" style={{ width: "80%" }}>
                   {this.renderSearchSuggestions()}
                 </div>
               ) : null}
@@ -269,13 +263,52 @@ class DailyPloySelect extends Component {
               </span>
             </div>
           </div>
+          {this.state.editable ? (
+            <>
+              <div
+                className="d-inline-block col-md-1"
+                style={{
+                  paddingLeft: "5px ",
+                  fontSize: "20px",
+                  cursor: "pointer"
+                }}
+                onClick={this.makeInputEditable}
+              >
+                <i className="fa fa-pencil"></i>
+              </div>
+              <span
+                className="d-inline-block col-md-1"
+                style={{
+                  paddingLeft: "5px ",
+                  fontSize: "20px",
+                  cursor: "pointer"
+                }}
+                onClick={() =>
+                  this.props.saveInputEditable(this.state.selectedText)
+                }
+              >
+                save
+              </span>
+            </>
+          ) : (
+            <div
+              className="d-inline-block col-md-1"
+              style={{
+                paddingLeft: "5px ",
+                fontSize: "20px",
+                cursor: "pointer"
+              }}
+            >
+              <i className="fa fa-bars"></i>
+            </div>
+          )}
         </div>
       </>
     );
   }
 }
 
-export default onClickOutside(DailyPloySelect);
+export default onClickOutside(EditableSelect);
 
 {
   /* <DailyPloySelect

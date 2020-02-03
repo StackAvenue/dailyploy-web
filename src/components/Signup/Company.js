@@ -77,13 +77,16 @@ const Company = props => {
             />
           </div>
           <div className="form-group">
-            <label>Password</label>
+            <label>
+              Password
+              <i className="fa fa-info-circle tooltip d-inline-block">
+                <span class="tooltiptext">
+                  Min 8 characters at least 1 number and 1 special character
+                </span>
+              </i>
+            </label>
             {props.state.errors.passwordError ? (
-              <span
-                className="error-warning text-wraping "
-                data-toggle="tooltip"
-                title="Min 8 characters at least 1 number and 1 special character"
-              >
+              <span className="error-warning info-icon text-wraping ">
                 Must be Valid
               </span>
             ) : null}

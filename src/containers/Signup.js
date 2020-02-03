@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../assets/css/signup.scss";
 import { signUp, get } from "../utils/API";
+import { workspaceNameSplit } from "../utils/function";
 import {
   checkPassword,
   validateName,
-  validateEmail
+  validateEmail,
+  PASSWORDREGX
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,6 +28,7 @@ class Signup extends Component {
       email: "",
       password: "",
       confirmPassword: "",
+      workspaceName: "",
       isLoading: false,
       errors: {
         nameError: null,
@@ -63,6 +66,8 @@ class Signup extends Component {
         const { data } = await get(`token_details/${tokenId}`);
         var userName = data.name;
         var userEmail = data.email;
+        var workspaceName = workspaceNameSplit(data.workspace_name);
+        console.log(workspaceName);
         isDisabled = true;
       } catch (e) {
         isDisabled = false;
@@ -72,6 +77,7 @@ class Signup extends Component {
         tokenId: tokenId,
         name: userName,
         email: userEmail,
+        workspaceName: workspaceName,
         isDisabled: isDisabled
       });
     }
@@ -111,7 +117,7 @@ class Signup extends Component {
           }
         };
       } else {
-        message = "Successfully added in Workspace";
+        message = `Successfully added in ${this.state.workspaceName} Workspace`;
         signupData = {
           user: {
             name: this.state.name,
@@ -199,8 +205,7 @@ class Signup extends Component {
         /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
       ) &&
       this.state.password &&
-      this.state.password.match(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+      this.state.password.match(PASSWORDREGX
       ) &&
       this.state.confirmPassword &&
       this.state.password === this.state.confirmPassword

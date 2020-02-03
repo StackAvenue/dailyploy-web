@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Header from "./Header";
-import { get, logout, mockGet, mockPost, put } from "../../utils/API";
+import { get, logout, put, del } from "../../utils/API";
 import MenuBar from "./MenuBar";
-import Sidebar from "./Sidebar";
 import moment from "moment";
-import AddMemberModal from "./AddMemberModal";
+import ConfirmModal from "./../ConfirmModal";
 import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
+import { toast } from "react-toastify";
+import DailyPloyToast from "../DailyPloyToast";
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -38,7 +38,8 @@ class ShowMembers extends Component {
       memberProjects: null,
       isDeleteShow: false,
       selectMemberArr: [],
-      isAllChecked: false
+      isAllChecked: false,
+      showConfirm: false
     };
   }
   logout = async () => {
@@ -79,20 +80,12 @@ class ShowMembers extends Component {
     }
 
     try {
-      var userIds =
-        this.props.searchUserDetails.length > 0
-          ? this.props.searchUserDetails.map(member => member.member_id)
-          : [];
-      var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
-      };
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`
       );
       var userArr = data.members.map(user => user.email);
       var worksapceUsers = data.members;
-      var worksapceUser = data.members.filter(
+      var worksapceUser = data.members.find(
         user => user.email === loggedInData.email
       );
       var memberArr = data.members.filter(
@@ -101,7 +94,6 @@ class ShowMembers extends Component {
       var emailArr = data.members.filter(
         user => user.email !== loggedInData.email
       );
-      // .map(user => user.email);
       this.props.handleLoading(false);
     } catch (e) {
       console.log("users Error", e);
@@ -115,7 +107,7 @@ class ShowMembers extends Component {
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
-      userRole: worksapceUser[0].role,
+      userRole: worksapceUser ? worksapceUser.role : null,
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
       members: memberArr
@@ -133,13 +125,17 @@ class ShowMembers extends Component {
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails.map(member => member.member_id)
           : [];
-      var searchData = {
-        user_ids: JSON.stringify(userIds),
-        project_ids: JSON.stringify(this.props.searchProjectIds)
-      };
+      var searchData = {};
+      if (userIds.length > 0) {
+        searchData["user_ids"] = userIds.join(",");
+      }
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/members`
+          `workspaces/${this.state.workspaceId}/members`,
+          searchData
         );
         var userArr = data.members.map(user => user.email);
         var worksapceUsers = data.members;
@@ -275,11 +271,12 @@ class ShowMembers extends Component {
   };
 
   createUserProjectList = () => {
-    var searchOptions = [];
+    let projectList = [];
+    let memberList = [];
     if (this.state.projects) {
       {
         this.state.projects.map((project, index) => {
-          searchOptions.push({
+          projectList.push({
             value: project.name,
             project_id: project.id,
             type: "project",
@@ -288,13 +285,10 @@ class ShowMembers extends Component {
         });
       }
     }
-
-    var index = searchOptions.length;
-    if (this.state.worksapceUsers) {
-      this.state.worksapceUsers.map((member, idx) => {
-        searchOptions.push({
+    if (this.state.members) {
+      this.state.members.map((member, idx) => {
+        memberList.push({
           value: member.name,
-          id: (index += 1),
           member_id: member.id,
           email: member.email,
           type: "member",
@@ -302,6 +296,11 @@ class ShowMembers extends Component {
         });
       });
     }
+    var searchOptions = {
+      members: memberList,
+      projects: projectList
+    };
+    console.log("searchOptions", searchOptions);
     this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
   };
@@ -353,10 +352,67 @@ class ShowMembers extends Component {
     this.setState({ selectMemberArr: arrProject });
   };
 
-  deleteProject = (e, member) => {};
+  toggleShowConfirm = () => {
+    this.setState({ showConfirm: true });
+  };
+
+  deleteMembers = async e => {
+    let memberIds = this.state.selectMemberArr.map(m => m.id).join(",");
+    if (memberIds != "") {
+      try {
+        const { data } = await del(
+          `workspaces/${this.state.workspaceId}/members?ids=${memberIds}`
+        );
+        let members = this.state.members.filter(
+          m => !this.state.selectMemberArr.includes(m)
+        );
+        toast(
+          <DailyPloyToast
+            message="member Deleted Succesfully"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+        this.setState({
+          showConfirm: false,
+          members: members,
+          selectMemberArr: []
+        });
+      } catch (e) {
+        toast(
+          <DailyPloyToast message="Something went wrong" status="error" />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      }
+    }
+  };
+
+  closeModal = () => {
+    this.setState({ showConfirm: false });
+  };
+
+  renderMessage = () => {
+    if (
+      this.props.searchProjectIds.length > 0 ||
+      this.props.searchUserDetails.length > 0
+    ) {
+      return (
+        <div className="list-not-found padding-top-60px">
+          <span>Results Not Found</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="list-not-found padding-top-60px">
+          <span>Please Add Members</span>
+        </div>
+      );
+    }
+  };
 
   render() {
     var userRole = localStorage.getItem("userRole");
+    var isShowMember = this.state.members.length > 0;
     return (
       <>
         <MenuBar
@@ -366,153 +422,181 @@ class ShowMembers extends Component {
           handleLoad={this.handleLoad}
           state={this.state}
         />
-        <div className="show-projects">
-          <div className="members" style={{ padding: "10px 0px 10px 60px" }}>
-            <div className="row no-margin">
-              <div
-                className="col-md-2 d-inline-block no-padding"
-                style={{ marginTop: "10px" }}
-              >
-                <input
-                  className="styled-checkbox"
-                  id={`styled-checkbox`}
-                  type="checkbox"
-                  name="chk[]"
-                  onChange={e => this.handleCheckAll(e, this.state.members)}
-                />
-                <label htmlFor={`styled-checkbox`}>
-                  {this.state.isAllChecked ? (
-                    <span>All Selected</span>
-                  ) : (
-                    <span>Select All</span>
-                  )}
-                </label>
-              </div>
-              <div className="col-md-4 d-inline-block no-margin no-padding">
-                {this.state.selectMemberArr.length > 0 ? (
-                  <>
-                    <div className="d-inline-block">
-                      <button
-                        className="btn btn-primary delete-button"
-                        onClick={e =>
-                          this.deleteProject(e, this.state.selectMemberArr)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </div>
-                    <div className="d-inline-block select-project-text">
-                      {this.state.selectMemberArr.length + " Member Selected"}
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            </div>
-          </div>
-
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col" style={{ paddingLeft: "60px" }}>
-                  Name <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-                <th scope="col">
-                  Email <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-                <th scope="col">Role</th>
-                <th scope="col">
-                  Working Hours{" "}
-                  <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-                <th scope="col">Projects</th>
-                <th scope="col">Invitation</th>
-                <th scope="col">
-                  Date Created <i className="fa fa-sort" aria-hidden="true"></i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.members.map((member, index) => {
-                return (
-                  <tr key={index}>
-                    <td
-                      className="text-titlize"
-                      style={{ paddingLeft: "60px" }}
-                    >
+        {isShowMember ? (
+          <div className="show-projects padding-top-60px">
+            <div className={`${userRole == "admin" ? "members" : ""}`}>
+              <div className="row no-margin">
+                <div
+                  className="col-md-2 d-inline-block no-padding"
+                  style={{ marginTop: "10px" }}
+                >
+                  {this.state.worksapceUser &&
+                  this.state.worksapceUser.role == "admin" ? (
+                    <>
                       <input
                         className="styled-checkbox"
-                        id={`styled-checkbox-${index}`}
+                        id={`styled-checkbox`}
                         type="checkbox"
-                        name="isChecked"
-                        onChange={e => this.handleCheck(e, member)}
+                        name="chk[]"
+                        onChange={e =>
+                          this.handleCheckAll(e, this.state.members)
+                        }
                       />
-                      <label htmlFor={`styled-checkbox-${index}`}></label>
-                      {member.name}
-                    </td>
-                    <td>{member.email}</td>
-                    <td className="text-titlize">{member.role}</td>
-                    <td className="text-titlize">
-                      {member.working_hours ? member.working_hours : "8"} hours
-                    </td>
-                    <td className="text-titlize">
-                      <span>{this.displayProjects(member.projects)}</span>
-                      <span
-                        className="project-count"
-                        style={{ pointer: "cursor" }}
-                        onMouseMove={e => this.countProjectView(e, member.id)}
+                      <label htmlFor={`styled-checkbox`}>
+                        {this.state.isAllChecked ? (
+                          <span>All Selected</span>
+                        ) : (
+                          <span>Select All</span>
+                        )}
+                      </label>
+                    </>
+                  ) : null}
+                </div>
+                <div className="col-md-4 d-inline-block no-margin no-padding">
+                  {this.state.selectMemberArr.length > 0 &&
+                  userRole == "admin" ? (
+                    <>
+                      <div className="d-inline-block">
+                        <button
+                          className="btn btn-primary delete-button"
+                          onClick={e => this.toggleShowConfirm()}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <div className="d-inline-block select-project-text">
+                        {this.state.selectMemberArr.length + " Member Selected"}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ paddingLeft: "60px" }}>
+                    Name <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                  <th scope="col">
+                    Email <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                  <th scope="col">Role</th>
+                  <th scope="col">
+                    Working Hours{" "}
+                    <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                  <th scope="col">Projects</th>
+                  <th scope="col">Invitation</th>
+                  <th scope="col">
+                    Date Created{" "}
+                    <i className="fa fa-sort" aria-hidden="true"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="list-view">
+                {this.state.members.map((member, index) => {
+                  return (
+                    <tr key={index}>
+                      <td
+                        className="text-titlize"
+                        style={{ paddingLeft: "60px" }}
                       >
-                        {this.countProject(member.projects)}
-                      </span>
-                      {this.state.isProjectListShow &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <div className="project-count-list-show">
-                          <div className="close-div">
-                            <a onClick={this.countProjectViewClose}>
-                              <i className="fa fa-times" aria-hidden="true"></i>
-                            </a>
-                          </div>
-                          <div className="project-body-box">
-                            {member.projects.map(project => (
-                              <div className="project-body-text">
-                                {project.name}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                    </td>
-                    <td className={"text-titlize"}>
-                      {!member.is_invited ? (
-                        <p className="text-green">Accepted</p>
-                      ) : (
-                        <p className="text-blue">Invited</p>
-                      )}
-                    </td>
-                    <td>{moment(member.created_at).format("DD MMM YY")}</td>
-                    <td className={userRole === "member" ? "d-none" : null}>
-                      <button
-                        className="btn btn-link edit-btn"
-                        onClick={e => this.handleShow(e, member)}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      {this.state.show &&
-                      this.state.projectShowMemberId === member.id ? (
-                        <EditMemberModal
-                          show={this.state.show}
-                          handleClose={this.handleClose}
-                          state={this.state}
-                          editMemberHandleChange={this.editMemberHandleChange}
-                          editMember={this.editMember}
+                        <input
+                          className="styled-checkbox"
+                          id={`styled-checkbox-${index}`}
+                          type="checkbox"
+                          name="isChecked"
+                          onChange={e => this.handleCheck(e, member)}
                         />
-                      ) : null}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                        <label htmlFor={`styled-checkbox-${index}`}></label>
+                        {member.name}
+                      </td>
+                      <td>{member.email}</td>
+                      <td className="text-titlize">{member.role}</td>
+                      <td className="text-titlize">
+                        {member.working_hours ? member.working_hours : "8"}{" "}
+                        hours
+                      </td>
+                      <td className="text-titlize">
+                        <span>{this.displayProjects(member.projects)}</span>
+                        <span
+                          className="project-count"
+                          style={{ pointer: "cursor" }}
+                          onMouseMove={e => this.countProjectView(e, member.id)}
+                        >
+                          {this.countProject(member.projects)}
+                        </span>
+                        {this.state.isProjectListShow &&
+                        this.state.projectShowMemberId === member.id ? (
+                          <div className="project-count-list-show">
+                            <div className="close-div">
+                              <a onClick={this.countProjectViewClose}>
+                                <i
+                                  className="fa fa-times"
+                                  aria-hidden="true"
+                                ></i>
+                              </a>
+                            </div>
+                            <div className="project-body-box">
+                              {member.projects.map(project => (
+                                <div className="project-body-text">
+                                  {project.name}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+                      </td>
+                      <td className={"text-titlize"}>
+                        {!member.is_invited ? (
+                          <p className="text-green">Accepted</p>
+                        ) : (
+                          <p className="text-blue">Invited</p>
+                        )}
+                      </td>
+                      <td>{moment(member.created_at).format("DD MMM YY")}</td>
+                      <td className={userRole === "member" ? "d-none" : null}>
+                        <button
+                          className="btn btn-link edit-btn"
+                          onClick={e => this.handleShow(e, member)}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                        {this.state.show &&
+                        this.state.projectShowMemberId === member.id ? (
+                          <EditMemberModal
+                            show={this.state.show}
+                            handleClose={this.handleClose}
+                            state={this.state}
+                            editMemberHandleChange={this.editMemberHandleChange}
+                            editMember={this.editMember}
+                          />
+                        ) : null}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          this.renderMessage()
+        )}
+        {this.state.showConfirm ? (
+          <ConfirmModal
+            title="Delete Member"
+            message={`Are you sure you want to Delete ${
+              this.state.selectMemberArr.length == 1
+                ? " this member"
+                : "these members"
+            }?`}
+            onClick={this.deleteMembers}
+            closeModal={this.closeModal}
+            buttonText="Delete"
+            show={this.state.showConfirm}
+          />
+        ) : null}
       </>
     );
   }

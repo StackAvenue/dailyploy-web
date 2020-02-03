@@ -1,37 +1,53 @@
 @import "./styles";
-
-.SelectedWeekExample .react-datepicker__week:hover .react-datepicker__day {
-  background-color:#f0f0f0;
-  border-radius: 5px;
-}
   
 .reports-container {
-  width: 95%;
-  margin: auto;
+  width: 100%;
+  .report-table{
+    margin: 2% 2.5% 2% 2.5%;
+  }
 }
 
 .reports-btns{
   display: inline-block;
   width: 100%;
+  padding: 10px 20px 10px 20px;
+  box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1);
   .report-caleneder-btn{
     display: inline-block;
-    padding-left: 600px;
-    button{
-      width: auto;
-      height: 30px;
-      border-radius: 5px;
-      border: solid 1px $color-borders;
-      background-color: $color-white;
-      margin-right: 10px;
-      box-shadow: none !important;
-      color: #212529;
-      background-color: white;
-      &:hover{
-          background-color: #33a1ff !important;
-          color: #fff !important;
-          font-weight: bold !important;
+    padding-left: 275px;
+    .report-category{
+      margin-right: 20px;
+      .custom-search-select{
+        height: 34px !important;
+        width: 400px !important;
+        input{
+          padding: 5px 5px !important;
+        }
       }
-      
+      .down-icon{
+        position: absolute !important;
+        right: 0px !important;
+        top: -3px !important;
+      }
+    }
+    .report-priority{
+      .custom-search-select{
+        width: 130px !important;
+        height: 34px !important;
+        input{
+          width: 0px !important;
+          padding: 5px 5px !important;
+        }
+        .color-dot{
+          margin-left: 5px !important;
+          margin-right: 5px !important;
+        }
+      }
+      .down-icon{
+        position: absolute !important;
+        right: 0px !important;
+        top: -3px !important;
+      }
     }
   }
   .report-download{
@@ -41,18 +57,23 @@
       width: auto;
       height: 30px;
       border-radius: 5px;
-      border: solid 1px $color-borders;
+      border: solid 1px $color-brand3;
       background-color: $color-white;
       margin-top: 7px;
       box-shadow: none !important;
       color: #212529;
       background-color: white;
       &:hover{
-          background-color: #33a1ff !important;
-          color: #fff !important;
+          // background-color: #33a1ff !important;
+          // color: #fff !important;
           font-weight: bold !important;
       }
       
+    }
+    .csv-loader{
+      position: absolute;
+      z-index: 100;
+      padding-left: 70px;
     }
   }
   .SelectedWeekExample{
@@ -74,7 +95,8 @@
   .react-datepicker-wrapper {
     .react-datepicker__input-container input{
       border: none;
-      padding: 5px 0 0 5px;
+      padding: 0px 0 0 0px;
+      margin: 4px;
     }::after {
       font-family: "Font Awesome 5 Free" !important;
       font-weight: 900 !important;
@@ -112,7 +134,42 @@
   padding: 0px 15px 0px 15px;
   border: none;
   background: none;
+  vertical-align: bottom;
   font-size: 26px;
+}
+.report-viewtype-btns {
+  position: fixed !important;
+  top: 72px !important;
+  right: 185px !important;
+  z-index: 10;
+  div{
+    width: 80px;
+    height: 36px;
+    background-color: #ffffff;
+    border: solid 1px $color-borders;
+    text-align: center;
+    padding-top: 5px;
+    font-family: $font-family-roboto !important;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    cursor: pointer;
+  }
+  :first-child{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  :last-child{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .active{
+    border: solid 1px $color-brand3 !important;
+    background-color: $color-brand3 !important;
+    color: $color-white !important;
+  }
 }
 .right-left-space-5{
   padding-left: 5px;
@@ -150,7 +207,7 @@
     left: 0;
     width: 109%;
     height: auto;
-    z-index: 1;
+    z-index: 100;
     background-color: #fff;
     border-radius: 5px;
     top:39px;
@@ -165,7 +222,7 @@
   }
   .selected-tags{
     display: inline-block;
-    div{
+    .search-icon-member, .search-icon-project{
       width: auto;
       height: 26px;
       margin-right: 10px;
@@ -177,31 +234,16 @@
   }
   .remove-tag:hover{
     cursor: pointer;
-    background: #ad2020;
   }
   .remove-tag{
     cursor: pointer;
   }
 }
 
-.priority-high{
+.priority{
   width: 10px;
   height: 10px;
-  background-color: #00a031;
-  margin-right: 15px;
-  border-radius: 20px;
-}
-.priority-medium{
-  width: 10px;
-  height: 10px;
-  background-color: #ff7f00;
-  margin-right: 15px;
-  border-radius: 20px;
-}
-.priority-low{
-  width: 10px;
-  height: 10px;
-  background-color: #555555;
+  background-color: #9B9B9B;
   margin-right: 15px;
   border-radius: 20px;
 }
@@ -255,4 +297,165 @@
   width: auto;
   height: 18px;
   padding-top: 10px;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: none !important;
+  opacity: 2 !important;
+  font-family:  "FontAwesome" !important;
+  padding-left: 10px;
+  z-index: 1 !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 300px !important;
+  font-size: 12px !important;
+  background-color: $color-info-bg;
+  color: #fff !important;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1 !important;
+  top: -5px;
+  left: 110%;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.summary-reports{
+  width: 94%;
+  height: 300px;
+  margin: 1.5% 3% 1.5% 3%;
+  .heading{
+    margin-bottom: 2%;
+  }
+  .report-heading{
+    width: 151px;
+    height: 24px;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+  }
+  .circle-chart{
+    width: 60% !important;
+    .chart{
+      width: 30% !important;
+      height: 180px !important;
+    }
+  }
+  .column-chart{
+    width: 40% !important;
+    height: 200px;
+  }
+  .summury-info-btn{
+    button{
+      height: 36px;
+      width: 90px;
+      text-align: center;
+      border: solid 1px $color-background;
+      border-radius: 3px;
+      color: $color-brandheading2
+    }
+    .cap-info-btn{
+      button:first-child{
+        background-color: $color-white;
+      }
+      button:last-child{
+        background-color: $color-background;
+      }
+    }
+    .sch-info-btn{
+      margin: 0px 20px 0px 20px;
+      button:first-child{
+        background-color: $color-white;
+      }
+      button:last-child{
+        background-color: $color-info-bg;
+        color: $color-white;
+      }
+    }
+    .work-info-btn{
+      button:first-child{
+        background-color: $color-white;
+        color: $color-text3;
+      }
+      button:last-child{
+        background-color: #04505e;
+        color: $color-white;
+      }
+    }
+  }
+  .legend{
+    .text{
+      height: 16px;
+      font-family: $font-family-roboto;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+        font-style: normal;
+      line-height: 1.14;
+      letter-spacing: normal;
+      text-align: center;
+      color: $color-text2;
+      vertical-align: super;
+      margin-right: 20px;
+    }
+    .box{
+      width: 30px;
+      height: 25px;
+      border: solid 0.5px #707070;
+      margin-right: 20px;
+    }
+    .box:first-child{
+      background-color: $color-background;
+    }
+    .stripe-2 {
+      color: black;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 5px,
+        #fff 0px,
+        #fff 9px
+      ),
+      linear-gradient(
+        to bottom,
+        #999,
+        #999
+      )
+    }
+  }
+  .hour-popup{
+    border: solid 1px $color-text2 !important;
+    background-color: #00A031 !important;
+  }
+  .highcharts-grid-line{
+    display: none;
+  }
+  .report-not-found{
+    padding-top: 85px;
+    text-align: center;
+    vertical-align: top;
+  }
 }

@@ -68,8 +68,8 @@ const EditMemberModal = props => {
                 name="memberHours"
                 onChange={props.editMemberHandleChange}
               >
-                {hours.map(value => (
-                  <option value={value}>{`${value}hr`}</option>
+                {hours.map((value, index) => (
+                  <option key={index} value={value}>{`${value}hr`}</option>
                 ))}
               </select>
             </div>
@@ -110,12 +110,7 @@ const EditMemberModal = props => {
 };
 
 const MemberProject = props => {
-  let memberProject = props.projects
-    .slice(0, props.projects.length - 1)
-    .map(project => project.name + ", ");
-  let memberProjects = memberProject.join("");
-  let lastProject = props.projects[props.projects.length - 1].name;
-  return memberProjects + lastProject;
+  return props.projects.map(project => project.name).join(", ");
 };
 
 export default EditMemberModal;

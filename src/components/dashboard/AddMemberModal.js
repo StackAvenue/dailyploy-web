@@ -99,20 +99,35 @@ class AddMemberModal extends Component {
                 <tr>
                   <td>
                     <input
-                      className="form-control name"
+                      className={`form-control name ${
+                        this.props.state.memberNameError
+                          ? "input-error-border"
+                          : ""
+                      }`}
                       name="memberName"
                       type="text"
                       placeholder="Name"
                       value={this.props.state.memberName}
                       onChange={this.props.handleChangeMemberInput}
                     />
-                    <div className="auto-search">
+                    <div
+                      className="auto-search"
+                      style={
+                        this.props.state.suggestions.length > 0
+                          ? { borderColor: "#d6d6d6" }
+                          : { borderColor: "#ffffff" }
+                      }
+                    >
                       {this.autoSearchSuggestion()}
                     </div>
                   </td>
                   <td>
                     <input
-                      className="form-control email"
+                      className={`form-control email ${
+                        this.props.state.memberEmailError
+                          ? "input-error-border"
+                          : ""
+                      }`}
                       name="memberEmail"
                       type="text"
                       placeholder="Email ID"
@@ -122,7 +137,11 @@ class AddMemberModal extends Component {
                   </td>
                   <td>
                     <select
-                      className="form-control role"
+                      className={`form-control role ${
+                        this.props.state.memberRoleError
+                          ? "input-error-border"
+                          : ""
+                      }`}
                       name="memberRole"
                       value={this.props.state.memberRole}
                       onChange={this.props.handleChangeMemberInput}
@@ -134,7 +153,11 @@ class AddMemberModal extends Component {
                   </td>
                   <td>
                     <select
-                      className="form-control role"
+                      className={`form-control role ${
+                        this.props.state.memberWorkingHoursError
+                          ? "input-error-border"
+                          : ""
+                      }`}
                       name="memberWorkingHours"
                       value={this.props.state.memberWorkingHours}
                       onChange={this.props.handleChangeMemberInput}
@@ -160,6 +183,16 @@ class AddMemberModal extends Component {
                 </tr>
               </tbody>
             </table>
+            {this.props.state.error != "" ? (
+              <div className="col-md-12 no-padding">
+                <span
+                  className="pull-right error-warning"
+                  style={{ paddingRight: "70px" }}
+                >
+                  {this.props.state.error}
+                </span>
+              </div>
+            ) : null}
             <div className="col-md-12 no-padding bottom-button">
               <div className="col-md-4 ml-auto">
                 <button
@@ -169,7 +202,8 @@ class AddMemberModal extends Component {
                     this.props.state.memberWorkingHours &&
                     this.props.state.memberRole &&
                     this.props.state.memberEmail &&
-                    this.props.state.memberName
+                    this.props.state.memberName &&
+                    this.props.state.btnEnable
                       ? ""
                       : "disabled"
                   }`}

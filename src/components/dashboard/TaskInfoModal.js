@@ -6,18 +6,14 @@ import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
+import { UncontrolledAlert } from "reactstrap";
 
 class TaskInfoModal extends Component {
   constructor(props) {
     super(props);
-    this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.priority = {
       name: "high",
       color_code: "#00A031"
-    };
-    this.category = {
-      name: "Meeting",
-      color_code: "#9B9B9B"
     };
     this.state = {
       color: "#ffffff",
@@ -39,7 +35,7 @@ class TaskInfoModal extends Component {
         this.handleReset();
         this.props.handleTaskPlay("check");
         if (eventTaskId === taskId) {
-          this.props.handleTaskBottomPopup("");
+          this.props.handleTaskBottomPopup("", null, "stop");
         }
       }
     }
@@ -111,12 +107,12 @@ class TaskInfoModal extends Component {
     }
   };
 
-  renderTaskInfo = (option, type) => {
+  renderTaskInfo = (option, type, name) => {
     if (option) {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
-        <div className="">
+        <div className="left-padding-20px">
           <div
             className={`d-inline-block ${klass}`}
             style={{
@@ -125,7 +121,7 @@ class TaskInfoModal extends Component {
               }`
             }}
           ></div>
-          <div className="right-left-space-5 d-inline-block">{option.name}</div>
+          <div className="right-left-space-5 d-inline-block">{`${option[name]}`}</div>
         </div>
       );
     }
@@ -134,56 +130,8 @@ class TaskInfoModal extends Component {
 
   isValidUserDate = () => {
     const props = this.props.state;
-    return this.isToday() && props.taskEvent.resourceId === props.userId;
-  };
-
-  handleTaskStartTop = () => {
-    this.setState(state => {
-      var icon = this.props.icon;
-      var updateIcon = icon;
-      var status = state.status;
-      if (state.status) {
-        var endOn = Date.now();
-        this.handleReset();
-        this.props.handleTaskBottomPopup("");
-        updateIcon =
-          icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-        status = !state.status;
-      } else {
-        if (this.props.onGoingTask) {
-          updateIcon = icon;
-          this.setState({ showAlert: !this.state.showAlert });
-        } else {
-          var startOn = Date.now();
-          this.setState({ startOn: startOn });
-          localStorage.setItem(
-            `startOn-${this.props.state.workspaceId}`,
-            startOn
-          );
-          localStorage.setItem(
-            `taskId-${this.props.state.workspaceId}`,
-            this.props.state.taskEvent.id
-          );
-          localStorage.setItem(
-            `colorCode-${this.props.state.workspaceId}`,
-            this.props.state.taskEvent.bgColor
-          );
-          localStorage.setItem(
-            `taskTitle-${this.props.state.workspaceId}`,
-            this.props.state.taskEvent.title
-          );
-          this.props.handleTaskBottomPopup(this.state.startOn);
-          var updateIcon =
-            icon == "pause" ? "play" : icon == "play" ? "pause" : "check";
-          status = !state.status;
-        }
-      }
-      return {
-        status: status,
-        showPopup: false,
-        icon: updateIcon
-      };
-    });
+    // return this.isToday() && props.taskEvent.resourceId === props.userId;
+    return props.taskEvent.resourceId === props.userId;
   };
 
   async saveTaskTrackingTime(endOn) {
@@ -212,6 +160,51 @@ class TaskInfoModal extends Component {
     localStorage.setItem(`taskTitle-${this.props.state.workspaceId}`, "");
   };
 
+  returnTime = time => {
+    return `${moment(time.start_time).format("HH.mm")} - ${moment(
+      time.end_time
+    ).format("HH.mm")}`;
+  };
+
+  displayTotalTime = () => {
+    if (this.props.state.timeTracked.length > 0) {
+      let totalSec = this.props.state.timeTracked
+        .map(time => time.duration)
+        .flat()
+        .reduce((a, b) => a + b, 0);
+      var h = Math.floor(totalSec / 3600);
+      var m = Math.floor((totalSec % 3600) / 60);
+      var s = Math.floor((totalSec % 3600) % 60);
+
+      return (
+        ("0" + h).slice(-2) +
+        // " hh" +
+        ":" +
+        ("0" + m).slice(-2) +
+        // " mm" +
+        ":" +
+        ("0" + s).slice(-2)
+      );
+    } else {
+      var start = this.props.state.dateFrom;
+      var end = this.props.state.dateTo;
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      totalSeconds = Number(totalSeconds);
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = Math.floor((totalSeconds % 3600) % 60);
+      return (
+        ("0" + h).slice(-2) +
+        ":" +
+        ("0" + m).slice(-2) +
+        ":" +
+        ("0" + s).slice(-2) +
+        " h"
+      );
+    }
+  };
+
   render() {
     const { props } = this;
     return (
@@ -228,7 +221,7 @@ class TaskInfoModal extends Component {
                 <span>{"Task Details"}</span>
               </div>
               <div className="action-btn d-inline-block">
-                {this.props.icon !== "check" ? (
+                {this.props.state.taskEvent.status !== "completed" ? (
                   <>
                     <button
                       className="d-inline-block btn btn-link"
@@ -264,40 +257,59 @@ class TaskInfoModal extends Component {
             <div className="col-md-12 body d-inline-block text-titlize">
               <div className="input-row">
                 <div className="d-inline-block">
-                  {this.props.icon == "pause" ? (
+                  {this.props.state.taskEvent.trackingStatus == "pause" ? (
                     <div
                       style={{
                         pointerEvents: this.isValidUserDate() ? "" : "none"
                       }}
                       className="d-inline-block task-play-btn pointer"
-                      onClick={() => this.props.handleTaskStartTop()}
+                      onClick={() =>
+                        this.props.handleTaskStartTop(
+                          this.props.state.taskEvent
+                        )
+                      }
                     >
                       <i className="fa fa-pause"></i>
                     </div>
                   ) : null}
 
-                  {this.props.icon == "play" ? (
+                  {this.props.state.taskEvent.trackingStatus == "play" ? (
                     <div
                       style={{
                         pointerEvents: this.isValidUserDate() ? "" : "none"
                       }}
                       className="d-inline-block task-play-btn pointer"
-                      onClick={() => this.props.handleTaskStartTop()}
+                      onClick={() =>
+                        this.props.handleTaskStartTop(
+                          this.props.state.taskEvent
+                        )
+                      }
                     >
                       <i className="fa fa-play"></i>
                     </div>
                   ) : null}
 
-                  {this.props.icon == "check" ? (
+                  {this.props.state.taskEvent.status === "completed" ? (
                     <div className="d-inline-block task-play-btn">
                       <i className="fa fa-check"></i>
                     </div>
+                  ) : null}
+
+                  {this.props.state.showAlert &&
+                  this.props.state.showEventAlertId ==
+                    this.props.state.taskEvent.id ? (
+                    <UncontrolledAlert
+                      className="task-war-alert"
+                      color="warning"
+                    >
+                      one task already ongoing !
+                    </UncontrolledAlert>
                   ) : null}
                 </div>
                 <div className="d-inline-block header-2">
                   <span>{"2hr 30mins"}</span>
                 </div>
-                {this.props.icon === "check" ? (
+                {this.props.state.taskEvent.status === "completed" ? (
                   <div className="d-inline-block button3">
                     <span>Completed</span>
                   </div>
@@ -312,8 +324,8 @@ class TaskInfoModal extends Component {
               </div>
             </div>
 
-            <div className="col-md-12 body text-titlize">
-              <div className="col-md-12 no-padding ">
+            <div className="col-md-12 body">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Name
                 </div>
@@ -324,34 +336,42 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Project
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(props.state.project, "block")}
+                  {this.renderTaskInfo(props.state.project, "block", "name")}
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Category
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(this.category, "block")}
+                  <span className="left-padding-20px">
+                    {props.state.taskCategorie
+                      ? props.state.taskCategorie.name
+                      : "---"}
+                  </span>
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Priority
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(this.priority, "circle")}
+                  {this.renderTaskInfo(
+                    this.props.state.taskPrioritie,
+                    "circle",
+                    "label"
+                  )}
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Member
                 </div>
@@ -360,7 +380,7 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Date
                 </div>
@@ -386,26 +406,42 @@ class TaskInfoModal extends Component {
                       <input
                         className="d-inline-block"
                         className={this.state.showTimerMenu ? "border" : ""}
-                        defaultValue={this.times ? this.times[0] : ""}
+                        defaultValue={
+                          this.props.state.timeTracked.length > 0
+                            ? this.returnTime(this.props.state.timeTracked[0])
+                            : "00:00 - 00:00"
+                        }
                         onClick={() => this.ToggleTimerDropDown()}
                         readOnly
                       />
                       {this.state.showTimerMenu ? (
                         <div className="dropdown">
-                          {this.times.map((time, idx) => {
-                            return <div className="border"> {time} </div>;
+                          {this.props.state.timeTracked.map((time, idx) => {
+                            if (idx != 0) {
+                              return (
+                                <div className="border" key={time.id}>
+                                  {" "}
+                                  {this.returnTime(time)}{" "}
+                                </div>
+                              );
+                            }
                           })}
                         </div>
                       ) : null}
                     </div>
                   </div>
-                  <div className="col-md-4 d-inline-block">
-                    <span className="d-inline-block">01h 00min</span>
+                  <div className="col-md-6 d-inline-block">
+                    <span className="d-inline-block">
+                      {this.displayTotalTime()}
+                    </span>
+                    <span className="d-inline-block track-time-placeholder">
+                      (hh:mm:ss)
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="col-md-12 row no-margin no-padding input-row">
+              <div className="col-md-12 row no-margin no-padding input-row text-titlize">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
                   <p className="left-padding-20px comments">

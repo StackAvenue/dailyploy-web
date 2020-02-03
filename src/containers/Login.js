@@ -41,12 +41,6 @@ class Signin extends Component {
     }
   }
 
-  nameSplit = name => {
-    let nameArr = name;
-    let nameSplit = nameArr.split(" ").slice(2);
-    return nameSplit.join(" ");
-  };
-
   login = async e => {
     e.preventDefault();
     this.validateAllInputs();
@@ -70,7 +64,7 @@ class Signin extends Component {
           if (workspace && workspace.type === "company") {
             cookie.save("workspaceName", workspace.company.name, { path: "/" });
           } else {
-            cookie.save("workspaceName", this.nameSplit(workspace.name), {
+            cookie.save("workspaceName", workspace.name, {
               path: "/"
             });
           }
@@ -203,8 +197,6 @@ class Signin extends Component {
                     Sign In with Google
                   </Link>
                 </div>
-                <br />
-                <br />
                 <br />
                 <div className="col-md-8 offset-2 googleIcon">
                   <span>New to DailyPloy?</span>
