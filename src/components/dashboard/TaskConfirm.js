@@ -5,6 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { put } from "../../utils/API";
+import DailyPloyToast from "./../../../src/components/DailyPloyToast";
+import { ToastContainer, toast } from "react-toastify";
 import {
   DATE_FORMAT2,
   HRMIN,
@@ -29,7 +31,8 @@ class TaskConfirm extends Component {
       startOn: "",
       status: false,
       color: "#ffffff",
-      selected: ""
+      selected: "",
+      trackSaved: false
     };
   }
 
@@ -120,30 +123,72 @@ class TaskConfirm extends Component {
     };
   };
 
+  validateTime = time => {
+    let timeSplit = time.trim().split("-");
+    var flag = false;
+    if (timeSplit.length == 2) {
+      let startTime = timeSplit[0].trim().split(":");
+      let endTime = timeSplit[1].trim().split(":");
+      if (startTime.length == 2 && endTime.length == 2) {
+        flag =
+          startTime[0] < 24 &&
+          startTime[1] <= 59 &&
+          endTime[0] < 24 &&
+          endTime[0] > startTime[0] &&
+          endTime[1] <= 59 &&
+          endTime[1] > startTime[1];
+      }
+    }
+    return flag;
+  };
+
   saveInputEditable = async time => {
     if (this.state.selected && this.state.selected.id != "" && time != "") {
-      let startOn = time.split("-")[0].trim();
-      let endOn = time.split("-")[1].trim();
-      let newTrack = {
-        start_time: new Date(
-          moment(this.state.selected.start).format(DATE_FORMAT1) + " " + startOn
-        ),
-        end_time: new Date(
-          moment(this.state.selected.end).format(DATE_FORMAT1) + " " + endOn
-        )
-      };
-      try {
-        const { data } = await put(
-          newTrack,
-          `tasks/${this.props.state.taskEvent.taskId}/edit_tracked_time/${this.state.selected.id}`
+      if (this.validateTime(time)) {
+        let startOn = time.split("-")[0].trim();
+        let endOn = time.split("-")[1].trim();
+        let newTrack = {
+          start_time: new Date(
+            moment(this.state.selected.start).format(DATE_FORMAT1) +
+              " " +
+              startOn
+          ),
+          end_time: new Date(
+            moment(this.state.selected.end).format(DATE_FORMAT1) + " " + endOn
+          )
+        };
+        try {
+          const { data } = await put(
+            newTrack,
+            `tasks/${this.props.state.taskEvent.taskId}/edit_tracked_time/${this.state.selected.id}`
+          );
+          if (data) {
+            this.setState({ trackSaved: true });
+            this.props.updateTaskEventLogTime(data);
+          }
+          toast(
+            <DailyPloyToast message={"log time updated"} status="success" />,
+            {
+              autoClose: 2000,
+              position: toast.POSITION.TOP_CENTER
+            }
+          );
+        } catch (e) {}
+      } else {
+        toast(
+          <DailyPloyToast message={"please enter valid time"} status="error" />,
+          {
+            autoClose: 2000,
+            position: toast.POSITION.TOP_CENTER
+          }
         );
-      } catch (e) {}
+      }
     }
   };
 
   render() {
     const { props } = this;
-    const ligTimes = this.props.state.taskEvent.timeTracked.map((opt, idx) => {
+    let ligTimes = this.props.state.taskEvent.timeTracked.map((opt, idx) => {
       return this.returnTime(opt);
     });
     return (
@@ -259,6 +304,7 @@ class TaskConfirm extends Component {
                     }}
                     onChange={this.selectedOption}
                     saveInputEditable={this.saveInputEditable}
+                    state={this.state.trackSaved}
                   />
                 </div>
               </div>

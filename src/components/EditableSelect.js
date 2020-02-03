@@ -281,7 +281,8 @@ class EditableSelect extends Component {
                 style={{
                   paddingLeft: "5px ",
                   fontSize: "20px",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  color: this.props.state ? "#10b857" : "#424242"
                 }}
                 onClick={() =>
                   this.props.saveInputEditable(this.state.selectedText)
