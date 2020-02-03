@@ -932,15 +932,22 @@ class Dashboard extends Component {
   };
 
   validateTime = () => {
-    if (
-      (this.state.timeFrom != "" || this.state.timeFrom != null) &&
-      (this.state.timeTo == "" || this.state.timeTo == null)
-    ) {
+    // if (
+    //   (this.state.timeFrom != "" || this.state.timeFrom != null) &&
+    //   (this.state.timeTo == "" || this.state.timeTo == null)
+    // ) {
+    //   return false;
+    // } else if (
+    //   (this.state.timeFrom == "" || this.state.timeFrom == null) &&
+    //   (this.state.timeTo != "" || this.state.timeTo != null)
+    // ) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    if (this.state.timeFrom != null && this.state.timeTo == null) {
       return false;
-    } else if (
-      (this.state.timeFrom == "" || this.state.timeFrom == null) &&
-      (this.state.timeTo != "" || this.state.timeTo != null)
-    ) {
+    } else if (this.state.timeFrom == null && this.state.timeTo != null) {
       return false;
     } else {
       return true;
