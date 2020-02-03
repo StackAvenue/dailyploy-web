@@ -390,7 +390,7 @@ class Reports extends Component {
     // MIS report listing
     var searchData = {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      user_id: loggedInData.id,
+      user_ids: loggedInData.id,
       frequency: "daily"
     };
     if (this.props.searchProjectIds.length > 0) {

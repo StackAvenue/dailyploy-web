@@ -40,7 +40,7 @@ class Sidebar extends Component {
                 workspaceName={this.props.workspaceName}
               />
             ))}
-            <li>
+            {/* <li>
               <div className="workspace-box" style={{ paddingTop: "8px" }}>
                 <button className="btn btn-link" onClick={this.showTaskModal}>
                   +
@@ -51,7 +51,7 @@ class Sidebar extends Component {
                 state={this.state}
                 onHideModal={this.closeTaskModal}
               />
-            </li>
+            </li> */}
           </ul>
         </div>
       </>

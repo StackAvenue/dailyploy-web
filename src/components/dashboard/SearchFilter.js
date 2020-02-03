@@ -121,6 +121,11 @@ class SearchFilter extends Component {
         memberSuggestions = memberSearchOptions.filter(
           v => regex.test(v.value) && !this.state.selectedTags.includes(v)
         );
+      } else if (
+        this.props.state.searchFlag === "My Reports" &&
+        this.props.isReports
+      ) {
+        memberSuggestions = [];
       } else {
         memberSuggestions = memberSearchOptions.filter(
           v => regex.test(v.value) && !this.state.selectedTags.includes(v)
@@ -136,7 +141,10 @@ class SearchFilter extends Component {
       });
     } else {
       this.setState({
-        memberSuggestions: this.props.searchOptions.members,
+        memberSuggestions:
+          this.props.isReports && this.props.state.searchFlag == "My Reports"
+            ? []
+            : this.props.searchOptions.members,
         projectSuggestions: this.props.searchOptions.projects,
         value: value
       });
