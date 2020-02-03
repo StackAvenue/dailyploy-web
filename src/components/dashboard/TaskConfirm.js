@@ -4,9 +4,15 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
-import { post, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT2, HRMIN, PRIORITIES_MAP } from "./../../utils/Constants";
+import { put } from "../../utils/API";
+import {
+  DATE_FORMAT2,
+  HRMIN,
+  PRIORITIES_MAP,
+  DATE_FORMAT1
+} from "./../../utils/Constants";
 import TimePicker from "rc-time-picker";
+import EditableSelect from "./../EditableSelect";
 
 class TaskConfirm extends Component {
   constructor(props) {
@@ -22,7 +28,8 @@ class TaskConfirm extends Component {
       icon: "play",
       startOn: "",
       status: false,
-      color: "#ffffff"
+      color: "#ffffff",
+      selected: ""
     };
   }
 
@@ -98,8 +105,47 @@ class TaskConfirm extends Component {
     return [];
   };
 
+  selectedOption = option => {
+    this.setState({ selected: option });
+  };
+
+  returnTime = time => {
+    return {
+      id: time.id,
+      name: `${moment(time.start_time).format("HH:mm")} - ${moment(
+        time.end_time
+      ).format("HH:mm")}`,
+      start: time.start_time,
+      end: time.end_time
+    };
+  };
+
+  saveInputEditable = async time => {
+    if (this.state.selected && this.state.selected.id != "" && time != "") {
+      let startOn = time.split("-")[0].trim();
+      let endOn = time.split("-")[1].trim();
+      let newTrack = {
+        start_time: new Date(
+          moment(this.state.selected.start).format(DATE_FORMAT1) + " " + startOn
+        ),
+        end_time: new Date(
+          moment(this.state.selected.end).format(DATE_FORMAT1) + " " + endOn
+        )
+      };
+      try {
+        const { data } = await put(
+          newTrack,
+          `tasks/${this.props.state.taskEvent.taskId}/edit_tracked_time/${this.state.selected.id}`
+        );
+      } catch (e) {}
+    }
+  };
+
   render() {
     const { props } = this;
+    const ligTimes = this.props.state.taskEvent.timeTracked.map((opt, idx) => {
+      return this.returnTime(opt);
+    });
     return (
       <>
         <Modal
@@ -136,11 +182,13 @@ class TaskConfirm extends Component {
               ) : null}
             </div>
 
-            {this.props.state.confirmModalText === "mark as completed" ? (
+            {this.props.state.confirmModalText === "mark as completed" &&
+            this.props.state.taskEvent.timeTracked.length == 0 ? (
               <div className="col-md-12 task-details log-timer no-padding">
                 <span className="col-md-2 d-inline-block no-padding">
                   Log Time
                 </span>
+
                 <div className="col-md-5 d-inline-block">
                   <span className="d-inline-block">From</span>
                   <div className="d-inline-block time-picker-container no-padding">
@@ -171,6 +219,7 @@ class TaskConfirm extends Component {
                     />
                   </div>
                 </div>
+
                 {this.props.state.logTimeFromError ||
                 this.props.state.logTimeToError ? (
                   <div className="col-md-12">
@@ -187,6 +236,31 @@ class TaskConfirm extends Component {
                     </div>
                   </div>
                 ) : null}
+              </div>
+            ) : null}
+
+            {this.props.state.confirmModalText === "mark as completed" &&
+            this.props.state.taskEvent.timeTracked.length > 0 ? (
+              <div className="col-md-12 task-details log-timer no-padding">
+                <span className="col-md-2 d-inline-block no-padding">
+                  Log Time
+                </span>
+                <div
+                  className="col-md-8 d-inline-block"
+                  style={{ paddingRight: "0px" }}
+                >
+                  <EditableSelect
+                    options={ligTimes}
+                    value={this.state.selected}
+                    getOptionValue={option => option.id}
+                    getOptionLabel={option => option.name}
+                    createOption={text => {
+                      return { id: 1, name: text };
+                    }}
+                    onChange={this.selectedOption}
+                    saveInputEditable={this.saveInputEditable}
+                  />
+                </div>
               </div>
             ) : null}
 
