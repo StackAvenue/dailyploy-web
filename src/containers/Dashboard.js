@@ -1358,6 +1358,14 @@ class Dashboard extends Component {
     }
   };
 
+  updateTaskEventLogTime = taskLog => {
+    var taskEvent = this.state.taskEvent;
+    var taskLogs = taskEvent.timeTracked.filter(l => l.id != taskLog.id);
+    let newlogs = [...taskLogs, taskLog];
+    taskEvent["timeTracked"] = newlogs;
+    this.setState({ taskEvent: taskEvent });
+  };
+
   render() {
     return (
       <>
@@ -1445,6 +1453,7 @@ class Dashboard extends Component {
               taskDelete={this.taskDelete}
               handleLogTimeFrom={this.handleLogTimeFrom}
               handleLogTimeTo={this.handleLogTimeTo}
+              updateTaskEventLogTime={this.updateTaskEventLogTime}
             />
           ) : null}
         </div>
