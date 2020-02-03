@@ -62,7 +62,7 @@
     "start:staging": "env-cmd -f .env.staging react-scripts start",
     "build:production": "env-cmd -f .env.production react-scripts build",
     "start:production": "env-cmd -f .env.production react-scripts start",
-    "deploy": "aws s3 sync build/ s3://daily-ploy-production --acl public-read"
+    "deploy": "aws s3 sync build/ s3://dailyploy.com --acl public-read"
   },
   "eslintConfig": {
     "extends": "react-app"
