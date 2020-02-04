@@ -253,7 +253,6 @@ class Dashboard extends Component {
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent
         });
-        this.props.handleLoading(false);
         let projects = [];
         this.state.projects.forEach(project => {
           let flag = true;
@@ -274,7 +273,10 @@ class Dashboard extends Component {
             member => !userIds.includes(member.id)
           )
         );
-      } catch (e) {}
+        this.props.handleLoading(false);
+      } catch (e) {
+        this.props.handleLoading(false);
+      }
     }
 
     if (prevState.timeFrom !== this.state.timeFrom) {
@@ -333,6 +335,8 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     // Logged In User Info
+    this.props.handleLoading(true);
+
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -386,7 +390,6 @@ class Dashboard extends Component {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
     } catch (e) {}
-    this.props.handleLoading(true);
 
     // workspace Tasks Listing
     try {
