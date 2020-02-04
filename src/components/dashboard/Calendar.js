@@ -266,7 +266,7 @@ class Calendar extends Component {
     var m = Math.floor((totalSeconds % 3600) / 60);
     var s = Math.floor((totalSeconds % 3600) % 60);
 
-    var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
+    var timeDiff = ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
     if (schedulerData.viewType !== 2) {
       return (
         <div className="custom-event-popup">
@@ -285,7 +285,7 @@ class Calendar extends Component {
             </div>
             <div className="time">
               <div className="d-inline-block">
-                {start.format("HH:mm")}-{end.format("HH:mm")}
+                {start.format("HH:mm A")} - {end.format("HH:mm A")}
               </div>
               <div className="d-inline-block pull-right">{timeDiff}</div>
             </div>
