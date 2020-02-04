@@ -27,7 +27,13 @@ class ReportTableRow extends Component {
       moment(endDateTime).format("HH:mm");
     let totalMilSeconds = new Date(end) - new Date(start);
     var totalSeconds = totalMilSeconds / 1000;
-    totalSeconds = Number(totalSeconds);
+    return Number(totalSeconds);
+    // var h = Math.floor(totalSeconds / 3600);
+    // var m = Math.floor((totalSeconds % 3600) / 60);
+    // return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+  };
+
+  dateFormater = totalSeconds => {
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
     return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
@@ -45,7 +51,7 @@ class ReportTableRow extends Component {
   };
 
   getTaskTotalDuration = timeTracked => {
-    return this.secondsToHours(this.addTotalDuration(timeTracked));
+    return this.addTotalDuration(timeTracked);
   };
 
   addTotalDuration = timeTracked => {
@@ -118,9 +124,20 @@ class ReportTableRow extends Component {
           </td>
           <td className="text-titlize">{this.showCategory(task.priority)}</td>
           <td>
-            {this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}
+            {this.dateFormater(
+              this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)
+            )}
           </td>
-          <td>{this.getTaskTotalDuration(task.time_tracked)}</td>
+          <td
+            style={
+              this.getDiffOfTwoDate(task.start_datetime, task.end_datetime) <
+              this.getTaskTotalDuration(task.time_tracked)
+                ? { color: "#964B00" }
+                : { color: "#33a1ff" }
+            }
+          >
+            {this.dateFormater(this.getTaskTotalDuration(task.time_tracked))}
+          </td>
         </tr>
       );
     });
