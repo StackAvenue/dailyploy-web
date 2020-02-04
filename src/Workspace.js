@@ -19,6 +19,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { workspaceNameSplit } from "./utils/function";
 import moment from "moment";
+import "../src/assets/css/loader.scss";
 
 class Workspace extends Component {
   constructor(props) {
@@ -265,7 +266,7 @@ class Workspace extends Component {
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
 
-            {this.state.isLoading ? (
+            {/* {this.state.isLoading ? (
               <Loader
                 type="Oval"
                 color="#1f8354"
@@ -273,7 +274,8 @@ class Workspace extends Component {
                 width={50}
                 className="d-inline-block dailyploy-loader"
               />
-            ) : null}
+            ) : null} */}
+            {this.state.isLoading ? <div class="loading"></div> : null}
             <Switch>
               {this.Routes.map((route, i) => (
                 <Route
