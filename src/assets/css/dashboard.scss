@@ -1,11 +1,11 @@
-@import "./styles";
+@import './styles';
 
 .dashboard-container {
   width: 100%;
   margin: auto;
   height: 60px;
-  .navbar{
-    padding: .5rem 5rem 0 2rem;
+  .navbar {
+    padding: 0.5rem 5rem 0 2rem;
   }
 }
 
@@ -18,7 +18,7 @@
   height: 60px !important;
 }
 
-.btn-link:hover{
+.btn-link:hover {
   text-decoration: none !important;
 }
 .dashboard-header-container {
@@ -126,6 +126,19 @@
     }
   }
 
+  .navbar-collapse .navbar-nav {
+    margin-left: 70% !important;
+    @media (max-width: 1600px) {
+      margin-left: 50% !important;
+    }
+    @media (max-width: 1400px) {
+      margin-left: 40% !important;
+    }
+    @media (max-width: 1200px) {
+      margin-left: 30% !important;
+    }
+  }
+
   .dropdown-notification {
     left: -160px !important;
     width: 400px !important;
@@ -191,9 +204,9 @@
       }
     }
   }
-  .header-ws-name{
-    .bar{
-      padding:0px 15px 0px 15px !important;
+  .header-ws-name {
+    .bar {
+      padding: 0px 15px 0px 15px !important;
     }
     width: 25% !important;
     overflow: hidden !important;
@@ -647,22 +660,22 @@
           color: $color-text3 !important;
           margin-left: 7% !important;
         }
-        .date-text-light{
+        .date-text-light {
           width: 50px !important;
-          span{
+          span {
             color: $color-text2 !important;
           }
         }
-        .calender-icon{
+        .calender-icon {
           width: 205px;
           .react-datepicker-wrapper {
             .react-datepicker__input-container input {
               width: 90%;
             }
             ::after {
-              font-family: "Font Awesome 5 Free" !important;
+              font-family: 'Font Awesome 5 Free' !important;
               font-weight: 900 !important;
-              content: "\f073" !important;
+              content: '\f073' !important;
               color: #555 !important;
               position: relative;
               right: 25px;
@@ -671,7 +684,7 @@
         }
       }
     }
-    .react-datepicker-popper{
+    .react-datepicker-popper {
       left: -33px !important;
     }
   }
@@ -769,7 +782,7 @@
           // margin-left: 7% !important;
           width: 93px;
         }
-        .button3{
+        .button3 {
           border-radius: 5px !important;
           border: solid 1px $color-brand3 !important;
           background-color: $color-white !important;
@@ -777,34 +790,34 @@
           font-size: 13px !important;
           font-weight: 500 !important;
           color: $color-text3 !important;
-          color:$color-brand3 !important;
+          color: $color-brand3 !important;
           height: 40px;
           width: 93px;
           // margin-left: 7% !important;
         }
       }
-      .task-add-category{
+      .task-add-category {
         padding: 5px;
         border-top: solid 1px #e5e5e5;
         width: 100%;
-        .add-category{
+        .add-category {
           color: $color-brand4;
           cursor: pointer;
           padding-left: 10px;
         }
       }
     }
-    .action-btn{
+    .action-btn {
       padding: 20px 15px 0px 31px;
-      button{
+      button {
         margin-left: 20px;
       }
     }
-    .task-datepicker{
-      .label{
+    .task-datepicker {
+      .label {
         width: 30% !important;
       }
-      .picker{
+      .picker {
         width: 70% !important;
       }
       .react-datepicker-wrapper {
@@ -813,13 +826,13 @@
           width: 100%;
         }
         ::after {
-          font-family: "Font Awesome 5 Free" !important;
+          font-family: 'Font Awesome 5 Free' !important;
           font-weight: 900 !important;
-          content: "\f073" !important;
+          content: '\f073' !important;
           color: #555 !important;
           position: absolute;
           right: 10px;
-          top:5px;
+          top: 5px;
         }
       }
     }
@@ -837,7 +850,7 @@
         width: 81%;
       }
     }
-    .react-datepicker-popper{
+    .react-datepicker-popper {
       left: -50px !important;
     }
   }
@@ -934,7 +947,7 @@
         }
       }
     }
-    .table{
+    .table {
       margin: 1rem 2rem 1rem 2rem !important;
     }
   }
@@ -943,7 +956,7 @@
 .day-event-container {
   text-align: left;
   padding: 5px 5px 0 5px;
-  .dropdown-div{
+  .dropdown-div {
     margin: 3px !important;
   }
 }
@@ -1164,14 +1177,14 @@ table.scheduler-table {
 
 table.scheduler-table {
   border: 1px solid $color-borders;
-  tbody{
-    .header2-text{
+  tbody {
+    .header2-text {
       font-family: $font-family-roboto;
       font-size: 15px;
       font-weight: 900;
       color: $color-text2;
     }
-    tr td:first-child{
+    tr td:first-child {
       background-color: #ededed;
       border-right: solid 2px #d6d6d6 !important;
     }
@@ -1424,18 +1437,18 @@ table.scheduler-table tr:last-child td {
   .item-heading {
     font-size: 13px !important;
     font-weight: 900 !important;
-    .fa-pencil{
+    .fa-pencil {
       right: 0px;
-      position: absolute
+      position: absolute;
     }
   }
   .item-time {
     font-size: 12px !important;
-    .weektimer-log{
+    .weektimer-log {
       position: relative;
       padding: 7px 5px 5px 0px !important;
     }
-    .daytimer-log{
+    .daytimer-log {
       position: relative;
       padding: 7px 0px 0px 10px !important;
     }
@@ -1463,7 +1476,7 @@ table.scheduler-table tr:last-child td {
     border: 0 !important;
     thead {
       tr {
-        th:first-child{
+        th:first-child {
           padding-left: 0px;
         }
         th {
@@ -1495,14 +1508,14 @@ table.scheduler-table tr:last-child td {
       .project {
         width: 220px !important;
       }
-      .select-memeber-project{
-        .down-icon{
+      .select-memeber-project {
+        .down-icon {
           position: absolute !important;
           right: 5px !important;
         }
-        .custom-search-select{
+        .custom-search-select {
           height: 36px !important;
-          input{
+          input {
             width: 50% !important;
             height: 34px !important;
           }
@@ -1521,7 +1534,7 @@ table.scheduler-table tr:last-child td {
         font-family: $font-family-roboto !important;
         color: $color-text2 !important;
       }
-      input{
+      input {
         height: 36px !important;
       }
     }
@@ -1579,7 +1592,7 @@ table.scheduler-table tr:last-child td {
         cursor: pointer;
       }
     }
-  } 
+  }
 }
 
 .show-projects {
@@ -1589,45 +1602,44 @@ table.scheduler-table tr:last-child td {
     height: 60px !important;
     border-bottom: solid 2px $color-borders !important;
     padding: 10px 0px 10px 60px;
-      label{
-        font-size: 14px !important;
-        span{
-          vertical-align: text-bottom !important;
-        }
+    label {
+      font-size: 14px !important;
+      span {
+        vertical-align: text-bottom !important;
       }
-      .delete-button{
-        width: 93px !important;
-        height: 36px !important;
-        border-radius: 5px !important;
-        font-size: 15px !important;
-        font-weight: 400 !important;
-        background-color: $btn-background-color !important;
-        border-color: $btn-background-color !important;
-        margin: 0px 20px 0px 46px;
-        &:hover {
-          background-color: $color-brand4;
-          border-color: $color-brand4;
-        }
+    }
+    .delete-button {
+      width: 93px !important;
+      height: 36px !important;
+      border-radius: 5px !important;
+      font-size: 15px !important;
+      font-weight: 400 !important;
+      background-color: $btn-background-color !important;
+      border-color: $btn-background-color !important;
+      margin: 0px 20px 0px 46px;
+      &:hover {
+        background-color: $color-brand4;
+        border-color: $color-brand4;
       }
-      .select-project-text{
-        font-size: 14px !important;
-        color: $color-text3 !important;
-      }
-
+    }
+    .select-project-text {
+      font-size: 14px !important;
+      color: $color-text3 !important;
+    }
   }
   .views {
     padding: 10px 0px 10px 0px;
     // border-bottom: 2px solid $color-borders;
-    .select{
+    .select {
       padding: 10px 0px 10px 60px;
-      label{
+      label {
         font-size: 14px !important;
         margin-bottom: 0 !important;
-        span{
+        span {
           vertical-align: text-bottom !important;
         }
       }
-      .delete-button{
+      .delete-button {
         width: 93px !important;
         height: 36px !important;
         border-radius: 5px !important;
@@ -1641,7 +1653,7 @@ table.scheduler-table tr:last-child td {
           border-color: $color-brand4;
         }
       }
-      .select-project-text{
+      .select-project-text {
         font-size: 14px !important;
         color: $color-text3 !important;
       }
@@ -1738,16 +1750,16 @@ table.scheduler-table tr:last-child td {
       .styled-checkbox {
         position: absolute; // take it out of document flow
         opacity: 0; // hide it
-      
+
         & + label {
           position: relative;
           cursor: pointer;
           padding: 0;
         }
-      
+
         // Box.
         & + label:before {
-          content: "";
+          content: '';
           margin-right: 10px;
           display: inline-block;
           vertical-align: text-top;
@@ -1757,36 +1769,36 @@ table.scheduler-table tr:last-child td {
           background: white;
           border: 1px solid $color-text3;
         }
-      
+
         // Box hover
         &:hover + label:before {
         }
-      
+
         // Box focus
         &:focus + label:before {
           // box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
         }
-      
+
         // Box checked
         &:checked + label:before {
           background: #33a1ff;
         }
-      
+
         // Disabled state label.
         &:disabled + label {
           color: #b8b8b8;
           cursor: auto;
         }
-      
+
         // Disabled box.
         &:disabled + label:before {
           box-shadow: none;
           background: #ddd;
         }
-      
+
         // Checkmark. Could be replaced with an image
         &:checked + label:after {
-          content: "";
+          content: '';
           position: absolute;
           left: 3.5px;
           top: 8px;
@@ -1794,13 +1806,13 @@ table.scheduler-table tr:last-child td {
           width: 2px;
           height: 2px;
           box-shadow: 2px 0 0 $color-white, 4px 0 0 $color-white,
-            4px -2px 0 $color-white, 4px -4px 0 $color-white, 4px -6px 0 $color-white,
-            4px -7px 0 $color-white;
+            4px -2px 0 $color-white, 4px -4px 0 $color-white,
+            4px -6px 0 $color-white, 4px -7px 0 $color-white;
           transform: rotate(45deg);
         }
       }
     }
-    .active{
+    .active {
       border-color: $color-brand3 !important;
     }
   }
@@ -1903,7 +1915,7 @@ table.scheduler-table tr:last-child td {
       display: block;
     }
 
-    .checkbox input[type="checkbox"] {
+    .checkbox input[type='checkbox'] {
       width: auto;
       opacity: 0.00000001;
       position: absolute;
@@ -1914,7 +1926,7 @@ table.scheduler-table tr:last-child td {
       position: relative;
     }
     .checkbox label:before {
-      content: "";
+      content: '';
       position: absolute;
       left: 0;
       top: 0;
@@ -1927,7 +1939,7 @@ table.scheduler-table tr:last-child td {
       border: solid 1px #505050;
     }
     .checkbox label:after {
-      content: "";
+      content: '';
       display: block;
       opacity: 0.5;
       width: 8px;
@@ -1943,11 +1955,11 @@ table.scheduler-table tr:last-child td {
       top: 7px;
       left: 7px;
     }
-    .checkbox input[type="checkbox"]:checked ~ label::before {
+    .checkbox input[type='checkbox']:checked ~ label::before {
       color: #33a1ff;
     }
 
-    .checkbox input[type="checkbox"]:checked ~ label::after {
+    .checkbox input[type='checkbox']:checked ~ label::after {
       -webkit-transform: rotate(-45deg) scale(1);
       -moz-transform: rotate(-45deg) scale(1);
       -ms-transform: rotate(-45deg) scale(1);
@@ -1969,45 +1981,45 @@ table.scheduler-table tr:last-child td {
       -webkit-transform: translateY(-50%);
       transform: translateY(-50%);
     }
-    .checkbox input[type="checkbox"]:focus + label::before {
+    .checkbox input[type='checkbox']:focus + label::before {
       outline: 0;
     }
   }
-  .list-view{
+  .list-view {
     .styled-checkbox {
       &:checked + label:after {
-      top: 6px !important;
+        top: 6px !important;
       }
     }
   }
 }
 
-.email-config-modal{
-  .modal-dialog{
+.email-config-modal {
+  .modal-dialog {
     max-width: 648px !important;
     // top: 100px !important;
-    .modal-content{
-      .config-modal-box{
+    .modal-content {
+      .config-modal-box {
         padding: 20px 22px 0px 50px;
-        margin:0;
-        .header{
-          padding:0px 0px 44px 0px  !important;
-          span{
+        margin: 0;
+        .header {
+          padding: 0px 0px 44px 0px !important;
+          span {
             font-family: $font-family-roboto !important;
             color: $color-text1;
             font-size: 20px;
             font-weight: bold;
           }
-          button{
-            padding:0;
+          button {
+            padding: 0;
           }
         }
-        .body{
+        .body {
           padding: 0px !important;
-          .input-row{
-            margin-bottom:21px;
+          .input-row {
+            margin-bottom: 21px;
             padding: 0px !important;
-            .label{
+            .label {
               font-family: $font-family-roboto !important;
               color: $color-text3;
               font-size: 15px;
@@ -2015,7 +2027,7 @@ table.scheduler-table tr:last-child td {
               display: inline-block !important;
               vertical-align: top;
             }
-            textarea{
+            textarea {
               width: 100%;
               height: 150px;
               border: 1px solid #d6d6d6 !important;
@@ -2121,111 +2133,111 @@ table.scheduler-table tr:last-child td {
   }
 }
 
-.add-admin-modal{
-  .modal-dialog{
-    max-width:432px !important;
-      top: 235px !important;
-      .modal-content{   
-        .box{
-          padding: 26px 0px 30px 36px;
-          .box-top{
-            padding:0 !important;
-            .heading{
-              font-family: $font-family-roboto !important;
-              color: $color-text1;
-              font-size: 20px;
-              font-weight: bold;
-            }
-            .btn{
-              padding-top:0px;
-              padding-right:20px;
-            }
-          }
-          .input{
-            height: 40px;
-            border-radius: 5px;
-            border: solid 1px $color-borders;
-            background-color: #ffffff;
+.add-admin-modal {
+  .modal-dialog {
+    max-width: 432px !important;
+    top: 235px !important;
+    .modal-content {
+      .box {
+        padding: 26px 0px 30px 36px;
+        .box-top {
+          padding: 0 !important;
+          .heading {
             font-family: $font-family-roboto !important;
-            color: $color-text2;
-            font-size: 12px;
-            margin:28px 0px 40px 0px;
+            color: $color-text1;
+            font-size: 20px;
+            font-weight: bold;
           }
-          .auto-search {
-            position: absolute;
-            top:70px;
-            width: 361px;
-            height: auto;
-            z-index: 1;
-            background-color: #fff;
-            border-radius: 5px;
-            ul {
-              list-style: none;
-              padding-left: 0px;
-              text-align: left;
-              margin-bottom: 0px;
-              li {
-                padding: 10px;
-                font-family: $font-family-roboto !important;
-                color: $color-text2;
-                font-size: 12px;
-              }
-              li:hover {
-                cursor: pointer;
-              }
-            }
-          } 
-          .border-add{
-            border: 1px solid $color-borders;
+          .btn {
+            padding-top: 0px;
+            padding-right: 20px;
           }
-          .btn-box {
-            padding-top: 30px !important;
-            // padding-bottom: 21px !important;
-            .add {
-              width: 93px !important;
-              height: 40px !important;
-              border-radius: 5px !important;
-              background-color: $color-brand3 !important;
+        }
+        .input {
+          height: 40px;
+          border-radius: 5px;
+          border: solid 1px $color-borders;
+          background-color: #ffffff;
+          font-family: $font-family-roboto !important;
+          color: $color-text2;
+          font-size: 12px;
+          margin: 28px 0px 40px 0px;
+        }
+        .auto-search {
+          position: absolute;
+          top: 70px;
+          width: 361px;
+          height: auto;
+          z-index: 1;
+          background-color: #fff;
+          border-radius: 5px;
+          ul {
+            list-style: none;
+            padding-left: 0px;
+            text-align: left;
+            margin-bottom: 0px;
+            li {
+              padding: 10px;
               font-family: $font-family-roboto !important;
-              font-size: 17px !important;
-              color: $color-white !important;
+              color: $color-text2;
+              font-size: 12px;
             }
-            .cancel {
-              width: 93px !important;
-              height: 40px !important;
-              border-radius: 5px !important;
-              border: solid 1px $color-brand3 !important;
-              background-color: $color-white !important;
-              font-family: $font-family-roboto !important;
-              font-size: 17px !important;
-              color: $color-text2 !important;
-              margin-left: 10px !important;
+            li:hover {
+              cursor: pointer;
             }
           }
         }
+        .border-add {
+          border: 1px solid $color-borders;
+        }
+        .btn-box {
+          padding-top: 30px !important;
+          // padding-bottom: 21px !important;
+          .add {
+            width: 93px !important;
+            height: 40px !important;
+            border-radius: 5px !important;
+            background-color: $color-brand3 !important;
+            font-family: $font-family-roboto !important;
+            font-size: 17px !important;
+            color: $color-white !important;
+          }
+          .cancel {
+            width: 93px !important;
+            height: 40px !important;
+            border-radius: 5px !important;
+            border: solid 1px $color-brand3 !important;
+            background-color: $color-white !important;
+            font-family: $font-family-roboto !important;
+            font-size: 17px !important;
+            color: $color-text2 !important;
+            margin-left: 10px !important;
+          }
+        }
       }
+    }
   }
 }
 
-.workspace-settings{
+.workspace-settings {
   .react-tabs__tab--selected {
     background: transparent;
     border: 0;
     border-bottom: 3px solid $color-brand3;
     border-radius: 0px;
   }
-  .react-tabs__tab{
+  .react-tabs__tab {
     color: $color-text2;
     font-size: 15px;
     font-family: $font-family-roboto !important;
     margin-right: 30px;
   }
-  .react-tabs__tab-list{
+  .react-tabs__tab-list {
     border-bottom: 1px solid $color-borders;
   }
-  .general-setting{
-    .workspace-name{
-      padding-top:40px;
+  .general-setting {
+    .workspace-name {
+      padding-top: 40px;
       .name {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
@@ -2238,7 +2250,7 @@ table.scheduler-table tr:last-child td {
           color: $color-failure !important;
         }
       }
-      .save-button{
+      .save-button {
         height: 40px !important;
         width: 93px !important;
         border-radius: 5px !important;
@@ -2256,7 +2268,7 @@ table.scheduler-table tr:last-child td {
         border: solid 1px $color-borders !important;
         background-color: $color-white !important;
         color: $color-text1 !important;
-        &:disabled{
+        &:disabled {
           background-color: $color-borders !important;
           cursor: not-allowed;
         }
@@ -2280,18 +2292,18 @@ table.scheduler-table tr:last-child td {
           background-color: $color-brand4 !important;
           color: $color-white !important;
         }
-        .btn-blue{
+        .btn-blue {
           background-color: $color-brand3 !important;
           color: $color-white !important;
         }
-        .btn-disable{
+        .btn-disable {
           pointer-events: none;
         }
       }
     }
-    .admin-add{
-      padding-top:20px;
-      .admin-box{
+    .admin-add {
+      padding-top: 20px;
+      .admin-box {
         width: 200px;
         height: 40px;
         border-radius: 2px;
@@ -2299,7 +2311,7 @@ table.scheduler-table tr:last-child td {
         background-color: #ffffff;
         display: inline-block;
         margin: 0px 10px 5px 0px;
-        .img-box{
+        .img-box {
           width: 28px;
           height: 28px;
           border-radius: 50%;
@@ -2314,26 +2326,26 @@ table.scheduler-table tr:last-child td {
           padding: 2px 0px 0px 0px;
           text-align: center;
         }
-        .text{
+        .text {
           font-family: $font-family-roboto !important;
           font-size: 14px !important;
           color: $color-text2 !important;
           float: left;
           padding-top: 8px;
         }
-        .triple-dot{
+        .triple-dot {
           float: right;
           padding: 5px 10px 0px 0px;
-          i{
+          i {
             font-size: 12px;
             color: $color-text2;
           }
         }
-        .remove-btn{
+        .remove-btn {
           position: relative;
           width: 62px;
           height: 25px;
-          padding:0px;
+          padding: 0px;
           border-radius: 5px;
           box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.15);
           border: solid 1px $color-borders;
@@ -2345,7 +2357,7 @@ table.scheduler-table tr:last-child td {
           left: 139px;
         }
       }
-      .addnew-button{
+      .addnew-button {
         height: 40px !important;
         width: 93px !important;
         border-radius: 5px !important;
@@ -2359,52 +2371,50 @@ table.scheduler-table tr:last-child td {
         display: inline-block;
         vertical-align: top;
       }
-      
-      
     }
-    .hr1{
+    .hr1 {
       border-bottom: 1px solid $color-borders;
       margin: 50px 0px 30px 0px;
     }
-    .config-email-box{
+    .config-email-box {
       border-radius: 2px;
       border: solid 1px $color-borders;
       background-color: #ffffff;
       padding: 21px 33px 30px 33px;
       width: 876px;
-      .workdays-text{
+      .workdays-text {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
         color: $color-text3 !important;
-        padding:31px 15px 9px 0px;
+        padding: 31px 15px 9px 0px;
         margin-left: 15px;
         border-bottom: 1px solid $color-borders;
       }
-      .workdays{
-        table{
+      .workdays {
+        table {
           width: 100% !important;
-          tr{
+          tr {
             border-bottom: 1px solid $color-borders;
-            td{
+            td {
               padding: 10px 0px 10px 0px;
             }
-            .check{
+            .check {
               margin-bottom: 0 !important;
               vertical-align: middle !important;
             }
-            .text{
+            .text {
               font-family: $font-family-roboto !important;
               font-size: 15px !important;
               color: $color-text2 !important;
             }
-            select{
+            select {
               width: 92px !important;
               height: 25px !important;
               border-radius: 5px !important;
               background-color: #ffffff !important;
               border: 1px solid $color-borders !important;
             }
-            .hrs{
+            .hrs {
               font-family: $font-family-roboto !important;
               font-size: 14px !important;
               color: $color-text2 !important;
@@ -2413,93 +2423,93 @@ table.scheduler-table tr:last-child td {
         }
       }
     }
-    .config-heading{
+    .config-heading {
       font-family: $font-family-roboto !important;
       font-size: 20px !important;
       color: $color-text2 !important;
       font-weight: bold !important;
       margin-bottom: 20px !important;
-      padding:0 !important;
+      padding: 0 !important;
     }
   }
-  .categories-setting{
+  .categories-setting {
     padding: 50px 60px 0px 60px;
-    .category{
-      .category-cnt{
+    .category {
+      .category-cnt {
         padding-left: 20px;
         color: $color-text3 !important;
       }
-      .heading-text{
+      .heading-text {
         font-family: $font-family-roboto !important;
         font-size: 20px !important;
         color: $color-text2 !important;
         font-weight: bold !important;
       }
-      .sub{
+      .sub {
         font-family: $font-family-roboto !important;
         font-size: 18px !important;
         color: $color-text3 !important;
         font-weight: bold !important;
-        padding:0;
+        padding: 0;
       }
-      .btn-add{
+      .btn-add {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
         color: $color-white !important;
         font-weight: bold !important;
-        border:0 !important;
+        border: 0 !important;
         background-color: $color-brand3 !important;
         width: 93px;
         height: 32px;
       }
     }
-    .category-box{
+    .category-box {
       border-radius: 2px;
       border: solid 1px $color-borders;
       background-color: #ffffff;
       padding: 10px 20px 0px 20px;
-      margin-top:20px;
-      table{
-        thead{
-          th{
-            border:0;
+      margin-top: 20px;
+      table {
+        thead {
+          th {
+            border: 0;
             font-family: $font-family-roboto !important;
             font-size: 14px !important;
             color: $color-text1 !important;
             font-weight: 700 !important;
-            i{
-              margin-left:20px;
+            i {
+              margin-left: 20px;
               color: $color-text3 !important;
             }
           }
         }
-        tbody{
-          td{
+        tbody {
+          td {
             font-family: $font-family-roboto !important;
             font-size: 13px !important;
             color: #000000 !important;
-            input{
+            input {
               border: 1px solid rgba(155, 155, 155, 1);
               height: 30px;
               border-radius: 5px;
               color: #000000;
               box-shadow: 0px 0px 8px rgba(255, 255, 255, 1);
               font-size: 13px !important;
-              width:300px;
+              width: 300px;
             }
-            button{
-              padding:0px 10px 0px 0px;
-              i{
+            button {
+              padding: 0px 10px 0px 0px;
+              i {
                 font-size: 15px !important;
                 color: $color-text3 !important;
               }
-              span{
-                i{
+              span {
+                i {
                   font-size: 15px !important;
                   color: $color-success !important;
                 }
               }
-              .fa-close{
+              .fa-close {
                 color: $red-color !important;
               }
             }
@@ -2509,16 +2519,16 @@ table.scheduler-table tr:last-child td {
     }
   }
 
-  .employee-project-settings{
+  .employee-project-settings {
     padding: 30px 45px 0px 30px;
-    .email-heading{
+    .email-heading {
       font-family: $font-family-roboto !important;
       font-size: 20px !important;
       color: $color-text2 !important;
       font-weight: 700 !important;
-      margin-bottom:20px;
+      margin-bottom: 20px;
     }
-    .report-box{
+    .report-box {
       border-radius: 2px;
       border: solid 1px $color-brand3;
       height: 167px;
@@ -2526,34 +2536,33 @@ table.scheduler-table tr:last-child td {
       background-color: #ffffff;
       padding: 10px 20px 10px 20px;
       margin: auto;
-      .day-text{
+      .day-text {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
         color: $color-text2 !important;
       }
-      .day-select{
+      .day-select {
         margin: 15px 0px;
-        select{
+        select {
           width: 70px;
           height: 40px;
           background-color: $color-white;
-          margin-right:5px;
+          margin-right: 5px;
           border: 1px solid $color-borders;
         }
-
       }
-      .week-select{
+      .week-select {
         margin: 15px 0px;
-        select{
+        select {
           width: 130px;
           height: 40px;
           background-color: $color-white;
           border: 1px solid $color-borders;
         }
       }
-      .month-select{
+      .month-select {
         margin: 15px 0px;
-        input{
+        input {
           width: 220px;
           height: 40px;
           background-color: $color-white;
@@ -2561,40 +2570,40 @@ table.scheduler-table tr:last-child td {
           cursor: pointer;
         }
       }
-      .day-desc{
+      .day-desc {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
         color: $color-text3 !important;
       }
     }
-    .employee-project-box{
+    .employee-project-box {
       border-radius: 2px;
       border: solid 1px $color-borders;
       background-color: #ffffff;
       padding: 10px 20px 0px 20px;
-      margin-top:20px;
-      table{
-        thead{
-          th{
-            border:0;
+      margin-top: 20px;
+      table {
+        thead {
+          th {
+            border: 0;
             font-family: $font-family-roboto !important;
             font-size: 14px !important;
             color: $color-text1 !important;
             font-weight: 700 !important;
-            i{
-              margin-left:20px;
+            i {
+              margin-left: 20px;
               color: $color-text3 !important;
             }
           }
         }
-        tbody{
-          td{
+        tbody {
+          td {
             font-family: $font-family-roboto !important;
             font-size: 13px !important;
             color: #000000 !important;
-            i{
+            i {
               font-size: 14px !important;
-            color: $color-text3 !important;
+              color: $color-text3 !important;
             }
           }
         }
@@ -2638,7 +2647,7 @@ table.scheduler-table tr:last-child td {
       font-size: 15px !important;
       font-weight: bold !important;
       color: $color-text2 !important;
-      padding-bottom:10px;
+      padding-bottom: 10px;
       vertical-align: middle;
       .alert {
         color: $color-failure !important;
@@ -2713,18 +2722,18 @@ table.scheduler-table tr:last-child td {
           padding-top: 10px !important;
         }
       }
-      .access-box{
-        margin-left:178px;
-        .access-text{
+      .access-box {
+        margin-left: 178px;
+        .access-text {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
           color: $color-text3 !important;
         }
-        .admin-text{
+        .admin-text {
           font-family: $font-family-roboto !important;
           font-size: 13px !important;
           color: $color-text2 !important;
-          img{
+          img {
             margin: 0px 11px 0px 40px;
             vertical-align: bottom;
           }
@@ -2797,7 +2806,7 @@ table.scheduler-table tr:last-child td {
             color: $color-failure !important;
           }
         }
-        .save-button{
+        .save-button {
           height: 40px !important;
           width: 93px !important;
           border-radius: 5px !important;
@@ -2810,7 +2819,7 @@ table.scheduler-table tr:last-child td {
           padding-right: 20px !important;
           padding-left: 20px !important;
         }
-        .save-conf-btn{
+        .save-conf-btn {
           padding-top: 30px;
         }
         .input {
@@ -2819,7 +2828,7 @@ table.scheduler-table tr:last-child td {
           border: solid 1px $color-borders;
           background-color: $color-white !important;
           color: $color-text1 !important;
-          &:disabled{
+          &:disabled {
             background-color: $color-borders !important;
             cursor: not-allowed;
           }
@@ -2844,11 +2853,11 @@ table.scheduler-table tr:last-child td {
           background-color: $color-brand4 !important;
           color: $color-white !important;
         }
-        .btn-blue{
+        .btn-blue {
           background-color: $color-brand3 !important;
           color: $color-white !important;
         }
-        .btn-disable{
+        .btn-disable {
           pointer-events: none;
         }
       }
@@ -2859,7 +2868,7 @@ table.scheduler-table tr:last-child td {
       margin: 30px 0px 30px 0px !important;
     }
     .delete-text {
-      padding:0px !important;
+      padding: 0px !important;
       font-family: $font-family-roboto !important;
       font-size: 15px !important;
       color: $color-text3 !important;
@@ -2876,7 +2885,7 @@ table.scheduler-table tr:last-child td {
     display: inline-block;
     border-bottom: none !important;
     opacity: 2 !important;
-    font-family:  "FontAwesome" !important;
+    font-family: 'FontAwesome' !important;
     padding-left: 10px;
   }
 
@@ -2896,7 +2905,7 @@ table.scheduler-table tr:last-child td {
   }
 
   .tooltip .tooltiptext::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     right: 100%;
@@ -2911,12 +2920,12 @@ table.scheduler-table tr:last-child td {
 }
 
 .modal-box {
-  .modal-dialog{
+  .modal-dialog {
     padding-left: 20px !important;
-    max-width:432px !important;
+    max-width: 432px !important;
     top: 100px !important;
     height: 251px;
-    .modal-content{   
+    .modal-content {
       .heading {
         font-family: $font-family-roboto !important;
         font-size: 20px !important;
@@ -2966,7 +2975,7 @@ table.scheduler-table tr:last-child td {
   width: 4.6%;
   box-shadow: 0px -3px 20px rgba(0, 0, 0, 0.0470588235294118);
   // background-color: #ffffff;
-    background-color: rgba(2, 40, 17, 0.5);
+  background-color: rgba(2, 40, 17, 0.5);
   border-right: 1px solid $color-borders;
   display: inline-flex;
   position: fixed;
@@ -3041,7 +3050,7 @@ table.scheduler-table tr:last-child td {
         white-space: nowrap !important;
         text-overflow: ellipsis !important;
       }
-      .workspace-add-btn{
+      .workspace-add-btn {
         width: 45px;
         font-family: $font-family-roboto !important;
         font-size: 10px !important;
@@ -3220,9 +3229,9 @@ table.scheduler-table tr:last-child td {
       width: 81%;
     }
     ::after {
-      font-family: "Font Awesome 5 Free" !important;
+      font-family: 'Font Awesome 5 Free' !important;
       font-weight: 900 !important;
-      content: "\f073" !important;
+      content: '\f073' !important;
       color: #555 !important;
       padding-top: 10px;
       float: right;
@@ -3480,7 +3489,7 @@ table.scheduler-table tr:last-child td {
 
   // Box.
   & + label:before {
-    content: "";
+    content: '';
     margin-right: 10px;
     display: inline-block;
     vertical-align: text-top;
@@ -3518,7 +3527,7 @@ table.scheduler-table tr:last-child td {
 
   // Checkmark. Could be replaced with an image
   &:checked + label:after {
-    content: "";
+    content: '';
     position: absolute;
     left: 2px;
     top: 8px;
@@ -3532,46 +3541,46 @@ table.scheduler-table tr:last-child td {
   }
 }
 
-.header2-text-label{
+.header2-text-label {
   font-size: 13px !important;
   /* color: rgb(155, 155, 155); */
   text-transform: uppercase !important;
 }
-.hide{
+.hide {
   display: none !important;
 }
-.show{
+.show {
   display: block !important;
 }
-.medium{
+.medium {
   width: 10px;
   height: 10px;
   background-color: $color-medium-priority;
   border: solid 1px $color-white;
-  border-radius: 5px
+  border-radius: 5px;
 }
-.high{
+.high {
   width: 10px;
   height: 10px;
   background-color: $color-high-priority;
   border: solid 1px $color-white;
-  border-radius: 5px
+  border-radius: 5px;
 }
-.low{
+.low {
   width: 10px;
   height: 10px;
   background-color: $color-low-priority;
   border: solid 1px $color-white;
-  border-radius: 5px
+  border-radius: 5px;
 }
-.no_priority{
+.no_priority {
   width: 10px;
   height: 10px;
   background-color: $color-no-priority;
   border: solid 1px $color-white;
-  border-radius: 5px
+  border-radius: 5px;
 }
-.task-play-btn{
+.task-play-btn {
   border-radius: 15px;
   height: 25px;
   width: 25px;
@@ -3580,19 +3589,19 @@ table.scheduler-table tr:last-child td {
   right: 10px;
   border: 1px solid #ffffff;
 }
-.fa-pause{
+.fa-pause {
   color: green !important;
   padding-left: 4.5px;
 }
-.fa-play{
+.fa-play {
   color: #1e90ff;
   padding: 5px 6px;
 }
-.fa-check{
+.fa-check {
   color: green;
   padding-left: 3px;
 }
-.task-timer{
+.task-timer {
   font-family: 'Roboto-Regular', 'Roboto';
   font-weight: 400;
   font-style: normal;
@@ -3602,41 +3611,41 @@ table.scheduler-table tr:last-child td {
   line-height: 9px;
   padding: 0px 15px 0px 25px;
 }
-.task-event-action{
+.task-event-action {
   font-size: 20px;
 }
-.day-event-container{
+.day-event-container {
   padding: 0px !important;
-  .day-event{
+  .day-event {
     margin: 0px !important;
   }
 }
 
-.timeline-event{
-  left: 1 px!important;
+.timeline-event {
+  left: 1 px !important;
   padding: 2px !important;
 }
-.event-container{
-  .event-item{
+.event-container {
+  .event-item {
     margin: 0 !important;
   }
 }
 .border-top {
-  border-top:  solid 1px#dee2e6 !important;
+  border-top: solid 1px#dee2e6 !important;
   border-left: solid 2px #dee2e6 !important;
 }
-#RBS-Scheduler-root a{
+#RBS-Scheduler-root a {
   cursor: text !important;
 }
-.pointer{
+.pointer {
   cursor: pointer !important;
 }
 
-.dropdown-div{
+.dropdown-div {
   position: absolute;
-  width: 98px;
+  width: 140px;
   border: 1px solid #ffffff;
-  top: 73px;
+  top: 78px;
   left: 13px;
   background-color: #ffffff;
   border-top: 0;
@@ -3644,8 +3653,8 @@ table.scheduler-table tr:last-child td {
   font-size: 12px !important;
 }
 
-.timer-dropdown{
-  width: 100px !important;
+.timer-dropdown {
+  width: 140px !important;
   height: 26px !important;
   border-radius: 0px !important;
   padding-left: 5px !important;
@@ -3657,17 +3666,17 @@ table.scheduler-table tr:last-child td {
   color: #424242;
   line-height: 9px;
   cursor: pointer;
-  &:hover{
+  &:hover {
     border-color: #ffffff !important;
   }
 }
-.hover-border{
+.hover-border {
   padding-left: 5px !important;
-  &:hover{
+  &:hover {
     border: 1px solid #505050;
   }
 }
-.event-action-dropdown{
+.event-action-dropdown {
   width: 98px;
   position: absolute;
   z-index: 1;
@@ -3681,7 +3690,7 @@ table.scheduler-table tr:last-child td {
   font-weight: 400;
   font-style: normal;
   font-size: 12px;
-  color: #0075D9;
+  color: #0075d9;
 }
 .custom-event-popup {
   width: 200px;
@@ -3719,10 +3728,10 @@ table.scheduler-table tr:last-child td {
     }
   }
 }
-.border-bottom{
+.border-bottom {
   border-bottom: 1px solid rgb(214, 214, 214);
 }
-.task-b-popup{
+.task-b-popup {
   position: fixed;
   right: 94px;
   bottom: 20px;
@@ -3736,7 +3745,7 @@ table.scheduler-table tr:last-child td {
   border-style: solid;
   border-color: rgba(51, 161, 255, 1);
   border-radius: 0px;
-  .color-code{
+  .color-code {
     width: 20px;
     height: 20px;
     margin-top: 8px;
@@ -3745,14 +3754,14 @@ table.scheduler-table tr:last-child td {
     box-sizing: border-box;
     border: 1px solid rgba(155, 155, 155, 1);
   }
-  .task-pause-btn{
+  .task-pause-btn {
     margin: 0px 10px 0px 10px;
     height: 26px;
     width: 26px;
     border-radius: 20px;
-    border: 1px solid  rgba(16, 184, 87, 1);
+    border: 1px solid rgba(16, 184, 87, 1);
   }
-  .task-title{
+  .task-title {
     font-family: 'Roboto-Regular', 'Roboto';
     font-weight: 400;
     font-style: normal;
@@ -3762,16 +3771,16 @@ table.scheduler-table tr:last-child td {
     line-height: 9px;
     margin: 0px 10px 0px 5px;
   }
-  .title{
+  .title {
     width: 161px;
     text-align: left !important;
   }
-  .timer-dropdown{
+  .timer-dropdown {
     float: right;
     margin-right: 40px;
     margin-top: 6px;
     &:after {
-      content: "▼";
+      content: '▼';
       padding: 15px 8px;
       position: absolute;
       right: 10px;
@@ -3781,17 +3790,17 @@ table.scheduler-table tr:last-child td {
       height: 100%;
       pointer-events: none;
     }
-    .border{
+    .border {
       border: 1px solid #505050;
     }
-    input{
+    input {
       height: 26px;
       width: 123px;
       box-shadow: none !important;
       border: none;
     }
   }
-  .dropdown{
+  .dropdown {
     position: absolute;
     right: 17px;
     bottom: 31px;
@@ -3799,15 +3808,15 @@ table.scheduler-table tr:last-child td {
     width: 123px;
     height: auto;
     background-color: #ffffff;
-    .border{
+    .border {
       border: 1px solid #505050;
     }
   }
 }
-.task-war-alert{
+.task-war-alert {
   position: absolute !important;
   width: 154px;
-  top:55px;
+  top: 55px;
   text-align: left;
   z-index: 5500;
   font-family: 'Roboto-Regular', 'Roboto';
@@ -3818,9 +3827,9 @@ table.scheduler-table tr:last-child td {
 }
 
 .alert-dismissible .close {
-  padding: 0.60rem 0.80rem !important;
+  padding: 0.6rem 0.8rem !important;
 }
-.month-task-popup{
+.month-task-popup {
   border-width: 0px;
   position: absolute;
   z-index: 500;
@@ -3842,33 +3851,33 @@ table.scheduler-table tr:last-child td {
   .title {
     padding: 10px 15px 0px 15px;
   }
-  .comments{
+  .comments {
     padding: 10px 15px 0px 15px;
   }
   .project {
     padding: 10px 15px 0px 15px;
     height: 15px;
-    .status-dot{
+    .status-dot {
       margin-right: 20px;
     }
   }
-  .dot-timer-btn{
+  .dot-timer-btn {
     padding: 0px 15px 0px 15px;
-    .task-pause-btn{
+    .task-pause-btn {
       border-radius: 18px;
       border: 1px solid green;
       width: 26px;
       height: 26px;
     }
-    .task-timer{
+    .task-timer {
       padding: 0px 15px 0px 70px !important;
     }
   }
-  .timer-dropdown-action{
+  .timer-dropdown-action {
     padding: 10px 15px 15px 15px;
-    .down-icon{
+    .down-icon {
       &:after {
-        content: "▼";
+        content: '▼';
         padding: 2px 2px;
         position: absolute;
         right: 10px;
@@ -3879,10 +3888,10 @@ table.scheduler-table tr:last-child td {
         pointer-events: none;
       }
     }
-    .border{
+    .border {
       border: 1px solid #505050;
     }
-    input{
+    input {
       height: 26px;
       width: 123px;
       box-shadow: none !important;
@@ -3890,7 +3899,7 @@ table.scheduler-table tr:last-child td {
     }
   }
 }
-.monthly-timer-dropdown{
+.monthly-timer-dropdown {
   position: absolute;
   width: 123px;
   background-color: #ffffff;
@@ -3900,12 +3909,12 @@ table.scheduler-table tr:last-child td {
   font-style: normal;
   font-size: 13px;
   color: #424242;
-  .border{
+  .border {
     height: 26px;
     padding-top: 5px;
   }
 }
-.monthly-action-dropdown{
+.monthly-action-dropdown {
   width: 98px !important;
   position: absolute;
   z-index: 15546 !important;
@@ -3919,12 +3928,12 @@ table.scheduler-table tr:last-child td {
   font-weight: 400;
   font-style: normal;
   font-size: 12px;
-  color: #0075D9;
+  color: #0075d9;
 }
 .color-block {
   width: 20px;
   height: 20px;
-  margin-left: 0.90rem;
+  margin-left: 0.9rem;
   margin-right: 10px;
   vertical-align: middle;
   border: solid 1px#9b9b9b;
@@ -4032,7 +4041,7 @@ table.scheduler-table tr:last-child td {
     font-size: 22px !important;
   }
 }
-.task-info-modal{
+.task-info-modal {
   .modal-content {
     width: 626px;
     .header {
@@ -4050,7 +4059,7 @@ table.scheduler-table tr:last-child td {
           height: 15px;
         }
       }
-      .action-btn{
+      .action-btn {
         padding-left: 60px;
       }
     }
@@ -4127,7 +4136,7 @@ table.scheduler-table tr:last-child td {
           text-align: center;
           padding: 2px;
         }
-        .button3{
+        .button3 {
           border-radius: 5px !important;
           width: 80px;
           border: solid 1px #00a031 !important;
@@ -4140,7 +4149,7 @@ table.scheduler-table tr:last-child td {
           text-align: center;
           padding: 2px;
         }
-        .fa-user{
+        .fa-user {
           width: 8.4px;
           height: 11px;
           object-fit: contain;
@@ -4148,7 +4157,7 @@ table.scheduler-table tr:last-child td {
           margin-right: 10px;
         }
       }
-      .comments{
+      .comments {
         width: 389px;
         font-family: Roboto;
         font-size: 15px;
@@ -4161,10 +4170,10 @@ table.scheduler-table tr:last-child td {
         color: $color-brandheading2;
         text-transform: none !important;
       }
-      .color-block{
+      .color-block {
         vertical-align: text-bottom !important;
       }
-      .track-time-placeholder{
+      .track-time-placeholder {
         font-size: 12px;
       }
       .color-block {
@@ -4181,36 +4190,36 @@ table.scheduler-table tr:last-child td {
     width: 26px;
     background-color: #ffffff;
     border: 1px solid #ffffff;
-    .fa-pause{      
+    .fa-pause {
       border: 1px solid #10b857;
       border-radius: 20px;
       height: 26px;
       width: 26px;
       padding: 4.5px 4px 4px 5px;
     }
-    .fa-play{
-      border: 1px solid #1e90ff;;
+    .fa-play {
+      border: 1px solid #1e90ff;
       border-radius: 20px;
       height: 26px;
       width: 26px;
       padding: 5px 5px 5px 7px;
     }
-    .fa-check{
+    .fa-check {
       border: 1px solid #10b857;
       border-radius: 20px;
       height: 26px;
       width: 26px;
       padding: 4px;
     }
-  }  
-  .header-2{
+  }
+  .header-2 {
     padding-left: 30px;
     padding-right: 30px;
   }
-  .select-member{
+  .select-member {
     padding-left: 20px !important;
   }
-  .timer-dropdown{
+  .timer-dropdown {
     width: 110px !important;
     background-color: #ffffff !important;
     z-index: 10082;
@@ -4222,7 +4231,7 @@ table.scheduler-table tr:last-child td {
     margin-right: 40px;
     margin-top: 6px;
     &:after {
-      content: "▼";
+      content: '▼';
       padding: 15px 8px;
       position: absolute;
       right: 10px;
@@ -4232,24 +4241,24 @@ table.scheduler-table tr:last-child td {
       height: 100%;
       pointer-events: none;
     }
-    .border{
+    .border {
       height: 26px !important;
       padding-top: 7px !important;
       color: $color-text1 !important;
       background-color: $color-white;
     }
-    input{
+    input {
       height: 26px !important;
       width: 100% !important;
       box-shadow: none !important;
       border: none !important;
-      font-family: "Roboto-Regular", "Roboto" !important;
-      border: 1px solid #505050 !important; 
-      font-size: 15px !important; 
+      font-family: 'Roboto-Regular', 'Roboto' !important;
+      border: 1px solid #505050 !important;
+      font-size: 15px !important;
       padding: 0px !important;
     }
   }
-  .dropdown{
+  .dropdown {
     min-height: 85px;
     overflow-y: auto;
     position: absolute;
@@ -4261,17 +4270,17 @@ table.scheduler-table tr:last-child td {
     background-color: #ffffff !important;
   }
 }
-.bg-green{
+.bg-green {
   width: 86px;
   height: 25px;
   text-align: center;
   background: inherit;
   background-color: rgba(75, 121, 2, 1);
-  color:  #ffffff;
+  color: #ffffff;
   margin-right: 20px;
 }
 
-.task-delete-confirm-modal{
+.task-delete-confirm-modal {
   .modal-content {
     width: 550px;
     .header {
@@ -4297,7 +4306,7 @@ table.scheduler-table tr:last-child td {
         }
       }
     }
-    .confirm-msg{
+    .confirm-msg {
       height: 24px;
       font-family: Roboto;
       font-size: 15px;
@@ -4310,7 +4319,7 @@ table.scheduler-table tr:last-child td {
       color: #707070;
       margin: 30px 0px 0px 31px;
     }
-    .task-details{
+    .task-details {
       width: 82px;
       height: 18px;
       font-family: Roboto;
@@ -4345,7 +4354,7 @@ table.scheduler-table tr:last-child td {
           letter-spacing: normal;
           text-align: left;
         }
-        .date-time{
+        .date-time {
           width: 72px;
           height: 15px;
           font-family: Roboto;
@@ -4358,7 +4367,7 @@ table.scheduler-table tr:last-child td {
           text-align: left;
           color: $color-heading3;
         }
-        .comments{
+        .comments {
           width: 341px;
           height: auto;
           font-family: Roboto;
@@ -4371,7 +4380,7 @@ table.scheduler-table tr:last-child td {
           text-align: left;
           color: $color-text1;
         }
-        .task-name{
+        .task-name {
           height: 15px;
           font-family: $font-family-roboto !important;
           font-size: 13px;
@@ -4384,7 +4393,7 @@ table.scheduler-table tr:last-child td {
         }
       }
     }
-    .button2{
+    .button2 {
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
       background-color: $color-brand3 !important;
@@ -4395,7 +4404,7 @@ table.scheduler-table tr:last-child td {
       height: 40px;
       min-width: 93px !important;
     }
-    .button3{
+    .button3 {
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
       background-color: $color-white !important;
@@ -4403,11 +4412,11 @@ table.scheduler-table tr:last-child td {
       font-size: 13px !important;
       font-weight: 500 !important;
       color: $color-text3 !important;
-      color:$color-brand3 !important;
+      color: $color-brand3 !important;
       height: 40px;
       min-width: 93px !important;
     }
-    .complete-btn{
+    .complete-btn {
       border-radius: 5px !important;
       border: solid 1px #00a031 !important;
       background-color: $color-white !important;
@@ -4415,13 +4424,13 @@ table.scheduler-table tr:last-child td {
       font-size: 13px !important;
       font-weight: 500 !important;
       color: $color-text3 !important;
-      color:#00a031 !important;
+      color: #00a031 !important;
       height: 25px;
       min-width: 80px !important;
       text-align: center;
       padding: 2px;
     }
-    .not-start-btn{
+    .not-start-btn {
       border-radius: 5px !important;
       border: solid 1px $color-text3 !important;
       background-color: $color-white !important;
@@ -4434,48 +4443,48 @@ table.scheduler-table tr:last-child td {
       text-align: center;
       padding: 2px;
     }
-    .progress-btn{
+    .progress-btn {
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
       background-color: $color-white !important;
       font-family: $font-family-roboto !important;
       font-size: 13px !important;
       font-weight: 500 !important;
-      color:$color-brand3 !important;
+      color: $color-brand3 !important;
       height: 25px;
       min-width: 80px !important;
       text-align: center;
       padding: 2px;
     }
-    .color-block{
+    .color-block {
       width: 15px !important;
       height: 15px !important;
     }
-    .log-timer{
+    .log-timer {
       margin: 19px 0px 44px 31px !important;
-      .time-picker-container{
+      .time-picker-container {
         width: 115px !important;
         height: 34px !important;
       }
-      .rc-time-picker{
-        input{
+      .rc-time-picker {
+        input {
           font-family: Roboto;
           font-size: 15px !important;
           text-align: center;
           padding: 5px 0 0 0px !important;
         }
       }
-      .rc-time-picker-clear{
+      .rc-time-picker-clear {
         top: 6px !important;
       }
     }
-    .pri-info{
-      .color-dot{
+    .pri-info {
+      .color-dot {
         width: 10px !important;
         height: 10px !important;
-        margin: 0px 5px 3px 0px !important
+        margin: 0px 5px 3px 0px !important;
       }
-      .priority-dot{
+      .priority-dot {
         height: 15px;
         font-family: Roboto;
         font-size: 13px;
@@ -4488,7 +4497,7 @@ table.scheduler-table tr:last-child td {
         color: $color-heading3;
       }
     }
-    .mark-btn{
+    .mark-btn {
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
       background-color: $color-brand3 !important;
@@ -4500,16 +4509,16 @@ table.scheduler-table tr:last-child td {
       width: 170px !important;
     }
 
-    .action-btn{
+    .action-btn {
       padding: 20px 29px 20px 31px;
-      button{
+      button {
         margin-left: 10px;
         min-width: 93px !important;
       }
     }
-    .rc-time-picker-panel{
-      .rc-time-picker-panel-inner{
-        .rc-time-picker-panel-input-wrap{
+    .rc-time-picker-panel {
+      .rc-time-picker-panel-inner {
+        .rc-time-picker-panel-input-wrap {
           .rc-time-picker-panel-input {
             line-height: 2 !important;
             font-family: Roboto !important;
@@ -4523,40 +4532,40 @@ table.scheduler-table tr:last-child td {
   }
 }
 
-.rc-time-picker-panel-input{
+.rc-time-picker-panel-input {
   text-align: center;
   font-size: 15px;
 }
-.disable-project-select{
+.disable-project-select {
   pointer-events: none;
-  .custom-search-select{
+  .custom-search-select {
     background-color: $color-disable !important;
   }
-  input{
+  input {
     background-color: $color-disable !important;
   }
 }
 
-.suggestion-z-index-50{
-  .suggestions{
+.suggestion-z-index-50 {
+  .suggestions {
     z-index: 50;
   }
 }
-.suggestion-z-index-100{
-  .suggestions{
+.suggestion-z-index-100 {
+  .suggestions {
     z-index: 100;
   }
 }
 
-.viewtype-btns{
+.viewtype-btns {
   // position: relative;
   // top: -48px;
   // right: 170px;
-    position: fixed;
-    top: 72px;
-    right: 200px;
-    z-index: 10;
-  div{
+  position: fixed;
+  top: 72px;
+  right: 200px;
+  z-index: 10;
+  div {
     width: 80px;
     height: 36px;
     background-color: #ffffff;
@@ -4571,56 +4580,58 @@ table.scheduler-table tr:last-child td {
     letter-spacing: normal;
     cursor: pointer;
   }
-  :first-child{
+  :first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
   }
 
-  :last-child{
+  :last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
   }
-  .active{
+  .active {
     border: solid 1px $color-brand3 !important;
     background-color: $color-brand3 !important;
     color: $color-white !important;
   }
 }
-.day-format-width{
-  .react-datepicker-wrapper{
-    input{
+.day-format-width {
+  .react-datepicker-wrapper {
+    input {
       width: 135px !important;
       border: none;
     }
   }
-  .react-datepicker-popper{
+  .react-datepicker-popper {
     left: -50px !important;
-    div{
+    div {
       color: #555555 !important;
     }
-    .react-datepicker__day--selected, .react-datepicker__day--in-range {
+    .react-datepicker__day--selected,
+    .react-datepicker__day--in-range {
       color: $color-white !important;
     }
   }
 }
-.week-format-width{
-  .react-datepicker-wrapper{
-    input{
+.week-format-width {
+  .react-datepicker-wrapper {
+    input {
       width: 230px !important;
       border: none;
     }
   }
-  .react-datepicker-popper{
+  .react-datepicker-popper {
     left: -30px !important;
-    div{
+    div {
       color: #555555 !important;
     }
-    .react-datepicker__day--selected, .react-datepicker__day--in-range {
+    .react-datepicker__day--selected,
+    .react-datepicker__day--in-range {
       color: $color-white !important;
     }
   }
 }
-.dashboard-calender{
+.dashboard-calender {
   margin-left: 325px;
   .react-datepicker-wrapper {
     .react-datepicker__input-container input {
@@ -4634,9 +4645,9 @@ table.scheduler-table tr:last-child td {
       text-align: left;
     }
     ::before {
-      font-family: "Font Awesome 5 Free" !important;
+      font-family: 'Font Awesome 5 Free' !important;
       font-weight: 900 !important;
-      content: "\f073" !important;
+      content: '\f073' !important;
       color: #555 !important;
       padding: 5px 10px 5px 0px;
     }
@@ -4651,41 +4662,41 @@ table.scheduler-table tr:last-child td {
     //   pointer-events: none;
     // }
   }
-  .arrow-button{
+  .arrow-button {
     // margin-right: 25px;
     margin-left: 25px;
     padding: 0px !important;
     border: none;
     background: none;
     font-size: 20px !important;
-    .fa-angle-right{
+    .fa-angle-right {
       margin-left: 25px;
       margin-right: 25px;
     }
-    .fa-angle-left{
+    .fa-angle-left {
       margin-left: 25px;
       margin-right: 25px;
     }
   }
 }
 
-.l-padding-12px{
+.l-padding-12px {
   padding-left: 12px !important;
 }
 
-.search-filter-container{
+.search-filter-container {
   cursor: pointer;
-  .report-search-bar{
+  .report-search-bar {
     width: 535px !important;
   }
-  .search-bar{
+  .search-bar {
     width: 98% !important;
   }
-  .admin-filter{
+  .admin-filter {
     width: 120px;
     vertical-align: top;
-    .dropdown{
-      button{
+    .dropdown {
+      button {
         height: 34px;
         font-size: 15px;
         width: 120px;
@@ -4694,19 +4705,19 @@ table.scheduler-table tr:last-child td {
         border-top: none;
         border-left: none;
         border-bottom: none;
-        border-right: solid 1px $color-brandheading1 !important; 
-        i{
+        border-right: solid 1px $color-brandheading1 !important;
+        i {
           color: $color-text2;
         }
       }
-      .dropdown-menu{
-        min-width: 0px !important
+      .dropdown-menu {
+        min-width: 0px !important;
       }
-      .dropdown-menu:focus{
+      .dropdown-menu:focus {
         background-color: $color-white !important;
         color: $color-brand3 !important;
       }
-      .dropdown-item{
+      .dropdown-item {
         width: 120px !important;
         font-size: 15px;
         padding: 5px 5px 5px 10px !important;
@@ -4715,13 +4726,13 @@ table.scheduler-table tr:last-child td {
         color: $color-brand3 !important;
         background-color: $color-white !important;
       }
-      .active{
+      .active {
         color: $color-brand3 !important;
         background-color: $color-white !important;
       }
     }
   }
-  .search-icon{
+  .search-icon {
     top: 5px;
     right: 5px;
     position: absolute;
@@ -4761,18 +4772,19 @@ table.scheduler-table tr:last-child td {
       cursor: pointer;
       background-color: $color-dropdown;
     }
-    li{
+    li {
       border-bottom: solid 1px $color-borders;
     }
-    .list-icon{
+    .list-icon {
       padding: 0px 15px 0px 10px;
     }
-    .extra-selected-tags{
+    .extra-selected-tags {
       display: inline-block;
       width: 100%;
       background-color: $color-dropdown;
       padding-bottom: 10px;
-      .search-icon-project, .search-icon-member{
+      .search-icon-project,
+      .search-icon-member {
         width: auto;
         height: 26px;
         padding-top: 2px;
@@ -4786,13 +4798,14 @@ table.scheduler-table tr:last-child td {
       }
     }
   }
-  .list-header{
+  .list-header {
     background-color: $color-dropdown;
   }
-  .selected-tags{
+  .selected-tags {
     display: inline-block;
     vertical-align: sub !important;
-    .search-icon-member, .search-icon-project{
+    .search-icon-member,
+    .search-icon-project {
       width: auto;
       height: 26px !important;
       padding-top: 2px !important;
@@ -4801,8 +4814,8 @@ table.scheduler-table tr:last-child td {
       border-radius: 4px !important;
       border: solid 1px #bfbfbf;
       background-color: #ffffff;
-      display:inline-block !important;
-      .tag-text{
+      display: inline-block !important;
+      .tag-text {
         max-width: 115px !important;
         text-align: center !important;
         overflow: hidden !important;
@@ -4811,14 +4824,16 @@ table.scheduler-table tr:last-child td {
         border: none;
       }
     }
-    .project-icon, .member-icon, .remove-tag{
+    .project-icon,
+    .member-icon,
+    .remove-tag {
       vertical-align: super !important;
     }
   }
-  .search-bar-plus{
+  .search-bar-plus {
     font-size: 12px;
   }
-  .placeholder{
+  .placeholder {
     font-family: $font-family-roboto;
     color: $color-text3;
     padding-left: 20px;
@@ -4826,11 +4841,11 @@ table.scheduler-table tr:last-child td {
   }
 }
 
-.confirm-modal{
+.confirm-modal {
   .modal-content {
     width: 550px;
     min-height: 180px;
-    padding: 0px 20px; 
+    padding: 0px 20px;
     font-size: 16px;
     color: $color-text2 !important;
     font-family: $font-family-roboto !important;
@@ -4850,7 +4865,7 @@ table.scheduler-table tr:last-child td {
         text-align: left;
       }
     }
-    .button2{
+    .button2 {
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
       background-color: $color-brand3 !important;
@@ -4862,7 +4877,7 @@ table.scheduler-table tr:last-child td {
       min-width: 93px !important;
       margin: 20px 15px 0px 0px;
     }
-    .button3{
+    .button3 {
       border-radius: 5px !important;
       border: solid 1px $color-brand3 !important;
       background-color: $color-white !important;
@@ -4870,15 +4885,15 @@ table.scheduler-table tr:last-child td {
       font-size: 13px !important;
       font-weight: 500 !important;
       color: $color-text3 !important;
-      color:$color-brand3 !important;
+      color: $color-brand3 !important;
       height: 40px;
       min-width: 93px !important;
       margin-top: 20px;
     }
   }
 }
-.daily-agenda{
-  .border-top{
+.daily-agenda {
+  .border-top {
     border-top: none !important;
     border-left: 1px solid #dee2e6 !important;
   }
