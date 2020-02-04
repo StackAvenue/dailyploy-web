@@ -160,12 +160,12 @@ class Signin extends Component {
                         placeholder="Password"
                       />
                     </div>
-                    <div className="text-right forgot-pass">
+                    {/* <div className="text-right forgot-pass">
                       Forgot Password?{" "}
                       <button className="btn btn-link no-padding">
                         Click here
                       </button>
-                    </div>
+                    </div> */}
                     <br />
                     <div className="col-md-12 no-padding text-center">
                       <button
@@ -187,7 +187,7 @@ class Signin extends Component {
                   </div>
                 </form>
                 <br />
-                <div className="col-md-8 offset-2 googleIcon">
+                {/* <div className="col-md-8 offset-2 googleIcon">
                   <img
                     alt="Google Icon"
                     src={googleIcon}
@@ -196,7 +196,7 @@ class Signin extends Component {
                   <Link to={"/login"} className="link">
                     Sign In with Google
                   </Link>
-                </div>
+                </div> */}
                 <br />
                 <div className="col-md-8 offset-2 googleIcon">
                   <span>New to DailyPloy?</span>

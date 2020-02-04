@@ -205,8 +205,7 @@ class Signup extends Component {
         /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
       ) &&
       this.state.password &&
-      this.state.password.match(PASSWORDREGX
-      ) &&
+      this.state.password.match(PASSWORDREGX) &&
       this.state.confirmPassword &&
       this.state.password === this.state.confirmPassword
     );
@@ -270,7 +269,7 @@ class Signup extends Component {
                   </Tab>
                 </Tabs>
                 <br />
-                <div className="col-md-8 offset-2 googleIcon">
+                {/* <div className="col-md-8 offset-2 googleIcon">
                   <img
                     alt="Google Icon"
                     src={googleIcon}
@@ -279,7 +278,7 @@ class Signup extends Component {
                   <Link to={"/signup"} className="link">
                     Sign up with your Google account
                   </Link>
-                </div>
+                </div> */}
                 <br />
                 <div className="col-md-8 offset-2 googleIcon">
                   <span>Already have DailyPloy account?</span>
