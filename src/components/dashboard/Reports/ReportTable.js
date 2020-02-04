@@ -95,6 +95,7 @@ class ReportTable extends Component {
         <th scope="col-md-3">Project Name</th>
         <th scope="col-md-1">Category</th>
         <th scope="col-md-1">Priority</th>
+        <th scope="col">Estimate Time</th>
         <th scope="col-md-1">Duration</th>
       </>
     );
@@ -158,7 +159,12 @@ class ReportTable extends Component {
             <div className="report-header">
               <span className="pull-left">Capacity </span>
               <span className="pull-right">
-                {"Total Time: " + `${this.props.state.totalTime}` + " h"}
+                {"Total Time: " +
+                  `${
+                    this.props.state.totalTime
+                      ? this.props.state.totalTime
+                      : "0h 0m"
+                  }`}
               </span>
             </div>
             <table className="table">

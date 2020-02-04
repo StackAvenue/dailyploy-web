@@ -74,11 +74,6 @@ class SummuryReportCharts extends Component {
   };
 
   render() {
-    console.log(
-      "filter data",
-      this.props.state.priorityReports,
-      this.props.state.priorityReports != ""
-    );
     return (
       <div className="summary-reports">
         <div className="col-md-12 heading">
