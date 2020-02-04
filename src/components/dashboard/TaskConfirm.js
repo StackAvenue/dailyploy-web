@@ -299,6 +299,7 @@ class TaskConfirm extends Component {
                     value={this.state.selected}
                     getOptionValue={option => option.id}
                     getOptionLabel={option => option.name}
+                    action={true}
                     createOption={text => {
                       return { id: 1, name: text };
                     }}

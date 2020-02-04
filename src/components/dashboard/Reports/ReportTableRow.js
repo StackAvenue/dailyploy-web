@@ -16,6 +16,22 @@ class ReportTableRow extends Component {
     return sTime + "- " + eTime;
   };
 
+  // renderLog = task => {
+  //   <EditableSelect
+  //     options={ligTimes}
+  //     // value={this.state.selected}
+  //     getOptionValue={option => option.id}
+  //     getOptionLabel={option => option.name}
+  //     action={false}
+  //     createOption={text => {
+  //       return { id: 1, name: text };
+  //     }}
+  //     onChange={this.selectedOption}
+  //     saveInputEditable={this.saveInputEditable}
+  //     state={this.state.trackSaved}
+  //   />;
+  // };
+
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
     var start =
       moment(this.props.date).format("YYYY-MM-DD") +
@@ -117,6 +133,7 @@ class ReportTableRow extends Component {
             ) : null}
           </td>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
+          {/* <td>{this.renderLog(task)}</td> */}
           <td className="text-titlize">{task.name}</td>
           <td className="text-titlize">{task.project.name}</td>
           <td className="text-titlize">
