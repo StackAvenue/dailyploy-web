@@ -5,6 +5,7 @@ export const SERVICE_URL = process.env.REACT_APP_API_ENDPOINT;
 export const WORKSPACE_NAME = cookie.load("workspaceName");
 export const MOCK_URL = "http://5d1b281edd81710014e88430.mockapi.io/api/v1";
 export const DATE_FORMAT1 = "YYYY-MM-DD"; // 2019-10-27
+export const FULL_DATE = "YYYY-MM-DD HH:mm:ss"; // 2019-10-27
 export const DATE_FORMAT2 = "DD MMM YYYY"; // 27 Oct 2019
 export const DATE_FORMAT3 = "YYYY, DD MMM"; // 2019, 27 Oct
 export const DATE_FORMAT4 = "YYYY, MMM DD"; // 2019, Oct 27

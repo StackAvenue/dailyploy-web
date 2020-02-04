@@ -19,7 +19,8 @@ import {
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
   HRMIN,
-  HHMMSS
+  HHMMSS,
+  FULL_DATE
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -194,6 +195,10 @@ class Dashboard extends Component {
                 end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
                 taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
                 taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+                taskStartDateTime: moment(task.start_datetime).format(
+                  FULL_DATE
+                ),
+                taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
                 resourceId: user.id,
                 title: task.name,
                 bgColor: task.project.color_code,
@@ -215,11 +220,6 @@ class Dashboard extends Component {
                 let runningTask = task.time_tracked.find(
                   ttt => ttt.status == "running"
                 );
-                // let runningTask = runningTasks.find(
-                //   ttt =>
-                //     moment(ttt.start_time).format(DATE_FORMAT1) ==
-                //     dateWiseTasks.date
-                // );
                 if (runningTask) {
                   var taskStartOn = new Date(runningTask.start_time).getTime();
                   taskRunningObj = {
@@ -442,6 +442,8 @@ class Dashboard extends Component {
               end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
               taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
               taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+              taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
+              taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
               resourceId: user.id,
               title: task.name,
               bgColor: task.project.color_code,
@@ -458,11 +460,6 @@ class Dashboard extends Component {
               let runningTask = task.time_tracked.find(
                 ttt => ttt.status == "running"
               );
-              // let runningTask = runningTasks.find(
-              //   ttt =>
-              //     moment(ttt.start_time).format(DATE_FORMAT1) ==
-              //     dateWiseTasks.date
-              // );
               if (runningTask) {
                 var taskStartOn = new Date(runningTask.start_time).getTime();
                 taskRunningObj = {
