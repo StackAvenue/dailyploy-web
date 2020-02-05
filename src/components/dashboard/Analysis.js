@@ -151,7 +151,7 @@ class Analysis extends Component {
                 color: "#9b9b9b"
               }}
             >
-              Comming soon...
+              Coming soon...
             </h4>
           </div>
         </div>
