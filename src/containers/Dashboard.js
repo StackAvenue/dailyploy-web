@@ -108,7 +108,8 @@ class Dashboard extends Component {
         label: "no priority"
       },
       showEventAlertId: "",
-      trackingEvent: null
+      trackingEvent: null,
+      taskloader: false
     };
   }
 
@@ -1084,6 +1085,7 @@ class Dashboard extends Component {
         }
         let taskId = event.id.split("-")[0];
         try {
+          this.setState({ taskloader: true });
           const { data } = await put(
             searchData,
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
@@ -1101,7 +1103,8 @@ class Dashboard extends Component {
             taskEvent: event,
             taskConfirmModal: false,
             backFromTaskEvent: true,
-            showInfo: true
+            showInfo: true,
+            taskloader: false
           });
         } catch (e) {}
       } else {
@@ -1109,7 +1112,8 @@ class Dashboard extends Component {
           logTimeFromError: this.state.logTimeFrom
             ? ""
             : "please select time from",
-          logTimeToError: this.state.logTimeTo ? "" : "please select time to"
+          logTimeToError: this.state.logTimeTo ? "" : "please select time to",
+          taskloader: false
         });
       }
     }
@@ -1118,6 +1122,7 @@ class Dashboard extends Component {
   updateTaskEvent = async (event, taskData) => {
     let taskId = event.id.split("-")[0];
     try {
+      this.setState({ taskloader: true });
       const { data } = await put(
         taskData,
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
@@ -1132,27 +1137,53 @@ class Dashboard extends Component {
         taskEvent: event,
         taskConfirmModal: false,
         backFromTaskEvent: true,
-        showInfo: true
+        showInfo: true,
+        taskloader: false
       });
-    } catch (e) {}
+    } catch (e) {
+      this.setState({ taskloader: false });
+    }
   };
 
   taskDelete = async event => {
     if (event) {
       let taskId = event.id.split("-")[0];
+      this.setState({ taskloader: true });
       try {
         const { data } = await del(
           `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
         );
-        var events = this.state.events.filter(e => e.id !== event.id);
+        var events = this.state.events.filter(e => e.taskId != event.taskId);
         this.setState({
           events: events,
           taskEvent: "",
           taskConfirmModal: false,
           backFromTaskEvent: false,
-          showInfo: false
+          showInfo: false,
+          taskloader: false
         });
-      } catch (e) {}
+      } catch (e) {
+        if (
+          e.response.status == 403 &&
+          e.response.data &&
+          !e.response.data.task_owner
+        ) {
+          toast(
+            <DailyPloyToast
+              message={"You can't delete this task, only task owner can."}
+              status="error"
+            />,
+            {
+              autoClose: 2000,
+              position: toast.POSITION.TOP_CENTER
+            }
+          );
+          let self = this;
+          setTimeout(function() {
+            self.setState({ taskloader: false });
+          }, 2000);
+        }
+      }
     }
   };
 
