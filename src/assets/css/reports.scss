@@ -19,9 +19,10 @@
       margin-right: 20px;
       .custom-search-select{
         height: 34px !important;
-        width: 400px !important;
+        width: 290px !important;
         input{
           padding: 5px 5px !important;
+          width: 50% !important;
         }
       }
       .down-icon{
@@ -32,10 +33,10 @@
     }
     .report-priority{
       .custom-search-select{
-        width: 130px !important;
+        width: 230px !important;
         height: 34px !important;
         input{
-          width: 0px !important;
+          width: 50% !important;
           padding: 5px 5px !important;
         }
         .color-dot{

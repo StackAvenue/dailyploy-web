@@ -1060,7 +1060,7 @@ class Reports extends Component {
                       label="label"
                       suggesionBy="label"
                       iconType="circle"
-                      optionPlaceholder={true}
+                      optionPlaceholder={false}
                       options={PRIORITIES}
                     />
                   </div>
