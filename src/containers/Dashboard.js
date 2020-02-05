@@ -19,7 +19,8 @@ import {
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
   HRMIN,
-  HHMMSS
+  HHMMSS,
+  FULL_DATE
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -107,7 +108,8 @@ class Dashboard extends Component {
         label: "no priority"
       },
       showEventAlertId: "",
-      trackingEvent: null
+      trackingEvent: null,
+      taskloader: false
     };
   }
 
@@ -194,6 +196,10 @@ class Dashboard extends Component {
                 end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
                 taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
                 taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+                taskStartDateTime: moment(task.start_datetime).format(
+                  FULL_DATE
+                ),
+                taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
                 resourceId: user.id,
                 title: task.name,
                 bgColor: task.project.color_code,
@@ -215,11 +221,6 @@ class Dashboard extends Component {
                 let runningTask = task.time_tracked.find(
                   ttt => ttt.status == "running"
                 );
-                // let runningTask = runningTasks.find(
-                //   ttt =>
-                //     moment(ttt.start_time).format(DATE_FORMAT1) ==
-                //     dateWiseTasks.date
-                // );
                 if (runningTask) {
                   var taskStartOn = new Date(runningTask.start_time).getTime();
                   taskRunningObj = {
@@ -253,7 +254,6 @@ class Dashboard extends Component {
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent
         });
-        this.props.handleLoading(false);
         let projects = [];
         this.state.projects.forEach(project => {
           let flag = true;
@@ -274,7 +274,10 @@ class Dashboard extends Component {
             member => !userIds.includes(member.id)
           )
         );
-      } catch (e) {}
+        this.props.handleLoading(false);
+      } catch (e) {
+        this.props.handleLoading(false);
+      }
     }
 
     if (prevState.timeFrom !== this.state.timeFrom) {
@@ -333,6 +336,8 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     // Logged In User Info
+    this.props.handleLoading(true);
+
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -386,7 +391,6 @@ class Dashboard extends Component {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
     } catch (e) {}
-    this.props.handleLoading(true);
 
     // workspace Tasks Listing
     try {
@@ -439,6 +443,8 @@ class Dashboard extends Component {
               end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
               taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
               taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+              taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
+              taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
               resourceId: user.id,
               title: task.name,
               bgColor: task.project.color_code,
@@ -455,11 +461,6 @@ class Dashboard extends Component {
               let runningTask = task.time_tracked.find(
                 ttt => ttt.status == "running"
               );
-              // let runningTask = runningTasks.find(
-              //   ttt =>
-              //     moment(ttt.start_time).format(DATE_FORMAT1) ==
-              //     dateWiseTasks.date
-              // );
               if (runningTask) {
                 var taskStartOn = new Date(runningTask.start_time).getTime();
                 taskRunningObj = {
@@ -857,13 +858,13 @@ class Dashboard extends Component {
         taskUser: [memberId],
         selectedMembers: selecteMember,
         show: true,
-        // calenderTaskModal: true,
         project: "",
         projectId: "",
         taskId: "",
         modalMemberSearchOptions: members.length > 0 ? members : selecteMember,
         dateFrom: new Date(startDate),
-        dateTo: new Date(endDate),
+        dateTo: null,
+        // dateTo: new Date(endDate),
         border: "solid 1px #ffffff",
         timeDateTo: moment(),
         timeDateFrom: moment(),
@@ -1084,6 +1085,7 @@ class Dashboard extends Component {
         }
         let taskId = event.id.split("-")[0];
         try {
+          this.setState({ taskloader: true });
           const { data } = await put(
             searchData,
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
@@ -1101,7 +1103,8 @@ class Dashboard extends Component {
             taskEvent: event,
             taskConfirmModal: false,
             backFromTaskEvent: true,
-            showInfo: true
+            showInfo: true,
+            taskloader: false
           });
         } catch (e) {}
       } else {
@@ -1109,7 +1112,8 @@ class Dashboard extends Component {
           logTimeFromError: this.state.logTimeFrom
             ? ""
             : "please select time from",
-          logTimeToError: this.state.logTimeTo ? "" : "please select time to"
+          logTimeToError: this.state.logTimeTo ? "" : "please select time to",
+          taskloader: false
         });
       }
     }
@@ -1118,6 +1122,7 @@ class Dashboard extends Component {
   updateTaskEvent = async (event, taskData) => {
     let taskId = event.id.split("-")[0];
     try {
+      this.setState({ taskloader: true });
       const { data } = await put(
         taskData,
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
@@ -1132,27 +1137,53 @@ class Dashboard extends Component {
         taskEvent: event,
         taskConfirmModal: false,
         backFromTaskEvent: true,
-        showInfo: true
+        showInfo: true,
+        taskloader: false
       });
-    } catch (e) {}
+    } catch (e) {
+      this.setState({ taskloader: false });
+    }
   };
 
   taskDelete = async event => {
     if (event) {
       let taskId = event.id.split("-")[0];
+      this.setState({ taskloader: true });
       try {
         const { data } = await del(
           `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
         );
-        var events = this.state.events.filter(e => e.id !== event.id);
+        var events = this.state.events.filter(e => e.taskId != event.taskId);
         this.setState({
           events: events,
           taskEvent: "",
           taskConfirmModal: false,
           backFromTaskEvent: false,
-          showInfo: false
+          showInfo: false,
+          taskloader: false
         });
-      } catch (e) {}
+      } catch (e) {
+        if (
+          e.response.status == 403 &&
+          e.response.data &&
+          !e.response.data.task_owner
+        ) {
+          toast(
+            <DailyPloyToast
+              message={"You can't delete this task, only task owner can."}
+              status="error"
+            />,
+            {
+              autoClose: 2000,
+              position: toast.POSITION.TOP_CENTER
+            }
+          );
+          let self = this;
+          setTimeout(function() {
+            self.setState({ taskloader: false });
+          }, 2000);
+        }
+      }
     }
   };
 

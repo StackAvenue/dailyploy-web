@@ -15,10 +15,12 @@ import Header from "./components/dashboard/Header";
 import { ToastContainer } from "react-toastify";
 import TaskBottomPopup from "./components/dashboard/TaskBottomPopup";
 import { WORKSPACE_ID, DATE_FORMAT1, HHMMSS } from "./utils/Constants";
+import { getWorkspaceId } from "./utils/function";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { workspaceNameSplit } from "./utils/function";
 import moment from "moment";
+import "../src/assets/css/loader.scss";
 
 class Workspace extends Component {
   constructor(props) {
@@ -198,7 +200,7 @@ class Workspace extends Component {
     ) {
       return <RouteComponent {...newProps} />;
     }
-    return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
+    return <Redirect to={`/workspace/${getWorkspaceId()}/dashboard`} />;
   };
 
   handleTaskBottomPopup = (startOn, event, trackStatus) => {
@@ -245,12 +247,17 @@ class Workspace extends Component {
   render() {
     return (
       <div>
+        {this.state.isLoading ? <div className="loading"></div> : null}
         <ToastContainer />
-        <div className="row no-margin">
+        <div
+          className="row no-margin"
+          style={this.state.isLoading ? { pointerEvents: "none" } : {}}
+        >
           <Sidebar
             workspaces={this.state.workspaces}
             workspaceId={this.state.workspaceId}
             workspaceName={this.state.workspaceName}
+            callWorkspace={this.callWorkspace}
           />
           <div className="dashboard-main no-padding">
             <Header
@@ -265,7 +272,7 @@ class Workspace extends Component {
               handleSearchFilterResult={this.handleSearchFilterResult}
             />
 
-            {this.state.isLoading ? (
+            {/* {this.state.isLoading ? (
               <Loader
                 type="Oval"
                 color="#1f8354"
@@ -273,7 +280,7 @@ class Workspace extends Component {
                 width={50}
                 className="d-inline-block dailyploy-loader"
               />
-            ) : null}
+            ) : null} */}
             <Switch>
               {this.Routes.map((route, i) => (
                 <Route

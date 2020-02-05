@@ -376,7 +376,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => { };
+  handleProjectByUser = () => {};
 
   render() {
     this.handleProjectByUser();

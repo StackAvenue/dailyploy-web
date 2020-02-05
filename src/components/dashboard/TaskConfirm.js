@@ -7,6 +7,7 @@ import moment from "moment";
 import { put } from "../../utils/API";
 import DailyPloyToast from "./../../../src/components/DailyPloyToast";
 import { ToastContainer, toast } from "react-toastify";
+import Loader from "react-loader-spinner";
 import {
   DATE_FORMAT2,
   HRMIN,
@@ -299,6 +300,7 @@ class TaskConfirm extends Component {
                     value={this.state.selected}
                     getOptionValue={option => option.id}
                     getOptionLabel={option => option.name}
+                    action={true}
                     createOption={text => {
                       return { id: 1, name: text };
                     }}
@@ -408,10 +410,21 @@ class TaskConfirm extends Component {
               {props.state.confirmModalText === "resume" ? (
                 <button
                   type="button"
+                  disabled={`${this.props.state.taskloader ? "disabled" : ""}`}
                   className=" button2 pull-right btn-primary text-titlize"
                   onClick={() => props.taskResume(props.state.taskEvent)}
                 >
                   {props.state.confirmModalText}
+                  {this.props.state.taskloader ? (
+                    <Loader
+                      type="Oval"
+                      color="#FFFFFF"
+                      height={20}
+                      width={20}
+                      style={{ paddingLeft: "5px" }}
+                      className="d-inline-block login-signup-loader"
+                    />
+                  ) : null}
                 </button>
               ) : null}
 
@@ -420,17 +433,39 @@ class TaskConfirm extends Component {
                   type="button"
                   className=" button2 pull-right btn-primary text-titlize"
                   onClick={() => props.taskDelete(props.state.taskEvent)}
+                  disabled={`${this.props.state.taskloader ? "disabled" : ""}`}
                 >
                   {props.state.confirmModalText}
+                  {this.props.state.taskloader ? (
+                    <Loader
+                      type="Oval"
+                      color="#FFFFFF"
+                      height={20}
+                      width={20}
+                      style={{ paddingLeft: "5px" }}
+                      className="d-inline-block login-signup-loader"
+                    />
+                  ) : null}
                 </button>
               ) : null}
               {props.state.confirmModalText === "mark as completed" ? (
                 <button
                   type="button"
+                  disabled={`${this.props.state.taskloader ? "disabled" : ""}`}
                   className=" mark-btn pull-right btn-primary text-titlize"
                   onClick={() => props.taskMarkComplete(props.state.taskEvent)}
                 >
                   {props.state.confirmModalText}
+                  {this.props.state.taskloader ? (
+                    <Loader
+                      type="Oval"
+                      color="#FFFFFF"
+                      height={20}
+                      width={20}
+                      style={{ paddingLeft: "5px" }}
+                      className="d-inline-block login-signup-loader"
+                    />
+                  ) : null}
                 </button>
               ) : null}
             </div>

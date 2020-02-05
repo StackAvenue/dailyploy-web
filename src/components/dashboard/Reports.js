@@ -605,59 +605,41 @@ class Reports extends Component {
 
   makeDatesHash = reports => {
     var taskReports = {};
-    var totalSecond = 0;
-    {
-      reports.map((report, i) => {
-        taskReports[report.date] = report.tasks;
-      });
-    }
+    var totalSeconds = 0;
+    reports.map((report, i) => {
+      taskReports[report.date] = report.tasks;
+    });
 
     this.state.selectedDays.map(date => {
       let dateFormated = moment(date).format(DATE_FORMAT1);
       var tasks = taskReports[dateFormated];
       if (tasks !== undefined) {
-        totalSecond += this.calculateTotalSecond(dateFormated, tasks);
+        totalSeconds += this.calculateTotalSecond(tasks, dateFormated);
       }
     });
-
-    totalSecond = Number(totalSecond);
-    var h = Math.floor(totalSecond / 3600);
-    var m = Math.floor((totalSecond % 3600) / 60);
-    var time = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+    var time = this.secondsToHours(totalSeconds);
     return { taskReports: taskReports, totalTime: time };
   };
 
-  calculateTotalSecond = (date, tasks) => {
-    var totalSec = 0;
-    if (
-      this.state.userRole === "admin" &&
-      this.props.searchUserDetails === []
-    ) {
-      tasks.map((task, idx) => {
-        task.members.map(member => {
-          totalSec += this.totalSeconds(tasks, date);
-        });
-      });
-    } else {
-      totalSec += this.totalSeconds(tasks, date);
-    }
-    return totalSec;
+  addTotalDuration = timeTracked => {
+    return timeTracked
+      .map(log => log.duration)
+      .flat()
+      .reduce((a, b) => a + b, 0);
   };
 
-  totalSeconds = (tasks, date) => {
+  secondsToHours = seconds => {
+    let totalSeconds = Number(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor((totalSeconds % 3600) % 60);
+    return h + "h" + " " + m + "m";
+  };
+
+  calculateTotalSecond = (tasks, date) => {
     var totalSec = 0;
     tasks.map((task, idx) => {
-      var start =
-        moment(date).format(DATE_FORMAT1) +
-        " " +
-        moment(task.start_datetime).format("HH:mm");
-      var end =
-        moment(date).format(DATE_FORMAT1) +
-        " " +
-        moment(task.end_datetime).format("HH:mm");
-      let totalMilSeconds = new Date(end) - new Date(start);
-      var totalSeconds = totalMilSeconds / 1000;
-      totalSec += totalSeconds;
+      totalSec += this.addTotalDuration(task.time_tracked);
     });
     return totalSec;
   };

@@ -263,37 +263,40 @@ class DashboardEvent extends Component {
                 ) : null}
               </div>
               <div className="col-md-12 no-padding">
-                <div
-                  className="col-md-9 no-padding d-inline-block item-time"
-                  onClick={() => this.ToggleTimerDropDown(event.id)}
-                  onMouseOver={() => this.hideEventPopUp(event.id)}
-                >
-                  <i
-                    className={`fa fa-caret-down pull-right ${
-                      schedulerData.viewType === 0
-                        ? "daytimer-log"
-                        : "weektimer-log"
-                    }`}
-                    // style={{ position: "relative", padding: "7px 5px 5px 0px" }}
-                  ></i>
-                  <input
-                    className="form-control  timer-dropdown d-inline-block"
-                    readOnly
-                    style={{
-                      backgroundColor: this.state.showTimerMenu
-                        ? "#ffffff"
-                        : this.props.bgColor,
-                      borderColor: this.props.bgColor
-                    }}
-                    defaultValue={
-                      this.props.event.timeTracked.length > 0
-                        ? this.returnTime(this.props.event.timeTracked[0])
-                        : ""
-                    }
-                    // onClick={() => this.ToggleTimerDropDown(event.id)}
-                    // onMouseOver={() => this.hideEventPopUp(event.id)}
-                  />
-                </div>
+                {event.timeTracked.length > 0 ? (
+                  <div
+                    className="col-md-9 no-padding d-inline-block item-time"
+                    onClick={() => this.ToggleTimerDropDown(event.id)}
+                    onMouseOver={() => this.hideEventPopUp(event.id)}
+                  >
+                    <i
+                      className={`fa fa-caret-down pull-right ${
+                        schedulerData.viewType === 0
+                          ? "daytimer-log"
+                          : "weektimer-log"
+                      }`}
+                    ></i>
+                    <input
+                      className="form-control  timer-dropdown d-inline-block"
+                      readOnly
+                      style={{
+                        backgroundColor: this.state.showTimerMenu
+                          ? "#ffffff"
+                          : this.props.bgColor,
+                        borderColor: this.props.bgColor
+                      }}
+                      defaultValue={
+                        this.props.event.timeTracked.length > 0
+                          ? this.returnTime(this.props.event.timeTracked[0])
+                          : ""
+                      }
+                    />
+                  </div>
+                ) : (
+                  <span style={{ fontSize: "12px", paddingLeft: "10px" }}>
+                    No Tracked time
+                  </span>
+                )}
                 <div className="col-md-3 no-padding d-inline-block item-time text-right">
                   <span
                     className="task-event-action pointer"

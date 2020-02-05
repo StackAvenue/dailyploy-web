@@ -263,8 +263,36 @@ class EditableSelect extends Component {
               </span>
             </div>
           </div>
-          {this.state.editable ? (
-            <>
+          {this.props.action ? (
+            this.state.editable ? (
+              <>
+                <div
+                  className="d-inline-block col-md-1"
+                  style={{
+                    paddingLeft: "5px ",
+                    fontSize: "20px",
+                    cursor: "pointer"
+                  }}
+                  onClick={this.makeInputEditable}
+                >
+                  <i className="fa fa-pencil"></i>
+                </div>
+                <span
+                  className="d-inline-block col-md-1"
+                  style={{
+                    paddingLeft: "5px ",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                    color: this.props.state ? "#10b857" : "#424242"
+                  }}
+                  onClick={() =>
+                    this.props.saveInputEditable(this.state.selectedText)
+                  }
+                >
+                  save
+                </span>
+              </>
+            ) : (
               <div
                 className="d-inline-block col-md-1"
                 style={{
@@ -272,37 +300,11 @@ class EditableSelect extends Component {
                   fontSize: "20px",
                   cursor: "pointer"
                 }}
-                onClick={this.makeInputEditable}
               >
-                <i className="fa fa-pencil"></i>
+                <i className="fa fa-bars"></i>
               </div>
-              <span
-                className="d-inline-block col-md-1"
-                style={{
-                  paddingLeft: "5px ",
-                  fontSize: "20px",
-                  cursor: "pointer",
-                  color: this.props.state ? "#10b857" : "#424242"
-                }}
-                onClick={() =>
-                  this.props.saveInputEditable(this.state.selectedText)
-                }
-              >
-                save
-              </span>
-            </>
-          ) : (
-            <div
-              className="d-inline-block col-md-1"
-              style={{
-                paddingLeft: "5px ",
-                fontSize: "20px",
-                cursor: "pointer"
-              }}
-            >
-              <i className="fa fa-bars"></i>
-            </div>
-          )}
+            )
+          ) : null}
         </div>
       </>
     );
