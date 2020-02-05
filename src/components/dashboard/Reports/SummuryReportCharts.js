@@ -85,16 +85,16 @@ class SummuryReportCharts extends Component {
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
     let s = Math.floor((totalSeconds % 3600) % 60);
-    return h + "h" + " " + m + "m";
+    return h + "H" + " " + m + "M";
   };
 
   calculateCapacity = () => {
     if (this.props.state.frequency == "daily") {
-      return "8 h";
+      return "8 H";
     } else if (this.props.state.frequency == "weekly") {
-      return "40 h";
+      return "40 H";
     } else if (this.props.state.frequency == "monthly") {
-      return "240 h";
+      return "160 H";
     } else {
       return "8 h";
     }
