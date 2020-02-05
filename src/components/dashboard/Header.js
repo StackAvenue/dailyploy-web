@@ -11,6 +11,7 @@ import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
 import { WORKSPACE_ID } from "./../../utils/Constants";
+import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 
 class Header extends Component {
@@ -111,7 +112,7 @@ class Header extends Component {
               </button>
               <a
                 className="navbar-brand logo"
-                href={`/workspace/${WORKSPACE_ID}/dashboard`}
+                href={`/workspace/${getWorkspaceId()}/dashboard`}
               >
                 <img src={logo} alt="Logo" className="img-responsive image" />
               </a>

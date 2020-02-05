@@ -1,4 +1,5 @@
 import moment from "moment";
+import cookie from "react-cookies";
 
 export const getWeekFisrtDate = date => {
   return moment(date)
@@ -38,4 +39,8 @@ export const workspaceNameSplit = name => {
 export const convertUTCToLocalDate = date => {
   var date = new Date(date);
   return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+};
+
+export const getWorkspaceId = () => {
+  return cookie.load("workspaceId");
 };

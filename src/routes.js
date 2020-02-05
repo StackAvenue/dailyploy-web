@@ -6,6 +6,7 @@ import Landing from "./containers/Landing";
 import cookie from "react-cookies";
 import Workspace from "./Workspace";
 import { WORKSPACE_ID } from "./utils/Constants";
+import { getWorkspaceId } from "./utils/function";
 
 class Routes extends Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class Routes extends Component {
           />
         );
       }
-      return <Redirect to={`/workspace/${WORKSPACE_ID}/dashboard`} />;
+      return <Redirect to={`/workspace/${getWorkspaceId()}/dashboard`} />;
     } else {
       if (title === "signup") {
         return <SignUp {...props} />;
