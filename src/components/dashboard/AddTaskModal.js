@@ -1,79 +1,83 @@
-import React, { Component } from "react";
-import { Modal } from "react-bootstrap";
-import DatePicker from "react-datepicker";
-import TimePicker from "rc-time-picker";
-import "rc-time-picker/assets/index.css";
-import { PRIORITIES } from "./../../utils/Constants";
-import "react-datepicker/dist/react-datepicker.css";
-import Close from "../../assets/images/close.svg";
-import moment from "moment";
-import DailyPloySelect from "./../DailyPloySelect";
+import React, { Component } from 'react'
+import { Modal } from 'react-bootstrap'
+import DatePicker from 'react-datepicker'
+import TimePicker from 'rc-time-picker'
+import 'rc-time-picker/assets/index.css'
+import { PRIORITIES } from './../../utils/Constants'
+import 'react-datepicker/dist/react-datepicker.css'
+import Close from '../../assets/images/close.svg'
+import moment from 'moment'
+import DailyPloySelect from './../DailyPloySelect'
 
 class AddTaskModal extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       members: [],
-      project: "",
+      project: '',
       showProjectSuggestion: false,
       projectSuggestions: [],
       membersSuggestions: [],
       selectedMembers: [],
-      projectSearchText: "",
-      memberSearchText: "",
+      projectSearchText: '',
+      memberSearchText: '',
       isBorder: false,
-      border: "solid 1px #d1d1d1",
-      notFound: "hide",
-      memberNotFound: "hide"
-    };
+      border: 'solid 1px #d1d1d1',
+      notFound: 'hide',
+      memberNotFound: 'hide'
+    }
   }
 
   disabledHours = () => {
-    var time = this.props.state.timeFrom;
+    var time = this.props.state.timeFrom
     if (time) {
-      var hr = time.split(":")[0];
-      hr = Number(hr);
-      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
-      return hoursArr;
+      var hr = time.split(':')[0]
+      hr = Number(hr)
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k)
+      return hoursArr
     }
-    return [];
-  };
+    return []
+  }
 
   disabledMinutes = () => {
-    var fTime = this.props.state.timeFrom;
-    var tTime = this.props.state.timeTo;
+    var fTime = this.props.state.timeFrom
+    var tTime = this.props.state.timeTo
     if (fTime && !tTime) {
-      var min = fTime.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
-    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
-      var min = fTime.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
+      var min = fTime.split(':')[1]
+      min = Number(min) + 1
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k)
+      return minArr
+    } else if (fTime && tTime && fTime.split(':')[0] === tTime.split(':')[0]) {
+      var min = fTime.split(':')[1]
+      min = Number(min) + 1
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k)
+      return minArr
     }
-    return [];
-  };
+    return []
+  }
+
+  handleDateChangeRaw = e => {
+    e.preventDefault()
+  }
 
   render() {
-    const { props } = this;
+    const { props } = this
     return (
       <>
         <Modal
           className="task-modal"
           show={props.show}
           onHide={props.closeTaskModal}
-          style={{ paddingTop: "1.5%" }}
+          style={{ paddingTop: '1.5%' }}
         >
           <div className="row no-margin">
             <div className="col-md-12 header text-titlize">
               <div className={`d-inline-block`}>
                 <span>
-                  {" "}
-                  {props.state.taskButton === "Add"
-                    ? "Add New Task"
-                    : "Edit Task"}
+                  {' '}
+                  {props.state.taskButton === 'Add'
+                    ? 'Add New Task'
+                    : 'Edit Task'}
                 </span>
               </div>
               <button
@@ -117,9 +121,9 @@ class AddTaskModal extends Component {
                 </div>
                 <div
                   className={`col-md-10 d-inline-block ${
-                    props.state.taskButton !== "Add"
-                      ? "disable-project-select"
-                      : ""
+                    props.state.taskButton !== 'Add'
+                      ? 'disable-project-select'
+                      : ''
                   }`}
                 >
                   <DailyPloySelect
@@ -230,6 +234,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
+                          onChangeRaw={this.handleDateChangeRaw}
                         />
                       </div>
                     </div>
@@ -244,6 +249,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
                           disabled={props.state.disabledDateTo}
+                          onChangeRaw={this.handleDateChangeRaw}
                         />
                       </div>
                     </div>
@@ -279,7 +285,7 @@ class AddTaskModal extends Component {
                       </div>
                       <div
                         className="col-md-7 d-inline-block time-picker-container"
-                        style={{ paddingRight: "0" }}
+                        style={{ paddingRight: '0' }}
                       >
                         <TimePicker
                           placeholder="Select"
@@ -297,7 +303,7 @@ class AddTaskModal extends Component {
                       </div>
                       <div
                         className="col-md-7 d-inline-block time-picker-container"
-                        style={{ paddingRight: "0" }}
+                        style={{ paddingRight: '0' }}
                       >
                         <TimePicker
                           value={this.props.state.timeDateTo}
@@ -351,7 +357,7 @@ class AddTaskModal extends Component {
                     type="button"
                     className="button3 btn-primary pull-right"
                     onClick={
-                      props.state.taskButton !== "Add"
+                      props.state.taskButton !== 'Add'
                         ? this.props.backToTaskInfoModal
                         : this.props.closeTaskModal
                     }
@@ -362,7 +368,7 @@ class AddTaskModal extends Component {
                     type="button"
                     className="button1 btn-primary pull-right"
                     onClick={
-                      props.state.taskButton === "Add"
+                      props.state.taskButton === 'Add'
                         ? props.addTask
                         : props.editTask
                     }
@@ -373,7 +379,7 @@ class AddTaskModal extends Component {
                     <button
                       type="button"
                       className="pull-right button3 btn-primary"
-                      onClick={() => props.confirmModal("delete")}
+                      onClick={() => props.confirmModal('delete')}
                     >
                       Delete
                     </button>
@@ -384,8 +390,8 @@ class AddTaskModal extends Component {
           </div>
         </Modal>
       </>
-    );
+    )
   }
 }
 
-export default AddTaskModal;
+export default AddTaskModal

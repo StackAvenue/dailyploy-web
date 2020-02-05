@@ -5,7 +5,7 @@
   margin: auto;
   height: 60px;
   .navbar {
-    padding: 0.5rem 5rem 0 2rem;
+    width: 95%;
   }
 }
 
@@ -126,19 +126,6 @@
     }
   }
 
-  .navbar-collapse .navbar-nav {
-    margin-left: 70% !important;
-    @media (max-width: 1600px) {
-      margin-left: 50% !important;
-    }
-    @media (max-width: 1400px) {
-      margin-left: 40% !important;
-    }
-    @media (max-width: 1200px) {
-      margin-left: 30% !important;
-    }
-  }
-
   .dropdown-notification {
     left: -160px !important;
     width: 400px !important;
@@ -208,7 +195,7 @@
     .bar {
       padding: 0px 15px 0px 15px !important;
     }
-    width: 25% !important;
+    width: 20% !important;
     overflow: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
@@ -1407,7 +1394,7 @@ table.scheduler-table tr:last-child td {
           }
         }
         .leftheader {
-          width: 220px !important;
+          width: 291px !important;
           color: #e5e5e5 !important;
           text-align: center !important;
           height: 35px !important;
@@ -1423,6 +1410,13 @@ table.scheduler-table tr:last-child td {
             width: 220px !important;
             position: relative !important;
             top: 23px !important;
+          }
+        }
+        .ant-col {
+          width: calc(100% - 291px);
+          text-align: center;
+          .dashboard-calender {
+            margin-left: 0 !important;
           }
         }
       }
@@ -4686,6 +4680,7 @@ table.scheduler-table tr:last-child td {
 
 .search-filter-container {
   cursor: pointer;
+  margin: 0 !important;
   .report-search-bar {
     width: 535px !important;
   }
@@ -4898,6 +4893,6 @@ table.scheduler-table tr:last-child td {
     border-left: 1px solid #dee2e6 !important;
   }
 }
-.editable-focus{
+.editable-focus {
   box-shadow: 0 0 5px $color-brand4 !important;
 }
