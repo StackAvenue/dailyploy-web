@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import { DATE_FORMAT2, PRIORITIES_MAP } from "./../../../utils/Constants";
 import { convertUTCToLocalDate } from "./../../../utils/function";
+import EditableSelect from "./../../EditableSelect";
 
 class ReportTableRow extends Component {
   constructor(props) {
@@ -16,21 +17,39 @@ class ReportTableRow extends Component {
     return sTime + "- " + eTime;
   };
 
-  // renderLog = task => {
-  //   <EditableSelect
-  //     options={ligTimes}
-  //     // value={this.state.selected}
-  //     getOptionValue={option => option.id}
-  //     getOptionLabel={option => option.name}
-  //     action={false}
-  //     createOption={text => {
-  //       return { id: 1, name: text };
-  //     }}
-  //     onChange={this.selectedOption}
-  //     saveInputEditable={this.saveInputEditable}
-  //     state={this.state.trackSaved}
-  //   />;
-  // };
+  renderLog = task => {
+    let trackLogs = task.time_tracked
+      .sort((a, b) => b.id - a.id)
+      .map(time => {
+        return {
+          id: time.id,
+          name: `${moment(time.start_time).format("HH:mm A")} - ${moment(
+            time.end_time
+          ).format("HH:mm A")}`,
+          start: time.start_time,
+          end: time.end_time
+        };
+      });
+    let first = trackLogs[0];
+    return (
+      <div className="reports-track-logs">
+        {trackLogs.length > 0 ? (
+          <EditableSelect
+            options={trackLogs.slice(1)}
+            value={first}
+            getOptionValue={option => option.id}
+            getOptionLabel={option => option.name}
+            action={false}
+            onChange={() => {}}
+            saveInputEditable={() => {}}
+            state={this.state.trackSaved}
+          />
+        ) : (
+          <span>No tracked Time</span>
+        )}
+      </div>
+    );
+  };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
     var start =
@@ -100,6 +119,9 @@ class ReportTableRow extends Component {
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     );
   };
@@ -120,8 +142,8 @@ class ReportTableRow extends Component {
   renderTableRow = tasks => {
     return tasks.map((task, index) => {
       return (
-        <tr key={index}>
-          <td>
+        <tr key={index} className="report-table-row">
+          <td className="td-1">
             {task.status == "running" ? (
               <div className="progress-btn">In progress</div>
             ) : null}
@@ -132,20 +154,25 @@ class ReportTableRow extends Component {
               <div className="not-start-btn">Not started</div>
             ) : null}
           </td>
-          <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
-          {/* <td>{this.renderLog(task)}</td> */}
-          <td className="text-titlize">{task.name}</td>
-          <td className="text-titlize">{task.project.name}</td>
-          <td className="text-titlize">
+          {/* <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td> */}
+          <td className="td-2" style={{ width: "170px" }}>
+            {this.renderLog(task)}
+          </td>
+          <td className="td-3 text-titlize">{task.name}</td>
+          <td className="td-4 text-titlize">{task.project.name}</td>
+          <td className="td-5 text-titlize">
             {task.category ? task.category.name : "---"}
           </td>
-          <td className="text-titlize">{this.showCategory(task.priority)}</td>
-          <td>
+          <td className="td-6 text-titlize">
+            {this.showCategory(task.priority)}
+          </td>
+          <td className="td-7">
             {this.dateFormater(
               this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)
             )}
           </td>
           <td
+            className="td-8"
             style={
               this.getDiffOfTwoDate(task.start_datetime, task.end_datetime) <
               this.getTaskTotalDuration(task.time_tracked)
