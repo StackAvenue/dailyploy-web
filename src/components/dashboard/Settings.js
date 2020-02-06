@@ -209,28 +209,18 @@ class Settings extends Component {
         if (data) {
           this.setState({ isSaveConfirmEnable: false });
         }
-        toast(
-          <DailyPloyToast message="User Setting Updated" status="success" />,
-          {
-            autoClose: 2000,
-            position: toast.POSITION.TOP_CENTER
-          }
-        );
+        toast(<DailyPloyToast message="Password Updated" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        });
       } catch (e) {
         if (e.response.status === 500) {
           toast(
             <DailyPloyToast message={"Internal Server Error"} status="error" />,
             { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
           );
-        } else if (e.response.data.error) {
+        } else if (e.response.status === 403) {
           this.setState({ oldPasswordError: "Old Password is not correct" });
-          // toast(
-          //   <DailyPloyToast
-          //     message="Old Password does not match"
-          //     status="error"
-          //   />,
-          //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-          // );
         }
       }
     }
