@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
-import { DATE_FORMAT2, PRIORITIES_MAP } from "./../../../utils/Constants";
+import {
+  DATE_FORMAT2,
+  PRIORITIES_MAP,
+  DATE_FORMAT1
+} from "./../../../utils/Constants";
 import { convertUTCToLocalDate } from "./../../../utils/function";
 import EditableSelect from "./../../EditableSelect";
 
@@ -55,17 +59,14 @@ class ReportTableRow extends Component {
     var start =
       moment(this.props.date).format("YYYY-MM-DD") +
       " " +
-      moment(startDateTime).format("HH:mm");
+      moment(startDateTime).format("HH:mm:ss");
     var end =
       moment(this.props.date).format("YYYY-MM-DD") +
       " " +
-      moment(endDateTime).format("HH:mm");
+      moment(endDateTime).format("HH:mm:ss");
     let totalMilSeconds = new Date(end) - new Date(start);
     var totalSeconds = totalMilSeconds / 1000;
     return Number(totalSeconds);
-    // var h = Math.floor(totalSeconds / 3600);
-    // var m = Math.floor((totalSeconds % 3600) / 60);
-    // return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
   };
 
   dateFormater = totalSeconds => {
@@ -139,6 +140,71 @@ class ReportTableRow extends Component {
     );
   };
 
+  getEstimateTimeOfTask = task => {
+    let start = moment(convertUTCToLocalDate(task.start_datetime)).format(
+      DATE_FORMAT1
+    );
+    let end = moment(convertUTCToLocalDate(task.end_datetime)).format(
+      DATE_FORMAT1
+    );
+    var startTime = moment(convertUTCToLocalDate(task.start_datetime)).format(
+      "HH:mm:ss"
+    );
+    var endTime = moment(convertUTCToLocalDate(task.end_datetime)).format(
+      "HH:mm:ss"
+    );
+    if (this.props.date == start && start == end) {
+      return this.dateFormater(
+        this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)
+      );
+    } else {
+      let dates = this.getMiddleDates(start, end);
+      let datesMap = new Map();
+      dates.map((date, idx) => {
+        if (idx == 0 && date == start) {
+          datesMap.set(date, {
+            start: date + " " + startTime,
+            end: date + " " + "23:59:59"
+          });
+        } else if (idx == dates.length - 1 && date == end) {
+          datesMap.set(date, {
+            start: date + " " + "00:00:00",
+            end: date + " " + endTime
+          });
+        } else {
+          datesMap.set(date, {
+            start: date + " " + "00:00:00",
+            end: date + " " + "23:59:59"
+          });
+        }
+      });
+      let dateMap = datesMap.get(this.props.date);
+      return dateMap
+        ? this.dateFormater(
+            this.getDiffOfTwoDate(
+              new Date(dateMap.start),
+              new Date(dateMap.end)
+            )
+          )
+        : "";
+    }
+  };
+
+  getMiddleDates = (start, end) => {
+    var startDate = new Date(start);
+    var endDate = new Date(end);
+    var daysArr = new Array();
+    var currentDate = startDate;
+    while (currentDate <= endDate) {
+      daysArr.push(moment(currentDate).format(DATE_FORMAT1));
+      var date = moment(currentDate, DATE_FORMAT1)
+        .add(1, "days")
+        .format(DATE_FORMAT1);
+      currentDate = new Date(date);
+    }
+    return daysArr;
+  };
+
   renderTableRow = tasks => {
     return tasks.map((task, index) => {
       return (
@@ -166,11 +232,7 @@ class ReportTableRow extends Component {
           <td className="td-6 text-titlize">
             {this.showCategory(task.priority)}
           </td>
-          <td className="td-7">
-            {this.dateFormater(
-              this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)
-            )}
-          </td>
+          <td className="td-7">{this.getEstimateTimeOfTask(task)}</td>
           <td
             className="td-8"
             style={
