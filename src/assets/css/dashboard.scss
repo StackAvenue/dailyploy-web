@@ -3714,7 +3714,12 @@ table.scheduler-table tr:last-child td {
     }
     .time {
       padding-top: 15px;
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .time-2{
+      padding-top: 5px;
+      font-size: 12px;
       font-weight: 500;
     }
   }

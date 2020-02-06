@@ -13,7 +13,7 @@ import DashboardEvent from "./../dashboard/DashboardEvent";
 import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 import { convertUTCToLocalDate } from "../../utils/function";
-import { DATE_FORMAT1 } from "../../utils/Constants";
+import { DATE_FORMAT1, FULL_DATE_FORMAT3 } from "../../utils/Constants";
 
 class Calendar extends Component {
   _isMounted = false;
@@ -262,13 +262,28 @@ class Calendar extends Component {
     end,
     statusColor
   ) => {
-    let totalSeconds = end.diff(start, "seconds");
-    totalSeconds = Number(totalSeconds);
-    var h = Math.floor(totalSeconds / 3600);
-    var m = Math.floor((totalSeconds % 3600) / 60);
-    var s = Math.floor((totalSeconds % 3600) % 60);
+    var start = new Date(
+      moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
+    );
+    var end = new Date(
+      moment(convertUTCToLocalDate(eventItem.taskEndDateTime)).format(
+        `${DATE_FORMAT1} HH:mm:ss`
+      )
+    );
+    var timeDiff = "00h 00m";
+    if (
+      moment(start).format("HH:mm") != "00:00" &&
+      moment(end).format("HH:mm") != "00:00"
+    ) {
+      let totalSeconds = (end - start) / 1000;
+      totalSeconds = Number(totalSeconds);
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = Math.floor((totalSeconds % 3600) % 60);
 
-    var timeDiff = ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+      var timeDiff =
+        ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+    }
     if (schedulerData.viewType !== 2) {
       return (
         <div className="custom-event-popup">
@@ -287,7 +302,13 @@ class Calendar extends Component {
             </div>
             <div className="time">
               <div className="d-inline-block">
-                {start.format("HH:mm A")} - {end.format("HH:mm A")}
+                {moment(start).format(FULL_DATE_FORMAT3)}
+                {" - "}
+              </div>
+            </div>
+            <div className="time-2">
+              <div className="d-inline-block">
+                {moment(end).format(FULL_DATE_FORMAT3)}
               </div>
               <div className="d-inline-block pull-right">{timeDiff}</div>
             </div>
