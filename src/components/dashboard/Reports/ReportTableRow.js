@@ -154,9 +154,7 @@ class ReportTableRow extends Component {
       "HH:mm:ss"
     );
     if (this.props.date == start && start == end) {
-      return this.dateFormater(
-        this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)
-      );
+      return this.getDiffOfTwoDate(task.start_datetime, task.end_datetime);
     } else {
       let dates = this.getMiddleDates(start, end);
       let datesMap = new Map();
@@ -164,29 +162,34 @@ class ReportTableRow extends Component {
         if (idx == 0 && date == start) {
           datesMap.set(date, {
             start: date + " " + startTime,
-            end: date + " " + "23:59:59"
+            end:
+              date +
+              " " +
+              `${startTime == "00:00:00" ? "00:00:00" : "23:59:59"}`
           });
         } else if (idx == dates.length - 1 && date == end) {
           datesMap.set(date, {
             start: date + " " + "00:00:00",
-            end: date + " " + endTime
+            end: date + " " + `${endTime != "00:00:00" ? endTime : "00:00:00"}`
           });
         } else {
           datesMap.set(date, {
             start: date + " " + "00:00:00",
-            end: date + " " + "23:59:59"
+            end:
+              date +
+              " " +
+              `${
+                startTime == "00:00:00" && endTime == "00:00:00"
+                  ? "00:00:00"
+                  : "23:59:59"
+              }`
           });
         }
       });
       let dateMap = datesMap.get(this.props.date);
       return dateMap
-        ? this.dateFormater(
-            this.getDiffOfTwoDate(
-              new Date(dateMap.start),
-              new Date(dateMap.end)
-            )
-          )
-        : "";
+        ? this.getDiffOfTwoDate(new Date(dateMap.start), new Date(dateMap.end))
+        : 0;
     }
   };
 
@@ -232,11 +235,13 @@ class ReportTableRow extends Component {
           <td className="td-6 text-titlize">
             {this.showCategory(task.priority)}
           </td>
-          <td className="td-7">{this.getEstimateTimeOfTask(task)}</td>
+          <td className="td-7">
+            {this.dateFormater(this.getEstimateTimeOfTask(task))}
+          </td>
           <td
             className="td-8"
             style={
-              this.getDiffOfTwoDate(task.start_datetime, task.end_datetime) <
+              this.getEstimateTimeOfTask(task) <
               this.getTaskTotalDuration(task.time_tracked)
                 ? { color: "#964B00" }
                 : { color: "#33a1ff" }
