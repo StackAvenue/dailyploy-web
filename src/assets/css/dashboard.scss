@@ -1788,8 +1788,8 @@ table.scheduler-table tr:last-child td {
         &:checked + label:after {
           content: "";
           position: absolute;
-          left: 3.5px;
-          top: 8px;
+          left: 4px;
+          top: 10px;
           background: $color-white;
           width: 2px;
           height: 2px;
@@ -3483,7 +3483,7 @@ table.scheduler-table tr:last-child td {
     content: "";
     margin-right: 10px;
     display: inline-block;
-    vertical-align: text-top;
+    vertical-align: baseline;
     width: 13px;
     height: 13px;
     background: white;
@@ -3521,7 +3521,7 @@ table.scheduler-table tr:last-child td {
     content: "";
     position: absolute;
     left: 2px;
-    top: 8px;
+    top: 10px;
     background: $color-white;
     width: 2px;
     height: 2px;
