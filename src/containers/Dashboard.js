@@ -237,6 +237,15 @@ class Dashboard extends Component {
                     "start"
                   );
                 }
+              } else {
+                let runningTask = task.time_tracked.find(
+                  ttt => ttt.status == "running"
+                );
+                if (runningTask) {
+                  var taskStartOn = new Date(runningTask.start_time).getTime();
+                  tasksObj["trackingStatus"] = "pause";
+                  tasksObj["startOn"] = taskStartOn;
+                }
               }
               return tasksObj;
             });
@@ -471,6 +480,15 @@ class Dashboard extends Component {
                 tasksObj["trackingStatus"] = "pause";
                 tasksObj["startOn"] = taskStartOn;
                 trackingEvent = tasksObj;
+              }
+            } else {
+              let runningTask = task.time_tracked.find(
+                ttt => ttt.status == "running"
+              );
+              if (runningTask) {
+                var taskStartOn = new Date(runningTask.start_time).getTime();
+                tasksObj["trackingStatus"] = "pause";
+                tasksObj["startOn"] = taskStartOn;
               }
             }
             return tasksObj;
