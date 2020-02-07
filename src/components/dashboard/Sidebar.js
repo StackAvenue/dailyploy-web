@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AddWorkspaceModal from "./Sidebar/AddWorkspaceModal";
 import SelectWorkspace from "./Sidebar/SelectWorkspace";
+import cookie from "react-cookies";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -24,6 +25,10 @@ class Sidebar extends Component {
     });
   };
 
+  callWorkspace = id => {
+    cookie.save("workspaceId", id, { path: "/" });
+  };
+
   render() {
     let workspacesArr = this.props.workspaces;
     let divideArr = workspacesArr.map(item => item);
@@ -38,6 +43,7 @@ class Sidebar extends Component {
                 key={index}
                 workspaceId={this.props.workspaceId}
                 workspaceName={this.props.workspaceName}
+                callWorkspace={this.callWorkspace}
               />
             ))}
             {/* <li>

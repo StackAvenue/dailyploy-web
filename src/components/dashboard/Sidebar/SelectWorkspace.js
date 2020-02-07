@@ -8,6 +8,7 @@ const SelectWorkspace = props => {
         <div className="workspace-box text-titlize active">
           <a
             className="btn btn-default"
+            onClick={() => props.callWorkspace(props.item.id)}
             href={`/workspace/${props.item.id}/dashboard`}
             title={workspaceNameSplit(props.workspaceName)}
           >
@@ -26,6 +27,7 @@ const SelectWorkspace = props => {
         <div className="workspace-box text-titlize">
           <a
             className="btn btn-default"
+            onClick={() => props.callWorkspace(props.item.id)}
             href={`/workspace/${props.item.id}/dashboard`}
             title={workspaceNameSplit(props.item.name)}
           >

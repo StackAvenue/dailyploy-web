@@ -1,107 +1,107 @@
-import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import cookie from 'react-cookies'
-import { login, get } from '../utils/API'
-import { validateEmail } from '../utils/validation'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import Header from '../components/Landing/Header'
-import signup from '../assets/images/landing.jpg'
-import googleIcon from '../assets/images/google.png'
-import Loader from 'react-loader-spinner'
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-import axios from 'axios'
-import '../assets/css/login.scss'
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import cookie from "react-cookies";
+import { login, get } from "../utils/API";
+import { validateEmail } from "../utils/validation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Header from "../components/Landing/Header";
+import signup from "../assets/images/landing.jpg";
+import googleIcon from "../assets/images/google.png";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import axios from "axios";
+import "../assets/css/login.scss";
 
 class Signin extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       errors: {
         emailError: null,
         passwordError: null
       },
-      error: '',
+      error: "",
       isLoading: false
-    }
+    };
   }
 
   handleChange = e => {
-    const { name, value } = e.target
-    this.setState({ [name]: value })
-  }
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
   componentDidMount() {
-    const token = cookie.load('accessToken')
-    if (token !== 'undefined' && token !== null) {
-      return this.props.history.push('/login')
+    const token = cookie.load("accessToken");
+    if (token !== "undefined" && token !== null) {
+      return this.props.history.push("/login");
     } else {
-      return null
+      return null;
     }
   }
 
   login = async e => {
-    e.preventDefault()
-    this.validateAllInputs()
+    e.preventDefault();
+    this.validateAllInputs();
     if (this.isPresentAllInputs()) {
       const loginData = {
         email: this.state.email,
         password: this.state.password
-      }
-      this.setState({ isLoading: true })
+      };
+      this.setState({ isLoading: true });
       try {
-        const { data } = await login(loginData)
-        cookie.save('accessToken', data.access_token, { path: '/' })
-        cookie.save('refreshToken', 'adehbfjjnmmhdnmf', { path: '/' })
-        axios.defaults.headers.common['Authorization'] = data.access_token
+        const { data } = await login(loginData);
+        cookie.save("accessToken", data.access_token, { path: "/" });
+        cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
+        axios.defaults.headers.common["Authorization"] = data.access_token
           ? `Bearer ${data.access_token}`
-          : ''
+          : "";
         try {
-          const { data } = await get('workspaces')
-          const workspace = data.workspaces[0]
-          cookie.save('workspaceId', workspace.id, { path: '/' })
-          if (workspace && workspace.type === 'company') {
-            cookie.save('workspaceName', workspace.company.name, { path: '/' })
+          const { data } = await get("workspaces");
+          const workspace = data.workspaces[0];
+          cookie.save("workspaceId", workspace.id, { path: "/" });
+          if (workspace && workspace.type === "company") {
+            cookie.save("workspaceName", workspace.company.name, { path: "/" });
           } else {
-            cookie.save('workspaceName', workspace.name, {
-              path: '/'
-            })
+            cookie.save("workspaceName", workspace.name, {
+              path: "/"
+            });
           }
           try {
-            const { data } = await get('logged_in_user')
-            cookie.save('loggedInUser', data)
+            const { data } = await get("logged_in_user");
+            cookie.save("loggedInUser", data);
           } catch (e) {
-            console.log('err', e)
+            console.log("err", e);
           }
-          this.setState({ isLoading: false })
-          this.props.history.push(`/workspace/${workspace.id}/dashboard`)
+          this.setState({ isLoading: false });
+          this.props.history.push(`/workspace/${workspace.id}/dashboard`);
         } catch (e) {
-          console.log('error', e)
+          console.log("error", e);
         }
       } catch (e) {
-        this.setState({ error: e.response.data.error, isLoading: false })
+        this.setState({ error: e.response.data.error, isLoading: false });
       }
     } else {
-      return 'Enter valid email address and password'
+      return "Enter valid email address and password";
     }
-  }
+  };
   validateAllInputs = () => {
     const errors = {
       passwordError: null
-    }
-    errors.emailError = validateEmail(this.state.email)
-    this.setState({ errors })
-  }
+    };
+    errors.emailError = validateEmail(this.state.email);
+    this.setState({ errors });
+  };
 
   isPresentAllInputs = () => {
-    return this.state.email && this.state.password
-  }
+    return this.state.email && this.state.password;
+  };
 
   render() {
-    const { email, password } = this.state
-    const isEnabled = this.isPresentAllInputs()
+    const { email, password } = this.state;
+    const isEnabled = this.isPresentAllInputs();
     return (
       <>
         {/* {this.state.isLoading ? (
@@ -162,12 +162,12 @@ class Signin extends Component {
                           placeholder="Password"
                         />
                       </div>
-                      <div className="text-right forgot-pass">
-                        Forgot Password?{' '}
+                      {/* <div className="text-right forgot-pass">
+                        Forgot Password?{" "}
                         <button className="btn btn-link no-padding">
                           Click here
                         </button>
-                      </div>
+                      </div> */}
                       <br />
                       <div className="col-md-12 no-padding text-center">
                         <button
@@ -189,8 +189,8 @@ class Signin extends Component {
                     </div>
                   </form>
                   <br />
-                  <div
-                    style={{ margin: '0' }}
+                  {/* <div
+                    style={{ margin: "0" }}
                     className="col-md-8 offset-2 googleIcon"
                   >
                     <img
@@ -198,13 +198,13 @@ class Signin extends Component {
                       src={googleIcon}
                       className="img-responsive"
                     />
-                    <Link to={'/login'} className="link">
+                    <Link to={"/login"} className="link">
                       Sign In with Google
                     </Link>
-                  </div>
+                  </div> */}
                   <br />
                   <div
-                    style={{ margin: '0' }}
+                    style={{ margin: "0" }}
                     className="col-md-8 offset-2 googleIcon"
                   >
                     <span>New to DailyPloy?</span>
@@ -213,13 +213,13 @@ class Signin extends Component {
                     </Link>
                   </div>
                 </div>
-              </div>{' '}
+              </div>{" "}
             </div>
           </div>
         </div>
       </>
-    )
+    );
   }
 }
 
-export default withRouter(Signin)
+export default withRouter(Signin);

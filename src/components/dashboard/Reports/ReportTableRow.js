@@ -16,6 +16,22 @@ class ReportTableRow extends Component {
     return sTime + "- " + eTime;
   };
 
+  // renderLog = task => {
+  //   <EditableSelect
+  //     options={ligTimes}
+  //     // value={this.state.selected}
+  //     getOptionValue={option => option.id}
+  //     getOptionLabel={option => option.name}
+  //     action={false}
+  //     createOption={text => {
+  //       return { id: 1, name: text };
+  //     }}
+  //     onChange={this.selectedOption}
+  //     saveInputEditable={this.saveInputEditable}
+  //     state={this.state.trackSaved}
+  //   />;
+  // };
+
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
     var start =
       moment(this.props.date).format("YYYY-MM-DD") +
@@ -27,37 +43,46 @@ class ReportTableRow extends Component {
       moment(endDateTime).format("HH:mm");
     let totalMilSeconds = new Date(end) - new Date(start);
     var totalSeconds = totalMilSeconds / 1000;
-    totalSeconds = Number(totalSeconds);
+    return Number(totalSeconds);
+    // var h = Math.floor(totalSeconds / 3600);
+    // var m = Math.floor((totalSeconds % 3600) / 60);
+    // return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+  };
+
+  dateFormater = totalSeconds => {
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
-    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + " h";
+    return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
   };
 
   getTotalHours = tasks => {
     if (tasks !== undefined) {
-      var totalSec = null;
-      {
-        tasks.map((task, idx) => {
-          var start =
-            moment(this.props.date).format("YYYY-MM-DD") +
-            " " +
-            moment(task.start_datetime).format("HH:mm");
-          var end =
-            moment(this.props.date).format("YYYY-MM-DD") +
-            " " +
-            moment(task.end_datetime).format("HH:mm");
-          let totalMilSeconds = new Date(end) - new Date(start);
-          var totalSeconds = totalMilSeconds / 1000;
-          totalSec += totalSeconds;
-        });
-      }
-      totalSec = Number(totalSec);
-      var h = Math.floor(totalSec / 3600);
-      var m = Math.floor((totalSec % 3600) / 60);
-
-      return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + " h";
+      var totalSec = 0;
+      tasks.map((task, idx) => {
+        totalSec += this.addTotalDuration(task.time_tracked);
+      });
+      return this.secondsToHours(totalSec);
     }
     return "0 h";
+  };
+
+  getTaskTotalDuration = timeTracked => {
+    return this.addTotalDuration(timeTracked);
+  };
+
+  addTotalDuration = timeTracked => {
+    return timeTracked
+      .map(log => log.duration)
+      .flat()
+      .reduce((a, b) => a + b, 0);
+  };
+
+  secondsToHours = seconds => {
+    let totalSeconds = Number(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor((totalSeconds % 3600) % 60);
+    return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
   };
 
   displayDate = date => {
@@ -71,6 +96,7 @@ class ReportTableRow extends Component {
     return (
       <tr className="manage-error-tr">
         <td>No Tasks for this day</td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -107,6 +133,7 @@ class ReportTableRow extends Component {
             ) : null}
           </td>
           <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td>
+          {/* <td>{this.renderLog(task)}</td> */}
           <td className="text-titlize">{task.name}</td>
           <td className="text-titlize">{task.project.name}</td>
           <td className="text-titlize">
@@ -114,7 +141,19 @@ class ReportTableRow extends Component {
           </td>
           <td className="text-titlize">{this.showCategory(task.priority)}</td>
           <td>
-            {this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)}
+            {this.dateFormater(
+              this.getDiffOfTwoDate(task.start_datetime, task.end_datetime)
+            )}
+          </td>
+          <td
+            style={
+              this.getDiffOfTwoDate(task.start_datetime, task.end_datetime) <
+              this.getTaskTotalDuration(task.time_tracked)
+                ? { color: "#964B00" }
+                : { color: "#33a1ff" }
+            }
+          >
+            {this.dateFormater(this.getTaskTotalDuration(task.time_tracked))}
           </td>
         </tr>
       );
@@ -126,6 +165,7 @@ class ReportTableRow extends Component {
       <>
         <tr className="report-table-date">
           <th>{this.displayDate(this.props.date)}</th>
+          <th></th>
           <th></th>
           <th></th>
           <th></th>

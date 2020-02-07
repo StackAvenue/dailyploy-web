@@ -12,6 +12,8 @@ import moment from "moment";
 import DashboardEvent from "./../dashboard/DashboardEvent";
 import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
+import { convertUTCToLocalDate } from "../../utils/function";
+import { DATE_FORMAT1 } from "../../utils/Constants";
 
 class Calendar extends Component {
   _isMounted = false;
@@ -266,7 +268,7 @@ class Calendar extends Component {
     var m = Math.floor((totalSeconds % 3600) / 60);
     var s = Math.floor((totalSeconds % 3600) % 60);
 
-    var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2) + "h";
+    var timeDiff = ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
     if (schedulerData.viewType !== 2) {
       return (
         <div className="custom-event-popup">
@@ -285,7 +287,7 @@ class Calendar extends Component {
             </div>
             <div className="time">
               <div className="d-inline-block">
-                {start.format("HH:mm")}-{end.format("HH:mm")}
+                {start.format("HH:mm A")} - {end.format("HH:mm A")}
               </div>
               <div className="d-inline-block pull-right">{timeDiff}</div>
             </div>
@@ -396,24 +398,48 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData
     });
-    this.props.updateTaskEvent(event, { start_datetime: newStart });
+    let newStartTime = moment(
+      convertUTCToLocalDate(event.taskStartDateTime)
+    ).format("HH:mm:ss");
+    let newStartDateTime =
+      moment(newStart).format(DATE_FORMAT1) + " " + newStartTime;
+    this.props.updateTaskEvent(event, { start_datetime: newStartDateTime });
   };
 
   updateEventEnd = (schedulerData, event, newEnd) => {
     this.setState({
       viewModel: schedulerData
     });
-    this.props.updateTaskEvent(event, { end_datetime: newEnd });
+    let newEndTime = moment(
+      convertUTCToLocalDate(event.taskEndDateTime)
+    ).format("HH:mm:ss");
+    let newEndDateTime = moment(newEnd).format(DATE_FORMAT1) + " " + newEndTime;
+    this.props.updateTaskEvent(event, { end_datetime: newEndDateTime });
   };
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    schedulerData.moveEvent(event, slotId, slotName, start, end);
+    let newStartTime = moment(
+      convertUTCToLocalDate(event.taskStartDateTime)
+    ).format("HH:mm:ss");
+    let newEndTime = moment(
+      convertUTCToLocalDate(event.taskEndDateTime)
+    ).format("HH:mm:ss");
+    let newStartDateTime =
+      moment(start).format(DATE_FORMAT1) + " " + newStartTime;
+    let newEndDateTime = moment(end).format(DATE_FORMAT1) + " " + newEndTime;
+    schedulerData.moveEvent(
+      event,
+      slotId,
+      slotName,
+      newStartDateTime,
+      newEndDateTime
+    );
     this.setState({
       viewModel: schedulerData
     });
     this.props.updateTaskEvent(event, {
-      start_datetime: start,
-      end_datetime: end
+      start_datetime: newStartDateTime,
+      end_datetime: newEndDateTime
     });
   };
 

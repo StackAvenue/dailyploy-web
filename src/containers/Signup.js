@@ -1,35 +1,35 @@
-import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import '../assets/css/signup.scss'
-import { signUp, get } from '../utils/API'
-import { workspaceNameSplit } from '../utils/function'
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import "../assets/css/signup.scss";
+import { signUp, get } from "../utils/API";
+import { workspaceNameSplit } from "../utils/function";
 import {
   checkPassword,
   validateName,
   validateEmail,
   PASSWORDREGX
-} from '../utils/validation'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import DailyPloyToast from './../../src/components/DailyPloyToast'
-import { Tabs, Tab } from 'react-bootstrap'
-import Company from '../components/Signup/Company'
-import Individual from '../components/Signup/Individual'
-import Header from '../components/Landing/Header'
-import signup from '../assets/images/landing.jpg'
-import googleIcon from '../assets/images/google.png'
-import '../assets/css/login.scss'
+} from "../utils/validation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import DailyPloyToast from "./../../src/components/DailyPloyToast";
+import { Tabs, Tab } from "react-bootstrap";
+import Company from "../components/Signup/Company";
+import Individual from "../components/Signup/Individual";
+import Header from "../components/Landing/Header";
+import signup from "../assets/images/landing.jpg";
+import googleIcon from "../assets/images/google.png";
+import "../assets/css/login.scss";
 
 class Signup extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      name: '',
-      companyName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      workspaceName: '',
+      name: "",
+      companyName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      workspaceName: "",
       isLoading: false,
       errors: {
         nameError: null,
@@ -39,39 +39,39 @@ class Signup extends Component {
         confirmPasswordError: null
       },
       isCompany: false,
-      tokenId: '',
+      tokenId: "",
       isDisabled: false
-    }
+    };
   }
 
   companyFlag = word => {
-    var company
-    if (word === 'company') {
-      company = true
+    var company;
+    if (word === "company") {
+      company = true;
     } else {
-      company = false
+      company = false;
     }
-    return this.setState({ isCompany: company })
-  }
+    return this.setState({ isCompany: company });
+  };
 
   changeHandler = e => {
-    const { name, value } = e.target
-    this.setState({ [name]: value })
-  }
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
   async componentDidMount() {
-    const { tokenId } = this.props.match.params
+    const { tokenId } = this.props.match.params;
     if (tokenId !== undefined) {
-      var isDisabled
+      var isDisabled;
       try {
-        const { data } = await get(`token_details/${tokenId}`)
-        var userName = data.name
-        var userEmail = data.email
-        var workspaceName = workspaceNameSplit(data.workspace_name)
-        console.log(workspaceName)
-        isDisabled = true
+        const { data } = await get(`token_details/${tokenId}`);
+        var userName = data.name;
+        var userEmail = data.email;
+        var workspaceName = workspaceNameSplit(data.workspace_name);
+        console.log(workspaceName);
+        isDisabled = true;
       } catch (e) {
-        isDisabled = false
+        isDisabled = false;
       }
 
       this.setState({
@@ -80,18 +80,18 @@ class Signup extends Component {
         email: userEmail,
         workspaceName: workspaceName,
         isDisabled: isDisabled
-      })
+      });
     }
   }
 
   signupForm = async e => {
-    e.preventDefault()
-    this.validateAllInputs()
+    e.preventDefault();
+    this.validateAllInputs();
     if (this.validityCheck()) {
-      var signupData
-      var message
+      var signupData;
+      var message;
       if (this.state.isCompany === true) {
-        message = 'User Created Successfully!'
+        message = "User Created Successfully!";
         signupData = {
           user: {
             name: this.state.name,
@@ -104,9 +104,9 @@ class Signup extends Component {
               email: this.state.email
             }
           }
-        }
+        };
       } else if (!this.state.tokenId) {
-        message = 'User Created Successfully!'
+        message = "User Created Successfully!";
         signupData = {
           user: {
             name: this.state.name,
@@ -116,9 +116,9 @@ class Signup extends Component {
             is_company_present: this.state.isCompany,
             invitation_status: false
           }
-        }
+        };
       } else {
-        message = `Successfully added in ${this.state.workspaceName} Workspace`
+        message = `Successfully added in ${this.state.workspaceName} Workspace`;
         signupData = {
           user: {
             name: this.state.name,
@@ -131,53 +131,53 @@ class Signup extends Component {
               token_id: this.state.tokenId
             }
           }
-        }
+        };
       }
-      this.setState({ isLoading: true })
+      this.setState({ isLoading: true });
       try {
-        const { signUpData } = await signUp(signupData)
+        const { signUpData } = await signUp(signupData);
         toast(<DailyPloyToast message={message} status="success" />, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
-        })
-        setTimeout(() => this.props.history.push('/login'), 1000)
-        this.setState({ isLoading: false })
+        });
+        setTimeout(() => this.props.history.push("/login"), 1000);
+        this.setState({ isLoading: false });
       } catch (e) {
-        this.setState({ isLoading: false })
+        this.setState({ isLoading: false });
         if (e.response.status === 500) {
           toast(
-            <DailyPloyToast message={'Internal Server Error'} status="error" />,
+            <DailyPloyToast message={"Internal Server Error"} status="error" />,
             { autoClose: 2000 }
-          )
+          );
         } else if (e.response.data.errors.email) {
           toast(
             <DailyPloyToast
-              message={'email ' + `${e.response.data.errors.email}`}
+              message={"email " + `${e.response.data.errors.email}`}
               status="error"
             />,
             { autoClose: 2000 }
-          )
+          );
         } else if (e.response.data.errors.detail) {
           toast(
             <DailyPloyToast
-              message={'email ' + `${e.response.data.errors.detail}`}
+              message={"email " + `${e.response.data.errors.detail}`}
               status="error"
             />,
             { autoClose: 2000 }
-          )
+          );
         }
       }
     } else {
-      console.log('Enter valid email address and password')
+      console.log("Enter valid email address and password");
     }
-  }
+  };
 
   validatePassword = (password, confirmPassword) => {
     if (password === confirmPassword) {
-      return
+      return;
     }
-    return "Didn't Match, Try Again."
-  }
+    return "Didn't Match, Try Again.";
+  };
 
   validateAllInputs = () => {
     const errors = {
@@ -186,16 +186,16 @@ class Signup extends Component {
       emailError: null,
       passwordError: null,
       confirmPasswordError: null
-    }
-    errors.nameError = validateName(this.state.name)
-    errors.passwordError = checkPassword(this.state.password)
-    errors.emailError = validateEmail(this.state.email)
+    };
+    errors.nameError = validateName(this.state.name);
+    errors.passwordError = checkPassword(this.state.password);
+    errors.emailError = validateEmail(this.state.email);
     errors.confirmPasswordError = this.validatePassword(
       this.state.password,
       this.state.confirmPassword
-    )
-    this.setState({ errors })
-  }
+    );
+    this.setState({ errors });
+  };
 
   validityCheck = () => {
     return (
@@ -209,15 +209,15 @@ class Signup extends Component {
       this.state.password.match(PASSWORDREGX) &&
       this.state.confirmPassword &&
       this.state.password === this.state.confirmPassword
-    )
-  }
+    );
+  };
 
   render() {
     const isEnabled =
       this.state.name &&
       this.state.email &&
       this.state.password &&
-      this.state.confirmPassword
+      this.state.confirmPassword;
     // &&
     // this.state.isCompany
     //   ? this.state.companyName
@@ -242,15 +242,15 @@ class Signup extends Component {
 
               <div
                 style={{
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
                 }}
                 className="col-md-5 sub-container"
               >
                 <div
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   className="signup-form-container"
                 >
                   <div className="col-md-12 heading">Sign up</div>
@@ -271,7 +271,7 @@ class Signup extends Component {
                     <Tab
                       eventKey="company"
                       title="Organization"
-                      style={{ border: '0' }}
+                      style={{ border: "0" }}
                       disabled={this.state.isDisabled}
                     >
                       <Company
@@ -283,7 +283,7 @@ class Signup extends Component {
                     </Tab>
                   </Tabs>
                   <br />
-                  <div className="col-md-8 offset-2 googleIcon">
+                  {/* <div className="col-md-8 offset-2 googleIcon">
                     <img
                       alt="Google Icon"
                       src={googleIcon}
@@ -292,7 +292,7 @@ class Signup extends Component {
                     <Link to={'/signup'} className="link">
                       Sign up with your Google account
                     </Link>
-                  </div>
+                  </div> */}
                   <br />
                   <div className="col-md-8 offset-2 googleIcon">
                     <span>Already have DailyPloy account?</span>
@@ -302,12 +302,12 @@ class Signup extends Component {
                   </div>
                 </div>
               </div>
-            </div>{' '}
+            </div>{" "}
           </div>
         </div>
       </>
-    )
+    );
   }
 }
 
-export default withRouter(Signup)
+export default withRouter(Signup);
