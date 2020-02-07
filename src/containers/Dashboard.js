@@ -515,7 +515,7 @@ class Dashboard extends Component {
       events: taskEvents ? taskEvents : [],
       user: user,
       selectedMembers: [loggedInData],
-      taskUser: [loggedInData.id],
+      // taskUser: [loggedInData.id],
       worksapceUsers: worksapceUsers,
       taskCategories: taskCategories,
       workspaceId: workspaceId,
@@ -682,13 +682,29 @@ class Dashboard extends Component {
 
   showTaskModal = () => {
     let members = this.memberSearchOptions(this.state.userId);
-    this.setState({
-      setShow: true,
-      show: true,
-      modalMemberSearchOptions: members,
-      project: "",
-      memberProjects: this.state.projects
-    });
+    if (this.state.user.role === "admin") {
+      this.setState({
+        setShow: true,
+        show: true,
+        taskUser: [],
+        selectedMembers: [],
+        modalMemberSearchOptions: members,
+        project: "",
+        memberProjects: this.state.projects
+      });
+    } else {
+      var memberProjects = this.state.projects.filter(project =>
+        project.members.map(member => member.id).includes(this.state.userId)
+      );
+      this.setState({
+        setShow: true,
+        show: true,
+        taskUser: [this.state.userId],
+        modalMemberSearchOptions: members,
+        project: "",
+        memberProjects: memberProjects
+      });
+    }
   };
 
   closeTaskModal = () => {
@@ -804,11 +820,11 @@ class Dashboard extends Component {
     if (option) {
       if (this.state.user.role === "admin") {
         options = option.members;
-        options.push({
-          email: this.state.userEmail,
-          id: this.state.userId,
-          name: this.state.userName
-        });
+        // options.push({
+        //   email: this.state.userEmail,
+        //   id: this.state.userId,
+        //   name: this.state.userName
+        // });
       } else {
         options = option.members.filter(
           member => member.id === this.state.userId
@@ -882,7 +898,6 @@ class Dashboard extends Component {
         modalMemberSearchOptions: members.length > 0 ? members : selecteMember,
         dateFrom: new Date(startDate),
         dateTo: null,
-        // dateTo: new Date(endDate),
         border: "solid 1px #ffffff",
         timeDateTo: moment(),
         timeDateFrom: moment(),
