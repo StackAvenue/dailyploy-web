@@ -14,11 +14,13 @@ import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 import { convertUTCToLocalDate } from "../../utils/function";
 import { DATE_FORMAT1, FULL_DATE_FORMAT3 } from "../../utils/Constants";
+import cookie from "react-cookies";
 
 class Calendar extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
+    this.loggedInUser = cookie.load("loggedInUser");
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -31,8 +33,8 @@ class Calendar extends Component {
         tableHeaderHeight: 34,
 
         // agendaResourceTableWidth: 160,
-        agendaResourceTableWidth: 218,
-        agendaMaxEventWidth: 153,
+        agendaResourceTableWidth: 220,
+        agendaMaxEventWidth: 157,
 
         dayResourceTableWidth: 218,
         weekResourceTableWidth: 218,
@@ -89,7 +91,8 @@ class Calendar extends Component {
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
         calenderViewType: "customview",
-
+        userId: this.loggedInUser ? this.loggedInUser.id : "0",
+        bgColorExceptLoggedinUser: true,
         views: [
           {
             viewName: "Day",
