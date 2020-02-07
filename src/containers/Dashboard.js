@@ -165,96 +165,27 @@ class Dashboard extends Component {
             : 0;
         });
         var taskRunningObj = {
-          status: this.state.status,
+          status: false,
           startOn: null,
           taskId: ""
         };
         var trackingEvent = this.state.trackingEvent;
-        var tasksUser = sortedUsers.map(user => {
-          var usersObj = {
-            id: user.id,
-            name:
-              user.email === this.state.userEmail
-                ? user.name + " (Me)"
-                : user.name
-          };
-          var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
-            var task = dateWiseTasks.tasks.map(task => {
-              var startDateTime =
-                moment(dateWiseTasks.date).format("YYYY-MM-DD") +
-                " " +
-                moment(task.start_datetime).format("HH:mm");
-              var endDateTime =
-                moment(dateWiseTasks.date).format("YYYY-MM-DD") +
-                " " +
-                moment(task.end_datetime).format("HH:mm");
-              let newTaskId = task.id + "-" + dateWiseTasks.date;
-              var tasksObj = {
-                id: newTaskId,
-                taskId: task.id,
-                start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
-                end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
-                taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
-                taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
-                taskStartDateTime: moment(task.start_datetime).format(
-                  FULL_DATE
-                ),
-                taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
-                resourceId: user.id,
-                title: task.name,
-                bgColor: task.project.color_code,
-                projectName: task.project.name,
-                comments: task.comments,
-                projectId: task.project.id,
-                timeTracked: task.time_tracked,
-                priority: task.priority,
-                status: task.status,
-                trackingStatus:
-                  task.status == "completed" ? "completed" : "play",
-                startOn: null
-              };
-
-              if (
-                user.id == this.state.userId &&
-                task.time_tracked.length > 0
-              ) {
-                let runningTask = task.time_tracked.find(
-                  ttt => ttt.status == "running"
-                );
-                if (runningTask) {
-                  var taskStartOn = new Date(runningTask.start_time).getTime();
-                  taskRunningObj = {
-                    status: true,
-                    startOn: taskStartOn,
-                    taskId: newTaskId
-                  };
-                  tasksObj["trackingStatus"] = "pause";
-                  tasksObj["startOn"] = taskStartOn;
-                  trackingEvent = tasksObj;
-                  this.props.handleTaskBottomPopup(
-                    taskStartOn,
-                    tasksObj,
-                    "start"
-                  );
-                }
-              } else {
-                let runningTask = task.time_tracked.find(
-                  ttt => ttt.status == "running"
-                );
-                if (runningTask) {
-                  var taskStartOn = new Date(runningTask.start_time).getTime();
-                  tasksObj["trackingStatus"] = "pause";
-                  tasksObj["startOn"] = taskStartOn;
-                }
-              }
-              return tasksObj;
-            });
-            return task;
-          });
-          return { usersObj, tasks };
-        });
+        let generatedObj = this.generateTaskObject(
+          sortedUsers,
+          {
+            id: this.state.userId,
+            name: this.state.userName,
+            email: this.state.userEmail
+          },
+          taskRunningObj,
+          trackingEvent
+        );
+        taskRunningObj = generatedObj.taskRunningObj;
+        trackingEvent = generatedObj.trackingEvent;
+        var tasksUser = generatedObj.tasksUser;
         var tasksResources = tasksUser.map(user => user.usersObj);
         var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+
         this.setState({
           resources: tasksResources ? tasksResources : [],
           events: taskEvents ? taskEvents : [],
@@ -413,6 +344,12 @@ class Dashboard extends Component {
         user_id: userIds.join(","),
         project_ids: this.props.searchProjectIds.join(",")
       };
+      var taskRunningObj = {
+        status: false,
+        startOn: null,
+        taskId: ""
+      };
+      var trackingEvent = null;
       const { data } = await get(
         `workspaces/${workspaceId}/user_tasks`,
         searchData
@@ -422,81 +359,15 @@ class Dashboard extends Component {
       var sortedUsers = data.users.sort((x, y) => {
         return x.id === userId ? -1 : y.id === userId ? 1 : 0;
       });
-      var taskRunningObj = {
-        status: false,
-        startOn: null,
-        taskId: ""
-      };
-      var trackingEvent = null;
-      var tasksUser = sortedUsers.map(user => {
-        var usersObj = {
-          id: user.id,
-          name:
-            user.email === loggedInData.email ? user.name + " (Me)" : user.name
-        };
-        var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
-          var task = dateWiseTasks.tasks.map(task => {
-            var startDateTime =
-              moment(dateWiseTasks.date).format(DATE_FORMAT1) +
-              " " +
-              moment(new Date(task.start_datetime)).format("HH:mm");
-            var endDateTime =
-              moment(dateWiseTasks.date).format(DATE_FORMAT1) +
-              " " +
-              moment(new Date(task.end_datetime)).format("HH:mm");
-            let newTaskId = task.id + "-" + dateWiseTasks.date;
-            var tasksObj = {
-              id: newTaskId,
-              taskId: task.id,
-              start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
-              end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
-              taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
-              taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
-              taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
-              taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
-              resourceId: user.id,
-              title: task.name,
-              bgColor: task.project.color_code,
-              projectName: task.project.name,
-              comments: task.comments,
-              projectId: task.project.id,
-              timeTracked: task.time_tracked,
-              priority: task.priority,
-              status: task.status,
-              trackingStatus: task.status == "completed" ? "completed" : "play",
-              startOn: null
-            };
-            if (user.id == loggedInData.id && task.time_tracked.length > 0) {
-              let runningTask = task.time_tracked.find(
-                ttt => ttt.status == "running"
-              );
-              if (runningTask) {
-                var taskStartOn = new Date(runningTask.start_time).getTime();
-                taskRunningObj = {
-                  status: true,
-                  startOn: taskStartOn,
-                  taskId: newTaskId
-                };
-                tasksObj["trackingStatus"] = "pause";
-                tasksObj["startOn"] = taskStartOn;
-                trackingEvent = tasksObj;
-              }
-            } else {
-              let runningTask = task.time_tracked.find(
-                ttt => ttt.status == "running"
-              );
-              if (runningTask) {
-                var taskStartOn = new Date(runningTask.start_time).getTime();
-                tasksObj["trackingStatus"] = "pause";
-                tasksObj["startOn"] = taskStartOn;
-              }
-            }
-            return tasksObj;
-          });
-          return task;
-        });
-        return { usersObj, tasks };
-      });
+      let generatedObj = this.generateTaskObject(
+        sortedUsers,
+        loggedInData,
+        taskRunningObj,
+        trackingEvent
+      );
+      taskRunningObj = generatedObj.taskRunningObj;
+      trackingEvent = generatedObj.trackingEvent;
+      var tasksUser = generatedObj.tasksUser;
       var tasksResources = tasksUser.map(user => user.usersObj);
       var taskEvents = tasksUser.map(user => user.tasks).flat(2);
     } catch (e) {
@@ -515,7 +386,6 @@ class Dashboard extends Component {
       events: taskEvents ? taskEvents : [],
       user: user,
       selectedMembers: [loggedInData],
-      // taskUser: [loggedInData.id],
       worksapceUsers: worksapceUsers,
       taskCategories: taskCategories,
       workspaceId: workspaceId,
@@ -527,6 +397,95 @@ class Dashboard extends Component {
     this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
     this.props.handleLoading(false);
   }
+
+  generateTaskObject = (
+    sortedUsers,
+    userData,
+    taskRunningObj,
+    trackingEvent
+  ) => {
+    var tasksUser = sortedUsers.map(user => {
+      var usersObj = {
+        id: user.id,
+        name: user.email === userData.email ? user.name + " (Me)" : user.name
+      };
+      var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
+        var task = dateWiseTasks.tasks.map(task => {
+          var tasksObj = this.createTaskObject(task, user, dateWiseTasks.date);
+          var taskAllTracks = task.time_tracks.map(date => {
+            return date.time_tracks;
+          });
+          if (user.id == userData.id && task.time_tracks.length > 0) {
+            let runningTask = taskAllTracks
+              .flat()
+              .find(ttt => ttt.status == "running");
+            if (runningTask) {
+              var taskStartOn = new Date(runningTask.start_time).getTime();
+              taskRunningObj = {
+                status: true,
+                startOn: taskStartOn,
+                taskId: tasksObj.id
+              };
+              tasksObj["trackingStatus"] = "pause";
+              tasksObj["startOn"] = taskStartOn;
+              trackingEvent = tasksObj;
+            }
+          } else {
+            let runningTask = taskAllTracks
+              .flat()
+              .find(ttt => ttt.status == "running");
+            if (runningTask) {
+              var taskStartOn = new Date(runningTask.start_time).getTime();
+              tasksObj["trackingStatus"] = "pause";
+              tasksObj["startOn"] = taskStartOn;
+            }
+          }
+          return tasksObj;
+        });
+        return task;
+      });
+      return { usersObj, tasks };
+    });
+    return {
+      taskRunningObj: taskRunningObj,
+      trackingEvent: trackingEvent,
+      tasksUser: tasksUser
+    };
+  };
+
+  createTaskObject = (task, user, dateWiseTasksDate) => {
+    let startDateTime =
+      moment(dateWiseTasksDate).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(task.start_datetime)).format("HH:mm");
+    let endDateTime =
+      moment(dateWiseTasksDate).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(task.end_datetime)).format("HH:mm");
+    let newTaskId = task.id + "-" + dateWiseTasksDate;
+    return {
+      date: dateWiseTasksDate,
+      id: newTaskId,
+      taskId: task.id,
+      start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
+      end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
+      taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+      taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+      taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
+      taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
+      resourceId: user.id,
+      title: task.name,
+      bgColor: task.project.color_code,
+      projectName: task.project.name,
+      comments: task.comments,
+      projectId: task.project.id,
+      timeTracked: task.time_tracks,
+      priority: task.priority,
+      status: task.status,
+      trackingStatus: task.status == "completed" ? "completed" : "play",
+      startOn: null
+    };
+  };
 
   createUserProjectList = (projects, users) => {
     let projectList = [];

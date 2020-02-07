@@ -175,12 +175,15 @@ class DashboardEvent extends Component {
       titleText,
       state
     } = this.props;
-    const startTime = moment(start).format("HH:mm");
-    const endTime = moment(end).format("HH:mm");
     const totalTrackTime = this.props.event.timeTracked
+      .map(dLog => dLog.time_tracks)
+      .flat()
       .map(log => log.duration)
       .flat()
       .reduce((a, b) => a + b, 0);
+    let todaysLog = this.props.event.timeTracked.find(
+      dLog => dLog.date == event.date
+    );
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
@@ -318,7 +321,7 @@ class DashboardEvent extends Component {
 
         {this.state.showTimerMenu && this.state.clickEventId === event.id ? (
           <div className={`dropdown-div `}>
-            {this.props.event.timeTracked.map((time, idx) => {
+            {todaysLog.time_tracks.map((time, idx) => {
               if (idx !== 0) {
                 return (
                   <div className="hover-border" key={time.id}>
