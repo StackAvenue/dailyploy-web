@@ -69,6 +69,29 @@ class PieChart extends Component {
           }
         });
       }
+    } else if (this.props.estimateTime == 0 && this.props.data.length > 0) {
+      var estimateTime = this.props.estimateTime;
+      var totalTime = this.props.data
+        .map(item => item.tracked_time)
+        .reduce((a, b) => a + b, 0);
+      data = this.props.data.map((item, idx) => {
+        var time = this.secondsToHours(item.tracked_time);
+        return {
+          name: textTitlize(item.name),
+          color: item.color_code,
+          time: time,
+          y: item.tracked_time,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: "bold"
+            },
+            formatter: function() {
+              return "<b class='hour-popup'>" + time + "</b> ";
+            }
+          }
+        };
+      });
     }
     return data;
   };
@@ -110,6 +133,25 @@ class PieChart extends Component {
           }
         });
       }
+    } else if (this.props.estimateTime == 0 && this.props.data.length > 0) {
+      var estimateTime = this.props.estimateTime;
+      var totalTime = this.props.data
+        .map(item => item.tracked_time)
+        .reduce((a, b) => a + b, 0);
+      var data = this.props.data.map((item, idx) => {
+        var time = this.secondsToHours(item.tracked_time);
+        return {
+          name: textTitlize(item.name),
+          time: time,
+          y: item.tracked_time,
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return "<b>" + time + "</b>";
+            }
+          }
+        };
+      });
     }
     return data;
   };
@@ -160,6 +202,29 @@ class PieChart extends Component {
           }
         });
       }
+    } else if (this.props.estimateTime == 0 && this.props.data.length > 0) {
+      var estimateTime = this.props.estimateTime;
+      var totalTime = this.props.data
+        .map(item => item.tracked_time)
+        .reduce((a, b) => a + b, 0);
+      data = this.props.data.map((item, idx) => {
+        var time = this.secondsToHours(item.tracked_time);
+        return {
+          name: textTitlize(item.priority),
+          color: this.selectColorCode(item.priority),
+          time: time,
+          y: item.tracked_time,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: "bold"
+            },
+            formatter: function() {
+              return "<b class='hour-popup'>" + time + "</b> ";
+            }
+          }
+        };
+      });
     }
     return data;
   };
