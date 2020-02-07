@@ -64,7 +64,6 @@ class AddTaskModal extends Component {
           className="task-modal"
           show={props.show}
           onHide={props.closeTaskModal}
-          style={{ paddingTop: "1.5%" }}
         >
           <div className="row no-margin">
             <div className="col-md-12 header text-titlize">

@@ -394,6 +394,8 @@
 }
 
 .edit-member-modal {
+  margin: auto !important;
+  top: 9% !important;
   .modal-content {
     width: 658px;
     .header {
@@ -557,10 +559,11 @@
   width: 100%;
 }
 .project-modal {
+  margin: auto !important;
+  top: 9% !important;
   .modal-content {
     width: 658px;
     padding-bottom: 20px;
-    // height: 587px;
     .header {
       padding: 17px 0 5px 49px !important;
       span {
@@ -678,6 +681,9 @@
 }
 
 .task-modal {
+  top: 9% !important;
+  margin: auto !important;
+  // max-width: 626px !important;
   .modal-content {
     width: 626px;
     .header {
@@ -1455,7 +1461,9 @@ table.scheduler-table tr:last-child td {
 }
 
 .member-modal {
-  margin: 10% !important;
+  margin: auto !important;
+  max-width: 1110px !important;
+  top: 12% !important;
   .modal-content {
     width: 1110px !important;
   }
