@@ -11,6 +11,7 @@ import googleIcon from "../assets/images/google.png";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import axios from "axios";
+import "../assets/css/login.scss";
 
 class Signin extends Component {
   constructor(props) {
@@ -119,92 +120,100 @@ class Signin extends Component {
                   className="img-responsive image"
                 />
               </div>
-              <div className="col-md-5 sub-container">
-                <div className="col-md-12 heading">Sign In</div>
-                {this.state.error ? (
-                  <div className="invalid-error">
-                    Invalid Email or Password!
-                  </div>
-                ) : null}
-                <form onSubmit={this.login}>
-                  <div className="col-md-10 offset-1 no-padding signup-form text-left">
-                    <div className="form-group">
-                      <label>Email</label>
-                      {this.state.errors.emailError ? (
-                        <span className="error-warning">
-                          {this.state.errors.emailError}
-                        </span>
-                      ) : null}
-                      <input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={this.handleChange}
-                        className="form-control login-form-field"
-                        placeholder="johndoe1234@amazon.com"
-                      />
+              <div className="form-wrap">
+                <div className="col-md-5 sub-container">
+                  <div className="col-md-12 heading">Sign In</div>
+                  {this.state.error ? (
+                    <div className="invalid-error">
+                      Invalid Email or Password!
                     </div>
-                    <div className="form-group">
-                      <label>Password</label>
-                      {this.state.errors.passwordError ? (
-                        <span className="error-warning">
-                          {this.state.errors.passwordError}
-                        </span>
-                      ) : null}
-                      <input
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={this.handleChange}
-                        className="form-control login-form-field"
-                        placeholder="Password"
-                      />
-                    </div>
-                    {/* <div className="text-right forgot-pass">
-                      Forgot Password?{" "}
-                      <button className="btn btn-link no-padding">
-                        Click here
-                      </button>
-                    </div> */}
-                    <br />
-                    <div className="col-md-12 no-padding text-center">
-                      <button
-                        disabled={!isEnabled}
-                        className="d-inline-block btn form-btn"
-                      >
-                        <span>Sign In &nbsp;&nbsp;</span>
-                        {this.state.isLoading ? (
-                          <Loader
-                            type="Oval"
-                            color="#FFFFFF"
-                            height={20}
-                            width={20}
-                            className="d-inline-block login-signup-loader"
-                          />
+                  ) : null}
+                  <form onSubmit={this.login}>
+                    <div className="col-md-10 offset-1 no-padding signup-form text-left">
+                      <div className="form-group">
+                        <label>Email</label>
+                        {this.state.errors.emailError ? (
+                          <span className="error-warning">
+                            {this.state.errors.emailError}
+                          </span>
                         ) : null}
-                      </button>
+                        <input
+                          type="email"
+                          name="email"
+                          value={email}
+                          onChange={this.handleChange}
+                          className="form-control login-form-field"
+                          placeholder="johndoe1234@amazon.com"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Password</label>
+                        {this.state.errors.passwordError ? (
+                          <span className="error-warning">
+                            {this.state.errors.passwordError}
+                          </span>
+                        ) : null}
+                        <input
+                          type="password"
+                          name="password"
+                          value={password}
+                          onChange={this.handleChange}
+                          className="form-control login-form-field"
+                          placeholder="Password"
+                        />
+                      </div>
+                      {/* <div className="text-right forgot-pass">
+                        Forgot Password?{" "}
+                        <button className="btn btn-link no-padding">
+                          Click here
+                        </button>
+                      </div> */}
+                      <br />
+                      <div className="col-md-12 no-padding text-center">
+                        <button
+                          disabled={!isEnabled}
+                          className="d-inline-block btn form-btn"
+                        >
+                          <span>Sign In &nbsp;&nbsp;</span>
+                          {this.state.isLoading ? (
+                            <Loader
+                              type="Oval"
+                              color="#FFFFFF"
+                              height={20}
+                              width={20}
+                              className="d-inline-block login-signup-loader"
+                            />
+                          ) : null}
+                        </button>
+                      </div>
                     </div>
+                  </form>
+                  <br />
+                  {/* <div
+                    style={{ margin: "0" }}
+                    className="col-md-8 offset-2 googleIcon"
+                  >
+                    <img
+                      alt="Google Icon"
+                      src={googleIcon}
+                      className="img-responsive"
+                    />
+                    <Link to={"/login"} className="link">
+                      Sign In with Google
+                    </Link>
+                  </div> */}
+                  <br />
+                  <div
+                    style={{ margin: "0" }}
+                    className="col-md-8 offset-2 googleIcon"
+                  >
+                    <span>New to DailyPloy?</span>
+                    <Link to={`/signup`} className="link">
+                      Sign Up
+                    </Link>
                   </div>
-                </form>
-                <br />
-                {/* <div className="col-md-8 offset-2 googleIcon">
-                  <img
-                    alt="Google Icon"
-                    src={googleIcon}
-                    className="img-responsive"
-                  />
-                  <Link to={"/login"} className="link">
-                    Sign In with Google
-                  </Link>
-                </div> */}
-                <br />
-                <div className="col-md-8 offset-2 googleIcon">
-                  <span>New to DailyPloy?</span>
-                  <Link to={`/signup`} className="link">
-                    Sign Up
-                  </Link>
                 </div>
-              </div>
+              </div>{" "}
             </div>
           </div>
         </div>

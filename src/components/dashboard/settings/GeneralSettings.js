@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import EmailConfigurationModal from "./EmailConfigurationModal";
-import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
-import AddAdminModal from "./AddAdminModal";
-import { firstTwoLetter, textTitlize } from "../../../utils/function";
-import { post, get, put } from "../../../utils/API";
-import { toast } from "react-toastify";
-import DailyPloyToast from "../../DailyPloyToast";
-import RemoveAdminModal from "./RemoveAdminModal";
-import EmailConfigModal from "./EmailConfigModal";
-import { async } from "q";
+import React, { Component } from 'react'
+import EmailConfigurationModal from './EmailConfigurationModal'
+import DeleteWorkspaceModal from './DeleteWorkspaceModal'
+import AddAdminModal from './AddAdminModal'
+import { firstTwoLetter, textTitlize } from '../../../utils/function'
+import { post, get, put } from '../../../utils/API'
+import { toast } from 'react-toastify'
+import DailyPloyToast from '../../DailyPloyToast'
+import RemoveAdminModal from './RemoveAdminModal'
+import EmailConfigModal from './EmailConfigModal'
+import { async } from 'q'
 
 class GeneralSettings extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       resumeShow: false,
       resumeSetShow: false,
@@ -24,34 +24,34 @@ class GeneralSettings extends Component {
       removeSetShow: false,
       editShow: false,
       editSetShow: false,
-      addAdminEmail: "",
-      addAdminId: "",
-      addAdminName: "",
+      addAdminEmail: '',
+      addAdminId: '',
+      addAdminName: '',
       allUserArr: [],
       suggestions: [],
       isShowRemoveAdmin: false,
-      showRemoveAdminId: "",
-      toSearchText: "",
+      showRemoveAdminId: '',
+      toSearchText: '',
       toEmailSuggestions: [],
       selectToMembers: [],
-      ccSearchText: "",
+      ccSearchText: '',
       ccEmailSuggestions: [],
       selectCcMembers: [],
-      bccSearchText: "",
+      bccSearchText: '',
       bccEmailSuggestions: [],
       selectBccMembers: [],
-      emailText: "",
+      emailText: '',
       addAdminData: null,
-      adminUserName: "",
+      adminUserName: '',
       bccMails: [],
       ccMails: [],
       toMails: [],
       isConfig: true,
       isActive: true,
-      activeStatus: "",
-      toError: "",
-      emailTextError: ""
-    };
+      activeStatus: '',
+      toError: '',
+      emailTextError: ''
+    }
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
@@ -61,35 +61,35 @@ class GeneralSettings extends Component {
     ) {
       let selectedUser = this.props.state.userArr.members.filter(
         user => user.email === this.state.addAdminEmail
-      );
+      )
       let addAdminId =
-        selectedUser && selectedUser[0] ? selectedUser[0].id : null;
+        selectedUser && selectedUser[0] ? selectedUser[0].id : null
       let addAdminName =
-        selectedUser && selectedUser[0] ? selectedUser[0].name : null;
+        selectedUser && selectedUser[0] ? selectedUser[0].name : null
       this.setState({
         addAdminId: addAdminId,
         addAdminName: addAdminName,
         allUserArr: this.props.state.adminUserArr
-      });
+      })
     }
     if (
       prevProps.workspaceId !== this.props.workspaceId &&
-      this.props.workspaceId != ""
+      this.props.workspaceId != ''
     ) {
       try {
         const { data } = await get(
           `workspaces/${this.props.workspaceId}/members`
-        );
-        var members = data.members;
+        )
+        var members = data.members
       } catch (e) {
-        console.log("users Error", e);
+        console.log('users Error', e)
       }
-      this.setState({ members: members });
+      this.setState({ members: members })
 
       try {
         const { data } = await get(
           `workspaces/${this.props.workspaceId}/workspace_settings/show_daily_status_mail`
-        );
+        )
         if (data) {
           this.setState({
             toMails: data.to_mails,
@@ -111,131 +111,131 @@ class GeneralSettings extends Component {
             emailText: data.email_text,
             isConfig: false,
             members: members
-          });
+          })
         } else {
-          this.setState({ isConfig: true });
+          this.setState({ isConfig: true })
         }
       } catch (e) {
-        this.setState({ isConfig: true });
+        this.setState({ isConfig: true })
       }
     }
-  };
+  }
 
   filterEmailMember = (emails, members) => {
-    var filterMembers = [];
+    var filterMembers = []
     emails.map(email => {
-      var filterMember = members.filter(member => member.email === email);
+      var filterMember = members.filter(member => member.email === email)
       if (filterMember.length > 0) {
-        filterMembers.push(...filterMember);
+        filterMembers.push(...filterMember)
       }
-    });
-    return [...filterMembers];
-  };
+    })
+    return [...filterMembers]
+  }
 
   displayEmails = emails => {
     return emails.map(email => {
-      var emailName = textTitlize(email.split("@")[0]);
+      var emailName = textTitlize(email.split('@')[0])
       var emailInitial = email
-        .split("")
+        .split('')
         .slice(0, 2)
-        .join("")
-        .toUpperCase();
+        .join('')
+        .toUpperCase()
       return (
-        <div className="email-box" style={{ marginRight: "5px" }}>
+        <div className="email-box" style={{ marginRight: '5px' }}>
           <div className="email-icon">{emailInitial}</div>
           <span className="text-titlize">{emailName}</span>
         </div>
-      );
-    });
-  };
+      )
+    })
+  }
 
   handleRemoveShow = () => {
     this.setState({
       removeShow: true,
       removeSetShow: true
-    });
-  };
+    })
+  }
 
   handleRemoveClose = () => {
     this.setState({
       removeShow: false,
       isShowRemoveAdmin: false
-    });
-  };
+    })
+  }
 
   handleEditShow = () => {
     this.setState({
       editShow: true,
       editSetShow: true
-    });
-  };
+    })
+  }
 
   handleEditClose = () => {
     this.setState({
       editShow: false
-    });
-  };
+    })
+  }
 
   handleAddAdminShow = () => {
     this.setState({
       addAdminShow: true,
       addAdminSetShow: true,
-      addAdminEmail: ""
-    });
-  };
+      addAdminEmail: ''
+    })
+  }
 
   handleAddAdminClose = () => {
     this.setState({
       addAdminShow: false
-    });
-  };
+    })
+  }
 
   handleResumeShow = status => {
     this.setState({
       resumeShow: true,
       resumeSetShow: true,
       activeStatus: status
-    });
-  };
+    })
+  }
 
   handleResumeClose = () => {
     this.setState({
       resumeShow: false
-    });
-  };
+    })
+  }
   handleDeleteShow = () => {
     this.setState({
       deleteShow: true,
       deleteSetShow: true
-    });
-  };
+    })
+  }
 
   handleDeleteClose = () => {
     this.setState({
       deleteShow: false
-    });
-  };
+    })
+  }
 
   adminEmailHandleChange = e => {
-    const { name, value } = e.target;
-    let suggestions = [];
+    const { name, value } = e.target
+    let suggestions = []
     let memberList = this.props.state.userArr.members.filter(
-      user => user.role === "member"
-    );
-    var searchOptions = memberList.map(user => user.email);
+      user => user.role === 'member'
+    )
+    var searchOptions = memberList.map(user => user.email)
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      suggestions = searchOptions.sort().filter(v => regex.test(v));
+      const regex = new RegExp(`^${value}`, 'i')
+      suggestions = searchOptions.sort().filter(v => regex.test(v))
     }
-    this.setState({ [name]: value, suggestions: suggestions });
-  };
+    this.setState({ [name]: value, suggestions: suggestions })
+  }
 
   selectAutoSuggestion = option => {
     var filterArr = this.props.state.userArr.members.filter(
       user => user.email === option
-    );
-    this.setState({ addAdminEmail: filterArr[0].email, suggestions: [] });
-  };
+    )
+    this.setState({ addAdminEmail: filterArr[0].email, suggestions: [] })
+  }
 
   autoSearchSuggestion = () => {
     return (
@@ -247,26 +247,24 @@ class GeneralSettings extends Component {
                 <li key={idx} onClick={() => this.selectAutoSuggestion(option)}>
                   <i className="fa fa-user"></i> {option}
                 </li>
-              );
+              )
             })}
           </ul>
         ) : null}
       </>
-    );
-  };
+    )
+  }
 
   handleToChange = e => {
-    const { name, value } = e.target;
-    let toEmailSuggestions = [];
-    var searchOptions = this.props.state.userArr.members.map(user => user);
+    const { name, value } = e.target
+    let toEmailSuggestions = []
+    var searchOptions = this.props.state.userArr.members.map(user => user)
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      toEmailSuggestions = searchOptions
-        .sort()
-        .filter(v => regex.test(v.email));
+      const regex = new RegExp(`^${value}`, 'i')
+      toEmailSuggestions = searchOptions.sort().filter(v => regex.test(v.email))
     }
-    this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
-  };
+    this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions })
+  }
 
   renderToSuggestions = () => {
     return (
@@ -284,39 +282,39 @@ class GeneralSettings extends Component {
                     {option.email})
                   </span>
                 </li>
-              );
+              )
             })}
           </ul>
         ) : null}
       </>
-    );
-  };
+    )
+  }
 
   handleSelectToMembers = option => {
-    var selectToMembers = new Array(...this.state.selectToMembers);
-    selectToMembers.push(option);
+    var selectToMembers = new Array(...this.state.selectToMembers)
+    selectToMembers.push(option)
     var toEmailSuggestions = this.state.toEmailSuggestions.map(
       user => !selectToMembers.map(m => m.id).includes(user.id)
-    );
+    )
     this.setState({
       toEmailSuggestions: [],
-      toSearchText: "",
+      toSearchText: '',
       selectToMembers: selectToMembers
-    });
-  };
+    })
+  }
 
   removeSelectedToTag = index => {
-    var selectToMembers = this.state.selectToMembers;
-    selectToMembers = selectToMembers.filter((_, idx) => idx !== index);
+    var selectToMembers = this.state.selectToMembers
+    selectToMembers = selectToMembers.filter((_, idx) => idx !== index)
     this.setState({
       selectToMembers: selectToMembers
-    });
-  };
+    })
+  }
 
   initalChar = str => {
-    var matches = str.match(/\b(\w)/g);
-    return matches.join("").toUpperCase();
-  };
+    var matches = str.match(/\b(\w)/g)
+    return matches.join('').toUpperCase()
+  }
 
   renderSelectedToMembers = () => {
     return (
@@ -341,24 +339,22 @@ class GeneralSettings extends Component {
                 {/* )} */}
               </a>
             </div>
-          );
+          )
         })}
       </>
-    );
-  };
+    )
+  }
 
   handleCcChange = e => {
-    const { name, value } = e.target;
-    let ccEmailSuggestions = [];
-    var searchOptions = this.props.state.userArr.members.map(user => user);
+    const { name, value } = e.target
+    let ccEmailSuggestions = []
+    var searchOptions = this.props.state.userArr.members.map(user => user)
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      ccEmailSuggestions = searchOptions
-        .sort()
-        .filter(v => regex.test(v.email));
+      const regex = new RegExp(`^${value}`, 'i')
+      ccEmailSuggestions = searchOptions.sort().filter(v => regex.test(v.email))
     }
-    this.setState({ [name]: value, ccEmailSuggestions: ccEmailSuggestions });
-  };
+    this.setState({ [name]: value, ccEmailSuggestions: ccEmailSuggestions })
+  }
 
   renderCcSuggestions = () => {
     return (
@@ -376,39 +372,39 @@ class GeneralSettings extends Component {
                     {option.email})
                   </span>
                 </li>
-              );
+              )
             })}
           </ul>
         ) : null}
       </>
-    );
-  };
+    )
+  }
 
   handleSelectCcMembers = option => {
-    var selectCcMembers = new Array(...this.state.selectCcMembers);
-    selectCcMembers.push(option);
+    var selectCcMembers = new Array(...this.state.selectCcMembers)
+    selectCcMembers.push(option)
     var ccEmailSuggestions = this.state.ccEmailSuggestions.map(
       user => !selectCcMembers.map(m => m.id).includes(user.id)
-    );
+    )
     this.setState({
       ccEmailSuggestions: [],
-      ccSearchText: "",
+      ccSearchText: '',
       selectCcMembers: selectCcMembers
-    });
-  };
+    })
+  }
 
   removeSelectedCcTag = index => {
-    var selectCcMembers = this.state.selectCcMembers;
-    selectCcMembers = selectCcMembers.filter((_, idx) => idx !== index);
+    var selectCcMembers = this.state.selectCcMembers
+    selectCcMembers = selectCcMembers.filter((_, idx) => idx !== index)
     this.setState({
       selectCcMembers: selectCcMembers
-    });
-  };
+    })
+  }
 
   initalChar = str => {
-    var matches = str.match(/\b(\w)/g);
-    return matches.join("").toUpperCase();
-  };
+    var matches = str.match(/\b(\w)/g)
+    return matches.join('').toUpperCase()
+  }
 
   renderSelectedCcMembers = () => {
     return (
@@ -433,24 +429,24 @@ class GeneralSettings extends Component {
                 {/* )} */}
               </a>
             </div>
-          );
+          )
         })}
       </>
-    );
-  };
+    )
+  }
 
   handleBccChange = e => {
-    const { name, value } = e.target;
-    let bccEmailSuggestions = [];
-    var searchOptions = this.props.state.userArr.members.map(user => user);
+    const { name, value } = e.target
+    let bccEmailSuggestions = []
+    var searchOptions = this.props.state.userArr.members.map(user => user)
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
+      const regex = new RegExp(`^${value}`, 'i')
       bccEmailSuggestions = searchOptions
         .sort()
-        .filter(v => regex.test(v.email));
+        .filter(v => regex.test(v.email))
     }
-    this.setState({ [name]: value, bccEmailSuggestions: bccEmailSuggestions });
-  };
+    this.setState({ [name]: value, bccEmailSuggestions: bccEmailSuggestions })
+  }
 
   renderBccSuggestions = () => {
     return (
@@ -468,34 +464,34 @@ class GeneralSettings extends Component {
                     {option.email})
                   </span>
                 </li>
-              );
+              )
             })}
           </ul>
         ) : null}
       </>
-    );
-  };
+    )
+  }
 
   handleSelectBccMembers = option => {
-    var selectBccMembers = new Array(...this.state.selectBccMembers);
-    selectBccMembers.push(option);
+    var selectBccMembers = new Array(...this.state.selectBccMembers)
+    selectBccMembers.push(option)
     var bccEmailSuggestions = this.state.bccEmailSuggestions.map(
       user => !selectBccMembers.map(m => m.id).includes(user.id)
-    );
+    )
     this.setState({
       bccEmailSuggestions: [],
-      bccSearchText: "",
+      bccSearchText: '',
       selectBccMembers: selectBccMembers
-    });
-  };
+    })
+  }
 
   removeSelectedBccTag = index => {
-    var selectBccMembers = this.state.selectBccMembers;
-    selectBccMembers = selectBccMembers.filter((_, idx) => idx !== index);
+    var selectBccMembers = this.state.selectBccMembers
+    selectBccMembers = selectBccMembers.filter((_, idx) => idx !== index)
     this.setState({
       selectBccMembers: selectBccMembers
-    });
-  };
+    })
+  }
 
   renderSelectedBccMembers = () => {
     return (
@@ -520,53 +516,53 @@ class GeneralSettings extends Component {
                 {/* )} */}
               </a>
             </div>
-          );
+          )
         })}
       </>
-    );
-  };
+    )
+  }
 
   addAdmin = async () => {
     const addAdminData = {
       user_id: this.state.addAdminId
-    };
+    }
     try {
       const { data } = await post(
         addAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
-      );
+      )
       let filterData = this.props.state.userArr.members.filter(
         user => user.id === this.state.addAdminId
-      );
-      let addData = [...this.props.state.adminUserArr, ...filterData];
-      this.props.handleChangeAdminUsers(addData);
+      )
+      let addData = [...this.props.state.adminUserArr, ...filterData]
+      this.props.handleChangeAdminUsers(addData)
       toast(
         <DailyPloyToast
           message={`${textTitlize(this.state.addAdminName)} added as a Admin`}
           status="success"
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-      );
-      this.setState({ addAdminShow: false, allUserArr: addData });
+      )
+      this.setState({ addAdminShow: false, allUserArr: addData })
     } catch (e) {
-      console.log("error", e);
+      console.log('error', e)
     }
-  };
+  }
 
   removeAdmin = async () => {
     const removeAdminData = {
       user_id: this.state.showRemoveAdminId
-    };
+    }
 
     try {
       const { data } = await post(
         removeAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/adminship_removal/`
-      );
+      )
       let removeData = this.props.state.adminUserArr.filter(
         user => user.id !== this.state.showRemoveAdminId
-      );
-      this.props.handleChangeAdminUsers(removeData);
+      )
+      this.props.handleChangeAdminUsers(removeData)
       toast(
         <DailyPloyToast
           message={`Removed ${textTitlize(
@@ -578,76 +574,76 @@ class GeneralSettings extends Component {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         }
-      );
+      )
       this.setState({
         removeShow: false,
         isShowRemoveAdmin: false,
         allUserArr: removeData
-      });
+      })
     } catch (e) {
-      console.log("error", e);
+      console.log('error', e)
     }
-  };
+  }
 
   emailConfigObject = () => {
     var configEmailStatusData = {
       is_active: this.state.isActive
-    };
-    var toMember = this.state.selectToMembers.map(e => e.email);
-    var bccMember = this.state.selectBccMembers.map(e => e.email);
-    var ccMember = this.state.selectCcMembers.map(e => e.email);
+    }
+    var toMember = this.state.selectToMembers.map(e => e.email)
+    var bccMember = this.state.selectBccMembers.map(e => e.email)
+    var ccMember = this.state.selectCcMembers.map(e => e.email)
 
     toMember =
-      toMember.length > 0 ? (configEmailStatusData["to_mails"] = toMember) : "";
+      toMember.length > 0 ? (configEmailStatusData['to_mails'] = toMember) : ''
     bccMember =
       bccMember.length > 0
-        ? (configEmailStatusData["bcc_mails"] = bccMember)
-        : "";
+        ? (configEmailStatusData['bcc_mails'] = bccMember)
+        : ''
     ccMember =
-      ccMember.length > 0 ? (configEmailStatusData["cc_mails"] = ccMember) : "";
+      ccMember.length > 0 ? (configEmailStatusData['cc_mails'] = ccMember) : ''
     var emailText = this.state.emailText
-      ? (configEmailStatusData["email_text"] = this.state.emailText)
-      : "";
-    return configEmailStatusData;
-  };
+      ? (configEmailStatusData['email_text'] = this.state.emailText)
+      : ''
+    return configEmailStatusData
+  }
 
   checkValidate = () => {
-    var toError = "";
-    var emailTextError = "";
+    var toError = ''
+    var emailTextError = ''
     if (this.state.selectToMembers.length == 0) {
-      toError = "please select to emails";
+      toError = 'please select to emails'
     }
-    if (this.state.emailText == "") {
-      emailTextError = "please enter email text";
+    if (this.state.emailText == '') {
+      emailTextError = 'please enter email text'
     }
-    this.setState({ toError: toError, emailTextError: emailTextError });
-    return this.state.selectToMembers.length > 0 && this.state.emailText !== "";
-  };
+    this.setState({ toError: toError, emailTextError: emailTextError })
+    return this.state.selectToMembers.length > 0 && this.state.emailText !== ''
+  }
 
   configEmailStatus = async () => {
-    var emailData = this.emailConfigObject();
+    var emailData = this.emailConfigObject()
     if (this.state.isConfig && this.checkValidate()) {
       try {
         const { data } = await post(
           emailData,
           `workspaces/${this.props.state.workspaceId}/workspace_settings/daily_status_mail_settings/`
-        );
-        this.setEmailState(data);
+        )
+        this.setEmailState(data)
       } catch (e) {
-        console.log("error", e);
+        console.log('error', e)
       }
     } else if (!this.state.isConfig && this.checkValidate()) {
       try {
         const { data } = await put(
           emailData,
           `workspaces/${this.props.state.workspaceId}/update_daily_status_mail`
-        );
-        this.setEmailState(data);
+        )
+        this.setEmailState(data)
       } catch (e) {
-        console.log("error", e);
+        console.log('error', e)
       }
     }
-  };
+  }
 
   setEmailState = data => {
     this.setState({
@@ -671,37 +667,37 @@ class GeneralSettings extends Component {
       editShow: false,
       editSetShow: false,
       isConfig: false
-    });
-  };
+    })
+  }
 
   handleRemoveAdmin = (value, id, name) => {
     this.setState({
       showRemoveAdminId: id,
       isShowRemoveAdmin: !this.state.isShowRemoveAdmin,
       adminUserName: name
-    });
-  };
+    })
+  }
 
   handleEmailText = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+    const { name, value } = e.target
+    this.setState({ [name]: value })
+  }
 
   toggleActiveFlag = async flag => {
     try {
       const { data } = await put(
         { is_active: flag },
         `workspaces/${this.props.state.workspaceId}/update_daily_status_mail/`
-      );
+      )
       this.setState({
         isActive: flag,
         resumeShow: false,
         resumeSetShow: false
-      });
+      })
     } catch (e) {
-      console.log("error", e);
+      console.log('error', e)
     }
-  };
+  }
 
   render() {
     return (
@@ -725,8 +721,8 @@ class GeneralSettings extends Component {
               <button
                 className={`btn btn-primary save-button ${
                   this.props.state.isSaveWorkspaceName
-                    ? "btn-blue"
-                    : "btn-disable"
+                    ? 'btn-blue'
+                    : 'btn-disable'
                 }`}
                 onClick={this.props.updateWorkspaceName}
               >
@@ -734,16 +730,28 @@ class GeneralSettings extends Component {
               </button>
             </div>
           </div>
-          <div className="col-md-12 workspace-name">
+          <div
+            className="col-md-12 workspace-name"
+            style={{ marginTop: '10px' }}
+          >
             <div className="col-md-2 no-padding name">Admins</div>
           </div>
           <div className="col-md-12 admin-add">
             {this.props.state.adminUserArr.map((admin, index) => (
               <div className="admin-box" key={index}>
-                <div className="img-box">{firstTwoLetter(admin.name)}</div>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                  className="img-box"
+                >
+                  {firstTwoLetter(admin.name)}
+                </div>
                 <div className="text text-titlize">{admin.name}</div>
                 {(this.props.loggedInUser &&
-                  this.props.loggedInUser.role !== "member" &&
+                  this.props.loggedInUser.role !== 'member' &&
                   this.props.state.adminUserArr.length > 1) ||
                 (this.props.state.adminUserArr.length == 1 &&
                   this.props.loggedInUser &&
@@ -762,7 +770,7 @@ class GeneralSettings extends Component {
                     <i className="fas fa-ellipsis-v"></i>
                   </button>
                 ) : null}
-                <div style={{ position: "absolute" }}>
+                <div style={{ position: 'absolute' }}>
                   {this.state.isShowRemoveAdmin &&
                   this.state.showRemoveAdminId === admin.id ? (
                     <>
@@ -783,7 +791,7 @@ class GeneralSettings extends Component {
               </div>
             ))}
             {(this.props.loggedInUser &&
-              this.props.loggedInUser.role === "admin") ||
+              this.props.loggedInUser.role === 'admin') ||
             (this.props.workspace && this.props.loggedInUser
               ? this.props.loggedInUser.id === this.props.workspace.owner.id
               : false) ? (
@@ -791,7 +799,7 @@ class GeneralSettings extends Component {
                 className="btn btn-primary addnew-button"
                 onClick={this.handleAddAdminShow}
               >
-                {" "}
+                {' '}
                 + Add New
               </button>
             ) : null}
@@ -810,7 +818,7 @@ class GeneralSettings extends Component {
               <div className="col-md-6 no-padding d-inline-block">
                 Daily Status Mail
                 <button className="btn btn-link" onClick={this.handleEditShow}>
-                  {this.state.isConfig ? "configure" : "Edit"}
+                  {this.state.isConfig ? 'configure' : 'Edit'}
                 </button>
               </div>
               <EmailConfigModal
@@ -833,14 +841,14 @@ class GeneralSettings extends Component {
                   {this.state.isActive ? (
                     <button
                       className="btn btn-primary suspend-btn"
-                      onClick={() => this.handleResumeShow("suspend")}
+                      onClick={() => this.handleResumeShow('suspend')}
                     >
                       Suspend
                     </button>
                   ) : (
                     <button
                       className="btn btn-primary resume-btn"
-                      onClick={() => this.handleResumeShow("resume")}
+                      onClick={() => this.handleResumeShow('resume')}
                     >
                       Resume
                     </button>
@@ -864,7 +872,7 @@ class GeneralSettings extends Component {
                 <div className="col-md-9 no-padding d-inline-block">
                   {this.state.toMails.length > 0
                     ? this.displayEmails(this.state.toMails)
-                    : ""}
+                    : ''}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -874,7 +882,7 @@ class GeneralSettings extends Component {
                 <div className="col-md-9 no-padding d-inline-block">
                   {this.state.ccMails.length > 0
                     ? this.displayEmails(this.state.ccMails)
-                    : ""}
+                    : ''}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -884,7 +892,7 @@ class GeneralSettings extends Component {
                 <div className="col-md-9 no-padding d-inline-block">
                   {this.state.bccMails.length > 0
                     ? this.displayEmails(this.state.bccMails)
-                    : ""}
+                    : ''}
                 </div>
               </div>
               <div className="col-md-12 inner-container">
@@ -1083,7 +1091,7 @@ class GeneralSettings extends Component {
             deleted and irretrievable.
             <button
               className="btn btn-link"
-              style={{ pointerEvents: "none" }}
+              style={{ pointerEvents: 'none' }}
               onClick={this.handleDeleteShow}
             >
               comming soon...!
@@ -1095,8 +1103,8 @@ class GeneralSettings extends Component {
           </div>
         </div>
       </>
-    );
+    )
   }
 }
 
-export default GeneralSettings;
+export default GeneralSettings
