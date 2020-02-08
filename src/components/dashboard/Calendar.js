@@ -42,7 +42,7 @@ class Calendar extends Component {
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
 
-        dayCellWidth: 40,
+        dayCellWidth: "12%",
         weekCellWidth: "12%",
         monthCellWidth: 40,
         customCellWidth: 80,
@@ -63,6 +63,7 @@ class Calendar extends Component {
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#ededed",
+        otherUserTimeBodyBgColor: "#ffffff",
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
 
