@@ -13,12 +13,19 @@ class DailyPloyMultiSelect extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({
-      selectedTags:
-        this.props.defaultSelected && this.props.defaultSelected.length > 0
-          ? this.props.defaultSelected
-          : []
-    });
+    if (this.props.reset) {
+      console.log("hiii");
+      this.setState({
+        selectedTags: []
+      });
+    } else {
+      this.setState({
+        selectedTags:
+          this.props.defaultSelected && this.props.defaultSelected.length > 0
+            ? this.props.defaultSelected
+            : []
+      });
+    }
   };
 
   onSearchTextChange = e => {

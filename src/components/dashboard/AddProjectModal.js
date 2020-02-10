@@ -253,6 +253,7 @@ class AddProjectModal extends Component {
                   <DailyPloyMultiSelect
                     options={this.state.members}
                     searchBy="name"
+                    reset={this.props.state.reset}
                     defaultSelected={this.props.state.selectedTags}
                     selectedIcon="initial"
                     onChange={this.props.handleChangeMember}

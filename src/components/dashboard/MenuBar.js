@@ -74,7 +74,8 @@ export default class MenuBar extends Component {
       memberRoleError: "",
       memberEmailError: "",
       memberNameError: "",
-      saveDisable: false
+      saveDisable: false,
+      reset: false
     };
   }
 
@@ -114,9 +115,6 @@ export default class MenuBar extends Component {
           projectData,
           `workspaces/${this.props.workspaceId}/projects`
         );
-        this.handleClose();
-        this.props.manageProjectListing(data.project);
-        this.props.handleLoad(true);
         toast(
           <DailyPloyToast
             message="Project added successfully!"
@@ -124,6 +122,9 @@ export default class MenuBar extends Component {
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
+        this.handleClose();
+        this.props.manageProjectListing(data.project);
+        this.props.handleLoad(true);
       } catch (e) {
         if (e.response && e.response.data) {
           var errors = e.response.data.errors;
@@ -345,13 +346,17 @@ export default class MenuBar extends Component {
       projectMembers: [],
       dateTo: null,
       background: "#b9e1ff",
-      dateFrom: new Date()
+      dateFrom: new Date(),
+      reset: false
     });
   };
+
   handleShow = () => {
     this.setState({
       setShow: true,
-      show: true
+      show: true,
+      saveDisable: false,
+      reset: true
     });
   };
 

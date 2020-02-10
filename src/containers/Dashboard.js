@@ -1430,6 +1430,12 @@ class Dashboard extends Component {
     this.setState({ taskEvent: taskEvent });
   };
 
+  manageProjectListing = project => {
+    project["owner"] = { name: `${this.state.userName}` };
+    var filterdProjects = [...this.state.projects, ...[project]];
+    this.setState({ projects: filterdProjects });
+  };
+
   render() {
     return (
       <>
@@ -1439,6 +1445,7 @@ class Dashboard extends Component {
           classNameRoute={this.classNameRoute}
           handleLoad={this.handleLoad}
           state={this.state}
+          manageProjectListing={this.manageProjectListing}
         />
         <div className="padding-top-60px">
           <Calendar

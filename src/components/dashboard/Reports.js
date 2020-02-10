@@ -995,6 +995,7 @@ class Reports extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
+          manageProjectListing={() => {}}
         />
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
