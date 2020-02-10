@@ -199,7 +199,7 @@ class AddProjectModal extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-md-12 no-padding input-row">
+              {/* <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Budget
                 </div>
@@ -213,7 +213,7 @@ class AddProjectModal extends Component {
                     className="form-control"
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Select Color</div>
                 <div className="col-md-10">
@@ -264,7 +264,9 @@ class AddProjectModal extends Component {
                 <div className="col-md-5 ml-auto">
                   <button
                     type="button"
-                    className="btn col-md-5 button1 btn-primary"
+                    className={`btn col-md-5 button1 btn-primary ${
+                      this.props.state.saveDisable ? "disabled" : ""
+                    }`}
                     onClick={props.addProject}
                   >
                     {props.btnText}
