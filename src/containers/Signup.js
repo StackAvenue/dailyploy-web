@@ -7,7 +7,8 @@ import {
   checkPassword,
   validateName,
   validateEmail,
-  PASSWORDREGX
+  PASSWORDREGX,
+  EMAILREGX
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -202,9 +203,7 @@ class Signup extends Component {
       this.state.name &&
       this.state.name.length >= 3 &&
       this.state.email &&
-      this.state.email.match(
-        /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-      ) &&
+      this.state.email.match(EMAILREGX) &&
       this.state.password &&
       this.state.password.match(PASSWORDREGX) &&
       this.state.confirmPassword &&
