@@ -403,6 +403,7 @@ class Dashboard extends Component {
     taskRunningObj,
     trackingEvent
   ) => {
+    var trackingEvent = trackingEvent;
     var tasksUser = sortedUsers.map(user => {
       var usersObj = {
         id: user.id,
@@ -411,9 +412,6 @@ class Dashboard extends Component {
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
         var task = dateWiseTasks.tasks.map(task => {
           var tasksObj = this.createTaskObject(task, user, dateWiseTasks.date);
-          // var taskAllTracks = task.time_tracked.map(date => {
-          //   return date.time_tracks;
-          // });
           if (user.id == userData.id && task.time_tracked.length > 0) {
             let runningTask = task.time_tracked
               .flat()
@@ -1197,13 +1195,16 @@ class Dashboard extends Component {
     this.setState({ icon: "check" });
   };
 
-  handleTaskStartTop = taskEvent => {
+  handleTaskStartTop = async taskEvent => {
     var status = this.state.status;
     var showAlert = false;
     var events = this.state.events;
     var alertEventId = "";
     if (status) {
-      if (this.state.trackingEvent.taskId == taskEvent.taskId) {
+      if (
+        this.state.trackingEvent &&
+        this.state.trackingEvent.taskId == taskEvent.taskId
+      ) {
         this.props.handleTaskBottomPopup("", null, "stop");
         this.handleTaskTracking("stop", taskEvent, Date.now());
         status = !this.state.status;
@@ -1236,6 +1237,7 @@ class Dashboard extends Component {
       startOn: startOn,
       showAlert: showAlert,
       events: events,
+      trackingEvent: taskEvent,
       showEventAlertId: alertEventId
     });
   };
@@ -1286,11 +1288,12 @@ class Dashboard extends Component {
             event["trackingStatus"] = "pause";
             event["startOn"] = dateTime;
           });
+          var event = filterEvents.find(dd => dd.id == eventTask.id);
           this.setState({
             status: true,
             startOn: dateTime,
             taskId: eventTask.id,
-            trackingEvent: eventTask,
+            trackingEvent: event,
             events: events
           });
         } catch (e) {}
