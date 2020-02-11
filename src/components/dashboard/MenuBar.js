@@ -73,7 +73,9 @@ export default class MenuBar extends Component {
       memberWorkingHoursError: "",
       memberRoleError: "",
       memberEmailError: "",
-      memberNameError: ""
+      memberNameError: "",
+      saveDisable: false,
+      reset: false
     };
   }
 
@@ -94,62 +96,76 @@ export default class MenuBar extends Component {
   addProject = async () => {
     let addOwner = [];
     addOwner.push(this.props.state.userId);
-    const projectData = {
-      project: {
-        name: this.state.projectName,
-        start_date: this.state.dateFrom,
-        end_date: this.state.dateTo,
-        members: !this.state.projectMembers.includes(this.props.state.userId)
-          ? [...this.state.projectMembers, ...addOwner]
-          : this.state.projectMembers,
-        color_code: this.state.background
+    var self = this;
+    this.setState({ saveDisable: true });
+    if (this.state.projectName != "") {
+      const projectData = {
+        project: {
+          name: this.state.projectName,
+          start_date: this.state.dateFrom,
+          end_date: this.state.dateTo,
+          members: !this.state.projectMembers.includes(this.props.state.userId)
+            ? [...this.state.projectMembers, ...addOwner]
+            : this.state.projectMembers,
+          color_code: this.state.background
+        }
+      };
+      try {
+        const { data } = await post(
+          projectData,
+          `workspaces/${this.props.workspaceId}/projects`
+        );
+        toast(
+          <DailyPloyToast
+            message="Project added successfully!"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+        this.handleClose();
+        this.props.manageProjectListing(data.project);
+        this.props.handleLoad(true);
+      } catch (e) {
+        if (e.response && e.response.data) {
+          var errors = e.response.data.errors;
+          if (errors && errors.project_name_workspace_uniqueness) {
+            toast(
+              <DailyPloyToast
+                message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+                status="error"
+              />,
+              { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+            );
+            setTimeout(function() {
+              self.setState({ saveDisable: false });
+            }, 2000);
+          } else if (errors && errors.name) {
+            toast(
+              <DailyPloyToast
+                message={`Project name ${errors.name}`}
+                status="error"
+              />,
+              { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+            );
+            setTimeout(function() {
+              self.setState({ saveDisable: false });
+            }, 2000);
+          } else {
+            this.setState({ show: false });
+          }
+        }
       }
-    };
-    try {
-      const { data } = await post(
-        projectData,
-        `workspaces/${this.props.workspaceId}/projects`
-      );
-      this.setState({
-        show: false,
-        projectName: "",
-        dateTo: null,
-        projectMembers: [],
-        background: "#b9e1ff"
-      });
-      this.props.manageProjectListing(data.project);
-      this.props.handleLoad(true);
+    } else {
       toast(
         <DailyPloyToast
-          message="Project added successfully!"
-          status="success"
+          message={`Project Name can't be blank`}
+          status="error"
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-    } catch (e) {
-      console.log("error", e);
-      if (e.response && e.response.data) {
-        var errors = e.response.data.errors;
-        if (errors && errors.project_name_workspace_uniqueness) {
-          toast(
-            <DailyPloyToast
-              message={`Project Name ${errors.project_name_workspace_uniqueness}`}
-              status="error"
-            />,
-            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-          );
-        } else if (errors && errors.name) {
-          toast(
-            <DailyPloyToast
-              message={`Project name ${errors.name}`}
-              status="error"
-            />,
-            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-          );
-        } else {
-          this.setState({ show: false });
-        }
-      }
+      setTimeout(function() {
+        self.setState({ saveDisable: false });
+      }, 2000);
     }
   };
 
@@ -325,13 +341,22 @@ export default class MenuBar extends Component {
 
   handleClose = () => {
     this.setState({
-      show: false
+      show: false,
+      projectName: "",
+      projectMembers: [],
+      dateTo: null,
+      background: "#b9e1ff",
+      dateFrom: new Date(),
+      reset: false
     });
   };
+
   handleShow = () => {
     this.setState({
       setShow: true,
-      show: true
+      show: true,
+      saveDisable: false,
+      reset: true
     });
   };
 

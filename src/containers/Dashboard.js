@@ -412,11 +412,11 @@ class Dashboard extends Component {
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
         var task = dateWiseTasks.tasks.map(task => {
           var tasksObj = this.createTaskObject(task, user, dateWiseTasks.date);
-          var taskAllTracks = task.time_tracks.map(date => {
-            return date.time_tracks;
-          });
-          if (user.id == userData.id && task.time_tracks.length > 0) {
-            let runningTask = taskAllTracks
+          // var taskAllTracks = task.time_tracked.map(date => {
+          //   return date.time_tracks;
+          // });
+          if (user.id == userData.id && task.time_tracked.length > 0) {
+            let runningTask = task.time_tracked
               .flat()
               .find(ttt => ttt.status == "running");
             if (runningTask) {
@@ -431,7 +431,7 @@ class Dashboard extends Component {
               trackingEvent = tasksObj;
             }
           } else {
-            let runningTask = taskAllTracks
+            let runningTask = task.time_tracked
               .flat()
               .find(ttt => ttt.status == "running");
             if (runningTask) {
@@ -463,6 +463,9 @@ class Dashboard extends Component {
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
+    let dateFormattedTimeTracks = task.date_formatted_time_tracks.find(
+      dateLog => dateLog.date == dateWiseTasksDate
+    );
     return {
       date: dateWiseTasksDate,
       id: newTaskId,
@@ -479,7 +482,10 @@ class Dashboard extends Component {
       projectName: task.project.name,
       comments: task.comments,
       projectId: task.project.id,
-      timeTracked: task.time_tracks,
+      timeTracked: dateFormattedTimeTracks
+        ? dateFormattedTimeTracks.time_tracks
+        : [],
+      allTimeTracked: task.time_tracked,
       priority: task.priority,
       status: task.status,
       trackingStatus: task.status == "completed" ? "completed" : "play",
@@ -1389,6 +1395,12 @@ class Dashboard extends Component {
     this.setState({ taskEvent: taskEvent });
   };
 
+  manageProjectListing = project => {
+    project["owner"] = { name: `${this.state.userName}` };
+    var filterdProjects = [...this.state.projects, ...[project]];
+    this.setState({ projects: filterdProjects });
+  };
+
   render() {
     return (
       <>
@@ -1398,6 +1410,7 @@ class Dashboard extends Component {
           classNameRoute={this.classNameRoute}
           handleLoad={this.handleLoad}
           state={this.state}
+          manageProjectListing={this.manageProjectListing}
         />
         <div className="padding-top-60px">
           <Calendar

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import MonthlyEvent from "./../dashboard/MonthlyEvent";
+import Select from "./../Select";
 import moment from "moment";
 import { post, put, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
@@ -26,7 +27,8 @@ class DashboardEvent extends Component {
       canStart: false,
       icon: "play",
       taskTimerLog: [],
-      showAlert: false
+      showAlert: false,
+      show: false
     };
   }
 
@@ -112,7 +114,8 @@ class DashboardEvent extends Component {
     this.setState({
       clickEventId: id,
       showTimerMenu: !this.state.showTimerMenu,
-      showPopup: false
+      showPopup: false,
+      show: false
     });
   };
 
@@ -158,9 +161,35 @@ class DashboardEvent extends Component {
   };
 
   returnTime = time => {
-    return `${moment(time.start_time).format("HH.mm")} - ${moment(
+    return `${moment(time.start_time).format("HH.mm A")} - ${moment(
       time.end_time
-    ).format("HH.mm")}`;
+    ).format("HH.mm A")}`;
+  };
+
+  createLogTimes = times => {
+    return times.map(time => {
+      return {
+        id: time.id,
+        name: `${moment(time.start_time).format("HH.mm A")} - ${moment(
+          time.end_time
+        ).format("HH.mm A")}`
+      };
+    });
+  };
+
+  onClickInput = () => {
+    this.setState({
+      clickEventId: this.props.event.id,
+      show: true,
+      showAction: false
+    });
+  };
+
+  onClickOutside = () => {
+    this.setState({
+      show: !this.state.show,
+      showAction: false
+    });
   };
 
   render() {
@@ -175,20 +204,19 @@ class DashboardEvent extends Component {
       titleText,
       state
     } = this.props;
-    const totalTrackTime = this.props.event.timeTracked
-      .map(dLog => dLog.time_tracks)
-      .flat()
+    const totalTrackTime = this.props.event.allTimeTracked
       .map(log => log.duration)
       .flat()
       .reduce((a, b) => a + b, 0);
-    let todaysLog = this.props.event.timeTracked.find(
-      dLog => dLog.date == event.date
+    let todaysLog = this.props.event.timeTracked.filter(
+      log => log.status != "running"
     );
+    let logs = this.createLogTimes(todaysLog);
     return (
       <>
         {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
           <div key={event.id} className={mustAddCssClass} style={divStyle}>
-            <div className="row item">
+            <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 pointer item-heading text-wraper"
                 style={{ padding: "5px 5px 0px 5px" }}
@@ -252,7 +280,6 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    // onClick={() => this.handleClick(event)}
                     onClick={() => this.props.handleTaskStartTop(event)}
                   >
                     <i className="fa fa-play"></i>
@@ -266,41 +293,29 @@ class DashboardEvent extends Component {
                 ) : null}
               </div>
               <div className="col-md-12 no-padding">
-                {event.timeTracked.length > 0 ? (
-                  <div
-                    className="col-md-9 no-padding d-inline-block item-time"
-                    onClick={() => this.ToggleTimerDropDown(event.id)}
-                    onMouseOver={() => this.hideEventPopUp(event.id)}
-                  >
-                    <i
-                      className={`fa fa-caret-down pull-right ${
-                        schedulerData.viewType === 0
-                          ? "daytimer-log"
-                          : "weektimer-log"
-                      }`}
-                    ></i>
-                    <input
-                      className="form-control  timer-dropdown d-inline-block"
-                      readOnly
-                      style={{
-                        backgroundColor: this.state.showTimerMenu
-                          ? "#ffffff"
-                          : this.props.bgColor,
-                        borderColor: this.props.bgColor
-                      }}
-                      defaultValue={
-                        this.props.event.timeTracked.length > 0
-                          ? this.returnTime(this.props.event.timeTracked[0])
-                          : ""
-                      }
-                    />
-                  </div>
+                {logs.length > 0 ? (
+                  <>
+                    <div
+                      className="no-padding d-inline-block event-active-log"
+                      onClick={() => this.onClickInput()}
+                      style={this.state.show ? { backgroundColor: "#fff" } : {}}
+                    >
+                      <li>{logs[0].name}</li>
+                    </div>
+                    <i className="fa fa-angle-down log-angle-down"></i>
+                  </>
                 ) : (
-                  <span style={{ fontSize: "12px", paddingLeft: "10px" }}>
-                    No Tracked time
-                  </span>
+                  <div
+                    className="no-padding d-inline-block no-track-time text-right"
+                    style={{ fontSize: "12px" }}
+                  >
+                    <span> No Tracked time</span>
+                  </div>
                 )}
-                <div className="col-md-3 no-padding d-inline-block item-time text-right">
+                <div
+                  className="no-padding d-inline-block three-dot"
+                  // style={{ float: "right" }}
+                >
                   <span
                     className="task-event-action pointer"
                     onClick={() => this.ToggleActionDropDown(event.id)}
@@ -318,6 +333,14 @@ class DashboardEvent extends Component {
             showEventPopUp={this.showEventPopUp}
           />
         )}
+
+        {this.state.clickEventId === event.id && this.state.show ? (
+          <Select
+            state={this.state}
+            options={logs}
+            onClickInput={this.onClickOutside}
+          />
+        ) : null}
 
         {this.state.showTimerMenu && this.state.clickEventId === event.id ? (
           <div className={`dropdown-div `}>

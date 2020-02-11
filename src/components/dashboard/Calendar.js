@@ -14,11 +14,13 @@ import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 import { convertUTCToLocalDate } from "../../utils/function";
 import { DATE_FORMAT1, FULL_DATE_FORMAT3 } from "../../utils/Constants";
+import cookie from "react-cookies";
 
 class Calendar extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
+    this.loggedInUser = cookie.load("loggedInUser");
     this.schedulerData = new SchedulerData(
       Date.now(),
       ViewTypes.Week,
@@ -31,8 +33,8 @@ class Calendar extends Component {
         tableHeaderHeight: 34,
 
         // agendaResourceTableWidth: 160,
-        agendaResourceTableWidth: 218,
-        agendaMaxEventWidth: 153,
+        agendaResourceTableWidth: 220,
+        agendaMaxEventWidth: 157,
 
         dayResourceTableWidth: 218,
         weekResourceTableWidth: 218,
@@ -40,7 +42,7 @@ class Calendar extends Component {
         monthResourceTableWidth: 218,
         customResourceTableWidth: 160,
 
-        dayCellWidth: 40,
+        dayCellWidth: "12%",
         weekCellWidth: "12%",
         monthCellWidth: 40,
         customCellWidth: 80,
@@ -61,6 +63,7 @@ class Calendar extends Component {
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
         nonWorkingTimeBodyBgColor: "#ededed",
+        otherUserTimeBodyBgColor: "#ffffff",
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
 
@@ -89,7 +92,8 @@ class Calendar extends Component {
         eventItemPopoverDateFormat: "MMM D",
         minuteStep: 30,
         calenderViewType: "customview",
-
+        userId: this.loggedInUser ? this.loggedInUser.id : "0",
+        bgColorExceptLoggedinUser: true,
         views: [
           {
             viewName: "Day",

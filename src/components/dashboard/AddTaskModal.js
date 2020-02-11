@@ -56,6 +56,10 @@ class AddTaskModal extends Component {
     return [];
   };
 
+  handleDateChangeRaw = e => {
+    e.preventDefault();
+  };
+
   render() {
     const { props } = this;
     return (
@@ -229,6 +233,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
+                          onChangeRaw={this.handleDateChangeRaw}
                         />
                       </div>
                     </div>
@@ -243,6 +248,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
                           disabled={props.state.disabledDateTo}
+                          onChangeRaw={this.handleDateChangeRaw}
                         />
                       </div>
                     </div>

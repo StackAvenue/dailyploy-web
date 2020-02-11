@@ -18,6 +18,7 @@ import Individual from "../components/Signup/Individual";
 import Header from "../components/Landing/Header";
 import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
+import "../assets/css/login.scss";
 
 class Signup extends Component {
   constructor(props) {
@@ -238,56 +239,70 @@ class Signup extends Component {
                   className="img-responsive image"
                 />
               </div>
-              <div className="col-md-5 sub-container">
-                <div className="col-md-12 heading">Sign up</div>
-                <Tabs
-                  defaultActiveKey="individual"
-                  className="col-md-10 offset-1 main-tabs"
-                  id="uncontrolled-tab-example"
-                  onSelect={key => this.companyFlag(key)}
+
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                className="col-md-5 sub-container"
+              >
+                <div
+                  style={{ width: "100%" }}
+                  className="signup-form-container"
                 >
-                  <Tab eventKey="individual" title="Individual">
-                    <Individual
-                      state={this.state}
-                      enable={isEnabled}
-                      changeHandler={this.changeHandler}
-                      signup={this.signupForm}
-                    />
-                  </Tab>
-                  <Tab
-                    eventKey="company"
-                    title="Organization"
-                    style={{ border: "0" }}
-                    disabled={this.state.isDisabled}
+                  <div className="col-md-12 heading">Sign up</div>
+                  <Tabs
+                    defaultActiveKey="individual"
+                    className="col-md-10 offset-1 main-tabs"
+                    id="uncontrolled-tab-example"
+                    onSelect={key => this.companyFlag(key)}
                   >
-                    <Company
-                      state={this.state}
-                      enable={isEnabled}
-                      changeHandler={this.changeHandler}
-                      signup={this.signupForm}
+                    <Tab eventKey="individual" title="Individual">
+                      <Individual
+                        state={this.state}
+                        enable={isEnabled}
+                        changeHandler={this.changeHandler}
+                        signup={this.signupForm}
+                      />
+                    </Tab>
+                    <Tab
+                      eventKey="company"
+                      title="Organization"
+                      style={{ border: "0" }}
+                      disabled={this.state.isDisabled}
+                    >
+                      <Company
+                        state={this.state}
+                        enable={isEnabled}
+                        changeHandler={this.changeHandler}
+                        signup={this.signupForm}
+                      />
+                    </Tab>
+                  </Tabs>
+                  <br />
+                  {/* <div className="col-md-8 offset-2 googleIcon">
+                    <img
+                      alt="Google Icon"
+                      src={googleIcon}
+                      className="img-responsive"
                     />
-                  </Tab>
-                </Tabs>
-                <br />
-                {/* <div className="col-md-8 offset-2 googleIcon">
-                  <img
-                    alt="Google Icon"
-                    src={googleIcon}
-                    className="img-responsive"
-                  />
-                  <Link to={"/signup"} className="link">
-                    Sign up with your Google account
-                  </Link>
-                </div> */}
-                <br />
-                <div className="col-md-8 offset-2 googleIcon">
-                  <span>Already have DailyPloy account?</span>
-                  <Link to={`/login`} className="link">
-                    Sign in
-                  </Link>
+                    <Link to={'/signup'} className="link">
+                      Sign up with your Google account
+                    </Link>
+                  </div> */}
+                  <br />
+                  <div className="col-md-8 offset-2 googleIcon">
+                    <span>Already have DailyPloy account?</span>
+                    <Link to={`/login`} className="link">
+                      Sign in
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            </div>{" "}
           </div>
         </div>
       </>

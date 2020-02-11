@@ -9,6 +9,7 @@ import cookie from "react-cookies";
 import { checkPassword, validateName } from "../../utils/validation";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../../../src/components/DailyPloyToast";
+import "../../assets/css/settings.scss";
 
 class Settings extends Component {
   constructor(props) {
@@ -298,7 +299,7 @@ class Settings extends Component {
                 </Nav.Item> */}
               </Nav>
             </div>
-            <div className="col-md-10">
+            <div className="col-md-10 main-content">
               <div className="col-md-12 body-tabs">
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
