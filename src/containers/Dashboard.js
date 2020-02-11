@@ -142,6 +142,7 @@ class Dashboard extends Component {
       this.state.workspaceId != ""
     ) {
       try {
+        console.log("did update");
         this.props.handleLoading(true);
         var userIds =
           this.props.searchUserDetails.length > 0
@@ -276,8 +277,7 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     // Logged In User Info
-    this.props.handleLoading(true);
-
+    this.handleLoad(true);
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -354,7 +354,6 @@ class Dashboard extends Component {
         `workspaces/${workspaceId}/user_tasks`,
         searchData
       );
-
       var userId = loggedInData.id;
       var sortedUsers = data.users.sort((x, y) => {
         return x.id === userId ? -1 : y.id === userId ? 1 : 0;
@@ -395,7 +394,7 @@ class Dashboard extends Component {
       trackingEvent: trackingEvent
     });
     this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
-    this.props.handleLoading(false);
+    this.handleLoad(false);
   }
 
   generateTaskObject = (
@@ -1404,96 +1403,104 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-          classNameRoute={this.classNameRoute}
-          handleLoad={this.handleLoad}
-          state={this.state}
-          manageProjectListing={this.manageProjectListing}
-        />
-        <div className="padding-top-60px">
-          <Calendar
-            state={this.state}
-            sortUnit={this.state.sort}
+        {this.state.isLoading ? <div className="loading"></div> : null}
+        <div
+          className="row no-margin"
+          style={this.state.isLoading ? { pointerEvents: "none" } : {}}
+        >
+          <MenuBar
+            onSelectSort={this.onSelectSort}
             workspaceId={this.state.workspaceId}
-            resources={this.state.resources}
-            events={this.state.events}
-            updateTaskDateView={this.updateTaskDateView}
-            setAddTaskDetails={this.setAddTaskDetails}
-            editAddTaskDetails={this.editAddTaskDetails}
-            show={this.state.calenderTaskModal}
-            closeTaskModal={this.closeTaskModal}
-            handleProjectSelect={this.handleProjectSelect}
-            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-            onGoingTask={this.props.state.isStart}
-            taskEventResumeConfirm={this.taskEventResumeConfirm}
-            handleTaskTracking={this.handleTaskTracking}
-            updateTaskEvent={this.updateTaskEvent}
-            handleTaskStartTop={this.handleTaskStartTop}
-          />
-        </div>
-
-        <div>
-          <button className="btn menubar-task-btn" onClick={this.showTaskModal}>
-            <i className="fas fa-plus" />
-          </button>
-          {/* {this.state.show ? */}
-          <AddTaskModal
-            show={this.state.show}
+            classNameRoute={this.classNameRoute}
+            handleLoad={this.handleLoad}
             state={this.state}
-            closeTaskModal={this.closeTaskModal}
-            handleInputChange={this.handleInputChange}
-            projects={this.state.memberProjects}
-            handleDateFrom={this.handleDateFrom}
-            handleDateTo={this.handleDateTo}
-            handleTimeFrom={this.handleTimeFrom}
-            handleTimeTo={this.handleTimeTo}
-            users={this.state.users}
-            addTask={this.addTask}
-            editTask={this.editTask}
-            handleMemberSelect={this.handleMemberSelect}
-            handleProjectSelect={this.handleProjectSelect}
-            modalMemberSearchOptions={this.state.modalMemberSearchOptions}
-            backToTaskInfoModal={this.backToTaskInfoModal}
-            confirmModal={this.confirmModal}
-            handleCategoryChange={this.handleCategoryChange}
-            handlePrioritiesChange={this.handlePrioritiesChange}
-            addCategory={this.addCategory}
+            manageProjectListing={this.manageProjectListing}
           />
+          <div className="padding-top-60px">
+            <Calendar
+              state={this.state}
+              sortUnit={this.state.sort}
+              workspaceId={this.state.workspaceId}
+              resources={this.state.resources}
+              events={this.state.events}
+              updateTaskDateView={this.updateTaskDateView}
+              setAddTaskDetails={this.setAddTaskDetails}
+              editAddTaskDetails={this.editAddTaskDetails}
+              show={this.state.calenderTaskModal}
+              closeTaskModal={this.closeTaskModal}
+              handleProjectSelect={this.handleProjectSelect}
+              handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+              onGoingTask={this.props.state.isStart}
+              taskEventResumeConfirm={this.taskEventResumeConfirm}
+              handleTaskTracking={this.handleTaskTracking}
+              updateTaskEvent={this.updateTaskEvent}
+              handleTaskStartTop={this.handleTaskStartTop}
+              handleLoading={this.props.handleLoading}
+            />
+          </div>
 
-          <TaskInfoModal
-            showInfo={this.state.showInfo && this.state.backFromTaskEvent}
-            state={this.state}
-            closeTaskModal={this.closeTaskModal}
-            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-            onGoingTask={this.props.state.isStart}
-            taskInfoEdit={this.taskInfoEdit}
-            confirmModal={this.confirmModal}
-            resumeOrDeleteTask={this.resumeOrDeleteTask}
-            handleTaskPlay={this.handleTaskPlay}
-            icon={this.state.icon}
-            handleTaskStartTop={this.handleTaskStartTop}
-          />
-          {this.state.taskConfirmModal ? (
-            <TaskConfirm
-              taskConfirmModal={this.state.taskConfirmModal}
+          <div>
+            <button
+              className="btn menubar-task-btn"
+              onClick={this.showTaskModal}
+            >
+              <i className="fas fa-plus" />
+            </button>
+            <AddTaskModal
+              show={this.state.show}
+              state={this.state}
+              closeTaskModal={this.closeTaskModal}
+              handleInputChange={this.handleInputChange}
+              projects={this.state.memberProjects}
+              handleDateFrom={this.handleDateFrom}
+              handleDateTo={this.handleDateTo}
+              handleTimeFrom={this.handleTimeFrom}
+              handleTimeTo={this.handleTimeTo}
+              users={this.state.users}
+              addTask={this.addTask}
+              editTask={this.editTask}
+              handleMemberSelect={this.handleMemberSelect}
+              handleProjectSelect={this.handleProjectSelect}
+              modalMemberSearchOptions={this.state.modalMemberSearchOptions}
+              backToTaskInfoModal={this.backToTaskInfoModal}
+              confirmModal={this.confirmModal}
+              handleCategoryChange={this.handleCategoryChange}
+              handlePrioritiesChange={this.handlePrioritiesChange}
+              addCategory={this.addCategory}
+            />
+
+            <TaskInfoModal
+              showInfo={this.state.showInfo && this.state.backFromTaskEvent}
               state={this.state}
               closeTaskModal={this.closeTaskModal}
               handleTaskBottomPopup={this.props.handleTaskBottomPopup}
               onGoingTask={this.props.state.isStart}
               taskInfoEdit={this.taskInfoEdit}
-              backToTaskInfoModal={this.backToTaskInfoModal}
-              taskMarkComplete={this.taskMarkComplete}
-              taskResume={this.taskResume}
-              taskDelete={this.taskDelete}
-              handleLogTimeFrom={this.handleLogTimeFrom}
-              handleLogTimeTo={this.handleLogTimeTo}
-              updateTaskEventLogTime={this.updateTaskEventLogTime}
+              confirmModal={this.confirmModal}
+              resumeOrDeleteTask={this.resumeOrDeleteTask}
+              handleTaskPlay={this.handleTaskPlay}
+              icon={this.state.icon}
+              handleTaskStartTop={this.handleTaskStartTop}
             />
-          ) : null}
+            {this.state.taskConfirmModal ? (
+              <TaskConfirm
+                taskConfirmModal={this.state.taskConfirmModal}
+                state={this.state}
+                closeTaskModal={this.closeTaskModal}
+                handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+                onGoingTask={this.props.state.isStart}
+                taskInfoEdit={this.taskInfoEdit}
+                backToTaskInfoModal={this.backToTaskInfoModal}
+                taskMarkComplete={this.taskMarkComplete}
+                taskResume={this.taskResume}
+                taskDelete={this.taskDelete}
+                handleLogTimeFrom={this.handleLogTimeFrom}
+                handleLogTimeTo={this.handleLogTimeTo}
+                updateTaskEventLogTime={this.updateTaskEventLogTime}
+              />
+            ) : null}
+          </div>
         </div>
-        {/* <Footer />  */}
       </>
     );
   }
