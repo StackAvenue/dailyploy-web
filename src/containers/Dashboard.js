@@ -25,6 +25,7 @@ import {
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
 import { async } from "q";
+import { base } from "./../../src/base";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -109,7 +110,8 @@ class Dashboard extends Component {
       },
       showEventAlertId: "",
       trackingEvent: null,
-      taskloader: false
+      taskloader: false,
+      task: []
     };
   }
 
@@ -1435,6 +1437,33 @@ class Dashboard extends Component {
     var filterdProjects = [...this.state.projects, ...[project]];
     this.setState({ projects: filterdProjects });
   };
+
+  componentWillMount() {
+    base
+      .firestore()
+      .collection("task")
+      .onSnapshot(snapshot => {
+        let notesDoc = [];
+        var querySnapshot = snapshot.docs;
+        querySnapshot.forEach(doc => {
+          // const { content, title } = doc.data();
+          console.log("hello", doc.data());
+        });
+      });
+
+    // console.log(
+    //   "firebase",
+    //   base.syncState("task", {
+    //     context: this,
+    //     state: "task",
+    //     then: function(ss) {
+    //       console.log("sucesss", ss);
+    //     }
+    //   })
+    // );
+  }
+
+  componentWillUnmount() {}
 
   render() {
     return (
