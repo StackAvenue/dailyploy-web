@@ -248,6 +248,9 @@ class Dashboard extends Component {
         "start"
       );
     }
+    if (prevState.status != this.state.status && !this.state.status) {
+      this.props.handleTaskBottomPopup("", null, "stop");
+    }
 
     if (
       prevProps.state.event != this.props.state.event &&
@@ -1121,11 +1124,9 @@ class Dashboard extends Component {
         if (
           this.state.status &&
           this.state.trackingEvent &&
-          this.state.trackingEvent.id == event.id
+          this.state.trackingEvent.taskId == event.taskId
         ) {
-          this.handleTaskTracking("stop", event, Date.now());
-          this.handleReset();
-          this.props.handleTaskBottomPopup("", null, "stop");
+          this.handleTaskStop(event, Date.now());
         }
         let taskId = event.id.split("-")[0];
         try {
@@ -1135,7 +1136,7 @@ class Dashboard extends Component {
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
           );
           var events = this.state.events;
-          var filterEvents = events.filter(e => e.taskId === event.taskId);
+          var filterEvents = events.filter(e => e.taskId == event.taskId);
           filterEvents.map(event => {
             event["timeTracked"] = data.task.time_tracked;
             event["status"] = data.task.status;
@@ -1172,10 +1173,10 @@ class Dashboard extends Component {
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
       );
       var events = this.state.events;
-      var event = events.find(e => e.id === event.id);
+      var event = events.find(e => e.id == event.id);
       event["timeTracked"] = data.task.time_tracked;
       event["status"] = data.task.status;
-      event["trackingStatus"] = data.task.status === "completed" ? "" : "play";
+      event["trackingStatus"] = data.task.status == "completed" ? "" : "play";
       this.setState({
         events: events,
         taskEvent: event,
@@ -1206,6 +1207,15 @@ class Dashboard extends Component {
           showInfo: false,
           taskloader: false
         });
+        if (
+          this.state.status &&
+          this.state.trackingEvent.taskId == event.taskId
+        ) {
+          this.setState({
+            status: false,
+            trackingEvent: null
+          });
+        }
         this.closeTaskModal();
       } catch (e) {
         if (
@@ -1245,52 +1255,52 @@ class Dashboard extends Component {
     this.setState({ icon: "check" });
   };
 
-  handleTaskStartTop = async taskEvent => {
-    var status = this.state.status;
-    var showAlert = false;
-    var events = this.state.events;
-    var alertEventId = "";
-    if (status) {
-      if (
-        this.state.trackingEvent &&
-        this.state.trackingEvent.taskId == taskEvent.taskId
-      ) {
-        this.props.handleTaskBottomPopup("", null, "stop");
-        this.handleTaskTracking("stop", taskEvent, Date.now());
-        status = !this.state.status;
-        var event = events.find(event => event.id === taskEvent.id);
-        event["trackingStatus"] = "play";
-        event["startOn"] = null;
-      } else {
-        showAlert = true;
-        alertEventId = taskEvent.id;
-      }
-    } else {
-      var startOn = Date.now();
-      this.props.handleTaskBottomPopup(startOn, taskEvent, "start");
-      this.handleTaskTracking("start", taskEvent, startOn);
-      status = !this.state.status;
-      // var event = events.find(event => event.id === taskEvent.id);
-      // event["trackingStatus"] = "pause";
-      // event["startOn"] = startOn;
-      var filterEvents = events.filter(
-        event => event.taskId === taskEvent.taskId
-      );
-      filterEvents.forEach(event => {
-        event["trackingStatus"] = "pause";
-        event["startOn"] = startOn;
-      });
-    }
-    this.setState({
-      status: status,
-      showPopup: false,
-      startOn: startOn,
-      showAlert: showAlert,
-      events: events,
-      trackingEvent: taskEvent,
-      showEventAlertId: alertEventId
-    });
-  };
+  // handleTaskStartTop = async taskEvent => {
+  //   var status = this.state.status;
+  //   var showAlert = false;
+  //   var events = this.state.events;
+  //   var alertEventId = "";
+  //   if (status) {
+  //     if (
+  //       this.state.trackingEvent &&
+  //       this.state.trackingEvent.taskId == taskEvent.taskId
+  //     ) {
+  //       this.props.handleTaskBottomPopup("", null, "stop");
+  //       this.handleTaskTracking("stop", taskEvent, Date.now());
+  //       status = !this.state.status;
+  //       var event = events.find(event => event.id === taskEvent.id);
+  //       event["trackingStatus"] = "play";
+  //       event["startOn"] = null;
+  //     } else {
+  //       showAlert = true;
+  //       alertEventId = taskEvent.id;
+  //     }
+  //   } else {
+  //     var startOn = Date.now();
+  //     this.props.handleTaskBottomPopup(startOn, taskEvent, "start");
+  //     this.handleTaskTracking("start", taskEvent, startOn);
+  //     status = !this.state.status;
+  //     // var event = events.find(event => event.id === taskEvent.id);
+  //     // event["trackingStatus"] = "pause";
+  //     // event["startOn"] = startOn;
+  //     var filterEvents = events.filter(
+  //       event => event.taskId === taskEvent.taskId
+  //     );
+  //     filterEvents.forEach(event => {
+  //       event["trackingStatus"] = "pause";
+  //       event["startOn"] = startOn;
+  //     });
+  //   }
+  //   this.setState({
+  //     status: status,
+  //     showPopup: false,
+  //     startOn: startOn,
+  //     showAlert: showAlert,
+  //     events: events,
+  //     trackingEvent: taskEvent,
+  //     showEventAlertId: alertEventId
+  //   });
+  // };
 
   taskEventResumeConfirm = (event, modalText) => {
     this.setState({
@@ -1375,6 +1385,66 @@ class Dashboard extends Component {
           });
         } catch (e) {}
       }
+    }
+  };
+
+  handleTaskStart = async (eventTask, dateTime) => {
+    if (this.state.status && this.state.trackingEvent) {
+      this.handleTaskStop(this.state.trackingEvent, Date.now());
+    }
+    if (eventTask && dateTime) {
+      var taskId = eventTask.id.split("-")[0];
+      var taskDate = {
+        start_time: new Date(dateTime),
+        status: "running"
+      };
+      try {
+        const { data } = await post(taskDate, `tasks/${taskId}/start-tracking`);
+        var events = this.state.events;
+        var filterEvents = events.filter(event => event.taskId == taskId);
+        filterEvents.forEach(event => {
+          event["trackingStatus"] = "pause";
+          event["startOn"] = dateTime;
+        });
+        var event = filterEvents.find(dd => dd.id == eventTask.id);
+        this.setState({
+          status: true,
+          startOn: dateTime,
+          taskId: eventTask.id,
+          trackingEvent: event,
+          events: events
+        });
+      } catch (e) {}
+    }
+  };
+
+  handleTaskStop = async (eventTask, dateTime) => {
+    if (eventTask && dateTime) {
+      var taskId = eventTask.id.split("-")[0];
+      var taskDate = {
+        end_time: new Date(dateTime),
+        status: "stopped"
+      };
+      try {
+        const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
+        var events = this.state.events;
+        var filterEvents = events.filter(
+          event => event.taskId == eventTask.taskId
+        );
+        filterEvents.forEach(event => {
+          var timeTracked = [...event.timeTracked, ...[data]];
+          event["timeTracked"] = timeTracked;
+          event["startOn"] = null;
+          event["trackingStatus"] = "play";
+        });
+        var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
+        this.setState({
+          status: false,
+          events: events,
+          timeTracked: infoTimeTrackLog,
+          trackingEvent: null
+        });
+      } catch (e) {}
     }
   };
 
@@ -1488,6 +1558,8 @@ class Dashboard extends Component {
               handleTaskTracking={this.handleTaskTracking}
               updateTaskEvent={this.updateTaskEvent}
               handleTaskStartTop={this.handleTaskStartTop}
+              handleTaskStart={this.handleTaskStart}
+              handleTaskStop={this.handleTaskStop}
               handleLoading={this.props.handleLoading}
             />
           </div>
@@ -1534,6 +1606,8 @@ class Dashboard extends Component {
               handleTaskPlay={this.handleTaskPlay}
               icon={this.state.icon}
               handleTaskStartTop={this.handleTaskStartTop}
+              handleTaskStart={this.handleTaskStart}
+              handleTaskStop={this.handleTaskStop}
             />
             {this.state.taskConfirmModal ? (
               <TaskConfirm

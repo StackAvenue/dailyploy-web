@@ -44,38 +44,38 @@ class DashboardEvent extends Component {
     }
   }
 
-  handleClick = async event => {
-    console.log(this.props.state.status);
-    var icon = this.state.icon;
-    // var status = this.state.status;
-    var status = this.props.state.status;
-    var showAlert = false;
-    var startOn = "";
-    if (status) {
-      var endOn = Date.now();
-      this.props.handleTaskTracking("stop", event, endOn);
-      this.handleReset();
-      this.props.handleTaskBottomPopup("", event, "stop");
-      status = !this.state.status;
-    } else {
-      if (this.props.onGoingTask) {
-        showAlert = !this.state.showAlert;
-      } else {
-        startOn = Date.now();
-        this.setLocalStorageValue(startOn);
-        this.props.handleTaskBottomPopup(startOn, this.props.event, "start");
-        status = !this.state.status;
-        this.props.handleTaskTracking("start", event, startOn);
-      }
-    }
-    this.setState({
-      status: status,
-      showPopup: false,
-      clickEventId: event.id,
-      showAlert: showAlert,
-      startOn: startOn
-    });
-  };
+  // handleClick = async event => {
+  //   console.log(this.props.state.status);
+  //   var icon = this.state.icon;
+  //   // var status = this.state.status;
+  //   var status = this.props.state.status;
+  //   var showAlert = false;
+  //   var startOn = "";
+  //   if (status) {
+  //     var endOn = Date.now();
+  //     this.props.handleTaskTracking("stop", event, endOn);
+  //     this.handleReset();
+  //     this.props.handleTaskBottomPopup("", event, "stop");
+  //     status = !this.state.status;
+  //   } else {
+  //     if (this.props.onGoingTask) {
+  //       showAlert = !this.state.showAlert;
+  //     } else {
+  //       startOn = Date.now();
+  //       this.setLocalStorageValue(startOn);
+  //       this.props.handleTaskBottomPopup(startOn, this.props.event, "start");
+  //       status = !this.state.status;
+  //       this.props.handleTaskTracking("start", event, startOn);
+  //     }
+  //   }
+  //   this.setState({
+  //     status: status,
+  //     showPopup: false,
+  //     clickEventId: event.id,
+  //     showAlert: showAlert,
+  //     startOn: startOn
+  //   });
+  // };
 
   setLocalStorageValue = startOn => {
     localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
@@ -265,8 +265,7 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    // onClick={() => this.handleClick(event)}
-                    onClick={() => this.props.handleTaskStartTop(event)}
+                    onClick={() => this.props.handleTaskStop(event, Date.now())}
                   >
                     <i className="fa fa-pause"></i>
                   </div>
@@ -280,7 +279,9 @@ class DashboardEvent extends Component {
                         : "none"
                     }}
                     className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.props.handleTaskStartTop(event)}
+                    onClick={() =>
+                      this.props.handleTaskStart(event, Date.now())
+                    }
                   >
                     <i className="fa fa-play"></i>
                   </div>
@@ -363,7 +364,7 @@ class DashboardEvent extends Component {
                 <div
                   className="border-bottom pointer"
                   style={{ padding: "5px 0px 0px 0px" }}
-                  onClick={() => this.markCompleteTask(event.id)}
+                  // onClick={() => this.markCompleteTask(event.id)}
                   onClick={() =>
                     this.props.taskEventResumeConfirm(
                       event,
