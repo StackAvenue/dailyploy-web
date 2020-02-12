@@ -365,7 +365,9 @@ class AddTaskModal extends Component {
                   </button>
                   <button
                     type="button"
-                    className="button1 btn-primary pull-right"
+                    className={`button1 btn-primary pull-right ${
+                      props.state.taskloader ? "disabled" : ""
+                    }`}
                     onClick={
                       props.state.taskButton === "Add"
                         ? props.addTask

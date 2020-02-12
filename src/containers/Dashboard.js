@@ -540,6 +540,7 @@ class Dashboard extends Component {
 
   addTask = async () => {
     if (this.validateTaskModal()) {
+      this.setState({ taskloader: true });
       const taskData = this.taskDetails();
       try {
         const { data } = await post(
@@ -560,10 +561,16 @@ class Dashboard extends Component {
           border: "solid 1px #ffffff",
           taskName: "",
           project: "",
-          taskCategorie: ""
+          taskCategorie: "",
+          taskloader: false
         });
+        this.closeTaskModal();
       } catch (e) {
-        this.setState({ show: false, border: "solid 1px #ffffff" });
+        this.setState({
+          show: false,
+          taskloader: false,
+          border: "solid 1px #ffffff"
+        });
       }
     }
   };
@@ -652,7 +659,17 @@ class Dashboard extends Component {
         selectedMembers: [],
         modalMemberSearchOptions: members,
         project: "",
-        memberProjects: this.state.projects
+        memberProjects: this.state.projects,
+        errors: {
+          taskNameError: "",
+          projectError: "",
+          memberError: "",
+          dateFromError: "",
+          dateToError: "",
+          timeFromError: "",
+          timeToError: "",
+          categoryError: ""
+        }
       });
     } else {
       var memberProjects = this.state.projects.filter(project =>
@@ -664,7 +681,17 @@ class Dashboard extends Component {
         taskUser: [this.state.userId],
         modalMemberSearchOptions: members,
         project: "",
-        memberProjects: memberProjects
+        memberProjects: memberProjects,
+        errors: {
+          taskNameError: "",
+          projectError: "",
+          memberError: "",
+          dateFromError: "",
+          dateToError: "",
+          timeFromError: "",
+          timeToError: "",
+          categoryError: ""
+        }
       });
     }
   };
@@ -680,9 +707,10 @@ class Dashboard extends Component {
       modalMemberSearchOptions: [],
       memberProjects: [],
       dateFrom: new Date(),
-      dateTo: new Date(),
+      dateTo: null,
       timeFrom: "",
-      timeTo: "",
+      timeTo: null,
+      timeDateTo: null,
       taskId: "",
       selectedMembers: [],
       taskName: "",
@@ -697,7 +725,17 @@ class Dashboard extends Component {
       logTimeTo: null,
       logTimeFrom: null,
       taskPrioritie: DEFAULT_PRIORITIE,
-      taskCategorie: ""
+      taskCategorie: "",
+      errors: {
+        taskNameError: "",
+        projectError: "",
+        memberError: "",
+        dateFromError: "",
+        dateToError: "",
+        timeFromError: "",
+        timeToError: "",
+        categoryError: ""
+      }
     });
   };
 
@@ -854,6 +892,7 @@ class Dashboard extends Component {
         taskUser: [memberId],
         selectedMembers: selecteMember,
         show: true,
+        taskName: "",
         project: "",
         projectId: "",
         taskId: "",
@@ -865,7 +904,17 @@ class Dashboard extends Component {
         timeDateFrom: moment(),
         // timeTo: moment().format("HH:mm"),
         timeFrom: moment().format("HH:mm"),
-        memberProjects: memberProjects
+        memberProjects: memberProjects,
+        errors: {
+          taskNameError: "",
+          projectError: "",
+          memberError: "",
+          dateFromError: "",
+          dateToError: "",
+          timeFromError: "",
+          timeToError: "",
+          categoryError: ""
+        }
       });
     }
   };
@@ -1157,6 +1206,7 @@ class Dashboard extends Component {
           showInfo: false,
           taskloader: false
         });
+        this.closeTaskModal();
       } catch (e) {
         if (
           e.response.status == 403 &&
