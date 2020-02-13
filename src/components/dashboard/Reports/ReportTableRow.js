@@ -154,7 +154,10 @@ class ReportTableRow extends Component {
       "HH:mm:ss"
     );
     if (this.props.date == start && start == end) {
-      return this.getDiffOfTwoDate(task.start_datetime, task.end_datetime);
+      return this.getDiffOfTwoDate(
+        new Date(start + " " + startTime),
+        new Date(end + " " + endTime)
+      );
     } else {
       let dates = this.getMiddleDates(start, end);
       let datesMap = new Map();

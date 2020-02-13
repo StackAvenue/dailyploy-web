@@ -555,6 +555,8 @@ class Calendar extends Component {
           handleTaskTracking={this.props.handleTaskTracking}
           state={this.props.state}
           handleTaskStartTop={this.props.handleTaskStartTop}
+          handleTaskStart={this.props.handleTaskStart}
+          handleTaskStop={this.props.handleTaskStop}
         />
       </>
     );

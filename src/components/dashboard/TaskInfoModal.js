@@ -264,8 +264,9 @@ class TaskInfoModal extends Component {
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
-                        this.props.handleTaskStartTop(
-                          this.props.state.taskEvent
+                        this.props.handleTaskStop(
+                          this.props.state.taskEvent,
+                          Date.now()
                         )
                       }
                     >
@@ -280,8 +281,9 @@ class TaskInfoModal extends Component {
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
-                        this.props.handleTaskStartTop(
-                          this.props.state.taskEvent
+                        this.props.handleTaskStart(
+                          this.props.state.taskEvent,
+                          Date.now()
                         )
                       }
                     >

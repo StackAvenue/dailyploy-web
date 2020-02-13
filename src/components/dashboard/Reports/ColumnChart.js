@@ -213,7 +213,7 @@ class ColumnChart extends Component {
       var dailyScheduled = [];
       var dailyWorked = [];
       newSortedData.map(option => {
-        if (option.totalEstimateTime && option.trackedTime >= 0) {
+        if (option.totalEstimateTime != null && option.trackedTime >= 0) {
           var total = this.secondsToHours(option.totalEstimateTime);
           if (option.totalEstimateTime >= option.trackedTime) {
             var scheduleDiff = option.totalEstimateTime - option.trackedTime;

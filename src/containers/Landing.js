@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import Header from '../components/Landing/Header'
-import '../assets/css/landing.scss'
-import landing from '../assets/images/landing.jpg'
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import Header from "../components/Landing/Header";
+import "../assets/css/landing.scss";
+import landing from "../assets/images/landing.jpg";
 
 class Landing extends Component {
   render() {
@@ -14,7 +14,7 @@ class Landing extends Component {
             <div className="row no-margin landing">
               <div className="col-md-12 no-padding lcontainer">
                 <div
-                  style={{ display: 'flex' }}
+                  style={{ display: "flex" }}
                   className="col-md-12 no-padding container-margin"
                 >
                   <div className="col-md-7 no-padding d-inline-block">
@@ -25,18 +25,18 @@ class Landing extends Component {
                     />
                   </div>
                   <div
-                    style={{ flex: 1, display: 'flex', alignItems: 'center' }}
+                    style={{ flex: 1, display: "flex", alignItems: "center" }}
                   >
                     <div
                       className="col-md-5 d-inline-block sub-container"
-                      style={{ minWidth: '100%' }}
+                      style={{ minWidth: "100%" }}
                     >
                       <div className="col-md-12 heading">
                         Daily Planning made simple!
                       </div>
                       <div className="col-md-12 text">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aenean euismod bibendum laoreet.{' '}
+                        Aenean euismod bibendum laoreet.{" "}
                       </div>
                       <div className="col-md-12 text-left">
                         <Link
@@ -54,18 +54,20 @@ class Landing extends Component {
                       </div>
                       <div className="col-md-12 signin">
                         Already have DailyPloy account?
-                        <Link to="/login">SignIn</Link>
+                        <Link to="/login" style={{ marginLeft: "5px" }}>
+                          SignIn
+                        </Link>
                       </div>
                     </div>
-                  </div>{' '}
+                  </div>{" "}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </>
-    )
+    );
   }
 }
 
-export default withRouter(Landing)
+export default withRouter(Landing);
