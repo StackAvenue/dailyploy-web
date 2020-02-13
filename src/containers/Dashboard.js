@@ -11,7 +11,8 @@ import AddTaskModal from "../components/dashboard/AddTaskModal";
 import {
   getWeekFisrtDate,
   getFisrtDate,
-  convertUTCToLocalDate
+  convertUTCToLocalDate,
+  getMiddleDates
 } from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
 import {
@@ -144,7 +145,6 @@ class Dashboard extends Component {
       this.state.workspaceId != ""
     ) {
       try {
-        console.log("did update");
         this.props.handleLoading(true);
         var userIds =
           this.props.searchUserDetails.length > 0
@@ -1526,29 +1526,180 @@ class Dashboard extends Component {
   };
 
   componentWillMount() {
+    var workspaceId = this.props.match.params.workspaceId;
+    this.handleTaskCreate(workspaceId);
+    this.handleTaskDelete(workspaceId);
+    this.handleTaskRunning(workspaceId);
+    this.handleTaskStop(workspaceId);
+  }
+
+  handleTaskCreate = workspaceId => {
     base
-      .firestore()
-      .collection("task")
-      .onSnapshot(snapshot => {
-        let notesDoc = [];
-        var querySnapshot = snapshot.docs;
-        querySnapshot.forEach(doc => {
-          // const { content, title } = doc.data();
-          console.log("hello", doc.data());
-        });
+      .database()
+      .ref(`task_created/${workspaceId}`)
+      .on("child_added", snap => {
+        if (
+          !this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          let dates = getMiddleDates(task.start_datetime, task.end_datetime);
+          let taskObjects = dates.map(date => {
+            return this.createTaskSyncObject(date, task);
+          });
+          var events = [this.state.events, ...taskObjects].flat();
+          this.setState({ events: events });
+        }
+      });
+  };
+
+  handleTaskDelete = workspaceId => {
+    base
+      .database()
+      .ref(`task_deleted/${workspaceId}`)
+      .on("child_added", snap => {
+        if (
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          let events = this.state.events.filter(
+            event => event.taskId != task.id
+          );
+          this.setState({ events: events });
+        }
+      });
+  };
+
+  handleTaskRunning = workspaceId => {
+    base
+      .database()
+      .ref(`task_running/${workspaceId}`)
+      .on("child_added", snap => {
+        let task = snap.val();
+        if (
+          !this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          this.loadUserTask();
+        }
       });
 
-    // console.log(
-    //   "firebase",
-    //   base.syncState("task", {
-    //     context: this,
-    //     state: "task",
-    //     then: function(ss) {
-    //       console.log("sucesss", ss);
-    //     }
-    //   })
-    // );
-  }
+    base
+      .database()
+      .ref(`task_running/${workspaceId}`)
+      .on("child_changed", snap => {
+        this.loadUserTask();
+      });
+  };
+
+  handleTaskStop = workspaceId => {
+    base
+      .database()
+      .ref(`task_stopped/${workspaceId}`)
+      .on("child_added", snap => {
+        if (
+          !this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          this.loadUserTask();
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_stopped/${workspaceId}`)
+      .on("child_changed", snap => {
+        this.loadUserTask();
+      });
+  };
+
+  loadUserTask = async () => {
+    try {
+      var userIds =
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map(member => member.member_id)
+          : [];
+      var searchData = {
+        frequency: this.state.taskFrequency,
+        start_date: getFisrtDate(this.state.taskStartDate),
+        user_id: userIds.join(","),
+        project_ids: this.props.searchProjectIds.join(",")
+      };
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/user_tasks`,
+        searchData
+      );
+      var sortedUsers = data.users.sort((x, y) => {
+        return x.id === this.state.userId
+          ? -1
+          : y.id === this.state.userId
+          ? 1
+          : 0;
+      });
+      var taskRunningObj = {
+        status: false,
+        startOn: null,
+        taskId: ""
+      };
+      var trackingEvent = this.state.trackingEvent;
+      let generatedObj = this.generateTaskObject(
+        sortedUsers,
+        {
+          id: this.state.userId,
+          name: this.state.userName,
+          email: this.state.userEmail
+        },
+        taskRunningObj,
+        trackingEvent
+      );
+      taskRunningObj = generatedObj.taskRunningObj;
+      trackingEvent = generatedObj.trackingEvent;
+      var tasksUser = generatedObj.tasksUser;
+      var tasksResources = tasksUser.map(user => user.usersObj);
+      var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+
+      this.setState({
+        resources: tasksResources ? tasksResources : [],
+        events: taskEvents ? taskEvents : [],
+        status: taskRunningObj.status,
+        taskId: taskRunningObj.taskId,
+        startOn: taskRunningObj.startOn,
+        trackingEvent: trackingEvent
+      });
+    } catch (e) {}
+  };
+
+  createTaskSyncObject = (date, task) => {
+    let startDateTime =
+      moment(date).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(task.start_datetime)).format("HH:mm");
+    let endDateTime =
+      moment(date).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(task.end_datetime)).format("HH:mm");
+    let newTaskId = task.id + "-" + date;
+    return {
+      date: date,
+      id: newTaskId,
+      taskId: task.id,
+      start: startDateTime,
+      end: endDateTime,
+      taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+      taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+      taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
+      taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
+      resourceId: task.members.length > 0 ? task.members[0].id : null,
+      title: task.name,
+      bgColor: task.project.color_code,
+      projectName: task.project.name,
+      comments: task.comments ? task.comments : "",
+      projectId: task.project.id,
+      timeTracked: [],
+      allTimeTracked: [],
+      priority: task.priority,
+      status: task.status,
+      trackingStatus: "play",
+      startOn: null
+    };
+  };
 
   componentWillUnmount() {}
 
