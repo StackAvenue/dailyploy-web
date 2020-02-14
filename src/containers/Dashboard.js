@@ -1531,9 +1531,10 @@ class Dashboard extends Component {
     this.handleTaskDelete(workspaceId);
     this.handleTaskRunning(workspaceId);
     this.handleTaskStop(workspaceId);
+    this.handleTaskUpdate(workspaceId);
   }
 
-  handleTaskCreate = workspaceId => {
+  handleTaskCreate = async workspaceId => {
     base
       .database()
       .ref(`task_created/${workspaceId}`)
@@ -1552,7 +1553,7 @@ class Dashboard extends Component {
       });
   };
 
-  handleTaskDelete = workspaceId => {
+  handleTaskDelete = async workspaceId => {
     base
       .database()
       .ref(`task_deleted/${workspaceId}`)
@@ -1569,7 +1570,7 @@ class Dashboard extends Component {
       });
   };
 
-  handleTaskRunning = workspaceId => {
+  handleTaskRunning = async workspaceId => {
     base
       .database()
       .ref(`task_running/${workspaceId}`)
@@ -1578,7 +1579,7 @@ class Dashboard extends Component {
         if (
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
-          this.loadUserTask();
+          this.loadUserTask(workspaceId);
         }
       });
 
@@ -1586,11 +1587,11 @@ class Dashboard extends Component {
       .database()
       .ref(`task_running/${workspaceId}`)
       .on("child_changed", snap => {
-        this.loadUserTask();
+        this.loadUserTask(workspaceId);
       });
   };
 
-  handleTaskStop = workspaceId => {
+  handleTaskStop = async workspaceId => {
     base
       .database()
       .ref(`task_stopped/${workspaceId}`)
@@ -1598,7 +1599,7 @@ class Dashboard extends Component {
         if (
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
-          this.loadUserTask();
+          this.loadUserTask(workspaceId);
         }
       });
 
@@ -1606,64 +1607,66 @@ class Dashboard extends Component {
       .database()
       .ref(`task_stopped/${workspaceId}`)
       .on("child_changed", snap => {
-        this.loadUserTask();
+        this.loadUserTask(workspaceId);
       });
   };
 
-  loadUserTask = async () => {
-    try {
-      var userIds =
-        this.props.searchUserDetails.length > 0
-          ? this.props.searchUserDetails.map(member => member.member_id)
-          : [];
-      var searchData = {
-        frequency: this.state.taskFrequency,
-        start_date: getFisrtDate(this.state.taskStartDate),
-        user_id: userIds.join(","),
-        project_ids: this.props.searchProjectIds.join(",")
-      };
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/user_tasks`,
-        searchData
-      );
-      var sortedUsers = data.users.sort((x, y) => {
-        return x.id === this.state.userId
-          ? -1
-          : y.id === this.state.userId
-          ? 1
-          : 0;
-      });
-      var taskRunningObj = {
-        status: false,
-        startOn: null,
-        taskId: ""
-      };
-      var trackingEvent = this.state.trackingEvent;
-      let generatedObj = this.generateTaskObject(
-        sortedUsers,
-        {
-          id: this.state.userId,
-          name: this.state.userName,
-          email: this.state.userEmail
-        },
-        taskRunningObj,
-        trackingEvent
-      );
-      taskRunningObj = generatedObj.taskRunningObj;
-      trackingEvent = generatedObj.trackingEvent;
-      var tasksUser = generatedObj.tasksUser;
-      var tasksResources = tasksUser.map(user => user.usersObj);
-      var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+  loadUserTask = async workspaceId => {
+    if (this.state.workspaceId) {
+      try {
+        var userIds =
+          this.props.searchUserDetails.length > 0
+            ? this.props.searchUserDetails.map(member => member.member_id)
+            : [];
+        var searchData = {
+          frequency: this.state.taskFrequency,
+          start_date: getFisrtDate(this.state.taskStartDate),
+          user_id: userIds.join(","),
+          project_ids: this.props.searchProjectIds.join(",")
+        };
+        const { data } = await get(
+          `workspaces/${workspaceId}/user_tasks`,
+          searchData
+        );
+        var sortedUsers = data.users.sort((x, y) => {
+          return x.id === this.state.userId
+            ? -1
+            : y.id === this.state.userId
+            ? 1
+            : 0;
+        });
+        var taskRunningObj = {
+          status: false,
+          startOn: null,
+          taskId: ""
+        };
+        var trackingEvent = this.state.trackingEvent;
+        let generatedObj = this.generateTaskObject(
+          sortedUsers,
+          {
+            id: this.state.userId,
+            name: this.state.userName,
+            email: this.state.userEmail
+          },
+          taskRunningObj,
+          trackingEvent
+        );
+        taskRunningObj = generatedObj.taskRunningObj;
+        trackingEvent = generatedObj.trackingEvent;
+        var tasksUser = generatedObj.tasksUser;
+        var tasksResources = tasksUser.map(user => user.usersObj);
+        var taskEvents = tasksUser.map(user => user.tasks).flat(2);
 
-      this.setState({
-        resources: tasksResources ? tasksResources : [],
-        events: taskEvents ? taskEvents : [],
-        status: taskRunningObj.status,
-        taskId: taskRunningObj.taskId,
-        startOn: taskRunningObj.startOn,
-        trackingEvent: trackingEvent
-      });
-    } catch (e) {}
+        this.setState({
+          resources: tasksResources ? tasksResources : [],
+          events: taskEvents ? taskEvents : [],
+          status: taskRunningObj.status,
+          taskId: taskRunningObj.taskId,
+          startOn: taskRunningObj.startOn,
+          trackingEvent: trackingEvent
+        });
+      } catch (e) {}
+    }
   };
 
   createTaskSyncObject = (date, task) => {
@@ -1699,6 +1702,85 @@ class Dashboard extends Component {
       trackingStatus: "play",
       startOn: null
     };
+  };
+
+  updateTaskSyncObject = (date, task) => {
+    let startDateTime =
+      moment(date).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(task.start_datetime)).format("HH:mm");
+    let endDateTime =
+      moment(date).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(task.end_datetime)).format("HH:mm");
+    let newTaskId = task.id + "-" + date;
+    var timeTracks = task.time_tracks.filter(time => {
+      return moment(time.start_time).format(DATE_FORMAT1) == date;
+    });
+    return {
+      date: date,
+      id: newTaskId,
+      taskId: task.id,
+      start: startDateTime,
+      end: endDateTime,
+      taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+      taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+      taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
+      taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
+      resourceId: task.members.length > 0 ? task.members[0].id : null,
+      title: task.name,
+      bgColor: task.project.color_code,
+      projectName: task.project.name,
+      comments: task.comments ? task.comments : "",
+      projectId: task.project.id,
+      timeTracked: timeTracks,
+      allTimeTracked: task.time_tracks,
+      priority: task.priority,
+      status: task.status,
+      trackingStatus: task.status == "completed" ? "check" : "play",
+      startOn: null
+    };
+  };
+
+  handleTaskUpdate = async workspaceId => {
+    base
+      .database()
+      .ref(`task_update/${workspaceId}`)
+      .on("child_added", snap => {
+        if (
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          let dates = getMiddleDates(task.start_datetime, task.end_datetime);
+          let events = this.state.events.filter(
+            event => event.taskId != task.id
+          );
+          let taskObjects = dates.map(date => {
+            return this.updateTaskSyncObject(date, task);
+          });
+          var finalEvents = [events, ...taskObjects].flat();
+          this.setState({ events: finalEvents });
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_completed/${workspaceId}`)
+      .on("child_added", snap => {
+        if (
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          var events = this.state.events;
+          var filterEvents = events.filter(event => event.taskId == task.id);
+          filterEvents.forEach(event => {
+            event["trackingStatus"] =
+              task.status == "completed" ? "check" : "play";
+            event["status"] = task.status;
+          });
+          this.setState({ events: events });
+        }
+      });
   };
 
   componentWillUnmount() {}
