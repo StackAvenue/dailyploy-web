@@ -25,7 +25,6 @@ import {
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
-import { async } from "q";
 import { base } from "./../../src/base";
 
 class Dashboard extends Component {
@@ -488,6 +487,7 @@ class Dashboard extends Component {
         ? dateFormattedTimeTracks.time_tracks
         : [],
       allTimeTracked: task.time_tracked,
+      dateFormattedTimeTrack: task.date_formatted_time_tracks,
       priority: task.priority,
       status: task.status,
       trackingStatus: task.status == "completed" ? "completed" : "play",
@@ -1714,9 +1714,7 @@ class Dashboard extends Component {
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
     let newTaskId = task.id + "-" + date;
-    var timeTracks = task.time_tracks.filter(time => {
-      return moment(time.start_time).format(DATE_FORMAT1) == date;
-    });
+    let event = this.state.events.find(e => e.id == newTaskId);
     return {
       date: date,
       id: newTaskId,
@@ -1733,8 +1731,9 @@ class Dashboard extends Component {
       projectName: task.project.name,
       comments: task.comments ? task.comments : "",
       projectId: task.project.id,
-      timeTracked: timeTracks,
-      allTimeTracked: task.time_tracks,
+      timeTracked: event ? event.timeTracked : [],
+      allTimeTracked: event ? event.allTimeTracked : [],
+      dateFormattedTimeTrack: event ? event.dateFormattedTimeTrack : [],
       priority: task.priority,
       status: task.status,
       trackingStatus: task.status == "completed" ? "check" : "play",
