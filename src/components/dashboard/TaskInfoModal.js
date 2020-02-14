@@ -1,56 +1,56 @@
-import React, { Component } from 'react'
-import { Modal } from 'react-bootstrap'
-import 'rc-time-picker/assets/index.css'
-import 'react-datepicker/dist/react-datepicker.css'
-import Close from '../../assets/images/close.svg'
-import moment from 'moment'
-import { post, mockGet, mockPost } from '../../utils/API'
-import { DATE_FORMAT2, DATE_FORMAT1 } from './../../utils/Constants'
-import { UncontrolledAlert } from 'reactstrap'
+import React, { Component } from "react";
+import { Modal } from "react-bootstrap";
+import "rc-time-picker/assets/index.css";
+import "react-datepicker/dist/react-datepicker.css";
+import Close from "../../assets/images/close.svg";
+import moment from "moment";
+import { post, mockGet, mockPost } from "../../utils/API";
+import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
+import { UncontrolledAlert } from "reactstrap";
 
 class TaskInfoModal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.priority = {
-      name: 'high',
-      color_code: '#00A031'
-    }
+      name: "high",
+      color_code: "#00A031"
+    };
     this.state = {
-      color: '#ffffff',
+      color: "#ffffff",
       showTimerMenu: false
-    }
+    };
   }
 
   async markCompleteTask() {
-    const eventTaskId = this.props.state.taskEvent.id
+    const eventTaskId = this.props.state.taskEvent.id;
     if (eventTaskId) {
       try {
-        const { data } = await mockGet('mark-complete')
-        var isComplete = data[0].complete
+        const { data } = await mockGet("mark-complete");
+        var isComplete = data[0].complete;
       } catch (e) {}
       if (isComplete) {
         var taskId = localStorage.getItem(
           `taskId-${this.props.state.workspaceId}`
-        )
-        this.handleReset()
-        this.props.handleTaskPlay('check')
+        );
+        this.handleReset();
+        this.props.handleTaskPlay("check");
         if (eventTaskId === taskId) {
-          this.props.handleTaskBottomPopup('', null, 'stop')
+          this.props.handleTaskBottomPopup("", null, "stop");
         }
       }
     }
   }
 
   async resumeCompletedTask() {
-    const eventTaskId = this.props.state.taskEvent.id
+    const eventTaskId = this.props.state.taskEvent.id;
     if (eventTaskId) {
       try {
-        const { data } = await mockGet('mark-complete')
-        var isComplete = data[0].complete
+        const { data } = await mockGet("mark-complete");
+        var isComplete = data[0].complete;
       } catch (e) {}
       if (isComplete) {
         // this.setState({ icon: "play" })
-        this.props.handleTaskPlay('play')
+        this.props.handleTaskPlay("play");
       }
     }
   }
@@ -59,36 +59,36 @@ class TaskInfoModal extends Component {
     return this.props.state.dateTo
       ? moment(this.props.state.dateTo).format(DATE_FORMAT1) ==
           moment(new Date()).format(DATE_FORMAT1)
-      : false
-  }
+      : false;
+  };
   async componentDidMount() {
     var startOn = localStorage.getItem(
       `startOn-${this.props.state.workspaceId}`
-    )
-    var taskId = localStorage.getItem(`taskId-${this.props.state.workspaceId}`)
-    if (taskId === this.props.state.taskId && startOn !== '') {
+    );
+    var taskId = localStorage.getItem(`taskId-${this.props.state.workspaceId}`);
+    if (taskId === this.props.state.taskId && startOn !== "") {
       this.setState({
         status: true,
         startOn: startOn,
-        icon: 'pause'
-      })
+        icon: "pause"
+      });
     } else {
       this.setState({
         status: false,
-        startOn: '',
-        icon: 'play'
-      })
+        startOn: "",
+        icon: "play"
+      });
     }
   }
 
   initalChar = str => {
-    var matches = str.match(/\b(\w)/g)
-    return matches.join('').toUpperCase()
-  }
+    var matches = str.match(/\b(\w)/g);
+    return matches.join("").toUpperCase();
+  };
 
   ToggleTimerDropDown = id => {
-    this.setState({ showTimerMenu: !this.state.showTimerMenu })
-  }
+    this.setState({ showTimerMenu: !this.state.showTimerMenu });
+  };
 
   renderMemberInfo = option => {
     if (option && option.length > 0) {
@@ -101,16 +101,16 @@ class TaskInfoModal extends Component {
             {option[0].name}
           </div>
         </div>
-      )
+      );
     } else {
-      return ''
+      return "";
     }
-  }
+  };
 
   renderTaskInfo = (option, type, name) => {
     if (option) {
       const klass =
-        type == 'block' ? 'color-block' : type == 'circle' ? 'color-dot' : ''
+        type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
         <div className="left-padding-20px">
           <div
@@ -123,111 +123,111 @@ class TaskInfoModal extends Component {
           ></div>
           <div className="right-left-space-5 d-inline-block">{`${option[name]}`}</div>
         </div>
-      )
+      );
     }
-    return ''
-  }
+    return "";
+  };
 
   isValidUserDate = () => {
-    const props = this.props.state
+    const props = this.props.state;
     // return this.isToday() && props.taskEvent.resourceId === props.userId;
-    return props.taskEvent.resourceId === props.userId
-  }
+    return props.taskEvent.resourceId === props.userId;
+  };
 
   async saveTaskTrackingTime(endOn) {
     var taskData = {
       startdate: new Date(this.state.startOn),
       enddate: new Date(endOn)
-    }
+    };
     try {
-      const { data } = await mockPost(taskData, 'task-track')
+      const { data } = await mockPost(taskData, "task-track");
       if (data) {
-        var timeArr = [this.state.timeArr, ...[]]
-        var sTime = moment(data.startdate).format('HH:mm')
-        var eTime = moment(data.enddate).format('HH:mm')
-        timeArr.push(`${sTime} - ${eTime}`)
-        this.setState({ timeArr: timeArr })
+        var timeArr = [this.state.timeArr, ...[]];
+        var sTime = moment(data.startdate).format("HH:mm");
+        var eTime = moment(data.enddate).format("HH:mm");
+        timeArr.push(`${sTime} - ${eTime}`);
+        this.setState({ timeArr: timeArr });
       }
     } catch (e) {}
   }
 
   handleReset = () => {
-    clearInterval(this.timer)
-    this.setState({ runningTime: 0, status: false, startOn: '' })
-    localStorage.setItem(`startOn-${this.props.state.workspaceId}`, '')
-    localStorage.setItem(`taskId-${this.props.state.workspaceId}`, '')
-    localStorage.setItem(`colorCode-${this.props.state.workspaceId}`, '')
-    localStorage.setItem(`taskTitle-${this.props.state.workspaceId}`, '')
-  }
+    clearInterval(this.timer);
+    this.setState({ runningTime: 0, status: false, startOn: "" });
+    localStorage.setItem(`startOn-${this.props.state.workspaceId}`, "");
+    localStorage.setItem(`taskId-${this.props.state.workspaceId}`, "");
+    localStorage.setItem(`colorCode-${this.props.state.workspaceId}`, "");
+    localStorage.setItem(`taskTitle-${this.props.state.workspaceId}`, "");
+  };
 
   returnTime = time => {
-    return `${moment(time.start_time).format('HH.mm A')} - ${moment(
+    return `${moment(time.start_time).format("HH.mm A")} - ${moment(
       time.end_time
-    ).format('HH.mm A')}`
-  }
+    ).format("HH.mm A")}`;
+  };
 
   displayTotalTime = () => {
     if (this.props.state.timeTracked.length > 0) {
       let totalSec = this.props.state.timeTracked
         .map(time => time.duration)
         .flat()
-        .reduce((a, b) => a + b, 0)
-      var h = Math.floor(totalSec / 3600)
-      var m = Math.floor((totalSec % 3600) / 60)
-      var s = Math.floor((totalSec % 3600) % 60)
+        .reduce((a, b) => a + b, 0);
+      var h = Math.floor(totalSec / 3600);
+      var m = Math.floor((totalSec % 3600) / 60);
+      var s = Math.floor((totalSec % 3600) % 60);
 
       return (
-        ('0' + h).slice(-2) +
+        ("0" + h).slice(-2) +
         // " hh" +
-        ':' +
-        ('0' + m).slice(-2) +
+        ":" +
+        ("0" + m).slice(-2) +
         // " mm" +
-        ':' +
-        ('0' + s).slice(-2)
-      )
+        ":" +
+        ("0" + s).slice(-2)
+      );
     } else {
-      var start = this.props.state.dateFrom
-      var end = this.props.state.dateTo
-      let totalMilSeconds = new Date(end) - new Date(start)
-      var totalSeconds = totalMilSeconds / 1000
-      totalSeconds = Number(totalSeconds)
-      var h = Math.floor(totalSeconds / 3600)
-      var m = Math.floor((totalSeconds % 3600) / 60)
-      var s = Math.floor((totalSeconds % 3600) % 60)
+      var start = this.props.state.dateFrom;
+      var end = this.props.state.dateTo;
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      totalSeconds = Number(totalSeconds);
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = Math.floor((totalSeconds % 3600) % 60);
       return (
-        ('0' + h).slice(-2) +
-        ':' +
-        ('0' + m).slice(-2) +
-        ':' +
-        ('0' + s).slice(-2) +
-        ' h'
-      )
+        ("0" + h).slice(-2) +
+        ":" +
+        ("0" + m).slice(-2) +
+        ":" +
+        ("0" + s).slice(-2) +
+        " h"
+      );
     }
-  }
+  };
 
   render() {
-    const { props } = this
+    const { props } = this;
     return (
       <>
         <Modal
           className="task-info-modal"
           show={this.props.state.showInfo}
           onHide={props.closeTaskModal}
-          style={{ paddingTop: '1.5%', paddingBottom: '30px' }}
+          style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
         >
           <div className="row no-margin">
             <div className="col-md-12 d-inline-block header text-titlize">
-              <div className="d-inline-block" style={{ width: '60%' }}>
-                <span>{'Task Details'}</span>
+              <div className="d-inline-block" style={{ width: "60%" }}>
+                <span>{"Task Details"}</span>
               </div>
               <div className="action-btn d-inline-block">
-                {this.props.state.taskEvent.status !== 'completed' ? (
+                {this.props.state.taskEvent.status !== "completed" ? (
                   <>
                     <button
                       className="d-inline-block btn btn-link"
-                      onClick={() => props.confirmModal('delete')}
+                      onClick={() => props.confirmModal("delete")}
                     >
-                      {' '}
+                      {" "}
                       Delete
                     </button>
                     <button
@@ -239,7 +239,7 @@ class TaskInfoModal extends Component {
                   </>
                 ) : (
                   <button
-                    onClick={() => props.confirmModal('resume')}
+                    onClick={() => props.confirmModal("resume")}
                     className="d-inline-block btn btn-link"
                   >
                     Resume
@@ -257,10 +257,10 @@ class TaskInfoModal extends Component {
             <div className="col-md-12 body d-inline-block text-titlize">
               <div className="input-row">
                 <div className="d-inline-block">
-                  {this.props.state.taskEvent.trackingStatus == 'pause' ? (
+                  {this.props.state.taskEvent.trackingStatus == "pause" ? (
                     <div
                       style={{
-                        pointerEvents: this.isValidUserDate() ? '' : 'none'
+                        pointerEvents: this.isValidUserDate() ? "" : "none"
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
@@ -274,10 +274,10 @@ class TaskInfoModal extends Component {
                     </div>
                   ) : null}
 
-                  {this.props.state.taskEvent.trackingStatus == 'play' ? (
+                  {this.props.state.taskEvent.trackingStatus == "play" ? (
                     <div
                       style={{
-                        pointerEvents: this.isValidUserDate() ? '' : 'none'
+                        pointerEvents: this.isValidUserDate() ? "" : "none"
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
@@ -290,7 +290,7 @@ class TaskInfoModal extends Component {
                       <i className="fa fa-play"></i>
                     </div>
                   ) : null}
-                  {this.props.state.taskEvent.status === 'completed' ? (
+                  {this.props.state.taskEvent.status === "completed" ? (
                     <div className="d-inline-block task-play-btn">
                       <i className="fa fa-check"></i>
                     </div>
@@ -308,15 +308,15 @@ class TaskInfoModal extends Component {
                   ) : null}
                 </div>
                 <div className="d-inline-block header-2">
-                  <span>{'2hr 30mins'}</span>
+                  <span>{"2hr 30mins"}</span>
                 </div>
-                {this.props.state.taskEvent.status === 'completed' ? (
+                {this.props.state.taskEvent.status === "completed" ? (
                   <div className="d-inline-block button3">
                     <span>Completed</span>
                   </div>
                 ) : (
                   <div
-                    onClick={() => props.confirmModal('mark as completed')}
+                    onClick={() => props.confirmModal("mark as completed")}
                     className="d-inline-block button2 pointer"
                   >
                     <span>Mark Complete</span>
@@ -342,7 +342,7 @@ class TaskInfoModal extends Component {
                   Project
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(props.state.project, 'block', 'name')}
+                  {this.renderTaskInfo(props.state.project, "block", "name")}
                 </div>
               </div>
 
@@ -354,7 +354,7 @@ class TaskInfoModal extends Component {
                   <span className="left-padding-20px">
                     {props.state.taskCategorie
                       ? props.state.taskCategorie.name
-                      : '---'}
+                      : "---"}
                   </span>
                 </div>
               </div>
@@ -366,8 +366,8 @@ class TaskInfoModal extends Component {
                 <div className="col-md-10 d-inline-block">
                   {this.renderTaskInfo(
                     this.props.state.taskPrioritie,
-                    'circle',
-                    'label'
+                    "circle",
+                    "label"
                   )}
                 </div>
               </div>
@@ -405,20 +405,22 @@ class TaskInfoModal extends Component {
                   <div className="col-md-4 d-inline-block">
                     {this.props.state.taskEvent.dateFormattedTimeTrack ? (
                       <select
-                        style={{ color: '#000 !important', background: '#fff' }}
+                        style={{ color: "#000 !important", background: "#fff" }}
                       >
                         import {moment} from 'moment';
                         {this.props.state.taskEvent.dateFormattedTimeTrack.map(
                           (date, i) => {
                             return (
                               <optgroup
-                                label={moment(date.date).format('MMM Do YYYY')}
+                                label={moment(date.date).format("MMM Do YYYY")}
                               >
-                                {date.time_tracks.map(tt => (
-                                  <option>{this.returnTime(tt)}</option>
+                                {date.time_tracks.map((tt, idx) => (
+                                  <option key={idx}>
+                                    {this.returnTime(tt)}
+                                  </option>
                                 ))}
                               </optgroup>
-                            )
+                            );
                           }
                         )}
                         {/* {this.props.state.timeTracked.map((time, idx) => {
@@ -451,7 +453,7 @@ class TaskInfoModal extends Component {
                   <p className="left-padding-20px comments">
                     {props.state.taskEvent.comments
                       ? props.state.taskEvent.comments
-                      : '---'}
+                      : "---"}
                   </p>
                 </div>
               </div>
@@ -459,10 +461,10 @@ class TaskInfoModal extends Component {
           </div>
         </Modal>
       </>
-    )
+    );
   }
 }
 
 // this.props.state.taskEvent.dateFormattedTimeTrack
 
-export default TaskInfoModal
+export default TaskInfoModal;
