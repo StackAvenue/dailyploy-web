@@ -1530,7 +1530,7 @@ class Dashboard extends Component {
     this.handleTaskCreate(workspaceId);
     this.handleTaskDelete(workspaceId);
     this.handleTaskRunning(workspaceId);
-    this.handleTaskStop(workspaceId);
+    this.handleTaskSyncStop(workspaceId);
     this.handleTaskUpdate(workspaceId);
   }
 
@@ -1591,7 +1591,7 @@ class Dashboard extends Component {
       });
   };
 
-  handleTaskStop = async workspaceId => {
+  handleTaskSyncStop = async workspaceId => {
     base
       .database()
       .ref(`task_stopped/${workspaceId}`)
