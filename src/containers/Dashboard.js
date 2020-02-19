@@ -186,7 +186,10 @@ class Dashboard extends Component {
         trackingEvent = generatedObj.trackingEvent;
         var tasksUser = generatedObj.tasksUser;
         var tasksResources = tasksUser.map(user => user.usersObj);
-        var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+        var taskEvents = tasksUser
+          .map(user => user.tasks)
+          .flat(2)
+          .sort((a, b) => b.taskStartDateTime - a.taskStartDateTime);
 
         this.setState({
           resources: tasksResources ? tasksResources : [],
@@ -372,7 +375,10 @@ class Dashboard extends Component {
       trackingEvent = generatedObj.trackingEvent;
       var tasksUser = generatedObj.tasksUser;
       var tasksResources = tasksUser.map(user => user.usersObj);
-      var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+      var taskEvents = tasksUser
+        .map(user => user.tasks)
+        .flat(2)
+        .sort((a, b) => b.taskStartDateTime - a.taskStartDateTime);
     } catch (e) {
       console.log("error", e);
     }
@@ -713,7 +719,7 @@ class Dashboard extends Component {
       memberProjects: [],
       dateFrom: new Date(),
       dateTo: null,
-      timeFrom: "",
+      timeFrom: null,
       timeTo: null,
       timeDateTo: null,
       taskId: "",
@@ -995,9 +1001,11 @@ class Dashboard extends Component {
     // } else {
     //   return true;
     // }
-    if (this.state.timeFrom != null && this.state.timeTo == null) {
+    if (this.state.timeFrom && this.state.timeTo) {
+      return true;
+    } else if (this.state.timeFrom && !this.state.timeTo) {
       return false;
-    } else if (this.state.timeFrom == null && this.state.timeTo != null) {
+    } else if (!this.state.timeFrom && this.state.timeTo) {
       return false;
     } else {
       return true;
@@ -1548,6 +1556,9 @@ class Dashboard extends Component {
             return this.createTaskSyncObject(date, task);
           });
           var events = [this.state.events, ...taskObjects].flat();
+          var events = events.sort(
+            (a, b) => b.taskStartDateTime - a.taskStartDateTime
+          );
           this.setState({ events: events });
         }
       });
@@ -1655,7 +1666,10 @@ class Dashboard extends Component {
         trackingEvent = generatedObj.trackingEvent;
         var tasksUser = generatedObj.tasksUser;
         var tasksResources = tasksUser.map(user => user.usersObj);
-        var taskEvents = tasksUser.map(user => user.tasks).flat(2);
+        var taskEvents = tasksUser
+          .map(user => user.tasks)
+          .flat(2)
+          .sort((a, b) => b.taskStartDateTime - a.taskStartDateTime);
 
         this.setState({
           resources: tasksResources ? tasksResources : [],
