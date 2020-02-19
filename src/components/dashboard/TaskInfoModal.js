@@ -7,6 +7,7 @@ import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
+import { convertUTCToLocalDate } from "../../utils/function";
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -161,8 +162,10 @@ class TaskInfoModal extends Component {
   };
 
   returnTime = time => {
-    return `${moment(time.start_time).format("HH.mm A")} - ${moment(
-      time.end_time
+    return `${moment(convertUTCToLocalDate(time.start_time)).format(
+      "HH.mm A"
+    )} - ${moment(
+      time.end_time ? convertUTCToLocalDate(time.end_time) : new Date()
     ).format("HH.mm A")}`;
   };
 
@@ -407,15 +410,15 @@ class TaskInfoModal extends Component {
                       <select
                         style={{ color: "#000 !important", background: "#fff" }}
                       >
-                        import {moment} from 'moment';
                         {this.props.state.taskEvent.dateFormattedTimeTrack.map(
-                          (date, i) => {
+                          (date, index) => {
                             return (
                               <optgroup
+                                key={index}
                                 label={moment(date.date).format("MMM Do YYYY")}
                               >
                                 {date.time_tracks.map((tt, idx) => (
-                                  <option key={idx}>
+                                  <option key={tt.id}>
                                     {this.returnTime(tt)}
                                   </option>
                                 ))}
@@ -423,27 +426,9 @@ class TaskInfoModal extends Component {
                             );
                           }
                         )}
-                        {/* {this.props.state.timeTracked.map((time, idx) => {
-                            if (idx !== 0) {
-                              return (
-                                <div className="border" key={time.id}>
-                                  {' '}
-                                  {this.returnTime(time)}{' '}
-                                </div>
-                              )
-                            }
-                          })} */}
                       </select>
                     ) : null}
                   </div>
-                  {/* <div className="col-md-6 d-inline-block">
-                    <span className="d-inline-block">
-                      {this.displayTotalTime()}
-                    </span>
-                    <span className="d-inline-block track-time-placeholder">
-                      (hh:mm:ss)
-                    </span>
-                  </div> */}
                 </div>
               </div>
 
@@ -464,7 +449,5 @@ class TaskInfoModal extends Component {
     );
   }
 }
-
-// this.props.state.taskEvent.dateFormattedTimeTrack
 
 export default TaskInfoModal;

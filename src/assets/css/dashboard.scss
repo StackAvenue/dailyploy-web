@@ -3789,12 +3789,14 @@ table.scheduler-table tr:last-child td {
     float: right;
     margin-right: 40px;
     margin-top: 6px;
+    font-size: 12px;
     &:after {
       content: '▼';
-      padding: 15px 8px;
+      padding: 15px 1px;
       position: absolute;
       right: 10px;
       top: 0;
+      font-size: 10px;
       z-index: 1;
       text-align: center;
       height: 100%;
@@ -3812,14 +3814,17 @@ table.scheduler-table tr:last-child td {
   }
   .dropdown {
     position: absolute;
-    right: 17px;
+    right: 5px !important;
     bottom: 31px;
     z-index: 500;
     width: 123px;
     height: auto;
+    font-size: 12px;
     background-color: #ffffff;
     .border {
       border: 1px solid #505050;
+      height: 26px;
+      padding: 4px 5px 5px 10px;
     }
   }
 }
@@ -4097,7 +4102,7 @@ table.scheduler-table tr:last-child td {
           }
         }
         select {
-          height: 40px !important;
+          height: 25px !important;
           border-radius: 5px !important;
           border: 1px solid $color-borders;
           font-size: 15px !important;

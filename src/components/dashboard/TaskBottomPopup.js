@@ -44,6 +44,7 @@ class TaskBottomPopup extends Component {
           </div>
           <div
             style={{ width: "122px" }}
+            title={this.props.event.title}
             className="d-inline-block task-title title text-wraper"
           >
             {this.props.event.title}
@@ -58,10 +59,7 @@ class TaskBottomPopup extends Component {
           ></div>
           {this.props.event && eventTimes.length > 0 ? (
             <>
-              <div
-                style={{ float: "none" }}
-                className="d-inline-block timer-dropdown"
-              >
+              <div className="d-inline-block timer-dropdown">
                 <input
                   style={{ width: "170px" }}
                   className="d-inline-block"
@@ -89,7 +87,11 @@ class TaskBottomPopup extends Component {
                 </div>
               ) : null}
             </>
-          ) : null}
+          ) : (
+            <div style={{ paddingLeft: "35px" }} className="d-inline-block">
+              no tracked time
+            </div>
+          )}
         </div>
       </>
     );

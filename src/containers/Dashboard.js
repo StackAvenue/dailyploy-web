@@ -189,7 +189,7 @@ class Dashboard extends Component {
         var taskEvents = tasksUser
           .map(user => user.tasks)
           .flat(2)
-          .sort((a, b) => b.taskStartDateTime - a.taskStartDateTime);
+          .sort((a, b) => b.created_at - a.created_at);
 
         this.setState({
           resources: tasksResources ? tasksResources : [],
@@ -378,7 +378,7 @@ class Dashboard extends Component {
       var taskEvents = tasksUser
         .map(user => user.tasks)
         .flat(2)
-        .sort((a, b) => b.taskStartDateTime - a.taskStartDateTime);
+        .sort((a, b) => b.created_at - a.created_at);
     } catch (e) {
       console.log("error", e);
     }
@@ -427,7 +427,10 @@ class Dashboard extends Component {
               .flat()
               .find(ttt => ttt.status == "running");
             if (runningTask) {
-              var taskStartOn = new Date(runningTask.start_time).getTime();
+              let taskStartOn = new Date(runningTask.start_time).getTime();
+              // let taskStartOn = convertUTCToLocalDate(
+              //   runningTask.start_time
+              // ).getTime();
               taskRunningObj = {
                 status: true,
                 startOn: taskStartOn,
@@ -442,7 +445,10 @@ class Dashboard extends Component {
               .flat()
               .find(ttt => ttt.status == "running");
             if (runningTask) {
-              var taskStartOn = new Date(runningTask.start_time).getTime();
+              let taskStartOn = new Date(runningTask.start_time).getTime();
+              // let taskStartOn = convertUTCToLocalDate(
+              //   runningTask.start_time
+              // ).getTime();
               tasksObj["trackingStatus"] = "pause";
               tasksObj["startOn"] = taskStartOn;
             }
@@ -1556,9 +1562,7 @@ class Dashboard extends Component {
             return this.createTaskSyncObject(date, task);
           });
           var events = [this.state.events, ...taskObjects].flat();
-          var events = events.sort(
-            (a, b) => b.taskStartDateTime - a.taskStartDateTime
-          );
+          var events = events.sort((a, b) => b.created_at - a.created_at);
           this.setState({ events: events });
         }
       });
@@ -1669,7 +1673,7 @@ class Dashboard extends Component {
         var taskEvents = tasksUser
           .map(user => user.tasks)
           .flat(2)
-          .sort((a, b) => b.taskStartDateTime - a.taskStartDateTime);
+          .sort((a, b) => b.created_at - a.created_at);
 
         this.setState({
           resources: tasksResources ? tasksResources : [],
@@ -1699,6 +1703,7 @@ class Dashboard extends Component {
       taskId: task.id,
       start: startDateTime,
       end: endDateTime,
+      created_at: task.created_at,
       taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
       taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
       taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
