@@ -8,6 +8,7 @@ export const DATE_FORMAT1 = "YYYY-MM-DD"; // 2019-10-27
 export const FULL_DATE = "YYYY-MM-DD HH:mm:ss"; // 2019-10-27
 export const DATE_FORMAT2 = "DD MMM YYYY"; // 27 Oct 2019
 export const DATE_FORMAT3 = "YYYY, DD MMM"; // 2019, 27 Oct
+export const FULL_DATE_FORMAT3 = "YYYY, DD MMM HH:mm A"; // 2019, 27 Oct
 export const DATE_FORMAT4 = "YYYY, MMM DD"; // 2019, Oct 27
 export const DATE_FORMAT5 = "MMM DD"; // Oct 27
 export const DATE_FORMAT6 = "DD MMM"; // 27 Oct

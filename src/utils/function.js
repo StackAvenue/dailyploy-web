@@ -1,5 +1,6 @@
 import moment from "moment";
 import cookie from "react-cookies";
+import { DATE_FORMAT1 } from "./Constants";
 
 export const getWeekFisrtDate = date => {
   return moment(date)
@@ -43,4 +44,19 @@ export const convertUTCToLocalDate = date => {
 
 export const getWorkspaceId = () => {
   return cookie.load("workspaceId");
+};
+
+export const getMiddleDates = (start, end) => {
+  var startDate = new Date(start);
+  var endDate = new Date(end);
+  var daysArr = new Array();
+  var currentDate = startDate;
+  while (currentDate <= endDate) {
+    daysArr.push(moment(currentDate).format(DATE_FORMAT1));
+    var date = moment(currentDate, DATE_FORMAT1)
+      .add(1, "days")
+      .format(DATE_FORMAT1);
+    currentDate = new Date(date);
+  }
+  return daysArr;
 };

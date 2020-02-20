@@ -56,6 +56,10 @@ class AddTaskModal extends Component {
     return [];
   };
 
+  handleDateChangeRaw = e => {
+    e.preventDefault();
+  };
+
   render() {
     const { props } = this;
     return (
@@ -64,7 +68,6 @@ class AddTaskModal extends Component {
           className="task-modal"
           show={props.show}
           onHide={props.closeTaskModal}
-          style={{ paddingTop: "1.5%" }}
         >
           <div className="row no-margin">
             <div className="col-md-12 header text-titlize">
@@ -230,6 +233,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
+                          onChangeRaw={this.handleDateChangeRaw}
                         />
                       </div>
                     </div>
@@ -244,6 +248,7 @@ class AddTaskModal extends Component {
                           onChange={props.handleDateTo}
                           placeholderText="Select Date"
                           disabled={props.state.disabledDateTo}
+                          onChangeRaw={this.handleDateChangeRaw}
                         />
                       </div>
                     </div>
@@ -360,7 +365,9 @@ class AddTaskModal extends Component {
                   </button>
                   <button
                     type="button"
-                    className="button1 btn-primary pull-right"
+                    className={`button1 btn-primary pull-right ${
+                      props.state.taskloader ? "disabled" : ""
+                    }`}
                     onClick={
                       props.state.taskButton === "Add"
                         ? props.addTask

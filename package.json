@@ -12,6 +12,8 @@
     "dotenv": "^8.2.0",
     "env-cmd": "^10.0.1",
     "faker": "^4.1.0",
+    "firebase": "^7.8.1",
+    "firestore": "^1.1.6",
     "highcharts": "^8.0.0",
     "interactjs": "^1.7.3",
     "jwt-decode": "^2.2.0",
@@ -62,7 +64,7 @@
     "start:staging": "env-cmd -f .env.staging react-scripts start",
     "build:production": "env-cmd -f .env.production react-scripts build",
     "start:production": "env-cmd -f .env.production react-scripts start",
-    "deploy": "aws s3 sync build/ s3://dailyploy.com --acl public-read"
+    "deploy": "aws s3 sync build/ s3://app.dailyploy.com --acl public-read"
   },
   "eslintConfig": {
     "extends": "react-app"

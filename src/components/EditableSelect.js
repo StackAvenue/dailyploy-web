@@ -22,7 +22,7 @@ class EditableSelect extends Component {
   componentDidMount = () => {
     this.setState({
       suggestions: this.props.options ? this.props.options : [],
-      selected: this.props.default ? this.props.default : ""
+      searchText: this.props.value ? this.props.value.name : ""
     });
   };
 
@@ -167,15 +167,17 @@ class EditableSelect extends Component {
   };
 
   selectSuggestion = option => {
-    this.setState({
-      selected: option,
-      show: false,
-      searchText: "",
-      editable: true,
-      selectedText: option.name,
-      beforeEdit: false
-    });
-    this.props.onChange(option);
+    if (this.props.action) {
+      this.setState({
+        selected: option,
+        show: false,
+        searchText: "",
+        editable: true,
+        selectedText: option.name,
+        beforeEdit: false
+      });
+      this.props.onChange(option);
+    }
   };
 
   editSelecedOption = e => {

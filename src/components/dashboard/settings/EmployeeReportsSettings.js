@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
+import React, { Component } from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import moment from 'moment'
 
 class EmployeeReportsSettings extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       selectDate: new Date()
-    };
+    }
   }
 
   handleSelectDate = date => {
-    this.setState({ selectDate: date });
-  };
+    this.setState({ selectDate: date })
+  }
   render() {
     return (
       <div className="employee-project-settings">
         <div className="email-heading">Email Employee Reports</div>
-        <div className="row">
+        <div className="row" style={{ marginTop: '40px' }}>
           <div className="col-md-4 report-box">
             <div className="col-md-12 no-padding day-text">Daily Reports</div>
             <div className="col-md-8 no-padding day-select">
@@ -70,7 +70,7 @@ class EmployeeReportsSettings extends Component {
                 onChange={this.handleSelectDate}
                 placeholderText="Select Date"
                 value={moment(this.state.selectDate).format(
-                  "ddd | YYYY, MMM DD"
+                  'ddd | YYYY, MMM DD'
                 )}
               />
             </div>
@@ -84,15 +84,15 @@ class EmployeeReportsSettings extends Component {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col" style={{ width: "40%" }}>
-                    Employee Name{" "}
+                  <th scope="col" style={{ width: '40%' }}>
+                    Employee Name{' '}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
                   <th scope="col">
                     Frequency <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
                   <th scope="col">
-                    Date Created{" "}
+                    Date Created{' '}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
                 </tr>
@@ -153,8 +153,8 @@ class EmployeeReportsSettings extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default EmployeeReportsSettings;
+export default EmployeeReportsSettings

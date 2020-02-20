@@ -73,7 +73,44 @@ class SummuryReportCharts extends Component {
     }
   };
 
+  addTotalDuration = totalTracks => {
+    return totalTracks
+      .map(log => log.tracked_time)
+      .flat()
+      .reduce((a, b) => a + b, 0);
+  };
+
+  secondsToHours = seconds => {
+    let totalSeconds = Number(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor((totalSeconds % 3600) % 60);
+    return h + "H" + " " + m + "M";
+  };
+
+  calculateCapacity = () => {
+    if (this.props.state.frequency == "daily") {
+      return "8 H";
+    } else if (this.props.state.frequency == "weekly") {
+      return "40 H";
+    } else if (this.props.state.frequency == "monthly") {
+      return "160 H";
+    } else {
+      return "8 h";
+    }
+  };
+
   render() {
+    let totalEstimate =
+      this.props.state.projectReports &&
+      this.props.state.projectReports.estimateTime
+        ? this.props.state.projectReports.estimateTime
+        : 0;
+    let totalWorked =
+      this.props.state.projectReports && this.props.state.projectReports.data
+        ? this.addTotalDuration(this.props.state.projectReports.data)
+        : 0;
+
     return (
       <div className="summary-reports">
         <div className="col-md-12 heading">
@@ -88,15 +125,21 @@ class SummuryReportCharts extends Component {
           <div className="col-md-9 summury-info-btn d-inline-block">
             <div className="cap-info-btn d-inline-block">
               <button className="d-inline-block">Capacity</button>
-              <button className="d-inline-block">8 hours</button>
+              <button className="d-inline-block">
+                {this.calculateCapacity()}
+              </button>
             </div>
             <div className="sch-info-btn d-inline-block">
               <button className="d-inline-block">Scheduled</button>
-              <button className="d-inline-block">7 hours</button>
+              <button className="d-inline-block">
+                {this.secondsToHours(totalEstimate)}
+              </button>
             </div>
             <div className="work-info-btn d-inline-block">
               <button className="d-inline-block">Worked</button>
-              <button className="d-inline-block">5 hours</button>
+              <button className="d-inline-block">
+                {this.secondsToHours(totalWorked)}
+              </button>
             </div>
           </div>
         </div>

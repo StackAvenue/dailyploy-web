@@ -17,12 +17,15 @@ class TaskBottomPopup extends Component {
   };
 
   returnTime = time => {
-    return `${moment(time.start_time).format("HH.mm")} - ${moment(
+    return `${moment(time.start_time).format("HH.mm A")} - ${moment(
       time.end_time
-    ).format("HH.mm")}`;
+    ).format("HH.mm A")}`;
   };
 
   render() {
+    const eventTimes = this.props.event
+      ? this.props.event.timeTracked.filter(time => time.status != "running")
+      : [];
     return (
       <>
         <div className="d-inline-block task-b-popup">
@@ -39,7 +42,11 @@ class TaskBottomPopup extends Component {
               totalDuration={0}
             />
           </div>
-          <div className="d-inline-block task-title title text-wraper">
+          <div
+            style={{ width: "122px" }}
+            title={this.props.event.title}
+            className="d-inline-block task-title title text-wraper"
+          >
             {this.props.event.title}
           </div>
           <div
@@ -50,15 +57,16 @@ class TaskBottomPopup extends Component {
               }`
             }}
           ></div>
-          {this.props.event && this.props.event.timeTracked.length > 0 ? (
+          {this.props.event && eventTimes.length > 0 ? (
             <>
               <div className="d-inline-block timer-dropdown">
                 <input
+                  style={{ width: "170px" }}
                   className="d-inline-block"
                   className={this.state.showTimerMenu ? "border" : ""}
                   defaultValue={
-                    this.props.event && this.props.event.timeTracked.length > 0
-                      ? this.returnTime(this.props.event.timeTracked[0])
+                    this.props.event && eventTimes.length > 0
+                      ? this.returnTime(eventTimes[0])
                       : ""
                   }
                   onClick={() => this.ToggleTimerDropDown()}
@@ -66,8 +74,8 @@ class TaskBottomPopup extends Component {
                 />
               </div>
               {this.state.showTimerMenu ? (
-                <div className="dropdown">
-                  {this.props.event.timeTracked.map((time, idx) => {
+                <div style={{ right: 15, width: "170px" }} className="dropdown">
+                  {eventTimes.map((time, idx) => {
                     if (idx !== 0) {
                       return (
                         <div className="border" key={time.id}>
@@ -79,7 +87,11 @@ class TaskBottomPopup extends Component {
                 </div>
               ) : null}
             </>
-          ) : null}
+          ) : (
+            <div style={{ paddingLeft: "35px" }} className="d-inline-block">
+              no tracked time
+            </div>
+          )}
         </div>
       </>
     );

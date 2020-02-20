@@ -1,0 +1,47 @@
+.signup-container {
+  height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  .width {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(250, 250, 250);
+    min-width: 65% !important;
+    img {
+      width: 90%;
+      height: 75%;
+    }
+  }
+  .form-wrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    justify-content: center;
+
+    .sub-container {
+      min-width: 100%;
+      background: #fafafa;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      form {
+        min-width: 100%;
+        .forgot-pass {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+      .tab-content {
+        min-width: 100%;
+      }
+    }
+  }
+}

@@ -19,9 +19,10 @@
       margin-right: 20px;
       .custom-search-select{
         height: 34px !important;
-        width: 400px !important;
+        width: 290px !important;
         input{
           padding: 5px 5px !important;
+          width: 50% !important;
         }
       }
       .down-icon{
@@ -32,10 +33,10 @@
     }
     .report-priority{
       .custom-search-select{
-        width: 130px !important;
+        width: 230px !important;
         height: 34px !important;
         input{
-          width: 0px !important;
+          width: 50% !important;
           padding: 5px 5px !important;
         }
         .color-dot{
@@ -128,6 +129,31 @@
     width: auto;
     height: 40px;
     background-color: rgba(229, 229, 229, 0.5);
+  }
+  .reports-track-logs{
+    height: 34px !important;
+    .custom-search-select{
+      width: 180px !important;
+      input{
+        padding: 5px 0px 5px 10px;
+      }
+      .down-icon{
+        margin: 0px 5px 0px 0px !important;
+      }
+      .suggestions{
+        width: 100% !important;
+      }
+      li{
+        height: 34px !important;
+        padding: 5px 0px !important
+        i{
+          padding-left: 5px !important;
+        }
+        span{
+          padding-left: 0px;
+        }
+      }
+    }
   }
 }
 .arrow-button{
@@ -371,7 +397,7 @@
   .summury-info-btn{
     button{
       height: 36px;
-      width: 90px;
+      width: 110px !important;
       text-align: center;
       border: solid 1px $color-background;
       border-radius: 3px;
@@ -457,5 +483,36 @@
     padding-top: 85px;
     text-align: center;
     vertical-align: top;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+.reports-table-container {
+    .report-table-row{
+      .td-1{
+        width: 15% !important;
+      }
+      .td-2{
+        width: 10% !important;
+      }
+      .td-3{
+        width: 27% !important;
+      }
+      .td-4{
+        width: 9% !important;
+      }
+      .td-5{
+        width: 9% !important;
+      }
+      .td-6{
+        width: 12% !important;
+      }
+      .td-7{
+        width: 9% !important;
+      }
+      .td-8{
+        width: 9% !important;
+      }
+    }
   }
 }

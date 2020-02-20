@@ -20,6 +20,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { workspaceNameSplit } from "./utils/function";
 import moment from "moment";
+import { base } from "./../src/base";
 import "../src/assets/css/loader.scss";
 
 class Workspace extends Component {
@@ -132,6 +133,30 @@ class Workspace extends Component {
       loggedInUserName: userData.name
     });
   }
+
+  componentWillMount = () => {
+    var workspaceId = this.props.match.params.workspaceId;
+
+    base
+      .database()
+      .ref(`task_stopped/${workspaceId}`)
+      .on("child_added", snap => {
+        if (this.state.event && this.state.event.taskId == snap.key) {
+          this.setState({ event: null });
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_stopped/${workspaceId}`)
+      .on("child_changed", snap => {
+        if (this.state.event && this.state.event.taskId == snap.key) {
+          this.setState({ event: null });
+        }
+      });
+  };
+
+  componentWillUnmount() {}
 
   handleReset = () => {
     localStorage.setItem(`startOn-${this.state.workspaceId}`, "");

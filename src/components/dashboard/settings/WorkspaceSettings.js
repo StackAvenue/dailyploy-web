@@ -1,26 +1,27 @@
-import React, { Component } from "react";
-import Profile from "../../../assets/images/profile.png";
-import Admin from "../../../assets/images/admin.png";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import GeneralSettings from "./GeneralSettings";
-import CategoriesSettings from "./CategoriesSettings";
-import EmployeeReportsSettings from "./EmployeeReportsSettings";
-import ProjectReportsSettings from "./ProjectReportsSettings";
-import { toast } from "react-toastify";
-import DailyPloyToast from "../../DailyPloyToast";
-import { put } from "../../../utils/API";
-import cookie from "react-cookies";
+import React, { Component } from 'react'
+import Profile from '../../../assets/images/profile.png'
+import Admin from '../../../assets/images/admin.png'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import GeneralSettings from './GeneralSettings'
+import CategoriesSettings from './CategoriesSettings'
+import EmployeeReportsSettings from './EmployeeReportsSettings'
+import ProjectReportsSettings from './ProjectReportsSettings'
+import { toast } from 'react-toastify'
+import DailyPloyToast from '../../DailyPloyToast'
+import { put } from '../../../utils/API'
+import cookie from 'react-cookies'
+import '../../../assets/css/workspaceSettings.scss'
 
 class WorkspaceSettings extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      workspaceName: "",
+      workspaceName: '',
       adminUserArr: [],
-      workspaceId: "",
+      workspaceId: '',
       userArr: [],
       isSaveWorkspaceName: false
-    };
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,54 +33,54 @@ class WorkspaceSettings extends Component {
     ) {
       let workspaceName = this.props.workspaceObj
         ? this.props.workspaceObj.name
-        : null;
-      let adminUserArr = this.props.state.adminUserArr;
+        : null
+      let adminUserArr = this.props.state.adminUserArr
       this.setState({
         workspaceName: workspaceName,
         adminUserArr: adminUserArr,
         workspaceId: this.props.workspaceObj.id,
         userArr: this.props.state.allMembers
-      });
+      })
     }
   }
 
   handleChangeAdminUsers = arr => {
-    this.setState({ adminUserArr: arr });
-  };
+    this.setState({ adminUserArr: arr })
+  }
 
   worskpaceNameHandler = e => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     this.setState({
       [name]: value,
       isSaveWorkspaceName: value ? true : false
-    });
-  };
+    })
+  }
 
   updateWorkspaceName = async () => {
     const updateWorkspaceName = {
       user: {
         name: this.state.workspaceName
       }
-    };
+    }
     try {
       const { data } = await put(
         updateWorkspaceName,
         `workspaces/${this.props.workspaceObj.id}/workspace_settings/${this.props.workspaceObj.id}`
-      );
-      cookie.save("workspaceName", data.workspace_role, { path: "/" });
+      )
+      cookie.save('workspaceName', data.workspace_role, { path: '/' })
       toast(
         <DailyPloyToast message="Workspace Name Updated" status="success" />,
         {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         }
-      );
-      this.setState({ isSaveWorkspaceName: false });
-      this.props.workspaceNameUpdate("workspaceName", data.workspace_role);
+      )
+      this.setState({ isSaveWorkspaceName: false })
+      this.props.workspaceNameUpdate('workspaceName', data.workspace_role)
     } catch (e) {
-      console.log("error", e);
+      console.log('error', e)
     }
-  };
+  }
 
   render() {
     return (
@@ -117,8 +118,8 @@ class WorkspaceSettings extends Component {
           </TabPanel> */}
         </Tabs>
       </div>
-    );
+    )
   }
 }
 
-export default WorkspaceSettings;
+export default WorkspaceSettings

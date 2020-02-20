@@ -7,6 +7,7 @@ import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
+import { convertUTCToLocalDate } from "../../utils/function";
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -161,9 +162,11 @@ class TaskInfoModal extends Component {
   };
 
   returnTime = time => {
-    return `${moment(time.start_time).format("HH.mm")} - ${moment(
-      time.end_time
-    ).format("HH.mm")}`;
+    return `${moment(convertUTCToLocalDate(time.start_time)).format(
+      "HH.mm A"
+    )} - ${moment(
+      time.end_time ? convertUTCToLocalDate(time.end_time) : new Date()
+    ).format("HH.mm A")}`;
   };
 
   displayTotalTime = () => {
@@ -264,8 +267,9 @@ class TaskInfoModal extends Component {
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
-                        this.props.handleTaskStartTop(
-                          this.props.state.taskEvent
+                        this.props.handleTaskStop(
+                          this.props.state.taskEvent,
+                          Date.now()
                         )
                       }
                     >
@@ -280,15 +284,15 @@ class TaskInfoModal extends Component {
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
-                        this.props.handleTaskStartTop(
-                          this.props.state.taskEvent
+                        this.props.handleTaskStart(
+                          this.props.state.taskEvent,
+                          Date.now()
                         )
                       }
                     >
                       <i className="fa fa-play"></i>
                     </div>
                   ) : null}
-
                   {this.props.state.taskEvent.status === "completed" ? (
                     <div className="d-inline-block task-play-btn">
                       <i className="fa fa-check"></i>
@@ -402,41 +406,28 @@ class TaskInfoModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <div className="col-md-4 d-inline-block">
-                    <div className="timer-dropdown">
-                      <input
-                        className="d-inline-block"
-                        className={this.state.showTimerMenu ? "border" : ""}
-                        defaultValue={
-                          this.props.state.timeTracked.length > 0
-                            ? this.returnTime(this.props.state.timeTracked[0])
-                            : "00:00 - 00:00"
-                        }
-                        onClick={() => this.ToggleTimerDropDown()}
-                        readOnly
-                      />
-                      {this.state.showTimerMenu ? (
-                        <div className="dropdown">
-                          {this.props.state.timeTracked.map((time, idx) => {
-                            if (idx != 0) {
-                              return (
-                                <div className="border" key={time.id}>
-                                  {" "}
-                                  {this.returnTime(time)}{" "}
-                                </div>
-                              );
-                            }
-                          })}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                  <div className="col-md-6 d-inline-block">
-                    <span className="d-inline-block">
-                      {this.displayTotalTime()}
-                    </span>
-                    <span className="d-inline-block track-time-placeholder">
-                      (hh:mm:ss)
-                    </span>
+                    {this.props.state.taskEvent.dateFormattedTimeTrack ? (
+                      <select
+                        style={{ color: "#000 !important", background: "#fff" }}
+                      >
+                        {this.props.state.taskEvent.dateFormattedTimeTrack.map(
+                          (date, index) => {
+                            return (
+                              <optgroup
+                                key={index}
+                                label={moment(date.date).format("MMM Do YYYY")}
+                              >
+                                {date.time_tracks.map((tt, idx) => (
+                                  <option key={tt.id}>
+                                    {this.returnTime(tt)}
+                                  </option>
+                                ))}
+                              </optgroup>
+                            );
+                          }
+                        )}
+                      </select>
+                    ) : null}
                   </div>
                 </div>
               </div>
