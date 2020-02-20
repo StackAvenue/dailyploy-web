@@ -22,7 +22,11 @@ class ReportTableRow extends Component {
   };
 
   renderLog = task => {
-    let trackLogs = task.time_tracked
+    let dateTimeTracks = task.date_formatted_time_tracks.find(
+      timeLog => timeLog.date == this.props.date
+    );
+    var trackLogs = dateTimeTracks ? dateTimeTracks.time_tracks : [];
+    trackLogs = trackLogs
       .sort((a, b) => b.id - a.id)
       .map(time => {
         return {
@@ -39,7 +43,7 @@ class ReportTableRow extends Component {
       <div className="reports-track-logs">
         {trackLogs.length > 0 ? (
           <EditableSelect
-            options={trackLogs.slice(1)}
+            options={trackLogs}
             value={first}
             getOptionValue={option => option.id}
             getOptionLabel={option => option.name}
