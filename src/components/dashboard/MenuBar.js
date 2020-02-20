@@ -124,7 +124,7 @@ export default class MenuBar extends Component {
         );
         this.handleClose();
         this.props.manageProjectListing(data.project);
-        this.props.handleLoad(true);
+        this.props.handleLoad(false);
       } catch (e) {
         if (e.response && e.response.data) {
           var errors = e.response.data.errors;
