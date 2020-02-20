@@ -21,7 +21,8 @@ import {
   DATE_FORMAT1,
   HRMIN,
   HHMMSS,
-  FULL_DATE
+  FULL_DATE,
+  DATE_FORMAT3
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -189,8 +190,7 @@ class Dashboard extends Component {
         var taskEvents = tasksUser
           .map(user => user.tasks)
           .flat(2)
-          .sort((a, b) => b.created_at - a.created_at);
-
+          .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
         this.setState({
           resources: tasksResources ? tasksResources : [],
           events: taskEvents ? taskEvents : [],
@@ -378,7 +378,7 @@ class Dashboard extends Component {
       var taskEvents = tasksUser
         .map(user => user.tasks)
         .flat(2)
-        .sort((a, b) => b.created_at - a.created_at);
+        .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
     } catch (e) {
       console.log("error", e);
     }
@@ -475,6 +475,11 @@ class Dashboard extends Component {
       moment(dateWiseTasksDate).format(DATE_FORMAT1) +
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
+    let sortedTime =
+      moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
+      "00:00"
+        ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
+        : moment(task.created_at).format("HH.mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks.find(
       dateLog => dateLog.date == dateWiseTasksDate
@@ -483,6 +488,8 @@ class Dashboard extends Component {
       date: dateWiseTasksDate,
       id: newTaskId,
       taskId: task.id,
+      created_at: task.created_at,
+      sortedTime: sortedTime,
       start: moment(startDateTime).format("YYYY-MM-DD HH:mm"),
       end: moment(endDateTime).format("YYYY-MM-DD HH:mm"),
       taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
@@ -1562,7 +1569,9 @@ class Dashboard extends Component {
             return this.createTaskSyncObject(date, task);
           });
           var events = [this.state.events, ...taskObjects].flat();
-          var events = events.sort((a, b) => b.created_at - a.created_at);
+          var events = events.sort(
+            (a, b) => Number(a.sortedTime) - Number(b.sortedTime)
+          );
           this.setState({ events: events });
         }
       });
@@ -1673,7 +1682,7 @@ class Dashboard extends Component {
         var taskEvents = tasksUser
           .map(user => user.tasks)
           .flat(2)
-          .sort((a, b) => b.created_at - a.created_at);
+          .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
 
         this.setState({
           resources: tasksResources ? tasksResources : [],
@@ -1697,12 +1706,18 @@ class Dashboard extends Component {
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
     let newTaskId = task.id + "-" + date;
+    let sortedTime =
+      moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
+      "00:00"
+        ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
+        : moment(task.inserted_at).format("HH.mm");
     return {
       date: date,
       id: newTaskId,
       taskId: task.id,
       start: startDateTime,
       end: endDateTime,
+      sortedTime: sortedTime,
       created_at: task.created_at,
       taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
       taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
@@ -1732,6 +1747,11 @@ class Dashboard extends Component {
       moment(date).format(DATE_FORMAT1) +
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
+    let sortedTime =
+      moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
+      "00:00"
+        ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
+        : moment(task.inserted_at).format("HH.mm");
     let newTaskId = task.id + "-" + date;
     let event = this.state.events.find(e => e.id == newTaskId);
     return {
@@ -1740,6 +1760,7 @@ class Dashboard extends Component {
       taskId: task.id,
       start: startDateTime,
       end: endDateTime,
+      sortedTime: sortedTime,
       taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
       taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
       taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
@@ -1776,7 +1797,9 @@ class Dashboard extends Component {
           let taskObjects = dates.map(date => {
             return this.updateTaskSyncObject(date, task);
           });
-          var finalEvents = [events, ...taskObjects].flat();
+          var finalEvents = [events, ...taskObjects]
+            .flat()
+            .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
           this.setState({ events: finalEvents });
         }
       });
@@ -1796,6 +1819,9 @@ class Dashboard extends Component {
               task.status == "completed" ? "check" : "play";
             event["status"] = task.status;
           });
+          var events = events.sort(
+            (a, b) => Number(a.sortedTime) - Number(b.sortedTime)
+          );
           this.setState({ events: events });
         }
       });
