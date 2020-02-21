@@ -263,7 +263,7 @@ class DashboardEvent extends Component {
                     this.props.bgColor
                   )}
                 >
-                  <>
+                  <div className="col-md-10 no-padding d-inline-block">
                     <div className="col-md-2 no-padding d-inline-block">
                       <div className={`${this.props.event.priority}`}></div>
                     </div>
@@ -277,7 +277,7 @@ class DashboardEvent extends Component {
                         {" of"} {this.calculateTime(event)}
                       </span>
                     </div>
-                  </>
+                  </div>
                 </OverlayTrigger>
 
                 {event.trackingStatus === "pause" ? (
@@ -455,7 +455,7 @@ class DashboardEvent extends Component {
                   this.props.bgColor
                 )}
               >
-                <>
+                <div className="col-md-10 no-padding flex-center">
                   <div className="col-md-2 no-padding flex-center">
                     <div className={`${this.props.event.priority}`}></div>
                   </div>
@@ -469,7 +469,7 @@ class DashboardEvent extends Component {
                       {" of"} {this.calculateTime(event)}
                     </span>
                   </div>
-                </>
+                </div>
               </OverlayTrigger>
 
               {event.trackingStatus === "pause" ? (
