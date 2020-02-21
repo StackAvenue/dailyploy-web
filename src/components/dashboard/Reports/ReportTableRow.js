@@ -56,17 +56,19 @@ class ReportTableRow extends Component {
   };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
-    var start =
-      moment(this.props.date).format("YYYY-MM-DD") +
-      " " +
-      moment(startDateTime).format("HH:mm:ss");
-    var end =
-      moment(this.props.date).format("YYYY-MM-DD") +
-      " " +
-      moment(endDateTime).format("HH:mm:ss");
-    let totalMilSeconds = new Date(end) - new Date(start);
-    var totalSeconds = totalMilSeconds / 1000;
-    return Number(totalSeconds);
+    let endTime = moment(endDateTime).format("HH:mm:ss");
+    let startTime = moment(startDateTime).format("HH:mm:ss");
+    if (endTime != "00:00:00") {
+      var start =
+        moment(this.props.date).format("YYYY-MM-DD") +
+        " " +
+        moment(startDateTime).format("HH:mm:ss");
+      var end = moment(this.props.date).format("YYYY-MM-DD") + " " + endTime;
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      return Number(totalSeconds);
+    }
+    return 0;
   };
 
   dateFormater = totalSeconds => {
