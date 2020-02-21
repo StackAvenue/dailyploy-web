@@ -94,6 +94,7 @@ class Dashboard extends Component {
       timeTracked: [],
       taskCategorie: "",
       showAlert: false,
+      newAddedProject: null,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -681,8 +682,10 @@ class Dashboard extends Component {
         show: true,
         taskUser: [],
         selectedMembers: [],
-        modalMemberSearchOptions: members,
-        project: "",
+        modalMemberSearchOptions: this.state.newAddedProject
+          ? this.state.newAddedProject.members
+          : members,
+        project: this.state.newAddedProject ? this.state.newAddedProject : "",
         memberProjects: this.state.projects,
         errors: {
           taskNameError: "",
@@ -699,13 +702,19 @@ class Dashboard extends Component {
       var memberProjects = this.state.projects.filter(project =>
         project.members.map(member => member.id).includes(this.state.userId)
       );
+      let selected = {
+        email: this.state.userEmail,
+        id: this.state.userId,
+        name: this.state.userName
+      };
       this.setState({
         setShow: true,
         show: true,
         taskUser: [this.state.userId],
-        modalMemberSearchOptions: members,
-        project: "",
+        modalMemberSearchOptions: [selected],
+        project: this.state.newAddedProject ? this.state.newAddedProject : "",
         memberProjects: memberProjects,
+        selectedMembers: [selected],
         errors: {
           taskNameError: "",
           projectError: "",
@@ -889,8 +898,12 @@ class Dashboard extends Component {
   };
 
   memberSearchOptions = (userId, projectId) => {
-    var projects = this.state.projects.filter(
-      project => project.id === projectId
+    var projects = this.state.projects.filter(project =>
+      project.id === projectId
+        ? projectId
+        : this.state.newAddedProject
+        ? this.state.newAddedProject.id
+        : null
     );
     var members = projects.length > 0 ? projects[0].members : [];
     if (this.state.user.role === "member") {
@@ -911,16 +924,23 @@ class Dashboard extends Component {
     var selecteMember = selectedMembers.map(member => {
       return { email: member.email, id: member.id, name: member.name };
     });
+    let newSelected = this.state.newAddedProject
+      ? this.state.newAddedProject.members.map(m => m.id).includes(memberId)
+        ? selecteMember
+        : []
+      : selecteMember;
     if (this.state.user.role === "admin" || this.state.userId == memberId) {
       this.setState({
-        taskUser: [memberId],
-        selectedMembers: selecteMember,
+        taskUser: newSelected.length > 0 ? [memberId] : [],
+        selectedMembers: newSelected,
         show: true,
         taskName: "",
-        project: "",
-        projectId: "",
+        project: this.state.newAddedProject ? this.state.newAddedProject : "",
+        projectId: this.state.newAddedProject
+          ? this.state.newAddedProject.id
+          : "",
         taskId: "",
-        modalMemberSearchOptions: members.length > 0 ? members : selecteMember,
+        modalMemberSearchOptions: this.addTaskMembers(members, selecteMember),
         dateFrom: new Date(startDate),
         dateTo: null,
         border: "solid 1px #ffffff",
@@ -941,6 +961,15 @@ class Dashboard extends Component {
         }
       });
     }
+  };
+
+  addTaskMembers = (members, selecteMember) => {
+    if (this.state.newAddedProject) {
+      return this.state.newAddedProject.members;
+    } else if (members.length > 0) {
+      return members;
+    }
+    return selecteMember;
   };
 
   validateTaskModal = () => {
@@ -1543,7 +1572,11 @@ class Dashboard extends Component {
   manageProjectListing = project => {
     project["owner"] = { name: `${this.state.userName}` };
     var filterdProjects = [...this.state.projects, ...[project]];
-    this.setState({ projects: filterdProjects });
+    this.setState({
+      projects: filterdProjects,
+      // modalMemberSearchOptions: [],
+      newAddedProject: project
+    });
   };
 
   componentWillMount() {
