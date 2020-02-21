@@ -3588,7 +3588,17 @@ table.scheduler-table tr:last-child td {
   width: 25px;
   background-color: #ffffff;
   position: absolute;
-  right: 10px;
+  // right: 10px;
+  border: 1px solid #ffffff;
+}
+.day-task-play-btn {
+  border-radius: 15px;
+  height: 25px;
+  width: 25px;
+  background-color: #ffffff;
+  position: absolute;
+  top: -18px;
+  // right: 10px;
   border: 1px solid #ffffff;
 }
 .fa-pause {
@@ -3607,11 +3617,11 @@ table.scheduler-table tr:last-child td {
   font-family: 'Roboto-Regular', 'Roboto';
   font-weight: 400;
   font-style: normal;
-  font-size: 12px;
+  font-size: 11px;
   color: #424242;
   text-align: right;
   line-height: 9px;
-  padding: 0px 15px 0px 25px;
+  // padding: 0px 15px 0px 9px;
 }
 .task-event-action {
   font-size: 20px;
