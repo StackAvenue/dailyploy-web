@@ -48,9 +48,9 @@ class Dashboard extends Component {
       show: false,
       setShow: false,
       dateFrom: new Date(),
-      dateTo: null,
+      dateTo: new Date(),
       timeFrom: "",
-      timeTo: "",
+      timeTo: null,
       comments: "",
       userId: "",
       userName: "",
@@ -67,7 +67,7 @@ class Dashboard extends Component {
       taskStartDate: moment().format("YYYY-MM-DD"),
       calenderTaskModal: false,
       newTask: {},
-      project: {},
+      project: null,
       taskId: "",
       taskEvent: "",
       selectedMembers: [],
@@ -684,9 +684,15 @@ class Dashboard extends Component {
         selectedMembers: [],
         modalMemberSearchOptions: this.state.newAddedProject
           ? this.state.newAddedProject.members
+          : this.state.project
+          ? this.state.project.members
           : members,
-        project: this.state.newAddedProject ? this.state.newAddedProject : "",
-        memberProjects: this.state.projects,
+        project: this.state.newAddedProject
+          ? this.state.newAddedProject
+          : this.state.project,
+        memberProjects: this.state.project
+          ? this.state.memberProjects
+          : this.state.projects,
         errors: {
           taskNameError: "",
           projectError: "",
@@ -712,7 +718,9 @@ class Dashboard extends Component {
         show: true,
         taskUser: [this.state.userId],
         modalMemberSearchOptions: [selected],
-        project: this.state.newAddedProject ? this.state.newAddedProject : "",
+        project: this.state.newAddedProject
+          ? this.state.newAddedProject
+          : this.state.project,
         memberProjects: memberProjects,
         selectedMembers: [selected],
         errors: {
@@ -729,6 +737,12 @@ class Dashboard extends Component {
     }
   };
 
+  closeOnlyTaskModal = () => {
+    this.setState({
+      show: false
+    });
+  };
+
   closeTaskModal = () => {
     this.setState({
       show: false,
@@ -740,7 +754,7 @@ class Dashboard extends Component {
       modalMemberSearchOptions: [],
       memberProjects: [],
       dateFrom: new Date(),
-      dateTo: null,
+      dateTo: new Date(),
       timeFrom: null,
       timeTo: null,
       timeDateTo: null,
@@ -934,15 +948,26 @@ class Dashboard extends Component {
         taskUser: newSelected.length > 0 ? [memberId] : [],
         selectedMembers: newSelected,
         show: true,
-        taskName: "",
-        project: this.state.newAddedProject ? this.state.newAddedProject : "",
+        // taskName: "",
+        project: this.state.newAddedProject
+          ? this.state.newAddedProject
+          : this.state.project &&
+            this.state.taskUser &&
+            this.state.taskUser[0] == memberId
+          ? this.state.project
+          : null,
         projectId: this.state.newAddedProject
           ? this.state.newAddedProject.id
-          : "",
+          : this.state.project &&
+            this.state.taskUser &&
+            this.state.taskUser[0] == memberId
+          ? this.state.project.id
+          : null,
         taskId: "",
         modalMemberSearchOptions: this.addTaskMembers(members, selecteMember),
         dateFrom: new Date(startDate),
-        dateTo: null,
+        dateTo:
+          new Date(startDate) <= this.state.dateTo ? this.state.dateTo : null,
         border: "solid 1px #ffffff",
         // timeDateTo: moment(),
         timeDateFrom: moment(),
@@ -966,6 +991,12 @@ class Dashboard extends Component {
   addTaskMembers = (members, selecteMember) => {
     if (this.state.newAddedProject) {
       return this.state.newAddedProject.members;
+    } else if (
+      this.state.project &&
+      this.state.taskUser &&
+      this.state.taskUser[0] == selecteMember[0].id
+    ) {
+      return this.state.project.members;
     } else if (members.length > 0) {
       return members;
     }
@@ -1913,7 +1944,7 @@ class Dashboard extends Component {
             <AddTaskModal
               show={this.state.show}
               state={this.state}
-              closeTaskModal={this.closeTaskModal}
+              closeTaskModal={this.closeOnlyTaskModal}
               handleInputChange={this.handleInputChange}
               projects={this.state.memberProjects}
               handleDateFrom={this.handleDateFrom}
