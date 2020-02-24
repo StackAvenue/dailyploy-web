@@ -5,7 +5,10 @@ import Select from "./../Select";
 import moment from "moment";
 import { post, put, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, FULL_DATE, MONTH_FORMAT } from "./../../utils/Constants";
-import { convertUTCToLocalDate } from "./../../utils/function";
+import {
+  convertUTCToLocalDate,
+  getContrastColor
+} from "./../../utils/function";
 import Timer from "./../dashboard/Timer";
 import { Alert, UncontrolledAlert } from "reactstrap";
 import { OverlayTrigger } from "react-bootstrap";
@@ -235,6 +238,7 @@ class DashboardEvent extends Component {
       log => log.status != "running"
     );
     let logs = this.createLogTimes(todaysLog);
+    let contColor = getContrastColor(this.props.bgColor);
     return (
       <>
         {schedulerData.viewType === 0 ? (
@@ -242,7 +246,7 @@ class DashboardEvent extends Component {
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 pointer item-heading text-wraper"
-                style={{ padding: "5px 5px 0px 5px" }}
+                style={{ padding: "5px 5px 0px 5px", color: contColor }}
                 onClick={() => {
                   if (!!eventItemClick) eventItemClick(schedulerData, event);
                 }}
@@ -268,7 +272,7 @@ class DashboardEvent extends Component {
                       <div className={`${this.props.event.priority}`}></div>
                     </div>
                     <div className="col-md-8 no-padding d-inline-block ">
-                      <span className="task-timer">
+                      <span className="task-timer" style={{ color: contColor }}>
                         <Timer
                           totalDuration={totalTrackTime}
                           startOn={this.props.event.startOn}
@@ -390,13 +394,20 @@ class DashboardEvent extends Component {
                   </div>
                 ) : null}
               </div> */}
-              <div className="col-md-12 no-padding">
+              <div
+                className="col-md-12 no-padding"
+                style={{ color: contColor }}
+              >
                 {logs.length > 0 ? (
                   <>
                     <div
                       className="no-padding d-inline-block event-active-log"
                       onClick={() => this.onClickInput()}
-                      style={this.state.show ? { backgroundColor: "#fff" } : {}}
+                      style={
+                        this.state.show
+                          ? { backgroundColor: "#fff" }
+                          : { color: contColor }
+                      }
                     >
                       <li>{logs[0].name}</li>
                     </div>
@@ -434,7 +445,10 @@ class DashboardEvent extends Component {
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding pointer item-heading text-wraper"
-                style={{ padding: "5px 5px 0px 5px" }}
+                style={{
+                  padding: "5px 5px 0px 5px",
+                  color: getContrastColor(this.props.bgColor)
+                }}
                 onClick={() => {
                   if (!!eventItemClick) eventItemClick(schedulerData, event);
                 }}
@@ -460,7 +474,7 @@ class DashboardEvent extends Component {
                     <div className={`${this.props.event.priority}`}></div>
                   </div>
                   <div className="col-md-8 no-padding d-inline-block ">
-                    <span className="task-timer">
+                    <span className="task-timer" style={{ color: contColor }}>
                       <Timer
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
@@ -515,13 +529,20 @@ class DashboardEvent extends Component {
               ) : null}
             </div>
             <div className="row item dashboard-event-box">
-              <div className="col-md-12 no-padding">
+              <div
+                className="col-md-12 no-padding"
+                style={{ color: contColor }}
+              >
                 {logs.length > 0 ? (
                   <>
                     <div
                       className="no-padding d-inline-block event-active-log"
                       onClick={() => this.onClickInput()}
-                      style={this.state.show ? { backgroundColor: "#fff" } : {}}
+                      style={
+                        this.state.show
+                          ? { color: contColor, backgroundColor: "#fff" }
+                          : { color: contColor }
+                      }
                     >
                       <li>{logs[0].name}</li>
                     </div>
