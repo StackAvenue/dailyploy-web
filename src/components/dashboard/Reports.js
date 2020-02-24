@@ -554,7 +554,8 @@ class Reports extends Component {
         var projectReportData = data.report_data
           ? {
               data: data.report_data,
-              estimateTime: data.total_estimated_time
+              estimateTime: data.total_estimated_time,
+              capacity: data.capacity
             }
           : "";
       } catch (e) {}

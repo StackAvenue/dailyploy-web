@@ -200,7 +200,9 @@ class ColumnChart extends Component {
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
     let s = Math.floor((totalSeconds % 3600) % 60);
-    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+    return (
+      ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) + ":" + ("0" + m).slice(-2)
+    );
   };
 
   getPercentageData = (totalTime, trackedTime) => {
@@ -287,7 +289,7 @@ class ColumnChart extends Component {
       });
       return [
         {
-          name: "Scheduled",
+          name: "Remaining Capacity",
           data: dailyScheduled,
           color: CHART_COLOR.scheduled
         },
@@ -387,7 +389,7 @@ class ColumnChart extends Component {
       });
       return [
         {
-          name: "Scheduled",
+          name: "Remaining Capacity",
           data: weeklyScheduled,
           color: CHART_COLOR.scheduled
         },
@@ -487,7 +489,7 @@ class ColumnChart extends Component {
       });
       return [
         {
-          name: "Scheduled",
+          name: "Remaining Capacity",
           data: monthlyScheduled,
           color: CHART_COLOR.scheduled
         },

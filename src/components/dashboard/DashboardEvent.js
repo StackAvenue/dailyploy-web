@@ -206,7 +206,10 @@ class DashboardEvent extends Component {
       var h = Math.floor(totalSeconds / 3600);
       var m = Math.floor((totalSeconds % 3600) / 60);
       var s = Math.floor((totalSeconds % 3600) % 60);
-      var timeDiff = ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+      var timeDiff =
+        ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+        ":" +
+        ("0" + m).slice(-2);
     }
     return timeDiff;
   };
