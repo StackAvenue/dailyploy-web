@@ -63,5 +63,5 @@ export const getMiddleDates = (start, end) => {
 
 export const getContrastColor = hexcolor => {
   var hexcolor = hexcolor.split("#")[1];
-  return parseInt(hexcolor, 16) > 0xffffff / 2 ? "black" : "white";
+  return parseInt(hexcolor, 16) > 0xffffff / 2 ? "black" : "#dcdcdc";
 };

@@ -585,8 +585,8 @@ class Dashboard extends Component {
           newTask: task,
           border: "solid 1px #ffffff",
           taskName: "",
-          project: "",
-          taskCategorie: "",
+          project: null,
+          taskCategorie: null,
           taskloader: false
         });
         this.closeTaskModal();
