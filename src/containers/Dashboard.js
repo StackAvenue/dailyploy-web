@@ -637,11 +637,16 @@ class Dashboard extends Component {
   taskDetails = () => {
     var startDateTime =
       moment(this.state.dateFrom).format(DATE_FORMAT1) +
-      (this.state.timeFrom ? " " + this.state.timeFrom : " 00:00:00");
+      (this.state.timeFrom && this.state.timeTo
+        ? " " + this.state.timeFrom
+        : " 00:00:00");
     var endDateTime =
       moment(this.state.dateTo ? this.state.dateTo : new Date()).format(
         DATE_FORMAT1
-      ) + (this.state.timeTo ? " " + this.state.timeTo : " 00:00:00");
+      ) +
+      (this.state.timeTo && this.state.timeFrom
+        ? " " + this.state.timeTo
+        : " 00:00:00");
 
     var taskData = {
       task: {
@@ -898,6 +903,14 @@ class Dashboard extends Component {
         isBorder: false,
         errors: errors
       });
+    } else {
+      this.setState({
+        projectId: null,
+        selectedMembers: [],
+        project: option,
+        taskUser: [],
+        modalMemberSearchOptions: []
+      });
     }
   };
 
@@ -1009,9 +1022,8 @@ class Dashboard extends Component {
     errors["taskNameError"] = this.state.taskName
       ? ""
       : "please enter task name";
-    errors["projectError"] = this.state.projectId
-      ? ""
-      : "please select project";
+    errors["projectError"] =
+      this.state.projectId && this.state.project ? "" : "please select project";
     errors["memberError"] =
       this.state.taskUser.length > 0 ? "" : "please select members";
     errors["dateFromError"] = this.state.dateFrom
@@ -1020,7 +1032,7 @@ class Dashboard extends Component {
     errors["categoryError"] = this.state.taskCategorie
       ? ""
       : "please select category";
-    if (!this.state.dateTo && this.state.dateFrom) {
+    if (this.state.dateTo == null && this.state.dateFrom != null) {
       if (
         moment(this.state.dateFrom).format(DATE_FORMAT1) ===
         moment().format(DATE_FORMAT1)
@@ -1033,6 +1045,20 @@ class Dashboard extends Component {
     }
     if (!this.state.timeTo && !this.state.timeFrom) {
       errors["timeFromError"] = "";
+      errors["timeToError"] = "";
+    } else if (
+      this.state.timeFrom &&
+      !this.state.timeTo &&
+      moment(this.state.dateFrom).format(DATE_FORMAT1) !==
+        moment().format(DATE_FORMAT1)
+    ) {
+      errors["timeToError"] = "please select time to";
+    } else if (
+      this.state.timeFrom &&
+      !this.state.timeTo &&
+      moment(this.state.dateFrom).format(DATE_FORMAT1) ===
+        moment().format(DATE_FORMAT1)
+    ) {
       errors["timeToError"] = "";
     } else if (
       (this.state.timeFrom != "" || this.state.timeFrom !== null) &&
@@ -1052,6 +1078,7 @@ class Dashboard extends Component {
     return (
       this.state.taskName &&
       this.state.projectId &&
+      this.state.project &&
       this.state.taskUser.length > 0 &&
       this.validateTime() &&
       this.state.dateFrom &&
@@ -1061,27 +1088,21 @@ class Dashboard extends Component {
   };
 
   validateTime = () => {
-    // if (
-    //   (this.state.timeFrom != "" || this.state.timeFrom != null) &&
-    //   (this.state.timeTo == "" || this.state.timeTo == null)
-    // ) {
-    //   return false;
-    // } else if (
-    //   (this.state.timeFrom == "" || this.state.timeFrom == null) &&
-    //   (this.state.timeTo != "" || this.state.timeTo != null)
-    // ) {
-    //   return false;
-    // } else {
-    //   return true;
-    // }
-    if (this.state.timeFrom && this.state.timeTo) {
+    if (this.state.timeFrom == null && this.state.timeTo == null) {
       return true;
-    } else if (this.state.timeFrom && !this.state.timeTo) {
-      return false;
-    } else if (!this.state.timeFrom && this.state.timeTo) {
+    } else if (this.state.timeFrom != null && this.state.timeTo != null) {
+      return true;
+    } else if (
+      this.state.timeFrom != null &&
+      this.state.timeTo == null &&
+      moment(this.state.dateFrom).format(DATE_FORMAT1) ===
+        moment().format(DATE_FORMAT1)
+    ) {
+      return true;
+    } else if (this.state.timeFrom == null && this.state.timeTo != null) {
       return false;
     } else {
-      return true;
+      return false;
     }
   };
 
@@ -1402,7 +1423,9 @@ class Dashboard extends Component {
   };
 
   handleCategoryChange = option => {
-    this.setState({ taskCategorie: option });
+    var errors = this.state.errors;
+    errors["categoryError"] = "";
+    this.setState({ taskCategorie: option, errors: errors });
   };
 
   handlePrioritiesChange = option => {
