@@ -195,6 +195,31 @@ class SearchFilter extends Component {
     }
   };
 
+  handleKeyPress = event => {
+    if (event.keyCode === 13 && this.state.memberSuggestions.length > 0) {
+      let option = this.state.memberSuggestions[0];
+      var newSelectedTags = new Array(...this.state.selectedTags);
+      newSelectedTags.push(option);
+      this.setState({
+        selectedTags: newSelectedTags,
+        value: "",
+        show: false
+      });
+    } else if (
+      event.keyCode === 13 &&
+      this.state.projectSuggestions.length > 0
+    ) {
+      let option = this.state.projectSuggestions[0];
+      var newSelectedTags = new Array(...this.state.selectedTags);
+      newSelectedTags.push(option);
+      this.setState({
+        selectedTags: newSelectedTags,
+        value: "",
+        show: false
+      });
+    }
+  };
+
   renderSearchSuggestion = () => {
     let selectedMember = this.state.selectedTags.find(
       option => option.type === "member"
@@ -217,6 +242,7 @@ class SearchFilter extends Component {
                 value={this.state.value}
                 onChange={this.onSearchTextChange}
                 placeholder={this.returnPlaceHolder(selectedMember)}
+                onKeyUp={this.handleKeyPress}
               />
             </div>
             {this.state.memberSuggestions.length > 0 ? (

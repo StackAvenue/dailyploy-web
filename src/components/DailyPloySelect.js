@@ -194,7 +194,7 @@ class DailyPloySelect extends Component {
     this.props.onChange(option);
   };
 
-  handleBackSpace = event => {
+  handleKeyPress = event => {
     if (event.keyCode === 8 && this.state.searchText.length === 0) {
       this.setState({
         canBack: true,
@@ -202,6 +202,11 @@ class DailyPloySelect extends Component {
         suggestions: this.props.options
       });
       this.props.onChange(null);
+    }
+    if (event.keyCode === 13 && this.state.suggestions.length > 0) {
+      let option = this.state.suggestions[0];
+      this.setState({ selected: option, show: false, searchText: "" });
+      this.props.onChange(option);
     }
   };
 
@@ -257,7 +262,7 @@ class DailyPloySelect extends Component {
                     : ""
                 }`}
                 onChange={this.onSearchTextChange}
-                onKeyUp={this.handleBackSpace}
+                onKeyUp={this.handleKeyPress}
               />
               {this.state.show ? (
                 <div className="suggestions">
