@@ -295,7 +295,7 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none"
                       }}
-                      className="task-play-btn pointer"
+                      className="day-task-play-btn pointer"
                       onClick={() =>
                         this.props.handleTaskStop(event, Date.now())
                       }
@@ -325,78 +325,12 @@ class DashboardEvent extends Component {
 
                 {event.status === "completed" ? (
                   <div className="col-md-2 no-padding d-inline-block">
-                    <span className="task-play-btn">
+                    <span className="day-task-play-btn">
                       <i className="fa fa-check"></i>
                     </span>
                   </div>
                 ) : null}
               </div>
-              {/* <div className="d-inline-block">
-                <OverlayTrigger
-                  placement="auto"
-                  trigger="hover"
-                  overlay={this.props.eventItemPopoverTemplateResolver(
-                    schedulerData,
-                    event,
-                    titleText,
-                    start,
-                    end,
-                    this.props.bgColor
-                  )}
-                >
-                  <div
-                    className="d-inline-block"
-                    style={{ position: "relative" }}
-                  >
-                    <div
-                      className={`d-inline-block ${this.props.event.priority}`}
-                    ></div>
-                    <div className="d-inline-block task-timer">
-                      <Timer
-                        totalDuration={totalTrackTime}
-                        startOn={this.props.event.startOn}
-                        isStart={this.props.event.startOn ? true : false}
-                      />
-                    </div>
-                  </div>
-                </OverlayTrigger>
-
-                {event.trackingStatus === "pause" ? (
-                  <div
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.props.handleTaskStop(event, Date.now())}
-                  >
-                    <i className="fa fa-pause"></i>
-                  </div>
-                ) : null}
-
-                {event.trackingStatus === "play" ? (
-                  <div
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className="d-inline-block task-play-btn pointer"
-                    onClick={() =>
-                      this.props.handleTaskStart(event, Date.now())
-                    }
-                  >
-                    <i className="fa fa-play"></i>
-                  </div>
-                ) : null}
-
-                {event.status === "completed" ? (
-                  <div className="d-inline-block task-play-btn">
-                    <i className="fa fa-check"></i>
-                  </div>
-                ) : null}
-              </div> */}
               <div
                 className="col-md-12 no-padding"
                 style={{ color: contColor }}
@@ -421,7 +355,7 @@ class DashboardEvent extends Component {
                     className="no-padding d-inline-block no-track-time text-right"
                     style={{ fontSize: "12px" }}
                   >
-                    <span> No Tracked time</span>
+                    <span>No tracked time</span>
                   </div>
                 )}
                 <div
@@ -556,7 +490,7 @@ class DashboardEvent extends Component {
                     className="no-padding d-inline-block no-track-time text-right"
                     style={{ fontSize: "12px" }}
                   >
-                    <span> No Tracked time</span>
+                    <span>No tracked time</span>
                   </div>
                 )}
                 <div
