@@ -580,15 +580,28 @@ class Dashboard extends Component {
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
+        let dates = getMiddleDates(task.start_datetime, task.end_datetime);
+        let taskObjects = dates.map(date => {
+          return this.createTaskSyncObject(date, task, this.state.project);
+        });
+        var events = [this.state.events, ...taskObjects].flat();
         this.setState({
           show: false,
-          newTask: task,
+          // newTask: task,
+          events: events,
           border: "solid 1px #ffffff",
           taskName: "",
           project: null,
           taskCategorie: null,
           taskloader: false
         });
+        if (
+          !this.state.status &&
+          moment(task.start_datetime).format(DATE_FORMAT1) ==
+            moment().format(DATE_FORMAT1)
+        ) {
+          this.handleTaskStartOnly(taskObjects[0], Date.now());
+        }
         this.closeTaskModal();
       } catch (e) {
         this.setState({
@@ -1498,6 +1511,10 @@ class Dashboard extends Component {
     if (this.state.status && this.state.trackingEvent) {
       this.handleTaskStop(this.state.trackingEvent, Date.now());
     }
+    this.handleTaskStartOnly(eventTask, dateTime);
+  };
+
+  handleTaskStartOnly = async (eventTask, dateTime) => {
     if (eventTask && dateTime) {
       var taskId = eventTask.id.split("-")[0];
       var taskDate = {
@@ -1783,7 +1800,7 @@ class Dashboard extends Component {
     }
   };
 
-  createTaskSyncObject = (date, task) => {
+  createTaskSyncObject = (date, task, project) => {
     let startDateTime =
       moment(date).format(DATE_FORMAT1) +
       " " +
@@ -1812,10 +1829,10 @@ class Dashboard extends Component {
       taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
       resourceId: task.members.length > 0 ? task.members[0].id : null,
       title: task.name,
-      bgColor: task.project.color_code,
-      projectName: task.project.name,
+      bgColor: project ? project.color_code : task.project.color_code,
+      projectName: project ? project.name : task.project.name,
       comments: task.comments ? task.comments : "",
-      projectId: task.project.id,
+      projectId: project ? project.id : task.project.id,
       timeTracked: [],
       allTimeTracked: [],
       priority: task.priority,
