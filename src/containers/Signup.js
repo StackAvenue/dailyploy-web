@@ -336,7 +336,7 @@ class Signup extends Component {
                   </div> */}
                   <br />
                   <div className="col-md-8 offset-2 googleIcon">
-                    <span>Already have DailyPloy account?</span>
+                    <span>Already have DailyPloy Account?</span>
                     <Link to={`/login`} className="link">
                       Sign in
                     </Link>

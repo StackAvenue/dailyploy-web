@@ -80,7 +80,7 @@ const Company = props => {
             <label>
               Password
               <i className="fa fa-info-circle tooltip d-inline-block">
-                <span class="tooltiptext">
+                <span className="tooltiptext">
                   Min 8 characters at least 1 number and 1 special character
                 </span>
               </i>
