@@ -1728,7 +1728,7 @@ table.scheduler-table tr:last-child td {
         border: solid 2px #fffcfc;
         color: #fff;
         font-size: 10px;
-        background-color: $color-projectList;
+        background-color: #94a98e;
         display: inline-block;
         text-align: center;
         padding-top: 4px;
@@ -1742,7 +1742,7 @@ table.scheduler-table tr:last-child td {
         border: solid 2px #fffcfc;
         color: #fff;
         font-size: 10px;
-        background-color: $color-projectList;
+        background-color: #94a98e;
         display: inline-block;
         text-align: center;
         padding-top: 6px;
@@ -1817,6 +1817,11 @@ table.scheduler-table tr:last-child td {
     .active {
       border-color: $color-brand3 !important;
     }
+    .proj-grid-edit{
+      top: -5px !important;
+      position: absolute;
+      right: -10px;
+    }
   }
   table {
     width: 100% !important;
@@ -1850,7 +1855,7 @@ table.scheduler-table tr:last-child td {
         border: solid 2px #fffcfc;
         color: #fff;
         font-size: 10px;
-        background-color: $color-projectList;
+        background-color: #94a98e;
         display: inline-block;
         text-align: center;
         padding-top: 4px;
@@ -4934,15 +4939,15 @@ table.scheduler-table tr:last-child td {
     z-index: 500 !important;
     font-size: 10px !important;
     font-family: $font-family-roboto !important;
-    color: $color-heading3 !important;
+    color: $color-heading3;
     padding: 2px !important;
     li{
       list-style-type: none;
     }
-    li:hover{
-      background-color: $color-white;
+    li:hover ~ .log-angle-down{
+      background-color: $color-white !important;
       border: solid 1px #5c5c5c !important;
-      color: black;
+      color: black !important;
     }
   }
   .log-angle-down{

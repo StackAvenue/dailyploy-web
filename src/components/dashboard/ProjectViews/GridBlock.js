@@ -1,12 +1,12 @@
 import React from "react";
-import { firstTwoLetter } from "../../../utils/function";
+import { firstTwoLetter, textTitlize } from "../../../utils/function";
 
 const GridBlock = props => {
   return (
     <div className="grid-div" key={props.index}>
       <div className="col-md-12 id">
         {`${"P-00"}${props.index + 1}`}{" "}
-        <div className="pull-right">
+        <div className="proj-grid-edit">
           <input
             className="styled-checkbox"
             id={`styled-checkbox-${props.index}`}
@@ -15,12 +15,21 @@ const GridBlock = props => {
             onChange={e => props.handleCheck(e, props.project)}
           />
           <label htmlFor={`styled-checkbox-${props.index}`}></label>
+          <button
+            className="btn"
+            onClick={() => props.handleEditShow(props.project)}
+          >
+            <i className="fas fa-pencil-alt"></i>
+          </button>
         </div>
       </div>
       <div className="col-md-12 name text-titlize">{props.project.name}</div>
       <div className="col-md-12 no-padding">
         <div className="col-md-2 d-inline-block no-padding">
-          <div className="owner-block">
+          <div
+            className="owner-block"
+            title={textTitlize(props.project.owner.name)}
+          >
             {firstTwoLetter(props.project.owner.name)}
           </div>
         </div>
@@ -28,7 +37,11 @@ const GridBlock = props => {
           <span>
             {props.project.members.slice(0, 4).map((user, index) => {
               return (
-                <div key={index} className="user-block">
+                <div
+                  key={index}
+                  className="user-block"
+                  title={textTitlize(user.name)}
+                >
                   <span>{firstTwoLetter(user.name)}</span>
                 </div>
               );

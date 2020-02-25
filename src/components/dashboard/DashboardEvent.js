@@ -340,15 +340,26 @@ class DashboardEvent extends Component {
                     <div
                       className="no-padding d-inline-block event-active-log"
                       onClick={() => this.onClickInput()}
+                      style={this.state.show ? { backgroundColor: "#fff" } : {}}
+                    >
+                      <li
+                        style={
+                          this.state.show
+                            ? { color: "#000" }
+                            : { color: contColor }
+                        }
+                      >
+                        {logs[0].name}
+                      </li>
+                    </div>
+                    <i
                       style={
                         this.state.show
-                          ? { backgroundColor: "#fff" }
+                          ? { color: "#000" }
                           : { color: contColor }
                       }
-                    >
-                      <li>{logs[0].name}</li>
-                    </div>
-                    <i className="fa fa-angle-down log-angle-down"></i>
+                      className="fa fa-angle-down log-angle-down"
+                    ></i>
                   </>
                 ) : (
                   <div
@@ -478,12 +489,27 @@ class DashboardEvent extends Component {
                       style={
                         this.state.show
                           ? { color: contColor, backgroundColor: "#fff" }
-                          : { color: contColor }
+                          : {}
                       }
                     >
-                      <li>{logs[0].name}</li>
+                      <li
+                        style={
+                          this.state.show
+                            ? { color: "#000" }
+                            : { color: contColor }
+                        }
+                      >
+                        {logs[0].name}
+                      </li>
                     </div>
-                    <i className="fa fa-angle-down log-angle-down"></i>
+                    <i
+                      style={
+                        this.state.show
+                          ? { color: "#000" }
+                          : { color: contColor }
+                      }
+                      className="fa fa-angle-down log-angle-down"
+                    ></i>
                   </>
                 ) : (
                   <div
