@@ -640,7 +640,8 @@ class Reports extends Component {
   calculateTotalSecond = (tasks, date) => {
     var totalSec = 0;
     tasks.map((task, idx) => {
-      totalSec += this.addTotalDuration(task.time_tracked);
+      // totalSec += this.addTotalDuration(task.time_tracked);
+      totalSec += task.duration;
     });
     return totalSec;
   };
