@@ -12,6 +12,8 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 class AddProjectModal extends Component {
   constructor(props) {
     super(props);
+    this.calendarFromRef = React.createRef();
+    this.calendarToRef = React.createRef();
     this.state = {
       members: [],
       displayColorPicker: false,
@@ -90,6 +92,14 @@ class AddProjectModal extends Component {
     this.props.handleChangeComplete(color, event);
   };
 
+  openFromCalender = () => {
+    this.calendarFromRef.current.setOpen(true);
+  };
+
+  openToCalender = () => {
+    this.calendarToRef.current.setOpen(true);
+  };
+
   render() {
     const { props } = this;
 
@@ -148,11 +158,19 @@ class AddProjectModal extends Component {
                   </div>
                   <div className="d-inline-block calender-icon">
                     <DatePicker
+                      ref={this.calendarFromRef}
                       selected={props.state.dateFrom}
                       onChange={props.handleDateFrom}
                       placeholderText="Select Date"
                       value={props.state.dateFrom}
                     />
+                    <span style={{ position: "relative", right: "40px" }}>
+                      <i
+                        onClick={this.openFromCalender}
+                        className="fa fa-calendar"
+                        aria-hidden="true"
+                      ></i>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -171,6 +189,7 @@ class AddProjectModal extends Component {
                     </div>
                     <div className="d-inline-block calender-icon">
                       <DatePicker
+                        ref={this.calendarToRef}
                         style={{ backgroundColor: props.state.disableColor }}
                         minDate={props.state.dateFrom}
                         selected={props.state.dateTo}
@@ -179,6 +198,13 @@ class AddProjectModal extends Component {
                         disabled={props.state.disabledDateTo}
                         value={props.state.dateTo}
                       />
+                      <span style={{ position: "relative", right: "40px" }}>
+                        <i
+                          onClick={this.openToCalender}
+                          className="fa fa-calendar"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
                     </div>
                   </div>
 

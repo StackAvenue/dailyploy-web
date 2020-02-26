@@ -28,6 +28,9 @@ import Loader from "react-loader-spinner";
 class Reports extends Component {
   constructor(props) {
     super(props);
+    this.calendarDayRef = React.createRef();
+    this.calendarWeekRef = React.createRef();
+    this.calendarMonthRef = React.createRef();
     this.calenderArr = ["daily", "weekly", "monthly"];
     this.now = moment()
       .hour(0)
@@ -944,16 +947,36 @@ class Reports extends Component {
     }
   };
 
+  openDayCalender = () => {
+    this.calendarDayRef.current.setOpen(true);
+  };
+
+  openWeekCalender = () => {
+    this.calendarWeekRef.current.setOpen(true);
+  };
+
+  openMonthCalender = () => {
+    this.calendarMonthRef.current.setOpen(true);
+  };
+
   render() {
     const Daily = props => {
       return (
         <>
           <DatePicker
+            ref={this.calendarDayRef}
             selected={this.state.dateFrom}
             onChange={this.handleDateFrom}
             startDate={this.state.dateFrom}
             dateFormat="dd MMMM, yyyy"
           />
+          <span style={{ position: "relative", right: "20px" }}>
+            <i
+              onClick={this.openDayCalender}
+              className="fa fa-calendar"
+              aria-hidden="true"
+            ></i>
+          </span>
         </>
       );
     };
@@ -962,11 +985,19 @@ class Reports extends Component {
       return (
         <>
           <DatePicker
+            ref={this.calendarMonthRef}
             selected={this.state.dateFrom}
             onChange={this.handleMonthlyDateFrom}
             dateFormat="MMMM yyyy"
             showMonthYearPicker
           />
+          <span style={{ position: "relative", right: "20px" }}>
+            <i
+              onClick={this.openMonthCalender}
+              className="fa fa-calendar"
+              aria-hidden="true"
+            ></i>
+          </span>
         </>
       );
     };
@@ -976,6 +1007,7 @@ class Reports extends Component {
         <>
           <div className="week-hover-bg d-inline-block">
             <DatePicker
+              ref={this.calendarWeekRef}
               showWeekNumbers
               selected={this.state.dateFrom}
               onChange={this.handleDayChange}
@@ -985,6 +1017,13 @@ class Reports extends Component {
               value={this.state.displayWeek}
               showWeekNumbers
             />
+            <span style={{ position: "relative", right: "20px" }}>
+              <i
+                onClick={this.openWeekCalender}
+                className="fa fa-calendar"
+                aria-hidden="true"
+              ></i>
+            </span>
           </div>
         </>
       );
@@ -1002,7 +1041,7 @@ class Reports extends Component {
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
             <div className="reports-container col-sm-offset-2">
-              <div className="reports-btns ">
+              <div className="reports-btns">
                 <div className="SelectedWeekExample">
                   <button
                     onClick={this.setPreviousDate}

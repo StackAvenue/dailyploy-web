@@ -1660,6 +1660,7 @@ class Dashboard extends Component {
   }
 
   handleTaskCreate = async workspaceId => {
+    console.log("task handleTaskUpdate");
     base
       .database()
       .ref(`task_created/${workspaceId}`)
@@ -1682,6 +1683,7 @@ class Dashboard extends Component {
   };
 
   handleTaskDelete = async workspaceId => {
+    console.log("handleTaskDelete");
     base
       .database()
       .ref(`task_deleted/${workspaceId}`)
@@ -1699,6 +1701,7 @@ class Dashboard extends Component {
   };
 
   handleTaskRunning = async workspaceId => {
+    console.log("handleTaskRunning");
     base
       .database()
       .ref(`task_running/${workspaceId}`)
@@ -1720,6 +1723,8 @@ class Dashboard extends Component {
   };
 
   handleTaskSyncStop = async workspaceId => {
+    console.log("handleTaskSyncStop");
+
     base
       .database()
       .ref(`task_stopped/${workspaceId}`)
@@ -1740,6 +1745,7 @@ class Dashboard extends Component {
   };
 
   loadUserTask = async workspaceId => {
+    console.log("load task");
     if (this.state.workspaceId) {
       try {
         var userIds =
@@ -1886,6 +1892,7 @@ class Dashboard extends Component {
   };
 
   handleTaskUpdate = async workspaceId => {
+    console.log("task handleTaskUpdate");
     base
       .database()
       .ref(`task_update/${workspaceId}`)
