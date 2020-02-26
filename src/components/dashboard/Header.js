@@ -139,7 +139,7 @@ class Header extends Component {
                 id="navbarTogglerDemo03"
               >
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-                  <Dropdown>
+                  {/* <Dropdown>
                     <Dropdown.Toggle
                       variant="link"
                       id="dropdown-basic"
@@ -209,7 +209,7 @@ class Header extends Component {
                         </div>
                       </Dropdown.Item>
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className={`header-auth-btn text-titlize ${
