@@ -220,7 +220,7 @@ class SummuryReportCharts extends Component {
         <div className="legend d-inline-block">
           <div className="d-inline-block">
             <span className="box d-inline-block"></span>
-            <span className="text">Remaining Scheduled Time (hours)</span>
+            <span className="text">Remaining Capacity (hours)</span>
           </div>
           <div className="d-inline-block">
             <span className="box stripe-2 d-inline-block"></span>

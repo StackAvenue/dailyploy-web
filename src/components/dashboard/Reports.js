@@ -634,7 +634,7 @@ class Reports extends Component {
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
     let s = Math.floor((totalSeconds % 3600) % 60);
-    return h + "h" + " " + m + "m";
+    return h + "H" + " " + m + "M";
   };
 
   calculateTotalSecond = (tasks, date) => {
