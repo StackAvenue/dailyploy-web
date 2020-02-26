@@ -89,7 +89,7 @@ class TaskBottomPopup extends Component {
             </>
           ) : (
             <div style={{ paddingLeft: "35px" }} className="d-inline-block">
-              no tracked time
+              No tracked time
             </div>
           )}
         </div>

@@ -554,7 +554,8 @@ class Reports extends Component {
         var projectReportData = data.report_data
           ? {
               data: data.report_data,
-              estimateTime: data.total_estimated_time
+              estimateTime: data.total_estimated_time,
+              capacity: data.capacity
             }
           : "";
       } catch (e) {}
@@ -639,7 +640,8 @@ class Reports extends Component {
   calculateTotalSecond = (tasks, date) => {
     var totalSec = 0;
     tasks.map((task, idx) => {
-      totalSec += this.addTotalDuration(task.time_tracked);
+      // totalSec += this.addTotalDuration(task.time_tracked);
+      totalSec += task.duration;
     });
     return totalSec;
   };

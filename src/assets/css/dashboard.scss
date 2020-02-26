@@ -681,7 +681,7 @@
 }
 
 .task-modal {
-  top: 9% !important;
+  top: 2.5% !important;
   margin: auto !important;
   // max-width: 626px !important;
   .modal-content {
@@ -1419,7 +1419,7 @@ table.scheduler-table tr:last-child td {
           }
         }
         .ant-col {
-          width: calc(100% - 291px);
+          width: calc(100% - 295px);
           text-align: center;
           .dashboard-calender {
             margin-left: 0 !important;
@@ -1728,7 +1728,7 @@ table.scheduler-table tr:last-child td {
         border: solid 2px #fffcfc;
         color: #fff;
         font-size: 10px;
-        background-color: $color-projectList;
+        background-color: #94a98e;
         display: inline-block;
         text-align: center;
         padding-top: 4px;
@@ -1742,7 +1742,7 @@ table.scheduler-table tr:last-child td {
         border: solid 2px #fffcfc;
         color: #fff;
         font-size: 10px;
-        background-color: $color-projectList;
+        background-color: #94a98e;
         display: inline-block;
         text-align: center;
         padding-top: 6px;
@@ -1817,6 +1817,11 @@ table.scheduler-table tr:last-child td {
     .active {
       border-color: $color-brand3 !important;
     }
+    .proj-grid-edit{
+      top: -5px !important;
+      position: absolute;
+      right: -10px;
+    }
   }
   table {
     width: 100% !important;
@@ -1850,7 +1855,7 @@ table.scheduler-table tr:last-child td {
         border: solid 2px #fffcfc;
         color: #fff;
         font-size: 10px;
-        background-color: $color-projectList;
+        background-color: #94a98e;
         display: inline-block;
         text-align: center;
         padding-top: 4px;
@@ -3588,7 +3593,17 @@ table.scheduler-table tr:last-child td {
   width: 25px;
   background-color: #ffffff;
   position: absolute;
-  right: 10px;
+  // right: 10px;
+  border: 1px solid #ffffff;
+}
+.day-task-play-btn {
+  border-radius: 15px;
+  height: 25px;
+  width: 25px;
+  background-color: #ffffff;
+  position: absolute;
+  top: -18px;
+  // right: 10px;
   border: 1px solid #ffffff;
 }
 .fa-pause {
@@ -3607,11 +3622,11 @@ table.scheduler-table tr:last-child td {
   font-family: 'Roboto-Regular', 'Roboto';
   font-weight: 400;
   font-style: normal;
-  font-size: 12px;
+  font-size: 11px;
   color: #424242;
   text-align: right;
   line-height: 9px;
-  padding: 0px 15px 0px 25px;
+  // padding: 0px 15px 0px 9px;
 }
 .task-event-action {
   font-size: 20px;
@@ -3745,7 +3760,7 @@ table.scheduler-table tr:last-child td {
   position: fixed;
   right: 94px;
   bottom: 20px;
-  z-index: 1111;
+  z-index: 1040;
   width: 457px;
   height: 40px;
   background: inherit;
@@ -4924,14 +4939,15 @@ table.scheduler-table tr:last-child td {
     z-index: 500 !important;
     font-size: 10px !important;
     font-family: $font-family-roboto !important;
-    color: $color-heading3 !important;
+    color: $color-heading3;
     padding: 2px !important;
     li{
       list-style-type: none;
     }
-    li:hover{
-      background-color: $color-white;
+    li:hover ~ .log-angle-down{
+      background-color: $color-white !important;
       border: solid 1px #5c5c5c !important;
+      color: black !important;
     }
   }
   .log-angle-down{

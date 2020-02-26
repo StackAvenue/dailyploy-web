@@ -4,7 +4,11 @@ import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import Select from "./../Select";
 import moment from "moment";
 import { post, put, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
+import { DATE_FORMAT1, FULL_DATE, MONTH_FORMAT } from "./../../utils/Constants";
+import {
+  convertUTCToLocalDate,
+  getContrastColor
+} from "./../../utils/function";
 import Timer from "./../dashboard/Timer";
 import { Alert, UncontrolledAlert } from "reactstrap";
 import { OverlayTrigger } from "react-bootstrap";
@@ -185,6 +189,31 @@ class DashboardEvent extends Component {
     });
   };
 
+  calculateTime = event => {
+    var start = new Date(
+      moment(convertUTCToLocalDate(event.taskStartDateTime)).format(FULL_DATE)
+    );
+    var end = new Date(
+      moment(convertUTCToLocalDate(event.taskEndDateTime)).format(FULL_DATE)
+    );
+    var timeDiff = "00:00";
+    if (
+      moment(start).format("HH:mm") != "00:00" &&
+      moment(end).format("HH:mm") != "00:00"
+    ) {
+      let totalSeconds = (end - start) / 1000;
+      totalSeconds = Number(totalSeconds);
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = Math.floor((totalSeconds % 3600) % 60);
+      var timeDiff =
+        ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+        ":" +
+        ("0" + m).slice(-2);
+    }
+    return timeDiff;
+  };
+
   onClickOutside = () => {
     this.setState({
       show: !this.state.show,
@@ -212,14 +241,15 @@ class DashboardEvent extends Component {
       log => log.status != "running"
     );
     let logs = this.createLogTimes(todaysLog);
+    let contColor = getContrastColor(this.props.bgColor);
     return (
       <>
-        {schedulerData.viewType === 0 || schedulerData.viewType === 1 ? (
+        {schedulerData.viewType === 0 ? (
           <div key={event.id} className={mustAddCssClass} style={divStyle}>
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 pointer item-heading text-wraper"
-                style={{ padding: "5px 5px 0px 5px" }}
+                style={{ padding: "5px 5px 0px 5px", color: contColor }}
                 onClick={() => {
                   if (!!eventItemClick) eventItemClick(schedulerData, event);
                 }}
@@ -227,7 +257,7 @@ class DashboardEvent extends Component {
                 {titleText}
               </div>
 
-              <div className="d-inline-block">
+              <div className="col-md-12 no-padding">
                 <OverlayTrigger
                   placement="auto"
                   trigger="hover"
@@ -240,60 +270,71 @@ class DashboardEvent extends Component {
                     this.props.bgColor
                   )}
                 >
-                  <div
-                    className="d-inline-block"
-                    style={{ position: "relative" }}
-                  >
-                    <div
-                      className={`d-inline-block ${this.props.event.priority}`}
-                    ></div>
-                    <div className="d-inline-block task-timer">
-                      <Timer
-                        totalDuration={totalTrackTime}
-                        startOn={this.props.event.startOn}
-                        isStart={this.props.event.startOn ? true : false}
-                      />
+                  <div className="col-md-10 no-padding d-inline-block">
+                    <div className="col-md-2 no-padding d-inline-block">
+                      <div className={`${this.props.event.priority}`}></div>
+                    </div>
+                    <div className="col-md-8 no-padding d-inline-block ">
+                      <span className="task-timer" style={{ color: contColor }}>
+                        <Timer
+                          totalDuration={totalTrackTime}
+                          startOn={this.props.event.startOn}
+                          isStart={this.props.event.startOn ? true : false}
+                        />
+                        {" of"} {this.calculateTime(event)}
+                      </span>
                     </div>
                   </div>
                 </OverlayTrigger>
 
                 {event.trackingStatus === "pause" ? (
-                  <div
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className="d-inline-block task-play-btn pointer"
-                    onClick={() => this.props.handleTaskStop(event, Date.now())}
-                  >
-                    <i className="fa fa-pause"></i>
+                  <div className="col-md-2 no-padding d-inline-block">
+                    <span
+                      style={{
+                        pointerEvents: this.isValidUserDate(event.resourceId)
+                          ? ""
+                          : "none"
+                      }}
+                      className="day-task-play-btn pointer"
+                      onClick={() =>
+                        this.props.handleTaskStop(event, Date.now())
+                      }
+                    >
+                      <i className="fa fa-pause"></i>
+                    </span>
                   </div>
                 ) : null}
 
                 {event.trackingStatus === "play" ? (
-                  <div
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className="d-inline-block task-play-btn pointer"
-                    onClick={() =>
-                      this.props.handleTaskStart(event, Date.now())
-                    }
-                  >
-                    <i className="fa fa-play"></i>
+                  <div className="col-md-2 no-padding d-inline-block">
+                    <span
+                      style={{
+                        pointerEvents: this.isValidUserDate(event.resourceId)
+                          ? ""
+                          : "none"
+                      }}
+                      className="day-task-play-btn pointer"
+                      onClick={() =>
+                        this.props.handleTaskStart(event, Date.now())
+                      }
+                    >
+                      <i className="fa fa-play"></i>
+                    </span>
                   </div>
                 ) : null}
 
                 {event.status === "completed" ? (
-                  <div className="d-inline-block task-play-btn">
-                    <i className="fa fa-check"></i>
+                  <div className="col-md-2 no-padding d-inline-block">
+                    <span className="day-task-play-btn">
+                      <i className="fa fa-check"></i>
+                    </span>
                   </div>
                 ) : null}
               </div>
-              <div className="col-md-12 no-padding">
+              <div
+                className="col-md-12 no-padding"
+                style={{ color: contColor }}
+              >
                 {logs.length > 0 ? (
                   <>
                     <div
@@ -301,16 +342,31 @@ class DashboardEvent extends Component {
                       onClick={() => this.onClickInput()}
                       style={this.state.show ? { backgroundColor: "#fff" } : {}}
                     >
-                      <li>{logs[0].name}</li>
+                      <li
+                        style={
+                          this.state.show
+                            ? { color: "#000" }
+                            : { color: contColor }
+                        }
+                      >
+                        {logs[0].name}
+                      </li>
                     </div>
-                    <i className="fa fa-angle-down log-angle-down"></i>
+                    <i
+                      style={
+                        this.state.show
+                          ? { color: "#000" }
+                          : { color: contColor }
+                      }
+                      className="fa fa-angle-down log-angle-down"
+                    ></i>
                   </>
                 ) : (
                   <div
                     className="no-padding d-inline-block no-track-time text-right"
                     style={{ fontSize: "12px" }}
                   >
-                    <span> No Tracked time</span>
+                    <span>No tracked time</span>
                   </div>
                 )}
                 <div
@@ -327,13 +383,165 @@ class DashboardEvent extends Component {
               </div>
             </div>
           </div>
-        ) : (
+        ) : null}
+        {schedulerData.viewType === 1 ? (
+          <div
+            key={event.id}
+            className={`${mustAddCssClass} padding-tb-5px`}
+            style={divStyle}
+          >
+            <div className="row item dashboard-event-box">
+              <div
+                className="col-md-12 no-padding pointer item-heading text-wraper"
+                style={{
+                  padding: "5px 5px 0px 5px",
+                  color: getContrastColor(this.props.bgColor)
+                }}
+                onClick={() => {
+                  if (!!eventItemClick) eventItemClick(schedulerData, event);
+                }}
+              >
+                {titleText}
+              </div>
+            </div>
+            <div className="row item dashboard-event-box">
+              <OverlayTrigger
+                placement="auto"
+                trigger="hover"
+                overlay={this.props.eventItemPopoverTemplateResolver(
+                  schedulerData,
+                  event,
+                  titleText,
+                  start,
+                  end,
+                  this.props.bgColor
+                )}
+              >
+                <div className="col-md-10 no-padding flex-center">
+                  <div className="col-md-2 no-padding flex-center">
+                    <div className={`${this.props.event.priority}`}></div>
+                  </div>
+                  <div className="col-md-8 no-padding d-inline-block ">
+                    <span className="task-timer" style={{ color: contColor }}>
+                      <Timer
+                        totalDuration={totalTrackTime}
+                        startOn={this.props.event.startOn}
+                        isStart={this.props.event.startOn ? true : false}
+                      />
+                      {" of"} {this.calculateTime(event)}
+                    </span>
+                  </div>
+                </div>
+              </OverlayTrigger>
+
+              {event.trackingStatus === "pause" ? (
+                <div className="col-md-2 no-padding d-inline-block">
+                  <span
+                    style={{
+                      pointerEvents: this.isValidUserDate(event.resourceId)
+                        ? ""
+                        : "none"
+                    }}
+                    className="task-play-btn pointer"
+                    onClick={() => this.props.handleTaskStop(event, Date.now())}
+                  >
+                    <i className="fa fa-pause"></i>
+                  </span>
+                </div>
+              ) : null}
+
+              {event.trackingStatus === "play" ? (
+                <div className="col-md-2 no-padding d-inline-block">
+                  <span
+                    style={{
+                      pointerEvents: this.isValidUserDate(event.resourceId)
+                        ? ""
+                        : "none"
+                    }}
+                    className="task-play-btn pointer"
+                    onClick={() =>
+                      this.props.handleTaskStart(event, Date.now())
+                    }
+                  >
+                    <i className="fa fa-play"></i>
+                  </span>
+                </div>
+              ) : null}
+
+              {event.status === "completed" ? (
+                <div className="col-md-2 no-padding d-inline-block">
+                  <span className="task-play-btn">
+                    <i className="fa fa-check"></i>
+                  </span>
+                </div>
+              ) : null}
+            </div>
+            <div className="row item dashboard-event-box">
+              <div
+                className="col-md-12 no-padding"
+                style={{ color: contColor }}
+              >
+                {logs.length > 0 ? (
+                  <>
+                    <div
+                      className="no-padding d-inline-block event-active-log"
+                      onClick={() => this.onClickInput()}
+                      style={
+                        this.state.show
+                          ? { color: contColor, backgroundColor: "#fff" }
+                          : {}
+                      }
+                    >
+                      <li
+                        style={
+                          this.state.show
+                            ? { color: "#000" }
+                            : { color: contColor }
+                        }
+                      >
+                        {logs[0].name}
+                      </li>
+                    </div>
+                    <i
+                      style={
+                        this.state.show
+                          ? { color: "#000" }
+                          : { color: contColor }
+                      }
+                      className="fa fa-angle-down log-angle-down"
+                    ></i>
+                  </>
+                ) : (
+                  <div
+                    className="no-padding d-inline-block no-track-time text-right"
+                    style={{ fontSize: "12px" }}
+                  >
+                    <span>No tracked time</span>
+                  </div>
+                )}
+                <div
+                  className="no-padding d-inline-block three-dot"
+                  // style={{ float: "right" }}
+                >
+                  <span
+                    className="task-event-action pointer"
+                    onClick={() => this.ToggleActionDropDown(event.id)}
+                  >
+                    ...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {schedulerData.viewType === 2 ? (
           <MonthlyEvent
             state={this.props}
             hideEventPopUp={this.hideEventPopUp}
             showEventPopUp={this.showEventPopUp}
           />
-        )}
+        ) : null}
 
         {this.state.clickEventId === event.id && this.state.show ? (
           <Select

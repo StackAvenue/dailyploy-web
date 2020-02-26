@@ -5,7 +5,7 @@ import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import GridBlock from "./ProjectViews/GridBlock";
 import AddProjectModal from "./AddProjectModal";
-import { firstTwoLetter } from "../../utils/function";
+import { firstTwoLetter, textTitlize } from "../../utils/function";
 import DailyPloyToast from "../DailyPloyToast";
 import ConfirmModal from "./../ConfirmModal";
 import moment from "moment";
@@ -253,7 +253,7 @@ class ShowProjects extends Component {
     }
   };
 
-  handleEditShow = (e, project) => {
+  handleEditShow = project => {
     this.setState({
       show: true,
       setShow: true,
@@ -359,6 +359,7 @@ class ShowProjects extends Component {
       this.setState({
         show: false,
         projectName: "",
+        projectId: "",
         dateTo: null,
         projectMembers: []
       });
@@ -606,6 +607,7 @@ class ShowProjects extends Component {
                               getDate={this.getDate}
                               countIncrese={this.countIncrese}
                               handleCheck={this.handleCheck}
+                              handleEditShow={this.handleEditShow}
                             />
                           );
                         })}
@@ -704,7 +706,11 @@ class ShowProjects extends Component {
                                     .slice(0, 4)
                                     .map((user, index) => {
                                       return (
-                                        <div key={index} className="user-block">
+                                        <div
+                                          key={index}
+                                          className="user-block"
+                                          title={textTitlize(user.name)}
+                                        >
                                           <span>
                                             {firstTwoLetter(user.name)}
                                           </span>
@@ -753,37 +759,10 @@ class ShowProjects extends Component {
                               >
                                 <button
                                   className="btn btn-link edit-btn"
-                                  onClick={e => this.handleEditShow(e, project)}
+                                  onClick={() => this.handleEditShow(project)}
                                 >
                                   <i className="fas fa-pencil-alt"></i>
                                 </button>
-                                {this.state.show &&
-                                this.state.projectId === project.id ? (
-                                  <AddProjectModal
-                                    state={this.state}
-                                    handleClose={this.handleEditClose}
-                                    btnText={"Save"}
-                                    headText={project.name}
-                                    ownerClassName={""}
-                                    handleChangeInput={this.handleChangeInput}
-                                    handleDateFrom={this.handleDateFrom}
-                                    handleDateTo={this.handleDateTo}
-                                    handleUndefinedToDate={
-                                      this.handleUndefinedToDate
-                                    }
-                                    workspaceId={this.state.workspaceId}
-                                    handleChangeColor={this.handleChangeColor}
-                                    handleChangeComplete={
-                                      this.handleChangeComplete
-                                    }
-                                    colors={this.colors}
-                                    handleChangeMember={this.handleChangeMember}
-                                    emailOptions={
-                                      this.state.isLogedInUserEmailArr
-                                    }
-                                    addProject={this.editProject}
-                                  />
-                                ) : null}
                               </td>
                             </tr>
                           );
@@ -810,6 +789,26 @@ class ShowProjects extends Component {
             closeModal={this.closeModal}
             buttonText="Delete"
             show={this.state.showConfirm}
+          />
+        ) : null}
+        {this.state.show && this.state.projectId ? (
+          <AddProjectModal
+            state={this.state}
+            handleClose={this.handleEditClose}
+            btnText={"Save"}
+            headText={this.state.projectName}
+            ownerClassName={""}
+            handleChangeInput={this.handleChangeInput}
+            handleDateFrom={this.handleDateFrom}
+            handleDateTo={this.handleDateTo}
+            handleUndefinedToDate={this.handleUndefinedToDate}
+            workspaceId={this.state.workspaceId}
+            handleChangeColor={this.handleChangeColor}
+            handleChangeComplete={this.handleChangeComplete}
+            colors={this.colors}
+            handleChangeMember={this.handleChangeMember}
+            emailOptions={this.state.isLogedInUserEmailArr}
+            addProject={this.editProject}
           />
         ) : null}
       </>

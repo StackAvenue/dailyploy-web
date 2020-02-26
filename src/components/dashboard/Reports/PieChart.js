@@ -14,7 +14,9 @@ class PieChart extends Component {
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
     let s = Math.floor((totalSeconds % 3600) % 60);
-    return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+    return (
+      ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) + ":" + ("0" + m).slice(-2)
+    );
   };
 
   generateChartData = () => {
@@ -56,7 +58,7 @@ class PieChart extends Component {
         let diff = estimateTime - totalTime;
         let time = this.secondsToHours(diff);
         data.push({
-          name: "Remaining Scheduled Time",
+          name: "Remaining Capacity",
           y: diff,
           time: time,
           color: "#ececec",
@@ -121,7 +123,7 @@ class PieChart extends Component {
         let diff = estimateTime - totalTime;
         let time = this.secondsToHours(diff);
         data.push({
-          name: "Remaining Scheduled Time",
+          name: "Remaining Capacity",
           y: diff,
           time: time,
           color: "#e5e5e5",
@@ -190,7 +192,7 @@ class PieChart extends Component {
         let diff = estimateTime - totalTime;
         let time = this.secondsToHours(diff);
         data.push({
-          name: "Remaining Scheduled Time",
+          name: "Remaining Capacity",
           y: diff,
           time: time,
           color: "#e5e5e5",

@@ -90,11 +90,20 @@ class SummuryReportCharts extends Component {
 
   calculateCapacity = () => {
     if (this.props.state.frequency == "daily") {
-      return "8 H";
+      return this.props.state.projectReports &&
+        this.props.state.projectReports.capacity
+        ? `${this.props.state.projectReports.capacity} H`
+        : "8 H";
     } else if (this.props.state.frequency == "weekly") {
-      return "40 H";
+      return this.props.state.projectReports &&
+        this.props.state.projectReports.capacity
+        ? `${this.props.state.projectReports.capacity * 5} H`
+        : "40 H";
     } else if (this.props.state.frequency == "monthly") {
-      return "160 H";
+      return this.props.state.projectReports &&
+        this.props.state.projectReports.capacity
+        ? `${this.props.state.projectReports.capacity * 20} H`
+        : "160 H";
     } else {
       return "8 h";
     }
@@ -130,10 +139,10 @@ class SummuryReportCharts extends Component {
               </button>
             </div>
             <div className="sch-info-btn d-inline-block">
-              <button className="d-inline-block">Scheduled</button>
+              {/* <button className="d-inline-block">Scheduled</button>
               <button className="d-inline-block">
                 {this.secondsToHours(totalEstimate)}
-              </button>
+              </button> */}
             </div>
             <div className="work-info-btn d-inline-block">
               <button className="d-inline-block">Worked</button>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import cookie from "react-cookies";
-import { login, get } from "../utils/API";
+import { login, get, forgotPassword } from "../utils/API";
 import { validateEmail } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +24,10 @@ class Signin extends Component {
         passwordError: null
       },
       error: "",
-      isLoading: false
+      resetSusses: "",
+      isLoading: false,
+      loadingReset: false,
+      isLogin: true
     };
   }
 
@@ -81,12 +84,47 @@ class Signin extends Component {
           console.log("error", e);
         }
       } catch (e) {
-        this.setState({ error: e.response.data.error, isLoading: false });
+        this.setState({
+          error: "Invalid Email or Password!",
+          isLoading: false,
+          resetSusses: ""
+        });
       }
-    } else {
-      return "Enter valid email address and password";
     }
   };
+
+  toggleResetPassword = () => {
+    this.setState({ isLogin: !this.state.isLogin });
+  };
+
+  resetPassword = async e => {
+    e.preventDefault();
+    this.validateAllInputs();
+    if (this.state.email != "") {
+      const forgotData = {
+        email: this.state.email
+      };
+      this.setState({ loadingReset: true });
+      try {
+        const { data } = await forgotPassword(forgotData);
+        if (data.mail_sent) {
+          this.setState({
+            resetSusses: "We have e-mailed your password to reset",
+            error: "",
+            loadingReset: false,
+            isLogin: true
+          });
+        }
+        this.setState({ loadingReset: false });
+      } catch (e) {
+        this.setState({
+          error: "We Could Not Find Your Email Address",
+          loadingReset: false
+        });
+      }
+    }
+  };
+
   validateAllInputs = () => {
     const errors = {
       passwordError: null
@@ -120,76 +158,89 @@ class Signin extends Component {
                   className="img-responsive image"
                 />
               </div>
-              <div className="form-wrap">
-                <div className="col-md-5 sub-container">
-                  <div className="col-md-12 heading">Sign In</div>
-                  {this.state.error ? (
-                    <div className="invalid-error">
-                      Invalid Email or Password!
-                    </div>
-                  ) : null}
-                  <form onSubmit={this.login}>
-                    <div className="col-md-10 offset-1 no-padding signup-form text-left">
-                      <div className="form-group">
-                        <label>Email</label>
-                        {this.state.errors.emailError ? (
-                          <span className="error-warning">
-                            {this.state.errors.emailError}
-                          </span>
-                        ) : null}
-                        <input
-                          type="email"
-                          name="email"
-                          value={email}
-                          onChange={this.handleChange}
-                          className="form-control login-form-field"
-                          placeholder="johndoe1234@amazon.com"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Password</label>
-                        {this.state.errors.passwordError ? (
-                          <span className="error-warning">
-                            {this.state.errors.passwordError}
-                          </span>
-                        ) : null}
-                        <input
-                          type="password"
-                          name="password"
-                          value={password}
-                          onChange={this.handleChange}
-                          className="form-control login-form-field"
-                          placeholder="Password"
-                        />
-                      </div>
-                      {/* <div className="text-right forgot-pass">
-                        Forgot Password?{" "}
-                        <button className="btn btn-link no-padding">
-                          Click here
-                        </button>
-                      </div> */}
-                      <br />
-                      <div className="col-md-12 no-padding text-center">
-                        <button
-                          disabled={!isEnabled}
-                          className="d-inline-block btn form-btn"
-                        >
-                          <span>Sign In &nbsp;&nbsp;</span>
-                          {this.state.isLoading ? (
+              {this.state.isLogin ? (
+                <div className="form-wrap">
+                  <div className="col-md-5 sub-container">
+                    <div className="col-md-12 heading">Sign In</div>
+                    {this.state.error ? (
+                      <div className="invalid-error">{this.state.error}</div>
+                    ) : null}
+                    {this.state.resetSusses ? (
+                      <div className="success">{this.state.resetSusses}</div>
+                    ) : null}
+                    <form onSubmit={this.login}>
+                      <div className="col-md-10 offset-1 no-padding signup-form text-left">
+                        <div className="form-group">
+                          <label>Email</label>
+                          {this.state.errors.emailError ? (
+                            <span className="error-warning">
+                              {this.state.errors.emailError}
+                            </span>
+                          ) : null}
+                          <input
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={this.handleChange}
+                            className="form-control login-form-field"
+                            placeholder="johndoe1234@amazon.com"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Password</label>
+                          {this.state.errors.passwordError ? (
+                            <span className="error-warning">
+                              {this.state.errors.passwordError}
+                            </span>
+                          ) : null}
+                          <input
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={this.handleChange}
+                            className="form-control login-form-field"
+                            placeholder="Password"
+                          />
+                        </div>
+                        <div className="text-right forgot-pass">
+                          Forgot Password?{" "}
+                          <button
+                            className="btn btn-link no-padding"
+                            onClick={this.toggleResetPassword}
+                          >
+                            Click here
+                          </button>
+                          {this.state.loadingReset ? (
                             <Loader
                               type="Oval"
-                              color="#FFFFFF"
+                              color="#000"
                               height={20}
                               width={20}
                               className="d-inline-block login-signup-loader"
                             />
                           ) : null}
-                        </button>
+                        </div>
+                        <br />
+                        <div className="col-md-12 no-padding text-center">
+                          <button
+                            disabled={!isEnabled}
+                            className="d-inline-block btn form-btn"
+                          >
+                            <span>Sign In &nbsp;&nbsp;</span>
+                            {this.state.isLoading ? (
+                              <Loader
+                                type="Oval"
+                                color="#FFFFFF"
+                                height={20}
+                                width={20}
+                                className="d-inline-block login-signup-loader"
+                              />
+                            ) : null}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </form>
-                  <br />
-                  {/* <div
+                    </form>
+                    {/* <div
                     style={{ margin: "0" }}
                     className="col-md-8 offset-2 googleIcon"
                   >
@@ -202,18 +253,83 @@ class Signin extends Component {
                       Sign In with Google
                     </Link>
                   </div> */}
-                  <br />
-                  <div
-                    style={{ margin: "0" }}
-                    className="col-md-8 offset-2 googleIcon"
-                  >
-                    <span>New to DailyPloy?</span>
-                    <Link to={`/signup`} className="link">
-                      Sign Up
-                    </Link>
+                    <br />
+                    <div
+                      style={{ margin: "0" }}
+                      className="col-md-8 offset-2 googleIcon"
+                    >
+                      <span>New to DailyPloy?</span>
+                      <Link to={`/signup`} className="link">
+                        Sign Up
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>{" "}
+              ) : (
+                <div className="form-wrap">
+                  <div className="col-md-5 sub-container">
+                    <div className="col-md-12 heading">Forgot Password</div>
+                    {this.state.error ? (
+                      <div className="invalid-error">{this.state.error}</div>
+                    ) : null}
+                    {this.state.resetSusses ? (
+                      <div className="success">{this.state.resetSusses}</div>
+                    ) : null}
+                    <form onSubmit={this.resetPassword}>
+                      <div className="col-md-10 offset-1 no-padding signup-form text-left">
+                        <div className="form-group">
+                          <label>Email</label>
+                          {this.state.errors.emailError ? (
+                            <span className="error-warning">
+                              {this.state.errors.emailError}
+                            </span>
+                          ) : null}
+                          <input
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={this.handleChange}
+                            className="form-control login-form-field"
+                            placeholder="johndoe1234@amazon.com"
+                          />
+                        </div>
+                        <br />
+                        <div className="col-md-12 no-padding text-center">
+                          <button
+                            disabled={this.state.loadingReset}
+                            className="d-inline-block btn form-btn"
+                          >
+                            <span>Send Password Reset Link &nbsp;&nbsp;</span>
+                            {this.state.loadingReset ? (
+                              <Loader
+                                type="Oval"
+                                color="#FFFFFF"
+                                height={20}
+                                width={20}
+                                className="d-inline-block login-signup-loader"
+                              />
+                            ) : null}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <br />
+                    <div className="col-md-12 googleIcon">
+                      <span className="d-inline-block">
+                        Already have DailyPloy Account?
+                      </span>
+
+                      <Link
+                        to="/login"
+                        onClick={this.toggleResetPassword}
+                        className="link"
+                      >
+                        Sign in
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

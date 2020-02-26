@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../assets/css/signup.scss";
-import { signUp, get } from "../utils/API";
+import { signUp, login, get } from "../utils/API";
 import { workspaceNameSplit } from "../utils/function";
 import {
   checkPassword,
@@ -19,6 +19,8 @@ import Individual from "../components/Signup/Individual";
 import Header from "../components/Landing/Header";
 import signup from "../assets/images/landing.jpg";
 import googleIcon from "../assets/images/google.png";
+import cookie from "react-cookies";
+import axios from "axios";
 import "../assets/css/login.scss";
 
 class Signup extends Component {
@@ -141,8 +143,9 @@ class Signup extends Component {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
-        setTimeout(() => this.props.history.push("/login"), 1000);
-        this.setState({ isLoading: false });
+        this.directLogin();
+        // setTimeout(() => this.props.history.push("/login"), 1000);
+        // this.setState({ isLoading: false });
       } catch (e) {
         this.setState({ isLoading: false });
         if (e.response.status === 500) {
@@ -170,6 +173,45 @@ class Signup extends Component {
       }
     } else {
       console.log("Enter valid email address and password");
+    }
+  };
+
+  directLogin = async () => {
+    const loginData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    try {
+      const { data } = await login(loginData);
+      cookie.save("accessToken", data.access_token, { path: "/" });
+      cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
+      axios.defaults.headers.common["Authorization"] = data.access_token
+        ? `Bearer ${data.access_token}`
+        : "";
+      try {
+        const { data } = await get("workspaces");
+        const workspace = data.workspaces[0];
+        cookie.save("workspaceId", workspace.id, { path: "/" });
+        if (workspace && workspace.type === "company") {
+          cookie.save("workspaceName", workspace.company.name, { path: "/" });
+        } else {
+          cookie.save("workspaceName", workspace.name, {
+            path: "/"
+          });
+        }
+        try {
+          const { data } = await get("logged_in_user");
+          cookie.save("loggedInUser", data);
+        } catch (e) {
+          console.log("err", e);
+        }
+        this.setState({ isLoading: false });
+        this.props.history.push(`/workspace/${workspace.id}/dashboard`);
+      } catch (e) {
+        console.log("error", e);
+      }
+    } catch (e) {
+      this.setState({ error: e.response.data.error, isLoading: false });
     }
   };
 
@@ -294,7 +336,7 @@ class Signup extends Component {
                   </div> */}
                   <br />
                   <div className="col-md-8 offset-2 googleIcon">
-                    <span>Already have DailyPloy account?</span>
+                    <span>Already have DailyPloy Account?</span>
                     <Link to={`/login`} className="link">
                       Sign in
                     </Link>

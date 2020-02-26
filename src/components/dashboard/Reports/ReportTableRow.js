@@ -22,7 +22,11 @@ class ReportTableRow extends Component {
   };
 
   renderLog = task => {
-    let trackLogs = task.time_tracked
+    let dateTimeTracks = task.date_formatted_time_tracks.find(
+      timeLog => timeLog.date == this.props.date
+    );
+    var trackLogs = dateTimeTracks ? dateTimeTracks.time_tracks : [];
+    trackLogs = trackLogs
       .sort((a, b) => b.id - a.id)
       .map(time => {
         return {
@@ -39,7 +43,7 @@ class ReportTableRow extends Component {
       <div className="reports-track-logs">
         {trackLogs.length > 0 ? (
           <EditableSelect
-            options={trackLogs.slice(1)}
+            options={trackLogs}
             value={first}
             getOptionValue={option => option.id}
             getOptionLabel={option => option.name}
@@ -56,30 +60,39 @@ class ReportTableRow extends Component {
   };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
-    var start =
-      moment(this.props.date).format("YYYY-MM-DD") +
-      " " +
-      moment(startDateTime).format("HH:mm:ss");
-    var end =
-      moment(this.props.date).format("YYYY-MM-DD") +
-      " " +
-      moment(endDateTime).format("HH:mm:ss");
-    let totalMilSeconds = new Date(end) - new Date(start);
-    var totalSeconds = totalMilSeconds / 1000;
-    return Number(totalSeconds);
+    let endTime = moment(endDateTime).format("HH:mm:ss");
+    let startTime = moment(startDateTime).format("HH:mm:ss");
+    if (endTime != "00:00:00") {
+      var start =
+        moment(this.props.date).format("YYYY-MM-DD") +
+        " " +
+        moment(startDateTime).format("HH:mm:ss");
+      var end = moment(this.props.date).format("YYYY-MM-DD") + " " + endTime;
+      let totalMilSeconds = new Date(end) - new Date(start);
+      var totalSeconds = totalMilSeconds / 1000;
+      return Number(totalSeconds);
+    }
+    return 0;
   };
 
   dateFormater = totalSeconds => {
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
-    return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+    return (
+      ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+      "h" +
+      " " +
+      ("0" + m).slice(-2) +
+      "m"
+    );
   };
 
   getTotalHours = tasks => {
     if (tasks !== undefined) {
       var totalSec = 0;
       tasks.map((task, idx) => {
-        totalSec += this.addTotalDuration(task.time_tracked);
+        totalSec += task.duration;
+        // totalSec += this.addTotalDuration(task.time_tracked);
       });
       return this.secondsToHours(totalSec);
     }
@@ -102,7 +115,13 @@ class ReportTableRow extends Component {
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
     let s = Math.floor((totalSeconds % 3600) % 60);
-    return ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+    return (
+      ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+      "h" +
+      " " +
+      ("0" + m).slice(-2) +
+      "m"
+    );
   };
 
   displayDate = date => {
@@ -244,13 +263,13 @@ class ReportTableRow extends Component {
           <td
             className="td-8"
             style={
-              this.getEstimateTimeOfTask(task) <
-              this.getTaskTotalDuration(task.time_tracked)
+              this.getEstimateTimeOfTask(task) < task.duration
                 ? { color: "#964B00" }
                 : { color: "#33a1ff" }
             }
           >
-            {this.dateFormater(this.getTaskTotalDuration(task.time_tracked))}
+            {/* {this.dateFormater(this.getTaskTotalDuration(task.time_tracked))} */}
+            {this.dateFormater(task.duration)}
           </td>
         </tr>
       );

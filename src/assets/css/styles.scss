@@ -79,6 +79,9 @@
 .left-padding-30px {
   padding-left: 30px !important;
 }
+.left-padding-17px {
+  padding-left: 17px !important;
+}
 .date-text-light {
   width: 24px;
   height: 18px;
@@ -241,4 +244,12 @@
 }
 .disabled{
  pointer-events: none !important;
+}
+.padding-tb-5px{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.flex-center{
+  display: flex !important;
+  align-items: center !important;
 }

@@ -14,7 +14,6 @@ class DailyPloyMultiSelect extends Component {
 
   componentDidMount = () => {
     if (this.props.reset) {
-      console.log("hiii");
       this.setState({
         selectedTags: []
       });
@@ -98,6 +97,20 @@ class DailyPloyMultiSelect extends Component {
     );
   };
 
+  handleKeyPress = event => {
+    if (event.keyCode === 13 && this.state.suggestions.length > 0) {
+      let option = this.state.suggestions[0];
+      var newSelectedTags = new Array(...this.state.selectedTags);
+      newSelectedTags.push(option);
+      this.setState({
+        selectedTags: newSelectedTags,
+        searchText: "",
+        suggestions: []
+      });
+      this.props.onChange(newSelectedTags);
+    }
+  };
+
   renderSelectedTags = () => {
     return (
       <>
@@ -149,6 +162,7 @@ class DailyPloyMultiSelect extends Component {
               value={this.state.searchText}
               placeholder="Search for member"
               onChange={this.onSearchTextChange}
+              onKeyUp={this.handleKeyPress}
             />
           </div>
           <div

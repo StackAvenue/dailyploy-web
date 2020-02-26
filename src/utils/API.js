@@ -17,6 +17,12 @@ export const login = async loginData => {
   return await axios.post(`${URL}/sign_in`, loginData);
 };
 
+export const forgotPassword = async data => {
+  return await axios.get(`${URL}/forgot_password`, {
+    params: data ? data : {}
+  });
+};
+
 export const logout = async () => {
   await cookie.remove("accessToken", { path: "/" });
   await cookie.remove("userRole", { path: "/" });

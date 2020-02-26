@@ -405,8 +405,10 @@ class TaskInfoModal extends Component {
                   Time
                 </div>
                 <div className="col-md-10 d-inline-block">
-                  <div className="col-md-4 d-inline-block">
-                    {this.props.state.taskEvent.dateFormattedTimeTrack ? (
+                  {this.props.state.taskEvent &&
+                  this.props.state.taskEvent.dateFormattedTimeTrack.length >
+                    0 ? (
+                    <div className="col-md-4 d-inline-block">
                       <select
                         style={{ color: "#000 !important", background: "#fff" }}
                       >
@@ -427,8 +429,10 @@ class TaskInfoModal extends Component {
                           }
                         )}
                       </select>
-                    ) : null}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="left-padding-17px">No tracked time</div>
+                  )}
                 </div>
               </div>
 
