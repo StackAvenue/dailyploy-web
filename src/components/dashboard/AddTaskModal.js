@@ -26,9 +26,20 @@ class AddTaskModal extends React.Component {
       isBorder: false,
       border: "solid 1px #d1d1d1",
       notFound: "hide",
-      memberNotFound: "hide"
+      memberNotFound: "hide",
+      taskName: "",
+      comments: ""
     };
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.state.taskName !== prevProps.state.taskName) {
+      this.setState({ taskName: this.props.state.taskName });
+    }
+    if (this.props.state.comments !== prevProps.state.comments) {
+      this.setState({ comments: this.props.state.comments });
+    }
+  };
 
   disabledHours = () => {
     var time = this.props.state.timeFrom;
@@ -69,6 +80,19 @@ class AddTaskModal extends React.Component {
     this.calendarToRef.current.setOpen(true);
   };
 
+  handleInputChange = async e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  onBlurInput = () => {
+    this.props.handleTaskNameChange("taskName", this.state.taskName);
+  };
+
+  onBlurComment = () => {
+    this.props.handleTaskNameChange("comments", this.state.comments);
+  };
+
   render() {
     const { props } = this;
     return (
@@ -104,8 +128,11 @@ class AddTaskModal extends React.Component {
                   <input
                     type="text"
                     name="taskName"
-                    value={props.state.taskName}
-                    onChange={props.handleInputChange}
+                    // value={props.state.taskName}
+                    // onChange={props.handleTaskNameChange}
+                    value={this.state.taskName}
+                    onChange={e => this.handleInputChange(e)}
+                    onBlur={this.onBlurInput}
                     placeholder="Task name..."
                     className="form-control"
                   />
@@ -366,8 +393,11 @@ class AddTaskModal extends React.Component {
                 <div className="col-md-10">
                   <textarea
                     name="comments"
-                    value={props.state.comments}
-                    onChange={props.handleInputChange}
+                    value={this.state.comments}
+                    // value={props.state.comments}
+                    // onChange={props.handleInputChange}
+                    onChange={e => this.handleInputChange(e)}
+                    onBlur={this.onBlurComment}
                     className="form-control"
                     rows="2"
                     placeholder="Write Here"

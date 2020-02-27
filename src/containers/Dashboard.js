@@ -6,7 +6,7 @@ import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import {
   getWeekFisrtDate,
@@ -20,10 +20,7 @@ import {
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
   HRMIN,
-  HHMMSS,
-  FULL_DATE,
-  DATE_FORMAT3,
-  FULL_DATE_FORMAT3
+  FULL_DATE
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -1958,6 +1955,10 @@ class Dashboard extends Component {
       });
   };
 
+  handleTaskNameChange = async (name, value) => {
+    this.setState({ [name]: value });
+  };
+
   componentWillUnmount() {}
 
   render() {
@@ -2029,6 +2030,7 @@ class Dashboard extends Component {
               handleCategoryChange={this.handleCategoryChange}
               handlePrioritiesChange={this.handlePrioritiesChange}
               addCategory={this.addCategory}
+              handleTaskNameChange={this.handleTaskNameChange}
             />
 
             <TaskInfoModal
