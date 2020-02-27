@@ -45,7 +45,7 @@ class TaskBottomPopup extends Component {
           <div
             style={{ width: "122px" }}
             title={this.props.event.title}
-            className="d-inline-block task-title title text-wraper"
+            className="d-inline-block task-title title text-titlize text-wraper"
           >
             {this.props.event.title}
           </div>

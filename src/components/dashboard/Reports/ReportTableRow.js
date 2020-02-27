@@ -27,6 +27,7 @@ class ReportTableRow extends Component {
     );
     var trackLogs = dateTimeTracks ? dateTimeTracks.time_tracks : [];
     trackLogs = trackLogs
+      .filter(log => log.status !== "running")
       .sort((a, b) => b.id - a.id)
       .map(time => {
         return {
@@ -80,10 +81,10 @@ class ReportTableRow extends Component {
     var m = Math.floor((totalSeconds % 3600) / 60);
     return (
       ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
-      "h" +
+      "H" +
       " " +
       ("0" + m).slice(-2) +
-      "m"
+      "M"
     );
   };
 
@@ -96,7 +97,7 @@ class ReportTableRow extends Component {
       });
       return this.secondsToHours(totalSec);
     }
-    return "0 h";
+    return "0 H";
   };
 
   getTaskTotalDuration = timeTracked => {
@@ -117,10 +118,10 @@ class ReportTableRow extends Component {
     let s = Math.floor((totalSeconds % 3600) % 60);
     return (
       ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
-      "h" +
+      "H" +
       " " +
       ("0" + m).slice(-2) +
-      "m"
+      "M"
     );
   };
 

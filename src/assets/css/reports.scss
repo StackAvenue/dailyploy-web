@@ -98,16 +98,15 @@
 
 .SelectedWeekExample {
   .react-datepicker-wrapper {
+    .reports-date-picker-icon{
+      position: relative !important;
+      right: 20px;
+    }
     .react-datepicker__input-container input{
       border: none;
       padding: 0px 0 0 0px;
       margin: 4px;
-    }::after {
-      font-family: "Font Awesome 5 Free" !important;
-      font-weight: 900 !important;
-      content: "\f073" !important;
-      color: #555 !important;
-      padding: 0 5px !important;
+      width:  220px !important;
     }
     border-radius: 5px;
     width: auto;
@@ -161,7 +160,7 @@
   }
 }
 .arrow-button{
-  padding: 0px 15px 0px 15px;
+  padding: 0px 26px 0px 15px;
   border: none;
   background: none;
   vertical-align: bottom;
