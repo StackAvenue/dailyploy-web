@@ -158,13 +158,6 @@ class Workspace extends Component {
 
   componentWillUnmount() {}
 
-  handleReset = () => {
-    localStorage.setItem(`startOn-${this.state.workspaceId}`, "");
-    localStorage.setItem(`taskId-${this.state.workspaceId}`, "");
-    localStorage.setItem(`colorCode-${this.state.workspaceId}`, "");
-    localStorage.setItem(`taskTitle-${this.state.workspaceId}`, "");
-  };
-
   logout = async () => {
     await logout();
     this.props.history.push("/login");
@@ -251,9 +244,6 @@ class Workspace extends Component {
 
   stopOnGoingTask = async () => {
     if (this.state.event) {
-      // let d = moment(this.state.event.start).format(DATE_FORMAT1);
-      // let t = moment().format(HHMMSS);
-      // let newDateTime = moment(d + " " + t);
       var taskDate = {
         end_time: new Date(),
         status: "stopped"
@@ -262,10 +252,15 @@ class Workspace extends Component {
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
       } catch (e) {}
-      this.handleReset();
       this.setState({
         event: null
       });
+    }
+  };
+
+  updateWorkspaces = workspace => {
+    if (workspace) {
+      this.setState({ workspaces: [...this.state.workspaces, workspace] });
     }
   };
 
@@ -283,6 +278,8 @@ class Workspace extends Component {
             workspaceId={this.state.workspaceId}
             workspaceName={this.state.workspaceName}
             callWorkspace={this.callWorkspace}
+            userInfo={this.state.loggedInUserInfo}
+            updateWorkspaces={this.updateWorkspaces}
           />
           <div className="dashboard-main no-padding">
             <Header

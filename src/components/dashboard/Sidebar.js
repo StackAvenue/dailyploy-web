@@ -1,14 +1,20 @@
 import React, { Component } from "react";
-import AddWorkspaceModal from "./Sidebar/AddWorkspaceModal";
+import AddWorkspace from "./Sidebar/AddWorkspace";
 import SelectWorkspace from "./Sidebar/SelectWorkspace";
 import cookie from "react-cookies";
+import DailyPloyToast from "./../../components/DailyPloyToast";
+import { toast } from "react-toastify";
+import { post } from "./../../utils/API";
 
 class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
-      setShow: false
+      setShow: false,
+      workspaceName: "",
+      nameError: "",
+      isLoading: false
     };
   }
 
@@ -21,12 +27,55 @@ class Sidebar extends Component {
 
   closeTaskModal = () => {
     this.setState({
-      show: false
+      show: false,
+      nameError: ""
     });
   };
 
   callWorkspace = id => {
     cookie.save("workspaceId", id, { path: "/" });
+  };
+
+  handleInputChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value, nameError: value ? "" : "cannot be empty" });
+  };
+
+  createWorkspace = async () => {
+    if (this.state.workspaceName != "") {
+      let workspaceDate = {
+        user_id: this.props.userInfo.id,
+        name: this.state.workspaceName
+      };
+      this.setState({ isLoading: true });
+      try {
+        const { data } = await post(workspaceDate, `add_workspace`);
+        toast(
+          <DailyPloyToast
+            message="Workspace Created successfully!"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+        let workspace = {
+          owner: this.props.userInfo,
+          id: data.workspace_id,
+          name: data.workspace_name,
+          type: "individual"
+        };
+        this.props.updateWorkspaces(workspace);
+        this.setState({
+          show: false,
+          setShow: false,
+          workspaceName: "",
+          isLoading: false
+        });
+      } catch (e) {
+        this.setState({ show: false, setShow: false, isLoding: false });
+      }
+    } else {
+      this.setState({ nameError: "cannot be empty" });
+    }
   };
 
   render() {
@@ -53,9 +102,15 @@ class Sidebar extends Component {
                 </button>
               </div>
               <div className="workspace-add-btn">Add New</div>
-              <AddWorkspaceModal
+              {/* <AddWorkspaceModal
                 state={this.state}
                 onHideModal={this.closeTaskModal}
+              /> */}
+              <AddWorkspace
+                state={this.state}
+                onHideModal={this.closeTaskModal}
+                handleInputChange={this.handleInputChange}
+                createWorkspace={this.createWorkspace}
               />
             </li>
           </ul>
