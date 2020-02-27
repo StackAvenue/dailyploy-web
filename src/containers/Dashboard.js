@@ -1913,7 +1913,6 @@ class Dashboard extends Component {
   };
 
   handleTaskUpdate = async workspaceId => {
-    console.log("task handleTaskUpdate");
     base
       .database()
       .ref(`task_update/${workspaceId}`)
