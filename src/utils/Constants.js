@@ -20,7 +20,7 @@ export const HHMMSS = "HH:mm:ss"; // 20:34:19
 export const MONTH_FORMAT = "DD MMM"; // November 2019
 export const CHART_COLOR = {
   capacity: "#e5e5e5",
-  scheduled: "#aeb8bb",
+  scheduled: "#e5e5e5",
   worked_0: "#7fa6ad",
   worked_1: "#e5edee",
   curr_worked_0: "#002329",

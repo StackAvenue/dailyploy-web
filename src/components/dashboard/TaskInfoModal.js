@@ -406,6 +406,7 @@ class TaskInfoModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   {this.props.state.taskEvent &&
+                  this.props.state.taskEvent.dateFormattedTimeTrack &&
                   this.props.state.taskEvent.dateFormattedTimeTrack.length >
                     0 ? (
                     <div className="col-md-4 d-inline-block">

@@ -9,9 +9,11 @@ import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import DailyPloySelect from "./../DailyPloySelect";
 
-class AddTaskModal extends Component {
+class AddTaskModal extends React.Component {
   constructor(props) {
     super(props);
+    this.calendarFromRef = React.createRef();
+    this.calendarToRef = React.createRef();
     this.state = {
       members: [],
       project: "",
@@ -58,6 +60,13 @@ class AddTaskModal extends Component {
 
   handleDateChangeRaw = e => {
     e.preventDefault();
+  };
+
+  openFromCalender = () => {
+    this.calendarFromRef.current.setOpen(true);
+  };
+  openToCalender = () => {
+    this.calendarToRef.current.setOpen(true);
   };
 
   render() {
@@ -229,12 +238,20 @@ class AddTaskModal extends Component {
                       </div>
                       <div className="d-inline-block picker">
                         <DatePicker
+                          ref={this.calendarFromRef}
                           selected={props.state.dateFrom}
                           onChange={props.handleDateFrom}
                           maxDate={props.state.dateTo}
                           placeholderText="Select Date"
                           onChangeRaw={this.handleDateChangeRaw}
                         />
+                        <span className="task-date-picker-icon">
+                          <i
+                            onClick={this.openFromCalender}
+                            className="fa fa-calendar"
+                            aria-hidden="true"
+                          ></i>
+                        </span>
                       </div>
                     </div>
                     <div className="col-md-6 d-inline-block task-datepicker">
@@ -243,6 +260,7 @@ class AddTaskModal extends Component {
                       </div>
                       <div className="d-inline-block picker">
                         <DatePicker
+                          ref={this.calendarToRef}
                           minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
                           onChange={props.handleDateTo}
@@ -250,6 +268,13 @@ class AddTaskModal extends Component {
                           disabled={props.state.disabledDateTo}
                           onChangeRaw={this.handleDateChangeRaw}
                         />
+                        <span className="task-date-picker-icon">
+                          <i
+                            onClick={this.openToCalender}
+                            className="fa fa-calendar"
+                            aria-hidden="true"
+                          ></i>
+                        </span>
                       </div>
                     </div>
                   </div>

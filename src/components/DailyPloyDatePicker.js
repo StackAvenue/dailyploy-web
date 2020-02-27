@@ -14,6 +14,7 @@ import moment from "moment";
 class DailyPloyDatePicker extends Component {
   constructor(props) {
     super(props);
+    this.dashboardCalender = React.createRef();
     this.dayFormat = "dd MMMM, yyyy";
     this.weekFormat = "";
     this.monthlyFormat = "MMMM yyyy";
@@ -38,6 +39,10 @@ class DailyPloyDatePicker extends Component {
         this.handleWeekDayChange(new Date());
       }
     }
+  };
+
+  openDashboardCalender = () => {
+    this.dashboardCalender.current.setOpen(true);
   };
 
   handleWeekDayChange = date => {
@@ -267,9 +272,18 @@ class DailyPloyDatePicker extends Component {
   };
   previous = () => {
     return (
-      <button onClick={this.setPreviousDate} className="arrow-button">
-        <i className="fa fa-angle-left"></i>
-      </button>
+      <>
+        <button onClick={this.setPreviousDate} className="arrow-button">
+          <i className="fa fa-angle-left"></i>
+        </button>
+        <span style={{ paddingRight: "10px" }}>
+          <i
+            onClick={this.openDashboardCalender}
+            className="fa fa-calendar"
+            aria-hidden="true"
+          ></i>
+        </span>
+      </>
     );
   };
 
@@ -287,6 +301,7 @@ class DailyPloyDatePicker extends Component {
         <>
           {this.previous()}
           <DatePicker
+            ref={this.dashboardCalender}
             selected={this.state.dateFrom}
             onChange={this.handleDateFrom}
             startDate={this.state.dateFrom}
@@ -302,6 +317,7 @@ class DailyPloyDatePicker extends Component {
           {this.previous()}
           <div className="week-hover-bg d-inline-block">
             <DatePicker
+              ref={this.dashboardCalender}
               showWeekNumbers
               onChange={this.handleWeekDayChange}
               startDate={this.state.selectedDays[0]}
@@ -319,6 +335,7 @@ class DailyPloyDatePicker extends Component {
         <>
           {this.previous()}
           <DatePicker
+            ref={this.dashboardCalender}
             selected={this.state.dateFrom}
             onChange={this.handleMonthlyDateFrom}
             dateFormat={this.monthlyFormat}

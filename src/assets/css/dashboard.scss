@@ -662,14 +662,14 @@
             .react-datepicker__input-container input {
               width: 90%;
             }
-            ::after {
-              font-family: 'Font Awesome 5 Free' !important;
-              font-weight: 900 !important;
-              content: '\f073' !important;
-              color: #555 !important;
-              position: relative;
-              right: 25px;
-            }
+            // ::after {
+            //   font-family: 'Font Awesome 5 Free' !important;
+            //   font-weight: 900 !important;
+            //   content: '\f073' !important;
+            //   color: #555 !important;
+            //   position: relative;
+            //   right: 25px;
+            // }
           }
         }
       }
@@ -818,15 +818,20 @@
           padding: 0 0 0 0px !important;
           width: 100%;
         }
-        ::after {
-          font-family: 'Font Awesome 5 Free' !important;
-          font-weight: 900 !important;
-          content: '\f073' !important;
-          color: #555 !important;
-          position: absolute;
-          right: 10px;
-          top: 5px;
-        }
+        // ::after {
+        //   font-family: 'Font Awesome 5 Free' !important;
+        //   font-weight: 900 !important;
+        //   content: '\f073' !important;
+        //   color: #555 !important;
+        //   position: absolute;
+        //   right: 10px;
+        //   top: 5px;
+        // }
+      }
+      .task-date-picker-icon{
+        position: absolute;
+        top: 5px;
+        right: 22px;
       }
     }
 
@@ -3078,6 +3083,7 @@ table.scheduler-table tr:last-child td {
 }
 
 .workspace-modal {
+  top: 3% !important;
   .modal-dialog {
     max-width: 432px !important;
     .modal-content {
@@ -3099,13 +3105,14 @@ table.scheduler-table tr:last-child td {
         .name {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
-          color: $color-text3 !important;
+          color: $color-text2 !important;
           padding: 33px 0px 8px 0px !important;
           span {
             font-size: 12px !important;
           }
         }
         .input {
+          color: $color-text1 !important;
           padding: 0 !important;
         }
         .create-btn {
@@ -4674,23 +4681,6 @@ table.scheduler-table tr:last-child td {
       letter-spacing: normal;
       text-align: left;
     }
-    ::before {
-      font-family: 'Font Awesome 5 Free' !important;
-      font-weight: 900 !important;
-      content: '\f073' !important;
-      color: #555 !important;
-      padding: 5px 10px 5px 0px;
-    }
-    // ::after {
-    //   content: "▼";
-    //   padding: 0px 8px;
-    //   position: absolute;
-    //   top: 0;
-    //   z-index: 1;
-    //   text-align: center;
-    //   height: 100%;
-    //   pointer-events: none;
-    // }
   }
   .arrow-button {
     // margin-right: 25px;

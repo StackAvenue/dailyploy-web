@@ -163,7 +163,7 @@ class ReportTable extends Component {
                   `${
                     this.props.state.totalTime
                       ? this.props.state.totalTime
-                      : "0h 0m"
+                      : "0H 0M"
                   }`}
               </span>
             </div>

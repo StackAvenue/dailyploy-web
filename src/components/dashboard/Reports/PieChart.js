@@ -36,7 +36,7 @@ class PieChart extends Component {
       var totalTime = this.props.data
         .map(item => item.tracked_time)
         .reduce((a, b) => a + b, 0);
-      data = this.props.data.map((item, idx) => {
+      var data = this.props.data.map((item, idx) => {
         var time = this.secondsToHours(item.tracked_time);
         return {
           name: textTitlize(item.name),
@@ -76,7 +76,7 @@ class PieChart extends Component {
       var totalTime = this.props.data
         .map(item => item.tracked_time)
         .reduce((a, b) => a + b, 0);
-      data = this.props.data.map((item, idx) => {
+      var data = this.props.data.map((item, idx) => {
         var time = this.secondsToHours(item.tracked_time);
         return {
           name: textTitlize(item.name),
