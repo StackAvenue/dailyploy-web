@@ -1040,6 +1040,33 @@ class Reports extends Component {
         />
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
+            <div className="report-viewtype-btns d-inline-block">
+              <div
+                onClick={() => this.calenderButtonHandle("daily")}
+                name="daily"
+                className={`d-inline-block ${this.state.daily ? "active" : ""}`}
+              >
+                Daily
+              </div>
+              <div
+                onClick={() => this.calenderButtonHandle("weekly")}
+                name="weekly"
+                className={`d-inline-block ${
+                  this.state.weekly ? "active" : ""
+                }`}
+              >
+                Weekly
+              </div>
+              <div
+                onClick={() => this.calenderButtonHandle("monthly")}
+                name="monthly"
+                className={`d-inline-block ${
+                  this.state.monthly ? "active" : ""
+                }`}
+              >
+                Monthly
+              </div>
+            </div>
             <div className="reports-container col-sm-offset-2">
               <div className="reports-btns">
                 <div className="SelectedWeekExample">
@@ -1056,37 +1083,6 @@ class Reports extends Component {
                     <i className="fa fa-angle-right"></i>
                   </button>
                 </div>
-
-                <div className="report-viewtype-btns d-inline-block">
-                  <div
-                    onClick={() => this.calenderButtonHandle("daily")}
-                    name="daily"
-                    className={`d-inline-block ${
-                      this.state.daily ? "active" : ""
-                    }`}
-                  >
-                    Daily
-                  </div>
-                  <div
-                    onClick={() => this.calenderButtonHandle("weekly")}
-                    name="weekly"
-                    className={`d-inline-block ${
-                      this.state.weekly ? "active" : ""
-                    }`}
-                  >
-                    Weekly
-                  </div>
-                  <div
-                    onClick={() => this.calenderButtonHandle("monthly")}
-                    name="monthly"
-                    className={`d-inline-block ${
-                      this.state.monthly ? "active" : ""
-                    }`}
-                  >
-                    Monthly
-                  </div>
-                </div>
-
                 <div className="report-caleneder-btn">
                   <div className="d-inline-block report-category">
                     <DailyPloySelect
