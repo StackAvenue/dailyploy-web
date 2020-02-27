@@ -47,8 +47,10 @@ export const getWorkspaceId = () => {
 };
 
 export const getMiddleDates = (start, end) => {
-  var startDate = new Date(start);
-  var endDate = new Date(end);
+  var startDate = convertUTCToLocalDate(start);
+  var endDate = convertUTCToLocalDate(end);
+  // var startDate = new Date(start);
+  // var endDate = new Date(end);
   var daysArr = new Array();
   var currentDate = startDate;
   while (currentDate <= endDate) {

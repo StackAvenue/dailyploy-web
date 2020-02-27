@@ -22,7 +22,8 @@ import {
   HRMIN,
   HHMMSS,
   FULL_DATE,
-  DATE_FORMAT3
+  DATE_FORMAT3,
+  FULL_DATE_FORMAT3
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -113,7 +114,8 @@ class Dashboard extends Component {
       showEventAlertId: "",
       trackingEvent: null,
       taskloader: false,
-      task: []
+      task: [],
+      validateTimefrom: null
     };
   }
 
@@ -584,23 +586,36 @@ class Dashboard extends Component {
         let taskObjects = dates.map(date => {
           return this.createTaskSyncObject(date, task, this.state.project);
         });
-        var events = [this.state.events, ...taskObjects].flat();
+        var events = [this.state.events, ...taskObjects]
+          .flat()
+          .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
         this.setState({
           show: false,
-          // newTask: task,
           events: events,
           border: "solid 1px #ffffff",
           taskName: "",
           project: null,
-          taskCategorie: null,
-          taskloader: false
+          taskCategorie: null
         });
+
+        let start = moment(convertUTCToLocalDate(task.start_datetime));
+        let end = moment(convertUTCToLocalDate(task.end_datetime));
+        let today = moment().format(DATE_FORMAT1);
+        let startDate = start.format(DATE_FORMAT1);
+        let startTime = start.format("HH.mm");
+        let endTime = end.format("HH.mm");
         if (
-          !this.state.status &&
-          moment(task.start_datetime).format(DATE_FORMAT1) ==
-            moment().format(DATE_FORMAT1)
+          task.members[0].id == this.state.userId &&
+          ((startDate == today &&
+            startTime == "00.00" &&
+            endTime == "00.00" &&
+            this.state.validateTimefrom == null) ||
+            (startDate == today &&
+              startTime == "00.00" &&
+              this.state.validateTimefrom != null &&
+              this.state.validateTimefrom <= moment().format("HH.mm")))
         ) {
-          this.handleTaskStartOnly(taskObjects[0], Date.now());
+          this.handleTaskStart(taskObjects[0], Date.now());
         }
         this.closeTaskModal();
       } catch (e) {
@@ -800,7 +815,8 @@ class Dashboard extends Component {
         timeFromError: "",
         timeToError: "",
         categoryError: ""
-      }
+      },
+      taskloader: false
     });
   };
 
@@ -834,7 +850,8 @@ class Dashboard extends Component {
       timeTo:
         value != null && value.format("HH:mm:ss") > this.state.timeTo
           ? null
-          : this.state.timeTo
+          : this.state.timeTo,
+      validateTimefrom: value != null ? value.format("HH.mm") : null
     });
   };
 
@@ -992,13 +1009,17 @@ class Dashboard extends Component {
         taskId: "",
         modalMemberSearchOptions: this.addTaskMembers(members, selecteMember),
         dateFrom: new Date(startDate),
-        dateTo:
-          new Date(startDate) <= this.state.dateTo ? this.state.dateTo : null,
+        dateTo: new Date(endDate),
         border: "solid 1px #ffffff",
         // timeDateTo: moment(),
-        timeDateFrom: moment(),
+        timeDateFrom: this.isCurrentDateTask(startDate) ? moment() : null,
         // timeTo: moment().format("HH:mm"),
-        timeFrom: moment().format("HH:mm"),
+        timeFrom: this.isCurrentDateTask(startDate)
+          ? moment().format("HH:mm")
+          : null,
+        validateTimefrom: this.isCurrentDateTask(startDate)
+          ? moment().format("HH.mm")
+          : null,
         memberProjects: memberProjects,
         errors: {
           taskNameError: "",
@@ -1012,6 +1033,12 @@ class Dashboard extends Component {
         }
       });
     }
+  };
+
+  isCurrentDateTask = startDate => {
+    return (
+      moment().format(DATE_FORMAT1) == moment(startDate).format(DATE_FORMAT1)
+    );
   };
 
   addTaskMembers = (members, selecteMember) => {
@@ -1660,7 +1687,6 @@ class Dashboard extends Component {
   }
 
   handleTaskCreate = async workspaceId => {
-    console.log("task handleTaskUpdate");
     base
       .database()
       .ref(`task_created/${workspaceId}`)
@@ -1683,7 +1709,6 @@ class Dashboard extends Component {
   };
 
   handleTaskDelete = async workspaceId => {
-    console.log("handleTaskDelete");
     base
       .database()
       .ref(`task_deleted/${workspaceId}`)
@@ -1701,7 +1726,6 @@ class Dashboard extends Component {
   };
 
   handleTaskRunning = async workspaceId => {
-    console.log("handleTaskRunning");
     base
       .database()
       .ref(`task_running/${workspaceId}`)
@@ -1723,8 +1747,6 @@ class Dashboard extends Component {
   };
 
   handleTaskSyncStop = async workspaceId => {
-    console.log("handleTaskSyncStop");
-
     base
       .database()
       .ref(`task_stopped/${workspaceId}`)
@@ -1745,7 +1767,6 @@ class Dashboard extends Component {
   };
 
   loadUserTask = async workspaceId => {
-    console.log("load task");
     if (this.state.workspaceId) {
       try {
         var userIds =
