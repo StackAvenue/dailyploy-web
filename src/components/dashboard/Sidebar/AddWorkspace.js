@@ -24,7 +24,7 @@ const AddWorkspace = props => {
           <div className="col-md-12 input">
             <input
               type="text"
-              placeholder="Write Here"
+              placeholder=""
               className="form-control"
               name="workspaceName"
               onChange={props.handleInputChange}

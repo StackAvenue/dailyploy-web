@@ -3105,13 +3105,14 @@ table.scheduler-table tr:last-child td {
         .name {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
-          color: $color-text3 !important;
+          color: $color-text2 !important;
           padding: 33px 0px 8px 0px !important;
           span {
             font-size: 12px !important;
           }
         }
         .input {
+          color: $color-text1 !important;
           padding: 0 !important;
         }
         .create-btn {
