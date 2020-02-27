@@ -128,11 +128,11 @@ class AddTaskModal extends React.Component {
                   <input
                     type="text"
                     name="taskName"
-                    // value={props.state.taskName}
-                    // onChange={props.handleTaskNameChange}
-                    value={this.state.taskName}
-                    onChange={e => this.handleInputChange(e)}
-                    onBlur={this.onBlurInput}
+                    value={props.state.taskName}
+                    onChange={props.handleInputChange}
+                    // value={this.state.taskName}
+                    // onChange={e => this.handleInputChange(e)}
+                    // onBlur={this.onBlurInput}
                     placeholder="Task name..."
                     className="form-control"
                   />
@@ -393,11 +393,11 @@ class AddTaskModal extends React.Component {
                 <div className="col-md-10">
                   <textarea
                     name="comments"
-                    value={this.state.comments}
-                    // value={props.state.comments}
-                    // onChange={props.handleInputChange}
-                    onChange={e => this.handleInputChange(e)}
-                    onBlur={this.onBlurComment}
+                    value={props.state.comments}
+                    onChange={props.handleInputChange}
+                    // value={this.state.comments}
+                    // onChange={e => this.handleInputChange(e)}
+                    // onBlur={this.onBlurComment}
                     className="form-control"
                     rows="2"
                     placeholder="Write Here"

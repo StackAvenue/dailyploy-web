@@ -159,6 +159,17 @@ class Calendar extends Component {
     cal.getElementsByTagName("input")[0].setAttribute("readonly", "readonly");
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      this.props.resources === nextProps.resources &&
+      this.props.events === nextProps.events
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   async componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.events !== this.props.events ||
@@ -258,6 +269,7 @@ class Calendar extends Component {
       </div>
     );
   }
+
   eventItemPopoverTemplateResolver = (
     schedulerData,
     eventItem,
