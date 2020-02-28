@@ -10,6 +10,7 @@ import {
   getContrastColor
 } from "./../../utils/function";
 import Timer from "./../dashboard/Timer";
+import TaskAction from "./../dashboard/TaskAction";
 import { Alert, UncontrolledAlert } from "reactstrap";
 import { OverlayTrigger } from "react-bootstrap";
 
@@ -218,6 +219,13 @@ class DashboardEvent extends Component {
     this.setState({
       show: !this.state.show,
       showAction: false
+    });
+  };
+
+  actionOnClickOutside = () => {
+    this.setState({
+      showAction: !this.state.showAction,
+      show: false
     });
   };
 
@@ -566,6 +574,14 @@ class DashboardEvent extends Component {
         ) : null}
 
         {this.state.showAction && this.state.clickEventId === event.id ? (
+          <TaskAction
+            event={event}
+            actionOnClickOutside={this.actionOnClickOutside}
+            taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+          />
+        ) : null}
+
+        {/* {this.state.showAction && this.state.clickEventId === event.id ? (
           <div className="d-inline-block event-action-dropdown">
             {this.props.event.status !== "completed" ? (
               <>
@@ -604,7 +620,7 @@ class DashboardEvent extends Component {
               </div>
             )}
           </div>
-        ) : null}
+        ) : null} */}
 
         <div className="custom-event-popup">
           {this.state.showPopup
