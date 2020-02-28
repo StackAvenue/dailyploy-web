@@ -1406,7 +1406,8 @@ table.scheduler-table tr:last-child td {
         }
         .leftheader {
           // width: 220px !important;
-          color: #e5e5e5 !important;
+          padding: 5px;
+          color: $color-text2 !important;
           text-align: center !important;
           height: 35px !important;
           border-right: solid 1px $color-borders !important;
@@ -4595,12 +4596,12 @@ table.scheduler-table tr:last-child td {
 }
 
 .viewtype-btns {
-  // position: relative;
-  // top: -48px;
-  // right: 170px;
-  position: fixed;
-  top: 72px;
-  right: 200px;
+  position: absolute;
+  top: -47px;
+  right: 20%;
+  // position: fixed;
+  // top: 72px;
+  // right: 200px;
   z-index: 10;
   div {
     width: 80px;
