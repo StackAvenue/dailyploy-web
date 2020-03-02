@@ -1,4 +1,5 @@
 import cookie from "react-cookies";
+export const WEBSITE_URL = "https://dailyploy.com";
 export const AUTH_TOKEN = cookie.load("accessToken");
 export const WORKSPACE_ID = cookie.load("workspaceId");
 export const SERVICE_URL = process.env.REACT_APP_API_ENDPOINT;
@@ -58,7 +59,6 @@ export const DEFAULT_PRIORITIE = {
   color_code: "#9B9B9B",
   label: "no priority"
 };
-
 export const PRIORITIES_MAP = new Map();
 PRIORITIES_MAP.set("high", {
   name: "high",
