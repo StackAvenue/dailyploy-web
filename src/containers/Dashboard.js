@@ -587,12 +587,11 @@ class Dashboard extends Component {
           .flat()
           .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
         this.setState({
-          show: false,
           events: events,
           border: "solid 1px #ffffff",
           taskName: "",
           project: null,
-          taskCategorie: null
+          taskCategorie: ""
         });
 
         let start = moment(convertUTCToLocalDate(task.start_datetime));
@@ -768,9 +767,13 @@ class Dashboard extends Component {
   };
 
   closeOnlyTaskModal = () => {
-    this.setState({
-      show: false
-    });
+    if (this.state.taskButton != "Add") {
+      this.closeTaskModal();
+    } else {
+      this.setState({
+        show: false
+      });
+    }
   };
 
   closeTaskModal = () => {
@@ -792,7 +795,7 @@ class Dashboard extends Component {
       selectedMembers: [],
       taskName: "",
       projectId: "",
-      project: {},
+      project: null,
       comments: "",
       border: "solid 1px #ffffff",
       taskEvent: "",
@@ -802,7 +805,7 @@ class Dashboard extends Component {
       logTimeTo: null,
       logTimeFrom: null,
       taskPrioritie: DEFAULT_PRIORITIE,
-      taskCategorie: "",
+      taskCategorie: null,
       errors: {
         taskNameError: "",
         projectError: "",
