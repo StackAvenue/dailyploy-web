@@ -133,8 +133,9 @@ class AddTaskModal extends React.Component {
                     // value={this.state.taskName}
                     // onChange={e => this.handleInputChange(e)}
                     // onBlur={this.onBlurInput}
-                    placeholder="Task name..."
+                    placeholder="Task Name"
                     className="form-control"
+                    autoFocus
                   />
                 </div>
 
@@ -163,7 +164,7 @@ class AddTaskModal extends React.Component {
                 >
                   <DailyPloySelect
                     options={this.props.state.memberProjects}
-                    placeholder="Select project"
+                    placeholder="Select Project"
                     label="name"
                     className="suggestion-z-index-100"
                     default={this.props.state.project}
@@ -190,7 +191,7 @@ class AddTaskModal extends React.Component {
                 <div className="col-md-10 d-inline-block">
                   <DailyPloySelect
                     options={this.props.state.taskCategories}
-                    placeholder="Select category"
+                    placeholder="Select Category"
                     className="suggestion-z-index-50"
                     default={this.props.state.taskCategorie}
                     onChange={this.props.handleCategoryChange}

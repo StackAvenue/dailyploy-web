@@ -174,7 +174,7 @@ class AddMemberModal extends Component {
                     <DailyPloySelect
                       className="select-memeber-project project"
                       options={this.props.projects}
-                      placeholder="Select project"
+                      placeholder="Select Project"
                       onChange={value =>
                         this.props.handleChangeProjectSelect(value)
                       }
