@@ -194,7 +194,9 @@ class Dashboard extends Component {
         this.setState({
           resources: tasksResources ? tasksResources : [],
           events: taskEvents ? taskEvents : [],
-          status: taskRunningObj.status,
+          status: taskRunningObj.status
+            ? taskRunningObj.status
+            : this.state.status,
           taskId: taskRunningObj.taskId,
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent
@@ -398,7 +400,7 @@ class Dashboard extends Component {
       worksapceUsers: worksapceUsers,
       taskCategories: taskCategories,
       workspaceId: workspaceId,
-      status: taskRunningObj.status,
+      status: taskRunningObj.status ? taskRunningObj.status : this.state.status,
       taskId: taskRunningObj.taskId,
       startOn: taskRunningObj.startOn,
       trackingEvent: trackingEvent
