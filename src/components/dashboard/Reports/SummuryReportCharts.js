@@ -93,19 +93,19 @@ class SummuryReportCharts extends Component {
       return this.props.state.projectReports &&
         this.props.state.projectReports.capacity
         ? `${this.props.state.projectReports.capacity} H`
-        : "8 H";
+        : "0 H";
     } else if (this.props.state.frequency == "weekly") {
       return this.props.state.projectReports &&
         this.props.state.projectReports.capacity
         ? `${this.props.state.projectReports.capacity * 5} H`
-        : "40 H";
+        : "0 H";
     } else if (this.props.state.frequency == "monthly") {
       return this.props.state.projectReports &&
         this.props.state.projectReports.capacity
         ? `${this.props.state.projectReports.capacity * 20} H`
-        : "160 H";
+        : "0 H";
     } else {
-      return "8 h";
+      return "0 H";
     }
   };
 

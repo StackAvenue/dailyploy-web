@@ -431,7 +431,8 @@ class Reports extends Component {
         data.report_data.length > 0
           ? {
               data: data.report_data,
-              estimateTime: data.total_estimated_time
+              estimateTime: data.total_estimated_time,
+              capacity: data.capacity
             }
           : "";
     } catch (e) {}
