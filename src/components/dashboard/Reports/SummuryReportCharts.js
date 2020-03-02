@@ -131,6 +131,7 @@ class SummuryReportCharts extends Component {
               <span className="tooltiptext">{this.infoMessage()}</span>
             </i>
           </div>
+
           <div className="col-md-9 summury-info-btn d-inline-block">
             <div className="cap-info-btn d-inline-block">
               <button className="d-inline-block">Capacity</button>
