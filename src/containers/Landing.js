@@ -39,7 +39,7 @@ class Landing extends Component {
                         collaboration and management. We aspire to provide a
                         solution that helps you to focus on your planning while
                         we help you organise and plan your team’s tasks for
-                        projects' success.
+                        project's success.
                       </div>
                       <div className="col-md-12 text-left">
                         <Link
