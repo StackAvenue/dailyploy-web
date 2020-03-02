@@ -95,7 +95,6 @@ class Analysis extends Component {
   };
 
   onSelectSort = value => {
-    console.log("selected value ", value);
     this.setState({ sort: value });
   };
 
@@ -117,11 +116,12 @@ class Analysis extends Component {
   };
 
   render() {
+    const { workspaceId } = this.props.match.params;
     return (
       <>
         <MenuBar
           onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
+          workspaceId={workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
         />

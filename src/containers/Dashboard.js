@@ -1178,6 +1178,8 @@ class Dashboard extends Component {
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
       var timeTracked = data.time_tracked;
+      event["dateFormattedTimeTrack"] = data.date_formatted_time_tracks;
+      event["allTimeTracked"] = data.time_tracked;
       var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
     } catch (e) {}
     if (
