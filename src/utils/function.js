@@ -38,8 +38,9 @@ export const workspaceNameSplit = name => {
 };
 
 export const convertUTCToLocalDate = date => {
-  var date = new Date(date);
-  return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  var newdate = new Date(date.replace(/-/g, "/"));
+  // console.log("newdate", date, newdate);
+  return new Date(newdate.getTime() + newdate.getTimezoneOffset() * 60 * 1000);
 };
 
 export const getWorkspaceId = () => {

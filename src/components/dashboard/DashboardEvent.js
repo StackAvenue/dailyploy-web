@@ -192,10 +192,14 @@ class DashboardEvent extends Component {
 
   calculateTime = event => {
     var start = new Date(
-      moment(convertUTCToLocalDate(event.taskStartDateTime)).format(FULL_DATE)
+      moment(convertUTCToLocalDate(event.taskStartDateTime))
+        .format(FULL_DATE)
+        .replace(/-/g, "/")
     );
     var end = new Date(
-      moment(convertUTCToLocalDate(event.taskEndDateTime)).format(FULL_DATE)
+      moment(convertUTCToLocalDate(event.taskEndDateTime))
+        .format(FULL_DATE)
+        .replace(/-/g, "/")
     );
     var timeDiff = "00:00";
     if (

@@ -323,10 +323,11 @@ class Calendar extends Component {
       moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
     );
     var end = new Date(
-      moment(convertUTCToLocalDate(eventItem.taskEndDateTime)).format(
-        `${DATE_FORMAT1} HH:mm:ss`
-      )
+      moment(convertUTCToLocalDate(eventItem.taskEndDateTime))
+        .format(`${DATE_FORMAT1} HH:mm:ss`)
+        .replace(/-/g, "/")
     );
+
     var timeDiff = "00h 00m";
     if (
       moment(start).format("HH:mm") != "00:00" &&

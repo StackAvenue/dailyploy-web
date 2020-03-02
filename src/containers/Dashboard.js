@@ -972,6 +972,8 @@ class Dashboard extends Component {
   };
 
   setAddTaskDetails = (memberId, startDate, endDate) => {
+    var startDate = new Date(startDate.replace(/-/g, "/"));
+    var endDate = new Date(endDate.replace(/-/g, "/"));
     let members = this.memberSearchOptions(memberId);
     var selectedMembers = this.state.users.filter(
       member => memberId === member.id
