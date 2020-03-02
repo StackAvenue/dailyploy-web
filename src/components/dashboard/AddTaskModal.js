@@ -6,7 +6,7 @@ import "rc-time-picker/assets/index.css";
 import { PRIORITIES } from "./../../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
-import moment from "moment";
+import Loader from "react-loader-spinner";
 import DailyPloySelect from "./../DailyPloySelect";
 
 class AddTaskModal extends React.Component {
@@ -430,6 +430,16 @@ class AddTaskModal extends React.Component {
                     }
                   >
                     {props.state.taskButton}
+                    {this.props.state.taskloader ? (
+                      <Loader
+                        type="Oval"
+                        color="#FFFFFF"
+                        height={20}
+                        width={20}
+                        style={{ paddingLeft: "5px" }}
+                        className="d-inline-block login-signup-loader"
+                      />
+                    ) : null}
                   </button>
                   {this.props.state.fromInfoEdit ? (
                     <button

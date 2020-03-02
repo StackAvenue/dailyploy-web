@@ -5,8 +5,9 @@ import SignUp from "./containers/Signup";
 import Landing from "./containers/Landing";
 import cookie from "react-cookies";
 import Workspace from "./Workspace";
-import { WORKSPACE_ID } from "./utils/Constants";
+import { WORKSPACE_ID, WEBSITE_URL } from "./utils/Constants";
 import { getWorkspaceId } from "./utils/function";
+import { isMobile } from "react-device-detect";
 
 class Routes extends Component {
   constructor(props) {
@@ -78,25 +79,30 @@ class Routes extends Component {
   };
 
   render() {
-    return (
-      <div>
-        <main>
-          <Switch>
-            {this.Routes.map((route, i) => (
-              <Route
-                key={i}
-                exact={route.exact}
-                path={route.path}
-                render={props =>
-                  this.isAllowed(props, route.component, route.title)
-                }
-              />
-            ))}
-            <Route />
-          </Switch>
-        </main>
-      </div>
-    );
+    if (isMobile) {
+      window.location.replace(`${WEBSITE_URL}/#Apps`);
+    } else {
+      return (
+        <div>
+          <main>
+            <Switch>
+              {}
+              {this.Routes.map((route, i) => (
+                <Route
+                  key={i}
+                  exact={route.exact}
+                  path={route.path}
+                  render={props =>
+                    this.isAllowed(props, route.component, route.title)
+                  }
+                />
+              ))}
+              <Route />
+            </Switch>
+          </main>
+        </div>
+      );
+    }
   }
 }
 
