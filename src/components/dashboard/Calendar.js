@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "antd/lib/style/index.less";
-// import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
-import Scheduler, {
-  SchedulerData,
-  ViewTypes
-} from "./../../../src/react-big-scheduler";
+import Scheduler, { SchedulerData, ViewTypes } from "react-big-scheduler";
+// import Scheduler, {
+//   SchedulerData,
+//   ViewTypes
+// } from "./../../../src/react-big-scheduler";
 import withDragDropContext from "./withDnDContext";
 import { Dropdown } from "react-bootstrap";
 import "../../assets/css/dashboard.scss";
