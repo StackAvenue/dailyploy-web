@@ -4865,7 +4865,8 @@ table.scheduler-table tr:last-child td {
       height: 26px !important;
       padding-top: 2px !important;
       vertical-align: middle !important;
-      margin-right: 10px !important;
+      margin-left: 10px !important;
+      // margin-right: 10px !important;
       border-radius: 4px !important;
       border: solid 1px #bfbfbf;
       background-color: #ffffff;
@@ -4892,7 +4893,9 @@ table.scheduler-table tr:last-child td {
     font-family: $font-family-roboto;
     color: $color-text3;
     padding-left: 20px;
-    vertical-align: sub;
+    vertical-align: inherit;
+    position: relative;
+    top: -37 !important;
   }
 }
 

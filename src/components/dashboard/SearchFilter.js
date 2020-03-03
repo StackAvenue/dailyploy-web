@@ -412,12 +412,12 @@ class SearchFilter extends Component {
             }`}
             onClick={this.onClickInput}
           >
-            {this.state.selectedTags.length == 0 ? (
-              <span className="placeholder">
-                {this.returnPlaceHolder(selectedMember)}
-              </span>
-            ) : null}
             <div className="d-inline-block user-project-search text-titlize">
+              {this.state.selectedTags.length == 0 ? (
+                <span className="placeholder">
+                  {this.returnPlaceHolder(selectedMember)}
+                </span>
+              ) : null}
               <div className="selected-tags">
                 {this.props.isReports
                   ? this.renderSelectedTags(
