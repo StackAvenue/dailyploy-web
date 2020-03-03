@@ -156,7 +156,10 @@ class ReportTable extends Component {
         <div>
           <div className="report-message">{this.props.state.message} </div>
           <div className="reports-table-container">
-            <div className="report-header">
+            <div
+              className="report-header"
+              style={{ fontWeight: "600", color: "#000000" }}
+            >
               <span className="pull-left">Capacity </span>
               <span className="pull-right">
                 {"Total Time: " +
