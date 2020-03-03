@@ -35,8 +35,11 @@ class Landing extends Component {
                         Daily Planning made simple!
                       </div>
                       <div className="col-md-12 text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aenean euismod bibendum laoreet.{" "}
+                        One-stop solution for all your projects, team
+                        collaboration and management. We aspire to provide a
+                        solution that helps you to focus on your planning while
+                        we help you organise and plan your team’s tasks for
+                        projects' success.
                       </div>
                       <div className="col-md-12 text-left">
                         <Link

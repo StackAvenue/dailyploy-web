@@ -134,7 +134,7 @@ class Calendar extends Component {
       ? this.props.resources.length
       : 0;
     let sceenHeight = window.screen.height;
-    let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 30) / 10;
+    let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 25) / 10;
     let heights = new Map();
     heights.set(0, finalSceenHeight);
     heights.set(1, finalSceenHeight);
@@ -159,6 +159,17 @@ class Calendar extends Component {
     cal.getElementsByTagName("input")[0].setAttribute("readonly", "readonly");
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      this.props.resources === nextProps.resources &&
+      this.props.events === nextProps.events
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   async componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.events !== this.props.events ||
@@ -172,10 +183,17 @@ class Calendar extends Component {
     }
   }
 
+  removeDuplicates = (myArr, prop) => {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  };
+
   renderData = () => {
     this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
     this.schedulerData.setResources(this.props.resources);
-    this.schedulerData.setEvents(this.props.events);
+    let uniqEvents = this.removeDuplicates(this.props.events, "id");
+    this.schedulerData.setEvents(uniqEvents);
   };
 
   nonAgendaCellHeaderTemplateResolver = (
@@ -215,6 +233,35 @@ class Calendar extends Component {
     this._isMounted = false;
   }
 
+  renderButtons = () => {
+    return this.schedulerData.config.views.map(item => (
+      <>
+        <button
+          className={`${
+            this.state.viewModel.viewType == item.viewType ? "active" : ""
+          }`}
+          onClick={e => this.onClickCustomButton(e)}
+          value={`${item.viewType}${item.showAgenda ? 1 : 0}${
+            item.isEventPerspective ? 1 : 0
+          }`}
+        >
+          {item.viewName}
+        </button>
+      </>
+    ));
+  };
+
+  onClickCustomButton = e => {
+    var viewType = parseInt(e.target.value.charAt(0));
+    var showAgenda = e.target.value.charAt(1) === "1";
+    var isEventPerspective = e.target.value.charAt(2) === "1";
+    this.onViewChange(this.schedulerData, {
+      viewType: viewType,
+      showAgenda: showAgenda,
+      isEventPerspective: isEventPerspective
+    });
+  };
+
   render() {
     const { viewModel } = this.state;
     this.renderData();
@@ -225,39 +272,45 @@ class Calendar extends Component {
     );
 
     return (
-      <div>
-        <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
-          <Scheduler
-            schedulerData={viewModel}
-            prevClick={this.prevClick}
-            nextClick={this.nextClick}
-            onSelectDate={this.onSelectDate}
-            onViewChange={this.onViewChange}
-            eventItemClick={this.eventClicked}
-            updateEventStart={this.updateEventStart}
-            updateEventEnd={this.updateEventEnd}
-            moveEvent={this.moveEvent}
-            newEvent={this.newEvent}
-            onScrollLeft={this.onScrollLeft}
-            onScrollRight={this.onScrollRight}
-            onScrollTop={this.onScrollTop}
-            onScrollBottom={this.onScrollBottom}
-            nonAgendaCellHeaderTemplateResolver={
-              this.nonAgendaCellHeaderTemplateResolver
-            }
-            toggleExpandFunc={this.toggleExpandFunc}
-            leftCustomHeader={leftCustomHeader}
-            eventItemTemplateResolver={this.eventItemTemplateResolver}
-            eventItemPopoverTemplateResolver={
-              this.eventItemPopoverTemplateResolver
-            }
-            customeVeiwTypeButtons={this.viewTypeButtons}
-            customeDatePicker={this.customeDatePicker}
-          />
+      <>
+        <div className="scheduler-date-picker">{this.customeDatePicker()}</div>
+        <div className="viewtype-btns">{this.renderButtons()}</div>
+        <div>
+          <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
+            <Scheduler
+              schedulerData={viewModel}
+              prevClick={this.prevClick}
+              nextClick={this.nextClick}
+              onSelectDate={this.onSelectDate}
+              onViewChange={this.onViewChange}
+              eventItemClick={this.eventClicked}
+              updateEventStart={this.updateEventStart}
+              updateEventEnd={this.updateEventEnd}
+              moveEvent={this.moveEvent}
+              newEvent={this.newEvent}
+              onScrollLeft={this.onScrollLeft}
+              onScrollRight={this.onScrollRight}
+              onScrollTop={this.onScrollTop}
+              onScrollBottom={this.onScrollBottom}
+              nonAgendaCellHeaderTemplateResolver={
+                this.nonAgendaCellHeaderTemplateResolver
+              }
+              toggleExpandFunc={this.toggleExpandFunc}
+              leftCustomHeader={leftCustomHeader}
+              eventItemTemplateResolver={this.eventItemTemplateResolver}
+              eventItemPopoverTemplateResolver={
+                this.eventItemPopoverTemplateResolver
+              }
+              customeVeiwTypeButtons={this.viewTypeButtons}
+              customeDatePicker={() => null}
+              // customeDatePicker={this.customeDatePicker}
+            />
+          </div>
         </div>
-      </div>
+      </>
     );
   }
+
   eventItemPopoverTemplateResolver = (
     schedulerData,
     eventItem,

@@ -6,7 +6,7 @@ import "../assets/css/dashboard.scss";
 import MenuBar from "../components/dashboard/MenuBar";
 import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
 import {
   getWeekFisrtDate,
@@ -20,10 +20,7 @@ import {
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
   HRMIN,
-  HHMMSS,
-  FULL_DATE,
-  DATE_FORMAT3,
-  FULL_DATE_FORMAT3
+  FULL_DATE
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -197,7 +194,9 @@ class Dashboard extends Component {
         this.setState({
           resources: tasksResources ? tasksResources : [],
           events: taskEvents ? taskEvents : [],
-          status: taskRunningObj.status,
+          status: taskRunningObj.status
+            ? taskRunningObj.status
+            : this.state.status,
           taskId: taskRunningObj.taskId,
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent
@@ -401,7 +400,7 @@ class Dashboard extends Component {
       worksapceUsers: worksapceUsers,
       taskCategories: taskCategories,
       workspaceId: workspaceId,
-      status: taskRunningObj.status,
+      status: taskRunningObj.status ? taskRunningObj.status : this.state.status,
       taskId: taskRunningObj.taskId,
       startOn: taskRunningObj.startOn,
       trackingEvent: trackingEvent
@@ -590,12 +589,11 @@ class Dashboard extends Component {
           .flat()
           .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
         this.setState({
-          show: false,
           events: events,
           border: "solid 1px #ffffff",
           taskName: "",
           project: null,
-          taskCategorie: null
+          taskCategorie: ""
         });
 
         let start = moment(convertUTCToLocalDate(task.start_datetime));
@@ -771,9 +769,13 @@ class Dashboard extends Component {
   };
 
   closeOnlyTaskModal = () => {
-    this.setState({
-      show: false
-    });
+    if (this.state.taskButton != "Add") {
+      this.closeTaskModal();
+    } else {
+      this.setState({
+        show: false
+      });
+    }
   };
 
   closeTaskModal = () => {
@@ -795,7 +797,7 @@ class Dashboard extends Component {
       selectedMembers: [],
       taskName: "",
       projectId: "",
-      project: {},
+      project: null,
       comments: "",
       border: "solid 1px #ffffff",
       taskEvent: "",
@@ -805,7 +807,7 @@ class Dashboard extends Component {
       logTimeTo: null,
       logTimeFrom: null,
       taskPrioritie: DEFAULT_PRIORITIE,
-      taskCategorie: "",
+      taskCategorie: null,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -1178,6 +1180,8 @@ class Dashboard extends Component {
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
       var timeTracked = data.time_tracked;
+      event["dateFormattedTimeTrack"] = data.date_formatted_time_tracks;
+      event["allTimeTracked"] = data.time_tracked;
       var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
     } catch (e) {}
     if (
@@ -1958,6 +1962,10 @@ class Dashboard extends Component {
       });
   };
 
+  handleTaskNameChange = async (name, value) => {
+    this.setState({ [name]: value });
+  };
+
   componentWillUnmount() {}
 
   render() {
@@ -2029,6 +2037,7 @@ class Dashboard extends Component {
               handleCategoryChange={this.handleCategoryChange}
               handlePrioritiesChange={this.handlePrioritiesChange}
               addCategory={this.addCategory}
+              handleTaskNameChange={this.handleTaskNameChange}
             />
 
             <TaskInfoModal

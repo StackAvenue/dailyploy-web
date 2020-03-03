@@ -361,7 +361,9 @@ class TaskConfirm extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <span className="">
-                    {this.props.state.taskCategorie.name}
+                    {this.props.state.taskCategorie
+                      ? this.props.state.taskCategorie.name
+                      : ""}
                   </span>
                 </div>
               </div>

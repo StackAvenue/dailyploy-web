@@ -204,12 +204,12 @@ class Signin extends Component {
                         </div>
                         <div className="text-right forgot-pass">
                           Forgot Password?{" "}
-                          <button
-                            className="btn btn-link no-padding"
+                          <div
+                            className="btn btn-link no-padding click-here"
                             onClick={this.toggleResetPassword}
                           >
                             Click here
-                          </button>
+                          </div>
                           {this.state.loadingReset ? (
                             <Loader
                               type="Oval"

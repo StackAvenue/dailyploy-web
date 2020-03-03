@@ -162,10 +162,8 @@ class TaskInfoModal extends Component {
   };
 
   returnTime = time => {
-    return `${moment(convertUTCToLocalDate(time.start_time)).format(
-      "HH.mm A"
-    )} - ${moment(
-      time.end_time ? convertUTCToLocalDate(time.end_time) : new Date()
+    return `${moment(time.start_time).format("HH.mm A")} - ${moment(
+      time.end_time ? time.end_time : new Date()
     ).format("HH.mm A")}`;
   };
 

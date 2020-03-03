@@ -6,7 +6,7 @@ import "rc-time-picker/assets/index.css";
 import { PRIORITIES } from "./../../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
-import moment from "moment";
+import Loader from "react-loader-spinner";
 import DailyPloySelect from "./../DailyPloySelect";
 
 class AddTaskModal extends React.Component {
@@ -26,9 +26,20 @@ class AddTaskModal extends React.Component {
       isBorder: false,
       border: "solid 1px #d1d1d1",
       notFound: "hide",
-      memberNotFound: "hide"
+      memberNotFound: "hide",
+      taskName: "",
+      comments: ""
     };
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.state.taskName !== prevProps.state.taskName) {
+      this.setState({ taskName: this.props.state.taskName });
+    }
+    if (this.props.state.comments !== prevProps.state.comments) {
+      this.setState({ comments: this.props.state.comments });
+    }
+  };
 
   disabledHours = () => {
     var time = this.props.state.timeFrom;
@@ -69,6 +80,19 @@ class AddTaskModal extends React.Component {
     this.calendarToRef.current.setOpen(true);
   };
 
+  handleInputChange = async e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  onBlurInput = () => {
+    this.props.handleTaskNameChange("taskName", this.state.taskName);
+  };
+
+  onBlurComment = () => {
+    this.props.handleTaskNameChange("comments", this.state.comments);
+  };
+
   render() {
     const { props } = this;
     return (
@@ -106,6 +130,9 @@ class AddTaskModal extends React.Component {
                     name="taskName"
                     value={props.state.taskName}
                     onChange={props.handleInputChange}
+                    // value={this.state.taskName}
+                    // onChange={e => this.handleInputChange(e)}
+                    // onBlur={this.onBlurInput}
                     placeholder="Task name..."
                     className="form-control"
                   />
@@ -368,6 +395,9 @@ class AddTaskModal extends React.Component {
                     name="comments"
                     value={props.state.comments}
                     onChange={props.handleInputChange}
+                    // value={this.state.comments}
+                    // onChange={e => this.handleInputChange(e)}
+                    // onBlur={this.onBlurComment}
                     className="form-control"
                     rows="2"
                     placeholder="Write Here"
@@ -400,6 +430,16 @@ class AddTaskModal extends React.Component {
                     }
                   >
                     {props.state.taskButton}
+                    {this.props.state.taskloader ? (
+                      <Loader
+                        type="Oval"
+                        color="#FFFFFF"
+                        height={20}
+                        width={20}
+                        style={{ paddingLeft: "5px" }}
+                        className="d-inline-block login-signup-loader"
+                      />
+                    ) : null}
                   </button>
                   {this.props.state.fromInfoEdit ? (
                     <button
