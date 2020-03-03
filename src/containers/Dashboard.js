@@ -1684,14 +1684,12 @@ class Dashboard extends Component {
   };
 
   componentWillMount() {
-    if (this.state.loadFireBase) {
-      var workspaceId = this.props.match.params.workspaceId;
-      this.handleTaskCreate(workspaceId);
-      this.handleTaskDelete(workspaceId);
-      this.handleTaskRunning(workspaceId);
-      this.handleTaskSyncStop(workspaceId);
-      this.handleTaskUpdate(workspaceId);
-    }
+    var workspaceId = this.props.match.params.workspaceId;
+    this.handleTaskCreate(workspaceId);
+    this.handleTaskDelete(workspaceId);
+    this.handleTaskRunning(workspaceId);
+    this.handleTaskSyncStop(workspaceId);
+    this.handleTaskUpdate(workspaceId);
   }
 
   handleTaskCreate = async workspaceId => {
@@ -1700,6 +1698,7 @@ class Dashboard extends Component {
       .ref(`task_created/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
@@ -1722,6 +1721,7 @@ class Dashboard extends Component {
       .ref(`task_deleted/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
@@ -1740,6 +1740,7 @@ class Dashboard extends Component {
       .on("child_added", snap => {
         let task = snap.val();
         if (
+          this.state.loadFireBase &&
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           this.loadUserTask(workspaceId);
@@ -1760,6 +1761,7 @@ class Dashboard extends Component {
       .ref(`task_stopped/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           this.loadUserTask(workspaceId);
@@ -1926,6 +1928,30 @@ class Dashboard extends Component {
       .ref(`task_update/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          let dates = getMiddleDates(task.start_datetime, task.end_datetime);
+          let events = this.state.events.filter(
+            event => event.taskId != task.id
+          );
+          let taskObjects = dates.map(date => {
+            return this.updateTaskSyncObject(date, task);
+          });
+          var finalEvents = [events, ...taskObjects]
+            .flat()
+            .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
+          this.setState({ events: finalEvents });
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_update/${workspaceId}`)
+      .on("child_changed", snap => {
+        if (
+          this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
@@ -1948,6 +1974,30 @@ class Dashboard extends Component {
       .ref(`task_completed/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          var events = this.state.events;
+          var filterEvents = events.filter(event => event.taskId == task.id);
+          filterEvents.forEach(event => {
+            event["trackingStatus"] =
+              task.status == "completed" ? "check" : "play";
+            event["status"] = task.status;
+          });
+          var events = events.sort(
+            (a, b) => Number(a.sortedTime) - Number(b.sortedTime)
+          );
+          this.setState({ events: events });
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_completed/${workspaceId}`)
+      .on("child_changed", snap => {
+        if (
+          this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
