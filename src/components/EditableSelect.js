@@ -75,7 +75,7 @@ class EditableSelect extends Component {
                           style={{ backgroundColor: `${option.color_code}` }}
                         ></div>
                       )}
-                      <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
+                      <span className="d-inline-block right-left-space-5 text-titlize ">{`${option[name]}`}</span>
                     </li>
                   );
                 })

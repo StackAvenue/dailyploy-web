@@ -31,6 +31,9 @@ class AddTaskModal extends React.Component {
       comments: ""
     };
   }
+  // componentDidMount() {
+  //   this.nameInput.focus();
+  // }
 
   componentDidUpdate = (prevProps, prevState) => {
     if (this.props.state.taskName !== prevProps.state.taskName) {
@@ -135,7 +138,11 @@ class AddTaskModal extends React.Component {
                     // onBlur={this.onBlurInput}
                     placeholder="Task Name"
                     className="form-control"
-                    autoFocus
+                    // ref={input => {
+                    //   this.nameInput = input;
+                    // }}
+                    // defaultValue=""
+                    ref={input => input && input.focus()}
                   />
                 </div>
 
@@ -284,7 +291,7 @@ class AddTaskModal extends React.Component {
                     </div>
                     <div className="col-md-6 d-inline-block task-datepicker">
                       <div className="d-inline-block label date-text-light ">
-                        <span>To:</span>
+                        <span style={{ paddingLeft: "18px" }}>To:</span>
                       </div>
                       <div className="d-inline-block picker">
                         <DatePicker
@@ -329,9 +336,15 @@ class AddTaskModal extends React.Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Time
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div
+                  className="col-md-10 d-inline-block"
+                  style={{ paddingRight: "0px" }}
+                >
                   <div className="col-md-12 d-inline-block no-padding">
-                    <div className="col-md-5 d-inline-block no-padding">
+                    <div
+                      className="col-md-5 d-inline-block no-padding "
+                      style={{ maxWidth: "219px" }}
+                    >
                       <div className="col-md-3 no-padding d-inline-block date-text-light">
                         <span>From:</span>
                       </div>
@@ -347,9 +360,13 @@ class AddTaskModal extends React.Component {
                           format={props.format}
                         />
                       </div>
+                      <span style={{ paddingLeft: "18px" }}> - </span>
                     </div>
-                    <div className="col-md-1 d-inline-block no-padding">-</div>
-                    <div className="col-md-5 d-inline-block no-padding">
+                    {/* <div className="col-md-1 d-inline-block no-padding">-</div> */}
+                    <div
+                      className="col-md-5 d-inline-block no-padding "
+                      style={{ marginLeft: "22px" }}
+                    >
                       <div className="col-md-2 no-padding d-inline-block date-text-light">
                         <span>To:</span>
                       </div>
@@ -401,7 +418,7 @@ class AddTaskModal extends React.Component {
                     // onBlur={this.onBlurComment}
                     className="form-control"
                     rows="2"
-                    placeholder="Write Here"
+                    placeholder="Write Here..."
                   />
                 </div>
               </div>
