@@ -1093,7 +1093,7 @@ class Reports extends Component {
                   </div>
                   <div className="d-inline-block report-priority">
                     <DailyPloySelect
-                      placeholder="select priority"
+                      placeholder="Select Priority"
                       onChange={this.handlePriorityChange}
                       label="label"
                       suggesionBy="label"

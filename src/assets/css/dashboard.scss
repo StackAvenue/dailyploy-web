@@ -1410,6 +1410,7 @@ table.scheduler-table tr:last-child td {
   right: 30%;
   .dashboard-calender {
     margin-left: 325px;
+    margin-top: 4px !important;
     .react-datepicker-wrapper {
       .react-datepicker__input-container input {
         font-family: Roboto !important;
@@ -4059,6 +4060,7 @@ table.scheduler-table tr:last-child td {
     color: #33a1ff;
     padding: 10px 5px;
     border-radius: 5px;
+
   }
   ul {
     list-style-type: none;

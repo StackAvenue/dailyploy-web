@@ -49,6 +49,8 @@
         input{
           width: 50% !important;
           padding: 5px 5px !important;
+          margin-left: 10px !important;
+
         }
         .color-dot{
           margin-left: 5px !important;
@@ -58,7 +60,7 @@
       .down-icon{
         position: absolute !important;
         right: 0px !important;
-        top: -3px !important;
+        top: 2px !important;
       }
     }
   }
@@ -66,12 +68,14 @@
     display: inline-block;
     float: right;
     button{
-      width: auto;
+      width: 70% !important;
+      font-size: 15px !important;
+      // width: auto;
       // height: 30px;
       border-radius: 5px;
       border: solid 1px $color-brand3;
       background-color: $color-white;
-      margin: 8px 90px 0px 0px;
+      margin: 6px 90px 0px 0px;
       box-shadow: none !important;
       color: #212529;
       background-color: white;
@@ -467,7 +471,7 @@
     .work-info-btn{
       button:first-child{
         background-color: $color-white;
-        color: $color-text3;
+        // color: $color-text3;
       }
       button:last-child{
         background-color: #04505e;
