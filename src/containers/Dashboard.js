@@ -39,6 +39,7 @@ class Dashboard extends Component {
       monthly: "month"
     };
     this.state = {
+      loadFireBase: false,
       taskName: "",
       projectId: "",
       taskUser: [],
@@ -403,7 +404,8 @@ class Dashboard extends Component {
       status: taskRunningObj.status ? taskRunningObj.status : this.state.status,
       taskId: taskRunningObj.taskId,
       startOn: taskRunningObj.startOn,
-      trackingEvent: trackingEvent
+      trackingEvent: trackingEvent,
+      loadFireBase: true
     });
     this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
     this.handleLoad(false);
@@ -1698,12 +1700,14 @@ class Dashboard extends Component {
   };
 
   componentWillMount() {
-    var workspaceId = this.props.match.params.workspaceId;
-    this.handleTaskCreate(workspaceId);
-    this.handleTaskDelete(workspaceId);
-    this.handleTaskRunning(workspaceId);
-    this.handleTaskSyncStop(workspaceId);
-    this.handleTaskUpdate(workspaceId);
+    if (this.state.loadFireBase) {
+      var workspaceId = this.props.match.params.workspaceId;
+      this.handleTaskCreate(workspaceId);
+      this.handleTaskDelete(workspaceId);
+      this.handleTaskRunning(workspaceId);
+      this.handleTaskSyncStop(workspaceId);
+      this.handleTaskUpdate(workspaceId);
+    }
   }
 
   handleTaskCreate = async workspaceId => {
