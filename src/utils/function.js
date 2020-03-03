@@ -39,7 +39,6 @@ export const workspaceNameSplit = name => {
 
 export const convertUTCToLocalDate = date => {
   var newdate = new Date(date.replace(/-/g, "/"));
-  // console.log("newdate", date, newdate);
   return new Date(newdate.getTime() + newdate.getTimezoneOffset() * 60 * 1000);
 };
 

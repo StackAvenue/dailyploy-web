@@ -147,7 +147,7 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 85;
+      return 90;
     }
     return height;
   };

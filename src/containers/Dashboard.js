@@ -1176,8 +1176,22 @@ class Dashboard extends Component {
     );
     try {
       const { data } = await get(`tasks/${taskId}`);
-      var startDate = convertUTCToLocalDate(data.start_datetime);
-      var endDate = convertUTCToLocalDate(data.end_datetime);
+      // var startDate = convertUTCToLocalDate(data.start_datetime);
+      // var endDate = convertUTCToLocalDate(data.end_datetime);
+      var startDate = new Date(
+        convertUTCToLocalDate(
+          moment(data.start_datetime)
+            .format(`${DATE_FORMAT1} HH:mm:ss`)
+            .replace(/-/g, "/")
+        )
+      );
+      var endDate = new Date(
+        convertUTCToLocalDate(
+          moment(data.end_datetime)
+            .format(`${DATE_FORMAT1} HH:mm:ss`)
+            .replace(/-/g, "/")
+        )
+      );
       var startTime = moment(startDate).format("HH:mm:ss");
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;

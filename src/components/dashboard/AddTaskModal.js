@@ -32,6 +32,12 @@ class AddTaskModal extends React.Component {
     };
   }
 
+  focusInput = component => {
+    if (component) {
+      component.focus();
+    }
+  };
+
   componentDidUpdate = (prevProps, prevState) => {
     if (this.props.state.taskName !== prevProps.state.taskName) {
       this.setState({ taskName: this.props.state.taskName });
@@ -133,7 +139,9 @@ class AddTaskModal extends React.Component {
                     // value={this.state.taskName}
                     // onChange={e => this.handleInputChange(e)}
                     // onBlur={this.onBlurInput}
+                    ref={this.focusInput}
                     placeholder="Task name..."
+                    autofocus="true"
                     className="form-control"
                   />
                 </div>
