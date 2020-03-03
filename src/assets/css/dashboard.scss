@@ -56,7 +56,7 @@
     background-color: $color-white !important;
     transform: translate3d(-145px, 39px, 0px) !important;
     a {
-      padding: 5px 0px 5px 31px !important;
+      padding: 5px 0px 5px 46px !important;
     }
     div {
       padding: 5px 0px 5px 31px !important;
@@ -86,12 +86,15 @@
       .big {
         font-size: 15px !important;
         font-weight: bold !important;
+        color: #010101 !important;
+
       }
     }
     .workspace-setting {
       font-size: 15px !important;
       font-family: $font-family-roboto !important;
-      color: $color-workspace !important;
+      // color: $color-workspace !important;
+      color: #010101 !important;
     }
     .invite {
       font-size: 15px !important;
@@ -105,7 +108,7 @@
       font-size: 15px !important;
       font-family: $font-family-roboto !important;
       color: $color-workspace !important;
-      padding-left: 35px !important;
+      padding-left: 48px !important;
       span {
         button {
           font-size: 14px !important;
@@ -514,7 +517,7 @@
   border-radius: 50% !important;
   background-color: #fff !important;
   border: 0 !important;
-  color: grey !important;
+  color: #010101 !important;
   text-align: center !important;
   font-size: 15px !important;
   padding: 5px 8px 5px 8px !important;
@@ -815,7 +818,7 @@
       }
       .react-datepicker-wrapper {
         .react-datepicker__input-container input {
-          padding: 0 0 0 0px !important;
+          padding: 0px 0px 0px 8px !important;
           width: 100%;
         }
         // ::after {
@@ -831,12 +834,12 @@
       .task-date-picker-icon{
         position: absolute;
         top: 5px;
-        right: 22px;
+        right: 26px;
       }
     }
 
     .time-picker-container {
-      width: 120px !important;
+      max-width: 132px !important;
       height: auto;
       border-radius: 5px;
       border: solid 1px #d6d6d6;
@@ -1100,8 +1103,8 @@
 
 .header3-text {
   font-weight: 500 !important;
-  text-align: left !important;
-  padding-left: 14px !important;
+  text-align: center !important;
+  // padding-left: 14px !important;
   font-size: 13px !important;
   color: #555555 !important;
 }
@@ -1225,6 +1228,26 @@ table.scheduler-table tr:last-child td {
 
 .timeline-event {
   position: absolute;
+  // :nth-child{
+  //   width: 98px;
+  //   position: absolute;
+  //   z-index: 1;
+  //   text-align: center;
+  //   right: 0px;
+  //   top: 80px;
+  //   background-color: #ffffff;
+  //   border: 1px solid #e5e5e5;
+  //   border-radius: 5px;
+  //   font-family: 'Roboto-Regular', 'Roboto';
+  //   font-weight: 400;
+  //   font-style: normal;
+  //   font-size: 12px;
+  //   color: #0075d9;
+  
+
+  // }
+  
+  
 }
 
 .day-event {
@@ -1390,6 +1413,7 @@ table.scheduler-table tr:last-child td {
   right: 30%;
   .dashboard-calender {
     margin-left: 325px;
+    margin-top: 4px !important;
     .react-datepicker-wrapper {
       .react-datepicker__input-container input {
         font-family: Roboto !important;
@@ -1406,7 +1430,7 @@ table.scheduler-table tr:last-child td {
       padding: 0px !important;
       border: none;
       background: none;
-      font-size: 20px !important;
+      font-size: 16px !important;
       .fa-angle-right {
         margin-left: 25px;
         margin-right: 25px;
@@ -2324,6 +2348,8 @@ table.scheduler-table tr:last-child td {
       .box-btn {
         padding: 10px 0px 0px 15px !important;
         button {
+          cursor: not-allowed;
+          pointer-events: all !important;
           height: 40px !important;
           width: auto !important;
           border-radius: 5px !important;
@@ -2672,7 +2698,7 @@ table.scheduler-table tr:last-child td {
     .nav-link {
       font-family: $font-family-roboto !important;
       font-size: 15px !important;
-      color: $color-workspace !important;
+      color: #010101 !important;
       padding: 0px 0px 30px 0px !important;
     }
     .nav-link .active {
@@ -2782,7 +2808,8 @@ table.scheduler-table tr:last-child td {
           font-size: 13px !important;
           color: $color-text2 !important;
           img {
-            margin: 0px 11px 0px 40px;
+            // margin: 0px 11px 0px 40px;
+            margin: 0px 4px 0px 16px;
             vertical-align: bottom;
           }
         }
@@ -2845,7 +2872,7 @@ table.scheduler-table tr:last-child td {
         .name {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
-          color: $color-text3 !important;
+          color: #010101!important;
           p {
             font-weight: bold !important;
             color: $color-text2 !important;
@@ -2906,7 +2933,8 @@ table.scheduler-table tr:last-child td {
           color: $color-white !important;
         }
         .btn-disable {
-          pointer-events: none;
+          cursor: not-allowed;
+  pointer-events: all !important;
         }
       }
     }
@@ -3295,7 +3323,7 @@ table.scheduler-table tr:last-child td {
   border-radius: 5px;
   border: solid 1px #d6d6d6;
   background-color: #ffffff;
-  margin-left: 15px;
+  margin-left: 5px;
   .rc-time-picker input {
     border: none !important;
     padding: 10px 0 0 0px !important;
@@ -3754,6 +3782,7 @@ table.scheduler-table tr:last-child td {
   font-style: normal;
   font-size: 12px;
   color: #0075d9;
+
 }
 .custom-event-popup {
   width: 200px;
@@ -4038,6 +4067,7 @@ table.scheduler-table tr:last-child td {
     color: #33a1ff;
     padding: 10px 5px;
     border-radius: 5px;
+
   }
   ul {
     list-style-type: none;
@@ -4109,7 +4139,7 @@ table.scheduler-table tr:last-child td {
     vertical-align: sub;
   }
   .down-icon {
-    margin: 5px !important;
+    margin-right: 10px !important;
     float: right !important;
     font-size: 22px !important;
   }
@@ -4781,16 +4811,17 @@ table.scheduler-table tr:last-child td {
         color: $color-brand3 !important;
         background-color: $color-white !important;
       }
-      .active {
-        color: $color-brand3 !important;
-        background-color: $color-white !important;
-      }
+      // .active {
+      //   color: $color-brand3 !important;
+      //   background-color: $color-white !important;
+      // }
     }
   }
   .search-icon {
     top: 5px;
     right: 5px;
     position: absolute;
+    padding-right: 12px !important;
   }
   margin-left: 2%;
   border-radius: 5px !important;

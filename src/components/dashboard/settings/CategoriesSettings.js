@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
-import moment from 'moment'
-import { get, post, put, del } from './../../../utils/API'
-import DailyPloyToast from './../../../../src/components/DailyPloyToast'
-import { ToastContainer, toast } from 'react-toastify'
-import ConfirmModal from '../../ConfirmModal'
+import React, { Component } from "react";
+import moment from "moment";
+import { get, post, put, del } from "./../../../utils/API";
+import DailyPloyToast from "./../../../../src/components/DailyPloyToast";
+import { ToastContainer, toast } from "react-toastify";
+import ConfirmModal from "../../ConfirmModal";
 
 class CategoriesSettings extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isEdit: false,
       rowId: null,
       taskCategories: [],
-      categoryName: '',
+      categoryName: "",
       showAddCategoryTr: false,
       editCategoryError: false,
       categoryError: false,
       showConfirm: false,
-      deleteCategory: ''
-    }
+      deleteCategory: ""
+    };
   }
 
   async componentDidMount() {
@@ -26,11 +26,11 @@ class CategoriesSettings extends Component {
     try {
       const { data } = await get(
         `workspaces/${this.props.workspaceId}/task_category`
-      )
-      var taskCategories = data.task_categories
+      );
+      var taskCategories = data.task_categories;
     } catch (e) {}
 
-    this.setState({ taskCategories: taskCategories })
+    this.setState({ taskCategories: taskCategories });
   }
 
   handleEditCatogries = category => {
@@ -38,39 +38,39 @@ class CategoriesSettings extends Component {
       isEdit: true,
       categoryId: category.task_category_id,
       editCategoryName: category.name
-    })
-  }
+    });
+  };
 
   categoryEdit = () => {
-    this.setState({ isEdit: false })
-  }
+    this.setState({ isEdit: false });
+  };
 
   toggleAddCategoryRow = () => {
-    this.setState({ showAddCategoryTr: !this.state.showAddCategoryTr })
-  }
+    this.setState({ showAddCategoryTr: !this.state.showAddCategoryTr });
+  };
 
   toggleEditCategoryRow = () => {
-    this.setState({ isEdit: false, categoryId: '', categoryName: '' })
-  }
+    this.setState({ isEdit: false, categoryId: "", categoryName: "" });
+  };
 
   addCategory = async e => {
-    if (this.state.categoryName != '') {
+    if (this.state.categoryName != "") {
       try {
         const { data } = await post(
           { name: this.state.categoryName },
           `workspaces/${this.props.workspaceId}/task_category`
-        )
-        var taskCategory = data
+        );
+        var taskCategory = data;
         toast(<DailyPloyToast message="Category Added" status="success" />, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
-        })
-        var newTaskCategories = [...this.state.taskCategories, taskCategory]
+        });
+        var newTaskCategories = [...this.state.taskCategories, taskCategory];
         this.setState({
           taskCategories: newTaskCategories,
           showAddCategoryTr: false,
-          categoryName: ''
-        })
+          categoryName: ""
+        });
       } catch (e) {
         if (e.response && e.response.status === 400) {
           if (
@@ -89,98 +89,98 @@ class CategoriesSettings extends Component {
                 autoClose: 2000,
                 position: toast.POSITION.TOP_CENTER
               }
-            )
+            );
           }
         }
       }
     } else {
-      this.setState({ categoryError: true })
+      this.setState({ categoryError: true });
     }
-  }
+  };
 
   editCategory = async e => {
-    if (this.state.editCategoryName != '') {
+    if (this.state.editCategoryName != "") {
       try {
         const { data } = await put(
           { name: this.state.editCategoryName },
           `workspaces/${this.props.workspaceId}/task_category/${this.state.categoryId}`
-        )
-        var taskCategory = data
+        );
+        var taskCategory = data;
         toast(
           <DailyPloyToast message="Category Name Updated" status="success" />,
           {
             autoClose: 2000,
             position: toast.POSITION.TOP_CENTER
           }
-        )
+        );
       } catch (e) {}
       var newTaskCategories = this.state.taskCategories.filter(
         c => c.task_category_id != this.state.categoryId
-      )
-      var newTaskCategories = [...newTaskCategories, taskCategory]
+      );
+      var newTaskCategories = [...newTaskCategories, taskCategory];
       this.setState({
         taskCategories: newTaskCategories,
-        editCategoryName: '',
-        categoryId: '',
+        editCategoryName: "",
+        categoryId: "",
         isEdit: false
-      })
+      });
     } else {
-      this.setState({ editCategoryError: true })
+      this.setState({ editCategoryError: true });
     }
-  }
+  };
 
   deleteCategory = async e => {
     if (this.state.deleteCategory) {
       try {
         const { data } = await del(
           `workspaces/${this.props.workspaceId}/task_category/${this.state.deleteCategory.task_category_id}`
-        )
+        );
         toast(<DailyPloyToast message="Category deleted" status="success" />, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
-        })
+        });
         var categories = this.state.taskCategories.filter(
           c => c.task_category_id != this.state.deleteCategory.task_category_id
-        )
+        );
         this.setState({
           taskCategories: categories,
           showConfirm: false
-        })
+        });
       } catch (e) {}
     }
-  }
+  };
 
   handleDeleteCategory = category => {
-    this.setState({ deleteCategory: category, showConfirm: true })
-  }
+    this.setState({ deleteCategory: category, showConfirm: true });
+  };
 
   closeConfirmModal = () => {
-    this.setState({ showConfirm: false, deleteCategory: '' })
-  }
+    this.setState({ showConfirm: false, deleteCategory: "" });
+  };
 
   handleEnterName = e => {
-    var name = e.target.value
-    var categoryError = e.target.name
-    console.log('handleEnterName', name, categoryError)
-    if (categoryError == 'categoryError') {
-      if (name != '') {
-        this.setState({ categoryName: name, categoryError: false })
+    var name = e.target.value;
+    var categoryError = e.target.name;
+    console.log("handleEnterName", name, categoryError);
+    if (categoryError == "categoryError") {
+      if (name != "") {
+        this.setState({ categoryName: name, categoryError: false });
       } else {
-        this.setState({ categoryError: true, categoryName: '' })
+        this.setState({ categoryError: true, categoryName: "" });
       }
     } else {
-      if (name != '') {
-        this.setState({ editCategoryName: name, editCategoryError: false })
+      if (name != "") {
+        this.setState({ editCategoryName: name, editCategoryError: false });
       } else {
-        this.setState({ editCategoryError: true, editCategoryName: '' })
+        this.setState({ editCategoryError: true, editCategoryName: "" });
       }
     }
-  }
+  };
 
   render() {
     return (
       <div className="categories-setting">
-        <div className="row no-margin category" style={{ marginTop: '50px' }}>
+        <div className="row no-margin category" style={{ marginTop: "50px" }}>
           <div className="d-inline-block col-md-4 heading-text">
             Task Categories
             <span className="d-inline-block category-cnt">
@@ -205,16 +205,16 @@ class CategoriesSettings extends Component {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col" style={{ width: '50%' }}>
-                    Category Name{' '}
+                  <th scope="col" style={{ width: "32%" }}>
+                    Category Name{" "}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
                   <th scope="col">
-                    Number of task{' '}
+                    Number of task{" "}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
                   <th scope="col">
-                    Date Created{' '}
+                    Date Created{" "}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
                   <th></th>
@@ -226,7 +226,7 @@ class CategoriesSettings extends Component {
                     <td scope="row">
                       <input
                         className={`form-control ${
-                          this.state.categoryError ? ' input-error-border' : ''
+                          this.state.categoryError ? " input-error-border" : ""
                         }`}
                         type="text"
                         value={this.state.categoryName}
@@ -235,8 +235,8 @@ class CategoriesSettings extends Component {
                         placeholder="Category Name"
                       />
                     </td>
-                    <td>{'0'}</td>
-                    <td>{moment().format('DD MMM YYYY')}</td>
+                    <td>{"0"}</td>
+                    <td>{moment().format("DD MMM YYYY")}</td>
                     <td>
                       <div>
                         <button
@@ -266,8 +266,8 @@ class CategoriesSettings extends Component {
                           <input
                             className={`form-control ${
                               this.state.editCategoryError
-                                ? ' input-error-border'
-                                : ''
+                                ? " input-error-border"
+                                : ""
                             }`}
                             type="text"
                             name="editCategoryError"
@@ -279,8 +279,8 @@ class CategoriesSettings extends Component {
                           <span className="text-titlize">{category.name}</span>
                         )}
                       </td>
-                      <td>{'2'}</td>
-                      <td>{'15 Jun 2019'}</td>
+                      <td>{"2"}</td>
+                      <td>{"15 Jun 2019"}</td>
                       <td>
                         {this.state.isEdit &&
                         this.state.categoryId === category.task_category_id ? (
@@ -320,7 +320,7 @@ class CategoriesSettings extends Component {
                         )}
                       </td>
                     </tr>
-                  )
+                  );
                 })}
               </tbody>
             </table>
@@ -336,8 +336,8 @@ class CategoriesSettings extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default CategoriesSettings
+export default CategoriesSettings;

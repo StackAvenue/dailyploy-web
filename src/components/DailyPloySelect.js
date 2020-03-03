@@ -83,7 +83,7 @@ class DailyPloySelect extends Component {
                       {icon !== "" ? (
                         <i className={`left-padding-10px ${icon}`}></i>
                       ) : null}
-                      <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
+                      <span className="d-inline-block left-padding-10px text-titlize">{`${option[name]}`}</span>
                     </li>
                   );
                 })}
