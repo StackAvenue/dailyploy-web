@@ -134,7 +134,7 @@ class Calendar extends Component {
       ? this.props.resources.length
       : 0;
     let sceenHeight = window.screen.height;
-    let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 25) / 10;
+    let finalSceenHeight = sceenHeight - ((sceenHeight / 10) * 30) / 10;
     let heights = new Map();
     heights.set(0, finalSceenHeight);
     heights.set(1, finalSceenHeight);

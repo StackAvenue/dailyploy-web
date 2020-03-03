@@ -33,12 +33,13 @@
         input{
           padding: 5px 5px !important;
           width: 50% !important;
+          margin-left: 10px !important;
         }
       }
       .down-icon{
         position: absolute !important;
         right: 0px !important;
-        top: -3px !important;
+        top: 2px !important;
       }
     }
     .report-priority{
@@ -110,7 +111,8 @@
     }
     .react-datepicker__input-container input{
       border: none;
-      padding: 0px 0 0 0px;
+      // padding: 0px 0 0 0px;
+      padding-left: 10px !important;
       margin: 4px;
       width:  220px !important;
     }

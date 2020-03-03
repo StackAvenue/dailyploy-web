@@ -428,7 +428,7 @@ export default class MenuBar extends Component {
                       id="dropdown-basic"
                     >
                       <img src={Add} alt="add" />
-                      &nbsp;Add
+                      &nbsp;ADD
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className="dropdownMenu">
