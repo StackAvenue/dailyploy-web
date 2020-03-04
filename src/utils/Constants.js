@@ -3,6 +3,7 @@ export const WEBSITE_URL = "https://dailyploy.com";
 export const AUTH_TOKEN = cookie.load("accessToken");
 export const WORKSPACE_ID = cookie.load("workspaceId");
 export const SERVICE_URL = process.env.REACT_APP_API_ENDPOINT;
+export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 export const WORKSPACE_NAME = cookie.load("workspaceName");
 export const MOCK_URL = "http://5d1b281edd81710014e88430.mockapi.io/api/v1";
 export const DATE_FORMAT1 = "YYYY-MM-DD"; // 2019-10-27
