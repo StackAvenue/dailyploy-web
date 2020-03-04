@@ -2297,6 +2297,7 @@ table.scheduler-table tr:last-child td {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
         color: $color-text3 !important;
+        // min-width: 16% !important;
         p {
           font-weight: bold !important;
           color: $color-text2 !important;
@@ -2329,7 +2330,7 @@ table.scheduler-table tr:last-child td {
         }
       }
       .box-btn {
-        padding: 10px 0px 0px 15px !important;
+        padding: 10px 0px 0px 0px !important;
         button {
           cursor: not-allowed;
           pointer-events: all !important;
@@ -5050,7 +5051,7 @@ table.scheduler-table tr:last-child td {
                     z-index: 1 !important;
                     text-align: center !important;
                     // right: 40px !important;
-                    left: 100%s;
+                    left: 100%;
                     top: 32px !important;
                     background-color: #ffffff;
                     border: 1px solid #e5e5e5;

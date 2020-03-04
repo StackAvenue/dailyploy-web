@@ -289,12 +289,13 @@ class AddTaskModal extends React.Component {
                         </span>
                       </div>
                     </div>
-                    <div className="col-md-6 d-inline-block task-datepicker">
-                      <div className="d-inline-block label date-text-light ">
-                        <span style={{ paddingLeft: "18px" }}>To:</span>
+                    <div className="col-md-6 d-inline-block task-datepicker no-padding">
+                      <div className="d-inline-block  date-text-light ">
+                        <span className="width-to">To:</span>
                       </div>
                       <div className="d-inline-block picker">
                         <DatePicker
+                          className="width-to"
                           ref={this.calendarToRef}
                           minDate={props.state.dateFrom}
                           selected={props.state.dateTo}
@@ -303,7 +304,10 @@ class AddTaskModal extends React.Component {
                           disabled={props.state.disabledDateTo}
                           onChangeRaw={this.handleDateChangeRaw}
                         />
-                        <span className="task-date-picker-icon">
+                        <span
+                          className="task-date-picker-icon"
+                          style={{ right: "51px" }}
+                        >
                           <i
                             onClick={this.openToCalender}
                             className="fa fa-calendar"
@@ -342,8 +346,8 @@ class AddTaskModal extends React.Component {
                 >
                   <div className="col-md-12 d-inline-block no-padding">
                     <div
-                      className="col-md-5 d-inline-block no-padding "
-                      style={{ maxWidth: "219px" }}
+                      className="col-md-6 d-inline-block no-padding "
+                      // style={{ maxWidth: "219px" }}
                     >
                       <div className="col-md-3 no-padding d-inline-block date-text-light">
                         <span>From:</span>
@@ -360,12 +364,12 @@ class AddTaskModal extends React.Component {
                           format={props.format}
                         />
                       </div>
-                      <span style={{ paddingLeft: "18px" }}> - </span>
+                      {/* <span style={{ paddingLeft: "18px" }}> - </span> */}
                     </div>
                     {/* <div className="col-md-1 d-inline-block no-padding">-</div> */}
                     <div
-                      className="col-md-5 d-inline-block no-padding "
-                      style={{ marginLeft: "22px" }}
+                      className="col-md-6 d-inline-block no-padding "
+                      // style={{ marginLeft: "22px" }}
                     >
                       <div className="col-md-2 no-padding d-inline-block date-text-light">
                         <span>To:</span>
