@@ -1687,8 +1687,9 @@ class Dashboard extends Component {
     var workspaceId = this.props.match.params.workspaceId;
     this.handleTaskCreate(workspaceId);
     this.handleTaskDelete(workspaceId);
-    this.handleTaskRunning(workspaceId);
-    this.handleTaskSyncStop(workspaceId);
+    this.handleTaskTracking(workspaceId);
+    // this.handleTaskRunning(workspaceId);
+    // this.handleTaskSyncStop(workspaceId);
     this.handleTaskUpdate(workspaceId);
   }
 
@@ -1733,10 +1734,32 @@ class Dashboard extends Component {
       });
   };
 
-  handleTaskRunning = async workspaceId => {
+  // handleTaskRunning = async workspaceId => {
+  //   base
+  //     .database()
+  //     .ref(`task_running/${workspaceId}`)
+  //     .on("child_added", snap => {
+  //       let task = snap.val();
+  //       if (
+  //         this.state.loadFireBase &&
+  //         !this.state.events.map(task => task.taskId).includes(snap.val().id)
+  //       ) {
+  //         this.loadUserTask(workspaceId);
+  //       }
+  //     });
+
+  //   base
+  //     .database()
+  //     .ref(`task_running/${workspaceId}`)
+  //     .on("child_changed", snap => {
+  //       this.loadUserTask(workspaceId);
+  //     });
+  // };
+
+  handleTaskTracking = async workspaceId => {
     base
       .database()
-      .ref(`task_running/${workspaceId}`)
+      .ref(`task_status/${workspaceId}`)
       .on("child_added", snap => {
         let task = snap.val();
         if (
@@ -1749,32 +1772,32 @@ class Dashboard extends Component {
 
     base
       .database()
-      .ref(`task_running/${workspaceId}`)
+      .ref(`task_status/${workspaceId}`)
       .on("child_changed", snap => {
         this.loadUserTask(workspaceId);
       });
   };
 
-  handleTaskSyncStop = async workspaceId => {
-    base
-      .database()
-      .ref(`task_stopped/${workspaceId}`)
-      .on("child_added", snap => {
-        if (
-          this.state.loadFireBase &&
-          !this.state.events.map(task => task.taskId).includes(snap.val().id)
-        ) {
-          this.loadUserTask(workspaceId);
-        }
-      });
+  // handleTaskSyncStop = async workspaceId => {
+  //   base
+  //     .database()
+  //     .ref(`task_stopped/${workspaceId}`)
+  //     .on("child_added", snap => {
+  //       if (
+  //         this.state.loadFireBase &&
+  //         !this.state.events.map(task => task.taskId).includes(snap.val().id)
+  //       ) {
+  //         this.loadUserTask(workspaceId);
+  //       }
+  //     });
 
-    base
-      .database()
-      .ref(`task_stopped/${workspaceId}`)
-      .on("child_changed", snap => {
-        this.loadUserTask(workspaceId);
-      });
-  };
+  //   base
+  //     .database()
+  //     .ref(`task_stopped/${workspaceId}`)
+  //     .on("child_changed", snap => {
+  //       this.loadUserTask(workspaceId);
+  //     });
+  // };
 
   loadUserTask = async workspaceId => {
     if (this.state.workspaceId) {
