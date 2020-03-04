@@ -142,7 +142,7 @@ class AddTaskModal extends React.Component {
                     //   this.nameInput = input;
                     // }}
                     // defaultValue=""
-                    ref={input => input && input.focus()}
+                    // ref={input => input && input.focus()}
                   />
                 </div>
 

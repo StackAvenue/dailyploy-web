@@ -4661,7 +4661,7 @@ table.scheduler-table tr:last-child td {
     background-color: #ffffff;
     border: solid 1px $color-borders;
     text-align: center;
-    padding-top: 5px;
+    // padding-top: 5px;
     font-family: $font-family-roboto !important;
     font-size: 15px;
     font-weight: normal;
@@ -5050,7 +5050,7 @@ table.scheduler-table tr:last-child td {
                     z-index: 1 !important;
                     text-align: center !important;
                     // right: 40px !important;
-                    left: 100%;
+                    left: 100%s;
                     top: 32px !important;
                     background-color: #ffffff;
                     border: 1px solid #e5e5e5;
