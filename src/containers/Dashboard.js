@@ -39,6 +39,7 @@ class Dashboard extends Component {
       monthly: "month"
     };
     this.state = {
+      loadFireBase: false,
       taskName: "",
       projectId: "",
       taskUser: [],
@@ -403,7 +404,8 @@ class Dashboard extends Component {
       status: taskRunningObj.status ? taskRunningObj.status : this.state.status,
       taskId: taskRunningObj.taskId,
       startOn: taskRunningObj.startOn,
-      trackingEvent: trackingEvent
+      trackingEvent: trackingEvent,
+      loadFireBase: true
     });
     this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
     this.handleLoad(false);
@@ -1685,8 +1687,9 @@ class Dashboard extends Component {
     var workspaceId = this.props.match.params.workspaceId;
     this.handleTaskCreate(workspaceId);
     this.handleTaskDelete(workspaceId);
-    this.handleTaskRunning(workspaceId);
-    this.handleTaskSyncStop(workspaceId);
+    this.handleTaskTracking(workspaceId);
+    // this.handleTaskRunning(workspaceId);
+    // this.handleTaskSyncStop(workspaceId);
     this.handleTaskUpdate(workspaceId);
   }
 
@@ -1696,6 +1699,7 @@ class Dashboard extends Component {
       .ref(`task_created/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
@@ -1718,6 +1722,7 @@ class Dashboard extends Component {
       .ref(`task_deleted/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
@@ -1729,13 +1734,36 @@ class Dashboard extends Component {
       });
   };
 
-  handleTaskRunning = async workspaceId => {
+  // handleTaskRunning = async workspaceId => {
+  //   base
+  //     .database()
+  //     .ref(`task_running/${workspaceId}`)
+  //     .on("child_added", snap => {
+  //       let task = snap.val();
+  //       if (
+  //         this.state.loadFireBase &&
+  //         !this.state.events.map(task => task.taskId).includes(snap.val().id)
+  //       ) {
+  //         this.loadUserTask(workspaceId);
+  //       }
+  //     });
+
+  //   base
+  //     .database()
+  //     .ref(`task_running/${workspaceId}`)
+  //     .on("child_changed", snap => {
+  //       this.loadUserTask(workspaceId);
+  //     });
+  // };
+
+  handleTaskTracking = async workspaceId => {
     base
       .database()
-      .ref(`task_running/${workspaceId}`)
+      .ref(`task_status/${workspaceId}`)
       .on("child_added", snap => {
         let task = snap.val();
         if (
+          this.state.loadFireBase &&
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           this.loadUserTask(workspaceId);
@@ -1744,31 +1772,32 @@ class Dashboard extends Component {
 
     base
       .database()
-      .ref(`task_running/${workspaceId}`)
+      .ref(`task_status/${workspaceId}`)
       .on("child_changed", snap => {
         this.loadUserTask(workspaceId);
       });
   };
 
-  handleTaskSyncStop = async workspaceId => {
-    base
-      .database()
-      .ref(`task_stopped/${workspaceId}`)
-      .on("child_added", snap => {
-        if (
-          !this.state.events.map(task => task.taskId).includes(snap.val().id)
-        ) {
-          this.loadUserTask(workspaceId);
-        }
-      });
+  // handleTaskSyncStop = async workspaceId => {
+  //   base
+  //     .database()
+  //     .ref(`task_stopped/${workspaceId}`)
+  //     .on("child_added", snap => {
+  //       if (
+  //         this.state.loadFireBase &&
+  //         !this.state.events.map(task => task.taskId).includes(snap.val().id)
+  //       ) {
+  //         this.loadUserTask(workspaceId);
+  //       }
+  //     });
 
-    base
-      .database()
-      .ref(`task_stopped/${workspaceId}`)
-      .on("child_changed", snap => {
-        this.loadUserTask(workspaceId);
-      });
-  };
+  //   base
+  //     .database()
+  //     .ref(`task_stopped/${workspaceId}`)
+  //     .on("child_changed", snap => {
+  //       this.loadUserTask(workspaceId);
+  //     });
+  // };
 
   loadUserTask = async workspaceId => {
     if (this.state.workspaceId) {
@@ -1922,6 +1951,30 @@ class Dashboard extends Component {
       .ref(`task_update/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          let dates = getMiddleDates(task.start_datetime, task.end_datetime);
+          let events = this.state.events.filter(
+            event => event.taskId != task.id
+          );
+          let taskObjects = dates.map(date => {
+            return this.updateTaskSyncObject(date, task);
+          });
+          var finalEvents = [events, ...taskObjects]
+            .flat()
+            .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
+          this.setState({ events: finalEvents });
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_update/${workspaceId}`)
+      .on("child_changed", snap => {
+        if (
+          this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
@@ -1944,6 +1997,30 @@ class Dashboard extends Component {
       .ref(`task_completed/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          this.state.loadFireBase &&
+          this.state.events.map(task => task.taskId).includes(snap.val().id)
+        ) {
+          let task = snap.val();
+          var events = this.state.events;
+          var filterEvents = events.filter(event => event.taskId == task.id);
+          filterEvents.forEach(event => {
+            event["trackingStatus"] =
+              task.status == "completed" ? "check" : "play";
+            event["status"] = task.status;
+          });
+          var events = events.sort(
+            (a, b) => Number(a.sortedTime) - Number(b.sortedTime)
+          );
+          this.setState({ events: events });
+        }
+      });
+
+    base
+      .database()
+      .ref(`task_completed/${workspaceId}`)
+      .on("child_changed", snap => {
+        if (
+          this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();

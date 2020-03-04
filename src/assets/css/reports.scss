@@ -221,7 +221,8 @@
   border: none;
   top: 0;
   left: 0;
-  position: absolute;
+  vertical-align: -webkit-baseline-middle;
+  // position: absolute;
   height: 34px;
   input{
     width: auto;
@@ -247,7 +248,7 @@
     z-index: 100;
     background-color: #fff;
     border-radius: 5px;
-    top:39px;
+    top: 36px;
     li:hover{
       cursor: pointer;
       background-color: rgba(242, 242, 242, 1);
@@ -262,7 +263,7 @@
     .search-icon-member, .search-icon-project{
       width: auto;
       height: 26px;
-      margin-right: 10px;
+      // margin-right: 10px;
       border-radius: 4px;
       border: solid 1px #bfbfbf;
       background-color: #ffffff;
