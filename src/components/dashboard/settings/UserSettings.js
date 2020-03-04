@@ -13,7 +13,7 @@ const UserSettings = props => {
         <div className="col-md-12">
           <div
             className="col-md-2 d-inline-block no-padding"
-            style={{ verticalAlign: "super" }}
+            style={{ verticalAlign: "bottom" }}
           >
             <div className="user-icon">
               <img alt={"profile"} src={Profile} className="img-responsive" />

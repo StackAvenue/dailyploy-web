@@ -6,7 +6,10 @@
     margin: 2% 2.5% 2% 2.5%;
   }
 }
-
+.reports-btns .SelectedWeekExample{
+  display: inline-block;
+  width: 47%;
+}
 .reports-btns{
   position: fixed;
   z-index: 4;
@@ -24,7 +27,10 @@
   // box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1);
   .report-caleneder-btn{
     display: inline-block;
-    padding-left: 275px;
+    // padding-left: 275px;
+//     width: 68%;
+// display: inline-flex;
+// justify-content: end;
     .report-category{
       margin-right: 20px;
       .custom-search-select{
@@ -94,6 +100,7 @@
   }
   .SelectedWeekExample{
     display: inline-block;
+
   }
   .active{
       background-color: #33a1ff !important;
