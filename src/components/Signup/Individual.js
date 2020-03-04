@@ -1,6 +1,8 @@
 import React from "react";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { GOOGLE_CLIENT_ID } from "./../../utils/Constants";
+import GoogleLogin from "react-google-login";
 
 const Individual = props => {
   const {
@@ -13,8 +15,8 @@ const Individual = props => {
   } = props.state;
   return (
     <>
-      <form onSubmit={props.signup}>
-        <div className="col-md-10 offset-1 no-padding signup-form text-left">
+      <form onSubmit={props.signup} className="signup-form">
+        <div className="col-md-10 offset-1 no-padding text-left">
           <div className="form-group">
             <label>Name</label>
             {props.state.errors.nameError ? (
@@ -145,6 +147,16 @@ const Individual = props => {
               ) : null}
             </button>
           </div>
+        </div>
+        <br />
+        <div className="col-md-10 offset-1 no-padding text-center googleIcon">
+          <GoogleLogin
+            clientId={GOOGLE_CLIENT_ID}
+            buttonText="Sign up with your Google account"
+            className="google-auth signup"
+            onSuccess={props.responseGoogle}
+            onFailure={props.errorGoogle}
+          />
         </div>
       </form>
     </>

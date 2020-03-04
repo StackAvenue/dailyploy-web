@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../assets/css/signup.scss";
-import { signUp, login, get } from "../utils/API";
+import { signUp, login, get, googleSignup } from "../utils/API";
 import { workspaceNameSplit } from "../utils/function";
 import {
   checkPassword,
@@ -215,6 +215,40 @@ class Signup extends Component {
     }
   };
 
+  directLoginGoogle = async data => {
+    try {
+      cookie.save("accessToken", data.access_token, { path: "/" });
+      cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
+      axios.defaults.headers.common["Authorization"] = data.access_token
+        ? `Bearer ${data.access_token}`
+        : "";
+      try {
+        const { data } = await get("workspaces");
+        const workspace = data.workspaces[0];
+        cookie.save("workspaceId", workspace.id, { path: "/" });
+        if (workspace && workspace.type === "company") {
+          cookie.save("workspaceName", workspace.company.name, { path: "/" });
+        } else {
+          cookie.save("workspaceName", workspace.name, {
+            path: "/"
+          });
+        }
+        try {
+          const { data } = await get("logged_in_user");
+          cookie.save("loggedInUser", data);
+        } catch (e) {
+          console.log("err", e);
+        }
+        this.setState({ isLoading: false });
+        this.props.history.push(`/workspace/${workspace.id}/dashboard`);
+      } catch (e) {
+        console.log("error", e);
+      }
+    } catch (e) {
+      this.setState({ error: e.response.data.error, isLoading: false });
+    }
+  };
+
   validatePassword = (password, confirmPassword) => {
     if (password === confirmPassword) {
       return;
@@ -251,6 +285,62 @@ class Signup extends Component {
       this.state.confirmPassword &&
       this.state.password === this.state.confirmPassword
     );
+  };
+
+  errorGoogle = error => {
+    console.log(error);
+  };
+
+  responseGoogle = response => {
+    this.signupOAuth(response, "google");
+  };
+
+  signupOAuth = async (resp, type) => {
+    let signupOAuthData;
+    let res = resp ? resp : null;
+    if (type === "google" && res.profileObj) {
+      signupOAuthData = {
+        user: {
+          name: res.profileObj.name,
+          email: res.profileObj.email,
+          provider: type,
+          // token: res.accessToken,
+          provider_id: res.googleId,
+          provider_img: res.profileObj.imageUrl
+        }
+      };
+    }
+
+    this.setState({ isLoading: true });
+    try {
+      const { data } = await googleSignup(signupOAuthData);
+      this.directLoginGoogle(data.user);
+      this.setState({ isLoading: false });
+    } catch (e) {
+      this.setState({ isLoading: false });
+      if (e.response.status === 500) {
+        toast(
+          <DailyPloyToast message={"Internal Server Error"} status="error" />,
+          { autoClose: 2000 }
+        );
+      } else if (e.response.data.errors.email) {
+        toast(
+          <DailyPloyToast
+            message={"email " + `${e.response.data.errors.email}`}
+            status="error"
+          />,
+          { autoClose: 2000 }
+        );
+      } else if (e.response.data.errors.detail) {
+        toast(
+          <DailyPloyToast
+            message={"email " + `${e.response.data.errors.detail}`}
+            status="error"
+          />,
+          { autoClose: 2000 }
+        );
+      }
+    }
   };
 
   render() {
@@ -307,6 +397,8 @@ class Signup extends Component {
                         enable={isEnabled}
                         changeHandler={this.changeHandler}
                         signup={this.signupForm}
+                        responseGoogle={this.responseGoogle}
+                        errorGoogle={this.errorGoogle}
                       />
                     </Tab>
                     <Tab
@@ -323,17 +415,6 @@ class Signup extends Component {
                       />
                     </Tab>
                   </Tabs>
-                  <br />
-                  {/* <div className="col-md-8 offset-2 googleIcon">
-                    <img
-                      alt="Google Icon"
-                      src={googleIcon}
-                      className="img-responsive"
-                    />
-                    <Link to={'/signup'} className="link">
-                      Sign up with your Google account
-                    </Link>
-                  </div> */}
                   <br />
                   <div className="col-md-8 offset-2 googleIcon">
                     <span>Already have DailyPloy Account?</span>
