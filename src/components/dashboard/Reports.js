@@ -1017,7 +1017,7 @@ class Reports extends Component {
               value={this.state.displayWeek}
               showWeekNumbers
             />
-            <span style={{ position: "relative", right: "21px" }}>
+            <span style={{ position: "relative", right: "28px" }}>
               <i
                 onClick={this.openWeekCalender}
                 className="fa fa-calendar"

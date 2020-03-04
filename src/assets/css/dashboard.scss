@@ -5049,7 +5049,8 @@ table.scheduler-table tr:last-child td {
                     position: absolute !important;
                     z-index: 1 !important;
                     text-align: center !important;
-                    right: 40px !important;
+                    // right: 40px !important;
+                    left: 100%;
                     top: 32px !important;
                     background-color: #ffffff;
                     border: 1px solid #e5e5e5;
