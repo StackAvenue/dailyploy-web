@@ -68,14 +68,14 @@
     display: inline-block;
     float: right;
     button{
-      width: 70% !important;
-      font-size: 15px !important;
-      // width: auto;
-      // height: 30px;
+      // width: 70% !important;
+      // font-size: 15px !important;
+      width: auto;
+      height: 30px;
       border-radius: 5px;
       border: solid 1px $color-brand3;
       background-color: $color-white;
-      margin: 6px 90px 0px 0px;
+      margin: 6px 76px 0px 0px;
       box-shadow: none !important;
       color: #212529;
       background-color: white;
@@ -116,15 +116,27 @@
     .react-datepicker__input-container input{
       border: none;
       // padding: 0px 0 0 0px;
-      padding-left: 10px !important;
+      padding-left: 54px !important;
+      // text-align: center;
       margin: 4px;
-      width:  220px !important;
+      width:  244px !important;
     }
     border-radius: 5px;
     width: auto;
     height: auto;
     border: solid 1px #d6d6d6;
     background-color: #ffffff;
+  }
+  .week-hover-bg{
+    .react-datepicker-wrapper {
+      .reports-date-picker-icon{
+       
+      }
+      .react-datepicker__input-container input{
+        
+        padding-left: 12px !important;
+      }
+    }
   }
 }
 

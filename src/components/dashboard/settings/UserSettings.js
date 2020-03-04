@@ -56,9 +56,25 @@ const UserSettings = props => {
                 </button>
               </div>
             </div>
+            <div className="col-md-12 access-box">
+              <div className="d-inline-block access-text">Access</div>
+              <div className="d-inline-block admin-text">
+                {props.role === "admin" ? (
+                  <>
+                    <img src={Admin} />
+                    Admin
+                  </>
+                ) : (
+                  <>
+                    <img src={Member} />
+                    Member
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-        <div className="col-md-8 access-box">
+        {/* <div className="col-md-8 access-box">
           <div className="d-inline-block access-text">Access</div>
           <div className="d-inline-block admin-text">
             {props.role === "admin" ? (
@@ -73,7 +89,7 @@ const UserSettings = props => {
               </>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="col-md-12 hr"></div>
       <div className="col-md-12 heading">Change Password</div>

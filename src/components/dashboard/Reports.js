@@ -1005,7 +1005,7 @@ class Reports extends Component {
     const Weekly = props => {
       return (
         <>
-          <div className="week-hover-bg d-inline-block">
+          <div className="week-hover-bg d-inline-block  AB">
             <DatePicker
               ref={this.calendarWeekRef}
               showWeekNumbers

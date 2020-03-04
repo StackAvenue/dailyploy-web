@@ -2797,7 +2797,8 @@ table.scheduler-table tr:last-child td {
         }
       }
       .access-box {
-        margin-left: 178px;
+        // margin-left: 178px;
+        margin-top: 8px;
         .access-text {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
