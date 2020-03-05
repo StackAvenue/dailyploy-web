@@ -1120,7 +1120,7 @@ class Reports extends Component {
                         className="d-inline-block csv-loader"
                       />
                     ) : null}
-                    <i className="fas fa-download right-left-space-5"></i>
+                    <i className="fas fa-download"></i>
                     Download
                   </button>
                 </div>
