@@ -71,7 +71,7 @@ class Calendar extends Component {
         endResizable: true,
         movable: true,
         creatable: true,
-        crossResourceMove: false,
+        crossResourceMove: true,
         checkConflict: false,
         scrollToSpecialMomentEnabled: true,
         eventItemPopoverEnabled: false,
@@ -147,7 +147,7 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 85;
+      return 90;
     }
     return height;
   };
@@ -161,8 +161,8 @@ class Calendar extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      this.props.resources === nextProps.resources &&
-      this.props.events === nextProps.events
+      this.props.resources == nextProps.resources &&
+      this.props.events == nextProps.events
     ) {
       return false;
     } else {
@@ -192,7 +192,10 @@ class Calendar extends Component {
   renderData = () => {
     this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
     this.schedulerData.setResources(this.props.resources);
-    let uniqEvents = this.removeDuplicates(this.props.events, "id");
+    let events = this.props.events.sort(
+      (a, b) => Number(b.sortedTime) - Number(a.sortedTime)
+    );
+    let uniqEvents = this.removeDuplicates(events, "id");
     this.schedulerData.setEvents(uniqEvents);
   };
 
@@ -323,10 +326,11 @@ class Calendar extends Component {
       moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
     );
     var end = new Date(
-      moment(convertUTCToLocalDate(eventItem.taskEndDateTime)).format(
-        `${DATE_FORMAT1} HH:mm:ss`
-      )
+      moment(convertUTCToLocalDate(eventItem.taskEndDateTime))
+        .format(`${DATE_FORMAT1} HH:mm:ss`)
+        .replace(/-/g, "/")
     );
+
     var timeDiff = "00h 00m";
     if (
       moment(start).format("HH:mm") != "00:00" &&
@@ -505,20 +509,49 @@ class Calendar extends Component {
     let newStartDateTime =
       moment(start).format(DATE_FORMAT1) + " " + newStartTime;
     let newEndDateTime = moment(end).format(DATE_FORMAT1) + " " + newEndTime;
-    schedulerData.moveEvent(
-      event,
-      slotId,
-      slotName,
-      newStartDateTime,
-      newEndDateTime
-    );
-    this.setState({
-      viewModel: schedulerData
-    });
-    this.props.updateTaskEvent(event, {
-      start_datetime: newStartDateTime,
-      end_datetime: newEndDateTime
-    });
+    if (
+      slotId !== event.resourceId &&
+      this.props.validCrossMove(slotId, event)
+    ) {
+      schedulerData.moveEvent(
+        event,
+        slotId,
+        slotName,
+        newStartDateTime,
+        newEndDateTime
+      );
+      this.setState({
+        viewModel: schedulerData
+      });
+      this.props.updateTaskEvent(event, {
+        start_datetime: newStartDateTime,
+        end_datetime: newEndDateTime,
+        member_ids: [slotId]
+      });
+    } else if (
+      !(
+        moment(start).format(DATE_FORMAT1) ===
+          moment(event.starsst).format(DATE_FORMAT1) &&
+        moment(end).format(DATE_FORMAT1) ===
+          moment(event.end).format(DATE_FORMAT1) &&
+        slotId === event.resourceId
+      )
+    ) {
+      schedulerData.moveEvent(
+        event,
+        slotId,
+        slotName,
+        newStartDateTime,
+        newEndDateTime
+      );
+      this.setState({
+        viewModel: schedulerData
+      });
+      this.props.updateTaskEvent(event, {
+        start_datetime: newStartDateTime,
+        end_datetime: newEndDateTime
+      });
+    }
   };
 
   onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {

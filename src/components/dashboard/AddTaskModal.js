@@ -35,6 +35,12 @@ class AddTaskModal extends React.Component {
   //   this.nameInput.focus();
   // }
 
+  focusInput = component => {
+    if (component) {
+      component.focus();
+    }
+  };
+
   componentDidUpdate = (prevProps, prevState) => {
     if (this.props.state.taskName !== prevProps.state.taskName) {
       this.setState({ taskName: this.props.state.taskName });

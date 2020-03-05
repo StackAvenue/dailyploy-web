@@ -974,6 +974,8 @@ class Dashboard extends Component {
   };
 
   setAddTaskDetails = (memberId, startDate, endDate) => {
+    var startDate = new Date(startDate.replace(/-/g, "/"));
+    var endDate = new Date(endDate.replace(/-/g, "/"));
     let members = this.memberSearchOptions(memberId);
     var selectedMembers = this.state.users.filter(
       member => memberId === member.id
@@ -1176,8 +1178,22 @@ class Dashboard extends Component {
     );
     try {
       const { data } = await get(`tasks/${taskId}`);
-      var startDate = convertUTCToLocalDate(data.start_datetime);
-      var endDate = convertUTCToLocalDate(data.end_datetime);
+      // var startDate = convertUTCToLocalDate(data.start_datetime);
+      // var endDate = convertUTCToLocalDate(data.end_datetime);
+      var startDate = new Date(
+        convertUTCToLocalDate(
+          moment(data.start_datetime)
+            .format(`${DATE_FORMAT1} HH:mm:ss`)
+            .replace(/-/g, "/")
+        )
+      );
+      var endDate = new Date(
+        convertUTCToLocalDate(
+          moment(data.end_datetime)
+            .format(`${DATE_FORMAT1} HH:mm:ss`)
+            .replace(/-/g, "/")
+        )
+      );
       var startTime = moment(startDate).format("HH:mm:ss");
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
@@ -1286,15 +1302,16 @@ class Dashboard extends Component {
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
           );
           var events = this.state.events;
-          var filterEvents = events.filter(e => e.taskId == event.taskId);
-          filterEvents.map(event => {
+          var filterEvents = events.filter(e => e.taskId != event.taskId);
+          var updateEvents = events.filter(e => e.taskId == event.taskId);
+          updateEvents.forEach(event => {
             event["timeTracked"] = data.task.time_tracked;
-            event["status"] = data.task.status;
-            event["trackingStatus"] =
-              data.task.status === "completed" ? "" : "play";
+            event["status"] = "completed";
+            event["trackingStatus"] = "completed";
           });
+          var newEvents = [...filterEvents, ...updateEvents].flat();
           this.setState({
-            events: events,
+            events: newEvents,
             taskEvent: event,
             taskConfirmModal: false,
             backFromTaskEvent: true,
@@ -1338,6 +1355,11 @@ class Dashboard extends Component {
     } catch (e) {
       this.setState({ taskloader: false });
     }
+  };
+
+  validCrossMove = (resourceId, event) => {
+    let project = this.state.projects.find(p => p.id === event.projectId);
+    return project && project.members.map(m => m.id).includes(resourceId);
   };
 
   taskDelete = async event => {
@@ -1557,10 +1579,21 @@ class Dashboard extends Component {
       try {
         const { data } = await post(taskDate, `tasks/${taskId}/start-tracking`);
         var events = this.state.events;
+        // if (this.state.status && this.state.trackingEvent) {
+        //   var prevFilterEvents = events.filter(
+        //     event => event.taskId == this.state.trackingEvent.taskId
+        //   );
+        //   prevFilterEvents.forEach(event => {
+        //     event["trackingStatus"] = "play";
+        //     event["startOn"] = null;
+        //     event["status"] = "running";
+        //   });
+        // }
         var filterEvents = events.filter(event => event.taskId == taskId);
         filterEvents.forEach(event => {
           event["trackingStatus"] = "pause";
           event["startOn"] = dateTime;
+          event["status"] = "running";
         });
         var event = filterEvents.find(dd => dd.id == eventTask.id);
         this.setState({
@@ -1591,6 +1624,7 @@ class Dashboard extends Component {
           var timeTracked = [...event.timeTracked, ...[data]];
           event["timeTracked"] = timeTracked;
           event["startOn"] = null;
+          event["status"] = "running";
           event["trackingStatus"] = "play";
         });
         var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];
@@ -2083,6 +2117,7 @@ class Dashboard extends Component {
               handleTaskStart={this.handleTaskStart}
               handleTaskStop={this.handleTaskStop}
               handleLoading={this.props.handleLoading}
+              validCrossMove={this.validCrossMove}
             />
           </div>
 
