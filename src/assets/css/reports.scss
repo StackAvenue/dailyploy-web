@@ -6,7 +6,10 @@
     margin: 2% 2.5% 2% 2.5%;
   }
 }
-
+.reports-btns .SelectedWeekExample{
+  display: inline-block;
+  width: 52%;
+}
 .reports-btns{
   position: fixed;
   z-index: 4;
@@ -14,17 +17,23 @@
   background-color: #ffff;
   top: 118px;
   box-shadow: inset 0 -15px 15px -10px rgba(0, 0, 0, 0.2);
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
   width: 100%;
   display: inline-block;
   // width: 100%;
   padding: 10px 20px 10px 20px;
   // box-shadow: 0 -3px 20px 0 rgba(0, 0, 0, 0.1);
   .report-caleneder-btn{
-    display: inline-block;
-    padding-left: 275px;
+    // width: 60%;
+display: inline-flex;
+justify-content: flex-end;
+    // display: inline-block;
+    // padding-left: 275px;
+//     width: 68%;
+// display: inline-flex;
+// justify-content: end;
     .report-category{
       margin-right: 20px;
       .custom-search-select{
@@ -34,6 +43,7 @@
           padding: 5px 5px !important;
           width: 50% !important;
           margin-left: 10px !important;
+          color: #9b9b9b !important;
         }
       }
       .down-icon{
@@ -50,6 +60,8 @@
           width: 50% !important;
           padding: 5px 5px !important;
           margin-left: 10px !important;
+          color: #9b9b9b !important;
+
 
         }
         .color-dot{
@@ -66,23 +78,28 @@
   }
   .report-download{
     display: inline-block;
-    float: right;
+    // float: right;
+    // width: 15%;
     button{
-      width: 70% !important;
-      font-size: 15px !important;
-      // width: auto;
-      // height: 30px;
+      // width: 70% !important;
+      // font-size: 15px !important;
+      display: inline-flex !important;
+      width: auto;
+      height: 36px;
       border-radius: 5px;
       border: solid 1px $color-brand3;
       background-color: $color-white;
-      margin: 6px 90px 0px 0px;
+      // margin: 6px 76px 0px 0px;
+      margin: 0px 76px 0px 22px;
+
       box-shadow: none !important;
       color: #212529;
       background-color: white;
+      font-size: 18px;
       &:hover{
           // background-color: #33a1ff !important;
           // color: #fff !important;
-          font-weight: bold !important;
+          // font-weight: bold !important;
       }
       
     }
@@ -94,6 +111,8 @@
   }
   .SelectedWeekExample{
     display: inline-block;
+    // width: 25%;
+
   }
   .active{
       background-color: #33a1ff !important;
@@ -116,15 +135,27 @@
     .react-datepicker__input-container input{
       border: none;
       // padding: 0px 0 0 0px;
-      padding-left: 10px !important;
+      padding-left: 54px !important;
+      // text-align: center;
       margin: 4px;
-      width:  220px !important;
+      width:  244px !important;
     }
     border-radius: 5px;
     width: auto;
     height: auto;
     border: solid 1px #d6d6d6;
     background-color: #ffffff;
+  }
+  .week-hover-bg{
+    .react-datepicker-wrapper {
+      .reports-date-picker-icon{
+       
+      }
+      .react-datepicker__input-container input{
+        
+        padding-left: 12px !important;
+      }
+    }
   }
 }
 
@@ -216,6 +247,7 @@
 .right-left-space-5{
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 4px;
 }
 
 .user-project-search{

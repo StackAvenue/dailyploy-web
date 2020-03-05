@@ -92,7 +92,7 @@
   padding-left: 17px !important;
 }
 .date-text-light {
-  width: 24px;
+  // width: 24px;
   height: 18px;
   opacity: 0.5;
   font-family: Roboto;
@@ -104,6 +104,10 @@
   letter-spacing: normal;
   text-align: left;
   color: #555555 !important;
+}
+.width-to{
+  max-width: 86% !important;
+  margin-left: 17% !important;
 }
 .padding-10px {
   padding: 10px !important;

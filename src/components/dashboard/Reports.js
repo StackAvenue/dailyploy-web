@@ -1006,7 +1006,7 @@ class Reports extends Component {
     const Weekly = props => {
       return (
         <>
-          <div className="week-hover-bg d-inline-block">
+          <div className="week-hover-bg d-inline-block  AB">
             <DatePicker
               ref={this.calendarWeekRef}
               showWeekNumbers
@@ -1018,7 +1018,7 @@ class Reports extends Component {
               value={this.state.displayWeek}
               showWeekNumbers
             />
-            <span style={{ position: "relative", right: "21px" }}>
+            <span style={{ position: "relative", right: "28px" }}>
               <i
                 onClick={this.openWeekCalender}
                 className="fa fa-calendar"

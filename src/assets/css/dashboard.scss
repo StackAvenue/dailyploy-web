@@ -1228,24 +1228,7 @@ table.scheduler-table tr:last-child td {
 
 .timeline-event {
   position: absolute;
-  // :nth-child{
-  //   width: 98px;
-  //   position: absolute;
-  //   z-index: 1;
-  //   text-align: center;
-  //   right: 0px;
-  //   top: 80px;
-  //   background-color: #ffffff;
-  //   border: 1px solid #e5e5e5;
-  //   border-radius: 5px;
-  //   font-family: 'Roboto-Regular', 'Roboto';
-  //   font-weight: 400;
-  //   font-style: normal;
-  //   font-size: 12px;
-  //   color: #0075d9;
-  
 
-  // }
   
   
 }
@@ -2314,6 +2297,7 @@ table.scheduler-table tr:last-child td {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
         color: $color-text3 !important;
+        // min-width: 16% !important;
         p {
           font-weight: bold !important;
           color: $color-text2 !important;
@@ -2346,7 +2330,7 @@ table.scheduler-table tr:last-child td {
         }
       }
       .box-btn {
-        padding: 10px 0px 0px 15px !important;
+        padding: 10px 0px 0px 0px !important;
         button {
           cursor: not-allowed;
           pointer-events: all !important;
@@ -2797,7 +2781,8 @@ table.scheduler-table tr:last-child td {
         }
       }
       .access-box {
-        margin-left: 178px;
+        // margin-left: 178px;
+        margin-top: 8px;
         .access-text {
           font-family: $font-family-roboto !important;
           font-size: 15px !important;
@@ -3767,6 +3752,7 @@ table.scheduler-table tr:last-child td {
     border: 1px solid #505050;
   }
 }
+.timeline-event{
 .event-action-dropdown {
   width: 98px;
   position: absolute;
@@ -3782,7 +3768,11 @@ table.scheduler-table tr:last-child td {
   font-style: normal;
   font-size: 12px;
   color: #0075d9;
-
+  &:nth-child(1){
+      right: 40px;
+      top: 32px;
+  }
+}
 }
 .custom-event-popup {
   width: 200px;
@@ -4672,7 +4662,7 @@ table.scheduler-table tr:last-child td {
     background-color: #ffffff;
     border: solid 1px $color-borders;
     text-align: center;
-    padding-top: 5px;
+    // padding-top: 5px;
     font-family: $font-family-roboto !important;
     font-size: 15px;
     font-weight: normal;
@@ -5019,6 +5009,7 @@ table.scheduler-table tr:last-child td {
   .event-active-log:hover{
     border: solid 1px $color-white;
   }
+
   .three-dot{
     right: 0px;
     // right: 14px;
@@ -5047,3 +5038,39 @@ table.scheduler-table tr:last-child td {
   .no-track-time{
     vertical-align: sub;
   }
+
+
+.scheduler-view {
+  .scheduler-content{
+     .scheduler-content-table{
+        tbody{
+          tr:nth-last-child(1) {
+            td{
+              .event-container{
+                .timeline-event{
+                  .event-action-dropdown{  
+                    width: 98px !important;
+                    position: absolute !important;
+                    z-index: 1 !important;
+                    text-align: center !important;
+                    // right: 40px !important;
+                    left: 100%;
+                    top: 32px !important;
+                    background-color: #ffffff;
+                    border: 1px solid #e5e5e5;
+                    border-radius: 5px;
+                    font-family: 'Roboto-Regular', 'Roboto';
+                    font-weight: 400;
+                    font-style: normal;
+                    font-size: 12px;
+                    color: #0075d9;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+}
