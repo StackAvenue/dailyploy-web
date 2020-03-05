@@ -93,6 +93,23 @@
       color: $color-text3 !important;
       font-size: 12px !important;
     }
+    .google-auth{
+      border-radius: 2px;
+      border: 1px solid #d6d6d6 !important;
+      background-color: #ffffff !important;
+      font-family: "Roboto-Medium", "Roboto Medium", "Roboto" !important;
+      font-weight: 500 !important;
+      color: #ffffff !important;
+      text-align: center !important;
+      box-shadow: none !important;
+      width: 100% !important;
+    }
+    .signup{
+      padding: 0px 18% 0px 20% !important;
+    }
+    .login{
+      padding: 0px 30% 0px 30% !important;
+    }
   }
 }
 
