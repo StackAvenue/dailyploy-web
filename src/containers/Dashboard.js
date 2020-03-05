@@ -1356,6 +1356,11 @@ class Dashboard extends Component {
     }
   };
 
+  validCrossMove = (resourceId, event) => {
+    let project = this.state.projects.find(p => p.id === event.projectId);
+    return project && project.members.map(m => m.id).includes(resourceId);
+  };
+
   taskDelete = async event => {
     if (event) {
       let taskId = event.id.split("-")[0];
@@ -2099,6 +2104,7 @@ class Dashboard extends Component {
               handleTaskStart={this.handleTaskStart}
               handleTaskStop={this.handleTaskStop}
               handleLoading={this.props.handleLoading}
+              validCrossMove={this.validCrossMove}
             />
           </div>
 

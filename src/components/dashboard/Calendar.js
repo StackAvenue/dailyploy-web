@@ -71,7 +71,7 @@ class Calendar extends Component {
         endResizable: true,
         movable: true,
         creatable: true,
-        crossResourceMove: false,
+        crossResourceMove: true,
         checkConflict: false,
         scrollToSpecialMomentEnabled: true,
         eventItemPopoverEnabled: false,
@@ -497,23 +497,43 @@ class Calendar extends Component {
   };
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
+    let newStartTime = moment(
+      convertUTCToLocalDate(event.taskStartDateTime)
+    ).format("HH:mm:ss");
+    let newEndTime = moment(
+      convertUTCToLocalDate(event.taskEndDateTime)
+    ).format("HH:mm:ss");
+    let newStartDateTime =
+      moment(start).format(DATE_FORMAT1) + " " + newStartTime;
+    let newEndDateTime = moment(end).format(DATE_FORMAT1) + " " + newEndTime;
     if (
+      slotId !== event.resourceId &&
+      this.props.validCrossMove(slotId, event)
+    ) {
+      schedulerData.moveEvent(
+        event,
+        slotId,
+        slotName,
+        newStartDateTime,
+        newEndDateTime
+      );
+      this.setState({
+        viewModel: schedulerData
+      });
+      this.props.updateTaskEvent(event, {
+        start_datetime: newStartDateTime,
+        end_datetime: newEndDateTime,
+        member_ids: [slotId]
+      });
+    } else if (
       !(
         moment(start).format(DATE_FORMAT1) ===
           moment(event.start).format(DATE_FORMAT1) &&
         moment(end).format(DATE_FORMAT1) ===
-          moment(event.end).format(DATE_FORMAT1)
+          moment(event.end).format(DATE_FORMAT1) &&
+        slotId === event.resourceId
       )
     ) {
-      let newStartTime = moment(
-        convertUTCToLocalDate(event.taskStartDateTime)
-      ).format("HH:mm:ss");
-      let newEndTime = moment(
-        convertUTCToLocalDate(event.taskEndDateTime)
-      ).format("HH:mm:ss");
-      let newStartDateTime =
-        moment(start).format(DATE_FORMAT1) + " " + newStartTime;
-      let newEndDateTime = moment(end).format(DATE_FORMAT1) + " " + newEndTime;
       schedulerData.moveEvent(
         event,
         slotId,
