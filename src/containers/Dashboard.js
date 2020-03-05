@@ -1302,15 +1302,16 @@ class Dashboard extends Component {
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
           );
           var events = this.state.events;
-          var filterEvents = events.filter(e => e.taskId == event.taskId);
-          filterEvents.map(event => {
+          var filterEvents = events.filter(e => e.taskId != event.taskId);
+          var updateEvents = events.filter(e => e.taskId == event.taskId);
+          updateEvents.forEach(event => {
             event["timeTracked"] = data.task.time_tracked;
             event["status"] = "completed";
             event["trackingStatus"] = "completed";
-            // data.task.status === "completed" ? "" : "play";
           });
+          var newEvents = [...filterEvents, ...updateEvents].flat();
           this.setState({
-            events: events,
+            events: newEvents,
             taskEvent: event,
             taskConfirmModal: false,
             backFromTaskEvent: true,
@@ -1578,6 +1579,16 @@ class Dashboard extends Component {
       try {
         const { data } = await post(taskDate, `tasks/${taskId}/start-tracking`);
         var events = this.state.events;
+        // if (this.state.status && this.state.trackingEvent) {
+        //   var prevFilterEvents = events.filter(
+        //     event => event.taskId == this.state.trackingEvent.taskId
+        //   );
+        //   prevFilterEvents.forEach(event => {
+        //     event["trackingStatus"] = "play";
+        //     event["startOn"] = null;
+        //     event["status"] = "running";
+        //   });
+        // }
         var filterEvents = events.filter(event => event.taskId == taskId);
         filterEvents.forEach(event => {
           event["trackingStatus"] = "pause";

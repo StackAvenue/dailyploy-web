@@ -161,8 +161,8 @@ class Calendar extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      this.props.resources === nextProps.resources &&
-      this.props.events === nextProps.events
+      this.props.resources == nextProps.resources &&
+      this.props.events == nextProps.events
     ) {
       return false;
     } else {
@@ -192,7 +192,10 @@ class Calendar extends Component {
   renderData = () => {
     this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
     this.schedulerData.setResources(this.props.resources);
-    let uniqEvents = this.removeDuplicates(this.props.events, "id");
+    let events = this.props.events.sort(
+      (a, b) => Number(b.sortedTime) - Number(a.sortedTime)
+    );
+    let uniqEvents = this.removeDuplicates(events, "id");
     this.schedulerData.setEvents(uniqEvents);
   };
 
