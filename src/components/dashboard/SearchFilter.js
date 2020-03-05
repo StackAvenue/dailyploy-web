@@ -389,16 +389,20 @@ class SearchFilter extends Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    className={`${
+                    style={
                       this.props.state.searchFlag === "My Reports"
-                        ? "active"
-                        : ""
-                    }`}
+                        ? {
+                            backgroundColor: "#ffffff",
+                            color: "#33a1ff !important"
+                          }
+                        : { backgroundColor: "#ffffff" }
+                    }
                     onClick={() => this.props.toggleSearchBy("My Reports")}
                   >
                     My Reports
                   </Dropdown.Item>
                   <Dropdown.Item
+                    style={{ backgroundColor: "#ffffff" }}
                     className={`${
                       this.props.state.searchFlag === "Members" ? "active" : ""
                     }`}
