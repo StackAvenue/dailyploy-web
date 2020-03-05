@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import cookie from "react-cookies";
-import { login, get, forgotPassword } from "../utils/API";
+import {
+  login,
+  get,
+  forgotPassword,
+  googleSignin,
+  googleSignup
+} from "../utils/API";
 import { validateEmail } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,6 +18,9 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import axios from "axios";
 import "../assets/css/login.scss";
+import { GOOGLE_CLIENT_ID } from "../utils/Constants";
+import GoogleLogin from "react-google-login";
+import DailyPloyToast from "./../../src/components/DailyPloyToast";
 
 class Signin extends Component {
   constructor(props) {
@@ -137,6 +146,141 @@ class Signin extends Component {
     return this.state.email && this.state.password;
   };
 
+  errorGoogle = error => {
+    console.log(error);
+  };
+
+  responseGoogle = response => {
+    this.signupOAuth(response, "google");
+  };
+
+  signupOAuth = async (resp, type) => {
+    let signupOAuthData;
+    let loginSignupData;
+    if (type === "google" && resp && resp.profileObj) {
+      signupOAuthData = {
+        email: resp.profileObj.email,
+        provider_id: resp.googleId
+      };
+      loginSignupData = {
+        user: {
+          name: resp.profileObj.name,
+          email: resp.profileObj.email,
+          provider: type,
+          provider_id: resp.googleId,
+          provider_img: resp.profileObj.imageUrl
+        }
+      };
+    }
+    this.setState({ isLoading: true });
+    try {
+      const { data } = await googleSignin(signupOAuthData);
+      cookie.save("accessToken", data.access_token, { path: "/" });
+      cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
+      axios.defaults.headers.common["Authorization"] = data.access_token
+        ? `Bearer ${data.access_token}`
+        : "";
+      try {
+        const { data } = await get("workspaces");
+        const workspace = data.workspaces[0];
+        cookie.save("workspaceId", workspace.id, { path: "/" });
+        if (workspace && workspace.type === "company") {
+          cookie.save("workspaceName", workspace.company.name, { path: "/" });
+        } else {
+          cookie.save("workspaceName", workspace.name, {
+            path: "/"
+          });
+        }
+        try {
+          const { data } = await get("logged_in_user");
+          cookie.save("loggedInUser", data);
+        } catch (e) {
+          console.log("err", e);
+        }
+        this.setState({ isLoading: false });
+        this.props.history.push(`/workspace/${workspace.id}/dashboard`);
+      } catch (e) {
+        console.log("error", e);
+      }
+    } catch (e) {
+      if (e.response.status === 400) {
+        this.loginSignup(loginSignupData);
+      } else {
+        this.setState({
+          error: "Invalid Email or Password!",
+          isLoading: false,
+          resetSusses: ""
+        });
+      }
+    }
+  };
+
+  loginSignup = async loginSignupData => {
+    try {
+      const { data } = await googleSignup(loginSignupData);
+      this.directLoginGoogle(data.user);
+      this.setState({ isLoading: false });
+    } catch (e) {
+      this.setState({ isLoading: false });
+      if (e.response.status === 500) {
+        toast(
+          <DailyPloyToast message={"Internal Server Error"} status="error" />,
+          { autoClose: 2000 }
+        );
+      } else if (e.response.data.errors.email) {
+        toast(
+          <DailyPloyToast
+            message={"email " + `${e.response.data.errors.email}`}
+            status="error"
+          />,
+          { autoClose: 2000 }
+        );
+      } else if (e.response.data.errors.detail) {
+        toast(
+          <DailyPloyToast
+            message={"email " + `${e.response.data.errors.detail}`}
+            status="error"
+          />,
+          { autoClose: 2000 }
+        );
+      }
+    }
+  };
+
+  directLoginGoogle = async data => {
+    try {
+      cookie.save("accessToken", data.access_token, { path: "/" });
+      cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
+      axios.defaults.headers.common["Authorization"] = data.access_token
+        ? `Bearer ${data.access_token}`
+        : "";
+      try {
+        const { data } = await get("workspaces");
+        const workspace = data.workspaces[0];
+        cookie.save("workspaceId", workspace.id, { path: "/" });
+        if (workspace && workspace.type === "company") {
+          cookie.save("workspaceName", workspace.company.name, { path: "/" });
+        } else {
+          cookie.save("workspaceName", workspace.name, {
+            path: "/"
+          });
+        }
+        try {
+          const { data } = await get("logged_in_user");
+          cookie.save("loggedInUser", data);
+        } catch (e) {
+          console.log("err", e);
+        }
+        this.setState({ isLoading: false });
+        this.props.history.push(`/workspace/${workspace.id}/dashboard`);
+      } catch (e) {
+        console.log("error", e);
+      }
+    } catch (e) {
+      this.setState({ error: e.response.data.error, isLoading: false });
+    }
+  };
+
   render() {
     const { email, password } = this.state;
     const isEnabled = this.isPresentAllInputs();
@@ -240,19 +384,19 @@ class Signin extends Component {
                         </div>
                       </div>
                     </form>
-                    {/* <div
-                    style={{ margin: "0" }}
-                    className="col-md-8 offset-2 googleIcon"
-                  >
-                    <img
-                      alt="Google Icon"
-                      src={googleIcon}
-                      className="img-responsive"
-                    />
-                    <Link to={"/login"} className="link">
-                      Sign In with Google
-                    </Link>
-                  </div> */}
+                    <br />
+                    <div
+                      style={{ margin: "0" }}
+                      className="col-md-10 offset-1 no-padding googleIcon"
+                    >
+                      <GoogleLogin
+                        clientId={GOOGLE_CLIENT_ID}
+                        buttonText="Sign In with Google"
+                        className="google-auth login"
+                        onSuccess={this.responseGoogle}
+                        onFailure={this.errorGoogle}
+                      />
+                    </div>
                     <br />
                     <div
                       style={{ margin: "0" }}

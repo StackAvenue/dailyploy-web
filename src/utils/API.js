@@ -17,6 +17,14 @@ export const login = async loginData => {
   return await axios.post(`${URL}/sign_in`, loginData);
 };
 
+export const googleSignin = async loginData => {
+  return await axios.post(`${URL}/google_signin`, loginData);
+};
+
+export const googleSignup = async loginData => {
+  return await axios.post(`${URL}/google_auth`, loginData);
+};
+
 export const forgotPassword = async data => {
   return await axios.get(`${URL}/forgot_password`, {
     params: data ? data : {}
