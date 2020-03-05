@@ -528,7 +528,7 @@ class Calendar extends Component {
     } else if (
       !(
         moment(start).format(DATE_FORMAT1) ===
-          moment(event.start).format(DATE_FORMAT1) &&
+          moment(event.starsst).format(DATE_FORMAT1) &&
         moment(end).format(DATE_FORMAT1) ===
           moment(event.end).format(DATE_FORMAT1) &&
         slotId === event.resourceId

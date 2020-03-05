@@ -1305,9 +1305,9 @@ class Dashboard extends Component {
           var filterEvents = events.filter(e => e.taskId == event.taskId);
           filterEvents.map(event => {
             event["timeTracked"] = data.task.time_tracked;
-            event["status"] = data.task.status;
-            event["trackingStatus"] =
-              data.task.status === "completed" ? "" : "play";
+            event["status"] = "completed";
+            event["trackingStatus"] = "completed";
+            // data.task.status === "completed" ? "" : "play";
           });
           this.setState({
             events: events,
@@ -1582,6 +1582,7 @@ class Dashboard extends Component {
         filterEvents.forEach(event => {
           event["trackingStatus"] = "pause";
           event["startOn"] = dateTime;
+          event["status"] = "running";
         });
         var event = filterEvents.find(dd => dd.id == eventTask.id);
         this.setState({
@@ -1612,6 +1613,7 @@ class Dashboard extends Component {
           var timeTracked = [...event.timeTracked, ...[data]];
           event["timeTracked"] = timeTracked;
           event["startOn"] = null;
+          event["status"] = "running";
           event["trackingStatus"] = "play";
         });
         var infoTimeTrackLog = [...this.state.timeTracked, ...[data]];

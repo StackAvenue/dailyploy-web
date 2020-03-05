@@ -299,7 +299,8 @@ class DashboardEvent extends Component {
                   </div>
                 </OverlayTrigger>
 
-                {event.trackingStatus === "pause" ? (
+                {event.trackingStatus === "pause" &&
+                event.status === "running" ? (
                   <div className="col-md-2 no-padding d-inline-block">
                     <span
                       style={{
@@ -317,7 +318,27 @@ class DashboardEvent extends Component {
                   </div>
                 ) : null}
 
-                {event.trackingStatus === "play" ? (
+                {event.trackingStatus === "play" &&
+                event.status === "not_started" ? (
+                  <div className="col-md-2 no-padding d-inline-block">
+                    <span
+                      style={{
+                        pointerEvents: this.isValidUserDate(event.resourceId)
+                          ? ""
+                          : "none"
+                      }}
+                      className="day-task-play-btn pointer"
+                      onClick={() =>
+                        this.props.handleTaskStart(event, Date.now())
+                      }
+                    >
+                      <i className="fa fa-power-off"></i>
+                    </span>
+                  </div>
+                ) : null}
+
+                {event.trackingStatus === "play" &&
+                event.status === "running" ? (
                   <div className="col-md-2 no-padding d-inline-block">
                     <span
                       style={{
@@ -446,7 +467,8 @@ class DashboardEvent extends Component {
                 </div>
               </OverlayTrigger>
 
-              {event.trackingStatus === "pause" ? (
+              {event.trackingStatus === "pause" &&
+              event.status === "running" ? (
                 <div className="col-md-2 no-padding d-inline-block">
                   <span
                     style={{
@@ -462,7 +484,26 @@ class DashboardEvent extends Component {
                 </div>
               ) : null}
 
-              {event.trackingStatus === "play" ? (
+              {event.trackingStatus === "play" &&
+              event.status === "not_started" ? (
+                <div className="col-md-2 no-padding d-inline-block">
+                  <span
+                    style={{
+                      pointerEvents: this.isValidUserDate(event.resourceId)
+                        ? ""
+                        : "none"
+                    }}
+                    className="task-play-btn pointer"
+                    onClick={() =>
+                      this.props.handleTaskStart(event, Date.now())
+                    }
+                  >
+                    <i className="fa fa-power-off"></i>
+                  </span>
+                </div>
+              ) : null}
+
+              {event.trackingStatus === "play" && event.status === "running" ? (
                 <div className="col-md-2 no-padding d-inline-block">
                   <span
                     style={{
