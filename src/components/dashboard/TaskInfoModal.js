@@ -8,6 +8,7 @@ import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
 import { convertUTCToLocalDate } from "../../utils/function";
+import CommentUpload from "./../../components/dashboard/CommentUpload";
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -16,6 +17,55 @@ class TaskInfoModal extends Component {
       name: "high",
       color_code: "#00A031"
     };
+    this.comments = [
+      {
+        attachments: [
+          {
+            attachment_id: 2,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
+          },
+          {
+            attachment_id: 3,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
+          }
+        ],
+        comments: "This is for the testing of task",
+        id: 4,
+        task_id: 222,
+        user_id: 1,
+        user: {
+          id: 1,
+          name: "ravindra karale",
+          email: "ravindra@stack-avenue.com"
+        }
+      },
+      {
+        attachments: [
+          {
+            attachment_id: 2,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
+          },
+          {
+            attachment_id: 3,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
+          }
+        ],
+        comments: '"This is for the testing of task"',
+        id: 4,
+        task_id: 222,
+        user_id: 1,
+        user: {
+          id: 1,
+          name: "ravindra karale",
+          email: "ravindra@stack-avenue.com"
+        }
+      }
+    ];
+
     this.state = {
       color: "#ffffff",
       showTimerMenu: false
@@ -205,6 +255,10 @@ class TaskInfoModal extends Component {
       );
     }
   };
+
+  deleteComments = () => {};
+
+  editComments = () => {};
 
   render() {
     const { props } = this;
@@ -440,11 +494,44 @@ class TaskInfoModal extends Component {
               <div className="col-md-12 row no-margin no-padding input-row text-titlize">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
-                  <p className="left-padding-20px comments">
-                    {props.state.taskEvent.comments
-                      ? props.state.taskEvent.comments
-                      : "---"}
-                  </p>
+                  <CommentUpload
+                    save={this.props.saveComments}
+                    defaultComment={props.state.taskEvent.comments}
+                    state={this.state}
+                    showSave={true}
+                    showAttachIcon={true}
+                  />
+                </div>
+
+                <div className="col-md-2 no-padding label"></div>
+                <div className="col-md-10 task-comments">
+                  {this.comments.map(comment => {
+                    return (
+                      <div className="commnet-card">
+                        <div className="row">
+                          <div className="col-md-7">{comment.user.name}</div>
+                          <div
+                            className="col-md-3"
+                            style={{ fontSize: "11px" }}
+                          >
+                            2 hours ago
+                          </div>
+                        </div>
+                        <div className="col-md-12 no-padding">
+                          {comment.comments}
+                        </div>
+                        <div className="col-md-12 no-padding"></div>
+                        <div className="col-md-12 no-padding">
+                          <a href="" onClick={this.deleteComments}>
+                            Edit
+                          </a>
+                          <a href="" onClick={this.editComments}>
+                            Delete
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

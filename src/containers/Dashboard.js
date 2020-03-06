@@ -893,6 +893,20 @@ class Dashboard extends Component {
     }
   };
 
+  saveComments = async (comments, attachments) => {
+    try {
+      let fd = new FormData();
+      attachments.forEach(image => {
+        fd.append("attachments[]", image, image.name);
+      });
+      fd.append("user_id", this.state.userId);
+      fd.append("task_id", this.state.taskEvent.taskId);
+      fd.append("comments", comments);
+      const { data } = await post(fd, `comment`);
+      this.setState({});
+    } catch (e) {}
+  };
+
   handleInputChange = e => {
     const { name, value } = e.target;
     var errors = this.state.errors;
@@ -2150,6 +2164,7 @@ class Dashboard extends Component {
               handlePrioritiesChange={this.handlePrioritiesChange}
               addCategory={this.addCategory}
               handleTaskNameChange={this.handleTaskNameChange}
+              saveComments={this.saveComments}
             />
 
             <TaskInfoModal
@@ -2166,6 +2181,7 @@ class Dashboard extends Component {
               handleTaskStartTop={this.handleTaskStartTop}
               handleTaskStart={this.handleTaskStart}
               handleTaskStop={this.handleTaskStop}
+              saveComments={this.saveComments}
             />
             {this.state.taskConfirmModal ? (
               <TaskConfirm

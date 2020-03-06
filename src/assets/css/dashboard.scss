@@ -854,6 +854,41 @@
     .react-datepicker-popper {
       left: -50px !important;
     }
+    .upload-files{
+      position: absolute;
+      right: 30px;
+      bottom: 5px;
+      color: $color-brand3;
+      cursor: pointer;
+    }
+    .manage-comment-file{
+      border: solid 1px #d6d6d6;
+      border-radius: 5px;
+      textarea{
+        border: none;
+      }
+    }
+    .fileUploader{
+      width: 90%;
+      .fileContainer{
+        box-shadow: none;
+        border-radius: none;
+        padding: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 10px auto;
+        transition: all 0.3s ease-in;
+        .uploadPictureContainer{
+          margin: 2%;
+          padding: 5px;
+        }
+      }
+      .chooseFileButton{
+        display: none;
+      }
+    }
   }
 }
 .member-modal {
@@ -4163,8 +4198,10 @@ table.scheduler-table tr:last-child td {
     .body {
       padding: 5px 49px 10px 49px !important;
       .input-row {
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
+        // padding-top: 15px !important;
+        // padding-bottom: 15px !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
         .label {
           font-family: $font-family-roboto;
           font-size: 15px;
@@ -5076,4 +5113,82 @@ table.scheduler-table tr:last-child td {
       }
     }
 
+}
+
+.comment-container{
+  border: solid 1px #d6d6d6;
+  border-radius: 5px;
+  textarea{
+    border: none;
+    resize: none;
+    overflow-y: hidden;
+  }
+  .save-button {
+    border-radius: 5px !important;
+    border: solid 1px $color-white !important;
+    background-color: $color-brand3 !important;
+    font-family: $font-family-roboto !important;
+    font-size: 12px !important;
+    height: 20px;
+    padding: 0px 6px;
+    color: $color-white !important;
+    margin: 0px 0px 10px 15px !important;
+    width: auto !important;
+  }
+  .upload-files{
+    position: absolute;
+    right: 30px;
+    bottom: 5px;
+    color: $color-brand3;
+    cursor: pointer;
+  }
+  .fileUploader{
+    .fileContainer{
+      box-shadow: none;
+      border-radius: none;
+      padding: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: 10px auto;
+      transition: all 0.3s ease-in;
+      .uploadPicturesWrapper{
+        div:first-child{
+          justify-content: left !important;
+        }
+        .deleteImage{
+          position: absolute;
+          top: -12px;
+          right: -9px;
+          color: #da8383;
+          background-color: #ffffff;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 14px;
+          width: 15px;
+          height: 15px;
+        }
+      }
+      .uploadPictureContainer{
+        margin: 2%;
+        padding: 5px;
+        width: 15%;
+      }
+    }
+    .chooseFileButton{
+      display: none;
+    }
+  }
+}
+.task-comments{
+  a{
+    padding: 0px 10px 0px 0px;
+    font-size: 11px;
+  }
+  .commnet-card{
+    // border: solid 1px #d6d6d6;
+    padding: 10px;
+    margin: 5px 0px;
+  }
 }
