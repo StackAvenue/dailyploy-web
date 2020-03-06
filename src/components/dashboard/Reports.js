@@ -971,7 +971,7 @@ class Reports extends Component {
             startDate={this.state.dateFrom}
             dateFormat="dd MMMM, yyyy"
           />
-          <span style={{ position: "relative", right: "20px" }}>
+          <span style={{ position: "relative", right: "28px" }}>
             <i
               onClick={this.openDayCalender}
               className="fa fa-calendar"
@@ -992,7 +992,7 @@ class Reports extends Component {
             dateFormat="MMMM yyyy"
             showMonthYearPicker
           />
-          <span style={{ position: "relative", right: "20px" }}>
+          <span style={{ position: "relative", right: "28px" }}>
             <i
               onClick={this.openMonthCalender}
               className="fa fa-calendar"
@@ -1006,7 +1006,7 @@ class Reports extends Component {
     const Weekly = props => {
       return (
         <>
-          <div className="week-hover-bg d-inline-block">
+          <div className="week-hover-bg d-inline-block  AB">
             <DatePicker
               ref={this.calendarWeekRef}
               showWeekNumbers
@@ -1018,7 +1018,7 @@ class Reports extends Component {
               value={this.state.displayWeek}
               showWeekNumbers
             />
-            <span style={{ position: "relative", right: "20px" }}>
+            <span style={{ position: "relative", right: "28px" }}>
               <i
                 onClick={this.openWeekCalender}
                 className="fa fa-calendar"
@@ -1087,14 +1087,14 @@ class Reports extends Component {
                 <div className="report-caleneder-btn">
                   <div className="d-inline-block report-category">
                     <DailyPloySelect
-                      placeholder="search for category"
+                      placeholder="Search for Category"
                       options={this.state.taskCategories}
                       onChange={this.handleCategoryChange}
                     />
                   </div>
                   <div className="d-inline-block report-priority">
                     <DailyPloySelect
-                      placeholder="select priority"
+                      placeholder="Select Priority"
                       onChange={this.handlePriorityChange}
                       label="label"
                       suggesionBy="label"
@@ -1120,7 +1120,7 @@ class Reports extends Component {
                         className="d-inline-block csv-loader"
                       />
                     ) : null}
-                    <i className="fas fa-download right-left-space-5"></i>
+                    <i className="fas fa-download"></i>
                     Download
                   </button>
                 </div>

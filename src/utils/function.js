@@ -1,6 +1,6 @@
 import moment from "moment";
 import cookie from "react-cookies";
-import { DATE_FORMAT1 } from "./Constants";
+import { DATE_FORMAT1, FULL_DATE } from "./Constants";
 
 export const getWeekFisrtDate = date => {
   return moment(date)
@@ -38,8 +38,8 @@ export const workspaceNameSplit = name => {
 };
 
 export const convertUTCToLocalDate = date => {
-  var date = new Date(date);
-  return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  var newdate = new Date(date.replace(/-/g, "/"));
+  return new Date(newdate.getTime() + newdate.getTimezoneOffset() * 60 * 1000);
 };
 
 export const getWorkspaceId = () => {
@@ -47,8 +47,8 @@ export const getWorkspaceId = () => {
 };
 
 export const getMiddleDates = (start, end) => {
-  var startDate = convertUTCToLocalDate(start);
-  var endDate = convertUTCToLocalDate(end);
+  var startDate = convertUTCToLocalDate(moment(start).format(FULL_DATE));
+  var endDate = convertUTCToLocalDate(moment(end).format(FULL_DATE));
   // var startDate = new Date(start);
   // var endDate = new Date(end);
   var daysArr = new Array();

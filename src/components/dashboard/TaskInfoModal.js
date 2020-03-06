@@ -208,6 +208,8 @@ class TaskInfoModal extends Component {
 
   render() {
     const { props } = this;
+
+    // console.log(props.state.dateFrom, moment(props.state.dateFrom));
     return (
       <>
         <Modal

@@ -177,21 +177,21 @@ class SearchFilter extends Component {
 
   returnPlaceHolder = selectedMember => {
     if (this.props.isReports && this.props.state.searchFlag == "My Reports") {
-      return "search by projects";
+      return "Search Projects";
     } else if (
       this.props.isReports &&
       this.props.state.searchFlag == "Members" &&
       selectedMember
     ) {
-      return "search by projects";
+      return "Search Projects";
     } else if (
       this.props.isReports &&
       this.props.state.searchFlag == "Members" &&
       !selectedMember
     ) {
-      return "search by members/projects";
+      return "Search Members or Projects";
     } else {
-      return "search by members/projects";
+      return "Search Members or Projects";
     }
   };
 
@@ -236,7 +236,7 @@ class SearchFilter extends Component {
             ) : null}
             <div>
               <input
-                style={{ width: "100%" }}
+                style={{ width: "100%", paddingLeft: "20px" }}
                 className="suggessionSearchInput"
                 type="text"
                 value={this.state.value}
@@ -248,7 +248,9 @@ class SearchFilter extends Component {
             {this.state.memberSuggestions.length > 0 ? (
               <ul>
                 <li className="list-header">
-                  <b>Members</b>
+                  <span style={{ paddingLeft: "10px" }}>
+                    <b>Members</b>
+                  </span>
                 </li>
                 {this.state.memberSuggestions.map((option, idx) => {
                   if (option.type == "member") {
@@ -273,7 +275,9 @@ class SearchFilter extends Component {
             {this.state.projectSuggestions.length > 0 ? (
               <ul>
                 <li className="list-header">
-                  <b>Projects</b>
+                  <span style={{ paddingLeft: "10px" }}>
+                    <b>Projects</b>
+                  </span>
                 </li>
                 {this.state.projectSuggestions.map((option, idx) => {
                   if (option.type == "project") {
@@ -385,16 +389,20 @@ class SearchFilter extends Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    className={`${
+                    style={
                       this.props.state.searchFlag === "My Reports"
-                        ? "active"
-                        : ""
-                    }`}
+                        ? {
+                            backgroundColor: "#ffffff",
+                            color: "#33a1ff !important"
+                          }
+                        : { backgroundColor: "#ffffff" }
+                    }
                     onClick={() => this.props.toggleSearchBy("My Reports")}
                   >
                     My Reports
                   </Dropdown.Item>
                   <Dropdown.Item
+                    style={{ backgroundColor: "#ffffff" }}
                     className={`${
                       this.props.state.searchFlag === "Members" ? "active" : ""
                     }`}

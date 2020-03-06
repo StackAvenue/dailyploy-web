@@ -225,7 +225,7 @@ class Signin extends Component {
       if (e.response.status === 500) {
         toast(
           <DailyPloyToast message={"Internal Server Error"} status="error" />,
-          { autoClose: 2000 }
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       } else if (e.response.data.errors.email) {
         toast(
@@ -233,7 +233,7 @@ class Signin extends Component {
             message={"email " + `${e.response.data.errors.email}`}
             status="error"
           />,
-          { autoClose: 2000 }
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       } else if (e.response.data.errors.detail) {
         toast(
@@ -241,7 +241,7 @@ class Signin extends Component {
             message={"email " + `${e.response.data.errors.detail}`}
             status="error"
           />,
-          { autoClose: 2000 }
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       }
     }

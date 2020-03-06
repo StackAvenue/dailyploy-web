@@ -257,7 +257,7 @@ class Header extends Component {
                             }
                             className="img-responsive"
                           />
-                          <span className="text-titlize padding-10px">
+                          <span className="text-titlize padding-6px">
                             {this.state.userRole}
                           </span>
                         </div>

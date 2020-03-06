@@ -1,6 +1,11 @@
 @import "./colors";
 @import "./variables";
 
+
+.form-control:focus {
+  border-color: #80bdff !important;
+}
+
 .error-warning {
   color: $red-color;
   font-family: $font-family-roboto;
@@ -87,7 +92,7 @@
   padding-left: 17px !important;
 }
 .date-text-light {
-  width: 24px;
+  // width: 24px;
   height: 18px;
   opacity: 0.5;
   font-family: Roboto;
@@ -100,9 +105,18 @@
   text-align: left;
   color: #555555 !important;
 }
+.width-to{
+  max-width: 86% !important;
+  margin-left: 17% !important;
+}
 .padding-10px {
   padding: 10px !important;
 }
+.padding-6px {
+  padding: 6px !important;
+}
+
+
 .text-blue {
   color: #0075d9;
 }
@@ -111,10 +125,10 @@
 }
 
 .left-padding-20px {
-  padding-left: 20px !important;
+  padding-left: 17px !important;
 }
 .left-padding-10px {
-  padding-left: 10px !important;
+  padding-left: 12px !important;
 }
 .login-signup-loader{
   position: absolute;

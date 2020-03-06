@@ -12,3 +12,46 @@
 .workspace1-setting .body-tabs {
   padding-top: 10px !important;
 }
+.tooltip-pwd1 .tooltiptext-pwd1::after {
+  content: "";
+  position: absolute;
+  top: 35px;
+  // right: 100%; 
+   left: -4px; 
+  margin-top: -5px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+  transform: rotateX(1deg) rotateY(8deg) rotateZ(1735deg);
+}
+
+
+
+
+.tooltip-pwd1 {
+  position: absolute;
+  top: 3px;
+    right: 28px;
+ 
+}
+
+.tooltip-pwd1 .tooltiptext-pwd1 {
+  visibility: hidden;
+  width: 180px;
+  height: 33px;
+  top: -40px;
+  left: 10px;
+  font-size: 12px !important;
+  background-color: #9b9b9b;
+  color: #fff;
+  text-align: center;
+  font-family: "Roboto-Regular", "Roboto" !important;
+  padding: 5px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip-pwd1:hover .tooltiptext-pwd1 {
+  visibility: visible;
+}
