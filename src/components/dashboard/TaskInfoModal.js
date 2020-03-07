@@ -32,7 +32,30 @@ class TaskInfoModal extends Component {
           }
         ],
         comments: "This is for the testing of task",
-        id: 4,
+        id: 1,
+        task_id: 222,
+        user_id: 1,
+        user: {
+          id: 1,
+          name: "ravindra karale",
+          email: "ravindra@stack-avenue.com"
+        }
+      },
+      {
+        attachments: [
+          {
+            attachment_id: 2,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
+          },
+          {
+            attachment_id: 3,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
+          }
+        ],
+        comments: '"This is for the testing of task"',
+        id: 2,
         task_id: 222,
         user_id: 1,
         user: {
@@ -68,7 +91,9 @@ class TaskInfoModal extends Component {
 
     this.state = {
       color: "#ffffff",
-      showTimerMenu: false
+      showTimerMenu: false,
+      editableComment: null,
+      commentId: null
     };
   }
 
@@ -258,7 +283,19 @@ class TaskInfoModal extends Component {
 
   deleteComments = () => {};
 
-  editComments = () => {};
+  editComments = comment => {
+    this.setState({
+      commentId: comment.id,
+      editableComment: comment
+    });
+  };
+
+  onClickOutside = () => {
+    this.setState({
+      commentId: null,
+      editableComment: null
+    });
+  };
 
   render() {
     const { props } = this;
@@ -491,9 +528,11 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 row no-margin no-padding input-row text-titlize">
-                <div className="col-md-2 no-padding label">Comments</div>
-                <div className="col-md-10">
+              <div className="col-md-12 no-padding input-row text-titlize">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Comments
+                </div>
+                <div className="col-md-10 d-inline-block">
                   <CommentUpload
                     save={this.props.saveComments}
                     defaultComment={props.state.taskEvent.comments}
@@ -502,36 +541,53 @@ class TaskInfoModal extends Component {
                     showAttachIcon={true}
                   />
                 </div>
+              </div>
 
-                <div className="col-md-2 no-padding label"></div>
-                <div className="col-md-10 task-comments">
-                  {this.comments.map(comment => {
-                    return (
-                      <div className="commnet-card">
-                        <div className="row">
-                          <div className="col-md-7">{comment.user.name}</div>
-                          <div
-                            className="col-md-3"
-                            style={{ fontSize: "11px" }}
-                          >
-                            2 hours ago
+              <div className="col-md-12 no-padding input-row text-titlize">
+                <div className="col-md-2 d-inline-block no-padding label"></div>
+                <div className="col-md-10 d-inline-block">
+                  <div className="task-comments">
+                    {this.comments.map(comment => {
+                      return this.state.editableComment &&
+                        comment.id === this.state.commentId ? (
+                        <CommentUpload
+                          save={this.props.saveComments}
+                          defaultComments={this.state.editableComment.comments}
+                          state={this.state}
+                          showSave={true}
+                          showAttachIcon={true}
+                          showBox={true}
+                          onClickOutside={this.onClickOutside}
+                        />
+                      ) : (
+                        <div className="commnet-card">
+                          <div className="row">
+                            <div className="col-md-7 owner-name">
+                              {comment.user.name}
+                            </div>
+                            <div
+                              className="col-md-3"
+                              style={{ fontSize: "11px" }}
+                            >
+                              2 hours ago
+                            </div>
+                          </div>
+                          <div className="col-md-12 no-padding comments">
+                            {comment.comments}
+                          </div>
+                          <div className="col-md-12 no-padding"></div>
+                          <div className="col-md-12 no-padding">
+                            <span onClick={() => this.editComments(comment)}>
+                              Edit
+                            </span>
+                            <span onClick={() => this.deleteComments(comment)}>
+                              Delete
+                            </span>
                           </div>
                         </div>
-                        <div className="col-md-12 no-padding">
-                          {comment.comments}
-                        </div>
-                        <div className="col-md-12 no-padding"></div>
-                        <div className="col-md-12 no-padding">
-                          <a href="" onClick={this.deleteComments}>
-                            Edit
-                          </a>
-                          <a href="" onClick={this.editComments}>
-                            Delete
-                          </a>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

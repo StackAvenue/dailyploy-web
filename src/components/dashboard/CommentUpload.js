@@ -17,10 +17,16 @@ class CommentUpload extends React.Component {
     if (this.props.defaultComments) {
       this.setState({ comments: this.props.defaultComments });
     }
+    if (this.props.showBox) {
+      this.setState({ showBox: true });
+    }
   };
 
   handleClickOutside = () => {
     this.setState({ showBox: false });
+    if (this.props.onClickOutside) {
+      this.props.onClickOutside();
+    }
   };
 
   handleImageRef = () => {

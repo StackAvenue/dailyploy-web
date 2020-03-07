@@ -5136,8 +5136,8 @@ table.scheduler-table tr:last-child td {
     width: auto !important;
   }
   .upload-files{
-    position: absolute;
-    right: 30px;
+    position: relative;
+    float: right;
     bottom: 5px;
     color: $color-brand3;
     cursor: pointer;
@@ -5182,13 +5182,24 @@ table.scheduler-table tr:last-child td {
   }
 }
 .task-comments{
-  a{
+  border: solid 1px #d6d6d6;
+  padding: 5px;
+  overflow-y: scroll;
+  height: auto;
+  max-height: 220px;
+  span{
     padding: 0px 10px 0px 0px;
     font-size: 11px;
+    cursor: pointer;
   }
   .commnet-card{
-    // border: solid 1px #d6d6d6;
     padding: 10px;
     margin: 5px 0px;
+    .owner-name{
+      color:  $color-brand3;
+    }
+    .comments{
+      font-size: 14px;
+    }
   }
 }
