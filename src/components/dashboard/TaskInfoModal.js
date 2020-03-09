@@ -5,7 +5,17 @@ import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { post, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
+import ImgsViewer from "react-images-viewer";
+import {
+  DATE_FORMAT2,
+  DATE_FORMAT1,
+  DATE_FORMAT3,
+  DATE_FORMAT6,
+  HRMIN,
+  FULL_DATE_FORMAT3,
+  FULL_DATE_FORMAT1,
+  FULL_DATE
+} from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
 import { convertUTCToLocalDate } from "../../utils/function";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
@@ -93,7 +103,9 @@ class TaskInfoModal extends Component {
       color: "#ffffff",
       showTimerMenu: false,
       editableComment: null,
-      commentId: null
+      commentId: null,
+      viewerIsOpen: false,
+      imge_url: null
     };
   }
 
@@ -281,12 +293,23 @@ class TaskInfoModal extends Component {
     }
   };
 
-  deleteComments = () => {};
-
   editComments = comment => {
     this.setState({
       commentId: comment.id,
       editableComment: comment
+    });
+  };
+
+  saveComments = (comments, attachments) => {
+    this.props.saveComments(comments, attachments);
+  };
+
+  handleUpdateComments = (comments, attachments) => {
+    let commentId = this.state.commentId;
+    this.props.updateComments(commentId, comments, attachments);
+    this.setState({
+      commentId: null,
+      editableComment: null
     });
   };
 
@@ -297,10 +320,56 @@ class TaskInfoModal extends Component {
     });
   };
 
+  formattedSeconds = ms => {
+    var totalSeconds = ms / 1000;
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
+    return h > 0
+      ? `${h} hours ago`
+      : m > 0
+      ? `${m} minutes ago`
+      : "few seconds ago";
+  };
+
+  commentsTime = comment => {
+    let commentDate = moment(comment.inserted_at);
+    let isToday =
+      commentDate.format(DATE_FORMAT1) == moment().format(DATE_FORMAT1);
+    if (isToday) {
+      var convertedTime = new Date(
+        convertUTCToLocalDate(moment(comment.inserted_at).format(FULL_DATE))
+      );
+      let time = Date.now() - convertedTime.getTime();
+      return this.formattedSeconds(time);
+    } else {
+      return `${commentDate.format(DATE_FORMAT6)} at ${commentDate.format(
+        HRMIN
+      )}`;
+    }
+  };
+
+  titleDateTime = comment => {
+    return moment(comment.inserted_at).format(FULL_DATE_FORMAT1);
+  };
+
+  openViewImage = imge_url => {
+    if (imge_url) {
+      this.setState({
+        viewerIsOpen: true,
+        imge_url: imge_url
+      });
+    }
+  };
+  closeViewer = () => {
+    this.setState({
+      viewerIsOpen: false
+    });
+  };
+
   render() {
     const { props } = this;
 
-    // console.log(props.state.dateFrom, moment(props.state.dateFrom));
     return (
       <>
         <Modal
@@ -534,7 +603,7 @@ class TaskInfoModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   <CommentUpload
-                    save={this.props.saveComments}
+                    save={this.saveComments}
                     defaultComment={props.state.taskEvent.comments}
                     state={this.state}
                     showSave={true}
@@ -542,54 +611,110 @@ class TaskInfoModal extends Component {
                   />
                 </div>
               </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label"></div>
-                <div className="col-md-10 d-inline-block">
-                  <div className="task-comments">
-                    {this.comments.map(comment => {
-                      return this.state.editableComment &&
-                        comment.id === this.state.commentId ? (
-                        <CommentUpload
-                          save={this.props.saveComments}
-                          defaultComments={this.state.editableComment.comments}
-                          state={this.state}
-                          showSave={true}
-                          showAttachIcon={true}
-                          showBox={true}
-                          onClickOutside={this.onClickOutside}
-                        />
-                      ) : (
-                        <div className="commnet-card">
-                          <div className="row">
-                            <div className="col-md-7 owner-name">
-                              {comment.user.name}
+              {props.state.taskComments ? (
+                <>
+                  <div className="col-md-12 no-padding input-row text-titlize">
+                    <div className="col-md-2 d-inline-block no-padding label"></div>
+                    <div className="col-md-10 d-inline-block">
+                      <div className="task-comments">
+                        {props.state.taskComments.map(comment => {
+                          return this.state.editableComment &&
+                            comment.id === this.state.commentId ? (
+                            <CommentUpload
+                              save={this.handleUpdateComments}
+                              defaultComments={
+                                this.state.editableComment.comments
+                              }
+                              defaultUploaded={
+                                this.state.editableComment.attachments
+                              }
+                              state={this.state}
+                              showSave={true}
+                              showAttachIcon={true}
+                              showBox={true}
+                              onClickOutside={this.onClickOutside}
+                            />
+                          ) : (
+                            <div className="commnet-card">
+                              <div
+                                className="col-md-12 no-padding"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "start"
+                                }}
+                              >
+                                <div className="owner-name">
+                                  {comment.user.name}
+                                </div>
+                                <div
+                                  className=""
+                                  style={{
+                                    fontSize: "11px",
+                                    padding: "3px 0px 0px 25px"
+                                  }}
+                                  title={this.titleDateTime(comment)}
+                                >
+                                  {this.commentsTime(comment)}
+                                </div>
+                              </div>
+                              <div className="col-md-12 no-padding comments">
+                                {comment.comments}
+                              </div>
+                              <div className="col-md-12 no-padding">
+                                {comment.attachments.map(attachment => {
+                                  return (
+                                    <>
+                                      <img
+                                        src={`${attachment.imge_url}`}
+                                        onClick={() =>
+                                          this.openViewImage(
+                                            attachment.imge_url
+                                          )
+                                        }
+                                        height="42"
+                                        width="42"
+                                        style={{ cursor: "pointer" }}
+                                      ></img>
+                                      {/* <ImgsViewer
+                                        imgs={[
+                                          { src: `${this.state.imge_url}` }
+                                        ]}
+                                        isOpen={this.state.viewerIsOpen}
+                                        onClose={this.closeViewer}
+                                      /> */}
+                                    </>
+                                  );
+                                })}
+                              </div>
+                              {this.state.viewerIsOpen ? (
+                                <ImgsViewer
+                                  imgs={[{ src: `${this.state.imge_url}` }]}
+                                  isOpen={this.state.viewerIsOpen}
+                                  onClose={this.closeViewer}
+                                />
+                              ) : null}
+                              <div className="col-md-12 no-padding">
+                                <span
+                                  onClick={() => this.editComments(comment)}
+                                >
+                                  Edit
+                                </span>
+                                <span
+                                  onClick={() =>
+                                    this.props.deleteComments(comment)
+                                  }
+                                >
+                                  Delete
+                                </span>
+                              </div>
                             </div>
-                            <div
-                              className="col-md-3"
-                              style={{ fontSize: "11px" }}
-                            >
-                              2 hours ago
-                            </div>
-                          </div>
-                          <div className="col-md-12 no-padding comments">
-                            {comment.comments}
-                          </div>
-                          <div className="col-md-12 no-padding"></div>
-                          <div className="col-md-12 no-padding">
-                            <span onClick={() => this.editComments(comment)}>
-                              Edit
-                            </span>
-                            <span onClick={() => this.deleteComments(comment)}>
-                              Delete
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              ) : null}
             </div>
           </div>
         </Modal>

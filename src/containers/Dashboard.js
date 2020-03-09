@@ -113,7 +113,8 @@ class Dashboard extends Component {
       trackingEvent: null,
       taskloader: false,
       task: [],
-      validateTimefrom: null
+      validateTimefrom: null,
+      taskComments: null
     };
   }
 
@@ -903,7 +904,39 @@ class Dashboard extends Component {
       fd.append("task_id", this.state.taskEvent.taskId);
       fd.append("comments", comments);
       const { data } = await post(fd, `comment`);
-      this.setState({});
+      var comment = data;
+      comment["user"] = {
+        id: this.state.userId,
+        name: this.state.userName,
+        email: this.state.userEmail
+      };
+      var taskComments = [...this.state.taskComments, comment];
+      this.setState({ taskComments: taskComments });
+    } catch (e) {}
+  };
+
+  updateComments = async (commnetId, comments, attachments) => {
+    try {
+      let fd = new FormData();
+      attachments.forEach(image => {
+        fd.append("attachments[]", image, image.name);
+      });
+      fd.append("user_id", this.state.userId);
+      fd.append("task_id", this.state.taskEvent.taskId);
+      fd.append("comments", comments);
+      const { data } = await put(fd, `comment/${commnetId}`);
+      var comment = data;
+      var taskComments = this.state.taskComments.filter(c => c.id != commnetId);
+      var taskComments = [...taskComments, comment];
+      this.setState({ taskComments: taskComments });
+    } catch (e) {}
+  };
+
+  deleteComments = async comment => {
+    try {
+      const { data } = await del(`comment/${comment.id}`);
+      var taskComments = this.state.taskComments.filter(c => c.id !== data.id);
+      this.setState({ taskComments: taskComments });
     } catch (e) {}
   };
 
@@ -1190,6 +1223,7 @@ class Dashboard extends Component {
     var selectedMembers = this.state.users.filter(member =>
       memberIds.includes(member.id)
     );
+    var taskComments = null;
     try {
       const { data } = await get(`tasks/${taskId}`);
       // var startDate = convertUTCToLocalDate(data.start_datetime);
@@ -1208,6 +1242,7 @@ class Dashboard extends Component {
             .replace(/-/g, "/")
         )
       );
+      taskComments = data.task_comments;
       var startTime = moment(startDate).format("HH:mm:ss");
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
@@ -1242,7 +1277,8 @@ class Dashboard extends Component {
         memberProjects: memberProjects,
         taskEvent: event,
         timeTracked: timeTracked,
-        taskPrioritie: taskPrioritie
+        taskPrioritie: taskPrioritie,
+        taskComments: taskComments
       });
     }
   };
@@ -2182,6 +2218,8 @@ class Dashboard extends Component {
               handleTaskStart={this.handleTaskStart}
               handleTaskStop={this.handleTaskStop}
               saveComments={this.saveComments}
+              deleteComments={this.deleteComments}
+              updateComments={this.updateComments}
             />
             {this.state.taskConfirmModal ? (
               <TaskConfirm

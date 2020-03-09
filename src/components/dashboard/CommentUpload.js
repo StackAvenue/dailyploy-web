@@ -9,13 +9,18 @@ class CommentUpload extends React.Component {
     this.state = {
       comments: "",
       showBox: false,
-      pictures: []
+      pictures: [],
+      attachments: []
     };
   }
 
   componentDidMount = () => {
-    if (this.props.defaultComments) {
-      this.setState({ comments: this.props.defaultComments });
+    if (this.props.state && this.props.state.editableComment) {
+      let comment = this.props.state.editableComment;
+      this.setState({
+        comments: comment.comments
+        // attachments: comment.attachments
+      });
     }
     if (this.props.showBox) {
       this.setState({ showBox: true });
@@ -45,6 +50,7 @@ class CommentUpload extends React.Component {
 
   onSave = () => {
     this.props.save(this.state.comments, this.state.pictures);
+    this.setState({ showBox: false, comments: "" });
   };
 
   handleInputChange = e => {
