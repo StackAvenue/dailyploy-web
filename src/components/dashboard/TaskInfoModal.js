@@ -337,9 +337,8 @@ class TaskInfoModal extends Component {
     let isToday =
       commentDate.format(DATE_FORMAT1) == moment().format(DATE_FORMAT1);
     if (isToday) {
-      var convertedTime = new Date(
-        convertUTCToLocalDate(moment(comment.inserted_at).format(FULL_DATE))
-      );
+      let newDate = moment(comment.inserted_at).format(FULL_DATE_FORMAT3);
+      var convertedTime = new Date(convertUTCToLocalDate(newDate));
       let time = Date.now() - convertedTime.getTime();
       return this.formattedSeconds(time);
     } else {
@@ -617,7 +616,7 @@ class TaskInfoModal extends Component {
                     <div className="col-md-2 d-inline-block no-padding label"></div>
                     <div className="col-md-10 d-inline-block">
                       <div className="task-comments">
-                        {props.state.taskComments.map(comment => {
+                        {props.state.taskComments.reverse().map(comment => {
                           return this.state.editableComment &&
                             comment.id === this.state.commentId ? (
                             <CommentUpload
@@ -647,7 +646,7 @@ class TaskInfoModal extends Component {
                                   {comment.user.name}
                                 </div>
                                 <div
-                                  className=""
+                                  className="hide"
                                   style={{
                                     fontSize: "11px",
                                     padding: "3px 0px 0px 25px"

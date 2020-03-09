@@ -15,11 +15,9 @@ class CommentUpload extends React.Component {
   }
 
   componentDidMount = () => {
-    if (this.props.state && this.props.state.editableComment) {
-      let comment = this.props.state.editableComment;
+    if (this.props.defaultComments) {
       this.setState({
-        comments: comment.comments
-        // attachments: comment.attachments
+        comments: this.props.defaultComments
       });
     }
     if (this.props.showBox) {
@@ -109,7 +107,7 @@ class CommentUpload extends React.Component {
                   Save
                 </button>
                 <span className="upload-files" onClick={this.handleImageRef}>
-                  <i class="fas fa-paperclip"></i>
+                  <i className="fas fa-paperclip"></i>
                 </span>
               </div>
             </div>

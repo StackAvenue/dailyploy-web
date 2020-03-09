@@ -437,7 +437,10 @@ class AddTaskModal extends React.Component {
                     showAttachIcon={
                       props.state.taskButton === "Add" ? false : true
                     }
+                    defaultComments={props.state.comments}
                     handleInputChange={this.props.handleInputChange}
+                    showSave={false}
+                    showAttachIcon={false}
                   />
                 </div>
               </div>

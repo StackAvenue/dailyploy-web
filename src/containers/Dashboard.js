@@ -895,6 +895,7 @@ class Dashboard extends Component {
   };
 
   saveComments = async (comments, attachments) => {
+    this.setState({ isLoading: true });
     try {
       let fd = new FormData();
       attachments.forEach(image => {
@@ -911,12 +912,15 @@ class Dashboard extends Component {
         email: this.state.userEmail
       };
       var taskComments = [...this.state.taskComments, comment];
-      this.setState({ taskComments: taskComments });
-    } catch (e) {}
+      this.setState({ taskComments: taskComments, isLoading: false });
+    } catch (e) {
+      this.setState({ isLoading: false });
+    }
   };
 
   updateComments = async (commnetId, comments, attachments) => {
     try {
+      this.setState({ isLoading: true });
       let fd = new FormData();
       attachments.forEach(image => {
         fd.append("attachments[]", image, image.name);
@@ -928,8 +932,10 @@ class Dashboard extends Component {
       var comment = data;
       var taskComments = this.state.taskComments.filter(c => c.id != commnetId);
       var taskComments = [...taskComments, comment];
-      this.setState({ taskComments: taskComments });
-    } catch (e) {}
+      this.setState({ taskComments: taskComments, isLoading: false });
+    } catch (e) {
+      this.setState({ isLoading: false });
+    }
   };
 
   deleteComments = async comment => {
