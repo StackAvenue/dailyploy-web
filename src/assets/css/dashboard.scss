@@ -5184,6 +5184,21 @@ table.scheduler-table tr:last-child td {
       display: none;
     }
   }
+  .uploded-img{
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+    .img-container{
+      .close-icon{
+        position: relative;
+        top: -12px;
+      }
+      img{
+        padding: 5px;
+      }
+      padding: 5px;
+    }
+  }
 }
 .task-comments{
   // border: solid 1px #d6d6d6;

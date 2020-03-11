@@ -894,49 +894,53 @@ class Dashboard extends Component {
     }
   };
 
-  saveComments = async (comments, attachments) => {
-    this.setState({ isLoading: true });
-    try {
-      let fd = new FormData();
-      attachments.forEach(image => {
-        fd.append("attachments[]", image, image.name);
-      });
-      fd.append("user_id", this.state.userId);
-      fd.append("task_id", this.state.taskEvent.taskId);
-      fd.append("comments", comments);
-      const { data } = await post(fd, `comment`);
-      var comment = data;
-      comment["user"] = {
-        id: this.state.userId,
-        name: this.state.userName,
-        email: this.state.userEmail
-      };
-      var taskComments = [...this.state.taskComments, comment];
-      this.setState({ taskComments: taskComments, isLoading: false });
-    } catch (e) {
-      this.setState({ isLoading: false });
-    }
+  // saveComments = async (comments, attachments) => {
+  //   this.setState({ isLoading: true });
+  //   try {
+  //     let fd = new FormData();
+  //     attachments.forEach(image => {
+  //       fd.append("attachments[]", image, image.name);
+  //     });
+  //     fd.append("user_id", this.state.userId);
+  //     fd.append("task_id", this.state.taskEvent.taskId);
+  //     fd.append("comments", comments);
+  //     const { data } = await post(fd, `comment`);
+  //     var comment = data;
+  //     comment["user"] = {
+  //       id: this.state.userId,
+  //       name: this.state.userName,
+  //       email: this.state.userEmail
+  //     };
+  //     var taskComments = [comment, ...this.state.taskComments];
+  //     this.setState({ taskComments: taskComments, isLoading: false });
+  //   } catch (e) {
+  //     this.setState({ isLoading: false });
+  //   }
+  // };
+
+  updateTaskComments = comments => {
+    this.setState({ taskComments: comments });
   };
 
-  updateComments = async (commnetId, comments, attachments) => {
-    try {
-      this.setState({ isLoading: true });
-      let fd = new FormData();
-      attachments.forEach(image => {
-        fd.append("attachments[]", image, image.name);
-      });
-      fd.append("user_id", this.state.userId);
-      fd.append("task_id", this.state.taskEvent.taskId);
-      fd.append("comments", comments);
-      const { data } = await put(fd, `comment/${commnetId}`);
-      var comment = data;
-      var taskComments = this.state.taskComments.filter(c => c.id != commnetId);
-      var taskComments = [...taskComments, comment];
-      this.setState({ taskComments: taskComments, isLoading: false });
-    } catch (e) {
-      this.setState({ isLoading: false });
-    }
-  };
+  // updateComments = async (commnetId, comments, attachments) => {
+  //   try {
+  //     this.setState({ isLoading: true });
+  //     let fd = new FormData();
+  //     attachments.forEach(image => {
+  //       fd.append("attachments[]", image, image.name);
+  //     });
+  //     fd.append("user_id", this.state.userId);
+  //     fd.append("task_id", this.state.taskEvent.taskId);
+  //     fd.append("comments", comments);
+  //     const { data } = await put(fd, `comment/${commnetId}`);
+  //     var comment = data;
+  //     var taskComments = this.state.taskComments.filter(c => c.id != commnetId);
+  //     var taskComments = [...taskComments, comment];
+  //     this.setState({ taskComments: taskComments, isLoading: false });
+  //   } catch (e) {
+  //     this.setState({ isLoading: false });
+  //   }
+  // };
 
   deleteComments = async comment => {
     try {
@@ -2223,7 +2227,7 @@ class Dashboard extends Component {
               handleTaskStartTop={this.handleTaskStartTop}
               handleTaskStart={this.handleTaskStart}
               handleTaskStop={this.handleTaskStop}
-              saveComments={this.saveComments}
+              updateTaskComments={this.updateTaskComments}
               deleteComments={this.deleteComments}
               updateComments={this.updateComments}
             />

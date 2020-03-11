@@ -4,7 +4,7 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
-import { post, mockGet, mockPost } from "../../utils/API";
+import { post, mockGet, put } from "../../utils/API";
 import ImgsViewer from "react-images-viewer";
 import {
   DATE_FORMAT2,
@@ -105,42 +105,14 @@ class TaskInfoModal extends Component {
       editableComment: null,
       commentId: null,
       viewerIsOpen: false,
-      imge_url: null
+      imge_url: null,
+      comments: "",
+      editedComments: "",
+      showBox: false,
+      pictures: [],
+      showAddBox: false,
+      taskloader: false
     };
-  }
-
-  async markCompleteTask() {
-    const eventTaskId = this.props.state.taskEvent.id;
-    if (eventTaskId) {
-      try {
-        const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete;
-      } catch (e) {}
-      if (isComplete) {
-        var taskId = localStorage.getItem(
-          `taskId-${this.props.state.workspaceId}`
-        );
-        this.handleReset();
-        this.props.handleTaskPlay("check");
-        if (eventTaskId === taskId) {
-          this.props.handleTaskBottomPopup("", null, "stop");
-        }
-      }
-    }
-  }
-
-  async resumeCompletedTask() {
-    const eventTaskId = this.props.state.taskEvent.id;
-    if (eventTaskId) {
-      try {
-        const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete;
-      } catch (e) {}
-      if (isComplete) {
-        // this.setState({ icon: "play" })
-        this.props.handleTaskPlay("play");
-      }
-    }
   }
 
   isToday = () => {
@@ -222,23 +194,6 @@ class TaskInfoModal extends Component {
     return props.taskEvent.resourceId === props.userId;
   };
 
-  async saveTaskTrackingTime(endOn) {
-    var taskData = {
-      startdate: new Date(this.state.startOn),
-      enddate: new Date(endOn)
-    };
-    try {
-      const { data } = await mockPost(taskData, "task-track");
-      if (data) {
-        var timeArr = [this.state.timeArr, ...[]];
-        var sTime = moment(data.startdate).format("HH:mm");
-        var eTime = moment(data.enddate).format("HH:mm");
-        timeArr.push(`${sTime} - ${eTime}`);
-        this.setState({ timeArr: timeArr });
-      }
-    } catch (e) {}
-  }
-
   handleReset = () => {
     clearInterval(this.timer);
     this.setState({ runningTime: 0, status: false, startOn: "" });
@@ -296,21 +251,67 @@ class TaskInfoModal extends Component {
   editComments = comment => {
     this.setState({
       commentId: comment.id,
-      editableComment: comment
+      editableComment: comment,
+      editedComments: comment.comments
     });
   };
 
-  saveComments = (comments, attachments) => {
-    this.props.saveComments(comments, attachments);
+  saveComments = async () => {
+    if (this.state.comments) {
+      this.setState({ taskloader: true });
+      try {
+        let fd = new FormData();
+        this.state.pictures.forEach(image => {
+          fd.append("attachments[]", image, image.name);
+        });
+        fd.append("user_id", this.props.state.userId);
+        fd.append("task_id", this.props.state.taskEvent.taskId);
+        fd.append("comments", this.state.comments);
+        const { data } = await post(fd, `comment`);
+        var comment = data;
+        var taskComments = [comment, ...this.props.state.taskComments];
+        this.props.updateTaskComments(taskComments);
+        this.setState({
+          pictures: [],
+          comments: "",
+          showBox: false,
+          taskloader: false
+        });
+      } catch (e) {
+        this.setState({ taskloader: false });
+      }
+    }
   };
 
-  handleUpdateComments = (comments, attachments) => {
-    let commentId = this.state.commentId;
-    this.props.updateComments(commentId, comments, attachments);
-    this.setState({
-      commentId: null,
-      editableComment: null
-    });
+  handleUpdateComments = async () => {
+    if (this.state.editedComments && this.state.editableComment) {
+      try {
+        this.setState({ taskloader: true });
+        let fd = new FormData();
+        let commnetId = this.state.editableComment.id;
+        this.state.pictures.forEach(image => {
+          fd.append("attachments[]", image, image.name);
+        });
+        fd.append("user_id", this.props.state.userId);
+        fd.append("task_id", this.props.state.taskEvent.taskId);
+        fd.append("comments", this.state.editedComments);
+        const { data } = await put(fd, `comment/${commnetId}`);
+        var taskComments = this.props.state.taskComments;
+        var comment = taskComments.find(c => c.id == commnetId);
+        comment["comments"] = data.comments;
+        comment["user"] = data.user;
+        comment["attachments"] = data.attachments;
+        this.props.updateTaskComments(taskComments);
+        this.setState({
+          taskloader: false,
+          commentId: null,
+          editedComments: "",
+          editableComment: null
+        });
+      } catch (e) {
+        this.setState({ taskloader: false });
+      }
+    }
   };
 
   onClickOutside = () => {
@@ -318,6 +319,14 @@ class TaskInfoModal extends Component {
       commentId: null,
       editableComment: null
     });
+  };
+
+  onClickOutsideAddCommnetBox = () => {
+    this.setState({ showAddBox: false });
+  };
+
+  onClickAddCommnetBox = () => {
+    this.setState({ showAddBox: true });
   };
 
   formattedSeconds = ms => {
@@ -360,10 +369,29 @@ class TaskInfoModal extends Component {
       });
     }
   };
+
   closeViewer = () => {
     this.setState({
       viewerIsOpen: false
     });
+  };
+
+  showCommentBox = () => {
+    this.setState({ showBox: true });
+  };
+
+  updateUploadedState = pictures => {
+    this.setState({ pictures: [...this.state.pictures, ...pictures] });
+  };
+
+  removeUploadedImage = index => {
+    let pictures = this.state.pictures.filter((f, idx) => idx !== index);
+    this.setState({ pictures: pictures });
+  };
+
+  handleInputChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -603,10 +631,17 @@ class TaskInfoModal extends Component {
                 <div className="col-md-10 d-inline-block">
                   <CommentUpload
                     save={this.saveComments}
-                    defaultComment={props.state.taskEvent.comments}
+                    comments={this.state.comments}
                     state={this.state}
                     showSave={true}
+                    showBox={this.state.showAddBox}
                     showAttachIcon={true}
+                    commentName="comments"
+                    onClickOutside={this.onClickOutsideAddCommnetBox}
+                    updateUploadedState={this.updateUploadedState}
+                    removeUploadedImage={this.removeUploadedImage}
+                    handleInputChange={this.handleInputChange}
+                    showCommentBox={this.onClickAddCommnetBox}
                   />
                 </div>
               </div>
@@ -616,22 +651,22 @@ class TaskInfoModal extends Component {
                     <div className="col-md-2 d-inline-block no-padding label"></div>
                     <div className="col-md-10 d-inline-block">
                       <div className="task-comments">
-                        {props.state.taskComments.reverse().map(comment => {
+                        {props.state.taskComments.map(comment => {
                           return this.state.editableComment &&
                             comment.id === this.state.commentId ? (
                             <CommentUpload
                               save={this.handleUpdateComments}
-                              defaultComments={
-                                this.state.editableComment.comments
-                              }
-                              defaultUploaded={
-                                this.state.editableComment.attachments
-                              }
+                              comments={this.state.editedComments}
                               state={this.state}
                               showSave={true}
                               showAttachIcon={true}
                               showBox={true}
+                              commentName="editedComments"
                               onClickOutside={this.onClickOutside}
+                              updateUploadedState={this.updateUploadedState}
+                              removeUploadedImage={this.removeUploadedImage}
+                              handleInputChange={this.handleInputChange}
+                              showCommentBox={this.showCommentBox}
                             />
                           ) : (
                             <div className="commnet-card">
@@ -674,13 +709,6 @@ class TaskInfoModal extends Component {
                                         width="42"
                                         style={{ cursor: "pointer" }}
                                       ></img>
-                                      {/* <ImgsViewer
-                                        imgs={[
-                                          { src: `${this.state.imge_url}` }
-                                        ]}
-                                        isOpen={this.state.viewerIsOpen}
-                                        onClose={this.closeViewer}
-                                      /> */}
                                     </>
                                   );
                                 })}

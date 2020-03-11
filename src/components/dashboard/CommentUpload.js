@@ -1,54 +1,31 @@
 import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
 import onClickOutside from "react-onclickoutside";
-
+import Loader from "react-loader-spinner";
 class CommentUpload extends React.Component {
   constructor(props) {
     super(props);
     this.onImageDropRef = React.createRef();
-    this.state = {
-      comments: "",
-      showBox: false,
-      pictures: [],
-      attachments: []
-    };
+    this.state = {};
   }
 
-  componentDidMount = () => {
-    if (this.props.defaultComments) {
-      this.setState({
-        comments: this.props.defaultComments
-      });
-    }
-    if (this.props.showBox) {
-      this.setState({ showBox: true });
-    }
-  };
-
   handleClickOutside = () => {
-    this.setState({ showBox: false });
     if (this.props.onClickOutside) {
       this.props.onClickOutside();
     }
   };
 
   handleImageRef = () => {
-    this.onImageDropRef.current.inputElement.click();
+    this.onImageDropRef.current.click();
   };
 
-  onImageDrop = pictures => {
-    this.setState({
-      pictures: pictures
-    });
-  };
-
-  showCommentBox = () => {
-    this.setState({ showBox: true });
-  };
-
-  onSave = () => {
-    this.props.save(this.state.comments, this.state.pictures);
-    this.setState({ showBox: false, comments: "" });
+  onImageDrop = event => {
+    let fileLength = event.target.files.length;
+    let pictures = [];
+    for (var i = 0; i < fileLength; i++) {
+      pictures.push(event.target.files[i]);
+    }
+    this.props.updateUploadedState(pictures);
   };
 
   handleInputChange = e => {
@@ -66,28 +43,45 @@ class CommentUpload extends React.Component {
         <div className="">
           <div className="comment-container">
             <textarea
-              name="comments"
-              value={this.state.comments}
-              onClick={this.showCommentBox}
-              onChange={e => this.handleInputChange(e)}
+              name={`${this.props.commentName}`}
+              value={this.props.comments}
+              onClick={this.props.showCommentBox}
+              onChange={e => this.props.handleInputChange(e)}
               className="form-control"
               rows="1"
               placeholder="Write Here..."
             />
-            <ImageUploader
-              className={`${this.state.showBox ? "show" : "hide"}`}
+            <div className="uploded-img">
+              {this.props.state.pictures.map((file, idx) => {
+                return (
+                  <div className="img-container">
+                    <img
+                      src={`${URL.createObjectURL(file)}`}
+                      // onClick={() => this.openViewImage(attachment.imge_url)}
+                      height="42"
+                      width="42"
+                      style={{ cursor: "pointer" }}
+                    ></img>
+                    <span
+                      className="close-icon"
+                      onClick={() => this.props.removeUploadedImage(idx)}
+                    >
+                      <i className="fa fa-close"></i>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            <input
               ref={this.onImageDropRef}
-              withIcon={false}
-              withPreview={true}
-              withLabel={false}
-              buttonText=""
-              fileContainerStyle={{}}
+              type="file"
+              className="hide"
               onChange={this.onImageDrop}
-              imgExtension={[".jpg", ".jpeg", ".gif", ".png", ".gif"]}
-              maxFileSize={5242880}
-            />
+              name="uploadedfile"
+              multiple
+            ></input>
             <div
-              className={`${this.state.showBox ? "show" : "hide"}`}
+              className={`${this.props.showBox ? "show" : "hide"}`}
               style={{ display: "flex", justifyContent: "center" }}
             >
               <div
@@ -99,12 +93,26 @@ class CommentUpload extends React.Component {
               >
                 <button
                   className={`btn save-button ${
-                    this.state.comments ? "" : "disabled"
+                    this.props.state.taskloader
+                      ? "disabled"
+                      : this.props.comments
+                      ? ""
+                      : "disabled"
                   }`}
-                  onClick={this.onSave}
+                  onClick={this.props.save}
                   type="button"
                 >
                   Save
+                  {this.props.state.taskloader ? (
+                    <Loader
+                      type="Oval"
+                      color="#33a1ff"
+                      height={20}
+                      width={20}
+                      style={{ paddingLeft: "15px" }}
+                      className="d-inline-block login-signup-loader"
+                    />
+                  ) : null}
                 </button>
                 <span className="upload-files" onClick={this.handleImageRef}>
                   <i className="fas fa-paperclip"></i>
