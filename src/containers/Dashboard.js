@@ -20,7 +20,8 @@ import {
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
   HRMIN,
-  FULL_DATE
+  FULL_DATE,
+  DATE_FORMAT5
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -387,6 +388,22 @@ class Dashboard extends Component {
       console.log("error", e);
     }
 
+    // if (!taskRunningObj.status && trackingEvent == null) {
+    //   try {
+    //     const { data } = await get(`workspaces/${workspaceId}/running_task`);
+    //     var task = data.task;
+    //     trackingEvent = this.createTaskObject(
+    //       task,
+    //       { id: loggedInData.id },
+    //       moment(task.start_datetime).format(DATE_FORMAT1)
+    //     );
+    //     taskRunningObj["status"] = true;
+    //     taskRunningObj["taskId"] = task.id;
+    //   } catch (e) {
+    //     console.log("users Error", e);
+    //   }
+    // }
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -486,9 +503,11 @@ class Dashboard extends Component {
         ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
         : moment(task.created_at).format("HH.mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
-    let dateFormattedTimeTracks = task.date_formatted_time_tracks.find(
-      dateLog => dateLog.date == dateWiseTasksDate
-    );
+    let dateFormattedTimeTracks = task.date_formatted_time_tracks
+      ? task.date_formatted_time_tracks.find(
+          dateLog => dateLog.date == dateWiseTasksDate
+        )
+      : null;
     return {
       date: dateWiseTasksDate,
       id: newTaskId,
