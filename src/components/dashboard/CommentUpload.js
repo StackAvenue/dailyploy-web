@@ -52,25 +52,27 @@ class CommentUpload extends React.Component {
               placeholder="Write Here..."
             />
             <div className="uploded-img">
-              {this.props.state.pictures.map((file, idx) => {
-                return (
-                  <div className="img-container">
-                    <img
-                      src={`${URL.createObjectURL(file)}`}
-                      // onClick={() => this.openViewImage(attachment.imge_url)}
-                      height="42"
-                      width="42"
-                      style={{ cursor: "pointer" }}
-                    ></img>
-                    <span
-                      className="close-icon"
-                      onClick={() => this.props.removeUploadedImage(idx)}
-                    >
-                      <i className="fa fa-close"></i>
-                    </span>
-                  </div>
-                );
-              })}
+              {this.props.showBox
+                ? this.props.state.pictures.map((file, idx) => {
+                    return (
+                      <div className="img-container">
+                        <img
+                          src={`${URL.createObjectURL(file)}`}
+                          // onClick={() => this.openViewImage(attachment.imge_url)}
+                          height="42"
+                          width="42"
+                          style={{ cursor: "pointer" }}
+                        ></img>
+                        <span
+                          className="close-icon"
+                          onClick={() => this.props.removeUploadedImage(idx)}
+                        >
+                          <i className="fa fa-close"></i>
+                        </span>
+                      </div>
+                    );
+                  })
+                : null}
             </div>
             <input
               ref={this.onImageDropRef}

@@ -17,7 +17,10 @@ import {
   FULL_DATE
 } from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
-import { convertUTCToLocalDate } from "../../utils/function";
+import {
+  convertUTCToLocalDate,
+  convertUTCDateToLocalDate
+} from "../../utils/function";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 
 class TaskInfoModal extends Component {
@@ -336,19 +339,22 @@ class TaskInfoModal extends Component {
     var s = Math.floor((totalSeconds % 3600) % 60);
     return h > 0
       ? `${h} hours ago`
-      : m > 0
+      : m > 0 && h == 0
       ? `${m} minutes ago`
-      : "few seconds ago";
+      : s > 30 && h == 0 && m == 0
+      ? "few seconds ago"
+      : "just now";
   };
 
   commentsTime = comment => {
-    let commentDate = moment(comment.inserted_at);
+    let date = convertUTCDateToLocalDate(
+      comment.inserted_at ? new Date(comment.inserted_at) : new Date()
+    );
+    let commentDate = moment(date);
     let isToday =
       commentDate.format(DATE_FORMAT1) == moment().format(DATE_FORMAT1);
     if (isToday) {
-      let newDate = moment(comment.inserted_at).format(FULL_DATE_FORMAT3);
-      var convertedTime = new Date(convertUTCToLocalDate(newDate));
-      let time = Date.now() - convertedTime.getTime();
+      let time = Date.now() - date.getTime();
       return this.formattedSeconds(time);
     } else {
       return `${commentDate.format(DATE_FORMAT6)} at ${commentDate.format(
@@ -358,7 +364,11 @@ class TaskInfoModal extends Component {
   };
 
   titleDateTime = comment => {
-    return moment(comment.inserted_at).format(FULL_DATE_FORMAT1);
+    return moment(
+      convertUTCDateToLocalDate(
+        comment.inserted_at ? new Date(comment.inserted_at) : new Date()
+      )
+    ).format(FULL_DATE_FORMAT1);
   };
 
   openViewImage = imge_url => {
@@ -647,7 +657,7 @@ class TaskInfoModal extends Component {
               </div>
               {props.state.taskComments ? (
                 <>
-                  <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-12 no-padding input-row">
                     <div className="col-md-2 d-inline-block no-padding label"></div>
                     <div className="col-md-10 d-inline-block">
                       <div className="task-comments">
@@ -677,11 +687,11 @@ class TaskInfoModal extends Component {
                                   justifyContent: "start"
                                 }}
                               >
-                                <div className="owner-name">
+                                <div className="owner-name text-titlize">
                                   {comment.user.name}
                                 </div>
                                 <div
-                                  className="hide"
+                                  className=""
                                   style={{
                                     fontSize: "11px",
                                     padding: "3px 0px 0px 25px"
