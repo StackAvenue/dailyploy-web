@@ -19,7 +19,8 @@ import {
 import { UncontrolledAlert } from "reactstrap";
 import {
   convertUTCToLocalDate,
-  convertUTCDateToLocalDate
+  convertUTCDateToLocalDate,
+  firstTwoLetter
 } from "../../utils/function";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 
@@ -657,13 +658,29 @@ class TaskInfoModal extends Component {
               </div>
               {props.state.taskComments ? (
                 <>
-                  <div className="col-md-12 no-padding input-row">
-                    <div className="col-md-2 d-inline-block no-padding label"></div>
-                    <div className="col-md-10 d-inline-block">
-                      <div className="task-comments">
-                        {props.state.taskComments.map(comment => {
-                          return this.state.editableComment &&
-                            comment.id === this.state.commentId ? (
+                  <div className="col-md-12 no-padding input-row task-comments">
+                    {props.state.taskComments.map(comment => {
+                      return this.state.editableComment &&
+                        comment.id === this.state.commentId ? (
+                        <div
+                          className="col-md-12 no-padding"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "flex-start"
+                          }}
+                        >
+                          <div
+                            className="col-md-2 d-inline-block no-padding label"
+                            // style={{
+                            // verticalAlign: "text-top",
+                            // marginTop: "20px"
+                            // }}
+                          >
+                            <div className="comment-owner-dot">
+                              {firstTwoLetter(comment.user.name)}
+                            </div>
+                          </div>
+                          <div className="col-md-10 d-inline-block">
                             <CommentUpload
                               save={this.handleUpdateComments}
                               comments={this.state.editedComments}
@@ -678,7 +695,27 @@ class TaskInfoModal extends Component {
                               handleInputChange={this.handleInputChange}
                               showCommentBox={this.showCommentBox}
                             />
-                          ) : (
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className="col-md-12 no-padding"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "flex-start"
+                          }}
+                        >
+                          <div
+                            className="col-md-2 d-inline-block no-padding label"
+                            style={{
+                              marginTop: "20px"
+                            }}
+                          >
+                            <div className="comment-owner-dot">
+                              {firstTwoLetter(comment.user.name)}
+                            </div>
+                          </div>
+                          <div className="col-md-10 d-inline-block">
                             <div className="commnet-card">
                               <div
                                 className="col-md-12 no-padding"
@@ -717,7 +754,10 @@ class TaskInfoModal extends Component {
                                         }
                                         height="42"
                                         width="42"
-                                        style={{ cursor: "pointer" }}
+                                        style={{
+                                          cursor: "pointer",
+                                          marginRight: "10px"
+                                        }}
                                       ></img>
                                     </>
                                   );
@@ -745,10 +785,10 @@ class TaskInfoModal extends Component {
                                 </span>
                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </>
               ) : null}

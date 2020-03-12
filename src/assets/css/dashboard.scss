@@ -4321,6 +4321,16 @@ table.scheduler-table tr:last-child td {
         right: 10px !important; 
         bottom: 0px !important;
       }
+      .comment-owner-dot{
+        text-align: center;
+        margin: auto;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        background-color: $color-info-bg;
+        color:$color-white;
+        border-radius: 50px;
+      }
     }
   }
   .task-play-btn {
@@ -4517,7 +4527,7 @@ table.scheduler-table tr:last-child td {
           line-height: 1.17;
           letter-spacing: normal;
           text-align: left;
-          color: $color-text1;
+          color: $color-text2;
         }
         .task-name {
           height: 15px;
@@ -5220,10 +5230,12 @@ table.scheduler-table tr:last-child td {
     padding: 10px;
     margin: 5px 0px;
     .owner-name{
-      color:  $color-brand3;
+      color:  $color-text1;
+      font-weight: 500;
     }
     .comments{
       font-size: 14px;
+      color: $color-text2;
     }
   }
   .upload-files{
