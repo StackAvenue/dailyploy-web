@@ -684,7 +684,7 @@ class TaskInfoModal extends Component {
                                 className="col-md-12 no-padding"
                                 style={{
                                   display: "flex",
-                                  justifyContent: "start"
+                                  justifyContent: "space-between"
                                 }}
                               >
                                 <div className="owner-name text-titlize">
@@ -701,7 +701,7 @@ class TaskInfoModal extends Component {
                                   {this.commentsTime(comment)}
                                 </div>
                               </div>
-                              <div className="col-md-12 no-padding comments">
+                              <div className="col-md-12 comments">
                                 {comment.comments}
                               </div>
                               <div className="col-md-12 no-padding">

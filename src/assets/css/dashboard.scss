@@ -4298,6 +4298,7 @@ table.scheduler-table tr:last-child td {
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
+        padding: 5px 0px;
         line-height: 1.2;
         letter-spacing: normal;
         text-align: left;
@@ -5136,12 +5137,12 @@ table.scheduler-table tr:last-child td {
     height: 20px;
     padding: 0px 6px;
     color: $color-white !important;
-    margin: 0px 0px 10px 15px !important;
+    margin:0px 10px 5px 5px !important;
     width: auto !important;
   }
   .upload-files{
     position: relative;
-    float: right;
+    // float: right;
     bottom: 5px;
     color: $color-brand3;
     cursor: pointer;
@@ -5199,6 +5200,10 @@ table.scheduler-table tr:last-child td {
       padding: 5px;
     }
   }
+  .comment-action{
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
 }
 .task-comments{
   // border: solid 1px #d6d6d6;
@@ -5220,5 +5225,13 @@ table.scheduler-table tr:last-child td {
     .comments{
       font-size: 14px;
     }
+  }
+  .upload-files{
+    position: relative;
+    bottom: 5px;
+    font-size: 16px;
+    padding: 0px;
+    color: $color-brand3;
+    cursor: pointer;
   }
 }

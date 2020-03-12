@@ -83,8 +83,9 @@ class CommentUpload extends React.Component {
               multiple
             ></input>
             <div
-              className={`${this.props.showBox ? "show" : "hide"}`}
-              style={{ display: "flex", justifyContent: "center" }}
+              className={`${
+                this.props.showBox ? "show" : "hide"
+              } comment-action`}
             >
               <div
                 className={`${
@@ -93,6 +94,9 @@ class CommentUpload extends React.Component {
                     : "show"
                 }`}
               >
+                <span className="upload-files" onClick={this.handleImageRef}>
+                  <i className="fas fa-paperclip"></i>
+                </span>
                 <button
                   className={`btn save-button ${
                     this.props.state.taskloader
@@ -116,9 +120,6 @@ class CommentUpload extends React.Component {
                     />
                   ) : null}
                 </button>
-                <span className="upload-files" onClick={this.handleImageRef}>
-                  <i className="fas fa-paperclip"></i>
-                </span>
               </div>
             </div>
           </div>
