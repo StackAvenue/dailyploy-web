@@ -888,6 +888,33 @@ class Dashboard extends Component {
     });
   };
 
+  timeTrackUpdate = log => {
+    debugger;
+    if (log) {
+      let date = moment(log.start_date).format(DATE_FORMAT1);
+      var taskEvent = this.state.taskEvent;
+      var dateFormattedTimeTrack = taskEvent.dateFormattedTimeTrack;
+      var dateFilterLog = dateFormattedTimeTrack.find(
+        dateLog => dateLog.date == date
+      );
+      if (dateFilterLog && dateFilterLog.time_tracks) {
+        let newLog = [];
+        dateFilterLog.time_tracks.forEach(dLog => {
+          if (dLog.id == log.id) {
+            newLog.push(log);
+          } else {
+            newLog.push(dLog);
+          }
+        });
+        dateFilterLog["time_tracks"] = newLog;
+        this.setState({
+          taskEvent: taskEvent
+        });
+        this.loadUserTask(this.state.workspaceId);
+      }
+    }
+  };
+
   handleUserSelect = e => {
     const { name, value } = e.target;
     let userIdArr = [];
@@ -2249,6 +2276,7 @@ class Dashboard extends Component {
               updateTaskComments={this.updateTaskComments}
               deleteComments={this.deleteComments}
               updateComments={this.updateComments}
+              timeTrackUpdate={this.timeTrackUpdate}
             />
             {this.state.taskConfirmModal ? (
               <TaskConfirm

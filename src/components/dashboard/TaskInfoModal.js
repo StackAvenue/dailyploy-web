@@ -6,6 +6,7 @@ import Close from "../../assets/images/close.svg";
 import moment from "moment";
 import { post, mockGet, put } from "../../utils/API";
 import ImgsViewer from "react-images-viewer";
+import TimePicker from "rc-time-picker";
 import {
   DATE_FORMAT2,
   DATE_FORMAT1,
@@ -115,7 +116,13 @@ class TaskInfoModal extends Component {
       showBox: false,
       pictures: [],
       showAddBox: false,
-      taskloader: false
+      taskloader: false,
+      editableLog: null,
+      editLog: false,
+      timeFrom: null,
+      timeTo: null,
+      fromDateTime: null,
+      toDateTime: null
     };
   }
 
@@ -318,6 +325,35 @@ class TaskInfoModal extends Component {
     }
   };
 
+  editTimeTrack = async () => {
+    if (this.state.fromDateTime && this.state.toDateTime) {
+      try {
+        // this.setState({ taskloader: true });
+        let trackedTime = {
+          start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
+          end_time: new Date(this.state.toDateTime.format(FULL_DATE))
+        };
+        console.log("trackedTime", trackedTime);
+        const { data } = await put(
+          trackedTime,
+          `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
+        );
+        this.props.timeTrackUpdate(data);
+        this.setState({
+          taskloader: false,
+          timeFrom: null,
+          timeTo: null,
+          fromDateTime: null,
+          toDateTime: null,
+          editableLog: null,
+          editLog: false
+        });
+      } catch (e) {
+        this.setState({ taskloader: false });
+      }
+    }
+  };
+
   onClickOutside = () => {
     this.setState({
       commentId: null,
@@ -405,9 +441,82 @@ class TaskInfoModal extends Component {
     this.setState({ [name]: value });
   };
 
+  disabledHours = () => {
+    var time = this.state.timeFrom;
+    if (time) {
+      var hr = time.split(":")[0];
+      hr = Number(hr);
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
+      return hoursArr;
+    }
+    return [];
+  };
+
+  disabledMinutes = () => {
+    var fTime = this.state.timeFrom;
+    var tTime = this.state.timeTo;
+    if (fTime && !tTime) {
+      var min = fTime.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
+      var min = fTime.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    }
+    return [];
+  };
+
+  makeLogEditable = e => {
+    let log = this.props.state.taskEvent.allTimeTracked.find(
+      tt => tt.id == e.target.value
+    );
+    let fromMoment = moment(log.start_time);
+    let toMoment = moment(log.end_time);
+    let timeFrom = fromMoment.format(HRMIN);
+    let timeTo = toMoment.format(HRMIN);
+    var fromDateTime = fromMoment.format("YYYY-MM-DD") + " " + timeFrom;
+    fromDateTime = moment(fromDateTime);
+    var toDateTime = toMoment.format("YYYY-MM-DD") + " " + timeTo;
+    toDateTime = moment(toDateTime);
+
+    this.setState({
+      editableLog: log,
+      timeFrom: timeFrom,
+      timeTo: timeTo,
+      fromDateTime: fromDateTime,
+      toDateTime: toDateTime
+    });
+  };
+
+  toggleEditableBox = () => {
+    this.setState({
+      editLog: !this.state.editLog
+    });
+  };
+
+  handleTimeFrom = value => {
+    this.setState({
+      timeFrom: value != null ? value.format("HH:mm") : null,
+      fromDateTime: value,
+      timeTo:
+        value != null && value.format("HH:mm") > this.state.timeTo
+          ? null
+          : this.state.timeTo
+    });
+  };
+
+  handleTimeTo = value => {
+    this.setState({
+      timeTo: value != null ? value.format("HH:mm:ss") : null,
+      toDateTime: value
+    });
+  };
+
   render() {
     const { props } = this;
-
     return (
       <>
         <Modal
@@ -607,28 +716,103 @@ class TaskInfoModal extends Component {
                   this.props.state.taskEvent.dateFormattedTimeTrack &&
                   this.props.state.taskEvent.dateFormattedTimeTrack.length >
                     0 ? (
-                    <div className="col-md-4 d-inline-block">
-                      <select
-                        style={{ color: "#000 !important", background: "#fff" }}
-                      >
-                        {this.props.state.taskEvent.dateFormattedTimeTrack.map(
-                          (date, index) => {
-                            return (
-                              <optgroup
-                                key={index}
-                                label={moment(date.date).format("MMM Do YYYY")}
-                              >
-                                {date.time_tracks.map((tt, idx) => (
-                                  <option key={tt.id}>
-                                    {this.returnTime(tt)}
-                                  </option>
-                                ))}
-                              </optgroup>
-                            );
-                          }
-                        )}
-                      </select>
-                    </div>
+                    !this.state.editLog ? (
+                      <>
+                        <div className="col-md-6 d-inline-block">
+                          <select
+                            style={{
+                              color: "#000 !important",
+                              background: "#fff"
+                            }}
+                            onChange={e => this.makeLogEditable(e)}
+                          >
+                            {this.props.state.taskEvent.dateFormattedTimeTrack.map(
+                              (date, index) => {
+                                return (
+                                  <optgroup
+                                    key={index}
+                                    label={moment(date.date).format(
+                                      "MMM Do YYYY"
+                                    )}
+                                  >
+                                    {date.time_tracks.map((tt, idx) => (
+                                      <option value={tt.id} key={tt.id}>
+                                        {this.returnTime(tt)}
+                                      </option>
+                                    ))}
+                                  </optgroup>
+                                );
+                              }
+                            )}
+                          </select>
+                        </div>
+                        {this.state.editableLog != null ? (
+                          <div
+                            className="col-md-1 d-inline-block"
+                            onClick={this.toggleEditableBox}
+                            style={{
+                              cursor: "pointer"
+                            }}
+                          >
+                            <i className="fa fa-pencil" aria-hidden="true"></i>
+                          </div>
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        <div className="col-md-10 d-inline-block">
+                          <span className="col-md-1 no-padding d-inline-block">
+                            From
+                          </span>
+                          <div
+                            className="col-md-4 no-padding d-inline-block track-time-edit"
+                            style={{
+                              marginLeft: "20px"
+                            }}
+                          >
+                            <TimePicker
+                              placeholder="Time"
+                              value={this.state.fromDateTime}
+                              showSecond={false}
+                              onChange={this.handleTimeFrom}
+                            />
+                          </div>
+                          <span className="col-md-1 no-padding d-inline-block">
+                            To
+                          </span>
+                          <div className="col-md-4 no-padding d-inline-block track-time-edit">
+                            <TimePicker
+                              placeholder="Time"
+                              value={this.state.toDateTime}
+                              showSecond={false}
+                              disabledMinutes={this.disabledMinutes}
+                              disabledHours={this.disabledHours}
+                              onChange={this.handleTimeTo}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="col-md-1 d-inline-block"
+                          onClick={this.toggleEditableBox}
+                          title={"Back"}
+                          style={{
+                            cursor: "pointer"
+                          }}
+                        >
+                          <i className="far fa-arrow-alt-circle-left"></i>
+                        </div>
+                        <div
+                          className="col-md-1 d-inline-block"
+                          onClick={this.editTimeTrack}
+                          title={"Edit"}
+                          style={{
+                            cursor: "pointer"
+                          }}
+                        >
+                          <i className="fa fa-check" aria-hidden="true"></i>
+                        </div>
+                      </>
+                    )
                   ) : (
                     <div className="left-padding-17px">No tracked time</div>
                   )}

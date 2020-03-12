@@ -4331,6 +4331,28 @@ table.scheduler-table tr:last-child td {
         color:$color-white;
         border-radius: 50px;
       }
+      .track-time-edit{
+        .rc-time-picker-input{
+          padding: 0px 10px !important;
+          font-size: 16px !important;
+          width: 92px;
+        }
+        .rc-time-picker-clear{
+          top: 1px;
+          right: 5px;
+        }
+        .rc-time-picker-panel{
+          width: 100px !important;
+          .rc-time-picker-panel-inner{
+            width: 92px !important;
+            .rc-time-picker-panel-combobox{
+              .rc-time-picker-panel-select{
+                width: 45px !important;
+              }
+            }
+          }
+        }
+      }
     }
   }
   .task-play-btn {
@@ -5245,5 +5267,20 @@ table.scheduler-table tr:last-child td {
     padding: 0px;
     color: $color-brand3;
     cursor: pointer;
+  }
+}
+
+.rc-time-picker-panel{
+  width: 100px !important;
+  .rc-time-picker-panel-inner{
+    width: 92px !important;
+    .rc-time-picker-panel-combobox{
+      .rc-time-picker-panel-select{
+        width: 45px !important;
+        li{
+          padding: 0px 10px !important;
+        }
+      }
+    }
   }
 }
