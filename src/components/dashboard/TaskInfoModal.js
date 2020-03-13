@@ -4,7 +4,7 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
-import { post, mockGet, put } from "../../utils/API";
+import { post, del, put } from "../../utils/API";
 import ImgsViewer from "react-images-viewer";
 import TimePicker from "rc-time-picker";
 import {
@@ -24,6 +24,7 @@ import {
   firstTwoLetter
 } from "../../utils/function";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
+import ConfirmModal from "./../ConfirmModal";
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -51,7 +52,8 @@ class TaskInfoModal extends Component {
       timeTo: null,
       fromDateTime: null,
       toDateTime: null,
-      trackTimeError: null
+      trackTimeError: null,
+      showConfirm: false
     };
   }
 
@@ -262,12 +264,11 @@ class TaskInfoModal extends Component {
           start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
           end_time: new Date(this.state.toDateTime.format(FULL_DATE))
         };
-        console.log("trackedTime", trackedTime);
         const { data } = await put(
           trackedTime,
           `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
         );
-        this.props.timeTrackUpdate(data);
+        this.props.timeTrackUpdate(data, "edit");
         this.setState({
           taskloader: false,
           timeFrom: null,
@@ -284,6 +285,20 @@ class TaskInfoModal extends Component {
             taskloader: false
           });
         }
+      }
+    }
+  };
+
+  deleteTimeTrack = async () => {
+    if (this.state.editableLog) {
+      try {
+        const { data } = await del(
+          `tasks/${this.state.editableLog.task_id}/delete/${this.state.editableLog.id}`
+        );
+        this.props.timeTrackUpdate(data, "delete");
+        this.setState({ showConfirm: false });
+      } catch (e) {
+        this.setState({ showConfirm: false });
       }
     }
   };
@@ -404,25 +419,35 @@ class TaskInfoModal extends Component {
   };
 
   makeLogEditable = e => {
-    let log = this.props.state.taskEvent.allTimeTracked.find(
-      tt => tt.id == e.target.value
-    );
-    let fromMoment = moment(log.start_time);
-    let toMoment = moment(log.end_time);
-    let timeFrom = fromMoment.format(HRMIN);
-    let timeTo = toMoment.format(HRMIN);
-    var fromDateTime = fromMoment.format("YYYY-MM-DD") + " " + timeFrom;
-    fromDateTime = moment(fromDateTime);
-    var toDateTime = toMoment.format("YYYY-MM-DD") + " " + timeTo;
-    toDateTime = moment(toDateTime);
+    if (e.target.value) {
+      let log = this.props.state.taskEvent.allTimeTracked.find(
+        tt => tt.id == e.target.value
+      );
+      let fromMoment = moment(log.start_time);
+      let toMoment = moment(log.end_time);
+      let timeFrom = fromMoment.format(HRMIN);
+      let timeTo = toMoment.format(HRMIN);
+      var fromDateTime = fromMoment.format("YYYY-MM-DD") + " " + timeFrom;
+      fromDateTime = moment(fromDateTime);
+      var toDateTime = toMoment.format("YYYY-MM-DD") + " " + timeTo;
+      toDateTime = moment(toDateTime);
 
-    this.setState({
-      editableLog: log,
-      timeFrom: timeFrom,
-      timeTo: timeTo,
-      fromDateTime: fromDateTime,
-      toDateTime: toDateTime
-    });
+      this.setState({
+        editableLog: log,
+        timeFrom: timeFrom,
+        timeTo: timeTo,
+        fromDateTime: fromDateTime,
+        toDateTime: toDateTime
+      });
+    } else {
+      this.setState({
+        editableLog: null,
+        timeFrom: null,
+        timeTo: null,
+        fromDateTime: null,
+        toDateTime: null
+      });
+    }
   };
 
   toggleEditableBox = () => {
@@ -446,6 +471,12 @@ class TaskInfoModal extends Component {
     this.setState({
       timeTo: value != null ? value.format("HH:mm:ss") : null,
       toDateTime: value
+    });
+  };
+
+  handleDeleteLog = () => {
+    this.setState({
+      showConfirm: !this.state.showConfirm
     });
   };
 
@@ -652,7 +683,7 @@ class TaskInfoModal extends Component {
                     0 ? (
                     !this.state.editLog ? (
                       <>
-                        <div className="col-md-6 d-inline-block">
+                        <div className="col-md-8 d-inline-block">
                           <select
                             style={{
                               color: "#000 !important",
@@ -660,6 +691,9 @@ class TaskInfoModal extends Component {
                             }}
                             onChange={e => this.makeLogEditable(e)}
                           >
+                            <option value="" key={0}>
+                              Select tracked time to edit/delete
+                            </option>
                             {this.props.state.taskEvent.dateFormattedTimeTrack.map(
                               (date, index) => {
                                 return (
@@ -681,15 +715,30 @@ class TaskInfoModal extends Component {
                           </select>
                         </div>
                         {this.state.editableLog != null ? (
-                          <div
-                            className="col-md-1 d-inline-block"
-                            onClick={this.toggleEditableBox}
-                            style={{
-                              cursor: "pointer"
-                            }}
-                          >
-                            <i className="fa fa-pencil" aria-hidden="true"></i>
-                          </div>
+                          <>
+                            <div
+                              className="col-md-1 d-inline-block"
+                              onClick={this.toggleEditableBox}
+                              style={{
+                                cursor: "pointer"
+                              }}
+                            >
+                              <i
+                                className="fa fa-pencil"
+                                aria-hidden="true"
+                              ></i>
+                            </div>
+                            <div
+                              className="col-md-1 d-inline-block"
+                              style={{
+                                padding: "0px 10px",
+                                cursor: "pointer"
+                              }}
+                              onClick={() => this.handleDeleteLog()}
+                            >
+                              <i class="fas fa-trash-alt"></i>
+                            </div>
+                          </>
                         ) : null}
                       </>
                     ) : (
@@ -924,6 +973,18 @@ class TaskInfoModal extends Component {
             </div>
           </div>
         </Modal>
+        {this.state.showConfirm ? (
+          <ConfirmModal
+            show={this.state.showConfirm}
+            message="Do you want to delete the Tracked Time?"
+            buttonText="delete"
+            onClick={this.deleteTimeTrack}
+            closeModal={this.handleDeleteLog}
+            style={{
+              padding: "9% 0 30px 4%"
+            }}
+          />
+        ) : null}
       </>
     );
   }

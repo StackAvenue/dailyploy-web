@@ -888,7 +888,7 @@ class Dashboard extends Component {
     });
   };
 
-  timeTrackUpdate = log => {
+  timeTrackUpdate = (log, flag) => {
     if (log) {
       let date = moment(log.start_date).format(DATE_FORMAT1);
       var taskEvent = this.state.taskEvent;
@@ -897,14 +897,18 @@ class Dashboard extends Component {
         dateLog => dateLog.date == date
       );
       if (dateFilterLog && dateFilterLog.time_tracks) {
-        let newLog = [];
-        dateFilterLog.time_tracks.forEach(dLog => {
-          if (dLog.id == log.id) {
-            newLog.push(log);
-          } else {
-            newLog.push(dLog);
-          }
-        });
+        var newLog = [];
+        if (flag == "delete") {
+          newLog = dateFilterLog.time_tracks.filter(dLog => dLog.id != log.id);
+        } else {
+          dateFilterLog.time_tracks.forEach(dLog => {
+            if (dLog.id == log.id) {
+              newLog.push(log);
+            } else {
+              newLog.push(dLog);
+            }
+          });
+        }
         dateFilterLog["time_tracks"] = newLog;
         this.setState({
           taskEvent: taskEvent

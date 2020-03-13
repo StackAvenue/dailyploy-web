@@ -17,7 +17,11 @@ class ConfirmModal extends Component {
         <Modal
           className="confirm-modal"
           show={props.show}
-          style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
+          style={
+            this.props.style
+              ? this.props.style
+              : { paddingTop: "1.5%", paddingBottom: "30px" }
+          }
         >
           <div className="row no-margin">
             <div className="col-md-12 d-inline-block header text-titlize">

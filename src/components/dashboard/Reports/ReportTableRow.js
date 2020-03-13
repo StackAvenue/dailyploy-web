@@ -4,21 +4,147 @@ import moment from "moment";
 import {
   DATE_FORMAT2,
   PRIORITIES_MAP,
-  DATE_FORMAT1
+  DATE_FORMAT1,
+  HRMIN,
+  FULL_DATE
 } from "./../../../utils/Constants";
+import { put, del } from "./../../../utils/API";
+import DailyPloyToast from "./../../../components/DailyPloyToast";
 import { convertUTCToLocalDate } from "./../../../utils/function";
 import EditableSelect from "./../../EditableSelect";
+import { toast } from "react-toastify";
+import EditableTimeTrack from "./../../EditableTimeTrack";
+import TimePicker from "rc-time-picker";
+import ConfirmModal from "./../../ConfirmModal";
 
 class ReportTableRow extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      editable: false,
+      editableLog: null,
+      fromDateTime: null,
+      toDateTime: null,
+      fromTime: null,
+      toTime: null,
+      showConfirm: false
+    };
   }
 
   calculateTime = (startDateTime, endDateTime) => {
     var sTime = moment(convertUTCToLocalDate(startDateTime)).format("HH:mm");
     var eTime = moment(convertUTCToLocalDate(endDateTime)).format("HH:mm");
     return sTime + "- " + eTime;
+  };
+
+  editTimeTrack = async () => {
+    if (this.state.fromDateTime && this.state.toDateTime) {
+      try {
+        this.setState({ taskloader: true, trackTimeError: null });
+        let trackedTime = {
+          start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
+          end_time: new Date(this.state.toDateTime.format(FULL_DATE))
+        };
+        const { data } = await put(
+          trackedTime,
+          `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
+        );
+        this.props.timeTrackUpdate();
+        this.setState({
+          taskloader: false,
+          editable: false,
+          editableLog: null,
+          fromDateTime: null,
+          toDateTime: null,
+          fromTime: null,
+          toTime: null
+        });
+      } catch (e) {
+        if (e.response.status == 400) {
+          toast(
+            <DailyPloyToast message={e.response.data.errors} status="error" />,
+            {
+              autoClose: 2000,
+              position: toast.POSITION.TOP_CENTER,
+              className: "text-titlize"
+            }
+          );
+          this.setState({
+            trackTimeError: e.response.data.errors,
+            taskloader: false
+          });
+        }
+      }
+    }
+  };
+
+  deleteTimeTrack = async () => {
+    if (this.state.editableLog) {
+      try {
+        const { data } = await del(
+          `tasks/${this.state.editableLog.task_id}/delete/${this.state.editableLog.id}`
+        );
+        this.props.timeTrackUpdate();
+        this.setState({ showConfirm: false });
+      } catch (e) {
+        this.setState({ showConfirm: false });
+      }
+    }
+  };
+
+  handleEditLog = log => {
+    let fromMoment = moment(log.start);
+    let toMoment = moment(log.end);
+    let timeFrom = fromMoment.format(HRMIN);
+    let timeTo = toMoment.format(HRMIN);
+    var fromDateTime = fromMoment.format("YYYY-MM-DD") + " " + timeFrom;
+    fromDateTime = moment(fromDateTime);
+    var toDateTime = toMoment.format("YYYY-MM-DD") + " " + timeTo;
+    toDateTime = moment(toDateTime);
+    this.setState({
+      editable: true,
+      editableLog: log,
+      timeFrom: timeFrom,
+      timeTo: timeTo,
+      fromDateTime: fromDateTime,
+      toDateTime: toDateTime
+    });
+  };
+
+  handleDeleteLog = log => {
+    this.setState({
+      editableLog: log,
+      showConfirm: true
+    });
+  };
+
+  toggleEditableBox = () => {
+    this.setState({
+      editable: false,
+      editableLog: null,
+      timeFrom: null,
+      timeTo: null,
+      fromDateTime: null,
+      toDateTime: null
+    });
+  };
+
+  handleTimeFrom = value => {
+    this.setState({
+      timeFrom: value != null ? value.format("HH:mm") : null,
+      fromDateTime: value,
+      timeTo:
+        value != null && value.format("HH:mm") > this.state.timeTo
+          ? null
+          : this.state.timeTo
+    });
+  };
+
+  handleTimeTo = value => {
+    this.setState({
+      timeTo: value != null ? value.format("HH:mm") : null,
+      toDateTime: value
+    });
   };
 
   renderLog = task => {
@@ -36,28 +162,101 @@ class ReportTableRow extends Component {
             time.end_time
           ).format("HH:mm A")}`,
           start: time.start_time,
-          end: time.end_time
+          end: time.end_time,
+          task_id: time.task_id
         };
       });
     let first = trackLogs[0];
     return (
       <div className="reports-track-logs">
         {trackLogs.length > 0 ? (
-          <EditableSelect
-            options={trackLogs}
-            value={first}
-            getOptionValue={option => option.id}
-            getOptionLabel={option => option.name}
-            action={false}
-            onChange={() => {}}
-            saveInputEditable={() => {}}
-            state={this.state.trackSaved}
-          />
+          this.state.editable &&
+          this.state.editableLog &&
+          this.state.editableLog.task_id === task.id ? (
+            <div style={{ display: "flex" }}>
+              <TimePicker
+                value={this.state.fromDateTime}
+                placeholder="Select"
+                showSecond={false}
+                onChange={this.handleTimeFrom}
+              />
+              <div style={{ margin: "0px 10px" }}>
+                <TimePicker
+                  value={this.state.toDateTime}
+                  placeholder="Select"
+                  showSecond={false}
+                  onChange={this.handleTimeTo}
+                  disabledMinutes={this.disabledMinutes}
+                  disabledHours={this.disabledHours}
+                />
+              </div>
+              <div
+                className=""
+                onClick={this.toggleEditableBox}
+                title={"Back"}
+                style={{
+                  cursor: "pointer",
+                  padding: "0px 10px"
+                }}
+              >
+                <i className="far fa-arrow-alt-circle-left"></i>
+              </div>
+              <div
+                className=""
+                onClick={this.editTimeTrack}
+                title={"Edit"}
+                style={{
+                  cursor: "pointer",
+                  padding: "0px 10px"
+                }}
+              >
+                <i className="fa fa-check" aria-hidden="true"></i>
+              </div>
+            </div>
+          ) : (
+            <EditableTimeTrack
+              options={trackLogs}
+              value={first}
+              action={true}
+              handleEditLog={this.handleEditLog}
+              handleDeleteLog={this.handleDeleteLog}
+              saveInputEditable={() => {}}
+              state={this.state}
+            />
+          )
         ) : (
           <span>No tracked Time</span>
         )}
       </div>
     );
+  };
+
+  disabledHours = () => {
+    var time = this.state.timeFrom;
+    if (time) {
+      var hr = time.split(":")[0];
+      hr = Number(hr);
+      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
+      return hoursArr;
+    }
+    return [];
+  };
+
+  disabledMinutes = () => {
+    var fTime = this.state.timeFrom;
+    var tTime = this.state.timeTo;
+    if (fTime && !tTime) {
+      var min = fTime.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
+      var min = fTime.split(":")[1];
+      min = Number(min) + 1;
+      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+      return minArr;
+    }
+    return [];
   };
 
   getDiffOfTwoDate = (startDateTime, endDateTime) => {
@@ -247,7 +446,7 @@ class ReportTableRow extends Component {
             ) : null}
           </td>
           {/* <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td> */}
-          <td className="td-2" style={{ width: "170px" }}>
+          <td className="td-2" style={{ width: "270px" }}>
             {this.renderLog(task)}
           </td>
           <td className="td-3 text-titlize">{task.name}</td>
@@ -277,6 +476,12 @@ class ReportTableRow extends Component {
     });
   };
 
+  closeConfirmModal = () => {
+    this.setState({
+      showConfirm: false
+    });
+  };
+
   render() {
     return (
       <>
@@ -293,6 +498,15 @@ class ReportTableRow extends Component {
         {this.props.tasks.length !== 0
           ? this.renderTableRow(this.props.tasks)
           : this.taskNotFound()}
+        {this.state.showConfirm ? (
+          <ConfirmModal
+            show={this.state.showConfirm}
+            message="Do you want to delete the Tracked Time?"
+            buttonText="delete"
+            onClick={this.deleteTimeTrack}
+            closeModal={this.closeConfirmModal}
+          />
+        ) : null}
       </>
     );
   }

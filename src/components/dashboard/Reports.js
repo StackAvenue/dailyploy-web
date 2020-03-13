@@ -72,7 +72,8 @@ class Reports extends Component {
       selectedPriority: null,
       columnChartData: [],
       barChartArray: this.generateDailyBarChartData(new Date()),
-      isLoading: false
+      isLoading: false,
+      loadReportsData: false
     };
   }
 
@@ -510,7 +511,8 @@ class Reports extends Component {
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
       prevProps.searchUserDetails !== this.props.searchUserDetails ||
       prevState.selectedCategory !== this.state.selectedCategory ||
-      prevState.selectedPriority !== this.state.selectedPriority
+      prevState.selectedPriority !== this.state.selectedPriority ||
+      prevState.loadReportsData !== this.state.loadReportsData
     ) {
       this.props.handleLoading(true);
       let userIds = this.props.searchUserDetails.map(
@@ -602,7 +604,8 @@ class Reports extends Component {
         taskDetails: taskDetails,
         message: message,
         totalTime: totalTime,
-        projectReports: projectReportData
+        projectReports: projectReportData,
+        loadReportsData: false
       });
       this.loadMultipleApiData({ user_ids: filterUserIds });
     }
@@ -960,6 +963,12 @@ class Reports extends Component {
     this.calendarMonthRef.current.setOpen(true);
   };
 
+  timeTrackUpdate = () => {
+    this.setState({
+      loadReportsData: true
+    });
+  };
+
   render() {
     const Daily = props => {
       return (
@@ -1145,6 +1154,7 @@ class Reports extends Component {
                   searchProjectIds={this.props.searchProjectIds}
                   searchUserDetails={this.props.searchUserDetails}
                   frequency={this.returnFrequency()}
+                  timeTrackUpdate={this.timeTrackUpdate}
                 />
               </div>
             </div>
