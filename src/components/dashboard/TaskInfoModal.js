@@ -32,78 +32,6 @@ class TaskInfoModal extends Component {
       name: "high",
       color_code: "#00A031"
     };
-    this.comments = [
-      {
-        attachments: [
-          {
-            attachment_id: 2,
-            imge_url:
-              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
-          },
-          {
-            attachment_id: 3,
-            imge_url:
-              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
-          }
-        ],
-        comments: "This is for the testing of task",
-        id: 1,
-        task_id: 222,
-        user_id: 1,
-        user: {
-          id: 1,
-          name: "ravindra karale",
-          email: "ravindra@stack-avenue.com"
-        }
-      },
-      {
-        attachments: [
-          {
-            attachment_id: 2,
-            imge_url:
-              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
-          },
-          {
-            attachment_id: 3,
-            imge_url:
-              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
-          }
-        ],
-        comments: '"This is for the testing of task"',
-        id: 2,
-        task_id: 222,
-        user_id: 1,
-        user: {
-          id: 1,
-          name: "ravindra karale",
-          email: "ravindra@stack-avenue.com"
-        }
-      },
-      {
-        attachments: [
-          {
-            attachment_id: 2,
-            imge_url:
-              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
-          },
-          {
-            attachment_id: 3,
-            imge_url:
-              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
-          }
-        ],
-        comments: '"This is for the testing of task"',
-        id: 4,
-        task_id: 222,
-        user_id: 1,
-        user: {
-          id: 1,
-          name: "ravindra karale",
-          email: "ravindra@stack-avenue.com"
-        }
-      }
-    ];
-
     this.state = {
       color: "#ffffff",
       showTimerMenu: false,
@@ -122,7 +50,8 @@ class TaskInfoModal extends Component {
       timeFrom: null,
       timeTo: null,
       fromDateTime: null,
-      toDateTime: null
+      toDateTime: null,
+      trackTimeError: null
     };
   }
 
@@ -328,7 +257,7 @@ class TaskInfoModal extends Component {
   editTimeTrack = async () => {
     if (this.state.fromDateTime && this.state.toDateTime) {
       try {
-        // this.setState({ taskloader: true });
+        this.setState({ taskloader: true, trackTimeError: null });
         let trackedTime = {
           start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
           end_time: new Date(this.state.toDateTime.format(FULL_DATE))
@@ -349,7 +278,12 @@ class TaskInfoModal extends Component {
           editLog: false
         });
       } catch (e) {
-        this.setState({ taskloader: false });
+        if (e.response.status == 400) {
+          this.setState({
+            trackTimeError: e.response.data.errors,
+            taskloader: false
+          });
+        }
       }
     }
   };
@@ -818,6 +752,17 @@ class TaskInfoModal extends Component {
                   )}
                 </div>
               </div>
+
+              {this.state.trackTimeError && this.state.editLog ? (
+                <div className="col-md-12 no-padding">
+                  <div
+                    className="col-md-10 d-inline-block error"
+                    style={{ textAlign: "center" }}
+                  >
+                    {this.state.trackTimeError}
+                  </div>
+                </div>
+              ) : null}
 
               <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">

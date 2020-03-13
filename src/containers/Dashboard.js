@@ -889,7 +889,6 @@ class Dashboard extends Component {
   };
 
   timeTrackUpdate = log => {
-    debugger;
     if (log) {
       let date = moment(log.start_date).format(DATE_FORMAT1);
       var taskEvent = this.state.taskEvent;
