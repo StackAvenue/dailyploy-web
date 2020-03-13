@@ -62,6 +62,7 @@ class ReportTable extends Component {
           tasks={tasks}
           date={date}
           frequency={this.props.frequency}
+          timeTrackUpdate={this.props.timeTrackUpdate}
         />
       );
     });
