@@ -37,17 +37,17 @@ class DashboardEvent extends Component {
     };
   }
 
-  async componentDidMount() {
-    var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
-    var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
-    if (taskId === this.props.event.id && startOn !== "") {
-      this.setState({
-        status: true,
-        startOn: startOn
-        // icon: "pause"
-      });
-    }
-  }
+  // async componentDidMount() {
+  //   var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
+  //   var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
+  //   if (taskId === this.props.event.id && startOn !== "") {
+  //     this.setState({
+  //       status: true,
+  //       startOn: startOn
+  //       // icon: "pause"
+  //     });
+  //   }
+  // }
 
   // handleClick = async event => {
   //   console.log(this.props.state.status);
@@ -82,30 +82,30 @@ class DashboardEvent extends Component {
   //   });
   // };
 
-  setLocalStorageValue = startOn => {
-    localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
-    localStorage.setItem(
-      `taskId-${this.props.workspaceId}`,
-      this.props.event.id
-    );
-    localStorage.setItem(
-      `colorCode-${this.props.workspaceId}`,
-      this.props.bgColor
-    );
-    localStorage.setItem(
-      `taskTitle-${this.props.workspaceId}`,
-      this.props.titleText
-    );
-  };
+  // setLocalStorageValue = startOn => {
+  //   localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
+  //   localStorage.setItem(
+  //     `taskId-${this.props.workspaceId}`,
+  //     this.props.event.id
+  //   );
+  //   localStorage.setItem(
+  //     `colorCode-${this.props.workspaceId}`,
+  //     this.props.bgColor
+  //   );
+  //   localStorage.setItem(
+  //     `taskTitle-${this.props.workspaceId}`,
+  //     this.props.titleText
+  //   );
+  // };
 
-  handleReset = () => {
-    clearInterval(this.timer);
-    this.setState({ runningTime: 0, status: false, startOn: "" });
-    localStorage.setItem(`startOn-${this.props.workspaceId}`, "");
-    localStorage.setItem(`taskId-${this.props.workspaceId}`, "");
-    localStorage.setItem(`colorCode-${this.props.workspaceId}`, "");
-    localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "");
-  };
+  // handleReset = () => {
+  //   clearInterval(this.timer);
+  //   this.setState({ runningTime: 0, status: false, startOn: "" });
+  //   localStorage.setItem(`startOn-${this.props.workspaceId}`, "");
+  //   localStorage.setItem(`taskId-${this.props.workspaceId}`, "");
+  //   localStorage.setItem(`colorCode-${this.props.workspaceId}`, "");
+  //   localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "");
+  // };
 
   showEventPopUp = () => {
     this.setState({ showPopup: !this.state.showPopup });
@@ -308,7 +308,9 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none"
                       }}
-                      className="day-task-play-btn pointer"
+                      className={`day-task-play-btn pointer ${
+                        state.isPlayPause ? "disabled" : ""
+                      }`}
                       onClick={() =>
                         this.props.handleTaskStop(event, Date.now())
                       }
@@ -327,10 +329,12 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none"
                       }}
-                      className="day-task-play-btn pointer"
                       onClick={() =>
                         this.props.handleTaskStart(event, Date.now())
                       }
+                      className={`day-task-play-btn pointer ${
+                        state.isPlayPause ? "disabled" : ""
+                      }`}
                     >
                       <i className="fa fa-power-off"></i>
                     </span>
@@ -346,7 +350,9 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none"
                       }}
-                      className="day-task-play-btn pointer"
+                      className={`day-task-play-btn pointer ${
+                        state.isPlayPause ? "disabled" : ""
+                      }`}
                       onClick={() =>
                         this.props.handleTaskStart(event, Date.now())
                       }
@@ -476,7 +482,9 @@ class DashboardEvent extends Component {
                         ? ""
                         : "none"
                     }}
-                    className="task-play-btn pointer"
+                    className={`task-play-btn pointer ${
+                      state.isPlayPause ? "disabled" : ""
+                    }`}
                     onClick={() => this.props.handleTaskStop(event, Date.now())}
                   >
                     <i className="fa fa-pause"></i>
@@ -493,7 +501,9 @@ class DashboardEvent extends Component {
                         ? ""
                         : "none"
                     }}
-                    className="task-play-btn pointer"
+                    className={`task-play-btn pointer ${
+                      state.isPlayPause ? "disabled" : ""
+                    }`}
                     onClick={() =>
                       this.props.handleTaskStart(event, Date.now())
                     }
@@ -511,7 +521,9 @@ class DashboardEvent extends Component {
                         ? ""
                         : "none"
                     }}
-                    className="task-play-btn pointer"
+                    className={`task-play-btn pointer ${
+                      state.isPlayPause ? "disabled" : ""
+                    }`}
                     onClick={() =>
                       this.props.handleTaskStart(event, Date.now())
                     }

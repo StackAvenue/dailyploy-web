@@ -113,7 +113,8 @@ class Dashboard extends Component {
       trackingEvent: null,
       taskloader: false,
       task: [],
-      validateTimefrom: null
+      validateTimefrom: null,
+      isPlayPause: false
     };
   }
 
@@ -1563,6 +1564,7 @@ class Dashboard extends Component {
   };
 
   handleTaskStart = async (eventTask, dateTime) => {
+    this.setState({ isPlayPause: true });
     if (this.state.status && this.state.trackingEvent) {
       this.handleTaskStop(this.state.trackingEvent, Date.now());
     }
@@ -1601,7 +1603,8 @@ class Dashboard extends Component {
           startOn: dateTime,
           taskId: eventTask.id,
           trackingEvent: event,
-          events: events
+          events: events,
+          isPlayPause: false
         });
       } catch (e) {}
     }
