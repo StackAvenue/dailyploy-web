@@ -8,12 +8,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import Loader from "react-loader-spinner";
 import DailyPloySelect from "./../DailyPloySelect";
+import ImageUploader from "react-images-upload";
+import CommentUpload from "./../../components/dashboard/CommentUpload";
 
 class AddTaskModal extends React.Component {
   constructor(props) {
     super(props);
     this.calendarFromRef = React.createRef();
     this.calendarToRef = React.createRef();
+    this.onImageDropRef = React.createRef();
     this.state = {
       members: [],
       project: "",
@@ -28,12 +31,10 @@ class AddTaskModal extends React.Component {
       notFound: "hide",
       memberNotFound: "hide",
       taskName: "",
-      comments: ""
+      comments: "",
+      pictures: []
     };
   }
-  // componentDidMount() {
-  //   this.nameInput.focus();
-  // }
 
   focusInput = component => {
     if (component) {
@@ -100,6 +101,17 @@ class AddTaskModal extends React.Component {
 
   onBlurComment = () => {
     this.props.handleTaskNameChange("comments", this.state.comments);
+  };
+
+  handleImageRef = () => {
+    this.onImageDropRef.current.inputElement.click();
+  };
+
+  onImageDrop = picture => {
+    console.log("picture", picture);
+    this.setState({
+      pictures: this.state.pictures.concat(picture)
+    });
   };
 
   render() {
@@ -419,16 +431,16 @@ class AddTaskModal extends React.Component {
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Comments</div>
                 <div className="col-md-10">
-                  <textarea
-                    name="comments"
-                    value={props.state.comments}
-                    onChange={props.handleInputChange}
-                    // value={this.state.comments}
-                    // onChange={e => this.handleInputChange(e)}
-                    // onBlur={this.onBlurComment}
-                    className="form-control"
-                    rows="2"
-                    placeholder="Write Here..."
+                  <CommentUpload
+                    state={this.state}
+                    showSave={props.state.taskButton === "Add" ? false : true}
+                    showAttachIcon={
+                      props.state.taskButton === "Add" ? false : true
+                    }
+                    defaultComments={props.state.comments}
+                    handleInputChange={this.props.handleInputChange}
+                    showSave={false}
+                    showAttachIcon={false}
                   />
                 </div>
               </div>

@@ -20,7 +20,8 @@ import {
   DEFAULT_PRIORITIE,
   DATE_FORMAT1,
   HRMIN,
-  FULL_DATE
+  FULL_DATE,
+  DATE_FORMAT5
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -114,6 +115,7 @@ class Dashboard extends Component {
       taskloader: false,
       task: [],
       validateTimefrom: null,
+      taskComments: null,
       isPlayPause: false
     };
   }
@@ -387,6 +389,22 @@ class Dashboard extends Component {
       console.log("error", e);
     }
 
+    // if (!taskRunningObj.status && trackingEvent == null) {
+    //   try {
+    //     const { data } = await get(`workspaces/${workspaceId}/running_task`);
+    //     var task = data.task;
+    //     trackingEvent = this.createTaskObject(
+    //       task,
+    //       { id: loggedInData.id },
+    //       moment(task.start_datetime).format(DATE_FORMAT1)
+    //     );
+    //     taskRunningObj["status"] = true;
+    //     taskRunningObj["taskId"] = task.id;
+    //   } catch (e) {
+    //     console.log("users Error", e);
+    //   }
+    // }
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -486,9 +504,11 @@ class Dashboard extends Component {
         ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
         : moment(task.created_at).format("HH.mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
-    let dateFormattedTimeTracks = task.date_formatted_time_tracks.find(
-      dateLog => dateLog.date == dateWiseTasksDate
-    );
+    let dateFormattedTimeTracks = task.date_formatted_time_tracks
+      ? task.date_formatted_time_tracks.find(
+          dateLog => dateLog.date == dateWiseTasksDate
+        )
+      : null;
     return {
       date: dateWiseTasksDate,
       id: newTaskId,
@@ -894,6 +914,62 @@ class Dashboard extends Component {
     }
   };
 
+  // saveComments = async (comments, attachments) => {
+  //   this.setState({ isLoading: true });
+  //   try {
+  //     let fd = new FormData();
+  //     attachments.forEach(image => {
+  //       fd.append("attachments[]", image, image.name);
+  //     });
+  //     fd.append("user_id", this.state.userId);
+  //     fd.append("task_id", this.state.taskEvent.taskId);
+  //     fd.append("comments", comments);
+  //     const { data } = await post(fd, `comment`);
+  //     var comment = data;
+  //     comment["user"] = {
+  //       id: this.state.userId,
+  //       name: this.state.userName,
+  //       email: this.state.userEmail
+  //     };
+  //     var taskComments = [comment, ...this.state.taskComments];
+  //     this.setState({ taskComments: taskComments, isLoading: false });
+  //   } catch (e) {
+  //     this.setState({ isLoading: false });
+  //   }
+  // };
+
+  updateTaskComments = comments => {
+    this.setState({ taskComments: comments });
+  };
+
+  // updateComments = async (commnetId, comments, attachments) => {
+  //   try {
+  //     this.setState({ isLoading: true });
+  //     let fd = new FormData();
+  //     attachments.forEach(image => {
+  //       fd.append("attachments[]", image, image.name);
+  //     });
+  //     fd.append("user_id", this.state.userId);
+  //     fd.append("task_id", this.state.taskEvent.taskId);
+  //     fd.append("comments", comments);
+  //     const { data } = await put(fd, `comment/${commnetId}`);
+  //     var comment = data;
+  //     var taskComments = this.state.taskComments.filter(c => c.id != commnetId);
+  //     var taskComments = [...taskComments, comment];
+  //     this.setState({ taskComments: taskComments, isLoading: false });
+  //   } catch (e) {
+  //     this.setState({ isLoading: false });
+  //   }
+  // };
+
+  deleteComments = async comment => {
+    try {
+      const { data } = await del(`comment/${comment.id}`);
+      var taskComments = this.state.taskComments.filter(c => c.id !== data.id);
+      this.setState({ taskComments: taskComments });
+    } catch (e) {}
+  };
+
   handleInputChange = e => {
     const { name, value } = e.target;
     var errors = this.state.errors;
@@ -1177,6 +1253,7 @@ class Dashboard extends Component {
     var selectedMembers = this.state.users.filter(member =>
       memberIds.includes(member.id)
     );
+    var taskComments = null;
     try {
       const { data } = await get(`tasks/${taskId}`);
       // var startDate = convertUTCToLocalDate(data.start_datetime);
@@ -1195,6 +1272,7 @@ class Dashboard extends Component {
             .replace(/-/g, "/")
         )
       );
+      taskComments = data.task_comments;
       var startTime = moment(startDate).format("HH:mm:ss");
       var endTime = moment(endDate).format("HH:mm:ss");
       var taskCategorie = data.category;
@@ -1229,7 +1307,8 @@ class Dashboard extends Component {
         memberProjects: memberProjects,
         taskEvent: event,
         timeTracked: timeTracked,
-        taskPrioritie: taskPrioritie
+        taskPrioritie: taskPrioritie,
+        taskComments: taskComments
       });
     }
   };
@@ -2153,6 +2232,7 @@ class Dashboard extends Component {
               handlePrioritiesChange={this.handlePrioritiesChange}
               addCategory={this.addCategory}
               handleTaskNameChange={this.handleTaskNameChange}
+              saveComments={this.saveComments}
             />
 
             <TaskInfoModal
@@ -2169,6 +2249,9 @@ class Dashboard extends Component {
               handleTaskStartTop={this.handleTaskStartTop}
               handleTaskStart={this.handleTaskStart}
               handleTaskStop={this.handleTaskStop}
+              updateTaskComments={this.updateTaskComments}
+              deleteComments={this.deleteComments}
+              updateComments={this.updateComments}
             />
             {this.state.taskConfirmModal ? (
               <TaskConfirm

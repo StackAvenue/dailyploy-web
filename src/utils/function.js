@@ -1,6 +1,7 @@
 import moment from "moment";
 import cookie from "react-cookies";
 import { DATE_FORMAT1, FULL_DATE } from "./Constants";
+import { isSafari } from "react-device-detect";
 
 export const getWeekFisrtDate = date => {
   return moment(date)
@@ -40,6 +41,27 @@ export const workspaceNameSplit = name => {
 export const convertUTCToLocalDate = date => {
   var newdate = new Date(date.replace(/-/g, "/"));
   return new Date(newdate.getTime() + newdate.getTimezoneOffset() * 60 * 1000);
+};
+
+export const convertUTCDateToLocalDate = date => {
+  // var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  // var offset = date.getTimezoneOffset() / 60;
+  // var hours = date.getHours();
+  // newDate.setHours(hours - offset);
+  // return newDate;
+
+  //UTC time converted to Local time
+
+  if (isSafari) {
+    date = new Date(date);
+  } else {
+    date = new Date(date);
+    var localOffset = date.getTimezoneOffset() * 60000;
+    var localTime = date.getTime();
+    date = localTime - localOffset;
+    date = new Date(date);
+  }
+  return date;
 };
 
 export const getWorkspaceId = () => {

@@ -4,10 +4,25 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
-import { post, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT2, DATE_FORMAT1 } from "./../../utils/Constants";
+import { post, mockGet, put } from "../../utils/API";
+import ImgsViewer from "react-images-viewer";
+import {
+  DATE_FORMAT2,
+  DATE_FORMAT1,
+  DATE_FORMAT3,
+  DATE_FORMAT6,
+  HRMIN,
+  FULL_DATE_FORMAT3,
+  FULL_DATE_FORMAT1,
+  FULL_DATE
+} from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
-import { convertUTCToLocalDate } from "../../utils/function";
+import {
+  convertUTCToLocalDate,
+  convertUTCDateToLocalDate,
+  firstTwoLetter
+} from "../../utils/function";
+import CommentUpload from "./../../components/dashboard/CommentUpload";
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -16,44 +31,92 @@ class TaskInfoModal extends Component {
       name: "high",
       color_code: "#00A031"
     };
-    this.state = {
-      color: "#ffffff",
-      showTimerMenu: false
-    };
-  }
-
-  async markCompleteTask() {
-    const eventTaskId = this.props.state.taskEvent.id;
-    if (eventTaskId) {
-      try {
-        const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete;
-      } catch (e) {}
-      if (isComplete) {
-        var taskId = localStorage.getItem(
-          `taskId-${this.props.state.workspaceId}`
-        );
-        this.handleReset();
-        this.props.handleTaskPlay("check");
-        if (eventTaskId === taskId) {
-          this.props.handleTaskBottomPopup("", null, "stop");
+    this.comments = [
+      {
+        attachments: [
+          {
+            attachment_id: 2,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
+          },
+          {
+            attachment_id: 3,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
+          }
+        ],
+        comments: "This is for the testing of task",
+        id: 1,
+        task_id: 222,
+        user_id: 1,
+        user: {
+          id: 1,
+          name: "ravindra karale",
+          email: "ravindra@stack-avenue.com"
+        }
+      },
+      {
+        attachments: [
+          {
+            attachment_id: 2,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
+          },
+          {
+            attachment_id: 3,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
+          }
+        ],
+        comments: '"This is for the testing of task"',
+        id: 2,
+        task_id: 222,
+        user_id: 1,
+        user: {
+          id: 1,
+          name: "ravindra karale",
+          email: "ravindra@stack-avenue.com"
+        }
+      },
+      {
+        attachments: [
+          {
+            attachment_id: 2,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/logo1.png"
+          },
+          {
+            attachment_id: 3,
+            imge_url:
+              "https://dailyploy-csv.s3.ap-south-1.amazonaws.com/uploads/attachments/tiger.jpeg"
+          }
+        ],
+        comments: '"This is for the testing of task"',
+        id: 4,
+        task_id: 222,
+        user_id: 1,
+        user: {
+          id: 1,
+          name: "ravindra karale",
+          email: "ravindra@stack-avenue.com"
         }
       }
-    }
-  }
+    ];
 
-  async resumeCompletedTask() {
-    const eventTaskId = this.props.state.taskEvent.id;
-    if (eventTaskId) {
-      try {
-        const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete;
-      } catch (e) {}
-      if (isComplete) {
-        // this.setState({ icon: "play" })
-        this.props.handleTaskPlay("play");
-      }
-    }
+    this.state = {
+      color: "#ffffff",
+      showTimerMenu: false,
+      editableComment: null,
+      commentId: null,
+      viewerIsOpen: false,
+      imge_url: null,
+      comments: "",
+      editedComments: "",
+      showBox: false,
+      pictures: [],
+      showAddBox: false,
+      taskloader: false
+    };
   }
 
   isToday = () => {
@@ -135,23 +198,6 @@ class TaskInfoModal extends Component {
     return props.taskEvent.resourceId === props.userId;
   };
 
-  async saveTaskTrackingTime(endOn) {
-    var taskData = {
-      startdate: new Date(this.state.startOn),
-      enddate: new Date(endOn)
-    };
-    try {
-      const { data } = await mockPost(taskData, "task-track");
-      if (data) {
-        var timeArr = [this.state.timeArr, ...[]];
-        var sTime = moment(data.startdate).format("HH:mm");
-        var eTime = moment(data.enddate).format("HH:mm");
-        timeArr.push(`${sTime} - ${eTime}`);
-        this.setState({ timeArr: timeArr });
-      }
-    } catch (e) {}
-  }
-
   handleReset = () => {
     clearInterval(this.timer);
     this.setState({ runningTime: 0, status: false, startOn: "" });
@@ -206,10 +252,162 @@ class TaskInfoModal extends Component {
     }
   };
 
+  editComments = comment => {
+    this.setState({
+      commentId: comment.id,
+      editableComment: comment,
+      editedComments: comment.comments
+    });
+  };
+
+  saveComments = async () => {
+    if (this.state.comments) {
+      this.setState({ taskloader: true });
+      try {
+        let fd = new FormData();
+        this.state.pictures.forEach(image => {
+          fd.append("attachments[]", image, image.name);
+        });
+        fd.append("user_id", this.props.state.userId);
+        fd.append("task_id", this.props.state.taskEvent.taskId);
+        fd.append("comments", this.state.comments);
+        const { data } = await post(fd, `comment`);
+        var comment = data;
+        var taskComments = [comment, ...this.props.state.taskComments];
+        this.props.updateTaskComments(taskComments);
+        this.setState({
+          pictures: [],
+          comments: "",
+          showBox: false,
+          taskloader: false
+        });
+      } catch (e) {
+        this.setState({ taskloader: false });
+      }
+    }
+  };
+
+  handleUpdateComments = async () => {
+    if (this.state.editedComments && this.state.editableComment) {
+      try {
+        this.setState({ taskloader: true });
+        let fd = new FormData();
+        let commnetId = this.state.editableComment.id;
+        this.state.pictures.forEach(image => {
+          fd.append("attachments[]", image, image.name);
+        });
+        fd.append("user_id", this.props.state.userId);
+        fd.append("task_id", this.props.state.taskEvent.taskId);
+        fd.append("comments", this.state.editedComments);
+        const { data } = await put(fd, `comment/${commnetId}`);
+        var taskComments = this.props.state.taskComments;
+        var comment = taskComments.find(c => c.id == commnetId);
+        comment["comments"] = data.comments;
+        comment["user"] = data.user;
+        comment["attachments"] = data.attachments;
+        this.props.updateTaskComments(taskComments);
+        this.setState({
+          taskloader: false,
+          commentId: null,
+          editedComments: "",
+          editableComment: null
+        });
+      } catch (e) {
+        this.setState({ taskloader: false });
+      }
+    }
+  };
+
+  onClickOutside = () => {
+    this.setState({
+      commentId: null,
+      editableComment: null
+    });
+  };
+
+  onClickOutsideAddCommnetBox = () => {
+    this.setState({ showAddBox: false });
+  };
+
+  onClickAddCommnetBox = () => {
+    this.setState({ showAddBox: true });
+  };
+
+  formattedSeconds = ms => {
+    var totalSeconds = ms / 1000;
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
+    return h > 0
+      ? `${h} hours ago`
+      : m > 0 && h == 0
+      ? `${m} minutes ago`
+      : s > 30 && h == 0 && m == 0
+      ? "few seconds ago"
+      : "just now";
+  };
+
+  commentsTime = comment => {
+    let date = convertUTCDateToLocalDate(
+      comment.inserted_at ? new Date(comment.inserted_at) : new Date()
+    );
+    let commentDate = moment(date);
+    let isToday =
+      commentDate.format(DATE_FORMAT1) == moment().format(DATE_FORMAT1);
+    if (isToday) {
+      let time = Date.now() - date.getTime();
+      return this.formattedSeconds(time);
+    } else {
+      return `${commentDate.format(DATE_FORMAT6)} at ${commentDate.format(
+        HRMIN
+      )}`;
+    }
+  };
+
+  titleDateTime = comment => {
+    return moment(
+      convertUTCDateToLocalDate(
+        comment.inserted_at ? new Date(comment.inserted_at) : new Date()
+      )
+    ).format(FULL_DATE_FORMAT1);
+  };
+
+  openViewImage = imge_url => {
+    if (imge_url) {
+      this.setState({
+        viewerIsOpen: true,
+        imge_url: imge_url
+      });
+    }
+  };
+
+  closeViewer = () => {
+    this.setState({
+      viewerIsOpen: false
+    });
+  };
+
+  showCommentBox = () => {
+    this.setState({ showBox: true });
+  };
+
+  updateUploadedState = pictures => {
+    this.setState({ pictures: [...this.state.pictures, ...pictures] });
+  };
+
+  removeUploadedImage = index => {
+    let pictures = this.state.pictures.filter((f, idx) => idx !== index);
+    this.setState({ pictures: pictures });
+  };
+
+  handleInputChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
   render() {
     const { props } = this;
 
-    // console.log(props.state.dateFrom, moment(props.state.dateFrom));
     return (
       <>
         <Modal
@@ -437,16 +635,163 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 row no-margin no-padding input-row text-titlize">
-                <div className="col-md-2 no-padding label">Comments</div>
-                <div className="col-md-10">
-                  <p className="left-padding-20px comments">
-                    {props.state.taskEvent.comments
-                      ? props.state.taskEvent.comments
-                      : "---"}
-                  </p>
+              <div className="col-md-12 no-padding input-row text-titlize">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Comments
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <CommentUpload
+                    save={this.saveComments}
+                    comments={this.state.comments}
+                    state={this.state}
+                    showSave={true}
+                    showBox={this.state.showAddBox}
+                    showAttachIcon={true}
+                    commentName="comments"
+                    onClickOutside={this.onClickOutsideAddCommnetBox}
+                    updateUploadedState={this.updateUploadedState}
+                    removeUploadedImage={this.removeUploadedImage}
+                    handleInputChange={this.handleInputChange}
+                    showCommentBox={this.onClickAddCommnetBox}
+                  />
                 </div>
               </div>
+              {props.state.taskComments ? (
+                <>
+                  <div className="col-md-12 no-padding input-row task-comments">
+                    {props.state.taskComments.map(comment => {
+                      return this.state.editableComment &&
+                        comment.id === this.state.commentId ? (
+                        <div
+                          className="col-md-12 no-padding"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "flex-start"
+                          }}
+                        >
+                          <div
+                            className="col-md-2 d-inline-block no-padding label"
+                            // style={{
+                            // verticalAlign: "text-top",
+                            // marginTop: "20px"
+                            // }}
+                          >
+                            <div className="comment-owner-dot">
+                              {firstTwoLetter(comment.user.name)}
+                            </div>
+                          </div>
+                          <div className="col-md-10 d-inline-block">
+                            <CommentUpload
+                              save={this.handleUpdateComments}
+                              comments={this.state.editedComments}
+                              state={this.state}
+                              showSave={true}
+                              showAttachIcon={true}
+                              showBox={true}
+                              commentName="editedComments"
+                              onClickOutside={this.onClickOutside}
+                              updateUploadedState={this.updateUploadedState}
+                              removeUploadedImage={this.removeUploadedImage}
+                              handleInputChange={this.handleInputChange}
+                              showCommentBox={this.showCommentBox}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className="col-md-12 no-padding"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "flex-start"
+                          }}
+                        >
+                          <div
+                            className="col-md-2 d-inline-block no-padding label"
+                            style={{
+                              marginTop: "20px"
+                            }}
+                          >
+                            <div className="comment-owner-dot">
+                              {firstTwoLetter(comment.user.name)}
+                            </div>
+                          </div>
+                          <div className="col-md-10 d-inline-block">
+                            <div className="commnet-card">
+                              <div
+                                className="col-md-12 no-padding"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between"
+                                }}
+                              >
+                                <div className="owner-name text-titlize">
+                                  {comment.user.name}
+                                </div>
+                                <div
+                                  className=""
+                                  style={{
+                                    fontSize: "11px",
+                                    padding: "3px 0px 0px 25px"
+                                  }}
+                                  title={this.titleDateTime(comment)}
+                                >
+                                  {this.commentsTime(comment)}
+                                </div>
+                              </div>
+                              <div className="col-md-12 comments">
+                                {comment.comments}
+                              </div>
+                              <div className="col-md-12 no-padding">
+                                {comment.attachments.map(attachment => {
+                                  return (
+                                    <>
+                                      <img
+                                        src={`${attachment.imge_url}`}
+                                        onClick={() =>
+                                          this.openViewImage(
+                                            attachment.imge_url
+                                          )
+                                        }
+                                        height="42"
+                                        width="42"
+                                        style={{
+                                          cursor: "pointer",
+                                          marginRight: "10px"
+                                        }}
+                                      ></img>
+                                    </>
+                                  );
+                                })}
+                              </div>
+                              {this.state.viewerIsOpen ? (
+                                <ImgsViewer
+                                  imgs={[{ src: `${this.state.imge_url}` }]}
+                                  isOpen={this.state.viewerIsOpen}
+                                  onClose={this.closeViewer}
+                                />
+                              ) : null}
+                              <div className="col-md-12 no-padding">
+                                <span
+                                  onClick={() => this.editComments(comment)}
+                                >
+                                  Edit
+                                </span>
+                                <span
+                                  onClick={() =>
+                                    this.props.deleteComments(comment)
+                                  }
+                                >
+                                  Delete
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : null}
             </div>
           </div>
         </Modal>

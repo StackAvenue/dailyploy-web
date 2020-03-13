@@ -854,6 +854,41 @@
     .react-datepicker-popper {
       left: -50px !important;
     }
+    .upload-files{
+      position: absolute;
+      right: 30px;
+      bottom: 5px;
+      color: $color-brand3;
+      cursor: pointer;
+    }
+    .manage-comment-file{
+      border: solid 1px #d6d6d6;
+      border-radius: 5px;
+      textarea{
+        border: none;
+      }
+    }
+    .fileUploader{
+      width: 90%;
+      .fileContainer{
+        box-shadow: none;
+        border-radius: none;
+        padding: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 10px auto;
+        transition: all 0.3s ease-in;
+        .uploadPictureContainer{
+          margin: 2%;
+          padding: 5px;
+        }
+      }
+      .chooseFileButton{
+        display: none;
+      }
+    }
   }
 }
 .member-modal {
@@ -4163,8 +4198,10 @@ table.scheduler-table tr:last-child td {
     .body {
       padding: 5px 49px 10px 49px !important;
       .input-row {
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
+        // padding-top: 15px !important;
+        // padding-bottom: 15px !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
         .label {
           font-family: $font-family-roboto;
           font-size: 15px;
@@ -4261,6 +4298,7 @@ table.scheduler-table tr:last-child td {
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
+        padding: 5px 0px;
         line-height: 1.2;
         letter-spacing: normal;
         text-align: left;
@@ -4278,6 +4316,20 @@ table.scheduler-table tr:last-child td {
       }
       .color-dot {
         margin-left: 0 !important;
+      }
+      .upload-files{
+        right: 10px !important; 
+        bottom: 0px !important;
+      }
+      .comment-owner-dot{
+        text-align: center;
+        margin: auto;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        background-color: $color-info-bg;
+        color:$color-white;
+        border-radius: 50px;
       }
     }
   }
@@ -4475,7 +4527,7 @@ table.scheduler-table tr:last-child td {
           line-height: 1.17;
           letter-spacing: normal;
           text-align: left;
-          color: $color-text1;
+          color: $color-text2;
         }
         .task-name {
           height: 15px;
@@ -5076,4 +5128,122 @@ table.scheduler-table tr:last-child td {
       }
     }
 
+}
+
+.comment-container{
+  border: solid 1px #d6d6d6;
+  border-radius: 5px;
+  textarea{
+    border: none;
+    resize: none;
+    overflow-y: hidden;
+  }
+  .save-button {
+    border-radius: 5px !important;
+    border: solid 1px $color-white !important;
+    background-color: $color-brand3 !important;
+    font-family: $font-family-roboto !important;
+    font-size: 12px !important;
+    height: 20px;
+    padding: 0px 6px;
+    color: $color-white !important;
+    margin:0px 10px 5px 5px !important;
+    width: auto !important;
+  }
+  .upload-files{
+    position: relative;
+    // float: right;
+    bottom: 5px;
+    color: $color-brand3;
+    cursor: pointer;
+  }
+  .fileUploader{
+    .fileContainer{
+      box-shadow: none;
+      border-radius: none;
+      padding: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: 10px auto;
+      transition: all 0.3s ease-in;
+      .uploadPicturesWrapper{
+        div:first-child{
+          justify-content: left !important;
+        }
+        .deleteImage{
+          position: absolute;
+          top: -12px;
+          right: -9px;
+          color: #da8383;
+          background-color: #ffffff;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 14px;
+          width: 15px;
+          height: 15px;
+        }
+      }
+      .uploadPictureContainer{
+        margin: 2%;
+        padding: 5px;
+        width: 15%;
+      }
+    }
+    .chooseFileButton{
+      display: none;
+    }
+  }
+  .uploded-img{
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+    .img-container{
+      .close-icon{
+        position: relative;
+        top: -12px;
+      }
+      img{
+        padding: 5px;
+      }
+      padding: 5px;
+    }
+  }
+  .comment-action{
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+}
+.task-comments{
+  // border: solid 1px #d6d6d6;
+  padding: 5px;
+  overflow-y: scroll;
+  height: auto;
+  max-height: 220px;
+  span{
+    padding: 0px 10px 0px 0px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .commnet-card{
+    padding: 10px;
+    margin: 5px 0px;
+    .owner-name{
+      color:  $color-text1;
+      font-weight: 500;
+    }
+    .comments{
+      font-size: 14px;
+      color: $color-text2;
+    }
+  }
+  .upload-files{
+    position: relative;
+    bottom: 5px;
+    font-size: 16px;
+    padding: 0px;
+    color: $color-brand3;
+    cursor: pointer;
+  }
 }
