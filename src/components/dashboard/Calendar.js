@@ -162,7 +162,8 @@ class Calendar extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (
       this.props.resources == nextProps.resources &&
-      this.props.events == nextProps.events
+      this.props.events == nextProps.events &&
+      this.props.state.isPlayPause == nextProps.state.isPlayPause
     ) {
       return false;
     } else {
