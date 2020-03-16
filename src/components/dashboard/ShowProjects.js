@@ -1,17 +1,23 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, logout, put, del } from "../../utils/API";
+import { get, post, logout, put, del } from "../../utils/API";
 import MenuBar from "./MenuBar";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import GridBlock from "./ProjectViews/GridBlock";
 import AddProjectModal from "./AddProjectModal";
 import { firstTwoLetter, textTitlize } from "../../utils/function";
+import {
+  validateName,
+  validateEmail,
+  validatePhone
+} from "../../utils/validation";
 import DailyPloyToast from "../DailyPloyToast";
 import ConfirmModal from "./../ConfirmModal";
 import moment from "moment";
 import { toast } from "react-toastify";
 import cookie from "react-cookies";
 import "react-tabs/style/react-tabs.css";
+import { connect } from "react-redux";
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -50,7 +56,16 @@ class ShowProjects extends Component {
       worksapceUsers: [],
       selectProjectArr: [],
       isAllChecked: false,
-      showConfirm: false
+      showConfirm: false,
+      contacts: [
+        {
+          name: "",
+          email: "",
+          phone_number: ""
+        }
+      ],
+      editNewCommnets: [],
+      editCommnets: []
     };
   }
 
@@ -253,7 +268,8 @@ class ShowProjects extends Component {
     }
   };
 
-  handleEditShow = project => {
+  handleEditShow = async project => {
+    // var contacts = this.returnContacts(project);
     this.setState({
       show: true,
       setShow: true,
@@ -265,7 +281,49 @@ class ShowProjects extends Component {
       background: project.color_code,
       selectedTags: project.members,
       projectMembers: project.members.map(project => project.id)
+      // contacts: contacts
     });
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects/${project.id}/contact`
+      );
+      var contacts = this.returnContacts(data.contacts);
+      this.setState({ contacts: contacts });
+    } catch (e) {}
+  };
+
+  returnContacts = contacts => {
+    if (contacts) {
+      return contacts.map(contact => {
+        return {
+          name: contact.name,
+          email: contact.email,
+          phone_number: contact.phone_number,
+          id: contact.id
+        };
+      });
+    }
+    return [
+      {
+        name: "",
+        email: "",
+        phone_number: ""
+      }
+    ];
+  };
+
+  makeEditContact = contact => {
+    var contacts = this.state.contacts;
+    var contact = contacts.find(c => c.id == contact.id);
+    contact["title"] = "edit";
+    this.setState({ contacts: contacts });
+  };
+
+  backToList = contact => {
+    var contacts = this.state.contacts;
+    var contact = contacts.find(c => c.id == contact.id);
+    contact["title"] = "";
+    this.setState({ contacts: contacts });
   };
 
   handleDateToDisable = project => {
@@ -521,6 +579,128 @@ class ShowProjects extends Component {
         </div>
       );
     }
+  };
+
+  updateContact = async idx => {
+    var contact = this.state.contacts.find((contact, id) => id == idx);
+    if (this.validateContackts(contact, idx, "contacts")) {
+      try {
+        const { data } = await put(
+          contact,
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/contact/${contact.id}`
+        );
+        var contacts = this.state.contacts;
+        var contact = contacts.find((contact, id) => id == idx);
+        contact["name"] = data.name;
+        contact["phone_number"] = data.phone_number;
+        contact["email"] = data.email;
+        contact["title"] = "";
+        this.setState({ contacts: contacts });
+      } catch (e) {}
+    }
+  };
+
+  deleteContact = async contact => {
+    try {
+      const { data } = await del(
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/contact/${contact.id}`
+      );
+      let contacts = this.state.contacts.filter(c => c.id != contact.id);
+      this.setState({ contacts: contacts });
+    } catch (e) {}
+  };
+
+  addNewContact = async idx => {
+    var contact = this.state.editNewCommnets.find(
+      (contact, index) => index == idx
+    );
+    if (this.validateContackts(contact, idx, "editNewCommnets")) {
+      try {
+        const { data } = await post(
+          contact,
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/contact`
+        );
+        let editNewCommnets = this.state.editNewCommnets.filter(
+          (contact, index) => index != idx
+        );
+        var contacts = [...this.state.contacts, ...this.returnContacts([data])];
+        this.setState({ contacts: contacts, editNewCommnets: editNewCommnets });
+      } catch (e) {}
+    }
+  };
+
+  validateContackts = (contact, idx, state) => {
+    var flag = true;
+    var contacts = this.state[state];
+    contacts
+      .filter((c, index) => index == idx)
+      .map(contact => {
+        let nm = validateName(contact.name);
+        let em = validateEmail(contact.email);
+        let ph = validatePhone(contact.phone_number);
+        if (nm) {
+          contact["nameError"] = nm;
+          flag = false;
+        } else {
+          contact["nameError"] = null;
+        }
+        if (em) {
+          contact["emailError"] = em;
+          flag = false;
+        } else {
+          contact["emailError"] = null;
+        }
+        if (ph) {
+          contact["phoneError"] = ph;
+          flag = false;
+        } else {
+          contact["phoneError"] = null;
+        }
+        return contact;
+      });
+    this.setState({
+      [state]: contacts
+    });
+    return flag;
+  };
+
+  handleContactChangeInput = (e, idx, state) => {
+    const { name, value } = e.target;
+    var contacts = this.state[state];
+    let contact = contacts.find((contact, index) => idx === index);
+    contact[name] = value;
+    this.setState({
+      [state]: contacts
+    });
+  };
+
+  addContactsRow = () => {
+    var contacts = this.state.editNewCommnets;
+    contacts.push({
+      name: "",
+      email: "",
+      phone_number: "",
+      title: "add"
+    });
+    this.setState({
+      editNewCommnets: contacts
+    });
+  };
+
+  removeContactsRow = idx => {
+    let contacts = this.state.contacts.filter((contact, index) => idx != index);
+    this.setState({
+      contacts: contacts
+    });
+  };
+
+  removeEditNewContactsRow = idx => {
+    let contacts = this.state.editNewCommnets.filter(
+      (contact, index) => idx != index
+    );
+    this.setState({
+      editNewCommnets: contacts
+    });
   };
 
   render() {
@@ -809,6 +989,15 @@ class ShowProjects extends Component {
             handleChangeMember={this.handleChangeMember}
             emailOptions={this.state.isLogedInUserEmailArr}
             addProject={this.editProject}
+            handleContactChangeInput={this.handleContactChangeInput}
+            addContactsRow={this.addContactsRow}
+            removeContactsRow={this.removeContactsRow}
+            deleteContact={this.deleteContact}
+            updateContact={this.updateContact}
+            makeEditContact={this.makeEditContact}
+            backToList={this.backToList}
+            removeEditNewContactsRow={this.removeEditNewContactsRow}
+            addNewContact={this.addNewContact}
           />
         ) : null}
       </>

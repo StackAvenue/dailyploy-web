@@ -563,7 +563,8 @@
 }
 .project-modal {
   margin: auto !important;
-  top: 9% !important;
+  top: 2% !important;
+  // top: 9% !important;
   .modal-content {
     width: 658px;
     padding-bottom: 20px;
@@ -586,7 +587,7 @@
     .body {
       padding: 5px 49px 10px 49px !important;
       .input-row {
-        padding-top: 20px !important;
+        padding-top: 10px !important;
         .label {
           font-family: $font-family-roboto;
           font-size: 15px;
