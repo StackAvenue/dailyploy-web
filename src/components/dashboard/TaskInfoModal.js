@@ -25,6 +25,7 @@ import {
 } from "../../utils/function";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 import ConfirmModal from "./../ConfirmModal";
+import Loader from "react-loader-spinner";
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class TaskInfoModal extends Component {
       pictures: [],
       showAddBox: false,
       taskloader: false,
+      timeTrackEditLoader: false,
       editableLog: null,
       editLog: false,
       timeFrom: null,
@@ -259,7 +261,7 @@ class TaskInfoModal extends Component {
   editTimeTrack = async () => {
     if (this.state.fromDateTime && this.state.toDateTime) {
       try {
-        this.setState({ taskloader: true, trackTimeError: null });
+        this.setState({ timeTrackEditLoader: true, trackTimeError: null });
         let trackedTime = {
           start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
           end_time: new Date(this.state.toDateTime.format(FULL_DATE))
@@ -270,7 +272,7 @@ class TaskInfoModal extends Component {
         );
         this.props.timeTrackUpdate(data, "edit");
         this.setState({
-          taskloader: false,
+          timeTrackEditLoader: false,
           timeFrom: null,
           timeTo: null,
           fromDateTime: null,
@@ -282,7 +284,7 @@ class TaskInfoModal extends Component {
         if (e.response.status == 400) {
           this.setState({
             trackTimeError: e.response.data.errors,
-            taskloader: false
+            timeTrackEditLoader: false
           });
         }
       }
@@ -785,7 +787,9 @@ class TaskInfoModal extends Component {
                           <i className="far fa-arrow-alt-circle-left"></i>
                         </div>
                         <div
-                          className="col-md-1 d-inline-block"
+                          className={`col-md-1 d-inline-block ${
+                            this.state.timeTrackEditLoader ? "disabled" : ""
+                          }`}
                           onClick={this.editTimeTrack}
                           title={"Edit"}
                           style={{
@@ -793,6 +797,16 @@ class TaskInfoModal extends Component {
                           }}
                         >
                           <i className="fa fa-check" aria-hidden="true"></i>
+                          {this.state.timeTrackEditLoader ? (
+                            <Loader
+                              type="Oval"
+                              color="#33a1ff"
+                              height={20}
+                              width={20}
+                              style={{ paddingLeft: "25px", top: "0px" }}
+                              className="d-inline-block login-signup-loader"
+                            />
+                          ) : null}
                         </div>
                       </>
                     )
