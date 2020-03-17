@@ -33,7 +33,9 @@ class TaskConfirm extends Component {
       status: false,
       color: "#ffffff",
       selected: "",
-      trackSaved: false
+      trackSaved: false,
+      showContacts: false,
+      selectContactArr: []
     };
   }
 
@@ -187,6 +189,54 @@ class TaskConfirm extends Component {
     }
   };
 
+  toggleCheckBox = () => {
+    this.setState({ showContacts: !this.state.showContacts });
+  };
+
+  handleCheck = (e, contact) => {
+    let checked = e.target.checked;
+    let arrContact = [];
+    if (checked) {
+      arrContact = [...this.state.selectContactArr, ...[contact]];
+    } else {
+      let filterContactArr = this.state.selectContactArr.filter(
+        item => item.id !== contact.id
+      );
+      arrContact = filterContactArr;
+    }
+    this.setState({
+      selectContactArr: arrContact
+    });
+  };
+
+  handleCheckAll = (e, contacts) => {
+    const allCheckboxChecked = e.target.checked;
+    var arrContacts;
+    if (allCheckboxChecked === true) {
+      arrContacts = contacts;
+    } else {
+      arrContacts = [];
+    }
+    var checkboxes = document.getElementsByName("isContactChecked");
+    if (allCheckboxChecked) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === false) {
+          checkboxes[i].checked = true;
+        }
+      }
+    } else {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === true) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+    this.setState({
+      selectContactArr: arrContacts,
+      showContacts: allCheckboxChecked
+    });
+  };
+
   render() {
     const { props } = this;
     let ligTimes = this.props.state.taskEvent.timeTracked.map((opt, idx) => {
@@ -311,6 +361,47 @@ class TaskConfirm extends Component {
                 </div>
               </div>
             ) : null}
+            <div className="col-md-12 contact no-padding">
+              <div className="contact-labal-checkbox no-padding">
+                <label>
+                  <span>Contacts</span>
+                  <input
+                    type="checkbox"
+                    name="isContactChecked"
+                    onChange={e =>
+                      this.handleCheckAll(e, this.props.state.taskContacts)
+                    }
+                    style={{
+                      margin: "0px 20px"
+                    }}
+                  />
+                </label>
+              </div>
+              <div
+                className={`contact-checkbox no-padding ${
+                  this.state.showContacts ? "show" : "hide"
+                }`}
+              >
+                {this.props.state.taskContacts.map(contact => {
+                  return (
+                    <div className="no-padding contact-check text-titlize">
+                      <label>
+                        <input
+                          type="checkbox"
+                          id={`contact-checkbox-${contact.id}`}
+                          name="isContactChecked"
+                          onChange={e => this.handleCheck(e, contact)}
+                          style={{
+                            margin: "0px 20px"
+                          }}
+                        />
+                        <span>{contact.name}</span>
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className="col-md-12 task-details no-padding">
               <span>Task Details</span>
@@ -455,7 +546,12 @@ class TaskConfirm extends Component {
                   type="button"
                   disabled={`${this.props.state.taskloader ? "disabled" : ""}`}
                   className=" mark-btn pull-right btn-primary text-titlize"
-                  onClick={() => props.taskMarkComplete(props.state.taskEvent)}
+                  onClick={() =>
+                    props.taskMarkComplete(
+                      props.state.taskEvent,
+                      this.state.selectContactArr
+                    )
+                  }
                 >
                   {props.state.confirmModalText}
                   {this.props.state.taskloader ? (

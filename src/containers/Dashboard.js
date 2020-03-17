@@ -116,7 +116,8 @@ class Dashboard extends Component {
       task: [],
       validateTimefrom: null,
       taskComments: null,
-      isPlayPause: false
+      isPlayPause: false,
+      taskContacts: []
     };
   }
 
@@ -841,7 +842,8 @@ class Dashboard extends Component {
         timeToError: "",
         categoryError: ""
       },
-      taskloader: false
+      taskloader: false,
+      taskContacts: []
     });
   };
 
@@ -1341,6 +1343,16 @@ class Dashboard extends Component {
         taskComments: taskComments
       });
     }
+    this.loadTaskContackts(event.projectId);
+  };
+
+  loadTaskContackts = async projectId => {
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects/${projectId}/contact`
+      );
+      this.setState({ taskContacts: data.contacts });
+    } catch (e) {}
   };
 
   taskInfoEdit = () => {
@@ -1371,7 +1383,7 @@ class Dashboard extends Component {
     });
   };
 
-  taskMarkComplete = async event => {
+  taskMarkComplete = async (event, contacts) => {
     if (event) {
       let start = moment(convertUTCToLocalDate(event.start)).format("HH:mm");
       let end = moment(convertUTCToLocalDate(event.end)).format("HH:mm");
@@ -1380,7 +1392,7 @@ class Dashboard extends Component {
         (this.state.logTimeFrom && this.state.logTimeTo) ||
         (start != "00:00" && end != "00:00")
       ) {
-        let searchData = {
+        var searchData = {
           task: {
             status: "completed"
           }
@@ -1403,6 +1415,10 @@ class Dashboard extends Component {
           this.state.trackingEvent.taskId == event.taskId
         ) {
           this.handleTaskStop(event, Date.now());
+        }
+        if (contacts.length > 0) {
+          let contactIds = contacts.map(contact => contact.id);
+          searchData.task["contact_ids"] = contactIds.join(", ");
         }
         let taskId = event.id.split("-")[0];
         try {
@@ -1598,6 +1614,9 @@ class Dashboard extends Component {
       taskEvent: event,
       confirmModalText: modalText
     });
+    if (modalText === "mark as completed") {
+      this.loadTaskContackts(event.projectId);
+    }
   };
 
   handleCategoryChange = option => {

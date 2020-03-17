@@ -4510,6 +4510,19 @@ table.scheduler-table tr:last-child td {
       color: $color-text1;
       margin-left: 31px;
     }
+    .contact{
+      margin-left: 31px;
+      display: flex;
+      padding-bottom: 10px !important;
+      .contact-checkbox{
+        width: 63%;
+        overflow-y: scroll;
+        max-height: 150px;
+      }
+      .contact-labal-checkbox{
+        width: 25%;
+      }
+    }
     .body {
       width: 490px;
       border-radius: 6px;

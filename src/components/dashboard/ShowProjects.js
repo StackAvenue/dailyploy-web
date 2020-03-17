@@ -293,7 +293,6 @@ class ShowProjects extends Component {
   };
 
   returnContacts = contacts => {
-    debugger;
     if (contacts.length > 0) {
       return contacts.map(contact => {
         return {
