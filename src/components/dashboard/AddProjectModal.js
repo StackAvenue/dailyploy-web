@@ -111,9 +111,10 @@ class AddProjectModal extends Component {
             style={{
               position: "absolute",
               right: "0px",
-              bottom: "75px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.backToList(contact)}
           >
@@ -123,10 +124,10 @@ class AddProjectModal extends Component {
             className="col-md-1  no-padding"
             style={{
               position: "absolute",
-              right: "-45px",
-              bottom: "75px",
+              right: "-27px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px"
             }}
             onClick={() => this.props.updateContact(idx)}
           >
@@ -145,7 +146,8 @@ class AddProjectModal extends Component {
                 right: "0px",
                 bottom: "25px",
                 cursor: "pointer",
-                fontSize: "25px"
+                fontSize: "22px",
+                color: "rgb(119, 114, 114)"
               }}
               onClick={() => this.props.addContactsRow()}
             >
@@ -157,9 +159,10 @@ class AddProjectModal extends Component {
             style={{
               position: "absolute",
               right: "0px",
-              bottom: "75px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.makeEditContact(contact)}
           >
@@ -169,10 +172,11 @@ class AddProjectModal extends Component {
             className="col-md-1  no-padding"
             style={{
               position: "absolute",
-              right: "-45px",
-              bottom: "75px",
+              right: "-27px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.deleteContact(contact)}
           >
@@ -188,9 +192,10 @@ class AddProjectModal extends Component {
             style={{
               position: "absolute",
               right: "0px",
-              bottom: "75px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.makeEditContact(contact)}
           >
@@ -200,10 +205,11 @@ class AddProjectModal extends Component {
             className="col-md-1  no-padding"
             style={{
               position: "absolute",
-              right: "-45px",
-              bottom: "75px",
+              right: "-27px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.deleteContact(contact)}
           >
@@ -225,7 +231,8 @@ class AddProjectModal extends Component {
               right: "0px",
               bottom: "25px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.addContactsRow()}
           >
@@ -236,22 +243,24 @@ class AddProjectModal extends Component {
             style={{
               position: "absolute",
               right: "0px",
-              bottom: "75px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.removeEditNewContactsRow(idx)}
           >
-            <i className="fa fa-times-circle"></i>
+            {/* <i className="fa fa-times-circle"></i> */}
+            <i className="far fa-times-circle"></i>
           </div>
           <div
             className="col-md-1  no-padding"
             style={{
               position: "absolute",
-              right: "-45px",
-              bottom: "75px",
+              right: "-27px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px"
             }}
             onClick={() => this.props.addNewContact(idx)}
           >
@@ -267,22 +276,24 @@ class AddProjectModal extends Component {
             style={{
               position: "absolute",
               right: "0px",
-              bottom: "75px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.removeEditNewContactsRow(idx)}
           >
-            <i className="fa fa-times-circle"></i>
+            {/* <i className="fa fa-times-circle"></i> */}
+            <i className="far fa-times-circle"></i>
           </div>
           <div
             className="col-md-1  no-padding"
             style={{
               position: "absolute",
-              right: "-45px",
-              bottom: "75px",
+              right: "-27px",
+              bottom: "62px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px"
             }}
             onClick={() => this.props.addNewContact(idx)}
           >
@@ -303,7 +314,8 @@ class AddProjectModal extends Component {
             right: "0px",
             bottom: "25px",
             cursor: "pointer",
-            fontSize: "25px"
+            fontSize: "22px",
+            color: "rgb(119, 114, 114)"
           }}
           onClick={() => this.props.addContactsRow()}
         >
@@ -320,7 +332,8 @@ class AddProjectModal extends Component {
               right: "0px",
               bottom: "25px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.addContactsRow()}
           >
@@ -333,11 +346,13 @@ class AddProjectModal extends Component {
               right: "-30px",
               bottom: "25px",
               cursor: "pointer",
-              fontSize: "25px"
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
             }}
             onClick={() => this.props.removeContactsRow(idx)}
           >
-            <i className="fa fa-times-circle"></i>
+            <i className="far fa-times-circle"></i>
+            {/* <i className="fa fa-times-circle"></i> */}
           </div>
         </>
       );
@@ -350,11 +365,13 @@ class AddProjectModal extends Component {
             right: "-30px",
             bottom: "25px",
             cursor: "pointer",
-            fontSize: "25px"
+            fontSize: "22px",
+            color: "rgb(119, 114, 114)"
           }}
           onClick={() => this.props.removeContactsRow(idx)}
         >
-          <i className="fa fa-times-circle"></i>
+          {/* <i className="fa fa-times-circle"></i> */}
+          <i className="far fa-times-circle"></i>
         </div>
       );
     }
@@ -556,10 +573,12 @@ class AddProjectModal extends Component {
                 <div className="col-md-2 no-padding label">Contacts</div>
                 <div
                   className="col-md-10"
-                  // style={{
-                  //   overflowY: "scroll",
-                  //   maxHeight: "600px"
-                  // }}
+                  style={{
+                    overflowY: "scroll",
+                    maxHeight: "300px",
+                    overflowX: "hidden",
+                    paddingRight: "20px"
+                  }}
                 >
                   {props.state.contacts
                     ? props.state.contacts.map((contact, idx) => {
@@ -568,7 +587,7 @@ class AddProjectModal extends Component {
                             <div className="col-md-12 no-padding">
                               <div className="col-md-11 no-padding">
                                 <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label">
+                                  <div className="col-md-2 no-padding label-1">
                                     Name
                                   </div>
                                   <div className="col-md-10">
@@ -593,7 +612,7 @@ class AddProjectModal extends Component {
                                   </div>
                                 </div>
                                 <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label">
+                                  <div className="col-md-2 no-padding label-1">
                                     Email
                                   </div>
                                   <div className="col-md-10">
@@ -618,7 +637,7 @@ class AddProjectModal extends Component {
                                   </div>
                                 </div>
                                 <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label">
+                                  <div className="col-md-2 no-padding label-1">
                                     Mobile No
                                   </div>
                                   <div className="col-md-10">
@@ -664,7 +683,7 @@ class AddProjectModal extends Component {
                             <div className="col-md-12 no-padding">
                               <div className="col-md-11 no-padding">
                                 <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label">
+                                  <div className="col-md-2 no-padding label-1">
                                     Name
                                   </div>
                                   <div className="col-md-10">
@@ -689,7 +708,7 @@ class AddProjectModal extends Component {
                                   </div>
                                 </div>
                                 <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label">
+                                  <div className="col-md-2 no-padding label-1">
                                     Email
                                   </div>
                                   <div className="col-md-10">
@@ -714,7 +733,7 @@ class AddProjectModal extends Component {
                                   </div>
                                 </div>
                                 <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label">
+                                  <div className="col-md-2 no-padding label-1">
                                     Mobile No
                                   </div>
                                   <div className="col-md-10">

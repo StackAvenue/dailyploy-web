@@ -297,8 +297,8 @@ class ShowProjects extends Component {
       return contacts.map(contact => {
         return {
           name: contact.name,
-          email: contact.email,
-          phone_number: contact.phone_number,
+          email: contact.email ? contact.email : "",
+          phone_number: contact.phone_number ? contact.phone_number : "",
           id: contact.id
         };
       });
@@ -592,8 +592,8 @@ class ShowProjects extends Component {
         var contacts = this.state.contacts;
         var contact = contacts.find((contact, id) => id == idx);
         contact["name"] = data.name;
-        contact["phone_number"] = data.phone_number;
-        contact["email"] = data.email;
+        contact["phone_number"] = data.phone_number ? data.phone_number : "";
+        contact["email"] = data.email ? data.email : "";
         contact["title"] = "";
         this.setState({ contacts: contacts });
       } catch (e) {}
@@ -636,25 +636,53 @@ class ShowProjects extends Component {
       .filter((c, index) => index == idx)
       .map(contact => {
         let nm = validateName(contact.name);
-        let em = validateEmail(contact.email);
-        let ph = validatePhone(contact.phone_number);
         if (nm) {
           contact["nameError"] = nm;
           flag = false;
         } else {
           contact["nameError"] = null;
         }
-        if (em) {
-          contact["emailError"] = em;
-          flag = false;
-        } else {
-          contact["emailError"] = null;
-        }
-        if (ph) {
-          contact["phoneError"] = ph;
-          flag = false;
-        } else {
-          contact["phoneError"] = null;
+        let em = validateEmail(contact.email);
+        let ph = validatePhone(contact.phone_number);
+        if (contact.email == "" && contact.phone_number == "") {
+          if (em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        } else if (contact.email != "" && contact.phone_number != "") {
+          if (em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        } else if (contact.email != "" || contact.phone_number != "") {
+          if (contact.email != "" && em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (contact.phone_number != "" && ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
         }
         return contact;
       });

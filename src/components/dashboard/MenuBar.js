@@ -119,7 +119,7 @@ export default class MenuBar extends Component {
     contacts.push({
       name: "",
       email: "",
-      phone: ""
+      phone_number: ""
     });
     this.setState({
       contacts: contacts
@@ -137,25 +137,53 @@ export default class MenuBar extends Component {
     var flag = true;
     var updatedContacts = this.state.contacts.map(contact => {
       let nm = validateName(contact.name);
-      let em = validateEmail(contact.email);
-      let ph = validatePhone(contact.phone_number);
       if (nm) {
         contact["nameError"] = nm;
         flag = false;
       } else {
         contact["nameError"] = null;
       }
-      if (em) {
-        contact["emailError"] = em;
-        flag = false;
-      } else {
-        contact["emailError"] = null;
-      }
-      if (ph) {
-        contact["phoneError"] = ph;
-        flag = false;
-      } else {
-        contact["phoneError"] = null;
+      let em = validateEmail(contact.email);
+      let ph = validatePhone(contact.phone_number);
+      if (contact.email == "" && contact.phone_number == "") {
+        if (em) {
+          contact["emailError"] = em;
+          flag = false;
+        } else {
+          contact["emailError"] = null;
+        }
+        if (ph) {
+          contact["phoneError"] = ph;
+          flag = false;
+        } else {
+          contact["phoneError"] = null;
+        }
+      } else if (contact.email != "" && contact.phone_number != "") {
+        if (em) {
+          contact["emailError"] = em;
+          flag = false;
+        } else {
+          contact["emailError"] = null;
+        }
+        if (ph) {
+          contact["phoneError"] = ph;
+          flag = false;
+        } else {
+          contact["phoneError"] = null;
+        }
+      } else if (contact.email != "" || contact.phone_number != "") {
+        if (contact.email != "" && em) {
+          contact["emailError"] = em;
+          flag = false;
+        } else {
+          contact["emailError"] = null;
+        }
+        if (contact.phone_number != "" && ph) {
+          contact["phoneError"] = ph;
+          flag = false;
+        } else {
+          contact["phoneError"] = null;
+        }
       }
       return contact;
     });
@@ -169,9 +197,9 @@ export default class MenuBar extends Component {
     let addOwner = [];
     addOwner.push(this.props.state.userId);
     var self = this;
-    this.setState({ saveDisable: true });
     if (this.state.projectName != "") {
       if (this.validateContackts()) {
+        this.setState({ saveDisable: true });
         const projectData = {
           project: {
             name: this.state.projectName,
