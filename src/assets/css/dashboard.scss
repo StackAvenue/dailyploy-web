@@ -810,9 +810,17 @@
       }
     }
     .action-btn {
-      padding: 20px 15px 0px 31px;
+      padding: 20px 15px 0px 0px;
       button {
         margin-left: 20px;
+      }
+      .tt-conf-btn{
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      input{
+        height: 0px !important;
+        vertical-align: middle;
       }
     }
     .task-datepicker {

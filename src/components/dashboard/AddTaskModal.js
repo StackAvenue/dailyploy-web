@@ -3,13 +3,18 @@ import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
-import { PRIORITIES } from "./../../utils/Constants";
+import {
+  PRIORITIES,
+  DATE_FORMAT3,
+  DATE_FORMAT1
+} from "./../../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import Loader from "react-loader-spinner";
 import DailyPloySelect from "./../DailyPloySelect";
 import ImageUploader from "react-images-upload";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
+import moment from "moment";
 
 class AddTaskModal extends React.Component {
   constructor(props) {
@@ -107,8 +112,14 @@ class AddTaskModal extends React.Component {
     this.onImageDropRef.current.inputElement.click();
   };
 
+  isTody = () => {
+    return (
+      moment().format(DATE_FORMAT1) ===
+      moment(this.props.state.dateFrom).format(DATE_FORMAT1)
+    );
+  };
+
   onImageDrop = picture => {
-    console.log("picture", picture);
     this.setState({
       pictures: this.state.pictures.concat(picture)
     });
@@ -447,6 +458,21 @@ class AddTaskModal extends React.Component {
 
               <div className="no-padding input-row">
                 <div className="action-btn">
+                  {this.isTody() ? (
+                    <label>
+                      <span className="tt-conf-btn">
+                        You want to start Time Track ?
+                      </span>
+                      <input
+                        type="checkbox"
+                        name="isContactChecked"
+                        onChange={e => this.props.toggleTaskStartState(e)}
+                        style={{
+                          margin: "0px 20px"
+                        }}
+                      />
+                    </label>
+                  ) : null}
                   <button
                     type="button"
                     className="button3 btn-primary pull-right"
@@ -463,10 +489,10 @@ class AddTaskModal extends React.Component {
                     className={`button1 btn-primary pull-right ${
                       props.state.taskloader ? "disabled" : ""
                     }`}
-                    onClick={
+                    onClick={() =>
                       props.state.taskButton === "Add"
-                        ? props.addTask
-                        : props.editTask
+                        ? props.addTask()
+                        : props.editTask()
                     }
                   >
                     {props.state.taskButton}

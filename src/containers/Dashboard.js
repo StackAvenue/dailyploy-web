@@ -117,7 +117,8 @@ class Dashboard extends Component {
       validateTimefrom: null,
       taskComments: null,
       isPlayPause: false,
-      taskContacts: []
+      taskContacts: [],
+      isStart: false
     };
   }
 
@@ -619,14 +620,18 @@ class Dashboard extends Component {
           project: null,
           taskCategorie: ""
         });
-
-        let start = moment(convertUTCToLocalDate(task.start_datetime));
-        let end = moment(convertUTCToLocalDate(task.end_datetime));
+        let start = moment(
+          convertUTCToLocalDate(moment(task.start_datetime).format(FULL_DATE))
+        );
+        let end = moment(
+          convertUTCToLocalDate(moment(task.end_datetime).format(FULL_DATE))
+        );
         let today = moment().format(DATE_FORMAT1);
         let startDate = start.format(DATE_FORMAT1);
         let startTime = start.format("HH.mm");
         let endTime = end.format("HH.mm");
         if (
+          this.state.isStart &&
           task.members[0].id == this.state.userId &&
           ((startDate == today &&
             startTime == "00.00" &&
@@ -843,7 +848,8 @@ class Dashboard extends Component {
         categoryError: ""
       },
       taskloader: false,
-      taskContacts: []
+      taskContacts: [],
+      isStart: false
     });
   };
 
@@ -1700,6 +1706,7 @@ class Dashboard extends Component {
   };
 
   handleTaskStartOnly = async (eventTask, dateTime) => {
+    // debugger;
     if (eventTask && dateTime) {
       var taskId = eventTask.id.split("-")[0];
       var taskDate = {
@@ -1786,6 +1793,11 @@ class Dashboard extends Component {
   updateTaskEvent = async (event, data) => {
     let taskId = event.id.split("-")[0];
     this.updateTask({ task: data }, taskId, event.projectId);
+  };
+
+  toggleTaskStartState = e => {
+    var checked = e.target.checked;
+    this.setState({ isStart: checked });
   };
 
   addCategory = async categoryName => {
@@ -2282,6 +2294,7 @@ class Dashboard extends Component {
               addCategory={this.addCategory}
               handleTaskNameChange={this.handleTaskNameChange}
               saveComments={this.saveComments}
+              toggleTaskStartState={this.toggleTaskStartState}
             />
 
             <TaskInfoModal
