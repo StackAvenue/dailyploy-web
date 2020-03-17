@@ -293,7 +293,8 @@ class ShowProjects extends Component {
   };
 
   returnContacts = contacts => {
-    if (contacts) {
+    debugger;
+    if (contacts.length > 0) {
       return contacts.map(contact => {
         return {
           name: contact.name,
@@ -302,14 +303,10 @@ class ShowProjects extends Component {
           id: contact.id
         };
       });
+    } else {
+      this.addContactsRow();
+      return [];
     }
-    return [
-      {
-        name: "",
-        email: "",
-        phone_number: ""
-      }
-    ];
   };
 
   makeEditContact = contact => {
