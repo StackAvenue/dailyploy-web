@@ -149,8 +149,14 @@ class RecurringTaskModal extends React.Component {
     day["status"] = !day["status"];
     this.setState({ days: days });
   };
+
   handleRepeatOnChange = repeat => {
     this.setState({ repeatOn: repeat });
+  };
+
+  handleRepeatOnInputChange = e => {
+    const { name, value } = e.target;
+    this.setState({ repeatOnNumber: value });
   };
 
   render() {
@@ -291,10 +297,10 @@ class RecurringTaskModal extends React.Component {
             <div className="col-md-3 d-inline-block">
               <input
                 type="number"
-                name=""
-                // value={props.state.taskName}
-                onChange={this.handleRepeatOnChange}
-                placeholder=""
+                name="repeatOnNumber"
+                value={this.state.repeatOnNumber}
+                onChange={e => this.handleRepeatOnInputChange(e)}
+                placeholder="Enter"
                 className="form-control"
               />
             </div>
@@ -335,6 +341,54 @@ class RecurringTaskModal extends React.Component {
                     </div>
                   );
                 })}
+              </div>
+              {/* {this.props.state.errors.memberError ? (
+              <div className="col-md-12">
+                <div className="col-md-2 d-inline-block no-padding"></div>
+                <div className="col-md- d-inline-block no-padding">
+                  <span className="error-warning">
+                    {this.props.state.errors.memberError}
+                  </span>
+                </div>
+              </div>
+            ) : null} */}
+            </div>
+          ) : null}
+
+          {this.state.repeatOn.name == "monthly" ? (
+            <div className="col-md-12 no-padding input-row">
+              <div className="col-md-2 d-inline-block no-padding label"></div>
+              <div className="col-md-10 d-inline-block">
+                <div
+                  className="d-inline-block task-datepicker no-padding"
+                  style={{ width: "125px" }}
+                >
+                  <span className="" style={{ marginLeft: "0px" }}>
+                    Monthly on date:
+                  </span>
+                </div>
+                <div className="col-md-7 d-inline-block task-datepicker no-padding">
+                  <div className="d-inline-block picker">
+                    <DatePicker
+                      className="width-to"
+                      ref={this.calendarToRef}
+                      selected={props.state.dateTo}
+                      onChange={props.handleDateTo}
+                      placeholderText="Select Date"
+                      onChangeRaw={this.handleDateChangeRaw}
+                    />
+                    <span
+                      className="task-date-picker-icon"
+                      style={{ right: "85px" }}
+                    >
+                      <i
+                        onClick={this.openToCalender}
+                        className="fa fa-calendar"
+                        aria-hidden="true"
+                      ></i>
+                    </span>
+                  </div>
+                </div>
               </div>
               {/* {this.props.state.errors.memberError ? (
               <div className="col-md-12">

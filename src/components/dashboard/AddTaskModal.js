@@ -141,10 +141,12 @@ class AddTaskModal extends React.Component {
               <TabList>
                 <Tab>
                   {props.state.taskButton === "Add"
-                    ? "Add New Task"
-                    : "Edit Task"}
+                    ? "ADD NEW TASK"
+                    : "EDIT TASK"}
                 </Tab>
-                <Tab>Recurring Task</Tab>
+                {props.state.taskButton === "Add" ? (
+                  <Tab>RECURRING TASK</Tab>
+                ) : null}
                 <Tab>
                   <button
                     className="btn btn-link"
