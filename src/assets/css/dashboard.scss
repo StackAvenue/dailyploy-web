@@ -695,6 +695,41 @@
   // max-width: 626px !important;
   .modal-content {
     width: 626px;
+    .react-tabs{
+      .react-tabs__tab{
+        border: none;
+      }
+      .react-tabs__tab-list{
+        margin: 0px;
+        padding: 5px;
+        border-bottom: 0px;
+        .react-tabs__tab--selected{
+          border-bottom: 5px solid #1592e6;
+        }
+        li:last-child{
+          float: right;
+          top: -6px;
+          right: -10px;
+          border-bottom: none;
+        }
+      }
+      .project-wrap-count{
+        width: 36px;
+        text-align: center;
+        height: 28px;
+        right: 32px;
+        top: 3px;
+        padding: 4px;
+        color: $color-white;
+        position: absolute;
+        border-radius: 9px;
+        box-shadow: rgba(81, 34, 209, 0.49) 0px 3px 6px 0px;
+        background-color: #5122d1;
+      }
+      .search-filter-container{
+        border: solid 1px #d6d6d6 !important;
+      }
+    }
     .header {
       padding: 17px 0 0px 49px !important;
       span {
@@ -797,6 +832,26 @@
           width: 93px;
           // margin-left: 7% !important;
         }
+        button{
+          margin-bottom: 20px !important;
+        }
+        .day-icon{
+          height: 40px;
+          width: 40px;
+          border: solid 1px #ebebeb;
+          background-color: #ebebeb;
+          border-radius: 50px;
+          color: $color-text2;
+          padding: 7px;
+          margin: 0px 6px;
+          text-align: center;
+          cursor: pointer;
+        }
+        .selected{
+          border: solid 1px #1592e6 !important;
+          background-color: #1592e6 !important;
+          color: $color-white !important;
+        }
       }
       .task-add-category {
         padding: 5px;
@@ -851,7 +906,6 @@
         right: 26px;
       }
     }
-
     .time-picker-container {
       max-width: 132px !important;
       height: auto;
@@ -902,6 +956,9 @@
       .chooseFileButton{
         display: none;
       }
+    }
+    .suggessionSearchInput{
+      border-bottom: solid 1px #d6d6d6 !important;
     }
   }
 }
