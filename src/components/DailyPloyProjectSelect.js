@@ -84,6 +84,15 @@ class DailyPloyProjectSelect extends Component {
       this.setState({
         selectedTags: newSelectedTags
       });
+      this.props.onChange(newSelectedTags);
+    } else {
+      var newSelectedTags = this.state.selectedTags.filter(
+        s => s.id != option.id
+      );
+      this.setState({
+        selectedTags: newSelectedTags
+      });
+      this.props.onChange(newSelectedTags);
     }
   };
 
@@ -176,7 +185,7 @@ class DailyPloyProjectSelect extends Component {
                   return (
                     <li
                       key={idx}
-                      // onClick={() => this.selectSuggestion(option)}
+                      onClick={() => this.selectSuggestion(option)}
                       style={{
                         listStyle: "none",
                         padding: "0px"
@@ -188,7 +197,7 @@ class DailyPloyProjectSelect extends Component {
                           width: "12%",
                           padding: "8px"
                         }}
-                        onClick={() => this.toggleSelectedTag(option)}
+                        // onClick={() => this.toggleSelectedTag(option)}
                       >
                         <div
                           className={`d-inline-block color-block`}
@@ -205,7 +214,7 @@ class DailyPloyProjectSelect extends Component {
                           width: "88%",
                           padding: "8px"
                         }}
-                        onClick={() => this.selectSuggestion(option)}
+                        // onClick={() => this.selectSuggestion(option)}
                       >
                         <span className="right-left-space-5">
                           {option.name}
