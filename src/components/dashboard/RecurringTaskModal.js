@@ -36,6 +36,128 @@ class RecurringTaskModal extends React.Component {
         value: "month"
       }
     ];
+    this.monthlyDays = [
+      {
+        name: "Monthly on day 1",
+        value: 1
+      },
+      {
+        name: "Monthly on day 2",
+        value: 2
+      },
+      {
+        name: "Monthly on day 3",
+        value: 3
+      },
+      {
+        name: "Monthly on day 4",
+        value: 4
+      },
+      {
+        name: "Monthly on day 5",
+        value: 5
+      },
+      {
+        name: "Monthly on day 6",
+        value: 6
+      },
+      {
+        name: "Monthly on day 7",
+        value: 7
+      },
+      {
+        name: "Monthly on day 8",
+        value: 8
+      },
+      {
+        name: "Monthly on day 9",
+        value: 9
+      },
+      {
+        name: "Monthly on day 10",
+        value: 10
+      },
+      {
+        name: "Monthly on day 11",
+        value: 11
+      },
+      {
+        name: "Monthly on day 12",
+        value: 12
+      },
+      {
+        name: "Monthly on day 13",
+        value: 13
+      },
+      {
+        name: "Monthly on day 14",
+        value: 14
+      },
+      {
+        name: "Monthly on day 15",
+        value: 15
+      },
+      {
+        name: "Monthly on day 16",
+        value: 16
+      },
+      {
+        name: "Monthly on day 17",
+        value: 17
+      },
+      {
+        name: "Monthly on day 18",
+        value: 18
+      },
+      {
+        name: "Monthly on day 19",
+        value: 19
+      },
+      {
+        name: "Monthly on day 20",
+        value: 20
+      },
+      {
+        name: "Monthly on day 21",
+        value: 21
+      },
+      {
+        name: "Monthly on day 22",
+        value: 22
+      },
+      {
+        name: "Monthly on day 23",
+        value: 23
+      },
+      {
+        name: "Monthly on day 24",
+        value: 24
+      },
+      {
+        name: "Monthly on day 25",
+        value: 25
+      },
+      {
+        name: "Monthly on day 26",
+        value: 26
+      },
+      {
+        name: "Monthly on day 27",
+        value: 27
+      },
+      {
+        name: "Monthly on day 28",
+        value: 28
+      },
+      {
+        name: "Monthly on day 29",
+        value: 29
+      },
+      {
+        name: "Monthly on day 30",
+        value: 30
+      }
+    ];
     this.state = {
       members: [],
       project: "",
@@ -69,6 +191,7 @@ class RecurringTaskModal extends React.Component {
       frequency: "days",
       weekDays: [],
       monthDays: [],
+      members: [],
       errors: {
         taskNameError: "",
         projectError: "",
@@ -78,7 +201,8 @@ class RecurringTaskModal extends React.Component {
         categoryError: "",
         numberError: "",
         repeatOnError: "",
-        weekDayError: ""
+        weekDayError: "",
+        monthDayError: ""
       }
     };
   }
@@ -95,6 +219,14 @@ class RecurringTaskModal extends React.Component {
     }
     if (this.props.state.comments !== prevProps.state.comments) {
       this.setState({ comments: this.props.state.comments });
+    }
+  };
+
+  componentDidMount = () => {
+    if (this.props.modalMemberSearchOptions.length > 0) {
+      this.setState({
+        members: this.props.modalMemberSearchOptions
+      });
     }
   };
 
@@ -254,6 +386,13 @@ class RecurringTaskModal extends React.Component {
       errors["weekDayError"] = "";
     }
 
+    if (this.state.frequency == "month" && this.state.monthDays.length == 0) {
+      errors["monthDayError"] = "please select day";
+      flag = false;
+    } else {
+      errors["monthDayError"] = "";
+    }
+
     this.setState({ errors: errors });
     return (
       this.props.state.taskName &&
@@ -268,7 +407,46 @@ class RecurringTaskModal extends React.Component {
   };
 
   handleProjectSelect = projects => {
-    this.setState({ selectedProjects: projects });
+    if (projects.length > 0) {
+      var members = projects.map(p => p.members).flat();
+      var newMembers = [];
+      members.forEach(m => {
+        if (!newMembers.map(mm => mm.id).includes(m.id)) {
+          newMembers.push(m);
+        }
+      });
+      let memberIdArray = projects.map(p => p.members.map(m => m.id));
+      let commonIds = this.getCommonElements(memberIdArray);
+      let filterMembers = newMembers.filter(m => commonIds.includes(m.id));
+      this.setState({ selectedProjects: projects, members: filterMembers });
+    } else {
+      this.setState({ selectedProjects: projects, members: [] });
+    }
+  };
+
+  getCommonElements = arrays => {
+    var min = 1000;
+    var arg = 0;
+    var index = 0;
+    var common = [];
+    for (var i = 0; i < arrays.length; i++) {
+      if (arrays[i].length < min) {
+        min = arrays[i].length;
+        arg = i;
+      }
+    }
+    for (var i = 0; i < arrays[arg].length; i++) {
+      for (var j = 0; j < arrays.length; j++) {
+        if (j != arg && arrays[j].indexOf(arrays[arg][i]) != -1) {
+          index++;
+        }
+      }
+      if (index == arrays.length - 1) {
+        common.push(arrays[arg][i]);
+      }
+      index = 0;
+    }
+    return common;
   };
 
   taskDetails = () => {
@@ -339,6 +517,12 @@ class RecurringTaskModal extends React.Component {
         });
       }
     }
+  };
+
+  handleMonthlyDayChange = day => {
+    this.setState({
+      monthDays: day ? [day.value] : []
+    });
   };
 
   render() {
@@ -453,9 +637,11 @@ class RecurringTaskModal extends React.Component {
             </div>
             <div className="col-md-10 d-inline-block">
               <DailyPloySelect
-                options={this.props.modalMemberSearchOptions}
+                // options={this.props.modalMemberSearchOptions}
+                options={this.state.members}
                 placeholder="Select Member"
-                default={this.props.state.selectedMembers[0]}
+                noOptionMessage="please select project first"
+                // default={this.props.state.selectedMembers[0]}
                 icon="fa fa-user"
                 onChange={this.props.handleMemberSelect}
               />
@@ -548,7 +734,15 @@ class RecurringTaskModal extends React.Component {
             <div className="col-md-12 no-padding input-row">
               <div className="col-md-2 d-inline-block no-padding label"></div>
               <div className="col-md-10 d-inline-block">
-                <div
+                <DailyPloySelect
+                  options={this.monthlyDays}
+                  placeholder="select day"
+                  // label="value"
+                  // name="value"
+                  // suggesionBy="value"
+                  onChange={this.handleMonthlyDayChange}
+                />
+                {/* <div
                   className="d-inline-block task-datepicker no-padding"
                   style={{ width: "125px" }}
                 >
@@ -577,18 +771,18 @@ class RecurringTaskModal extends React.Component {
                       ></i>
                     </span>
                   </div>
-                </div>
+                </div> */}
               </div>
-              {/* {this.state.errors.memberError ? (
-              <div className="col-md-12">
-                <div className="col-md-2 d-inline-block no-padding"></div>
-                <div className="col-md- d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.memberError}
-                  </span>
+              {this.state.errors.monthDayError ? (
+                <div className="col-md-12">
+                  <div className="col-md-2 d-inline-block no-padding"></div>
+                  <div className="col-md- d-inline-block no-padding">
+                    <span className="error-warning">
+                      {this.state.errors.monthDayError}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ) : null} */}
+              ) : null}
             </div>
           ) : null}
 

@@ -90,12 +90,21 @@ class DailyPloySelect extends Component {
           </ul>
         ) : (
           <>
-            <span
-              className={`text-titlize left-padding-10px  ${this.state.notFound}`}
-              style={{ padding: "5px" }}
-            >
-              No Match Found
-            </span>
+            {this.props.noOptionMessage && this.state.searchText == "" ? (
+              <span
+                className={`text-titlize left-padding-10px`}
+                style={{ padding: "10px" }}
+              >
+                {this.props.noOptionMessage}
+              </span>
+            ) : (
+              <span
+                className={`text-titlize left-padding-10px ${this.state.notFound}`}
+                style={{ padding: "5px" }}
+              >
+                No Match Found
+              </span>
+            )}
             {this.props.canAdd ? (
               <span className="d-inline-block task-add-category left-padding-10px">
                 <span>
