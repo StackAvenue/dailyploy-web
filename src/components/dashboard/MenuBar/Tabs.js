@@ -22,6 +22,11 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
+        </div>
       </>
     );
   } else if (routeName === "analysisTrue") {
@@ -41,6 +46,11 @@ const Tabs = props => {
         </div>
         <div className="col-md-1 active">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
         </div>
       </>
     );
@@ -62,6 +72,11 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
+        </div>
       </>
     );
   } else if (routeName === "membersTrue") {
@@ -81,6 +96,11 @@ const Tabs = props => {
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
         </div>
       </>
     );
@@ -102,6 +122,36 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
+        </div>
+      </>
+    );
+  } else if (routeName === "taskListTrue") {
+    classNameRoute = (
+      <>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
+        </div>
+        <div className="col-md-1 active">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
+        </div>
       </>
     );
   } else {
@@ -121,6 +171,11 @@ const Tabs = props => {
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
+        </div>
+        <div className="col-md-1 analysis">
+          <Link to={`/workspace/${props.workspaceId}/task_list`}>
+            Task List
+          </Link>
         </div>
       </>
     );
