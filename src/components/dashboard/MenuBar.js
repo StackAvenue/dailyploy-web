@@ -78,7 +78,7 @@ export default class MenuBar extends Component {
       memberRoleError: "",
       memberEmailError: "",
       memberNameError: "",
-      saveDisable: false,
+      saveDisable: true,
       reset: false,
       contacts: [
         {
@@ -135,58 +135,68 @@ export default class MenuBar extends Component {
 
   validateContackts = () => {
     var flag = true;
-    var updatedContacts = this.state.contacts.map(contact => {
-      let nm = validateName(contact.name);
-      if (nm) {
-        contact["nameError"] = nm;
-        flag = false;
-      } else {
-        contact["nameError"] = null;
-      }
-      let em = validateEmail(contact.email);
-      let ph = validatePhone(contact.phone_number);
-      if (contact.email == "" && contact.phone_number == "") {
-        if (em) {
-          contact["emailError"] = em;
+    var updatedContacts = this.state.contacts;
+    if (
+      this.state.contacts.length == 1 &&
+      this.state.contacts[0].name == "" &&
+      this.state.contacts[0].email == "" &&
+      this.state.contacts[0].phone_number == ""
+    ) {
+      flag = true;
+    } else {
+      var updatedContacts = this.state.contacts.map(contact => {
+        let nm = validateName(contact.name);
+        if (nm) {
+          contact["nameError"] = nm;
           flag = false;
         } else {
-          contact["emailError"] = null;
+          contact["nameError"] = null;
         }
-        if (ph) {
-          contact["phoneError"] = ph;
-          flag = false;
-        } else {
-          contact["phoneError"] = null;
+        let em = validateEmail(contact.email);
+        let ph = validatePhone(contact.phone_number);
+        if (contact.email == "" && contact.phone_number == "") {
+          if (em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        } else if (contact.email != "" && contact.phone_number != "") {
+          if (em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        } else if (contact.email != "" || contact.phone_number != "") {
+          if (contact.email != "" && em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (contact.phone_number != "" && ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
         }
-      } else if (contact.email != "" && contact.phone_number != "") {
-        if (em) {
-          contact["emailError"] = em;
-          flag = false;
-        } else {
-          contact["emailError"] = null;
-        }
-        if (ph) {
-          contact["phoneError"] = ph;
-          flag = false;
-        } else {
-          contact["phoneError"] = null;
-        }
-      } else if (contact.email != "" || contact.phone_number != "") {
-        if (contact.email != "" && em) {
-          contact["emailError"] = em;
-          flag = false;
-        } else {
-          contact["emailError"] = null;
-        }
-        if (contact.phone_number != "" && ph) {
-          contact["phoneError"] = ph;
-          flag = false;
-        } else {
-          contact["phoneError"] = null;
-        }
-      }
-      return contact;
-    });
+        return contact;
+      });
+    }
     this.setState({
       contacts: updatedContacts
     });
@@ -348,7 +358,7 @@ export default class MenuBar extends Component {
 
   handleChangeInput = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, saveDisable: false });
   };
 
   handleChangeMemberInput = e => {
