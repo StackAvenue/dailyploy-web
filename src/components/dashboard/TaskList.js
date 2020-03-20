@@ -312,13 +312,13 @@ class TaskList extends Component {
                     <div className="d-inline-block">
                       <button
                         className="btn btn-primary delete-button"
-                        onClick={e => this.toggleShowConfirm()}
+                        // onClick={e => this.toggleShowConfirm()}
                       >
                         Delete
                       </button>
                     </div>
                     <div className="d-inline-block select-project-text">
-                      {this.state.selectMemberArr.length + " Member Selected"}
+                      {this.state.selectMemberArr.length + " Task Selected"}
                     </div>
                   </>
                 ) : null}
