@@ -467,7 +467,7 @@ class AddTaskModal extends React.Component {
 
                   <div className="no-padding input-row">
                     <div className="action-btn">
-                      {this.isTody() ? (
+                      {this.isTody() && props.state.taskButton == "Add" ? (
                         <label>
                           <span className="tt-conf-btn">
                             You want to start Time Track ?
