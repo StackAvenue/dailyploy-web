@@ -303,7 +303,16 @@ class ShowProjects extends Component {
         };
       });
     } else {
-      this.addContactsRow();
+      var contacts = [];
+      contacts.push({
+        name: "",
+        email: "",
+        phone_number: "",
+        title: "add"
+      });
+      this.setState({
+        editNewCommnets: contacts
+      });
       return [];
     }
   };
