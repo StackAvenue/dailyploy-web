@@ -897,6 +897,11 @@ class Dashboard extends Component {
       var dateFilterLog = dateFormattedTimeTrack.find(
         dateLog => dateLog.date == date
       );
+      var allTimeTracks = taskEvent.allTimeTracked.filter(
+        tt => tt.id != log.id
+      );
+      allTimeTracks.push(log);
+      taskEvent["allTimeTracked"] = allTimeTracks;
       if (dateFilterLog && dateFilterLog.time_tracks) {
         var newLog = [];
         if (flag == "delete") {
@@ -911,6 +916,7 @@ class Dashboard extends Component {
           });
         }
         dateFilterLog["time_tracks"] = newLog;
+
         this.setState({
           taskEvent: taskEvent
         });
