@@ -479,7 +479,6 @@ class Dashboard extends Component {
               tasksObj["startOn"] = taskStartOn;
             }
           }
-          console.log(tasksObj);
           return tasksObj;
         });
         return task;
@@ -505,13 +504,13 @@ class Dashboard extends Component {
     let start = convertUTCToLocalDate(
       moment(task.start_datetime).format(FULL_DATE)
     );
-    let created = convertUTCToLocalDate(
-      moment(task.created_at).format(FULL_DATE)
-    );
-    let sortedTime =
-      moment(start).format("HH:mm") != "00:00"
-        ? moment(start).format("HH.mm")
-        : moment(created).format("HH.mm");
+    let created = moment(task.created_at).format(FULL_DATE);
+    // let sortedTime =
+    //   moment(start).format("HH:mm") != "00:00"
+    //     ? moment(start).format("HH.mm")
+    //     : moment(created).format("HH.mm");
+
+    let sortedTime = moment(created).format("HH.mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks
       ? task.date_formatted_time_tracks.find(
@@ -1906,7 +1905,6 @@ class Dashboard extends Component {
       .database()
       .ref(`task_deleted/${workspaceId}`)
       .on("child_added", snap => {
-        console.log("deleted", snap.val(), snap.val().id);
         if (
           snap.val() &&
           snap.val().id &&
@@ -1996,7 +1994,6 @@ class Dashboard extends Component {
           .flat(2)
           .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
 
-        console.log("taskEvents 2", taskEvents);
         this.setState({
           resources: tasksResources ? tasksResources : [],
           events: taskEvents ? taskEvents : [],
@@ -2028,13 +2025,12 @@ class Dashboard extends Component {
     let start = convertUTCToLocalDate(
       moment(task.start_datetime).format(FULL_DATE)
     );
-    let created = convertUTCToLocalDate(
-      moment(task.inserted_at).format(FULL_DATE)
-    );
-    let sortedTime =
-      moment(start).format("HH:mm") != "00:00"
-        ? moment(start).format("HH.mm")
-        : moment(created).format("HH.mm");
+    let created = moment(task.inserted_at).format(FULL_DATE);
+    // let sortedTime =
+    //   moment(start).format("HH:mm") != "00:00"
+    //     ? moment(start).format("HH.mm")
+    //     : moment(created).format("HH.mm");
+    let sortedTime = moment(created).format("HH.mm");
     return {
       date: date,
       id: newTaskId,
@@ -2077,16 +2073,13 @@ class Dashboard extends Component {
     //     ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
     //     : moment(task.inserted_at).format("HH.mm");
 
-    let start = convertUTCToLocalDate(
-      moment(task.start_datetime).format(FULL_DATE)
-    );
-    let created = convertUTCToLocalDate(
-      moment(task.inserted_at).format(FULL_DATE)
-    );
-    let sortedTime =
-      moment(start).format("HH:mm") != "00:00"
-        ? moment(start).format("HH.mm")
-        : moment(created).format("HH.mm");
+    let start = moment(task.start_datetime).format(FULL_DATE);
+    let created = moment(task.inserted_at).format(FULL_DATE);
+    // let sortedTime =
+    //   moment(start).format("HH:mm") != "00:00"
+    //     ? moment(start).format("HH.mm")
+    //     : moment(created).format("HH.mm");
+    let sortedTime = moment(created).format("HH.mm");
 
     let newTaskId = task.id + "-" + date;
     let event = this.state.events.find(e => e.id == newTaskId);
