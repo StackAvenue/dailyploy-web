@@ -1514,7 +1514,9 @@ table.scheduler-table tr:last-child td {
 }
 
 .item {
-  margin: 0px 10px 0px 10px !important;
+  // margin: 0px px 0px 10px !important;
+  // margin: 4px 2px;
+  margin: 0 !important;
   font-family: $font-family-roboto !important;
   color: $color-heading3 !important;
   .item-heading {
@@ -3663,6 +3665,8 @@ table.scheduler-table tr:last-child td {
   background-color: $color-high-priority;
   border: solid 1px $color-white;
   border-radius: 5px;
+  box-shadow: 1px 1px 3px 3px #ededed  !important;
+  
 }
 .low {
   width: 10px;
@@ -3680,12 +3684,13 @@ table.scheduler-table tr:last-child td {
 }
 .task-play-btn {
   border-radius: 15px;
-  height: 25px;
-  width: 25px;
+  // height: 25px;
+  // width: 25px;
   background-color: #ffffff;
-  position: absolute;
+  // position: absolute;
   // right: 10px;
   border: 1px solid #ffffff;
+  box-shadow: 0px 1px 5px 5px #ededed  !important;
 }
 .day-task-play-btn {
   border-radius: 15px;
@@ -3700,6 +3705,7 @@ table.scheduler-table tr:last-child td {
 .fa-pause {
   color: green !important;
   padding-left: 4.5px;
+  padding-right: 6.5px;
 }
 .fa-play {
   color: #1e90ff;
@@ -3714,10 +3720,10 @@ table.scheduler-table tr:last-child td {
   padding-left: 3px;
 }
 .task-timer {
-  font-family: 'Roboto-Regular', 'Roboto';
-  font-weight: 400;
+  font-family: 'Roboto';
+  // font-weight: 600;
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
   color: #424242;
   text-align: right;
   line-height: 9px;
@@ -5088,9 +5094,11 @@ table.scheduler-table tr:last-child td {
   }
 
   .three-dot{
-    right: 0px;
+    // right: 0px;
     // right: 14px;
-    position: absolute;
+    // position: absolute;
+    // top: -26px;
+    transform: rotate(90deg);
   }
   .track-log-dropdown{
     width: 114px !important;
@@ -5283,4 +5291,54 @@ table.scheduler-table tr:last-child td {
       }
     }
   }
+}
+
+.date-div-card{
+font-size: 13px;
+color: black;
+display: flex;
+// justify-content: center;
+// font-weight: 600;
+margin: 0 !important;
+font-family: 'Roboto' !important;
+
+}
+.project-name-text{
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 8px !important;
+    text-transform: capitalize;
+    width: 100%;
+    // width: 16%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    font-family: 'Roboto' !important;
+}
+.name-text-dot{
+  max-width: 16% !important;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  font-family: 'Roboto' !important;
+
+
+
+}
+.project-task-name{
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  font-size: 15px;
+  font-family: 'Roboto' !important;
+
+
+}
+.align-center{
+  display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }

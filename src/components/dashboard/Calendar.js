@@ -52,7 +52,8 @@ class Calendar extends Component {
         monthMaxEvents: 99,
         customMaxEvents: 99,
 
-        eventItemHeight: 85,
+        // eventItemHeight: 85,
+        eventItemHeight: 98,
         // eventItemHeight: 45,
         eventItemLineHeight: this.calculateResouceHeight(),
         nonAgendaSlotMinHeight: 0,
@@ -62,7 +63,9 @@ class Calendar extends Component {
         selectedAreaColor: "#7EC2F3",
         nonWorkingTimeHeadColor: "#5c5c5c",
         nonWorkingTimeHeadBgColor: "#fff",
-        nonWorkingTimeBodyBgColor: "#ededed",
+        // nonWorkingTimeBodyBgColor: "#ededed",
+        nonWorkingTimeBodyBgColor: "#ffffff",
+
         otherUserTimeBodyBgColor: "#ffffff",
         summaryColor: "#666",
         groupOnlySlotColor: "#F8F8F8",
@@ -607,44 +610,65 @@ class Calendar extends Component {
     var start = moment(event.start);
     var end = moment(event.end);
     let divStyle = {
-      borderRadius: "2px",
+      borderRadius: "5px",
       backgroundColor: backgroundColor,
-      height: mustBeHeight
+      // height: mustBeHeight
+      height: "75%",
+      marginTop: "4px",
+      padding: "2px"
+    };
+    let borderLeft = {
+      borderLeft: "4px solid backgroundColor"
     };
     if (!!agendaMaxEventWidth)
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
     return (
       <>
-        <DashboardEvent
-          eventItemClick={eventItemClick}
-          schedulerData={schedulerData}
-          event={event}
-          bgColor={bgColor}
-          isStart={isStart}
-          isEnd={isEnd}
-          mustAddCssClass={mustAddCssClass}
-          agendaMaxEventWidth={agendaMaxEventWidth}
-          titleText={titleText}
-          start={start}
-          end={end}
-          divStyle={divStyle}
-          scheduler={this.schedulerData}
-          hideOverPopup={this.hideOverPopup}
-          workspaceId={this.props.workspaceId}
-          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-          onGoingTask={this.props.onGoingTask}
-          eventItemPopoverTemplateResolver={
-            this.eventItemPopoverTemplateResolver
-          }
-          userId={this.props.state.userId}
-          taskEventResumeConfirm={this.props.taskEventResumeConfirm}
-          handleTaskTracking={this.props.handleTaskTracking}
-          state={this.props.state}
-          handleTaskStartTop={this.props.handleTaskStartTop}
-          handleTaskStart={this.props.handleTaskStart}
-          handleTaskStop={this.props.handleTaskStop}
-        />
+        <div
+          className="text"
+          style={{
+            borderLeft: `4px solid ${backgroundColor}`,
+            // borderRight: `2px solid ${backgroundColor}`,
+            // borderBottom: `2px solid ${backgroundColor}`,
+            // borderTop: `2px solid ${backgroundColor}`,
+            borderRight: `2px solid #ededed `,
+            borderBottom: `2px solid #ededed `,
+            borderTop: `2px solid #ededed `,
+            paddingLeft: "4px",
+            borderRadius: "5px"
+          }}
+        >
+          <DashboardEvent
+            eventItemClick={eventItemClick}
+            schedulerData={schedulerData}
+            event={event}
+            bgColor={bgColor}
+            isStart={isStart}
+            isEnd={isEnd}
+            mustAddCssClass={mustAddCssClass}
+            agendaMaxEventWidth={agendaMaxEventWidth}
+            titleText={titleText}
+            start={start}
+            end={end}
+            divStyle={divStyle}
+            scheduler={this.schedulerData}
+            hideOverPopup={this.hideOverPopup}
+            workspaceId={this.props.workspaceId}
+            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+            onGoingTask={this.props.onGoingTask}
+            eventItemPopoverTemplateResolver={
+              this.eventItemPopoverTemplateResolver
+            }
+            userId={this.props.state.userId}
+            taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+            handleTaskTracking={this.props.handleTaskTracking}
+            state={this.props.state}
+            handleTaskStartTop={this.props.handleTaskStartTop}
+            handleTaskStart={this.props.handleTaskStart}
+            handleTaskStop={this.props.handleTaskStop}
+          />
+        </div>
       </>
     );
   };
