@@ -3735,9 +3735,26 @@ table.scheduler-table tr:last-child td {
 .day-event-container {
   padding: 0px !important;
   .day-event {
-    margin: 0px !important;
+    margin: 4px !important;
     .event-item{
       margin: 2px !important;
+      //       .event-action-dropdown{  
+      //         width: 98px !important;
+      //         position: absolute !important;
+      //         z-index: 1 !important;
+      //         text-align: center !important;
+      //         // right: 40px !important;
+      //         left: 100%;
+      //         top: 32px !important;
+      //         background-color: #ffffff;
+      //         border: 1px solid #e5e5e5 !important;
+      //         border-radius: 5px;
+      //         font-family: 'Roboto-Regular', 'Roboto';
+      //         font-weight: 400;
+      //         font-style: normal;
+      //         font-size: 12px;
+      //         color: #0075d9;      
+      // }
     }
   }
 }
@@ -5133,23 +5150,23 @@ table.scheduler-table tr:last-child td {
             td{
               .event-container{
                 .timeline-event{
-                  .event-action-dropdown{  
-                    width: 98px !important;
-                    position: absolute !important;
-                    z-index: 1 !important;
-                    text-align: center !important;
-                    // right: 40px !important;
-                    left: 100%;
-                    top: 32px !important;
-                    background-color: #ffffff;
-                    border: 1px solid #e5e5e5;
-                    border-radius: 5px;
-                    font-family: 'Roboto-Regular', 'Roboto';
-                    font-weight: 400;
-                    font-style: normal;
-                    font-size: 12px;
-                    color: #0075d9;
-                  }
+                  // .event-action-dropdown{  
+                  //   width: 98px !important;
+                  //   position: absolute !important;
+                  //   z-index: 1 !important;
+                  //   text-align: center !important;
+                  //   // right: 40px !important;
+                  //   left: 100%;
+                  //   top: 32px !important;
+                  //   background-color: #ffffff;
+                  //   border: 1px solid #e5e5e5;
+                  //   border-radius: 5px;
+                  //   font-family: 'Roboto-Regular', 'Roboto';
+                  //   font-weight: 400;
+                  //   font-style: normal;
+                  //   font-size: 12px;
+                  //   color: #0075d9;
+                  // }
                 }
               }
             }

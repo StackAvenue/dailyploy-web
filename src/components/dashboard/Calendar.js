@@ -34,7 +34,9 @@ class Calendar extends Component {
 
         // agendaResourceTableWidth: 160,
         agendaResourceTableWidth: 220,
-        agendaMaxEventWidth: 157,
+        // agendaMaxEventWidth: 157,
+        agendaMaxEventWidth: 206,
+        // marginOf: 5,
 
         dayResourceTableWidth: 218,
         weekResourceTableWidth: 218,
@@ -600,6 +602,7 @@ class Calendar extends Component {
     mustAddCssClass,
     mustBeHeight,
     agendaMaxEventWidth
+    // marginOf
   ) => {
     let backgroundColor = bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
@@ -621,6 +624,7 @@ class Calendar extends Component {
       borderLeft: "4px solid backgroundColor"
     };
     if (!!agendaMaxEventWidth)
+      // divStyle = { marginOf, maxWidth: agendaMaxEventWidth };
       divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth, margin: "5px" };
 
     return (
@@ -648,6 +652,7 @@ class Calendar extends Component {
             isEnd={isEnd}
             mustAddCssClass={mustAddCssClass}
             agendaMaxEventWidth={agendaMaxEventWidth}
+            // marginOf={marginOf}
             titleText={titleText}
             start={start}
             end={end}
