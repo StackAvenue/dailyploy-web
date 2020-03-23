@@ -37,76 +37,6 @@ class DashboardEvent extends Component {
     };
   }
 
-  // async componentDidMount() {
-  //   var startOn = localStorage.getItem(`startOn-${this.props.workspaceId}`);
-  //   var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
-  //   if (taskId === this.props.event.id && startOn !== "") {
-  //     this.setState({
-  //       status: true,
-  //       startOn: startOn
-  //       // icon: "pause"
-  //     });
-  //   }
-  // }
-
-  // handleClick = async event => {
-  //   console.log(this.props.state.status);
-  //   var icon = this.state.icon;
-  //   // var status = this.state.status;
-  //   var status = this.props.state.status;
-  //   var showAlert = false;
-  //   var startOn = "";
-  //   if (status) {
-  //     var endOn = Date.now();
-  //     this.props.handleTaskTracking("stop", event, endOn);
-  //     this.handleReset();
-  //     this.props.handleTaskBottomPopup("", event, "stop");
-  //     status = !this.state.status;
-  //   } else {
-  //     if (this.props.onGoingTask) {
-  //       showAlert = !this.state.showAlert;
-  //     } else {
-  //       startOn = Date.now();
-  //       this.setLocalStorageValue(startOn);
-  //       this.props.handleTaskBottomPopup(startOn, this.props.event, "start");
-  //       status = !this.state.status;
-  //       this.props.handleTaskTracking("start", event, startOn);
-  //     }
-  //   }
-  //   this.setState({
-  //     status: status,
-  //     showPopup: false,
-  //     clickEventId: event.id,
-  //     showAlert: showAlert,
-  //     startOn: startOn
-  //   });
-  // };
-
-  // setLocalStorageValue = startOn => {
-  //   localStorage.setItem(`startOn-${this.props.workspaceId}`, startOn);
-  //   localStorage.setItem(
-  //     `taskId-${this.props.workspaceId}`,
-  //     this.props.event.id
-  //   );
-  //   localStorage.setItem(
-  //     `colorCode-${this.props.workspaceId}`,
-  //     this.props.bgColor
-  //   );
-  //   localStorage.setItem(
-  //     `taskTitle-${this.props.workspaceId}`,
-  //     this.props.titleText
-  //   );
-  // };
-
-  // handleReset = () => {
-  //   clearInterval(this.timer);
-  //   this.setState({ runningTime: 0, status: false, startOn: "" });
-  //   localStorage.setItem(`startOn-${this.props.workspaceId}`, "");
-  //   localStorage.setItem(`taskId-${this.props.workspaceId}`, "");
-  //   localStorage.setItem(`colorCode-${this.props.workspaceId}`, "");
-  //   localStorage.setItem(`taskTitle-${this.props.workspaceId}`, "");
-  // };
-
   showEventPopUp = () => {
     this.setState({ showPopup: !this.state.showPopup });
   };
@@ -246,7 +176,6 @@ class DashboardEvent extends Component {
       titleText,
       state
     } = this.props;
-    console.log(event);
 
     const totalTrackTime = this.props.event.allTimeTracked
       .map(log => log.duration)
@@ -261,192 +190,13 @@ class DashboardEvent extends Component {
       <>
         {schedulerData.viewType === 0 ? (
           <div key={event.id} className={mustAddCssClass}>
-            {/* <div className="row item dashboard-event-box ABS">
-              <div
-                className="col-md-12 pointer item-heading text-wraper"
-                style={{ padding: "5px 5px 0px 5px", color: contColor }}
-                onClick={() => {
-                  if (!!eventItemClick) eventItemClick(schedulerData, event);
-                }}
-              >
-                {titleText}
-              </div>
-
-              <div className="col-md-12 no-padding">
-                <OverlayTrigger
-                  placement="auto"
-                  trigger="hover"
-                  overlay={this.props.eventItemPopoverTemplateResolver(
-                    schedulerData,
-                    event,
-                    titleText,
-                    start,
-                    end,
-                    this.props.bgColor
-                  )}
-                >
-                  <div className="col-md-10 no-padding d-inline-block">
-                    <div className="col-md-2 no-padding d-inline-block">
-                      <div className={`${this.props.event.priority}`}></div>
-                    </div>
-                    <div className="col-md-8 no-padding d-inline-block ">
-                      <span className="task-timer" style={{ color: contColor }}>
-                        <Timer
-                          totalDuration={totalTrackTime}
-                          startOn={this.props.event.startOn}
-                          isStart={this.props.event.startOn ? true : false}
-                        />
-                        {" of"} {this.calculateTime(event)}
-                      </span>
-                    </div>
-                  </div>
-                </OverlayTrigger>
-
-                {event.trackingStatus === "pause" &&
-                event.status === "running" ? (
-                  <div className="col-md-2 no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none"
-                      }}
-                      className={`day-task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStop(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-pause"></i>
-                    </span>
-                  </div>
-                ) : null}
-
-                {event.trackingStatus === "play" &&
-                event.status === "not_started" ? (
-                  <div className="col-md-2 no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none"
-                      }}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                      className={`day-task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                    >
-                      <i className="fa fa-power-off"></i>
-                    </span>
-                  </div>
-                ) : null}
-
-                {event.trackingStatus === "play" &&
-                event.status === "running" ? (
-                  <div className="col-md-2 no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none"
-                      }}
-                      className={`day-task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-play"></i>
-                    </span>
-                  </div>
-                ) : null}
-
-                {event.status === "completed" ? (
-                  <div className="col-md-2 no-padding d-inline-block">
-                    <span className="day-task-play-btn">
-                      <i className="fa fa-check"></i>
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-              <div
-                className="col-md-12 no-padding"
-                style={{ color: contColor }}
-              >
-                {logs.length > 0 ? (
-                  <>
-                    <div
-                      className="no-padding d-inline-block event-active-log"
-                      onClick={() => this.onClickInput()}
-                      style={this.state.show ? { backgroundColor: "#fff" } : {}}
-                    >
-                      <li
-                        style={
-                          this.state.show
-                            ? { color: "#000" }
-                            : { color: contColor }
-                        }
-                      >
-                        {logs[0].name}
-                      </li>
-                    </div>
-                    <i
-                      style={
-                        this.state.show
-                          ? { color: "#000" }
-                          : { color: contColor }
-                      }
-                      className="fa fa-angle-down log-angle-down"
-                    ></i>
-                  </>
-                ) : (
-                  <div
-                    className="no-padding d-inline-block no-track-time text-right"
-                    style={{ fontSize: "12px" }}
-                  >
-                    <span>No tracked time</span>
-                  </div>
-                )}
-                <div
-                  className="no-padding d-inline-block three-dot"
-                  // style={{ float: "right" }}
-                >
-                  <span
-                    className="task-event-action pointer"
-                    onClick={() => this.ToggleActionDropDown(event.id)}
-                  >
-                    ...
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null} */}
-
             <div className="row item dashboard-event-box ABS">
-              {/* <div
-                className="col-md-12 no-padding pointer item-heading text-wraper"
-                style={{
-                  padding: "5px 5px 0px 5px",
-                  color: getContrastColor(this.props.bgColor)
-                }}
-                onClick={() => {
-                  if (!!eventItemClick) eventItemClick(schedulerData, event);
-                }}
-              >
-                {titleText}
-              </div> */}
               <div className="col-md-7 no-padding">
                 <div className="project-name-text" style={divStyle}>
                   <span className="name-text-dot">{event.projectName}</span>
                 </div>
               </div>
 
-              {/* <div className="col-md-6 no-padding"> */}
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
                 event.status === "running" ? (
@@ -529,40 +279,19 @@ class DashboardEvent extends Component {
                   </span>
                 </div>
               </div>
-              {/* </div> */}
-
-              {/* </div> */}
             </div>
 
-            {/* <div className="col-md-6 no-padding"></div> */}
             <div className="row date-div-card">
-              {/* <div className="col-md-12 no-padding date-div-card"> */}
               <span>
                 {moment(event.taskStartDateTime).format("DD MMM, HH:MM")}
+                {" - "}
               </span>
-
-              <span className="margin-none">-</span>
-
+              {/* <span className="margin-none">-</span> */}
               <span>
                 {moment(event.taskEndDateTime).format("DD MMM, HH:MM")}
               </span>
-              {/* </div> */}
             </div>
 
-            {/* <div className="col-md-6 no-padding">
-                <div className="date-div-card">
-                  <span>
-                    {moment(event.taskStartDateTime).format("DD MMM-")}
-                  </span>
-
-                  <span>{moment(event.taskEndDateTime).format("DD MMM")}</span>
-                </div>
-                <div className="date-div-card">
-                  <span>{moment(event.taskStartDateTime).format("HH:MM")}</span>
-                  <span style={{ margin: "0px 2px" }}>To</span>
-                  <span>{moment(event.taskEndDateTime).format("HH:MM")}</span>
-                </div>
-              </div> */}
             <div className="row item dashboard-event-box">
               <OverlayTrigger
                 placement="auto"
@@ -592,121 +321,12 @@ class DashboardEvent extends Component {
                   </div>
                 </div>
               </OverlayTrigger>
-              {/* 
-              {event.trackingStatus === "pause" &&
-              event.status === "running" ? (
-                <div className="col-md-3 no-padding d-inline-block">
-                  <span
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className={`task-play-btn pointer ${
-                      state.isPlayPause ? "disabled" : ""
-                    }`}
-                    onClick={() => this.props.handleTaskStop(event, Date.now())}
-                  >
-                    <i className="fa fa-pause"></i>
-                  </span>
-                </div>
-              ) : null}
-
-              {event.trackingStatus === "play" &&
-              event.status === "not_started" ? (
-                <div className="col-md-2 no-padding d-inline-block">
-                  <span
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className={`task-play-btn pointer ${
-                      state.isPlayPause ? "disabled" : ""
-                    }`}
-                    onClick={() =>
-                      this.props.handleTaskStart(event, Date.now())
-                    }
-                  >
-                    <i className="fa fa-power-off"></i>
-                  </span>
-                </div>
-              ) : null}
-
-              {event.trackingStatus === "play" && event.status === "running" ? (
-                <div className="col-md-2 no-padding d-inline-block">
-                  <span
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className={`task-play-btn pointer ${
-                      state.isPlayPause ? "disabled" : ""
-                    }`}
-                    onClick={() =>
-                      this.props.handleTaskStart(event, Date.now())
-                    }
-                  >
-                    <i className="fa fa-play"></i>
-                  </span>
-                </div>
-              ) : null}
-
-              {event.status === "completed" ? (
-                <div className="col-md-2 no-padding d-inline-block">
-                  <span className="task-play-btn">
-                    <i className="fa fa-check"></i>
-                  </span>
-                </div>
-              ) : null} */}
             </div>
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding"
                 style={{ color: contColor }}
               >
-                {/* {logs.length > 0 ? (
-                  <>
-                    <div
-                      className="no-padding d-inline-block event-active-log"
-                      onClick={() => this.onClickInput()}
-                      style={
-                        this.state.show
-                          ? { color: contColor, backgroundColor: "#fff" }
-                          : {}
-                      }
-                    >
-                      <li
-                        style={
-                          this.state.show
-                            ? { color: "#000" }
-                            : { color: contColor }
-                        }
-                      >
-                        {logs[0].name}
-                      </li>
-                    </div>
-                    <i
-                      style={
-                        this.state.show
-                          ? { color: "#000" }
-                          : { color: contColor }
-                      }
-                      className="fa fa-angle-down log-angle-down"
-                    ></i>
-                  </>
-                ) : (
-                  // <div
-                  //   className="no-padding d-inline-block no-track-time text-right"
-                  //   style={{ fontSize: "12px" }}
-                  // >
-                  //   <span>No tracked time</span>
-                  // </div>
-                  // <div className="">{`${option[name]}`}</div>
-                  // <div className="">{event.projectName}</div>
-                 
-                // )} */}
                 <div
                   className="col-md-12 no-padding pointer item-heading text-wraper"
                   style={{
@@ -719,17 +339,6 @@ class DashboardEvent extends Component {
                 >
                   <span className="project-task-name">{titleText}</span>
                 </div>
-                {/* <div
-                  className="no-padding d-inline-block three-dot"
-                  // style={{ float: "right" }}
-                >
-                  <span
-                    className="task-event-action pointer"
-                    onClick={() => this.ToggleActionDropDown(event.id)}
-                  >
-                    ...
-                  </span>
-                </div> */}
               </div>
             </div>
           </div>
@@ -743,26 +352,13 @@ class DashboardEvent extends Component {
             // style={divStyle}
             style={borderLeft}
           >
-            <div className="row item dashboard-event-box AB">
-              {/* <div
-                className="col-md-12 no-padding pointer item-heading text-wraper"
-                style={{
-                  padding: "5px 5px 0px 5px",
-                  color: getContrastColor(this.props.bgColor)
-                }}
-                onClick={() => {
-                  if (!!eventItemClick) eventItemClick(schedulerData, event);
-                }}
-              >
-                {titleText}
-              </div> */}
+            <div className="row item dashboard-event-box">
               <div className="col-md-7 no-padding">
                 <div className="project-name-text" style={divStyle}>
                   <span className="name-text-dot">{event.projectName}</span>
                 </div>
               </div>
 
-              {/* <div className="col-md-6 no-padding"> */}
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
                 event.status === "running" ? (
@@ -845,41 +441,19 @@ class DashboardEvent extends Component {
                   </span>
                 </div>
               </div>
-              {/* </div> */}
-
-              {/* </div> */}
             </div>
 
-            {/* <div className="col-md-6 no-padding"></div> */}
             <div className="row date-div-card">
-              {/* <div className="col-md-12 no-padding date-div-card"> */}
               <span>
                 {moment(event.taskStartDateTime).format("DD MMM, HH:MM")}
+                {" - "}
               </span>
-
-              {/* <span style={{ margin: "0px 12px" }}> - </span> */}
-              <span className="margin-none">-</span>
-
+              {/* <span className="margin-none">-</span> */}
               <span>
                 {moment(event.taskEndDateTime).format("DD MMM, HH:MM")}
               </span>
-              {/* </div> */}
             </div>
 
-            {/* <div className="col-md-6 no-padding">
-                <div className="date-div-card">
-                  <span>
-                    {moment(event.taskStartDateTime).format("DD MMM-")}
-                  </span>
-
-                  <span>{moment(event.taskEndDateTime).format("DD MMM")}</span>
-                </div>
-                <div className="date-div-card">
-                  <span>{moment(event.taskStartDateTime).format("HH:MM")}</span>
-                  <span style={{ margin: "0px 2px" }}>To</span>
-                  <span>{moment(event.taskEndDateTime).format("HH:MM")}</span>
-                </div>
-              </div> */}
             <div className="row item dashboard-event-box">
               <OverlayTrigger
                 placement="auto"
@@ -909,121 +483,12 @@ class DashboardEvent extends Component {
                   </div>
                 </div>
               </OverlayTrigger>
-              {/* 
-              {event.trackingStatus === "pause" &&
-              event.status === "running" ? (
-                <div className="col-md-3 no-padding d-inline-block">
-                  <span
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className={`task-play-btn pointer ${
-                      state.isPlayPause ? "disabled" : ""
-                    }`}
-                    onClick={() => this.props.handleTaskStop(event, Date.now())}
-                  >
-                    <i className="fa fa-pause"></i>
-                  </span>
-                </div>
-              ) : null}
-
-              {event.trackingStatus === "play" &&
-              event.status === "not_started" ? (
-                <div className="col-md-2 no-padding d-inline-block">
-                  <span
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className={`task-play-btn pointer ${
-                      state.isPlayPause ? "disabled" : ""
-                    }`}
-                    onClick={() =>
-                      this.props.handleTaskStart(event, Date.now())
-                    }
-                  >
-                    <i className="fa fa-power-off"></i>
-                  </span>
-                </div>
-              ) : null}
-
-              {event.trackingStatus === "play" && event.status === "running" ? (
-                <div className="col-md-2 no-padding d-inline-block">
-                  <span
-                    style={{
-                      pointerEvents: this.isValidUserDate(event.resourceId)
-                        ? ""
-                        : "none"
-                    }}
-                    className={`task-play-btn pointer ${
-                      state.isPlayPause ? "disabled" : ""
-                    }`}
-                    onClick={() =>
-                      this.props.handleTaskStart(event, Date.now())
-                    }
-                  >
-                    <i className="fa fa-play"></i>
-                  </span>
-                </div>
-              ) : null}
-
-              {event.status === "completed" ? (
-                <div className="col-md-2 no-padding d-inline-block">
-                  <span className="task-play-btn">
-                    <i className="fa fa-check"></i>
-                  </span>
-                </div>
-              ) : null} */}
             </div>
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding"
                 style={{ color: contColor }}
               >
-                {/* {logs.length > 0 ? (
-                  <>
-                    <div
-                      className="no-padding d-inline-block event-active-log"
-                      onClick={() => this.onClickInput()}
-                      style={
-                        this.state.show
-                          ? { color: contColor, backgroundColor: "#fff" }
-                          : {}
-                      }
-                    >
-                      <li
-                        style={
-                          this.state.show
-                            ? { color: "#000" }
-                            : { color: contColor }
-                        }
-                      >
-                        {logs[0].name}
-                      </li>
-                    </div>
-                    <i
-                      style={
-                        this.state.show
-                          ? { color: "#000" }
-                          : { color: contColor }
-                      }
-                      className="fa fa-angle-down log-angle-down"
-                    ></i>
-                  </>
-                ) : (
-                  // <div
-                  //   className="no-padding d-inline-block no-track-time text-right"
-                  //   style={{ fontSize: "12px" }}
-                  // >
-                  //   <span>No tracked time</span>
-                  // </div>
-                  // <div className="">{`${option[name]}`}</div>
-                  // <div className="">{event.projectName}</div>
-                 
-                // )} */}
                 <div
                   className="col-md-12 no-padding pointer item-heading text-wraper"
                   style={{
@@ -1036,17 +501,6 @@ class DashboardEvent extends Component {
                 >
                   <span className="project-task-name">{titleText}</span>
                 </div>
-                {/* <div
-                  className="no-padding d-inline-block three-dot"
-                  // style={{ float: "right" }}
-                >
-                  <span
-                    className="task-event-action pointer"
-                    onClick={() => this.ToggleActionDropDown(event.id)}
-                  >
-                    ...
-                  </span>
-                </div> */}
               </div>
             </div>
           </div>
@@ -1089,47 +543,6 @@ class DashboardEvent extends Component {
             taskEventResumeConfirm={this.props.taskEventResumeConfirm}
           />
         ) : null}
-
-        {/* {this.state.showAction && this.state.clickEventId === event.id ? (
-          <div className="d-inline-block event-action-dropdown">
-            {this.props.event.status !== "completed" ? (
-              <>
-                <div
-                  className="border-bottom pointer"
-                  style={{ padding: "5px 0px 0px 0px" }}
-                  // onClick={() => this.markCompleteTask(event.id)}
-                  onClick={() =>
-                    this.props.taskEventResumeConfirm(
-                      event,
-                      "mark as completed"
-                    )
-                  }
-                >
-                  Mark Complete
-                </div>
-                <div
-                  className="pointer"
-                  style={{ padding: "5px 0px 5px 0px" }}
-                  onClick={() =>
-                    this.props.taskEventResumeConfirm(event, "delete")
-                  }
-                >
-                  Delete Task
-                </div>
-              </>
-            ) : (
-              <div
-                className="pointer"
-                style={{ padding: "5px 0px 5px 0px" }}
-                onClick={() =>
-                  this.props.taskEventResumeConfirm(event, "resume")
-                }
-              >
-                Resume
-              </div>
-            )}
-          </div>
-        ) : null} */}
 
         <div className="custom-event-popup">
           {this.state.showPopup

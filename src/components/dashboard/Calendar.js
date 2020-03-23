@@ -33,9 +33,8 @@ class Calendar extends Component {
         tableHeaderHeight: 34,
 
         // agendaResourceTableWidth: 160,
-        agendaResourceTableWidth: 220,
-        // agendaMaxEventWidth: 157,
-        agendaMaxEventWidth: 206,
+        // agendaResourceTableWidth: 220,
+        agendaMaxEventWidth: 157,
         // marginOf: 5,
 
         dayResourceTableWidth: 218,
@@ -55,8 +54,7 @@ class Calendar extends Component {
         customMaxEvents: 99,
 
         // eventItemHeight: 85,
-        eventItemHeight: 98,
-        // eventItemHeight: 45,
+        eventItemHeight: 108,
         eventItemLineHeight: this.calculateResouceHeight(),
         nonAgendaSlotMinHeight: 0,
         dayStartFrom: 0,
@@ -152,9 +150,12 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 90;
+      return 108;
+    } else if (height < 108) {
+      return 108;
+    } else {
+      return height;
     }
-    return height;
   };
 
   async componentDidMount() {
@@ -434,9 +435,9 @@ class Calendar extends Component {
     );
     schedulerData.setEvents(this.state.events);
     if (view.viewType === 0) {
-      schedulerData.setEventItemHeight(85);
+      schedulerData.setEventItemHeight(108);
     } else if (view.viewType === 1) {
-      schedulerData.setEventItemHeight(85);
+      schedulerData.setEventItemHeight(108);
     } else if (view.viewType === 2) {
       schedulerData.setEventItemHeight(51);
     }
