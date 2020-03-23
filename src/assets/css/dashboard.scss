@@ -5359,3 +5359,28 @@ font-family: 'Roboto' !important;
     justify-content: center !important;
     align-items: center !important;
 }
+.margin-none{
+  margin: 0px 12px;
+}
+
+
+
+@media screen and (min-width: 1200px) and (max-width: 1600px) {
+
+  .date-div-card{
+    display: inline-block !important;
+    font-size: 11px;
+    margin: 0 !important;
+    .margin-none{
+      margin: 0 0 !important;
+      display: inline !important;
+    }
+
+  }
+  .task-timer {
+    font-size: 11px !important;
+   
+  }
+
+  
+}

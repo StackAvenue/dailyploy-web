@@ -541,7 +541,7 @@ class DashboardEvent extends Component {
                 {moment(event.taskStartDateTime).format("DD MMM, HH:MM")}
               </span>
 
-              <span style={{ margin: "0px 12px" }}> - </span>
+              <span className="margin-none">-</span>
 
               <span>
                 {moment(event.taskEndDateTime).format("DD MMM, HH:MM")}
@@ -857,7 +857,8 @@ class DashboardEvent extends Component {
                 {moment(event.taskStartDateTime).format("DD MMM, HH:MM")}
               </span>
 
-              <span style={{ margin: "0px 12px" }}> - </span>
+              {/* <span style={{ margin: "0px 12px" }}> - </span> */}
+              <span className="margin-none">-</span>
 
               <span>
                 {moment(event.taskEndDateTime).format("DD MMM, HH:MM")}
