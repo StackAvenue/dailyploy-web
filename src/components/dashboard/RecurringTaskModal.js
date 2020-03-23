@@ -159,18 +159,7 @@ class RecurringTaskModal extends React.Component {
       }
     ];
     this.state = {
-      members: [],
-      project: "",
-      showProjectSuggestion: false,
-      projectSuggestions: [],
-      membersSuggestions: [],
       selectedMembers: [],
-      projectSearchText: "",
-      memberSearchText: "",
-      isBorder: false,
-      border: "solid 1px #d1d1d1",
-      notFound: "hide",
-      memberNotFound: "hide",
       taskName: "",
       comments: "",
       dateFrom: new Date(),
@@ -323,7 +312,8 @@ class RecurringTaskModal extends React.Component {
   handleRepeatOnChange = repeat => {
     this.setState({
       repeatOn: repeat,
-      frequency: repeat ? repeat.value : null
+      frequency: repeat ? repeat.value : null,
+      repeatOnNumber: repeat.value == "days" ? 1 : this.state.repeatOnNumber
     });
   };
 
@@ -459,14 +449,15 @@ class RecurringTaskModal extends React.Component {
       (this.state.timeTo && this.state.timeFrom
         ? " " + this.state.timeTo
         : " 00:00:00");
-    let projectIds = this.state.selectedProjects.map(p => p.id).join(", ");
+    let projectIds = this.state.selectedProjects.map(p => p.id).join(",");
     var taskData = {
       task: {
         name: this.props.state.taskName,
-        member_ids: this.props.state.taskUser.join(", "),
+        member_ids: this.props.state.taskUser.join(","),
         start_datetime: startDateTime,
         comments: this.props.state.comments,
-        project_id: projectIds,
+        project_ids: projectIds,
+        status: "not_started",
         category_id: this.props.state.taskCategorie.task_category_id,
         priority:
           this.props.state.taskPrioritie && this.props.state.taskPrioritie.name
@@ -481,10 +472,10 @@ class RecurringTaskModal extends React.Component {
         moment(this.state.dateTo).format(DATE_FORMAT1) + " 00:00:00";
     }
     if (this.state.frequency == "week") {
-      taskData.task["week_numbers"] = this.state.weekDays.join(", ");
+      taskData.task["week_numbers"] = this.state.weekDays.join(",");
     }
     if (this.state.frequency == "month") {
-      taskData.task["month_numbers"] = this.state.monthDays.join(", ");
+      taskData.task["month_numbers"] = this.state.monthDays.join(",");
     }
     return taskData;
   };
@@ -496,14 +487,11 @@ class RecurringTaskModal extends React.Component {
       try {
         const { data } = await post(
           taskData,
-          `workspaces/${this.state.workspaceId}/recurring_tasks`
+          `workspaces/${this.props.state.workspaceId}/recurring_task`
         );
         var task = data.task;
         toast(
-          <DailyPloyToast
-            message="Task Created successfully!"
-            status="success"
-          />,
+          <DailyPloyToast message="Recurring Task Created!" status="success" />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
 
@@ -662,14 +650,18 @@ class RecurringTaskModal extends React.Component {
             <div className="col-md-2 d-inline-block no-padding label">
               Repeat Every
             </div>
-            <div className="col-md-3 d-inline-block">
+            <div
+              className={`col-md-3 d-inline-block ${
+                this.state.frequency == "days" ? "disabled" : ""
+              }`}
+            >
               <input
                 type="number"
                 name="repeatOnNumber"
                 value={this.state.repeatOnNumber}
                 onChange={e => this.handleRepeatOnInputChange(e)}
                 placeholder="Enter"
-                className="form-control"
+                className={`form-control`}
               />
             </div>
             <div className="col-md-7 d-inline-block">
@@ -957,12 +949,12 @@ class RecurringTaskModal extends React.Component {
               <button
                 type="button"
                 className={`button1 btn-primary pull-right ${
-                  props.state.taskloader ? "disabled" : ""
+                  this.state.taskloader ? "disabled" : ""
                 }`}
                 onClick={() => this.createRecurringTask()}
               >
                 {props.state.taskButton}
-                {this.props.state.taskloader ? (
+                {this.state.taskloader ? (
                   <Loader
                     type="Oval"
                     color="#FFFFFF"
