@@ -37,9 +37,85 @@ class TaskList extends Component {
       memberHours: "",
       memberProjects: null,
       isDeleteShow: false,
-      selectMemberArr: [],
+      selectTaskArr: [],
       isAllChecked: false,
-      showConfirm: false
+      showConfirm: false,
+      taskList: [
+        {
+          category: {
+            name: "integration",
+            task_category_id: 2
+          },
+          category_id: 2,
+          comments: null,
+          frequency: "weekly",
+          id: 1,
+          members: [
+            {
+              id: 1,
+              name: "ravi karale",
+              email: "ravi@gmail.com"
+            }
+          ],
+          name: "Task 12",
+          number: 1,
+          priority: "high",
+          projects: [
+            {
+              id: 12,
+              name: "dailyploy",
+              color_code: "#dsfdsf"
+            }
+          ],
+          schedule: true,
+          start_datetime: "2020-03-23T00:00:00Z",
+          end_datetime: null,
+          status: "not_started",
+          week_numbers: [
+            {
+              id: 0,
+              name: "monday"
+            }
+          ],
+          month_numbers: [0, 5]
+        },
+        {
+          category: {
+            name: "integration",
+            task_category_id: 2
+          },
+          category_id: 2,
+          comments: null,
+          frequency: "weekly",
+          id: 2,
+          members: [
+            {
+              id: 1,
+              name: "ravi karale",
+              email: "ravi@gmail.com"
+            }
+          ],
+          name: "Task 13",
+          number: 1,
+          priority: "medium",
+          projects: [
+            {
+              id: 12,
+              name: "dailyploy",
+              color_code: "#dsfdsf"
+            }
+          ],
+          schedule: false,
+          start_datetime: "2020-03-23T00:00:00Z",
+          end_datetime: null,
+          status: "not_started",
+          week_numbers: {
+            id: 0,
+            name: "monday"
+          },
+          month_numbers: [0, 5]
+        }
+      ]
     };
   }
 
@@ -65,32 +141,11 @@ class TaskList extends Component {
 
     this.getWorkspaceParams();
 
-    // worksapce project Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/projects`
+        `workspaces/${this.state.workspaceId}/task_list`
       );
-      var projectsData = data.projects;
-    } catch (e) {
-      console.log("err", e);
-    }
-
-    try {
-      const { data } = await get(
-        `workspaces/${this.state.workspaceId}/members`
-      );
-      var userArr = data.members.map(user => user.email);
-      var worksapceUsers = data.members;
-      var worksapceUser = data.members.find(
-        user => user.email === loggedInData.email
-      );
-      var memberArr = data.members.filter(
-        user => user.email !== loggedInData.email
-      );
-      var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email
-      );
-      this.props.handleLoading(false);
+      var taskList = data.tasks.this.props.handleLoading(false);
     } catch (e) {
       console.log("users Error", e);
     }
@@ -99,16 +154,13 @@ class TaskList extends Component {
       userId: loggedInData.id,
       userName: loggedInData.name,
       userEmail: loggedInData.email,
-      workspaces: workspacesData,
-      projects: projectsData,
-      users: userArr,
-      isLogedInUserEmailArr: emailArr,
-      userRole: worksapceUser ? worksapceUser.role : null,
-      worksapceUsers: worksapceUsers,
-      worksapceUser: worksapceUser,
-      members: memberArr
+      workspaces: workspacesData
+      // userRole: worksapceUser ? worksapceUser.role : null,
+      // worksapceUsers: worksapceUsers,
+      // worksapceUser: worksapceUser,
+      // taskList: taskList
     });
-    this.createUserProjectList();
+    // this.createUserProjectList();
   }
 
   async componentDidUpdate(prevProps, prevState) {}
@@ -128,71 +180,71 @@ class TaskList extends Component {
     }
   };
 
-  handleSearchFilterResult = data => {
-    var searchUserDetails = [];
-    var projectIds = [];
-    {
-      data.map((item, i) => {
-        if (item.type === "member") {
-          searchUserDetails.push(item);
-        } else if (item.type === "project") {
-          projectIds.push(item.project_id);
-        }
-      });
-    }
-    this.setState({
-      searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails
-    });
-  };
+  // handleSearchFilterResult = data => {
+  //   var searchUserDetails = [];
+  //   var projectIds = [];
+  //   {
+  //     data.map((item, i) => {
+  //       if (item.type === "member") {
+  //         searchUserDetails.push(item);
+  //       } else if (item.type === "project") {
+  //         projectIds.push(item.project_id);
+  //       }
+  //     });
+  //   }
+  //   this.setState({
+  //     searchProjectIds: projectIds,
+  //     searchUserDetails: searchUserDetails
+  //   });
+  // };
 
-  createUserProjectList = () => {
-    let projectList = [];
-    let memberList = [];
-    if (this.state.projects) {
-      {
-        this.state.projects.map((project, index) => {
-          projectList.push({
-            value: project.name,
-            project_id: project.id,
-            type: "project",
-            id: (index += 1)
-          });
-        });
-      }
-    }
-    if (this.state.members) {
-      this.state.members.map((member, idx) => {
-        memberList.push({
-          value: member.name,
-          member_id: member.id,
-          email: member.email,
-          type: "member",
-          role: member.role
-        });
-      });
-    }
-    var searchOptions = {
-      members: memberList,
-      projects: projectList
-    };
-    console.log("searchOptions", searchOptions);
-    this.setState({ searchOptions: searchOptions });
-    this.props.setSearchOptions(searchOptions);
-  };
+  // createUserProjectList = () => {
+  //   let projectList = [];
+  //   let memberList = [];
+  //   if (this.state.projects) {
+  //     {
+  //       this.state.projects.map((project, index) => {
+  //         projectList.push({
+  //           value: project.name,
+  //           project_id: project.id,
+  //           type: "project",
+  //           id: (index += 1)
+  //         });
+  //       });
+  //     }
+  //   }
+  //   if (this.state.members) {
+  //     this.state.members.map((member, idx) => {
+  //       memberList.push({
+  //         value: member.name,
+  //         member_id: member.id,
+  //         email: member.email,
+  //         type: "member",
+  //         role: member.role
+  //       });
+  //     });
+  //   }
+  //   var searchOptions = {
+  //     members: memberList,
+  //     projects: projectList
+  //   };
+  //   console.log("searchOptions", searchOptions);
+  //   this.setState({ searchOptions: searchOptions });
+  //   this.props.setSearchOptions(searchOptions);
+  // };
 
   handleLoad = value => {
     this.setState({ isLoading: value });
   };
 
-  handleCheckAll = (e, projects) => {
+  handleCheckAll = (e, tasks) => {
     const allCheckboxChecked = e.target.checked;
-    let projectsLength = projects.length;
-    var arrProject;
+    let tasksLength = tasks.length;
+    var taskArray;
     if (allCheckboxChecked === true) {
-      arrProject = projects;
+      taskArray = tasks;
     } else {
-      arrProject = [];
+      taskArray = [];
     }
     var checkboxes = document.getElementsByName("isChecked");
     if (allCheckboxChecked) {
@@ -209,38 +261,38 @@ class TaskList extends Component {
       }
     }
     this.setState({
-      selectMemberArr: arrProject,
+      selectTaskArr: taskArray,
       isAllChecked: allCheckboxChecked
     });
   };
 
-  handleCheck = (e, project) => {
+  handleCheck = (e, task) => {
     let checked = e.target.checked;
-    let arrProject = [];
+    let taskArr = [];
     if (checked) {
-      arrProject = [...this.state.selectMemberArr, ...[project]];
+      taskArr = [...this.state.selectTaskArr, ...[task]];
     } else {
-      let filterProjectArr = this.state.selectMemberArr.filter(
-        item => item.id !== project.id
+      let filterTaskArr = this.state.selectTaskArr.filter(
+        item => item.id !== task.id
       );
-      arrProject = filterProjectArr;
+      taskArr = filterTaskArr;
     }
-    this.setState({ selectMemberArr: arrProject });
+    this.setState({ selectTaskArr: taskArr });
   };
 
   toggleShowConfirm = () => {
     this.setState({ showConfirm: true });
   };
 
-  deleteMembers = async e => {
-    let memberIds = this.state.selectMemberArr.map(m => m.id).join(",");
-    if (memberIds != "") {
+  deleteTasks = async e => {
+    let taskIds = this.state.selectTaskArr.map(m => m.id).join(",");
+    if (taskIds != "") {
       try {
         const { data } = await del(
-          `workspaces/${this.state.workspaceId}/members?ids=${memberIds}`
+          `workspaces/${this.state.workspaceId}/members?ids=${taskIds}`
         );
-        let members = this.state.members.filter(
-          m => !this.state.selectMemberArr.includes(m)
+        let tasks = this.state.taskList.filter(
+          m => !this.state.selectTaskArr.includes(m)
         );
         toast(
           <DailyPloyToast
@@ -251,8 +303,38 @@ class TaskList extends Component {
         );
         this.setState({
           showConfirm: false,
-          members: members,
-          selectMemberArr: []
+          taskList: tasks,
+          selectTaskArr: []
+        });
+      } catch (e) {
+        toast(
+          <DailyPloyToast message="Something went wrong" status="error" />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      }
+    }
+  };
+
+  taskSuspend = async task => {
+    if (task) {
+      try {
+        // const { data } = await put(
+        //   { schedule: !task.schedule },
+        //   `workspaces/${this.state.workspaceId}/task_list/${task.id}`
+        // );
+        var tasks = this.state.taskList;
+        var task = tasks.find(t => t.id == task.id);
+        task["schedule"] = !task.schedule;
+        // task["schedule"] = data.schedule ? data.schedule : !task.schedule;
+        // toast(
+        //   <DailyPloyToast
+        //     message="member Deleted Succesfully"
+        //     status="success"
+        //   />,
+        //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        // );
+        this.setState({
+          taskList: tasks
         });
       } catch (e) {
         toast(
@@ -293,7 +375,9 @@ class TaskList extends Component {
                       id={`styled-checkbox`}
                       type="checkbox"
                       name="chk[]"
-                      onChange={e => this.handleCheckAll(e, this.state.members)}
+                      onChange={e =>
+                        this.handleCheckAll(e, this.state.taskList)
+                      }
                     />
                     <label htmlFor={`styled-checkbox`}>
                       {this.state.isAllChecked ? (
@@ -306,19 +390,18 @@ class TaskList extends Component {
                 ) : null}
               </div>
               <div className="col-md-4 d-inline-block no-margin no-padding">
-                {this.state.selectMemberArr.length > 0 &&
-                userRole == "admin" ? (
+                {this.state.selectTaskArr.length > 0 && userRole == "admin" ? (
                   <>
                     <div className="d-inline-block">
                       <button
                         className="btn btn-primary delete-button"
-                        // onClick={e => this.toggleShowConfirm()}
+                        onClick={e => this.toggleShowConfirm()}
                       >
                         Delete
                       </button>
                     </div>
                     <div className="d-inline-block select-project-text">
-                      {this.state.selectMemberArr.length + " Task Selected"}
+                      {this.state.selectTaskArr.length + " Task Selected"}
                     </div>
                   </>
                 ) : null}
@@ -328,7 +411,6 @@ class TaskList extends Component {
           <table className="table">
             <thead>
               <tr>
-                <th style={{ width: "50px" }}></th>
                 <th scope="col" style={{ paddingLeft: "60px" }}>
                   Task Name <i className="fa fa-sort" aria-hidden="true"></i>
                 </th>
@@ -339,51 +421,66 @@ class TaskList extends Component {
                 <th scope="col">Category</th>
                 <th scope="col">Priority</th>
                 <th scope="col">Members</th>
+                <th scope="col">Susped</th>
               </tr>
             </thead>
             <tbody className="list-view">
-              {this.state.members.map((member, index) => {
+              {this.state.taskList.map((task, index) => {
                 return (
                   <tr key={index}>
-                    <td style={{ width: "50px", paddingLeft: "60px" }}>
+                    <td
+                      className="text-titlize"
+                      style={{ paddingLeft: "60px" }}
+                    >
                       <input
                         className="styled-checkbox"
                         id={`styled-checkbox-${index}`}
                         type="checkbox"
                         name="isChecked"
-                        onChange={e => this.handleCheck(e, member)}
+                        onChange={e => this.handleCheck(e, task)}
                       />
                       <label htmlFor={`styled-checkbox-${index}`}></label>
+                      {task.name}
                     </td>
-                    <td
-                      className="text-titlize"
-                      style={{ paddingLeft: "60px" }}
-                    >
-                      {member.name}
-                    </td>
-                    <td>Weekly</td>
+                    <td className="text-titlize">{task.frequency}</td>
                     <td className="text-titlize">
-                      <span>Dailyploy</span>
+                      <span>{task.projects[0].name}</span>
                     </td>
                     <td className="text-titlize">
-                      <span>Metting</span>
+                      <span>{task.category.name}</span>
                     </td>
                     <td className={"text-titlize"}>
-                      <div
-                        className={`${member.priority}-priority medium-priority`}
-                      ></div>
+                      <div className={`${task.priority}-priority`}></div>
                     </td>
                     <td>
-                      <div className="member-action">
-                        <div title={member.name} className="member-icon">
-                          {firstTwoLetter(member.name)}
+                      <div className="task-action">
+                        <div
+                          title={task.members[0].name}
+                          className="member-icon"
+                        >
+                          {firstTwoLetter(task.members[0].name)}
                         </div>
                         {/* <div>
                           <i class="fas fa-plus-circle"></i>
                         </div> */}
-                        <div className="v-3-dot">
+                        {/* <div className="v-3-dot">
                           <i class="fa fa-ellipsis-v"></i>
-                        </div>
+                        </div> */}
+                      </div>
+                    </td>
+                    <td className="text-titlize">
+                      <div className="custom-control custom-switch">
+                        <input
+                          type="checkbox"
+                          className="custom-control-input"
+                          checked={task.schedule}
+                          id={`suspend-${task.id}`}
+                          onChange={() => this.taskSuspend(task)}
+                        />
+                        <label
+                          className="custom-control-label"
+                          for={`suspend-${task.id}`}
+                        ></label>
                       </div>
                     </td>
                   </tr>
@@ -395,13 +492,13 @@ class TaskList extends Component {
 
         {this.state.showConfirm ? (
           <ConfirmModal
-            title="Delete Member"
+            title="Delete Task"
             message={`Are you sure you want to Delete ${
-              this.state.selectMemberArr.length == 1
-                ? " this member"
-                : "these members"
+              this.state.selectTaskArr.length == 1
+                ? " this task"
+                : "these tasks"
             }?`}
-            onClick={this.deleteMembers}
+            onClick={this.deleteTasks}
             closeModal={this.closeModal}
             buttonText="Delete"
             show={this.state.showConfirm}
