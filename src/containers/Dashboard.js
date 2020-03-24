@@ -1430,7 +1430,7 @@ class Dashboard extends Component {
         }
         if (contacts.length > 0) {
           let contactIds = contacts.map(contact => contact.id);
-          searchData.task["contact_ids"] = contactIds.join(", ");
+          searchData.task["contact_ids"] = contactIds.join(",");
         }
         let taskId = event.id.split("-")[0];
         try {
