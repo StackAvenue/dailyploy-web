@@ -2,13 +2,16 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { get, logout, put, del } from "../../utils/API";
 import { firstTwoLetter } from "../../utils/function";
+import { PRIORITIES } from "../../utils/Constants";
 import MenuBar from "./MenuBar";
 import moment from "moment";
 import ConfirmModal from "./../ConfirmModal";
 import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
+import { Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../DailyPloyToast";
+import RecurringTaskModal from "./RecurringTaskModal";
 import "./../../../src/assets/css/taskList.scss";
 
 class TaskList extends Component {
@@ -40,6 +43,12 @@ class TaskList extends Component {
       selectTaskArr: [],
       isAllChecked: false,
       showConfirm: false,
+      memberSearchOptions: [],
+      editableTask: null,
+      taskButton: "Edit",
+      comments: "",
+      taskCategories: [],
+      taskCategorie: null,
       taskList: [
         {
           category: {
@@ -85,7 +94,7 @@ class TaskList extends Component {
             task_category_id: 2
           },
           category_id: 2,
-          comments: null,
+          comments: "testing testing",
           frequency: "weekly",
           id: 2,
           members: [
@@ -150,11 +159,20 @@ class TaskList extends Component {
       console.log("users Error", e);
     }
 
+    // Category Listing
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/task_category`
+      );
+      var taskCategories = data.task_categories;
+    } catch (e) {}
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
       userEmail: loggedInData.email,
-      workspaces: workspacesData
+      workspaces: workspacesData,
+      taskCategories: taskCategories
       // userRole: worksapceUser ? worksapceUser.role : null,
       // worksapceUsers: worksapceUsers,
       // worksapceUser: worksapceUser,
@@ -349,6 +367,35 @@ class TaskList extends Component {
     this.setState({ showConfirm: false });
   };
 
+  closeTaskModal = () => {
+    this.setState({
+      show: false,
+      editableTask: null,
+      comments: "",
+      taskName: null,
+      taskPrioritie: null
+    });
+  };
+
+  onClickTaskEdit = task => {
+    let priority = PRIORITIES.find(p => p.name == task.priority);
+    this.setState({
+      show: true,
+      editableTask: task,
+      taskName: task.name,
+      comments: task.comments,
+      taskCategorie: task.category,
+      taskPrioritie: priority
+    });
+  };
+
+  handleInputChange = e => {
+    const { name, value } = e.target;
+    var errors = this.state.errors;
+    errors[`${name}Error`] = "";
+    this.setState({ [name]: value, errors: errors });
+  };
+
   render() {
     var userRole = localStorage.getItem("userRole");
     return (
@@ -421,7 +468,7 @@ class TaskList extends Component {
                 <th scope="col">Category</th>
                 <th scope="col">Priority</th>
                 <th scope="col">Members</th>
-                <th scope="col">Susped</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody className="list-view">
@@ -469,18 +516,26 @@ class TaskList extends Component {
                       </div>
                     </td>
                     <td className="text-titlize">
-                      <div className="custom-control custom-switch">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          checked={task.schedule}
-                          id={`suspend-${task.id}`}
-                          onChange={() => this.taskSuspend(task)}
-                        />
-                        <label
-                          className="custom-control-label"
-                          for={`suspend-${task.id}`}
-                        ></label>
+                      <div className="task-action">
+                        <div
+                          className="action"
+                          onClick={() => this.onClickTaskEdit(task)}
+                        >
+                          <a className="fa fa-pencil"></a>
+                        </div>
+                        <div className="custom-control action custom-switch">
+                          <input
+                            type="checkbox"
+                            className="custom-control-input"
+                            checked={task.schedule}
+                            id={`suspend-${task.id}`}
+                            onChange={() => this.taskSuspend(task)}
+                          />
+                          <label
+                            className="custom-control-label"
+                            htmlFor={`suspend-${task.id}`}
+                          ></label>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -503,6 +558,45 @@ class TaskList extends Component {
             buttonText="Delete"
             show={this.state.showConfirm}
           />
+        ) : null}
+        {this.state.editableTask ? (
+          <Modal
+            className="task-modal"
+            show={this.state.show}
+            onHide={this.closeTaskModal}
+          >
+            <div className="row no-margin">
+              <div className="col-md-12 d-inline-block header text-titlize">
+                <div className="d-inline-block" style={{ width: "60%" }}>
+                  <span>{"Edit Recurring Task"}</span>
+                </div>
+                <button
+                  className="d-inline-block btn btn-link float-right"
+                  onClick={this.closeTaskModal}
+                >
+                  <i className="fa fa-close"></i>
+                </button>
+              </div>
+              <RecurringTaskModal
+                show={this.state.show}
+                state={this.state}
+                backToTaskInfoModal={this.closeTaskModal}
+                handleInputChange={this.handleInputChange}
+                projects={this.state.projects}
+                users={this.state.users}
+                handleMemberSelect={this.handleMemberSelect}
+                handleProjectSelect={this.handleProjectSelect}
+                modalMemberSearchOptions={this.state.memberSearchOptions}
+                confirmModal={this.confirmModal}
+                handleCategoryChange={this.handleCategoryChange}
+                handlePrioritiesChange={this.handlePrioritiesChange}
+                handleTaskNameChange={this.handleTaskNameChange}
+                saveComments={this.saveComments}
+                toggleTaskStartState={this.toggleTaskStartState}
+                confirm={true}
+              />
+            </div>
+          </Modal>
         ) : null}
       </>
     );

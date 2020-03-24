@@ -11,6 +11,7 @@ import DailyPloyProjectSelect from "./../DailyPloyProjectSelect";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 import moment from "moment";
 import DailyPloyToast from "./../../components/DailyPloyToast";
+import ConfirmModal from "./../ConfirmModal";
 import { toast } from "react-toastify";
 
 class RecurringTaskModal extends React.Component {
@@ -164,6 +165,7 @@ class RecurringTaskModal extends React.Component {
       comments: "",
       dateFrom: new Date(),
       dateTo: null,
+      showConfirm: false,
       pictures: [],
       selectedProjects: [],
       days: [
@@ -203,11 +205,13 @@ class RecurringTaskModal extends React.Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.state.taskName !== prevProps.state.taskName) {
-      this.setState({ taskName: this.props.state.taskName });
-    }
+    // if (this.props.state.taskName !== prevProps.state.taskName) {
+    //   this.setState({ taskName: this.props.state.taskName });
+    // }
     if (this.props.state.comments !== prevProps.state.comments) {
-      this.setState({ comments: this.props.state.comments });
+      this.setState({
+        comments: this.props.state.comments
+      });
     }
   };
 
@@ -481,30 +485,46 @@ class RecurringTaskModal extends React.Component {
   };
 
   createRecurringTask = async () => {
-    if (this.validateTaskModal()) {
-      this.setState({ taskloader: true });
-      const taskData = this.taskDetails();
-      try {
-        const { data } = await post(
-          taskData,
-          `workspaces/${this.props.state.workspaceId}/recurring_task`
-        );
-        var task = data.task;
-        toast(
-          <DailyPloyToast message="Recurring Task Created!" status="success" />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-        );
-
-        this.setState({
-          taskloader: false
-        });
-        this.props.closeTaskModal();
-      } catch (e) {
-        this.setState({
-          taskloader: false
-        });
-      }
+    // if (this.validateTaskModal()) {
+    if (this.props.confirm) {
+      this.setState({
+        showConfirm: true
+      });
+    } else {
+      this.addTask();
     }
+    // }
+  };
+
+  addTask = async () => {
+    this.setState({ taskloader: true });
+    const taskData = this.taskDetails();
+    try {
+      const { data } = await post(
+        taskData,
+        `workspaces/${this.props.state.workspaceId}/recurring_task`
+      );
+      var task = data.task;
+      toast(
+        <DailyPloyToast message="Recurring Task Created!" status="success" />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
+
+      this.setState({
+        taskloader: false
+      });
+      this.props.closeTaskModal();
+    } catch (e) {
+      this.setState({
+        taskloader: false
+      });
+    }
+  };
+
+  closeConfirmModal = () => {
+    this.setState({
+      showConfirm: false
+    });
   };
 
   handleMonthlyDayChange = day => {
@@ -699,6 +719,7 @@ class RecurringTaskModal extends React.Component {
                 {this.state.days.map(day => {
                   return (
                     <div
+                      key={day.id}
                       className={`d-inline-block day-icon ${
                         day.status ? "selected" : ""
                       }`}
@@ -851,73 +872,6 @@ class RecurringTaskModal extends React.Component {
             ) : null}
           </div>
 
-          {/* <div className="col-md-12 no-padding input-row">
-            <div className="col-md-2 d-inline-block no-padding label">Time</div>
-            <div
-              className="col-md-10 d-inline-block"
-              style={{ paddingRight: "0px" }}
-            >
-              <div className="col-md-12 d-inline-block no-padding">
-                <div
-                  className="col-md-6 d-inline-block no-padding "
-                  // style={{ maxWidth: "219px" }}
-                >
-                  <div className="col-md-3 no-padding d-inline-block date-text-light">
-                    <span>From:</span>
-                  </div>
-                  <div
-                    className="col-md-7 d-inline-block time-picker-container"
-                    style={{ paddingRight: "0" }}
-                  >
-                    <TimePicker
-                      placeholder="Select"
-                      value={this.props.state.timeDateFrom}
-                      showSecond={false}
-                      onChange={props.handleTimeFrom}
-                      format={props.format}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6 d-inline-block no-padding ">
-                  <div className="col-md-2 no-padding d-inline-block date-text-light">
-                    <span>To:</span>
-                  </div>
-                  <div
-                    className="col-md-7 d-inline-block time-picker-container"
-                    style={{ paddingRight: "0" }}
-                  >
-                    <TimePicker
-                      value={this.props.state.timeDateTo}
-                      placeholder="Select"
-                      showSecond={false}
-                      onChange={props.handleTimeTo}
-                      disabledMinutes={this.disabledMinutes}
-                      disabledHours={this.disabledHours}
-                      format={props.format}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {this.state.errors.timeFromError ||
-            this.state.errors.timeToError ? (
-              <div className="col-md-12 d-inline-block no-padding">
-                <div className="col-md-2 d-inline-block no-padding"></div>
-                <div className="col-md-4 d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.timeFromError}
-                  </span>
-                </div>
-                <div className="col-md-4 d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.timeToError}
-                  </span>
-                </div>
-              </div>
-            ) : null}
-          </div> */}
-
           <div className="col-md-12 row no-margin no-padding input-row">
             <div className="col-md-2 no-padding label">Comments</div>
             <div className="col-md-10">
@@ -925,7 +879,7 @@ class RecurringTaskModal extends React.Component {
                 state={this.state}
                 showSave={props.state.taskButton === "Add" ? false : true}
                 showAttachIcon={props.state.taskButton === "Add" ? false : true}
-                defaultComments={props.state.comments}
+                comments={props.state.comments}
                 handleInputChange={this.props.handleInputChange}
                 showSave={false}
                 showAttachIcon={false}
@@ -977,6 +931,19 @@ class RecurringTaskModal extends React.Component {
             </div>
           </div>
         </div>
+        {this.state.showConfirm ? (
+          <ConfirmModal
+            title="Update Recurring Task"
+            message={`These changes will be reflected from next Month`}
+            onClick={() => this.addTask()}
+            closeModal={this.closeConfirmModal}
+            buttonText="Edit"
+            show={this.state.showConfirm}
+            style={{
+              padding: "6% 0 0 35px"
+            }}
+          />
+        ) : null}
       </>
     );
   }
