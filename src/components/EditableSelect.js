@@ -260,7 +260,7 @@ class EditableSelect extends Component {
                   {this.renderSearchSuggestions()}
                 </div>
               ) : null}
-              <span className="down-icon">
+              <span className="down-icon" style={{ paddingTop: "5px" }}>
                 <i className="fa fa-angle-down"></i>
               </span>
             </div>
