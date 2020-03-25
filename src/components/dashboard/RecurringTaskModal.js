@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import { PRIORITIES, DATE_FORMAT1 } from "./../../utils/Constants";
-import { post } from "./../../utils/API";
+import { post, put } from "./../../utils/API";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
 import DailyPloySelect from "./../DailyPloySelect";
@@ -24,17 +24,17 @@ class RecurringTaskModal extends React.Component {
       {
         id: 1,
         name: "every day",
-        value: "days"
+        value: "daily"
       },
       {
         id: 2,
         name: "weekly",
-        value: "week"
+        value: "weekly"
       },
       {
         id: 3,
         name: "monthly",
-        value: "month"
+        value: "monthly"
       }
     ];
     this.monthlyDays = [
@@ -160,6 +160,7 @@ class RecurringTaskModal extends React.Component {
       }
     ];
     this.state = {
+      defaultRepeatOn: null,
       selectedMembers: [],
       taskName: "",
       comments: "",
@@ -169,20 +170,21 @@ class RecurringTaskModal extends React.Component {
       pictures: [],
       selectedProjects: [],
       days: [
-        { id: 1, name: "sunday", initial: "S", status: false },
-        { id: 2, name: "monday", initial: "M", status: false },
-        { id: 3, name: "tuesday", initial: "T", status: false },
-        { id: 4, name: "wednesday", initial: "W", status: false },
-        { id: 5, name: "thursday", initial: "T", status: false },
-        { id: 6, name: "friday", initial: "F", status: false },
-        { id: 7, name: "Saturday", initial: "S", status: false }
+        { id: 1, name: "monday", initial: "M", status: false },
+        { id: 2, name: "tuesday", initial: "T", status: false },
+        { id: 3, name: "wednesday", initial: "W", status: false },
+        { id: 4, name: "thursday", initial: "T", status: false },
+        { id: 5, name: "friday", initial: "F", status: false },
+        { id: 6, name: "Saturday", initial: "S", status: false },
+        { id: 7, name: "sunday", initial: "S", status: false }
       ],
-      repeatOn: this.repeatOptions[0],
+      repeatOn: null,
       repeatOnNumber: 1,
-      frequency: "days",
+      frequency: "daily",
       weekDays: [],
       monthDays: [],
       members: [],
+      selectedMonth: null,
       errors: {
         taskNameError: "",
         projectError: "",
@@ -213,6 +215,9 @@ class RecurringTaskModal extends React.Component {
         comments: this.props.state.comments
       });
     }
+
+    if (this.props.state.editableTask !== prevProps.state.editableTask) {
+    }
   };
 
   componentDidMount = () => {
@@ -220,6 +225,48 @@ class RecurringTaskModal extends React.Component {
       this.setState({
         members: this.props.modalMemberSearchOptions
       });
+    }
+    if (this.props.state.selectedProjects) {
+      this.setState({ selectedProjects: this.props.state.selectedProjects });
+    }
+    if (this.props.editableTask) {
+      var frequency = this.props.editableTask.frequency;
+      var repeatOn = this.repeatOptions.find(ro => ro.value == frequency);
+      if (frequency == "daily") {
+        this.setState({
+          frequency: frequency,
+          repeatOnNumber: this.props.state.editableTask.number,
+          repeatOn: repeatOn,
+          dateFrom: new Date(this.props.editableTask.start_datetime),
+          dateTo: new Date(this.props.editableTask.end_datetime)
+        });
+      } else if (frequency == "weekly") {
+        var weekDays = this.state.days.filter(d =>
+          this.props.state.editableTask.week_numbers.includes(d.id)
+        );
+        weekDays.forEach(d => (d["status"] = true));
+        this.setState({
+          frequency: frequency,
+          repeatOnNumber: this.props.state.editableTask.number,
+          weekDays: weekDays.map(d => d.id),
+          repeatOn: repeatOn,
+          dateFrom: new Date(this.props.editableTask.start_datetime),
+          dateTo: new Date(this.props.editableTask.end_datetime)
+        });
+      } else if (frequency == "monthly") {
+        var monthDays = this.monthlyDays.find(d =>
+          this.props.editableTask.month_numbers.includes(d.value)
+        );
+        this.setState({
+          frequency: frequency,
+          repeatOnNumber: this.props.state.editableTask.number,
+          monthDays: [monthDays.value],
+          selectedMonth: monthDays,
+          repeatOn: repeatOn,
+          dateFrom: new Date(this.props.editableTask.start_datetime),
+          dateTo: new Date(this.props.editableTask.end_datetime)
+        });
+      }
     }
   };
 
@@ -317,7 +364,8 @@ class RecurringTaskModal extends React.Component {
     this.setState({
       repeatOn: repeat,
       frequency: repeat ? repeat.value : null,
-      repeatOnNumber: repeat.value == "days" ? 1 : this.state.repeatOnNumber
+      repeatOnNumber:
+        repeat && repeat.value == "daily" ? 1 : this.state.repeatOnNumber
     });
   };
 
@@ -354,6 +402,8 @@ class RecurringTaskModal extends React.Component {
       ? ""
       : "please enter task name";
 
+    errors["dateToError"] = this.state.dateTo ? "" : "please select date to";
+
     errors["projectError"] =
       this.state.selectedProjects.length > 0 ? "" : "please select projects";
 
@@ -373,14 +423,14 @@ class RecurringTaskModal extends React.Component {
       ? ""
       : "please enter number";
 
-    if (this.state.frequency == "week" && this.state.weekDays.length == 0) {
+    if (this.state.frequency == "weekly" && this.state.weekDays.length == 0) {
       errors["weekDayError"] = "please select day";
       flag = false;
     } else {
       errors["weekDayError"] = "";
     }
 
-    if (this.state.frequency == "month" && this.state.monthDays.length == 0) {
+    if (this.state.frequency == "monthly" && this.state.monthDays.length == 0) {
       errors["monthDayError"] = "please select day";
       flag = false;
     } else {
@@ -393,7 +443,8 @@ class RecurringTaskModal extends React.Component {
       this.state.selectedProjects.length > 0 &&
       this.props.state.taskUser.length > 0 &&
       this.state.days.length > 0 &&
-      this.props.state.dateFrom &&
+      this.state.dateFrom &&
+      this.state.dateTo &&
       this.props.state.taskCategorie &&
       this.state.repeatOnNumber &&
       flag
@@ -401,7 +452,7 @@ class RecurringTaskModal extends React.Component {
   };
 
   handleProjectSelect = projects => {
-    if (projects.length > 0) {
+    if (projects && projects.length > 0) {
       var members = projects.map(p => p.members).flat();
       var newMembers = [];
       members.forEach(m => {
@@ -449,10 +500,7 @@ class RecurringTaskModal extends React.Component {
     var endDateTime =
       moment(this.state.dateTo ? this.state.dateTo : new Date()).format(
         DATE_FORMAT1
-      ) +
-      (this.state.timeTo && this.state.timeFrom
-        ? " " + this.state.timeTo
-        : " 00:00:00");
+      ) + " 00:00:00";
     let projectIds = this.state.selectedProjects.map(p => p.id).join(",");
     var taskData = {
       task: {
@@ -475,25 +523,26 @@ class RecurringTaskModal extends React.Component {
       taskData.task["end_datetime"] =
         moment(this.state.dateTo).format(DATE_FORMAT1) + " 00:00:00";
     }
-    if (this.state.frequency == "week") {
+    if (this.state.frequency == "weekly") {
       taskData.task["week_numbers"] = this.state.weekDays.join(",");
     }
-    if (this.state.frequency == "month") {
+    if (this.state.frequency == "monthly") {
       taskData.task["month_numbers"] = this.state.monthDays.join(",");
     }
     return taskData;
   };
 
   createRecurringTask = async () => {
-    // if (this.validateTaskModal()) {
-    if (this.props.confirm) {
-      this.setState({
-        showConfirm: true
-      });
-    } else {
-      this.addTask();
+    console.log(this.validateTaskModal());
+    if (this.validateTaskModal()) {
+      if (this.props.confirm) {
+        this.setState({
+          showConfirm: true
+        });
+      } else {
+        this.addTask();
+      }
     }
-    // }
   };
 
   addTask = async () => {
@@ -517,6 +566,33 @@ class RecurringTaskModal extends React.Component {
     } catch (e) {
       this.setState({
         taskloader: false
+      });
+    }
+  };
+
+  updateTask = async () => {
+    this.setState({ taskloader: true });
+    const taskData = this.taskDetails();
+    try {
+      const { data } = await put(
+        taskData,
+        `workspaces/${this.props.state.workspaceId}/recurring_task/${this.props.state.editableTask.id}`
+      );
+      var task = data.task;
+      toast(
+        <DailyPloyToast message="Recurring Task updated!" status="success" />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
+
+      this.setState({
+        taskloader: false,
+        showConfirm: false
+      });
+      this.props.closeTaskModal();
+    } catch (e) {
+      this.setState({
+        taskloader: false,
+        showConfirm: false
       });
     }
   };
@@ -569,7 +645,8 @@ class RecurringTaskModal extends React.Component {
             </div>
             <div
               className={`col-md-10 d-inline-block ${
-                props.state.taskButton !== "Add" ? "disable-project-select" : ""
+                ""
+                // props.state.taskButton !== "Add" ? "disable-project-select" : ""
               }`}
             >
               <DailyPloyProjectSelect
@@ -577,7 +654,7 @@ class RecurringTaskModal extends React.Component {
                 placeholder="Select Project"
                 label="name"
                 className="suggestion-z-index-100"
-                default={this.props.state.project}
+                default={this.props.state.memberProjects}
                 iconType="block"
                 onChange={this.handleProjectSelect}
               />
@@ -649,7 +726,7 @@ class RecurringTaskModal extends React.Component {
                 options={this.state.members}
                 placeholder="Select Member"
                 noOptionMessage="please select project first"
-                // default={this.props.state.selectedMembers[0]}
+                default={this.props.state.selectedMembers[0]}
                 icon="fa fa-user"
                 onChange={this.props.handleMemberSelect}
               />
@@ -688,7 +765,7 @@ class RecurringTaskModal extends React.Component {
               <DailyPloySelect
                 options={this.repeatOptions}
                 placeholder="select frequency"
-                default={this.state.repeatOn ? this.state.repeatOn : null}
+                default={this.state.repeatOn}
                 onChange={this.handleRepeatOnChange}
               />
             </div>
@@ -753,6 +830,7 @@ class RecurringTaskModal extends React.Component {
                   // label="value"
                   // name="value"
                   // suggesionBy="value"
+                  default={this.state.selectedMonth}
                   onChange={this.handleMonthlyDayChange}
                 />
                 {/* <div
@@ -880,6 +958,7 @@ class RecurringTaskModal extends React.Component {
                 showSave={props.state.taskButton === "Add" ? false : true}
                 showAttachIcon={props.state.taskButton === "Add" ? false : true}
                 comments={props.state.comments}
+                commentName="comments"
                 handleInputChange={this.props.handleInputChange}
                 showSave={false}
                 showAttachIcon={false}
@@ -935,7 +1014,7 @@ class RecurringTaskModal extends React.Component {
           <ConfirmModal
             title="Update Recurring Task"
             message={`These changes will be reflected from next Month`}
-            onClick={() => this.addTask()}
+            onClick={() => this.updateTask()}
             closeModal={this.closeConfirmModal}
             buttonText="Edit"
             show={this.state.showConfirm}

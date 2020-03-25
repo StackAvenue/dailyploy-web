@@ -22,12 +22,18 @@ class DailyPloyProjectSelect extends Component {
   onClickInput = () => {
     this.setState({
       show: true,
-      suggestions: this.state.suggestions
+      suggestions: this.props.options
     });
   };
 
   async componentDidMount() {
-    if (this.props.options) {
+    if (this.props.default && this.props.options) {
+      this.setState({
+        suggestions: this.props.options,
+        selectedTags: this.props.default
+        // show: true
+      });
+    } else if (this.props.options) {
       this.setState({
         suggestions: this.props.options
       });
@@ -286,7 +292,7 @@ class DailyPloyProjectSelect extends Component {
             className={`no-padding d-inline-block ${
               this.props.isReports ? "report-search-bar" : "search-bar"
             }`}
-            onClick={this.onClickInput}
+            onClick={() => this.onClickInput()}
           >
             <div className="d-inline-block user-project-search text-titlize">
               <div

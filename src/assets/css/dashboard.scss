@@ -713,19 +713,19 @@
           border-bottom: none;
         }
       }
-      .project-wrap-count{
-        width: 36px;
-        text-align: center;
-        height: 28px;
-        right: 32px;
-        top: 3px;
-        padding: 4px;
-        color: $color-white;
-        position: absolute;
-        border-radius: 9px;
-        box-shadow: rgba(81, 34, 209, 0.49) 0px 3px 6px 0px;
-        background-color: #5122d1;
-      }
+    }
+    .project-wrap-count{
+      width: 36px;
+      text-align: center;
+      height: 28px;
+      right: 32px;
+      top: 3px;
+      padding: 4px;
+      color: $color-white;
+      position: absolute;
+      border-radius: 9px;
+      box-shadow: rgba(81, 34, 209, 0.49) 0px 3px 6px 0px;
+      background-color: #5122d1;
     }
     .search-filter-container{
       border: solid 1px #d6d6d6 !important;

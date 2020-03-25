@@ -38,7 +38,8 @@ class TaskList extends Component {
       memberAccess: null,
       memberRole: null,
       memberHours: "",
-      memberProjects: null,
+      selectedProjects: [],
+      memberProjects: [],
       isDeleteShow: false,
       selectTaskArr: [],
       isAllChecked: false,
@@ -49,82 +50,9 @@ class TaskList extends Component {
       comments: "",
       taskCategories: [],
       taskCategorie: null,
-      taskList: [
-        {
-          category: {
-            name: "integration",
-            task_category_id: 2
-          },
-          category_id: 2,
-          comments: null,
-          frequency: "weekly",
-          id: 1,
-          members: [
-            {
-              id: 1,
-              name: "ravi karale",
-              email: "ravi@gmail.com"
-            }
-          ],
-          name: "Task 12",
-          number: 1,
-          priority: "high",
-          projects: [
-            {
-              id: 12,
-              name: "dailyploy",
-              color_code: "#dsfdsf"
-            }
-          ],
-          schedule: true,
-          start_datetime: "2020-03-23T00:00:00Z",
-          end_datetime: null,
-          status: "not_started",
-          week_numbers: [
-            {
-              id: 0,
-              name: "monday"
-            }
-          ],
-          month_numbers: [0, 5]
-        },
-        {
-          category: {
-            name: "integration",
-            task_category_id: 2
-          },
-          category_id: 2,
-          comments: "testing testing",
-          frequency: "weekly",
-          id: 2,
-          members: [
-            {
-              id: 1,
-              name: "ravi karale",
-              email: "ravi@gmail.com"
-            }
-          ],
-          name: "Task 13",
-          number: 1,
-          priority: "medium",
-          projects: [
-            {
-              id: 12,
-              name: "dailyploy",
-              color_code: "#dsfdsf"
-            }
-          ],
-          schedule: false,
-          start_datetime: "2020-03-23T00:00:00Z",
-          end_datetime: null,
-          status: "not_started",
-          week_numbers: {
-            id: 0,
-            name: "monday"
-          },
-          month_numbers: [0, 5]
-        }
-      ]
+      projectShowTaskId: null,
+      isProjectListShow: false,
+      taskList: []
     };
   }
 
@@ -150,14 +78,48 @@ class TaskList extends Component {
 
     this.getWorkspaceParams();
 
+    // worksapce project Listing
+    try {
+      var userIds =
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map(member => member.member_id)
+          : [];
+      var searchData = {};
+      if (userIds.length > 0) {
+        searchData["user_ids"] = userIds.join(",");
+      }
+      if (this.props.searchProjectIds.length > 0) {
+        searchData["project_ids"] = this.props.searchProjectIds.join(",");
+      }
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects`,
+        searchData
+      );
+      var projectsData = data.projects;
+      // this.props.handleLoading(false);
+    } catch (e) {
+      console.log("err", e);
+    }
+
+    // workspace Member Listing
     try {
       const { data } = await get(
-        `workspaces/${this.state.workspaceId}/task_list`
+        `workspaces/${this.state.workspaceId}/members`
       );
-      var taskList = data.tasks.this.props.handleLoading(false);
+      var worksapceUsers = data.members;
+      var userArr = data.members.map(user => user.email);
+      var emailArr = data.members;
     } catch (e) {
       console.log("users Error", e);
     }
+
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/recurring_task`
+      );
+      var taskList = data.recurring_task;
+      this.props.handleLoading(false);
+    } catch (e) {}
 
     // Category Listing
     try {
@@ -172,11 +134,12 @@ class TaskList extends Component {
       userName: loggedInData.name,
       userEmail: loggedInData.email,
       workspaces: workspacesData,
-      taskCategories: taskCategories
+      taskCategories: taskCategories,
+      taskList: taskList,
+      projects: projectsData
       // userRole: worksapceUser ? worksapceUser.role : null,
       // worksapceUsers: worksapceUsers,
       // worksapceUser: worksapceUser,
-      // taskList: taskList
     });
     // this.createUserProjectList();
   }
@@ -307,14 +270,15 @@ class TaskList extends Component {
     if (taskIds != "") {
       try {
         const { data } = await del(
-          `workspaces/${this.state.workspaceId}/members?ids=${taskIds}`
+          // `workspaces/${this.state.workspaceId}/recurring_task/${taskIds}`
+          `workspaces/${this.state.workspaceId}/recurring_task?ids=${taskIds}`
         );
         let tasks = this.state.taskList.filter(
           m => !this.state.selectTaskArr.includes(m)
         );
         toast(
           <DailyPloyToast
-            message="member Deleted Succesfully"
+            message="Recurring Task Deleted Succesfully"
             status="success"
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
@@ -336,21 +300,14 @@ class TaskList extends Component {
   taskSuspend = async task => {
     if (task) {
       try {
-        // const { data } = await put(
-        //   { schedule: !task.schedule },
-        //   `workspaces/${this.state.workspaceId}/task_list/${task.id}`
-        // );
+        let flag = task.schedule ? false : true;
+        const { data } = await put(
+          { schedule: flag },
+          `workspaces/${this.state.workspaceId}/recurring_task/${task.id}`
+        );
         var tasks = this.state.taskList;
         var task = tasks.find(t => t.id == task.id);
-        task["schedule"] = !task.schedule;
-        // task["schedule"] = data.schedule ? data.schedule : !task.schedule;
-        // toast(
-        //   <DailyPloyToast
-        //     message="member Deleted Succesfully"
-        //     status="success"
-        //   />,
-        //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-        // );
+        task["schedule"] = flag;
         this.setState({
           taskList: tasks
         });
@@ -379,21 +336,116 @@ class TaskList extends Component {
 
   onClickTaskEdit = task => {
     let priority = PRIORITIES.find(p => p.name == task.priority);
+    let projects = this.state.projects.filter(p =>
+      task.project_ids.includes(p.id)
+    );
     this.setState({
       show: true,
       editableTask: task,
       taskName: task.name,
       comments: task.comments,
       taskCategorie: task.category,
-      taskPrioritie: priority
+      taskPrioritie: priority,
+      memberSearchOptions: this.projectCommonMembers(projects),
+      selectedProjects: projects,
+      memberProjects: projects,
+      selectedMembers: task.members,
+      taskUser: task.members[0] ? [task.members[0].id] : []
     });
   };
 
   handleInputChange = e => {
     const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  displayProjects = projects => {
+    let arr = projects.map(project => project.name);
+    let projectShow = arr.length > 1 ? arr[0] + ", " + arr[1] : arr[0];
+    return projectShow;
+  };
+
+  countProject = projects => {
+    let projectLength = projects.length;
+    let count;
+    if (projectLength > 2) {
+      count = projectLength - 2;
+    }
+    let concatCount = "+" + count;
+    if (!count) {
+      return null;
+    } else {
+      return concatCount;
+    }
+  };
+
+  countProjectView = (e, id) => {
+    this.setState({ isProjectListShow: true, projectShowTaskId: id });
+  };
+
+  countProjectViewClose = () => {
+    this.setState({ isProjectListShow: false });
+  };
+
+  handleMemberSelect = member => {
     var errors = this.state.errors;
-    errors[`${name}Error`] = "";
-    this.setState({ [name]: value, errors: errors });
+    // errors["memberError"] = "";
+    if (member) {
+      this.setState({
+        taskUser: [member.id],
+        selectedMembers: [member],
+        errors: errors
+      });
+    } else {
+      this.setState({
+        taskUser: [],
+        selectedMembers: [],
+        errors: errors
+      });
+    }
+  };
+
+  projectCommonMembers = projects => {
+    if (projects.length > 0) {
+      var members = projects.map(p => p.members).flat();
+      var newMembers = [];
+      members.forEach(m => {
+        if (!newMembers.map(mm => mm.id).includes(m.id)) {
+          newMembers.push(m);
+        }
+      });
+      let memberIdArray = projects.map(p => p.members.map(m => m.id));
+      let commonIds = this.getCommonElements(memberIdArray);
+      let filterMembers = newMembers.filter(m => commonIds.includes(m.id));
+      return filterMembers;
+    } else {
+      return [];
+    }
+  };
+
+  getCommonElements = arrays => {
+    var min = 1000;
+    var arg = 0;
+    var index = 0;
+    var common = [];
+    for (var i = 0; i < arrays.length; i++) {
+      if (arrays[i].length < min) {
+        min = arrays[i].length;
+        arg = i;
+      }
+    }
+    for (var i = 0; i < arrays[arg].length; i++) {
+      for (var j = 0; j < arrays.length; j++) {
+        if (j != arg && arrays[j].indexOf(arrays[arg][i]) != -1) {
+          index++;
+        }
+      }
+      if (index == arrays.length - 1) {
+        common.push(arrays[arg][i]);
+      }
+      index = 0;
+    }
+    return common;
   };
 
   render() {
@@ -414,8 +466,7 @@ class TaskList extends Component {
                 className="col-md-2 d-inline-block no-padding"
                 style={{ marginTop: "10px" }}
               >
-                {this.state.worksapceUser &&
-                this.state.worksapceUser.role == "admin" ? (
+                {userRole == "admin" ? (
                   <>
                     <input
                       className="styled-checkbox"
@@ -491,7 +542,32 @@ class TaskList extends Component {
                     </td>
                     <td className="text-titlize">{task.frequency}</td>
                     <td className="text-titlize">
-                      <span>{task.projects[0].name}</span>
+                      {/* <span>{task.projects[0].name}</span> */}
+                      <span>{this.displayProjects(task.projects)}</span>
+                      <span
+                        className="project-count"
+                        style={{ pointer: "cursor" }}
+                        onMouseMove={e => this.countProjectView(e, task.id)}
+                      >
+                        {this.countProject(task.projects)}
+                      </span>
+                      {this.state.isProjectListShow &&
+                      this.state.projectShowTaskId === task.id ? (
+                        <div className="project-count-list-show">
+                          <div className="close-div">
+                            <a onClick={this.countProjectViewClose}>
+                              <i className="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                          <div className="project-body-box">
+                            {task.projects.map(project => (
+                              <div className="project-body-text">
+                                {project.name}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
                     </td>
                     <td className="text-titlize">
                       <span>{task.category.name}</span>
@@ -594,6 +670,7 @@ class TaskList extends Component {
                 saveComments={this.saveComments}
                 toggleTaskStartState={this.toggleTaskStartState}
                 confirm={true}
+                editableTask={this.state.editableTask}
               />
             </div>
           </Modal>
