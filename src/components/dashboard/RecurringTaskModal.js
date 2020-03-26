@@ -507,6 +507,7 @@ class RecurringTaskModal extends React.Component {
         name: this.props.state.taskName,
         member_ids: this.props.state.taskUser.join(","),
         start_datetime: startDateTime,
+        end_datetime: endDateTime,
         comments: this.props.state.comments,
         project_ids: projectIds,
         status: "not_started",
@@ -583,12 +584,12 @@ class RecurringTaskModal extends React.Component {
         <DailyPloyToast message="Recurring Task updated!" status="success" />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-
       this.setState({
         taskloader: false,
         showConfirm: false
       });
-      this.props.closeTaskModal();
+      this.props.backToTaskInfoModal();
+      this.props.loadTask();
     } catch (e) {
       this.setState({
         taskloader: false,
@@ -654,7 +655,7 @@ class RecurringTaskModal extends React.Component {
                 placeholder="Select Project"
                 label="name"
                 className="suggestion-z-index-100"
-                default={this.props.state.memberProjects}
+                default={this.props.state.selectedProjects}
                 iconType="block"
                 onChange={this.handleProjectSelect}
               />
@@ -915,6 +916,7 @@ class RecurringTaskModal extends React.Component {
                       selected={this.state.dateTo}
                       onChange={this.handleDateTo}
                       placeholderText="Select Date"
+                      readOnly={false}
                       // disabled={this.state.disabledDateTo}
                       onChangeRaw={this.handleDateChangeRaw}
                     />

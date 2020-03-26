@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { get, logout, put, del } from "../../utils/API";
+import { get, post, put, del } from "../../utils/API";
 import { firstTwoLetter } from "../../utils/function";
 import { PRIORITIES } from "../../utils/Constants";
 import MenuBar from "./MenuBar";
@@ -141,7 +141,7 @@ class TaskList extends Component {
       // worksapceUsers: worksapceUsers,
       // worksapceUser: worksapceUser,
     });
-    // this.createUserProjectList();
+    this.createUserProjectList();
   }
 
   async componentDidUpdate(prevProps, prevState) {}
@@ -179,40 +179,44 @@ class TaskList extends Component {
   //   });
   // };
 
-  // createUserProjectList = () => {
-  //   let projectList = [];
-  //   let memberList = [];
-  //   if (this.state.projects) {
-  //     {
-  //       this.state.projects.map((project, index) => {
-  //         projectList.push({
-  //           value: project.name,
-  //           project_id: project.id,
-  //           type: "project",
-  //           id: (index += 1)
-  //         });
-  //       });
-  //     }
-  //   }
-  //   if (this.state.members) {
-  //     this.state.members.map((member, idx) => {
-  //       memberList.push({
-  //         value: member.name,
-  //         member_id: member.id,
-  //         email: member.email,
-  //         type: "member",
-  //         role: member.role
-  //       });
-  //     });
-  //   }
-  //   var searchOptions = {
-  //     members: memberList,
-  //     projects: projectList
-  //   };
-  //   console.log("searchOptions", searchOptions);
-  //   this.setState({ searchOptions: searchOptions });
-  //   this.props.setSearchOptions(searchOptions);
-  // };
+  createUserProjectList = () => {
+    let projectList = [];
+    let memberList = [];
+    // if (this.state.projects) {
+    //   {
+    //     this.state.projects.map((project, index) => {
+    //       projectList.push({
+    //         value: project.name,
+    //         project_id: project.id,
+    //         type: "project",
+    //         id: (index += 1)
+    //       });
+    //     });
+    //   }
+    // }
+    // if (this.state.members) {
+    //   this.state.members.map((member, idx) => {
+    //     memberList.push({
+    //       value: member.name,
+    //       member_id: member.id,
+    //       email: member.email,
+    //       type: "member",
+    //       role: member.role
+    //     });
+    //   });
+    // }
+    var searchOptions = {
+      members: memberList,
+      projects: projectList
+    };
+    this.props.setSearchOptions(searchOptions);
+  };
+
+  memberProjects = userId => {
+    return this.state.projects.filter(project =>
+      project.members.map(m => m.id).includes(userId)
+    );
+  };
 
   handleLoad = value => {
     this.setState({ isLoading: value });
@@ -330,7 +334,13 @@ class TaskList extends Component {
       editableTask: null,
       comments: "",
       taskName: null,
-      taskPrioritie: null
+      taskCategorie: null,
+      taskPrioritie: null,
+      memberSearchOptions: [],
+      selectedProjects: [],
+      memberProjects: [],
+      selectedMembers: [],
+      taskUser: []
     });
   };
 
@@ -348,10 +358,90 @@ class TaskList extends Component {
       taskPrioritie: priority,
       memberSearchOptions: this.projectCommonMembers(projects),
       selectedProjects: projects,
-      memberProjects: projects,
+      memberProjects: this.memberProjects(task.members[0].id),
       selectedMembers: task.members,
       taskUser: task.members[0] ? [task.members[0].id] : []
     });
+  };
+
+  handleCategoryChange = option => {
+    this.setState({ taskCategorie: option });
+  };
+
+  addCategory = async categoryName => {
+    if (categoryName != "") {
+      try {
+        const { data } = await post(
+          { name: categoryName },
+          `workspaces/${this.state.workspaceId}/task_category`
+        );
+        var taskCategory = data;
+        toast(<DailyPloyToast message="Category Added" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER
+        });
+        var newTaskCategories = [...this.state.taskCategories, taskCategory];
+        this.setState({
+          taskCategories: newTaskCategories,
+          taskCategorie: taskCategory
+        });
+      } catch (e) {
+        if (e.response && e.response.status === 400) {
+          if (
+            e.response.data &&
+            e.response.data.errors &&
+            e.response.data.errors.workspace_task_category_uniqueness
+          ) {
+            toast(
+              <DailyPloyToast
+                message={
+                  e.response.data.errors.workspace_task_category_uniqueness
+                }
+                status="error"
+              />,
+              {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_CENTER
+              }
+            );
+          }
+        }
+      }
+    }
+  };
+
+  loadTask = async () => {
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/recurring_task`
+      );
+      var taskList = data.recurring_task;
+      this.setState({ taskList: taskList });
+    } catch (e) {}
+  };
+
+  // closeTaskModal = task => {
+  //   let priority = PRIORITIES.find(p => p.name == task.priority);
+  //   let projects = this.state.projects.filter(p =>
+  //     task.project_ids.includes(p.id)
+  //   );
+  //   this.setState({
+  //     show: true,
+  //     editableTask: task,
+  //     taskName: task.name,
+  //     comments: task.comments,
+  //     taskCategorie: task.category,
+  //     taskPrioritie: priority,
+  //     memberSearchOptions: this.projectCommonMembers(projects),
+  //     selectedProjects: projects,
+  //     memberProjects: projects,
+  //     selectedMembers: task.members,
+  //     taskUser: task.members[0] ? [task.members[0].id] : []
+  //   });
+  // };
+
+  handlePrioritiesChange = option => {
+    this.setState({ taskPrioritie: option });
   };
 
   handleInputChange = e => {
@@ -655,6 +745,7 @@ class TaskList extends Component {
               </div>
               <RecurringTaskModal
                 show={this.state.show}
+                loadTask={this.loadTask}
                 state={this.state}
                 backToTaskInfoModal={this.closeTaskModal}
                 handleInputChange={this.handleInputChange}
