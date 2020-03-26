@@ -576,7 +576,7 @@ class RecurringTaskModal extends React.Component {
     const taskData = this.taskDetails();
     try {
       const { data } = await put(
-        taskData,
+        taskData.task,
         `workspaces/${this.props.state.workspaceId}/recurring_task/${this.props.state.editableTask.id}`
       );
       var task = data.task;

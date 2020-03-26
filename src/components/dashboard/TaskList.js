@@ -420,26 +420,6 @@ class TaskList extends Component {
     } catch (e) {}
   };
 
-  // closeTaskModal = task => {
-  //   let priority = PRIORITIES.find(p => p.name == task.priority);
-  //   let projects = this.state.projects.filter(p =>
-  //     task.project_ids.includes(p.id)
-  //   );
-  //   this.setState({
-  //     show: true,
-  //     editableTask: task,
-  //     taskName: task.name,
-  //     comments: task.comments,
-  //     taskCategorie: task.category,
-  //     taskPrioritie: priority,
-  //     memberSearchOptions: this.projectCommonMembers(projects),
-  //     selectedProjects: projects,
-  //     memberProjects: projects,
-  //     selectedMembers: task.members,
-  //     taskUser: task.members[0] ? [task.members[0].id] : []
-  //   });
-  // };
-
   handlePrioritiesChange = option => {
     this.setState({ taskPrioritie: option });
   };
@@ -662,7 +642,7 @@ class TaskList extends Component {
                     <td className="text-titlize">
                       <span>{task.category.name}</span>
                     </td>
-                    <td className={"text-titlize"}>
+                    <td className={"text-titlize"} title={task.priority}>
                       <div className={`${task.priority}-priority`}></div>
                     </td>
                     <td>
@@ -684,12 +664,16 @@ class TaskList extends Component {
                     <td className="text-titlize">
                       <div className="task-action">
                         <div
+                          title={"Edit"}
                           className="action"
                           onClick={() => this.onClickTaskEdit(task)}
                         >
                           <a className="fa fa-pencil"></a>
                         </div>
-                        <div className="custom-control action custom-switch">
+                        <div
+                          className="custom-control action custom-switch"
+                          title="Suspend Task"
+                        >
                           <input
                             type="checkbox"
                             className="custom-control-input"
