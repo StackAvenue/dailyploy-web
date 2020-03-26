@@ -92,6 +92,50 @@
           font-size: 22px;
           color: $color-text2;
         }
+        .task-action{
+          display: flex;
+          justify-content: space-between;
+          .action{
+            cursor: pointer;
+          }
+        }
+        .project-count {
+          font-family: $font-family-roboto !important;
+          font-size: 13px !important;
+          color: $color-brand4 !important;
+          font-weight: bold;
+          margin-left: 5px !important;
+        }
+        .project-count-list-show {
+          width: 200px;
+          height: 121px;
+          border-radius: 5px;
+          box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+          background-color: #ffffff;
+          position: absolute;
+          .close-div {
+            width: 100%;
+            height: 25%;
+            background-color: transparent;
+            font-family: $font-family-roboto;
+            font-size: 13px;
+            color: $color-text2;
+            text-align: right;
+            padding: 5px 10px 10px 0px;
+          }
+          .project-body-box {
+            padding-left: 13px;
+            height: 75%;
+            overflow-y: scroll;
+            .project-body-text {
+              font-family: $font-family-roboto;
+              font-size: 13px;
+              color: $color-text2;
+              padding: 0px 0px 20px 0px;
+              font-weight: bold;
+            }
+          }
+        }
       }
       .checkbox {
         width: 100%;

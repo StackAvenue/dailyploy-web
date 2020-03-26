@@ -24,6 +24,15 @@ class DailyPloySelect extends Component {
     });
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.default != this.props.default) {
+      this.setState({
+        suggestions: this.props.options ? this.props.options : [],
+        selected: this.props.default ? this.props.default : ""
+      });
+    }
+  };
+
   onClickInput = () => {
     this.setState({ show: !this.state.show, suggestions: this.props.options });
   };

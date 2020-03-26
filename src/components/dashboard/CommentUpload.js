@@ -44,7 +44,7 @@ class CommentUpload extends React.Component {
           <div className="comment-container">
             <textarea
               name={`${this.props.commentName}`}
-              value={this.props.comments}
+              value={this.props.comments ? this.props.comments : ""}
               onClick={this.props.showCommentBox}
               onChange={e => this.props.handleInputChange(e)}
               className="form-control"

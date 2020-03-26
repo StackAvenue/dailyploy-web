@@ -449,7 +449,15 @@ class AddTaskModal extends React.Component {
                   <div className="col-md-12 row no-margin no-padding input-row">
                     <div className="col-md-2 no-padding label">Comments</div>
                     <div className="col-md-10">
-                      <CommentUpload
+                      <textarea
+                        name={`comments`}
+                        value={props.state.comments ? props.state.comments : ""}
+                        onChange={e => this.props.handleInputChange(e)}
+                        className="form-control"
+                        rows="1"
+                        placeholder="Write Here..."
+                      />
+                      {/* <CommentUpload
                         state={this.state}
                         showSave={
                           props.state.taskButton === "Add" ? false : true
@@ -457,11 +465,12 @@ class AddTaskModal extends React.Component {
                         showAttachIcon={
                           props.state.taskButton === "Add" ? false : true
                         }
+                        commentName="comments"
                         defaultComments={props.state.comments}
                         handleInputChange={this.props.handleInputChange}
                         showSave={false}
                         showAttachIcon={false}
-                      />
+                      /> */}
                     </div>
                   </div>
 
