@@ -13,7 +13,27 @@ class TaskAction extends Component {
   render() {
     const { props } = this;
     return (
-      <div className="d-inline-block event-action-dropdown">
+      <div
+        className="d-inline-block timeline-event-drop event-action-dropdown"
+        style={{
+          width: "98px",
+          position: "absolute",
+          zIndex: "1",
+          textAlign: "center",
+          right: "3px",
+          // left: "100%",
+          // top: "32px",
+          top: "86px",
+          backgroundColor: "#ffffff",
+          border: "1px solid #e5e5e5",
+          borderRadius: "5px",
+          fontFamily: "Roboto",
+          fontWeight: "400",
+          fontStyle: "normal",
+          fontSize: "12px",
+          color: "#0075d9"
+        }}
+      >
         {props.event.status !== "completed" ? (
           <>
             <div
