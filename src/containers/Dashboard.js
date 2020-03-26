@@ -1712,9 +1712,9 @@ class Dashboard extends Component {
   handleTaskStart = async (eventTask, dateTime) => {
     this.setState({ isPlayPause: true });
     if (this.state.status && this.state.trackingEvent) {
-      this.handleTaskStop(this.state.trackingEvent, Date.now());
+      await this.handleTaskStop(this.state.trackingEvent, Date.now());
     }
-    this.handleTaskStartOnly(eventTask, dateTime);
+    await this.handleTaskStartOnly(eventTask, dateTime);
   };
 
   handleTaskStartOnly = async (eventTask, dateTime) => {
