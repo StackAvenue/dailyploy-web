@@ -68,19 +68,36 @@ export const getWorkspaceId = () => {
   return cookie.load("workspaceId");
 };
 
+// export const getMiddleDates = (start, end) => {
+//   var startDate = convertUTCToLocalDate(moment(start).format(FULL_DATE));
+//   var endDate = convertUTCToLocalDate(moment(end).format(FULL_DATE));
+//   // var startDate = new Date(start);
+//   // var endDate = new Date(end);
+//   var daysArr = new Array();
+//   var currentDate = startDate;
+//   while (currentDate <= endDate) {
+//     daysArr.push(moment(currentDate).format(DATE_FORMAT1));
+//     var date = moment(currentDate, DATE_FORMAT1)
+//       .add(1, "days")
+//       .format(DATE_FORMAT1);
+//     currentDate = convertUTCToLocalDate(date);
+//   }
+//   return daysArr;
+// };
+
 export const getMiddleDates = (start, end) => {
-  var startDate = convertUTCToLocalDate(moment(start).format(FULL_DATE));
-  var endDate = convertUTCToLocalDate(moment(end).format(FULL_DATE));
-  // var startDate = new Date(start);
-  // var endDate = new Date(end);
-  var daysArr = new Array();
-  var currentDate = startDate;
-  while (currentDate <= endDate) {
-    daysArr.push(moment(currentDate).format(DATE_FORMAT1));
-    var date = moment(currentDate, DATE_FORMAT1)
-      .add(1, "days")
-      .format(DATE_FORMAT1);
-    currentDate = convertUTCToLocalDate(date);
+  var date1 = convertUTCToLocalDate(moment(start).format(FULL_DATE));
+  var date2 = convertUTCToLocalDate(moment(end).format(FULL_DATE));
+  var day = 1000 * 60 * 60 * 24;
+  var daysArr = [];
+
+  var diff = (date2.getTime() - date1.getTime()) / day;
+  for (var i = 0; i <= diff; i++) {
+    var xx = date1.getTime() + day * i;
+    var yy = new Date(xx);
+    daysArr.push(
+      yy.getFullYear() + "-" + (yy.getMonth() + 1) + "-" + yy.getDate()
+    );
   }
   return daysArr;
 };
