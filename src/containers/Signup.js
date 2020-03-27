@@ -34,6 +34,7 @@ class Signup extends Component {
       confirmPassword: "",
       workspaceName: "",
       isLoading: false,
+      showPassword: false,
       errors: {
         nameError: null,
         companyNameError: null,
@@ -295,6 +296,10 @@ class Signup extends Component {
     this.signupOAuth(response, "google");
   };
 
+  handlePasswordShow = () => {
+    this.setState({ showPassword: !this.state.showPassword });
+  };
+
   signupOAuth = async (resp, type) => {
     let signupOAuthData;
     let res = resp ? resp : null;
@@ -399,6 +404,7 @@ class Signup extends Component {
                         signup={this.signupForm}
                         responseGoogle={this.responseGoogle}
                         errorGoogle={this.errorGoogle}
+                        handlePasswordShow={this.handlePasswordShow}
                       />
                     </Tab>
                     <Tab
@@ -412,6 +418,7 @@ class Signup extends Component {
                         enable={isEnabled}
                         changeHandler={this.changeHandler}
                         signup={this.signupForm}
+                        handlePasswordShow={this.handlePasswordShow}
                       />
                     </Tab>
                   </Tabs>

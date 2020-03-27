@@ -78,23 +78,47 @@ const Individual = props => {
               </div>
             ) : null}
             {props.state.errors.passwordError ? (
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={props.changeHandler}
-                className="form-control login-form-field error"
-                placeholder="Password"
-              />
+              <>
+                <input
+                  type={props.state.showPassword ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field error"
+                  placeholder="Password"
+                />
+                <span
+                  className="signup-password-eye-1"
+                  onClick={props.handlePasswordShow}
+                >
+                  <i
+                    className={
+                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                    }
+                  ></i>
+                </span>
+              </>
             ) : (
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="Password"
-              />
+              <>
+                <input
+                  type={props.state.showPassword ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Password"
+                />
+                <span
+                  className="signup-password-eye-1"
+                  onClick={props.handlePasswordShow}
+                >
+                  <i
+                    className={
+                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                    }
+                  ></i>
+                </span>
+              </>
             )}
           </div>
           <div className="form-group">
@@ -105,23 +129,47 @@ const Individual = props => {
               </span>
             ) : null}
             {props.state.errors.confirmPasswordError ? (
-              <input
-                type="password"
-                name="confirmPassword"
-                value={confirmPassword}
-                onChange={props.changeHandler}
-                className="form-control login-form-field error"
-                placeholder="Confirm Password"
-              />
+              <>
+                <input
+                  type={props.state.showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field error"
+                  placeholder="Confirm Password"
+                />
+                <span
+                  className="signup-password-eye-2"
+                  onClick={props.handlePasswordShow}
+                >
+                  <i
+                    className={
+                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                    }
+                  ></i>
+                </span>
+              </>
             ) : (
-              <input
-                type="password"
-                name="confirmPassword"
-                value={confirmPassword}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="Confirm Password"
-              />
+              <>
+                <input
+                  type={props.state.showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Confirm Password"
+                />
+                <span
+                  className="signup-password-eye-2"
+                  onClick={props.handlePasswordShow}
+                >
+                  <i
+                    className={
+                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                    }
+                  ></i>
+                </span>
+              </>
             )}
           </div>
           {/* <br /> */}

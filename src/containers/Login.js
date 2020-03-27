@@ -36,9 +36,14 @@ class Signin extends Component {
       resetSusses: "",
       isLoading: false,
       loadingReset: false,
-      isLogin: true
+      isLogin: true,
+      showPassword: false
     };
   }
+
+  handlePasswordShow = () => {
+    this.setState({ showPassword: !this.state.showPassword });
+  };
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -338,13 +343,25 @@ class Signin extends Component {
                             </span>
                           ) : null}
                           <input
-                            type="password"
+                            type={this.state.showPassword ? "text" : "password"}
                             name="password"
                             value={password}
                             onChange={this.handleChange}
                             className="form-control login-form-field"
                             placeholder="Password"
                           />
+                          <span
+                            className="login-password-eye"
+                            onClick={this.handlePasswordShow}
+                          >
+                            <i
+                              className={
+                                this.state.showPassword
+                                  ? "fa fa-eye"
+                                  : "fa fa-eye-slash"
+                              }
+                            ></i>
+                          </span>
                         </div>
                         <div className="text-right forgot-pass">
                           Forgot Password?{" "}
