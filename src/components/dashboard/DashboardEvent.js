@@ -325,13 +325,13 @@ class DashboardEvent extends Component {
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding"
-                style={{ color: contColor }}
+                // style={{ color: contColor }}
               >
                 <div
                   className="col-md-12 no-padding pointer item-heading text-wraper"
                   style={{
-                    padding: "5px 5px 0px 5px",
-                    color: getContrastColor(this.props.bgColor)
+                    padding: "5px 5px 0px 5px"
+                    // color: getContrastColor(this.props.bgColor)
                   }}
                   onClick={() => {
                     if (!!eventItemClick) eventItemClick(schedulerData, event);
@@ -472,7 +472,7 @@ class DashboardEvent extends Component {
                     <div className={`${this.props.event.priority}`}></div>
                   </div>
                   <div className="col-md-3 no-padding d-inline-block ">
-                    <span className="task-timer" style={{ color: contColor }}>
+                    <span className="task-timer">
                       <Timer
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
@@ -487,13 +487,13 @@ class DashboardEvent extends Component {
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding"
-                style={{ color: contColor }}
+                // style={{ color: contColor }}
               >
                 <div
                   className="col-md-12 no-padding pointer item-heading text-wraper"
                   style={{
-                    padding: "5px 5px 0px 5px",
-                    color: getContrastColor(this.props.bgColor)
+                    padding: "5px 5px 0px 5px"
+                    // color: getContrastColor(this.props.bgColor)
                   }}
                   onClick={() => {
                     if (!!eventItemClick) eventItemClick(schedulerData, event);

@@ -12,7 +12,7 @@ import moment from "moment";
 import DashboardEvent from "./../dashboard/DashboardEvent";
 import DailyPloyDatePicker from "./../DailyPloyDatePicker";
 import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
-import { convertUTCToLocalDate } from "../../utils/function";
+import { convertUTCToLocalDate, getContrastColor } from "../../utils/function";
 import { DATE_FORMAT1, FULL_DATE_FORMAT3 } from "../../utils/Constants";
 import cookie from "react-cookies";
 
@@ -613,10 +613,12 @@ class Calendar extends Component {
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start);
     var end = moment(event.end);
+    let contColor = getContrastColor(bgColor);
     let divStyle = {
       borderRadius: "5px",
       backgroundColor: backgroundColor,
       // height: mustBeHeight
+      color: contColor,
       height: "75%",
       marginTop: "4px",
       padding: "2px"
