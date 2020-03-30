@@ -350,7 +350,11 @@ class Calendar extends Component {
       var s = Math.floor((totalSeconds % 3600) % 60);
 
       var timeDiff =
-        ("0" + h).slice(-2) + "h" + " " + ("0" + m).slice(-2) + "m";
+        ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+        "h" +
+        " " +
+        ("0" + m).slice(-2) +
+        "m";
     }
     if (schedulerData.viewType !== 2) {
       return (

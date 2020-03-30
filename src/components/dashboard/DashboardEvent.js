@@ -4,7 +4,11 @@ import MonthlyEvent from "./../dashboard/MonthlyEvent";
 import Select from "./../Select";
 import moment from "moment";
 import { post, put, mockGet, mockPost } from "../../utils/API";
-import { DATE_FORMAT1, FULL_DATE, MONTH_FORMAT } from "./../../utils/Constants";
+import {
+  DATE_FORMAT1,
+  FULL_DATE,
+  COMMENT_DATETIME
+} from "./../../utils/Constants";
 import {
   convertUTCToLocalDate,
   getContrastColor
@@ -283,12 +287,16 @@ class DashboardEvent extends Component {
 
             <div className="row date-div-card">
               <span>
-                {moment(event.taskStartDateTime).format("DD MMM, HH:MM")}
+                {moment(convertUTCToLocalDate(event.taskStartDateTime)).format(
+                  COMMENT_DATETIME
+                )}
                 {" - "}
               </span>
               {/* <span className="margin-none">-</span> */}
               <span>
-                {moment(event.taskEndDateTime).format("DD MMM, HH:MM")}
+                {moment(convertUTCToLocalDate(event.taskEndDateTime)).format(
+                  COMMENT_DATETIME
+                )}
               </span>
             </div>
 
@@ -310,7 +318,7 @@ class DashboardEvent extends Component {
                     <div className={`${this.props.event.priority}`}></div>
                   </div>
                   <div className="col-md-3 no-padding d-inline-block ">
-                    <span className="task-timer" style={{ color: contColor }}>
+                    <span className="task-timer">
                       <Timer
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
@@ -445,12 +453,16 @@ class DashboardEvent extends Component {
 
             <div className="row date-div-card">
               <span>
-                {moment(event.taskStartDateTime).format("DD MMM, HH:MM")}
+                {moment(convertUTCToLocalDate(event.taskStartDateTime)).format(
+                  COMMENT_DATETIME
+                )}
                 {" - "}
               </span>
               {/* <span className="margin-none">-</span> */}
               <span>
-                {moment(event.taskEndDateTime).format("DD MMM, HH:MM")}
+                {moment(convertUTCToLocalDate(event.taskEndDateTime)).format(
+                  COMMENT_DATETIME
+                )}
               </span>
             </div>
 

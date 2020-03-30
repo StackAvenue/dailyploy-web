@@ -855,6 +855,7 @@ class Dashboard extends Component {
       },
       taskloader: false,
       taskContacts: [],
+      taskComments: null,
       isStart: false
     });
   };
