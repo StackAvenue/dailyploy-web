@@ -276,6 +276,9 @@
   align-items: center !important;
 }
 
+.cursor{
+  cursor: pointer;
+}
 /* remove arrows from input element with number type*/
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

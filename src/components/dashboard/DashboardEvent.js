@@ -196,7 +196,13 @@ class DashboardEvent extends Component {
           <div key={event.id} className={mustAddCssClass}>
             <div className="row item dashboard-event-box ABS">
               <div className="col-md-7 no-padding">
-                <div className="project-name-text" style={divStyle}>
+                <div
+                  className="project-name-text cursor"
+                  style={divStyle}
+                  onClick={() => {
+                    if (!!eventItemClick) eventItemClick(schedulerData, event);
+                  }}
+                >
                   <span className="name-text-dot">{event.projectName}</span>
                 </div>
               </div>
@@ -362,7 +368,13 @@ class DashboardEvent extends Component {
           >
             <div className="row item dashboard-event-box">
               <div className="col-md-7 no-padding">
-                <div className="project-name-text" style={divStyle}>
+                <div
+                  className="project-name-text cursor"
+                  style={divStyle}
+                  onClick={() => {
+                    if (!!eventItemClick) eventItemClick(schedulerData, event);
+                  }}
+                >
                   <span className="name-text-dot">{event.projectName}</span>
                 </div>
               </div>

@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import EditableTimeTrack from "./../../EditableTimeTrack";
 import TimePicker from "rc-time-picker";
 import ConfirmModal from "./../../ConfirmModal";
+import ReportTimeTrackEditModal from "./ReportTimeTrackEditModal";
 
 class ReportTableRow extends Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class ReportTableRow extends Component {
       toDateTime: null,
       fromTime: null,
       toTime: null,
-      showConfirm: false
+      showConfirm: false,
+      trackTimeError: null
     };
   }
 
@@ -38,18 +40,19 @@ class ReportTableRow extends Component {
   };
 
   editTimeTrack = async () => {
-    if (this.state.fromDateTime && this.state.toDateTime) {
+    var startDate = new Date(this.state.fromDateTime.format(FULL_DATE));
+    var endDate = new Date(this.state.toDateTime.format(FULL_DATE));
+    if (startDate < endDate) {
       try {
         this.setState({ taskloader: true, trackTimeError: null });
         let trackedTime = {
-          start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
-          end_time: new Date(this.state.toDateTime.format(FULL_DATE))
+          start_time: startDate,
+          end_time: endDate
         };
         const { data } = await put(
           trackedTime,
           `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
         );
-        this.props.timeTrackUpdate();
         this.setState({
           taskloader: false,
           editable: false,
@@ -59,6 +62,7 @@ class ReportTableRow extends Component {
           fromTime: null,
           toTime: null
         });
+        this.props.timeTrackUpdate();
       } catch (e) {
         if (e.response.status == 400) {
           toast(
@@ -75,6 +79,10 @@ class ReportTableRow extends Component {
           });
         }
       }
+    } else {
+      this.setState({
+        trackTimeError: "Please Select Valid End DateTime"
+      });
     }
   };
 
@@ -130,6 +138,7 @@ class ReportTableRow extends Component {
   };
 
   handleTimeFrom = value => {
+    var value = moment(value);
     this.setState({
       timeFrom: value != null ? value.format("HH:mm") : null,
       fromDateTime: value,
@@ -141,6 +150,7 @@ class ReportTableRow extends Component {
   };
 
   handleTimeTo = value => {
+    var value = moment(value);
     this.setState({
       timeTo: value != null ? value.format("HH:mm") : null,
       toDateTime: value
@@ -170,61 +180,61 @@ class ReportTableRow extends Component {
     return (
       <div className="reports-track-logs">
         {trackLogs.length > 0 ? (
-          this.state.editable &&
-          this.state.editableLog &&
-          this.state.editableLog.task_id === task.id ? (
-            <div style={{ display: "flex" }}>
-              <TimePicker
-                value={this.state.fromDateTime}
-                placeholder="Select"
-                showSecond={false}
-                onChange={this.handleTimeFrom}
-              />
-              <div style={{ margin: "0px 10px" }}>
-                <TimePicker
-                  value={this.state.toDateTime}
-                  placeholder="Select"
-                  showSecond={false}
-                  onChange={this.handleTimeTo}
-                  disabledMinutes={this.disabledMinutes}
-                  disabledHours={this.disabledHours}
-                />
-              </div>
-              <div
-                className=""
-                onClick={this.toggleEditableBox}
-                title={"Back"}
-                style={{
-                  cursor: "pointer",
-                  padding: "0px 10px"
-                }}
-              >
-                <i className="far fa-arrow-alt-circle-left"></i>
-              </div>
-              <div
-                className=""
-                onClick={this.editTimeTrack}
-                title={"Edit"}
-                style={{
-                  cursor: "pointer",
-                  padding: "0px 10px"
-                }}
-              >
-                <i className="fa fa-check" aria-hidden="true"></i>
-              </div>
-            </div>
-          ) : (
-            <EditableTimeTrack
-              options={trackLogs}
-              value={first}
-              action={true}
-              handleEditLog={this.handleEditLog}
-              handleDeleteLog={this.handleDeleteLog}
-              saveInputEditable={() => {}}
-              state={this.state}
-            />
-          )
+          // this.state.editable &&
+          // this.state.editableLog &&
+          // this.state.editableLog.task_id === task.id ? (
+          //   <div style={{ display: "flex" }}>
+          //     <TimePicker
+          //       value={this.state.fromDateTime}
+          //       placeholder="Select"
+          //       showSecond={false}
+          //       onChange={this.handleTimeFrom}
+          //     />
+          //     <div style={{ margin: "0px 10px" }}>
+          //       <TimePicker
+          //         value={this.state.toDateTime}
+          //         placeholder="Select"
+          //         showSecond={false}
+          //         onChange={this.handleTimeTo}
+          //         disabledMinutes={this.disabledMinutes}
+          //         disabledHours={this.disabledHours}
+          //       />
+          //     </div>
+          //     <div
+          //       className=""
+          //       onClick={this.toggleEditableBox}
+          //       title={"Back"}
+          //       style={{
+          //         cursor: "pointer",
+          //         padding: "0px 10px"
+          //       }}
+          //     >
+          //       <i className="far fa-arrow-alt-circle-left"></i>
+          //     </div>
+          //     <div
+          //       className=""
+          //       onClick={this.editTimeTrack}
+          //       title={"Edit"}
+          //       style={{
+          //         cursor: "pointer",
+          //         padding: "0px 10px"
+          //       }}
+          //     >
+          //       <i className="fa fa-check" aria-hidden="true"></i>
+          //     </div>
+          //   </div>
+          // ) : (
+          <EditableTimeTrack
+            options={trackLogs}
+            value={first}
+            action={true}
+            handleEditLog={this.handleEditLog}
+            handleDeleteLog={this.handleDeleteLog}
+            saveInputEditable={() => {}}
+            state={this.state}
+          />
         ) : (
+          // )
           <span>No tracked Time</span>
         )}
       </div>
@@ -505,6 +515,16 @@ class ReportTableRow extends Component {
             buttonText="delete"
             onClick={this.deleteTimeTrack}
             closeModal={this.closeConfirmModal}
+          />
+        ) : null}
+
+        {this.state.editable ? (
+          <ReportTimeTrackEditModal
+            state={this.state}
+            editTimeTrack={this.editTimeTrack}
+            handleTimeFrom={this.handleTimeFrom}
+            handleTimeTo={this.handleTimeTo}
+            closeModal={this.toggleEditableBox}
           />
         ) : null}
       </>

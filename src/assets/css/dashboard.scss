@@ -4446,6 +4446,18 @@ table.scheduler-table tr:last-child td {
             }
           }
         }
+        .react-datepicker-popper{
+          left: -45px !important;
+        }
+        .react-datepicker-wrapper{
+          input{
+            width: 90%;
+            border-radius: 5px;
+          }
+        }
+        .react-datepicker{
+          display: flex !important;
+        }
       }
     }
   }
@@ -5118,7 +5130,7 @@ table.scheduler-table tr:last-child td {
       padding: 20px 0 0px 0px !important;
       span {
         font-size: 20px;
-        color: $color-brand4 !important;
+        color: $color-text1 !important;
         font-family: $font-family-roboto !important;
         font-weight: 500;
         font-stretch: normal;

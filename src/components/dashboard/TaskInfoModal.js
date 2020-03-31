@@ -7,6 +7,7 @@ import moment from "moment";
 import { post, del, put } from "../../utils/API";
 import ImgsViewer from "react-images-viewer";
 import TimePicker from "rc-time-picker";
+import DatePicker from "react-datepicker";
 import {
   DATE_FORMAT2,
   DATE_FORMAT1,
@@ -260,33 +261,42 @@ class TaskInfoModal extends Component {
 
   editTimeTrack = async () => {
     if (this.state.fromDateTime && this.state.toDateTime) {
-      try {
-        this.setState({ timeTrackEditLoader: true, trackTimeError: null });
-        let trackedTime = {
-          start_time: new Date(this.state.fromDateTime.format(FULL_DATE)),
-          end_time: new Date(this.state.toDateTime.format(FULL_DATE))
-        };
-        const { data } = await put(
-          trackedTime,
-          `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
-        );
-        this.props.timeTrackUpdate(data, "edit");
-        this.setState({
-          timeTrackEditLoader: false,
-          timeFrom: null,
-          timeTo: null,
-          fromDateTime: null,
-          toDateTime: null,
-          editableLog: null,
-          editLog: false
-        });
-      } catch (e) {
-        if (e.response.status == 400) {
+      var start_time = new Date(this.state.fromDateTime.format(FULL_DATE));
+      var end_time = new Date(this.state.toDateTime.format(FULL_DATE));
+      if (start_time < end_time) {
+        try {
+          this.setState({ timeTrackEditLoader: true, trackTimeError: null });
+          let trackedTime = {
+            start_time: start_time,
+            end_time: end_time
+          };
+          const { data } = await put(
+            trackedTime,
+            `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
+          );
+          this.props.timeTrackUpdate(data, "edit");
           this.setState({
-            trackTimeError: e.response.data.errors,
-            timeTrackEditLoader: false
+            timeTrackEditLoader: false,
+            timeFrom: null,
+            timeTo: null,
+            fromDateTime: null,
+            toDateTime: null,
+            editableLog: null,
+            editLog: false
           });
+        } catch (e) {
+          if (e.response.status == 400) {
+            this.setState({
+              trackTimeError: "End datetime is wrong",
+              timeTrackEditLoader: false
+            });
+          }
         }
+      } else {
+        this.setState({
+          trackTimeError: "End datetime is wrong",
+          timeTrackEditLoader: false
+        });
       }
     }
   };
@@ -459,6 +469,7 @@ class TaskInfoModal extends Component {
   };
 
   handleTimeFrom = value => {
+    var value = moment(value);
     this.setState({
       timeFrom: value != null ? value.format("HH:mm") : null,
       fromDateTime: value,
@@ -470,6 +481,7 @@ class TaskInfoModal extends Component {
   };
 
   handleTimeTo = value => {
+    var value = moment(value);
     this.setState({
       timeTo: value != null ? value.format("HH:mm:ss") : null,
       toDateTime: value
@@ -755,24 +767,49 @@ class TaskInfoModal extends Component {
                               marginLeft: "20px"
                             }}
                           >
-                            <TimePicker
+                            {/* <TimePicker
                               placeholder="Time"
                               value={this.state.fromDateTime}
                               showSecond={false}
                               onChange={this.handleTimeFrom}
+                            /> */}
+                            <DatePicker
+                              selected={new Date(this.state.fromDateTime)}
+                              onChange={date => this.handleTimeFrom(date)}
+                              showTimeSelect
+                              timeFormat="HH:mm"
+                              timeIntervals={1}
+                              excludeTimes={
+                                [
+                                  // setHours(setMinutes(new Date(), 0), 17),
+                                  // setHours(setMinutes(new Date(), 30), 18),
+                                  // setHours(setMinutes(new Date(), 30), 19),
+                                  // setHours(setMinutes(new Date(), 30), 17)
+                                ]
+                              }
+                              dateFormat="d MMM, HH:mm"
                             />
                           </div>
                           <span className="col-md-1 no-padding d-inline-block">
                             To
                           </span>
                           <div className="col-md-4 no-padding d-inline-block track-time-edit">
-                            <TimePicker
+                            {/* <TimePicker
                               placeholder="Time"
                               value={this.state.toDateTime}
                               showSecond={false}
                               disabledMinutes={this.disabledMinutes}
                               disabledHours={this.disabledHours}
                               onChange={this.handleTimeTo}
+                            /> */}
+                            <DatePicker
+                              selected={new Date(this.state.toDateTime)}
+                              onChange={date => this.handleTimeTo(date)}
+                              showTimeSelect
+                              timeFormat="HH:mm"
+                              timeIntervals={1}
+                              // minTime={new Date(this.state.fromDateTime)}
+                              dateFormat="d MMM, HH:mm"
                             />
                           </div>
                         </div>

@@ -904,39 +904,57 @@ class Dashboard extends Component {
     });
   };
 
-  timeTrackUpdate = (log, flag) => {
+  timeTrackUpdate = async (log, flag) => {
+    // if (log) {
+    //   let date = moment(log.start_date).format(DATE_FORMAT1);
+    //   var taskEvent = this.state.taskEvent;
+    //   var dateFormattedTimeTrack = taskEvent.dateFormattedTimeTrack;
+    //   var dateFilterLog = dateFormattedTimeTrack.find(
+    //     dateLog => dateLog.date == date
+    //   );
+    //   var allTimeTracks = taskEvent.allTimeTracked.filter(
+    //     tt => tt.id != log.id
+    //   );
+    //   allTimeTracks.push(log);
+    //   taskEvent["allTimeTracked"] = allTimeTracks;
+    //   if (dateFilterLog && dateFilterLog.time_tracks) {
+    //     var newLog = [];
+    //     if (flag == "delete") {
+    //       newLog = dateFilterLog.time_tracks.filter(dLog => dLog.id != log.id);
+    //     } else {
+    //       dateFilterLog.time_tracks.forEach(dLog => {
+    //         if (dLog.id == log.id) {
+    //           newLog.push(log);
+    //         } else {
+    //           newLog.push(dLog);
+    //         }
+    //       });
+    //     }
+    //     dateFilterLog["time_tracks"] = newLog;
+    //   } else {
+    //     var newDateObj = {
+    //       date: date,
+    //       time_tracks: [log]
+    //     };
+    //     dateFormattedTimeTrack.push(newDateObj);
+    //   }
+    //   this.setState({
+    //     taskEvent: taskEvent
+    //   });
+    //   this.loadUserTask(this.state.workspaceId);
+    // }
     if (log) {
-      let date = moment(log.start_date).format(DATE_FORMAT1);
       var taskEvent = this.state.taskEvent;
-      var dateFormattedTimeTrack = taskEvent.dateFormattedTimeTrack;
-      var dateFilterLog = dateFormattedTimeTrack.find(
-        dateLog => dateLog.date == date
-      );
-      var allTimeTracks = taskEvent.allTimeTracked.filter(
-        tt => tt.id != log.id
-      );
-      allTimeTracks.push(log);
-      taskEvent["allTimeTracked"] = allTimeTracks;
-      if (dateFilterLog && dateFilterLog.time_tracks) {
-        var newLog = [];
-        if (flag == "delete") {
-          newLog = dateFilterLog.time_tracks.filter(dLog => dLog.id != log.id);
-        } else {
-          dateFilterLog.time_tracks.forEach(dLog => {
-            if (dLog.id == log.id) {
-              newLog.push(log);
-            } else {
-              newLog.push(dLog);
-            }
-          });
-        }
-        dateFilterLog["time_tracks"] = newLog;
-
+      try {
+        const { data } = await get(`tasks/${log.task_id}`);
+        taskEvent["dateFormattedTimeTrack"] = data.date_formatted_time_tracks;
+        taskEvent["allTimeTracked"] = data.time_tracked;
+        var taskEvent = this.state.taskEvent;
         this.setState({
           taskEvent: taskEvent
         });
-        this.loadUserTask(this.state.workspaceId);
-      }
+      } catch (e) {}
+      this.loadUserTask(this.state.workspaceId);
     }
   };
 

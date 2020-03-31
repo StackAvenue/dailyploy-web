@@ -449,10 +449,6 @@ justify-content: flex-end;
     border-color: transparent black transparent transparent;
     transform: rotateX(1deg) rotateY(8deg) rotateZ(90deg);
 }
-
-
-
-
 .tooltip {
   position: relative;
   display: inline-block;
@@ -603,6 +599,25 @@ justify-content: flex-end;
   }
 }
 
+.report-edit-timetrack{
+  .time-edit{
+    margin-left: 50px;
+  }
+  .track-time-edit{
+    .react-datepicker-popper{
+      left: -60px !important;
+    }
+    .react-datepicker-wrapper{
+      input{
+        width: 90%;
+        border-radius: 5px;
+      }
+    }
+    .react-datepicker{
+      display: flex !important;
+    }
+  }
+}
 @media screen and (max-width: 1440px) {
 .reports-table-container {
     .report-table-row{
