@@ -163,6 +163,24 @@ a {
   .error {
     border: 1px solid $color-failure !important;
   }
+  .login-password-eye{
+    position: absolute;
+    right: 10px;
+    bottom: 102px;
+    color: $color-text3;
+  }
+  .signup-password-eye-1{
+    position: absolute;
+    right: 10px;
+    bottom: 136px;
+    color: $color-text3;
+  }
+  .signup-password-eye-2{
+    position: absolute;
+    right: 10px;
+    bottom: 58px;
+    color: $color-text3;
+  }
 }
 
 .signup-toaster {

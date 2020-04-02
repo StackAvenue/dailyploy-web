@@ -1,5 +1,6 @@
 export const PASSWORDREGX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[ !"#$%&'()*+,-.\/\\:;<=>?@\[\]^_`{|}~])[A-Za-z\d !"#$%&'()*+,-.\/\\:;<=>?@\[\]^_`{|}~]{8,}$/;
 export const EMAILREGX = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,})$/;
+const phoneNo = /^\d{10}$/;
 export const checkPassword = sPassword => {
   if (sPassword) {
     if (!sPassword.match(PASSWORDREGX)) {
@@ -24,6 +25,16 @@ export const validateName = name => {
 export const validateEmail = sEmail => {
   if (sEmail) {
     if (!sEmail.match(EMAILREGX)) {
+      return "Must be Valid";
+    }
+    return null;
+  }
+  return "cannot be empty";
+};
+
+export const validatePhone = phoneno => {
+  if (phoneno) {
+    if (!phoneno.match(phoneNo)) {
       return "Must be Valid";
     }
     return null;

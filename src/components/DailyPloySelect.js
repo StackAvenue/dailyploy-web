@@ -24,6 +24,15 @@ class DailyPloySelect extends Component {
     });
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.default != this.props.default) {
+      this.setState({
+        suggestions: this.props.options ? this.props.options : [],
+        selected: this.props.default ? this.props.default : ""
+      });
+    }
+  };
+
   onClickInput = () => {
     this.setState({ show: !this.state.show, suggestions: this.props.options });
   };
@@ -90,12 +99,21 @@ class DailyPloySelect extends Component {
           </ul>
         ) : (
           <>
-            <span
-              className={`text-titlize left-padding-10px  ${this.state.notFound}`}
-              style={{ padding: "5px" }}
-            >
-              No Match Found
-            </span>
+            {this.props.noOptionMessage && this.state.searchText == "" ? (
+              <span
+                className={`text-titlize left-padding-10px`}
+                style={{ padding: "10px" }}
+              >
+                {this.props.noOptionMessage}
+              </span>
+            ) : (
+              <span
+                className={`text-titlize left-padding-10px ${this.state.notFound}`}
+                style={{ padding: "5px" }}
+              >
+                No Match Found
+              </span>
+            )}
             {this.props.canAdd ? (
               <span className="d-inline-block task-add-category left-padding-10px">
                 <span>

@@ -6,8 +6,10 @@ import { get } from "../../utils/API";
 import { TwitterPicker, ChromePicker } from "react-color";
 import cookie from "react-cookies";
 import DailyPloyMultiSelect from "./../DailyPloyMultiSelect";
+import DailyPloySelect from "./../DailyPloySelect";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
+import { connect } from "react-redux";
 
 class AddProjectModal extends Component {
   constructor(props) {
@@ -100,9 +102,289 @@ class AddProjectModal extends Component {
     this.calendarToRef.current.setOpen(true);
   };
 
+  renderEditIcons = (idx, contactsLength, contact) => {
+    if (contact.title == "edit") {
+      return (
+        <>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.backToList(contact)}
+          >
+            <i className="far fa-arrow-alt-circle-left"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "-27px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px"
+            }}
+            onClick={() => this.props.updateContact(idx)}
+          >
+            <i className="fa fa-check"></i>
+          </div>
+        </>
+      );
+    } else if (idx == contactsLength - 1 && contact.id != "") {
+      return (
+        <>
+          {this.props.state.editNewCommnets.length == 0 ? (
+            <div
+              className="col-md-1  no-padding"
+              style={{
+                position: "absolute",
+                right: "0px",
+                bottom: "25px",
+                cursor: "pointer",
+                fontSize: "22px",
+                color: "rgb(119, 114, 114)"
+              }}
+              onClick={() => this.props.addContactsRow()}
+            >
+              <i className="fa fa-plus-circle"></i>
+            </div>
+          ) : null}
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.makeEditContact(contact)}
+          >
+            <i className="fa fa-pencil"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "-27px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.deleteContact(contact)}
+          >
+            <i className="fas fa-trash-alt"></i>
+          </div>
+        </>
+      );
+    } else if (contact.id != "") {
+      return (
+        <>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.makeEditContact(contact)}
+          >
+            <i className="fa fa-pencil"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "-27px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.deleteContact(contact)}
+          >
+            <i className="fas fa-trash-alt"></i>
+          </div>
+        </>
+      );
+    }
+  };
+
+  renderAddEditIcons = (idx, contactsLength, contact) => {
+    if (idx == contactsLength - 1) {
+      return (
+        <>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "25px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.addContactsRow()}
+          >
+            <i className="fa fa-plus-circle"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.removeEditNewContactsRow(idx)}
+          >
+            {/* <i className="fa fa-times-circle"></i> */}
+            <i className="far fa-times-circle"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "-27px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px"
+            }}
+            onClick={() => this.props.addNewContact(idx)}
+          >
+            <i className="fa fa-check"></i>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.removeEditNewContactsRow(idx)}
+          >
+            {/* <i className="fa fa-times-circle"></i> */}
+            <i className="far fa-times-circle"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "-27px",
+              bottom: "62px",
+              cursor: "pointer",
+              fontSize: "22px"
+            }}
+            onClick={() => this.props.addNewContact(idx)}
+          >
+            <i className="fa fa-check"></i>
+          </div>
+        </>
+      );
+    }
+  };
+
+  renderAddIcons = (idx, contactsLength) => {
+    if (idx == contactsLength - 1 && idx == 0) {
+      return (
+        <div
+          className="col-md-1  no-padding"
+          style={{
+            position: "absolute",
+            right: "0px",
+            bottom: "25px",
+            cursor: "pointer",
+            fontSize: "22px",
+            color: "rgb(119, 114, 114)"
+          }}
+          onClick={() => this.props.addContactsRow()}
+        >
+          <i className="fa fa-plus-circle"></i>
+        </div>
+      );
+    } else if (idx == contactsLength - 1) {
+      return (
+        <>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "0px",
+              bottom: "25px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.addContactsRow()}
+          >
+            <i className="fa fa-plus-circle"></i>
+          </div>
+          <div
+            className="col-md-1  no-padding"
+            style={{
+              position: "absolute",
+              right: "-30px",
+              bottom: "25px",
+              cursor: "pointer",
+              fontSize: "22px",
+              color: "rgb(119, 114, 114)"
+            }}
+            onClick={() => this.props.removeContactsRow(idx)}
+          >
+            <i className="far fa-times-circle"></i>
+            {/* <i className="fa fa-times-circle"></i> */}
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <div
+          className="col-md-1  no-padding"
+          style={{
+            position: "absolute",
+            right: "-30px",
+            bottom: "25px",
+            cursor: "pointer",
+            fontSize: "22px",
+            color: "rgb(119, 114, 114)"
+          }}
+          onClick={() => this.props.removeContactsRow(idx)}
+        >
+          {/* <i className="fa fa-times-circle"></i> */}
+          <i className="far fa-times-circle"></i>
+        </div>
+      );
+    }
+  };
+
   render() {
     const { props } = this;
-
+    let contactsLength = this.props.state.contacts
+      ? this.props.state.contacts.length
+      : 0;
+    let newContactsLength = props.state.editNewCommnets
+      ? props.state.editNewCommnets.length
+      : 0;
     return (
       <>
         <Modal
@@ -287,6 +569,211 @@ class AddProjectModal extends Component {
                 </div>
               </div>
 
+              <div className="col-md-12 row no-margin no-padding input-row">
+                <div className="col-md-2 no-padding label">Contacts</div>
+                <div
+                  className="col-md-10"
+                  style={{
+                    overflowY: "scroll",
+                    maxHeight: "300px",
+                    overflowX: "hidden",
+                    paddingRight: "20px"
+                  }}
+                >
+                  {props.state.contacts
+                    ? props.state.contacts.map((contact, idx) => {
+                        return (
+                          <>
+                            <div className="col-md-12 no-padding">
+                              <div className="col-md-11 no-padding">
+                                <div className="col-md-12 row no-margin no-padding input-row">
+                                  <div className="col-md-2 no-padding label-1">
+                                    Name
+                                  </div>
+                                  <div className="col-md-10">
+                                    <input
+                                      type="text"
+                                      name="name"
+                                      placeholder="Name"
+                                      onChange={e =>
+                                        props.handleContactChangeInput(
+                                          e,
+                                          idx,
+                                          "contacts"
+                                        )
+                                      }
+                                      className={`form-control ${
+                                        contact.nameError
+                                          ? " input-error-border"
+                                          : ""
+                                      }`}
+                                      value={contact.name}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-md-12 row no-margin no-padding input-row">
+                                  <div className="col-md-2 no-padding label-1">
+                                    Email
+                                  </div>
+                                  <div className="col-md-10">
+                                    <input
+                                      type="email"
+                                      name="email"
+                                      onChange={e =>
+                                        props.handleContactChangeInput(
+                                          e,
+                                          idx,
+                                          "contacts"
+                                        )
+                                      }
+                                      placeholder="Email"
+                                      className={`form-control ${
+                                        contact.emailError
+                                          ? " input-error-border"
+                                          : ""
+                                      }`}
+                                      value={contact.email}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-md-12 row no-margin no-padding input-row">
+                                  <div className="col-md-2 no-padding label-1">
+                                    Mobile No
+                                  </div>
+                                  <div className="col-md-10">
+                                    <input
+                                      type="number"
+                                      name="phone_number"
+                                      onChange={e =>
+                                        props.handleContactChangeInput(
+                                          e,
+                                          idx,
+                                          "contacts"
+                                        )
+                                      }
+                                      placeholder="Mobile No"
+                                      className={`form-control ${
+                                        contact.phoneError
+                                          ? " input-error-border"
+                                          : ""
+                                      }`}
+                                      value={contact.phone_number}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              {props.btnText === "Save"
+                                ? this.renderEditIcons(
+                                    idx,
+                                    contactsLength,
+                                    contact
+                                  )
+                                : this.renderAddIcons(idx, contactsLength)}
+                              <hr></hr>
+                            </div>
+                          </>
+                        );
+                      })
+                    : null}
+
+                  {props.state.editNewCommnets
+                    ? props.state.editNewCommnets.map((contact, idx) => {
+                        return (
+                          <>
+                            <div className="col-md-12 no-padding">
+                              <div className="col-md-11 no-padding">
+                                <div className="col-md-12 row no-margin no-padding input-row">
+                                  <div className="col-md-2 no-padding label-1">
+                                    Name
+                                  </div>
+                                  <div className="col-md-10">
+                                    <input
+                                      type="text"
+                                      name="name"
+                                      placeholder="Name"
+                                      onChange={e =>
+                                        props.handleContactChangeInput(
+                                          e,
+                                          idx,
+                                          "editNewCommnets"
+                                        )
+                                      }
+                                      className={`form-control ${
+                                        contact.nameError
+                                          ? " input-error-border"
+                                          : ""
+                                      }`}
+                                      value={contact.name}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-md-12 row no-margin no-padding input-row">
+                                  <div className="col-md-2 no-padding label-1">
+                                    Email
+                                  </div>
+                                  <div className="col-md-10">
+                                    <input
+                                      type="email"
+                                      name="email"
+                                      onChange={e =>
+                                        props.handleContactChangeInput(
+                                          e,
+                                          idx,
+                                          "editNewCommnets"
+                                        )
+                                      }
+                                      placeholder="Email"
+                                      className={`form-control ${
+                                        contact.emailError
+                                          ? " input-error-border"
+                                          : ""
+                                      }`}
+                                      value={contact.email}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-md-12 row no-margin no-padding input-row">
+                                  <div className="col-md-2 no-padding label-1">
+                                    Mobile No
+                                  </div>
+                                  <div className="col-md-10">
+                                    <input
+                                      type="number"
+                                      name="phone_number"
+                                      onChange={e =>
+                                        props.handleContactChangeInput(
+                                          e,
+                                          idx,
+                                          "editNewCommnets"
+                                        )
+                                      }
+                                      placeholder="Mobile No"
+                                      className={`form-control ${
+                                        contact.phoneError
+                                          ? " input-error-border"
+                                          : ""
+                                      }`}
+                                      value={contact.phone_number}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              {props.btnText === "Save"
+                                ? this.renderAddEditIcons(
+                                    idx,
+                                    newContactsLength,
+                                    contact
+                                  )
+                                : null}
+                              <hr></hr>
+                            </div>
+                          </>
+                        );
+                      })
+                    : null}
+                </div>
+              </div>
+
               <div className="col-md-12 no-padding input-row">
                 <div className="col-md-5 ml-auto">
                   <button
@@ -294,7 +781,7 @@ class AddProjectModal extends Component {
                     className={`btn col-md-5 button1 btn-primary ${
                       this.props.state.saveDisable ? "disabled" : ""
                     }`}
-                    onClick={props.addProject}
+                    onClick={() => props.addProject()}
                   >
                     {props.btnText}
                   </button>

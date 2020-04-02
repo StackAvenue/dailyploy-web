@@ -3,7 +3,11 @@ import "../../assets/css/dashboard.scss";
 import { Dropdown } from "react-bootstrap";
 import Add from "../../assets/images/add.svg";
 import { get, post, mockPost } from "../../utils/API";
-import { validateEmail } from "../../utils/validation";
+import {
+  validateName,
+  validateEmail,
+  validatePhone
+} from "../../utils/validation";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
 import AddMemberModal from "./AddMemberModal";
@@ -74,8 +78,15 @@ export default class MenuBar extends Component {
       memberRoleError: "",
       memberEmailError: "",
       memberNameError: "",
-      saveDisable: false,
-      reset: false
+      saveDisable: true,
+      reset: false,
+      contacts: [
+        {
+          name: "",
+          email: "",
+          phone_number: ""
+        }
+      ]
     };
   }
 
@@ -93,65 +104,171 @@ export default class MenuBar extends Component {
     }
   }
 
+  handleContactChangeInput = (e, idx) => {
+    const { name, value } = e.target;
+    var contacts = this.state.contacts;
+    let contact = contacts.find((contact, index) => idx === index);
+    contact[name] = value;
+    this.setState({
+      contacts: contacts
+    });
+  };
+
+  addContactsRow = () => {
+    let contacts = this.state.contacts;
+    contacts.push({
+      name: "",
+      email: "",
+      phone_number: ""
+    });
+    this.setState({
+      contacts: contacts
+    });
+  };
+
+  removeContactsRow = idx => {
+    let contacts = this.state.contacts.filter((contact, index) => idx != index);
+    this.setState({
+      contacts: contacts
+    });
+  };
+
+  validateContackts = () => {
+    var flag = true;
+    var updatedContacts = this.state.contacts;
+    if (
+      this.state.contacts.length == 1 &&
+      this.state.contacts[0].name == "" &&
+      this.state.contacts[0].email == "" &&
+      this.state.contacts[0].phone_number == ""
+    ) {
+      flag = true;
+    } else {
+      var updatedContacts = this.state.contacts.map(contact => {
+        let nm = validateName(contact.name);
+        if (nm) {
+          contact["nameError"] = nm;
+          flag = false;
+        } else {
+          contact["nameError"] = null;
+        }
+        let em = validateEmail(contact.email);
+        let ph = validatePhone(contact.phone_number);
+        if (contact.email == "" && contact.phone_number == "") {
+          if (em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        } else if (contact.email != "" && contact.phone_number != "") {
+          if (em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        } else if (contact.email != "" || contact.phone_number != "") {
+          if (contact.email != "" && em) {
+            contact["emailError"] = em;
+            flag = false;
+          } else {
+            contact["emailError"] = null;
+          }
+          if (contact.phone_number != "" && ph) {
+            contact["phoneError"] = ph;
+            flag = false;
+          } else {
+            contact["phoneError"] = null;
+          }
+        }
+        return contact;
+      });
+    }
+    this.setState({
+      contacts: updatedContacts
+    });
+    return flag;
+  };
+
   addProject = async () => {
     let addOwner = [];
     addOwner.push(this.props.state.userId);
     var self = this;
-    this.setState({ saveDisable: true });
     if (this.state.projectName != "") {
-      const projectData = {
-        project: {
-          name: this.state.projectName,
-          start_date: this.state.dateFrom,
-          end_date: this.state.dateTo,
-          members: !this.state.projectMembers.includes(this.props.state.userId)
-            ? [...this.state.projectMembers, ...addOwner]
-            : this.state.projectMembers,
-          color_code: this.state.background
+      if (this.validateContackts()) {
+        this.setState({ saveDisable: true });
+        const projectData = {
+          project: {
+            name: this.state.projectName,
+            start_date: this.state.dateFrom,
+            end_date: this.state.dateTo,
+            members: !this.state.projectMembers.includes(
+              this.props.state.userId
+            )
+              ? [...this.state.projectMembers, ...addOwner]
+              : this.state.projectMembers,
+            color_code: this.state.background
+          }
+        };
+        if (this.state.contacts.length > 0) {
+          projectData.project["contacts"] = this.state.contacts;
         }
-      };
-      try {
-        const { data } = await post(
-          projectData,
-          `workspaces/${this.props.workspaceId}/projects`
-        );
-        toast(
-          <DailyPloyToast
-            message="Project added successfully!"
-            status="success"
-          />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-        );
-        this.handleClose();
-        this.props.manageProjectListing(data.project);
-        this.props.handleLoad(false);
-      } catch (e) {
-        if (e.response && e.response.data) {
-          var errors = e.response.data.errors;
-          if (errors && errors.project_name_workspace_uniqueness) {
-            toast(
-              <DailyPloyToast
-                message={`Project Name ${errors.project_name_workspace_uniqueness}`}
-                status="error"
-              />,
-              { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-            );
-            setTimeout(function() {
-              self.setState({ saveDisable: false });
-            }, 2000);
-          } else if (errors && errors.name) {
-            toast(
-              <DailyPloyToast
-                message={`Project name ${errors.name}`}
-                status="error"
-              />,
-              { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-            );
-            setTimeout(function() {
-              self.setState({ saveDisable: false });
-            }, 2000);
-          } else {
-            this.setState({ show: false });
+        try {
+          const { data } = await post(
+            projectData,
+            `workspaces/${this.props.workspaceId}/projects`
+          );
+          toast(
+            <DailyPloyToast
+              message="Project added successfully!"
+              status="success"
+            />,
+            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+          );
+          this.handleClose();
+          this.props.manageProjectListing(data.project);
+          this.props.handleLoad(false);
+        } catch (e) {
+          if (e.response && e.response.data) {
+            var errors = e.response.data.errors;
+            if (errors && errors.project_name_workspace_uniqueness) {
+              toast(
+                <DailyPloyToast
+                  message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+                  status="error"
+                />,
+                { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+              );
+              setTimeout(function() {
+                self.setState({ saveDisable: false });
+              }, 2000);
+            } else if (errors && errors.name) {
+              toast(
+                <DailyPloyToast
+                  message={`Project name ${errors.name}`}
+                  status="error"
+                />,
+                { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+              );
+              setTimeout(function() {
+                self.setState({ saveDisable: false });
+              }, 2000);
+            } else {
+              this.setState({ show: false });
+            }
           }
         }
       }
@@ -241,7 +358,7 @@ export default class MenuBar extends Component {
 
   handleChangeInput = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, saveDisable: false });
   };
 
   handleChangeMemberInput = e => {
@@ -416,7 +533,7 @@ export default class MenuBar extends Component {
                 classNameRoute={this.props.classNameRoute}
                 workspaceId={this.props.workspaceId}
               />
-              <div className="col-md-7 text-right">
+              <div className="col-md-6 text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
                   isDeleteShow={this.props.state.isDeleteShow}
@@ -451,6 +568,9 @@ export default class MenuBar extends Component {
                         handleChangeComplete={this.handleChangeComplete}
                         colors={this.colors}
                         addProject={this.addProject}
+                        handleContactChangeInput={this.handleContactChangeInput}
+                        addContactsRow={this.addContactsRow}
+                        removeContactsRow={this.removeContactsRow}
                         btnText={"Add"}
                         headText={"Add New Project"}
                         emailOptions={this.props.state.isLogedInUserEmailArr}

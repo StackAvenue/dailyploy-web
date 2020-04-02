@@ -12,6 +12,7 @@ import {
   getWeekFisrtDate,
   getFisrtDate,
   convertUTCToLocalDate,
+  convertUTCDateToLocalDate,
   getMiddleDates
 } from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
@@ -116,7 +117,9 @@ class Dashboard extends Component {
       task: [],
       validateTimefrom: null,
       taskComments: null,
-      isPlayPause: false
+      isPlayPause: false,
+      taskContacts: [],
+      isStart: false
     };
   }
 
@@ -498,11 +501,16 @@ class Dashboard extends Component {
       moment(dateWiseTasksDate).format(DATE_FORMAT1) +
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
-    let sortedTime =
-      moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
-      "00:00"
-        ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
-        : moment(task.created_at).format("HH.mm");
+    let start = convertUTCToLocalDate(
+      moment(task.start_datetime).format(FULL_DATE)
+    );
+    let created = moment(task.created_at).format(FULL_DATE);
+    // let sortedTime =
+    //   moment(start).format("HH:mm") != "00:00"
+    //     ? moment(start).format("HH.mm")
+    //     : moment(created).format("HH.mm");
+
+    let sortedTime = moment(created).format("HH.mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks
       ? task.date_formatted_time_tracks.find(
@@ -618,14 +626,18 @@ class Dashboard extends Component {
           project: null,
           taskCategorie: ""
         });
-
-        let start = moment(convertUTCToLocalDate(task.start_datetime));
-        let end = moment(convertUTCToLocalDate(task.end_datetime));
+        let start = moment(
+          convertUTCToLocalDate(moment(task.start_datetime).format(FULL_DATE))
+        );
+        let end = moment(
+          convertUTCToLocalDate(moment(task.end_datetime).format(FULL_DATE))
+        );
         let today = moment().format(DATE_FORMAT1);
         let startDate = start.format(DATE_FORMAT1);
         let startTime = start.format("HH.mm");
         let endTime = end.format("HH.mm");
         if (
+          this.state.isStart &&
           task.members[0].id == this.state.userId &&
           ((startDate == today &&
             startTime == "00.00" &&
@@ -841,7 +853,10 @@ class Dashboard extends Component {
         timeToError: "",
         categoryError: ""
       },
-      taskloader: false
+      taskloader: false,
+      taskContacts: [],
+      taskComments: null,
+      isStart: false
     });
   };
 
@@ -889,33 +904,57 @@ class Dashboard extends Component {
     });
   };
 
-  timeTrackUpdate = (log, flag) => {
+  timeTrackUpdate = async (log, flag) => {
+    // if (log) {
+    //   let date = moment(log.start_date).format(DATE_FORMAT1);
+    //   var taskEvent = this.state.taskEvent;
+    //   var dateFormattedTimeTrack = taskEvent.dateFormattedTimeTrack;
+    //   var dateFilterLog = dateFormattedTimeTrack.find(
+    //     dateLog => dateLog.date == date
+    //   );
+    //   var allTimeTracks = taskEvent.allTimeTracked.filter(
+    //     tt => tt.id != log.id
+    //   );
+    //   allTimeTracks.push(log);
+    //   taskEvent["allTimeTracked"] = allTimeTracks;
+    //   if (dateFilterLog && dateFilterLog.time_tracks) {
+    //     var newLog = [];
+    //     if (flag == "delete") {
+    //       newLog = dateFilterLog.time_tracks.filter(dLog => dLog.id != log.id);
+    //     } else {
+    //       dateFilterLog.time_tracks.forEach(dLog => {
+    //         if (dLog.id == log.id) {
+    //           newLog.push(log);
+    //         } else {
+    //           newLog.push(dLog);
+    //         }
+    //       });
+    //     }
+    //     dateFilterLog["time_tracks"] = newLog;
+    //   } else {
+    //     var newDateObj = {
+    //       date: date,
+    //       time_tracks: [log]
+    //     };
+    //     dateFormattedTimeTrack.push(newDateObj);
+    //   }
+    //   this.setState({
+    //     taskEvent: taskEvent
+    //   });
+    //   this.loadUserTask(this.state.workspaceId);
+    // }
     if (log) {
-      let date = moment(log.start_date).format(DATE_FORMAT1);
       var taskEvent = this.state.taskEvent;
-      var dateFormattedTimeTrack = taskEvent.dateFormattedTimeTrack;
-      var dateFilterLog = dateFormattedTimeTrack.find(
-        dateLog => dateLog.date == date
-      );
-      if (dateFilterLog && dateFilterLog.time_tracks) {
-        var newLog = [];
-        if (flag == "delete") {
-          newLog = dateFilterLog.time_tracks.filter(dLog => dLog.id != log.id);
-        } else {
-          dateFilterLog.time_tracks.forEach(dLog => {
-            if (dLog.id == log.id) {
-              newLog.push(log);
-            } else {
-              newLog.push(dLog);
-            }
-          });
-        }
-        dateFilterLog["time_tracks"] = newLog;
+      try {
+        const { data } = await get(`tasks/${log.task_id}`);
+        taskEvent["dateFormattedTimeTrack"] = data.date_formatted_time_tracks;
+        taskEvent["allTimeTracked"] = data.time_tracked;
+        var taskEvent = this.state.taskEvent;
         this.setState({
           taskEvent: taskEvent
         });
-        this.loadUserTask(this.state.workspaceId);
-      }
+      } catch (e) {}
+      this.loadUserTask(this.state.workspaceId);
     }
   };
 
@@ -1341,6 +1380,16 @@ class Dashboard extends Component {
         taskComments: taskComments
       });
     }
+    this.loadTaskContackts(event.projectId);
+  };
+
+  loadTaskContackts = async projectId => {
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects/${projectId}/contact`
+      );
+      this.setState({ taskContacts: data.contacts });
+    } catch (e) {}
   };
 
   taskInfoEdit = () => {
@@ -1371,7 +1420,7 @@ class Dashboard extends Component {
     });
   };
 
-  taskMarkComplete = async event => {
+  taskMarkComplete = async (event, contacts) => {
     if (event) {
       let start = moment(convertUTCToLocalDate(event.start)).format("HH:mm");
       let end = moment(convertUTCToLocalDate(event.end)).format("HH:mm");
@@ -1380,7 +1429,7 @@ class Dashboard extends Component {
         (this.state.logTimeFrom && this.state.logTimeTo) ||
         (start != "00:00" && end != "00:00")
       ) {
-        let searchData = {
+        var searchData = {
           task: {
             status: "completed"
           }
@@ -1403,6 +1452,10 @@ class Dashboard extends Component {
           this.state.trackingEvent.taskId == event.taskId
         ) {
           this.handleTaskStop(event, Date.now());
+        }
+        if (contacts.length > 0) {
+          let contactIds = contacts.map(contact => contact.id);
+          searchData.task["contact_ids"] = contactIds.join(",");
         }
         let taskId = event.id.split("-")[0];
         try {
@@ -1598,6 +1651,9 @@ class Dashboard extends Component {
       taskEvent: event,
       confirmModalText: modalText
     });
+    if (modalText === "mark as completed") {
+      this.loadTaskContackts(event.projectId);
+    }
   };
 
   handleCategoryChange = option => {
@@ -1675,9 +1731,9 @@ class Dashboard extends Component {
   handleTaskStart = async (eventTask, dateTime) => {
     this.setState({ isPlayPause: true });
     if (this.state.status && this.state.trackingEvent) {
-      this.handleTaskStop(this.state.trackingEvent, Date.now());
+      await this.handleTaskStop(this.state.trackingEvent, Date.now());
     }
-    this.handleTaskStartOnly(eventTask, dateTime);
+    await this.handleTaskStartOnly(eventTask, dateTime);
   };
 
   handleTaskStartOnly = async (eventTask, dateTime) => {
@@ -1769,6 +1825,11 @@ class Dashboard extends Component {
     this.updateTask({ task: data }, taskId, event.projectId);
   };
 
+  toggleTaskStartState = e => {
+    var checked = e.target.checked;
+    this.setState({ isStart: checked });
+  };
+
   addCategory = async categoryName => {
     if (categoryName != "") {
       try {
@@ -1833,7 +1894,7 @@ class Dashboard extends Component {
     var workspaceId = this.props.match.params.workspaceId;
     this.handleTaskCreate(workspaceId);
     this.handleTaskDelete(workspaceId);
-    this.handleTaskTracking(workspaceId);
+    this.handleTaskSyncTracking(workspaceId);
     // this.handleTaskRunning(workspaceId);
     // this.handleTaskSyncStop(workspaceId);
     this.handleTaskUpdate(workspaceId);
@@ -1845,6 +1906,8 @@ class Dashboard extends Component {
       .ref(`task_created/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
           !this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
@@ -1868,6 +1931,8 @@ class Dashboard extends Component {
       .ref(`task_deleted/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
@@ -1880,37 +1945,18 @@ class Dashboard extends Component {
       });
   };
 
-  // handleTaskRunning = async workspaceId => {
-  //   base
-  //     .database()
-  //     .ref(`task_running/${workspaceId}`)
-  //     .on("child_added", snap => {
-  //       let task = snap.val();
-  //       if (
-  //         this.state.loadFireBase &&
-  //         !this.state.events.map(task => task.taskId).includes(snap.val().id)
-  //       ) {
-  //         this.loadUserTask(workspaceId);
-  //       }
-  //     });
-
-  //   base
-  //     .database()
-  //     .ref(`task_running/${workspaceId}`)
-  //     .on("child_changed", snap => {
-  //       this.loadUserTask(workspaceId);
-  //     });
-  // };
-
-  handleTaskTracking = async workspaceId => {
+  handleTaskSyncTracking = async workspaceId => {
     base
       .database()
       .ref(`task_status/${workspaceId}`)
       .on("child_added", snap => {
-        let task = snap.val();
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
-          !this.state.events.map(task => task.taskId).includes(snap.val().id)
+          !this.state.events
+            .map(task => task.taskId)
+            .includes(snap.val().task_id)
         ) {
           this.loadUserTask(workspaceId);
         }
@@ -1923,27 +1969,6 @@ class Dashboard extends Component {
         this.loadUserTask(workspaceId);
       });
   };
-
-  // handleTaskSyncStop = async workspaceId => {
-  //   base
-  //     .database()
-  //     .ref(`task_stopped/${workspaceId}`)
-  //     .on("child_added", snap => {
-  //       if (
-  //         this.state.loadFireBase &&
-  //         !this.state.events.map(task => task.taskId).includes(snap.val().id)
-  //       ) {
-  //         this.loadUserTask(workspaceId);
-  //       }
-  //     });
-
-  //   base
-  //     .database()
-  //     .ref(`task_stopped/${workspaceId}`)
-  //     .on("child_changed", snap => {
-  //       this.loadUserTask(workspaceId);
-  //     });
-  // };
 
   loadUserTask = async workspaceId => {
     if (this.state.workspaceId) {
@@ -2016,11 +2041,21 @@ class Dashboard extends Component {
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
     let newTaskId = task.id + "-" + date;
-    let sortedTime =
-      moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
-      "00:00"
-        ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
-        : moment(task.inserted_at).format("HH.mm");
+    // let sortedTime =
+    //   moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
+    //   "00:00"
+    //     ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
+    //     : moment(task.inserted_at).format("HH.mm");
+
+    let start = convertUTCToLocalDate(
+      moment(task.start_datetime).format(FULL_DATE)
+    );
+    let created = moment(task.inserted_at).format(FULL_DATE);
+    // let sortedTime =
+    //   moment(start).format("HH:mm") != "00:00"
+    //     ? moment(start).format("HH.mm")
+    //     : moment(created).format("HH.mm");
+    let sortedTime = moment(created).format("HH.mm");
     return {
       date: date,
       id: newTaskId,
@@ -2057,11 +2092,20 @@ class Dashboard extends Component {
       moment(date).format(DATE_FORMAT1) +
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
-    let sortedTime =
-      moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
-      "00:00"
-        ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
-        : moment(task.inserted_at).format("HH.mm");
+    // let sortedTime =
+    //   moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
+    //   "00:00"
+    //     ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
+    //     : moment(task.inserted_at).format("HH.mm");
+
+    let start = moment(task.start_datetime).format(FULL_DATE);
+    let created = moment(task.inserted_at).format(FULL_DATE);
+    // let sortedTime =
+    //   moment(start).format("HH:mm") != "00:00"
+    //     ? moment(start).format("HH.mm")
+    //     : moment(created).format("HH.mm");
+    let sortedTime = moment(created).format("HH.mm");
+
     let newTaskId = task.id + "-" + date;
     let event = this.state.events.find(e => e.id == newTaskId);
     return {
@@ -2097,6 +2141,8 @@ class Dashboard extends Component {
       .ref(`task_update/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
@@ -2120,6 +2166,8 @@ class Dashboard extends Component {
       .ref(`task_update/${workspaceId}`)
       .on("child_changed", snap => {
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
@@ -2143,6 +2191,8 @@ class Dashboard extends Component {
       .ref(`task_completed/${workspaceId}`)
       .on("child_added", snap => {
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
@@ -2166,6 +2216,8 @@ class Dashboard extends Component {
       .ref(`task_completed/${workspaceId}`)
       .on("child_changed", snap => {
         if (
+          snap.val() &&
+          snap.val().id &&
           this.state.loadFireBase &&
           this.state.events.map(task => task.taskId).includes(snap.val().id)
         ) {
@@ -2263,6 +2315,7 @@ class Dashboard extends Component {
               addCategory={this.addCategory}
               handleTaskNameChange={this.handleTaskNameChange}
               saveComments={this.saveComments}
+              toggleTaskStartState={this.toggleTaskStartState}
             />
 
             <TaskInfoModal

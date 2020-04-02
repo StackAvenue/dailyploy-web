@@ -8,6 +8,7 @@ import Analysis from "./components/dashboard/Analysis";
 import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
+import TaskList from "./components/dashboard/TaskList";
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -62,6 +63,12 @@ class Workspace extends Component {
         exact: true,
         component: Reports,
         title: "reports"
+      },
+      {
+        path: "/task_list",
+        exact: true,
+        component: TaskList,
+        title: "taskList"
       },
       {
         component: NotFound,

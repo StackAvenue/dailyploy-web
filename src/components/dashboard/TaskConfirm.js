@@ -12,7 +12,8 @@ import {
   DATE_FORMAT2,
   HRMIN,
   PRIORITIES_MAP,
-  DATE_FORMAT1
+  DATE_FORMAT1,
+  DATE_FORMAT6
 } from "./../../utils/Constants";
 import TimePicker from "rc-time-picker";
 import EditableSelect from "./../EditableSelect";
@@ -33,7 +34,9 @@ class TaskConfirm extends Component {
       status: false,
       color: "#ffffff",
       selected: "",
-      trackSaved: false
+      trackSaved: false,
+      showContacts: false,
+      selectContactArr: []
     };
   }
 
@@ -86,25 +89,64 @@ class TaskConfirm extends Component {
   };
 
   disabledHours = () => {
-    var timeMoment = this.props.state.logTimeFrom;
-    if (timeMoment) {
-      let time = timeMoment.format(HRMIN);
-      var hr = time.split(":")[0];
-      hr = Number(hr);
-      var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
-      return hoursArr;
+    if (
+      this.props.state.taskEvent &&
+      moment(this.props.state.taskEvent.taskStartDate).format(DATE_FORMAT1) ==
+        moment(this.props.state.taskEvent.taskEndDate).format(DATE_FORMAT1)
+    ) {
+      var timeMoment = this.props.state.logTimeFrom;
+      if (timeMoment) {
+        let time = timeMoment.format(HRMIN);
+        var hr = time.split(":")[0];
+        hr = Number(hr);
+        var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
+        return hoursArr;
+      }
     }
     return [];
   };
 
+  // disabledMinutes = () => {
+  //   var timeMoment = this.props.state.logTimeFrom;
+  //   if (timeMoment) {
+  //     let time = timeMoment.format(HRMIN);
+  //     var min = time.split(":")[1];
+  //     min = Number(min) + 1;
+  //     var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+  //     return minArr;
+  //   }
+  //   return [];
+  // };
+
   disabledMinutes = () => {
-    var timeMoment = this.props.state.logTimeFrom;
-    if (timeMoment) {
-      let time = timeMoment.format(HRMIN);
-      var min = time.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
+    if (
+      this.props.state.taskEvent &&
+      moment(this.props.state.taskEvent.taskStartDate).format(DATE_FORMAT1) ==
+        moment(this.props.state.taskEvent.taskEndDate).format(DATE_FORMAT1)
+    ) {
+      var fTime = this.props.state.logTimeFrom;
+      var tTime = this.props.state.logTimeTo;
+      if (tTime) {
+        tTime = tTime.format(HRMIN);
+      }
+      if (fTime) {
+        fTime = fTime.format(HRMIN);
+      }
+      if (fTime && !tTime) {
+        var min = fTime.split(":")[1];
+        min = Number(min) + 1;
+        var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+        return minArr;
+      } else if (
+        fTime &&
+        tTime &&
+        fTime.split(":")[0] === tTime.split(":")[0]
+      ) {
+        var min = fTime.split(":")[1];
+        min = Number(min) + 1;
+        var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+        return minArr;
+      }
     }
     return [];
   };
@@ -185,6 +227,54 @@ class TaskConfirm extends Component {
         );
       }
     }
+  };
+
+  toggleCheckBox = () => {
+    this.setState({ showContacts: !this.state.showContacts });
+  };
+
+  handleCheck = (e, contact) => {
+    let checked = e.target.checked;
+    let arrContact = [];
+    if (checked) {
+      arrContact = [...this.state.selectContactArr, ...[contact]];
+    } else {
+      let filterContactArr = this.state.selectContactArr.filter(
+        item => item.id !== contact.id
+      );
+      arrContact = filterContactArr;
+    }
+    this.setState({
+      selectContactArr: arrContact
+    });
+  };
+
+  handleCheckAll = (e, contacts) => {
+    const allCheckboxChecked = e.target.checked;
+    var arrContacts;
+    if (allCheckboxChecked === true) {
+      arrContacts = contacts;
+    } else {
+      arrContacts = [];
+    }
+    var checkboxes = document.getElementsByName("isContactChecked");
+    if (allCheckboxChecked) {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === false) {
+          checkboxes[i].checked = true;
+        }
+      }
+    } else {
+      for (let i in checkboxes) {
+        if (checkboxes[i].checked === true) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+    this.setState({
+      selectContactArr: arrContacts,
+      showContacts: allCheckboxChecked
+    });
   };
 
   render() {
@@ -308,6 +398,49 @@ class TaskConfirm extends Component {
                     saveInputEditable={this.saveInputEditable}
                     state={this.state.trackSaved}
                   />
+                </div>
+              </div>
+            ) : null}
+            {this.props.state.confirmModalText === "mark as completed" ? (
+              <div className="col-md-12 contact no-padding">
+                <div className="contact-labal-checkbox no-padding">
+                  <label>
+                    <span>Contacts</span>
+                    <input
+                      type="checkbox"
+                      name="isContactChecked"
+                      onChange={e =>
+                        this.handleCheckAll(e, this.props.state.taskContacts)
+                      }
+                      style={{
+                        margin: "0px 20px"
+                      }}
+                    />
+                  </label>
+                </div>
+                <div
+                  className={`contact-checkbox no-padding ${
+                    this.state.showContacts ? "show" : "hide"
+                  }`}
+                >
+                  {this.props.state.taskContacts.map(contact => {
+                    return (
+                      <div className="no-padding contact-check text-titlize">
+                        <label>
+                          <input
+                            type="checkbox"
+                            id={`contact-checkbox-${contact.id}`}
+                            name="isContactChecked"
+                            onChange={e => this.handleCheck(e, contact)}
+                            style={{
+                              margin: "0px 20px"
+                            }}
+                          />
+                          <span>{contact.name}</span>
+                        </label>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ) : null}
@@ -455,7 +588,12 @@ class TaskConfirm extends Component {
                   type="button"
                   disabled={`${this.props.state.taskloader ? "disabled" : ""}`}
                   className=" mark-btn pull-right btn-primary text-titlize"
-                  onClick={() => props.taskMarkComplete(props.state.taskEvent)}
+                  onClick={() =>
+                    props.taskMarkComplete(
+                      props.state.taskEvent,
+                      this.state.selectContactArr
+                    )
+                  }
                 >
                   {props.state.confirmModalText}
                   {this.props.state.taskloader ? (
