@@ -16,13 +16,13 @@ import {
   HRMIN,
   FULL_DATE_FORMAT3,
   FULL_DATE_FORMAT1,
-  FULL_DATE
+  FULL_DATE,
 } from "./../../utils/Constants";
 import { UncontrolledAlert } from "reactstrap";
 import {
   convertUTCToLocalDate,
   convertUTCDateToLocalDate,
-  firstTwoLetter
+  firstTwoLetter,
 } from "../../utils/function";
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 import ConfirmModal from "./../ConfirmModal";
@@ -33,7 +33,7 @@ class TaskInfoModal extends Component {
     super(props);
     this.priority = {
       name: "high",
-      color_code: "#00A031"
+      color_code: "#00A031",
     };
     this.state = {
       color: "#ffffff",
@@ -56,7 +56,7 @@ class TaskInfoModal extends Component {
       fromDateTime: null,
       toDateTime: null,
       trackTimeError: null,
-      showConfirm: false
+      showConfirm: false,
     };
   }
 
@@ -75,27 +75,27 @@ class TaskInfoModal extends Component {
       this.setState({
         status: true,
         startOn: startOn,
-        icon: "pause"
+        icon: "pause",
       });
     } else {
       this.setState({
         status: false,
         startOn: "",
-        icon: "play"
+        icon: "play",
       });
     }
   }
 
-  initalChar = str => {
+  initalChar = (str) => {
     var matches = str.match(/\b(\w)/g);
     return matches.join("").toUpperCase();
   };
 
-  ToggleTimerDropDown = id => {
+  ToggleTimerDropDown = (id) => {
     this.setState({ showTimerMenu: !this.state.showTimerMenu });
   };
 
-  renderMemberInfo = option => {
+  renderMemberInfo = (option) => {
     if (option && option.length > 0) {
       return (
         <div className="select-member">
@@ -123,7 +123,7 @@ class TaskInfoModal extends Component {
             style={{
               backgroundColor: `${
                 option.color_code ? option.color_code : this.state.color
-              }`
+              }`,
             }}
           ></div>
           <div className="right-left-space-5 d-inline-block">{`${option[name]}`}</div>
@@ -148,7 +148,7 @@ class TaskInfoModal extends Component {
     localStorage.setItem(`taskTitle-${this.props.state.workspaceId}`, "");
   };
 
-  returnTime = time => {
+  returnTime = (time) => {
     return `${moment(time.start_time).format("HH.mm A")} - ${moment(
       time.end_time ? time.end_time : new Date()
     ).format("HH.mm A")}`;
@@ -157,7 +157,7 @@ class TaskInfoModal extends Component {
   displayTotalTime = () => {
     if (this.props.state.timeTracked.length > 0) {
       let totalSec = this.props.state.timeTracked
-        .map(time => time.duration)
+        .map((time) => time.duration)
         .flat()
         .reduce((a, b) => a + b, 0);
       var h = Math.floor(totalSec / 3600);
@@ -193,11 +193,11 @@ class TaskInfoModal extends Component {
     }
   };
 
-  editComments = comment => {
+  editComments = (comment) => {
     this.setState({
       commentId: comment.id,
       editableComment: comment,
-      editedComments: comment.comments
+      editedComments: comment.comments,
     });
   };
 
@@ -206,7 +206,7 @@ class TaskInfoModal extends Component {
       this.setState({ taskloader: true });
       try {
         let fd = new FormData();
-        this.state.pictures.forEach(image => {
+        this.state.pictures.forEach((image) => {
           fd.append("attachments[]", image, image.name);
         });
         fd.append("user_id", this.props.state.userId);
@@ -220,7 +220,7 @@ class TaskInfoModal extends Component {
           pictures: [],
           comments: "",
           showBox: false,
-          taskloader: false
+          taskloader: false,
         });
       } catch (e) {
         this.setState({ taskloader: false });
@@ -234,7 +234,7 @@ class TaskInfoModal extends Component {
         this.setState({ taskloader: true });
         let fd = new FormData();
         let commnetId = this.state.editableComment.id;
-        this.state.pictures.forEach(image => {
+        this.state.pictures.forEach((image) => {
           fd.append("attachments[]", image, image.name);
         });
         fd.append("user_id", this.props.state.userId);
@@ -242,7 +242,7 @@ class TaskInfoModal extends Component {
         fd.append("comments", this.state.editedComments);
         const { data } = await put(fd, `comment/${commnetId}`);
         var taskComments = this.props.state.taskComments;
-        var comment = taskComments.find(c => c.id == commnetId);
+        var comment = taskComments.find((c) => c.id == commnetId);
         comment["comments"] = data.comments;
         comment["user"] = data.user;
         comment["attachments"] = data.attachments;
@@ -251,7 +251,7 @@ class TaskInfoModal extends Component {
           taskloader: false,
           commentId: null,
           editedComments: "",
-          editableComment: null
+          editableComment: null,
         });
       } catch (e) {
         this.setState({ taskloader: false });
@@ -268,7 +268,7 @@ class TaskInfoModal extends Component {
           this.setState({ timeTrackEditLoader: true, trackTimeError: null });
           let trackedTime = {
             start_time: start_time,
-            end_time: end_time
+            end_time: end_time,
           };
           const { data } = await put(
             trackedTime,
@@ -282,20 +282,20 @@ class TaskInfoModal extends Component {
             fromDateTime: null,
             toDateTime: null,
             editableLog: null,
-            editLog: false
+            editLog: false,
           });
         } catch (e) {
           if (e.response.status == 400) {
             this.setState({
               trackTimeError: "End datetime is wrong",
-              timeTrackEditLoader: false
+              timeTrackEditLoader: false,
             });
           }
         }
       } else {
         this.setState({
           trackTimeError: "End datetime is wrong",
-          timeTrackEditLoader: false
+          timeTrackEditLoader: false,
         });
       }
     }
@@ -318,7 +318,7 @@ class TaskInfoModal extends Component {
   onClickOutside = () => {
     this.setState({
       commentId: null,
-      editableComment: null
+      editableComment: null,
     });
   };
 
@@ -330,7 +330,7 @@ class TaskInfoModal extends Component {
     this.setState({ showAddBox: true });
   };
 
-  formattedSeconds = ms => {
+  formattedSeconds = (ms) => {
     var totalSeconds = ms / 1000;
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
@@ -344,7 +344,7 @@ class TaskInfoModal extends Component {
       : "just now";
   };
 
-  commentsTime = comment => {
+  commentsTime = (comment) => {
     let date = convertUTCDateToLocalDate(
       comment.inserted_at ? new Date(comment.inserted_at) : new Date()
     );
@@ -361,7 +361,7 @@ class TaskInfoModal extends Component {
     }
   };
 
-  titleDateTime = comment => {
+  titleDateTime = (comment) => {
     return moment(
       convertUTCDateToLocalDate(
         comment.inserted_at ? new Date(comment.inserted_at) : new Date()
@@ -369,18 +369,18 @@ class TaskInfoModal extends Component {
     ).format(FULL_DATE_FORMAT1);
   };
 
-  openViewImage = imge_url => {
+  openViewImage = (imge_url) => {
     if (imge_url) {
       this.setState({
         viewerIsOpen: true,
-        imge_url: imge_url
+        imge_url: imge_url,
       });
     }
   };
 
   closeViewer = () => {
     this.setState({
-      viewerIsOpen: false
+      viewerIsOpen: false,
     });
   };
 
@@ -388,16 +388,16 @@ class TaskInfoModal extends Component {
     this.setState({ showBox: true });
   };
 
-  updateUploadedState = pictures => {
+  updateUploadedState = (pictures) => {
     this.setState({ pictures: [...this.state.pictures, ...pictures] });
   };
 
-  removeUploadedImage = index => {
+  removeUploadedImage = (index) => {
     let pictures = this.state.pictures.filter((f, idx) => idx !== index);
     this.setState({ pictures: pictures });
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -430,10 +430,10 @@ class TaskInfoModal extends Component {
     return [];
   };
 
-  makeLogEditable = e => {
+  makeLogEditable = (e) => {
     if (e.target.value) {
       let log = this.props.state.taskEvent.allTimeTracked.find(
-        tt => tt.id == e.target.value
+        (tt) => tt.id == e.target.value
       );
       let fromMoment = moment(log.start_time);
       let toMoment = moment(log.end_time);
@@ -449,7 +449,7 @@ class TaskInfoModal extends Component {
         timeFrom: timeFrom,
         timeTo: timeTo,
         fromDateTime: fromDateTime,
-        toDateTime: toDateTime
+        toDateTime: toDateTime,
       });
     } else {
       this.setState({
@@ -457,18 +457,18 @@ class TaskInfoModal extends Component {
         timeFrom: null,
         timeTo: null,
         fromDateTime: null,
-        toDateTime: null
+        toDateTime: null,
       });
     }
   };
 
   toggleEditableBox = () => {
     this.setState({
-      editLog: !this.state.editLog
+      editLog: !this.state.editLog,
     });
   };
 
-  handleTimeFrom = value => {
+  handleTimeFrom = (value) => {
     var value = moment(value);
     this.setState({
       timeFrom: value != null ? value.format("HH:mm") : null,
@@ -476,22 +476,47 @@ class TaskInfoModal extends Component {
       timeTo:
         value != null && value.format("HH:mm") > this.state.timeTo
           ? null
-          : this.state.timeTo
+          : this.state.timeTo,
     });
   };
 
-  handleTimeTo = value => {
+  handleTimeTo = (value) => {
     var value = moment(value);
     this.setState({
       timeTo: value != null ? value.format("HH:mm:ss") : null,
-      toDateTime: value
+      toDateTime: value,
     });
   };
 
   handleDeleteLog = () => {
     this.setState({
-      showConfirm: !this.state.showConfirm
+      showConfirm: !this.state.showConfirm,
     });
+  };
+
+  addTotalDuration = (timeTracked) => {
+    if (timeTracked && timeTracked.length > 0) {
+      return timeTracked
+        .map((log) => log.duration)
+        .flat()
+        .reduce((a, b) => a + b, 0);
+    } else {
+      return 0;
+    }
+  };
+
+  secondsToHours = (seconds) => {
+    let totalSeconds = Number(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor((totalSeconds % 3600) % 60);
+    return (
+      ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+      "H" +
+      " " +
+      ("0" + m).slice(-2) +
+      "M"
+    );
   };
 
   render() {
@@ -549,7 +574,7 @@ class TaskInfoModal extends Component {
                   {this.props.state.taskEvent.trackingStatus == "pause" ? (
                     <div
                       style={{
-                        pointerEvents: this.isValidUserDate() ? "" : "none"
+                        pointerEvents: this.isValidUserDate() ? "" : "none",
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
@@ -566,7 +591,7 @@ class TaskInfoModal extends Component {
                   {this.props.state.taskEvent.trackingStatus == "play" ? (
                     <div
                       style={{
-                        pointerEvents: this.isValidUserDate() ? "" : "none"
+                        pointerEvents: this.isValidUserDate() ? "" : "none",
                       }}
                       className="d-inline-block task-play-btn pointer"
                       onClick={() =>
@@ -597,7 +622,13 @@ class TaskInfoModal extends Component {
                   ) : null}
                 </div>
                 <div className="d-inline-block header-2">
-                  <span>{"2hr 30mins"}</span>
+                  <span>
+                    {this.secondsToHours(
+                      this.addTotalDuration(
+                        props.state.taskEvent.allTimeTracked
+                      )
+                    )}
+                  </span>
                 </div>
                 {this.props.state.taskEvent.status === "completed" ? (
                   <div className="d-inline-block button3">
@@ -701,9 +732,9 @@ class TaskInfoModal extends Component {
                           <select
                             style={{
                               color: "#000 !important",
-                              background: "#fff"
+                              background: "#fff",
                             }}
-                            onChange={e => this.makeLogEditable(e)}
+                            onChange={(e) => this.makeLogEditable(e)}
                           >
                             <option value="" key={0}>
                               Select tracked time to edit/delete
@@ -734,7 +765,7 @@ class TaskInfoModal extends Component {
                               className="col-md-1 d-inline-block"
                               onClick={this.toggleEditableBox}
                               style={{
-                                cursor: "pointer"
+                                cursor: "pointer",
                               }}
                             >
                               <i
@@ -746,7 +777,7 @@ class TaskInfoModal extends Component {
                               className="col-md-1 d-inline-block"
                               style={{
                                 padding: "0px 10px",
-                                cursor: "pointer"
+                                cursor: "pointer",
                               }}
                               onClick={() => this.handleDeleteLog()}
                             >
@@ -764,7 +795,7 @@ class TaskInfoModal extends Component {
                           <div
                             className="col-md-4 no-padding d-inline-block track-time-edit"
                             style={{
-                              marginLeft: "20px"
+                              marginLeft: "20px",
                             }}
                           >
                             {/* <TimePicker
@@ -775,7 +806,7 @@ class TaskInfoModal extends Component {
                             /> */}
                             <DatePicker
                               selected={new Date(this.state.fromDateTime)}
-                              onChange={date => this.handleTimeFrom(date)}
+                              onChange={(date) => this.handleTimeFrom(date)}
                               showTimeSelect
                               timeFormat="HH:mm"
                               timeIntervals={1}
@@ -804,7 +835,7 @@ class TaskInfoModal extends Component {
                             /> */}
                             <DatePicker
                               selected={new Date(this.state.toDateTime)}
-                              onChange={date => this.handleTimeTo(date)}
+                              onChange={(date) => this.handleTimeTo(date)}
                               showTimeSelect
                               timeFormat="HH:mm"
                               timeIntervals={1}
@@ -818,7 +849,7 @@ class TaskInfoModal extends Component {
                           onClick={this.toggleEditableBox}
                           title={"Back"}
                           style={{
-                            cursor: "pointer"
+                            cursor: "pointer",
                           }}
                         >
                           <i className="far fa-arrow-alt-circle-left"></i>
@@ -830,7 +861,7 @@ class TaskInfoModal extends Component {
                           onClick={this.editTimeTrack}
                           title={"Edit"}
                           style={{
-                            cursor: "pointer"
+                            cursor: "pointer",
                           }}
                         >
                           <i className="fa fa-check" aria-hidden="true"></i>
@@ -888,14 +919,14 @@ class TaskInfoModal extends Component {
               {props.state.taskComments ? (
                 <>
                   <div className="col-md-12 no-padding input-row task-comments">
-                    {props.state.taskComments.map(comment => {
+                    {props.state.taskComments.map((comment) => {
                       return this.state.editableComment &&
                         comment.id === this.state.commentId ? (
                         <div
                           className="col-md-12 no-padding"
                           style={{
                             display: "inline-flex",
-                            alignItems: "flex-start"
+                            alignItems: "flex-start",
                           }}
                         >
                           <div
@@ -931,13 +962,13 @@ class TaskInfoModal extends Component {
                           className="col-md-12 no-padding"
                           style={{
                             display: "inline-flex",
-                            alignItems: "flex-start"
+                            alignItems: "flex-start",
                           }}
                         >
                           <div
                             className="col-md-2 d-inline-block no-padding label"
                             style={{
-                              marginTop: "20px"
+                              marginTop: "20px",
                             }}
                           >
                             <div className="comment-owner-dot">
@@ -950,7 +981,7 @@ class TaskInfoModal extends Component {
                                 className="col-md-12 no-padding"
                                 style={{
                                   display: "flex",
-                                  justifyContent: "space-between"
+                                  justifyContent: "space-between",
                                 }}
                               >
                                 <div className="owner-name text-titlize">
@@ -960,7 +991,7 @@ class TaskInfoModal extends Component {
                                   className=""
                                   style={{
                                     fontSize: "11px",
-                                    padding: "3px 0px 0px 25px"
+                                    padding: "3px 0px 0px 25px",
                                   }}
                                   title={this.titleDateTime(comment)}
                                 >
@@ -971,7 +1002,7 @@ class TaskInfoModal extends Component {
                                 {comment.comments}
                               </div>
                               <div className="col-md-12 no-padding">
-                                {comment.attachments.map(attachment => {
+                                {comment.attachments.map((attachment) => {
                                   return (
                                     <>
                                       <img
@@ -985,7 +1016,7 @@ class TaskInfoModal extends Component {
                                         width="42"
                                         style={{
                                           cursor: "pointer",
-                                          marginRight: "10px"
+                                          marginRight: "10px",
                                         }}
                                       ></img>
                                     </>
@@ -1032,7 +1063,7 @@ class TaskInfoModal extends Component {
             onClick={this.deleteTimeTrack}
             closeModal={this.handleDeleteLog}
             style={{
-              padding: "9% 0 30px 4%"
+              padding: "9% 0 30px 4%",
             }}
           />
         ) : null}
