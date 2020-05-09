@@ -48,7 +48,7 @@ class Header extends Component {
       }
     } else {
       let notificataionData = await get(
-        `users/${loggedInData.id}/notifications`
+        `users/${loggedInData.id}/notifications?workspace_id=${getWorkspaceId()}`
       );
       this.setState({
         notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [],
