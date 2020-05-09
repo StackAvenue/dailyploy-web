@@ -4,18 +4,20 @@ import "rc-time-picker/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
 import moment from "moment";
-import { put } from "../../utils/API";
+import { put, del } from "../../utils/API";
 import DailyPloyToast from "./../../../src/components/DailyPloyToast";
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "react-loader-spinner";
 import {
+  FULL_DATE,
   DATE_FORMAT2,
   HRMIN,
   PRIORITIES_MAP,
   DATE_FORMAT1,
-  DATE_FORMAT6
+  DATE_FORMAT6,
 } from "./../../utils/Constants";
 import TimePicker from "rc-time-picker";
+import DatePicker from "react-datepicker";
 import EditableSelect from "./../EditableSelect";
 
 class TaskConfirm extends Component {
@@ -24,7 +26,7 @@ class TaskConfirm extends Component {
     this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.priority = {
       name: "high",
-      color_code: "#00A031"
+      color_code: "#00A031",
     };
     this.state = {
       color: "#ffffff",
@@ -36,7 +38,13 @@ class TaskConfirm extends Component {
       selected: "",
       trackSaved: false,
       showContacts: false,
-      selectContactArr: []
+      selectContactArr: [],
+      editableLog: null,
+      editLog: false,
+      timeFrom: null,
+      timeTo: null,
+      fromDateTime: null,
+      toDateTime: null,
     };
   }
 
@@ -51,7 +59,7 @@ class TaskConfirm extends Component {
             style={{
               backgroundColor: `${
                 option.color_code ? option.color_code : this.state.color
-              }`
+              }`,
             }}
           ></div>
           <div className="right-left-space-5 d-inline-block task-name">
@@ -78,7 +86,7 @@ class TaskConfirm extends Component {
             style={{
               backgroundColor: `${
                 option.color_code ? option.color_code : this.state.color
-              }`
+              }`,
             }}
           ></div>
           <div className=" d-inline-block priority-dot">{option.label}</div>
@@ -151,22 +159,28 @@ class TaskConfirm extends Component {
     return [];
   };
 
-  selectedOption = option => {
+  selectedOption = (option) => {
     this.setState({ selected: option });
   };
 
-  returnTime = time => {
-    return {
-      id: time.id,
-      name: `${moment(time.start_time).format("HH:mm")} - ${moment(
-        time.end_time
-      ).format("HH:mm")}`,
-      start: time.start_time,
-      end: time.end_time
-    };
+  // returnTime = (time) => {
+  //   return {
+  //     id: time.id,
+  //     name: `${moment(time.start_time).format("HH:mm")} - ${moment(
+  //       time.end_time
+  //     ).format("HH:mm")}`,
+  //     start: time.start_time,
+  //     end: time.end_time,
+  //   };
+  // };
+
+  returnTime = (time) => {
+    return `${moment(time.start_time).format("HH.mm A")} - ${moment(
+      time.end_time ? time.end_time : new Date()
+    ).format("HH.mm A")}`;
   };
 
-  validateTime = time => {
+  validateTime = (time) => {
     let timeSplit = time.trim().split("-");
     var flag = false;
     if (timeSplit.length == 2) {
@@ -185,7 +199,7 @@ class TaskConfirm extends Component {
     return flag;
   };
 
-  saveInputEditable = async time => {
+  saveInputEditable = async (time) => {
     if (this.state.selected && this.state.selected.id != "" && time != "") {
       if (this.validateTime(time)) {
         let startOn = time.split("-")[0].trim();
@@ -198,7 +212,7 @@ class TaskConfirm extends Component {
           ),
           end_time: new Date(
             moment(this.state.selected.end).format(DATE_FORMAT1) + " " + endOn
-          )
+          ),
         };
         try {
           const { data } = await put(
@@ -213,7 +227,7 @@ class TaskConfirm extends Component {
             <DailyPloyToast message={"log time updated"} status="success" />,
             {
               autoClose: 2000,
-              position: toast.POSITION.TOP_CENTER
+              position: toast.POSITION.TOP_CENTER,
             }
           );
         } catch (e) {}
@@ -222,7 +236,7 @@ class TaskConfirm extends Component {
           <DailyPloyToast message={"please enter valid time"} status="error" />,
           {
             autoClose: 2000,
-            position: toast.POSITION.TOP_CENTER
+            position: toast.POSITION.TOP_CENTER,
           }
         );
       }
@@ -240,12 +254,12 @@ class TaskConfirm extends Component {
       arrContact = [...this.state.selectContactArr, ...[contact]];
     } else {
       let filterContactArr = this.state.selectContactArr.filter(
-        item => item.id !== contact.id
+        (item) => item.id !== contact.id
       );
       arrContact = filterContactArr;
     }
     this.setState({
-      selectContactArr: arrContact
+      selectContactArr: arrContact,
     });
   };
 
@@ -273,7 +287,121 @@ class TaskConfirm extends Component {
     }
     this.setState({
       selectContactArr: arrContacts,
-      showContacts: allCheckboxChecked
+      showContacts: allCheckboxChecked,
+    });
+  };
+
+  makeLogEditable = (e) => {
+    if (e.target.value) {
+      let log = this.props.state.taskEvent.allTimeTracked.find(
+        (tt) => tt.id == e.target.value
+      );
+      let fromMoment = moment(log.start_time);
+      let toMoment = moment(log.end_time);
+      let timeFrom = fromMoment.format(HRMIN);
+      let timeTo = toMoment.format(HRMIN);
+      var fromDateTime = fromMoment.format("YYYY-MM-DD") + " " + timeFrom;
+      fromDateTime = moment(fromDateTime);
+      var toDateTime = toMoment.format("YYYY-MM-DD") + " " + timeTo;
+      toDateTime = moment(toDateTime);
+
+      this.setState({
+        editableLog: log,
+        timeFrom: timeFrom,
+        timeTo: timeTo,
+        fromDateTime: fromDateTime,
+        toDateTime: toDateTime,
+      });
+    } else {
+      this.setState({
+        editableLog: null,
+        timeFrom: null,
+        timeTo: null,
+        fromDateTime: null,
+        toDateTime: null,
+      });
+    }
+  };
+
+  editTimeTrack = async () => {
+    if (this.state.fromDateTime && this.state.toDateTime) {
+      var start_time = new Date(this.state.fromDateTime.format(FULL_DATE));
+      var end_time = new Date(this.state.toDateTime.format(FULL_DATE));
+      if (start_time < end_time) {
+        try {
+          this.setState({ timeTrackEditLoader: true, trackTimeError: null });
+          let trackedTime = {
+            start_time: start_time,
+            end_time: end_time,
+          };
+          const { data } = await put(
+            trackedTime,
+            `tasks/${this.state.editableLog.task_id}/edit_tracked_time/${this.state.editableLog.id}`
+          );
+          this.props.timeTrackUpdate(data, "edit");
+          this.setState({
+            timeTrackEditLoader: false,
+            timeFrom: null,
+            timeTo: null,
+            fromDateTime: null,
+            toDateTime: null,
+            editableLog: null,
+            editLog: false,
+          });
+        } catch (e) {
+          if (e.response.status == 400) {
+            this.setState({
+              trackTimeError: "End datetime is wrong",
+              timeTrackEditLoader: false,
+            });
+          }
+        }
+      } else {
+        this.setState({
+          trackTimeError: "End datetime is wrong",
+          timeTrackEditLoader: false,
+        });
+      }
+    }
+  };
+
+  deleteTimeTrack = async () => {
+    if (this.state.editableLog) {
+      try {
+        const { data } = await del(
+          `tasks/${this.state.editableLog.task_id}/delete/${this.state.editableLog.id}`
+        );
+        this.props.timeTrackUpdate(data, "delete");
+        this.setState({ showConfirm: false });
+      } catch (e) {
+        this.setState({ showConfirm: false });
+      }
+    }
+  };
+
+  toggleEditableBox = () => {
+    this.setState({
+      editLog: !this.state.editLog,
+    });
+  };
+
+  handleTimeFrom = (value) => {
+    var value = moment(value);
+    this.setState({
+      timeFrom: value != null ? value.format("HH:mm") : null,
+      fromDateTime: value,
+      timeTo:
+        value != null && value.format("HH:mm") > this.state.timeTo
+          ? null
+          : this.state.timeTo,
+    });
+  };
+
+  handleTimeTo = (value) => {
+    var value = moment(value);
+    this.setState({
+      timeTo: value != null ? value.format("HH:mm:ss") : null,
+      toDateTime: value,
     });
   };
 
@@ -319,7 +447,7 @@ class TaskConfirm extends Component {
             </div>
 
             {this.props.state.confirmModalText === "mark as completed" &&
-            this.props.state.taskEvent.timeTracked.length == 0 ? (
+            this.props.state.taskEvent.allTimeTracked.length == 0 ? (
               <div className="col-md-12 task-details log-timer no-padding">
                 <span className="col-md-2 d-inline-block no-padding">
                   Log Time
@@ -374,33 +502,186 @@ class TaskConfirm extends Component {
                 ) : null}
               </div>
             ) : null}
-
             {this.props.state.confirmModalText === "mark as completed" &&
-            this.props.state.taskEvent.timeTracked.length > 0 ? (
+            this.props.state.taskEvent.allTimeTracked.length > 0 ? (
+              // <div className="col-md-12 task-details log-timer no-padding">
+              //   <span className="col-md-2 d-inline-block no-padding">
+              //     Log Time
+              //   </span>
+              //   <div
+              //     className="col-md-8 d-inline-block"
+              //     style={{ paddingRight: "0px" }}
+              //   >
+              //     <EditableSelect
+              //       options={ligTimes}
+              //       value={this.state.selected}
+              //       getOptionValue={(option) => option.id}
+              //       getOptionLabel={(option) => option.name}
+              //       action={true}
+              //       createOption={(text) => {
+              //         return { id: 1, name: text };
+              //       }}
+              //       onChange={this.selectedOption}
+              //       saveInputEditable={this.saveInputEditable}
+              //       state={this.state.trackSaved}
+              //     />
+              //   </div>
+              // </div>
               <div className="col-md-12 task-details log-timer no-padding">
                 <span className="col-md-2 d-inline-block no-padding">
                   Log Time
                 </span>
-                <div
-                  className="col-md-8 d-inline-block"
-                  style={{ paddingRight: "0px" }}
-                >
-                  <EditableSelect
-                    options={ligTimes}
-                    value={this.state.selected}
-                    getOptionValue={option => option.id}
-                    getOptionLabel={option => option.name}
-                    action={true}
-                    createOption={text => {
-                      return { id: 1, name: text };
-                    }}
-                    onChange={this.selectedOption}
-                    saveInputEditable={this.saveInputEditable}
-                    state={this.state.trackSaved}
-                  />
+                <div className="col-md-10 no-padding d-inline-block">
+                  {this.props.state.taskEvent &&
+                  this.props.state.taskEvent.dateFormattedTimeTrack &&
+                  this.props.state.taskEvent.dateFormattedTimeTrack.length >
+                    0 ? (
+                    !this.state.editLog ? (
+                      <>
+                        <div className="col-md-8 d-inline-block">
+                          <select
+                            style={{
+                              color: "#000 !important",
+                              background: "#fff",
+                            }}
+                            onChange={(e) => this.makeLogEditable(e)}
+                          >
+                            <option value="" key={0}>
+                              Select tracked time to edit/delete
+                            </option>
+                            {this.props.state.taskEvent.dateFormattedTimeTrack.map(
+                              (date, index) => {
+                                return (
+                                  <optgroup
+                                    key={index}
+                                    label={moment(date.date).format(
+                                      "MMM Do YYYY"
+                                    )}
+                                  >
+                                    {date.time_tracks.map((tt, idx) => (
+                                      <option value={tt.id} key={tt.id}>
+                                        {this.returnTime(tt)}
+                                      </option>
+                                    ))}
+                                  </optgroup>
+                                );
+                              }
+                            )}
+                          </select>
+                        </div>
+                        {this.state.editableLog != null ? (
+                          <>
+                            <div
+                              className="col-md-1 d-inline-block"
+                              onClick={this.toggleEditableBox}
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            >
+                              <i
+                                className="fa fa-pencil"
+                                aria-hidden="true"
+                              ></i>
+                            </div>
+                            <div
+                              className="col-md-1 d-inline-block"
+                              style={{
+                                padding: "0px 10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => this.handleDeleteLog()}
+                            >
+                              <i class="fas fa-trash-alt"></i>
+                            </div>
+                          </>
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        <div className="col-md-8 d-inline-block">
+                          {/* <span className="col-md-1 no-padding d-inline-block">
+                            From
+                          </span> */}
+                          <div
+                            className="col-md-4 no-padding d-inline-block track-time-edit"
+                            style={{
+                              margin: "0px 20px",
+                            }}
+                          >
+                            <DatePicker
+                              selected={new Date(this.state.fromDateTime)}
+                              onChange={(date) => this.handleTimeFrom(date)}
+                              showTimeSelect
+                              timeFormat="HH:mm"
+                              timeIntervals={1}
+                              dateFormat="d MMM, HH:mm"
+                            />
+                          </div>
+                          {/* <span className="col-md-1 no-padding d-inline-block">
+                            To
+                          </span> */}
+                          <div className="col-md-4 no-padding d-inline-block track-time-edit">
+                            <DatePicker
+                              selected={new Date(this.state.toDateTime)}
+                              onChange={(date) => this.handleTimeTo(date)}
+                              showTimeSelect
+                              timeFormat="HH:mm"
+                              timeIntervals={1}
+                              dateFormat="d MMM, HH:mm"
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="col-md-1 d-inline-block"
+                          onClick={this.toggleEditableBox}
+                          title={"Back"}
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          <i className="far fa-arrow-alt-circle-left"></i>
+                        </div>
+                        <div
+                          className={`col-md-1 d-inline-block ${
+                            this.state.timeTrackEditLoader ? "disabled" : ""
+                          }`}
+                          onClick={this.editTimeTrack}
+                          title={"Edit"}
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          <i className="fa fa-check" aria-hidden="true"></i>
+                          {this.state.timeTrackEditLoader ? (
+                            <Loader
+                              type="Oval"
+                              color="#33a1ff"
+                              height={20}
+                              width={20}
+                              style={{ paddingLeft: "25px", top: "0px" }}
+                              className="d-inline-block login-signup-loader"
+                            />
+                          ) : null}
+                        </div>
+                      </>
+                    )
+                  ) : (
+                    <div className="left-padding-17px">No tracked time</div>
+                  )}
                 </div>
+                {this.state.trackTimeError && this.state.editLog ? (
+                  <div className="col-md-12 no-padding">
+                    <div
+                      className="col-md-10 d-inline-block error"
+                      style={{ textAlign: "center" }}
+                    >
+                      {this.state.trackTimeError}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : null}
+
             {this.props.state.confirmModalText === "mark as completed" ? (
               <div className="col-md-12 contact no-padding">
                 <div className="contact-labal-checkbox no-padding">
@@ -409,11 +690,11 @@ class TaskConfirm extends Component {
                     <input
                       type="checkbox"
                       name="isContactChecked"
-                      onChange={e =>
+                      onChange={(e) =>
                         this.handleCheckAll(e, this.props.state.taskContacts)
                       }
                       style={{
-                        margin: "0px 20px"
+                        margin: "0px 20px",
                       }}
                     />
                   </label>
@@ -423,7 +704,7 @@ class TaskConfirm extends Component {
                     this.state.showContacts ? "show" : "hide"
                   }`}
                 >
-                  {this.props.state.taskContacts.map(contact => {
+                  {this.props.state.taskContacts.map((contact) => {
                     return (
                       <div className="no-padding contact-check text-titlize">
                         <label>
@@ -431,9 +712,9 @@ class TaskConfirm extends Component {
                             type="checkbox"
                             id={`contact-checkbox-${contact.id}`}
                             name="isContactChecked"
-                            onChange={e => this.handleCheck(e, contact)}
+                            onChange={(e) => this.handleCheck(e, contact)}
                             style={{
-                              margin: "0px 20px"
+                              margin: "0px 20px",
                             }}
                           />
                           <span>{contact.name}</span>

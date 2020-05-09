@@ -7,11 +7,11 @@ import { post, put, mockGet, mockPost } from "../../utils/API";
 import {
   DATE_FORMAT1,
   FULL_DATE,
-  COMMENT_DATETIME
+  COMMENT_DATETIME,
 } from "./../../utils/Constants";
 import {
   convertUTCToLocalDate,
-  getContrastColor
+  getContrastColor,
 } from "./../../utils/function";
 import Timer from "./../dashboard/Timer";
 import TaskAction from "./../dashboard/TaskAction";
@@ -37,7 +37,7 @@ class DashboardEvent extends Component {
       icon: "play",
       taskTimerLog: [],
       showAlert: false,
-      show: false
+      show: false,
     };
   }
 
@@ -49,20 +49,20 @@ class DashboardEvent extends Component {
     this.setState({ showPopup: false });
   };
 
-  ToggleTimerDropDown = id => {
+  ToggleTimerDropDown = (id) => {
     this.setState({
       clickEventId: id,
       showTimerMenu: !this.state.showTimerMenu,
       showPopup: false,
-      show: false
+      show: false,
     });
   };
 
-  ToggleActionDropDown = id => {
+  ToggleActionDropDown = (id) => {
     this.setState({
       clickEventId: id,
       showAction: !this.state.showAction,
-      showPopup: false
+      showPopup: false,
     });
   };
 
@@ -94,24 +94,24 @@ class DashboardEvent extends Component {
     }
   }
 
-  isValidUserDate = userId => {
+  isValidUserDate = (userId) => {
     return this.props.userId === userId;
     // return this.isToday && this.props.userId === userId;
   };
 
-  returnTime = time => {
+  returnTime = (time) => {
     return `${moment(time.start_time).format("HH.mm A")} - ${moment(
       time.end_time
     ).format("HH.mm A")}`;
   };
 
-  createLogTimes = times => {
-    return times.map(time => {
+  createLogTimes = (times) => {
+    return times.map((time) => {
       return {
         id: time.id,
         name: `${moment(time.start_time).format("HH.mm A")} - ${moment(
           time.end_time
-        ).format("HH.mm A")}`
+        ).format("HH.mm A")}`,
       };
     });
   };
@@ -120,11 +120,11 @@ class DashboardEvent extends Component {
     this.setState({
       clickEventId: this.props.event.id,
       show: true,
-      showAction: false
+      showAction: false,
     });
   };
 
-  calculateTime = event => {
+  calculateTime = (event) => {
     var start = new Date(
       moment(convertUTCToLocalDate(event.taskStartDateTime))
         .format(FULL_DATE)
@@ -156,14 +156,14 @@ class DashboardEvent extends Component {
   onClickOutside = () => {
     this.setState({
       show: !this.state.show,
-      showAction: false
+      showAction: false,
     });
   };
 
   actionOnClickOutside = () => {
     this.setState({
       showAction: !this.state.showAction,
-      show: false
+      show: false,
     });
   };
 
@@ -178,15 +178,15 @@ class DashboardEvent extends Component {
       borderLeft,
       schedulerData,
       titleText,
-      state
+      state,
     } = this.props;
 
     const totalTrackTime = this.props.event.allTimeTracked
-      .map(log => log.duration)
+      .map((log) => log.duration)
       .flat()
       .reduce((a, b) => a + b, 0);
     let todaysLog = this.props.event.timeTracked.filter(
-      log => log.status != "running"
+      (log) => log.status != "running"
     );
     let logs = this.createLogTimes(todaysLog);
     let contColor = getContrastColor(this.props.bgColor);
@@ -215,7 +215,7 @@ class DashboardEvent extends Component {
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
                           ? ""
-                          : "none"
+                          : "none",
                       }}
                       className={`task-play-btn pointer ${
                         state.isPlayPause ? "disabled" : ""
@@ -236,7 +236,7 @@ class DashboardEvent extends Component {
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
                           ? ""
-                          : "none"
+                          : "none",
                       }}
                       className={`task-play-btn pointer ${
                         state.isPlayPause ? "disabled" : ""
@@ -257,7 +257,7 @@ class DashboardEvent extends Component {
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
                           ? ""
-                          : "none"
+                          : "none",
                       }}
                       className={`task-play-btn pointer ${
                         state.isPlayPause ? "disabled" : ""
@@ -344,7 +344,7 @@ class DashboardEvent extends Component {
                 <div
                   className="col-md-12 no-padding pointer item-heading text-wraper"
                   style={{
-                    padding: "5px 5px 0px 5px"
+                    padding: "5px 5px 0px 5px",
                     // color: getContrastColor(this.props.bgColor)
                   }}
                   onClick={() => {
@@ -387,7 +387,7 @@ class DashboardEvent extends Component {
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
                           ? ""
-                          : "none"
+                          : "none",
                       }}
                       className={`task-play-btn pointer ${
                         state.isPlayPause ? "disabled" : ""
@@ -408,7 +408,7 @@ class DashboardEvent extends Component {
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
                           ? ""
-                          : "none"
+                          : "none",
                       }}
                       className={`task-play-btn pointer ${
                         state.isPlayPause ? "disabled" : ""
@@ -429,7 +429,7 @@ class DashboardEvent extends Component {
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
                           ? ""
-                          : "none"
+                          : "none",
                       }}
                       className={`task-play-btn pointer ${
                         state.isPlayPause ? "disabled" : ""
@@ -516,7 +516,7 @@ class DashboardEvent extends Component {
                 <div
                   className="col-md-12 no-padding pointer item-heading text-wraper"
                   style={{
-                    padding: "5px 5px 0px 5px"
+                    padding: "5px 5px 0px 5px",
                     // color: getContrastColor(this.props.bgColor)
                   }}
                   onClick={() => {
