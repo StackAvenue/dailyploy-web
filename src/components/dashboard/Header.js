@@ -192,7 +192,7 @@ class Header extends Component {
                           Notifications
                         </div>
                         {this.state.notifications && this.state.notifications.length > 0 && <div className="col-md-7 no-padding notification-heading sett-text">
-                          <span onClick={() => this.props.readAllNotification()}>Mark All as Read</span>&nbsp;
+                          <span onClick={() => this.readAllNotification()}>Mark All as Read</span>&nbsp;
                           {/* <span>.&nbsp;Settings</span> */}
                         </div>}
                       </div>
