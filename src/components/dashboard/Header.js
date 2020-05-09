@@ -25,7 +25,7 @@ class Header extends Component {
       userEmail: "",
       userRole: "",
       userId: "",
-      searchFlag: "My Reports"
+      searchFlag: "My Reports",
     };
   }
 
@@ -37,7 +37,7 @@ class Header extends Component {
         this.setState({
           userId: data.id,
           userName: data.name,
-          userEmail: data.email
+          userEmail: data.email,
         });
       } catch (e) {
         console.log("err", e);
@@ -46,7 +46,7 @@ class Header extends Component {
       this.setState({
         userId: loggedInData.id,
         userName: loggedInData.name,
-        userEmail: loggedInData.email
+        userEmail: loggedInData.email,
       });
     }
   }
@@ -72,8 +72,8 @@ class Header extends Component {
     this.clickClose.current.click();
   };
 
-  textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function(a) {
+  textTitlize = (text) => {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
@@ -86,9 +86,9 @@ class Header extends Component {
     return false;
   };
 
-  toggleSearchBy = text => {
+  toggleSearchBy = (text) => {
     this.setState({
-      searchFlag: text
+      searchFlag: text,
     });
   };
 
@@ -139,7 +139,7 @@ class Header extends Component {
                 id="navbarTogglerDemo03"
               >
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-                  {/* <Dropdown>
+                  <Dropdown>
                     <Dropdown.Toggle
                       variant="link"
                       id="dropdown-basic"
@@ -147,14 +147,21 @@ class Header extends Component {
                     >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
+                    <div className="notification-icon right">
+                      <span className="num-count">13</span>
+                    </div>
 
                     <Dropdown.Menu className="dropdown-notification">
                       <div className="col-md-12">
-                        <div className="col-md-6 notification-heading">
+                        <div className="col-md-5 no-padding notification-heading">
                           Notifications
                         </div>
+                        <div className="col-md-7 no-padding notification-heading sett-text">
+                          <span>Mark All as Read</span>&nbsp;
+                          <span>.&nbsp;Settings</span>
+                        </div>
                       </div>
-                      <Dropdown.Item className="notification-box">
+                      {/* <Dropdown.Item className="notification-box">
                         <div className="row">
                           <div className="col-md-1 no-padding">
                             <div className="notification-img">
@@ -207,9 +214,9 @@ class Header extends Component {
                             </div>
                           </div>
                         </div>
-                      </Dropdown.Item>
+                      </Dropdown.Item> */}
                     </Dropdown.Menu>
-                  </Dropdown> */}
+                  </Dropdown>
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className={`header-auth-btn text-titlize ${

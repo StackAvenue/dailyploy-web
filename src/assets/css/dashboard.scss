@@ -129,6 +129,34 @@
     }
   }
 
+  .notification-icon{
+    position: relative;
+    margin-right: 1em;
+    border-radius: 5px;
+    background: #ecf0f1;
+    top: -27px;
+    left: -8px;
+  }
+  .num-count{
+    position: absolute;
+    user-select: none;
+    cursor: default;
+    font-size: 0.6rem;
+    // background: #e74c3c;
+    background: #ff2b15bf;
+    width: 1.2rem;
+    height: 1.2rem;
+    color: #ffffff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    // border-radius: 50%;
+    border-radius: 24%;
+    top: -0.33rem;
+    right: -.66rem;
+    box-sizing: border-box;
+  }
+
   .dropdown-notification {
     left: -160px !important;
     width: 400px !important;
@@ -145,6 +173,10 @@
       font-weight: bold;
       display: inline-block !important;
     }
+    .sett-text{
+      text-align: end;
+    }
+
     .notification-box {
       height: 61px;
       background-color: $color-background;
