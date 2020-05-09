@@ -202,7 +202,7 @@ class TaskInfoModal extends Component {
   };
 
   saveComments = async () => {
-    if (this.state.comments) {
+    if (this.state.comments || this.state.pictures.length) {
       this.setState({ taskloader: true });
       try {
         let fd = new FormData();
@@ -517,6 +517,18 @@ class TaskInfoModal extends Component {
       ("0" + m).slice(-2) +
       "M"
     );
+  };
+
+  returnAlt = (url) => {
+    let splitUrl = url.split("/");
+    return splitUrl[splitUrl.length - 1];
+  };
+
+  isImage = (url) => {
+    let splitUrl = url.split("/");
+    let name = splitUrl[splitUrl.length - 1];
+    let nameSplit = name.split(".");
+    return ["png", "jpeg", "jpg"].includes(nameSplit[nameSplit.length - 1]);
   };
 
   render() {
@@ -1005,20 +1017,47 @@ class TaskInfoModal extends Component {
                                 {comment.attachments.map((attachment) => {
                                   return (
                                     <>
-                                      <img
-                                        src={`${attachment.imge_url}`}
-                                        onClick={() =>
-                                          this.openViewImage(
-                                            attachment.imge_url
-                                          )
-                                        }
-                                        height="42"
-                                        width="42"
-                                        style={{
-                                          cursor: "pointer",
-                                          marginRight: "10px",
-                                        }}
-                                      ></img>
+                                      {this.isImage(attachment.imge_url) ? (
+                                        <div style={{ display: "grid" }}>
+                                          <img
+                                            src={`${attachment.imge_url}`}
+                                            onClick={() =>
+                                              this.openViewImage(
+                                                attachment.imge_url
+                                              )
+                                            }
+                                            alt={this.returnAlt(
+                                              attachment.imge_url
+                                            )}
+                                            height="42"
+                                            width="42"
+                                            style={{
+                                              cursor: "pointer",
+                                              marginRight: "10px",
+                                            }}
+                                          ></img>
+                                          <a
+                                            href={`${attachment.imge_url}`}
+                                            download
+                                            style={{
+                                              fontSize: "12px",
+                                              padding: "5px",
+                                            }}
+                                          >
+                                            {this.returnAlt(
+                                              attachment.imge_url
+                                            )}
+                                          </a>
+                                        </div>
+                                      ) : (
+                                        <a
+                                          href={`${attachment.imge_url}`}
+                                          download
+                                          style={{ fontSize: "12px" }}
+                                        >
+                                          {this.returnAlt(attachment.imge_url)}
+                                        </a>
+                                      )}
                                     </>
                                   );
                                 })}

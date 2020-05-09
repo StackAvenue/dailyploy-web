@@ -31,11 +31,18 @@ class TaskAction extends Component {
           fontWeight: "400",
           fontStyle: "normal",
           fontSize: "12px",
-          color: "#0075d9"
+          color: "#0075d9",
         }}
       >
         {props.event.status !== "completed" ? (
           <>
+            <div
+              className="border-bottom pointer"
+              style={{ padding: "5px 0px 0px 0px" }}
+              onClick={() => props.taskEventResumeConfirm(props.event, "edit")}
+            >
+              Edit
+            </div>
             <div
               className="border-bottom pointer"
               style={{ padding: "5px 0px 0px 0px" }}

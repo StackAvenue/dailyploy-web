@@ -7,7 +7,7 @@ import "rc-time-picker/assets/index.css";
 import {
   PRIORITIES,
   DATE_FORMAT3,
-  DATE_FORMAT1
+  DATE_FORMAT1,
 } from "./../../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import Close from "../../assets/images/close.svg";
@@ -39,11 +39,11 @@ class AddTaskModal extends React.Component {
       memberNotFound: "hide",
       taskName: "",
       comments: "",
-      pictures: []
+      pictures: [],
     };
   }
 
-  focusInput = component => {
+  focusInput = (component) => {
     if (component) {
       component.focus();
     }
@@ -86,7 +86,7 @@ class AddTaskModal extends React.Component {
     return [];
   };
 
-  handleDateChangeRaw = e => {
+  handleDateChangeRaw = (e) => {
     e.preventDefault();
   };
 
@@ -97,7 +97,7 @@ class AddTaskModal extends React.Component {
     this.calendarToRef.current.setOpen(true);
   };
 
-  handleInputChange = async e => {
+  handleInputChange = async (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -121,9 +121,9 @@ class AddTaskModal extends React.Component {
     );
   };
 
-  onImageDrop = picture => {
+  onImageDrop = (picture) => {
     this.setState({
-      pictures: this.state.pictures.concat(picture)
+      pictures: this.state.pictures.concat(picture),
     });
   };
 
@@ -144,9 +144,9 @@ class AddTaskModal extends React.Component {
                     ? "ADD NEW TASK"
                     : "EDIT TASK"}
                 </Tab>
-                {props.state.taskButton === "Add" ? (
+                {/* {props.state.taskButton === "Add" ? (
                   <Tab>RECURRING TASK</Tab>
-                ) : null}
+                ) : null} */}
                 <Tab>
                   <button
                     className="btn btn-link"
@@ -452,7 +452,7 @@ class AddTaskModal extends React.Component {
                       <textarea
                         name={`comments`}
                         value={props.state.comments ? props.state.comments : ""}
-                        onChange={e => this.props.handleInputChange(e)}
+                        onChange={(e) => this.props.handleInputChange(e)}
                         className="form-control"
                         rows="1"
                         placeholder="Write Here..."
@@ -484,9 +484,9 @@ class AddTaskModal extends React.Component {
                           <input
                             type="checkbox"
                             name="isContactChecked"
-                            onChange={e => this.props.toggleTaskStartState(e)}
+                            onChange={(e) => this.props.toggleTaskStartState(e)}
                             style={{
-                              margin: "0px 20px"
+                              margin: "0px 20px",
                             }}
                           />
                         </label>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Tabs = props => {
+const Tabs = (props) => {
   let classNameRoute;
   let routeName = props.classNameRoute();
   if (routeName === "dashboardTrue") {
@@ -19,14 +19,14 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   } else if (routeName === "analysisTrue") {
@@ -44,14 +44,14 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 active">
+        {/* <div className="col-md-1 active">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   } else if (routeName === "projectsTrue") {
@@ -69,14 +69,14 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   } else if (routeName === "membersTrue") {
@@ -94,14 +94,14 @@ const Tabs = props => {
         <div className="col-md-1 active">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   } else if (routeName === "reportsTrue") {
@@ -119,14 +119,14 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   } else if (routeName === "taskListTrue") {
@@ -144,14 +144,14 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 active">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   } else {
@@ -169,14 +169,14 @@ const Tabs = props => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/task_list`}>
             Task List
           </Link>
-        </div>
+        </div> */}
       </>
     );
   }

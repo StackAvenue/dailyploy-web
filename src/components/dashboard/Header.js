@@ -10,10 +10,14 @@ import { firstTwoLetter } from "../../utils/function";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
-import { WORKSPACE_ID } from "./../../utils/Constants";
+import { WORKSPACE_ID, FULL_DATE } from "./../../utils/Constants";
 import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
+import {
+  convertUTCToLocalDate,
+  convertUTCDateToLocalDate,
+} from "./../../utils/function";
 
 class Header extends Component {
   constructor(props) {
@@ -36,7 +40,16 @@ class Header extends Component {
     if (!loggedInData) {
       try {
         let { data } = await get("logged_in_user");
+        let notificataionData = await get(
+          `users/${
+            loggedInData.id
+          }/notifications?workspace_id=${getWorkspaceId()}`
+        );
         this.setState({
+          notifications:
+            notificataionData && notificataionData.data
+              ? notificataionData.data.notifications
+              : [],
           userId: data.id,
           userName: data.name,
           userEmail: data.email,
@@ -126,7 +139,10 @@ class Header extends Component {
   };
 
   returnDaysAgo = (date) => {
-    let changedDate = moment(date).format("YYYYMMDD");
+    console.log("date", date);
+    let changedDate = convertUTCDateToLocalDate(moment(date).format(FULL_DATE));
+    console.log("date", changedDate);
+    changedDate = moment(date).format("YYYYMMDD");
     return moment(changedDate, "YYYYMMDD").fromNow();
   };
 
