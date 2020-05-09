@@ -202,7 +202,7 @@ class TaskInfoModal extends Component {
   };
 
   saveComments = async () => {
-    if (this.state.comments) {
+    if (this.state.comments || this.state.pictures.length) {
       this.setState({ taskloader: true });
       try {
         let fd = new FormData();
