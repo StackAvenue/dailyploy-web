@@ -13,7 +13,7 @@ import {
   HRMIN,
   PRIORITIES_MAP,
   DATE_FORMAT1,
-  DATE_FORMAT6
+  DATE_FORMAT6,
 } from "./../../utils/Constants";
 import TimePicker from "rc-time-picker";
 import EditableSelect from "./../EditableSelect";
@@ -24,7 +24,7 @@ class TaskConfirm extends Component {
     this.times = ["18:19 - 20:19", "18:19 - 20:19", "18:19 - 20:19"];
     this.priority = {
       name: "high",
-      color_code: "#00A031"
+      color_code: "#00A031",
     };
     this.state = {
       color: "#ffffff",
@@ -36,7 +36,7 @@ class TaskConfirm extends Component {
       selected: "",
       trackSaved: false,
       showContacts: false,
-      selectContactArr: []
+      selectContactArr: [],
     };
   }
 
@@ -51,7 +51,7 @@ class TaskConfirm extends Component {
             style={{
               backgroundColor: `${
                 option.color_code ? option.color_code : this.state.color
-              }`
+              }`,
             }}
           ></div>
           <div className="right-left-space-5 d-inline-block task-name">
@@ -78,7 +78,7 @@ class TaskConfirm extends Component {
             style={{
               backgroundColor: `${
                 option.color_code ? option.color_code : this.state.color
-              }`
+              }`,
             }}
           ></div>
           <div className=" d-inline-block priority-dot">{option.label}</div>
@@ -151,22 +151,22 @@ class TaskConfirm extends Component {
     return [];
   };
 
-  selectedOption = option => {
+  selectedOption = (option) => {
     this.setState({ selected: option });
   };
 
-  returnTime = time => {
+  returnTime = (time) => {
     return {
       id: time.id,
       name: `${moment(time.start_time).format("HH:mm")} - ${moment(
         time.end_time
       ).format("HH:mm")}`,
       start: time.start_time,
-      end: time.end_time
+      end: time.end_time,
     };
   };
 
-  validateTime = time => {
+  validateTime = (time) => {
     let timeSplit = time.trim().split("-");
     var flag = false;
     if (timeSplit.length == 2) {
@@ -185,7 +185,7 @@ class TaskConfirm extends Component {
     return flag;
   };
 
-  saveInputEditable = async time => {
+  saveInputEditable = async (time) => {
     if (this.state.selected && this.state.selected.id != "" && time != "") {
       if (this.validateTime(time)) {
         let startOn = time.split("-")[0].trim();
@@ -198,7 +198,7 @@ class TaskConfirm extends Component {
           ),
           end_time: new Date(
             moment(this.state.selected.end).format(DATE_FORMAT1) + " " + endOn
-          )
+          ),
         };
         try {
           const { data } = await put(
@@ -213,7 +213,7 @@ class TaskConfirm extends Component {
             <DailyPloyToast message={"log time updated"} status="success" />,
             {
               autoClose: 2000,
-              position: toast.POSITION.TOP_CENTER
+              position: toast.POSITION.TOP_CENTER,
             }
           );
         } catch (e) {}
@@ -222,7 +222,7 @@ class TaskConfirm extends Component {
           <DailyPloyToast message={"please enter valid time"} status="error" />,
           {
             autoClose: 2000,
-            position: toast.POSITION.TOP_CENTER
+            position: toast.POSITION.TOP_CENTER,
           }
         );
       }
@@ -240,12 +240,12 @@ class TaskConfirm extends Component {
       arrContact = [...this.state.selectContactArr, ...[contact]];
     } else {
       let filterContactArr = this.state.selectContactArr.filter(
-        item => item.id !== contact.id
+        (item) => item.id !== contact.id
       );
       arrContact = filterContactArr;
     }
     this.setState({
-      selectContactArr: arrContact
+      selectContactArr: arrContact,
     });
   };
 
@@ -273,7 +273,7 @@ class TaskConfirm extends Component {
     }
     this.setState({
       selectContactArr: arrContacts,
-      showContacts: allCheckboxChecked
+      showContacts: allCheckboxChecked,
     });
   };
 
@@ -374,7 +374,6 @@ class TaskConfirm extends Component {
                 ) : null}
               </div>
             ) : null}
-
             {this.props.state.confirmModalText === "mark as completed" &&
             this.props.state.taskEvent.timeTracked.length > 0 ? (
               <div className="col-md-12 task-details log-timer no-padding">
@@ -388,10 +387,10 @@ class TaskConfirm extends Component {
                   <EditableSelect
                     options={ligTimes}
                     value={this.state.selected}
-                    getOptionValue={option => option.id}
-                    getOptionLabel={option => option.name}
+                    getOptionValue={(option) => option.id}
+                    getOptionLabel={(option) => option.name}
                     action={true}
-                    createOption={text => {
+                    createOption={(text) => {
                       return { id: 1, name: text };
                     }}
                     onChange={this.selectedOption}
@@ -409,11 +408,11 @@ class TaskConfirm extends Component {
                     <input
                       type="checkbox"
                       name="isContactChecked"
-                      onChange={e =>
+                      onChange={(e) =>
                         this.handleCheckAll(e, this.props.state.taskContacts)
                       }
                       style={{
-                        margin: "0px 20px"
+                        margin: "0px 20px",
                       }}
                     />
                   </label>
@@ -423,7 +422,7 @@ class TaskConfirm extends Component {
                     this.state.showContacts ? "show" : "hide"
                   }`}
                 >
-                  {this.props.state.taskContacts.map(contact => {
+                  {this.props.state.taskContacts.map((contact) => {
                     return (
                       <div className="no-padding contact-check text-titlize">
                         <label>
@@ -431,9 +430,9 @@ class TaskConfirm extends Component {
                             type="checkbox"
                             id={`contact-checkbox-${contact.id}`}
                             name="isContactChecked"
-                            onChange={e => this.handleCheck(e, contact)}
+                            onChange={(e) => this.handleCheck(e, contact)}
                             style={{
-                              margin: "0px 20px"
+                              margin: "0px 20px",
                             }}
                           />
                           <span>{contact.name}</span>
