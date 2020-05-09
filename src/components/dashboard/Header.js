@@ -131,11 +131,7 @@ class Header extends Component {
   };
 
   returnDaysAgo = (date) => {
-    console.log('date', date)
-    let changedDate = convertUTCDateToLocalDate(moment(date).format(FULL_DATE))
-    console.log('date', changedDate)
-    changedDate = moment(date).format("YYYYMMDD");
-    return moment(changedDate, "YYYYMMDD").fromNow();
+    return moment.utc(date).fromNow();
   }
 
   render() {
@@ -236,7 +232,6 @@ class Header extends Component {
                           </Dropdown.Item>)
                         })}
                       </div> : <Dropdown.Item className="notification-box">
-                          {/* <span>{this.returnDaysAgo("2020-05-09T22:08:44")}</span> */}
                           <div>There is no notification for you</div>
                         </Dropdown.Item>}
                     </Dropdown.Menu>
