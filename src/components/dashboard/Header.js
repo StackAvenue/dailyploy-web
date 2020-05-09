@@ -36,7 +36,11 @@ class Header extends Component {
     if (!loggedInData) {
       try {
         let { data } = await get("logged_in_user");
+        let notificataionData = await get(
+          `users/${loggedInData.id}/notifications?workspace_id=${getWorkspaceId()}`
+        );
         this.setState({
+          notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [],
           userId: data.id,
           userName: data.name,
           userEmail: data.email,
