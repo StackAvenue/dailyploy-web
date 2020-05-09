@@ -97,7 +97,8 @@ class Workspace extends Component {
       workspaceName: "",
       loggedInUserName: "",
       timeTracked: [],
-      event: null
+      event: null,
+      notifications: [],
     };
   }
 
@@ -124,6 +125,10 @@ class Workspace extends Component {
           path: "/"
         });
       }
+      let notificataionData = await get(
+        `users/${workspaceId}/notifications`
+      );
+      this.setState({ notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [] })
     } catch (e) {
       console.log("err", e);
     }
@@ -163,7 +168,7 @@ class Workspace extends Component {
       });
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   logout = async () => {
     await logout();
@@ -258,7 +263,7 @@ class Workspace extends Component {
       var taskId = this.state.event.id.split("-")[0];
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-      } catch (e) {}
+      } catch (e) { }
       this.setState({
         event: null
       });
@@ -270,6 +275,28 @@ class Workspace extends Component {
       this.setState({ workspaces: [...this.state.workspaces, workspace] });
     }
   };
+
+  readAllNotification = async () => {
+    if (this.state.notifications) {
+      let notification_ids = this.state.notifications.map((data) => {
+        return data.id
+      })
+      let params = {
+        notification_ids: notification_ids
+      }
+      try {
+        const { data } = await put(
+          params,
+          `users/${this.state.workspaceId}/notifications/mark_all_as_read`
+        );
+        this.setState({
+          notifications: []
+        });
+      } catch (e) {
+        console.log("error", e);
+      }
+    }
+  }
 
   render() {
     return (
@@ -290,12 +317,14 @@ class Workspace extends Component {
           />
           <div className="dashboard-main no-padding">
             <Header
+              notification={this.state.notifications}
               logout={this.logout}
               workspaces={this.state.workspaces}
               workspaceId={this.state.workspaceId}
               userData={this.state.loggedInUserInfo}
               searchOptions={this.state.searchOptions}
               pathname={this.classNameRoute()}
+              readAllNotification={this.readAllNotification}
               workspaceName={this.state.workspaceName}
               loggedInUserName={this.state.loggedInUserName}
               handleSearchFilterResult={this.handleSearchFilterResult}

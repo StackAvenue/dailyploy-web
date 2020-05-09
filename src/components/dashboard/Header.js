@@ -13,6 +13,7 @@ import Admin from "../../assets/images/admin.png";
 import { WORKSPACE_ID } from "./../../utils/Constants";
 import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
+import moment from "moment";
 
 class Header extends Component {
   constructor(props) {
@@ -33,12 +34,13 @@ class Header extends Component {
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
-        const { data } = await get("logged_in_user");
+        let { data } = await get("logged_in_user");
         this.setState({
           userId: data.id,
           userName: data.name,
           userEmail: data.email,
         });
+
       } catch (e) {
         console.log("err", e);
       }
@@ -91,6 +93,11 @@ class Header extends Component {
       searchFlag: text,
     });
   };
+
+  returnDaysAgo = (date) => {
+    let changedDate = moment(date).format("YYYYMMDD");
+    return moment(changedDate, "YYYYMMDD").fromNow();
+  }
 
   render() {
     const x = firstTwoLetter(this.props.loggedInUserName);
@@ -147,74 +154,52 @@ class Header extends Component {
                     >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
-                    <div className="notification-icon right">
-                      <span className="num-count">13</span>
-                    </div>
+                    {this.props.notification && this.props.notification.length && <div className="notification-icon right">
+                      <span className="num-count">{this.props.notification.length}</span>
+                    </div>}
 
                     <Dropdown.Menu className="dropdown-notification">
                       <div className="col-md-12">
                         <div className="col-md-5 no-padding notification-heading">
                           Notifications
                         </div>
-                        <div className="col-md-7 no-padding notification-heading sett-text">
-                          <span>Mark All as Read</span>&nbsp;
-                          <span>.&nbsp;Settings</span>
-                        </div>
+                        {this.props.notification && this.props.notification.length > 0 && <div className="col-md-7 no-padding notification-heading sett-text">
+                          <span onClick={() => this.props.readAllNotification()}>Mark All as Read</span>&nbsp;
+                          {/* <span>.&nbsp;Settings</span> */}
+                        </div>}
                       </div>
-                      <Dropdown.Item className="notification-box">
-                        <div className="row">
-                          <div className="col-md-1 no-padding">
-                            <div className="notification-img">
-                              <img
-                                alt={"userImg"}
-                                src={userImg}
-                                className="img-responsive"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-11">
-                            <div className="notification-text">
-                              Amit Shah added you to the project{" "}
-                              <span>
-                                Aviabird
+                      {this.props.notification && this.props.notification.length > 0 ? <div>
+                        {this.props.notification.map((eachNotification) => {
+                          return (<Dropdown.Item className="notification-box">
+                            <div className="row">
+                              <div className="col-md-1 no-padding">
+                                <div className="notification-img">
+                                  <img
+                                    alt={"userImg"}
+                                    src={userImg}
+                                    className="img-responsive"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="notification-text">
+                                {eachNotification.data.message}
+                                {/* <span>
+                                    Aviabird
                                 <br />
-                                Technologies
-                              </span>
+                                    Technologies
+                              </span> */}
+                              </div>
+                              <div className="col-md-12 no-padding notification-text text-right">
+                                <span>{this.returnDaysAgo(eachNotification.inserted_at)}</span>
+                                {/* {eachNotification.inserted_at} */}
+                              </div>
                             </div>
-                            <div className="col-md-12 no-padding notification-text text-right">
-                              <span>4h </span>
-                              Jan 19, 2019
-                            </div>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="notification-box">
-                        <div className="row">
-                          <div className="col-md-1 no-padding">
-                            <div className="notification-img">
-                              <img
-                                alt={"userImg"}
-                                src={userImg}
-                                className="img-responsive"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-11">
-                            <div className="notification-text">
-                              Amit Shah added you to the project{" "}
-                              <span>
-                                Aviabird
-                                <br />
-                                Technologies
-                              </span>
-                            </div>
-                            <div className="col-md-12 no-padding notification-text text-right">
-                              <span>4h </span>
-                              Jan 19, 2019
-                            </div>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
+                          </Dropdown.Item>)
+                        })}
+                      </div> : <Dropdown.Item className="notification-box">
+                          <div>There is no notification for you</div>
+                        </Dropdown.Item>}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
@@ -223,7 +208,7 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                      } `}
+                        } `}
                       id="dropdown-basic"
                     >
                       {x}
@@ -235,7 +220,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                          } `}
+                            } `}
                         >
                           {x}
                         </div>
