@@ -10,10 +10,14 @@ import { firstTwoLetter } from "../../utils/function";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
-import { WORKSPACE_ID } from "./../../utils/Constants";
+import { WORKSPACE_ID, FULL_DATE } from "./../../utils/Constants";
 import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
+import {
+  convertUTCToLocalDate,
+  convertUTCDateToLocalDate
+} from "./../../utils/function";
 
 class Header extends Component {
   constructor(props) {
@@ -127,7 +131,10 @@ class Header extends Component {
   };
 
   returnDaysAgo = (date) => {
-    let changedDate = moment(date).format("YYYYMMDD");
+    console.log('date', date)
+    let changedDate = convertUTCDateToLocalDate(moment(date).format(FULL_DATE))
+    console.log('date', changedDate)
+    changedDate = moment(date).format("YYYYMMDD");
     return moment(changedDate, "YYYYMMDD").fromNow();
   }
 
@@ -229,7 +236,7 @@ class Header extends Component {
                           </Dropdown.Item>)
                         })}
                       </div> : <Dropdown.Item className="notification-box">
-                          {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                          {/* <span>{this.returnDaysAgo("2020-05-09T22:08:44")}</span> */}
                           <div>There is no notification for you</div>
                         </Dropdown.Item>}
                     </Dropdown.Menu>
