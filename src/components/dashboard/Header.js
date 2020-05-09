@@ -16,7 +16,7 @@ import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import {
   convertUTCToLocalDate,
-  convertUTCDateToLocalDate
+  convertUTCDateToLocalDate,
 } from "./../../utils/function";
 
 class Header extends Component {
@@ -41,25 +41,33 @@ class Header extends Component {
       try {
         let { data } = await get("logged_in_user");
         let notificataionData = await get(
-          `users/${loggedInData.id}/notifications?workspace_id=${getWorkspaceId()}`
+          `users/${
+          loggedInData.id
+          }/notifications?workspace_id=${getWorkspaceId()}`
         );
         this.setState({
-          notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [],
+          notifications:
+            notificataionData && notificataionData.data
+              ? notificataionData.data.notifications
+              : [],
           userId: data.id,
           userName: data.name,
           userEmail: data.email,
         });
-
-
       } catch (e) {
         console.log("err", e);
       }
     } else {
       let notificataionData = await get(
-        `users/${loggedInData.id}/notifications?workspace_id=${getWorkspaceId()}`
+        `users/${
+        loggedInData.id
+        }/notifications?workspace_id=${getWorkspaceId()}`
       );
       this.setState({
-        notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [],
+        notifications:
+          notificataionData && notificataionData.data
+            ? notificataionData.data.notifications
+            : [],
         userId: loggedInData.id,
         userName: loggedInData.name,
         userEmail: loggedInData.email,
@@ -87,24 +95,24 @@ class Header extends Component {
   readAllNotification = async () => {
     if (this.state.notifications) {
       let notification_ids = this.state.notifications.map((data) => {
-        return data.id
-      })
+        return data.id;
+      });
       let params = {
-        notification_ids: notification_ids
-      }
+        notification_ids: notification_ids,
+      };
       try {
         const { data } = await put(
           params,
           `users/${this.state.userId}/notifications/mark_all_as_read`
         );
         this.setState({
-          notifications: []
+          notifications: [],
         });
       } catch (e) {
         console.log("error", e);
       }
     }
-  }
+  };
 
   closeSettingModal = () => {
     this.clickClose.current.click();
@@ -189,51 +197,86 @@ class Header extends Component {
                     >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
-                    {this.state.notifications && this.state.notifications.length > 0 && <div className="notification-icon right">
-                      <span className="num-count">{this.state.notifications.length}</span>
-                    </div>}
+                    {this.state.notifications &&
+                      this.state.notifications.length > 0 && (
+                        <div className="notification-icon right">
+                          <span className="num-count">
+                            {this.state.notifications.length}
+                          </span>
+                        </div>
+                      )}
 
                     <Dropdown.Menu className="dropdown-notification">
-                      <div className="col-md-12">
+                      <div
+                        className="col-md-12"
+                        style={{
+                          // backgroundColor: "#10b857",
+                          backgroundColor: "#28b458",
+                        }}
+                      >
                         <div className="col-md-5 no-padding notification-heading">
                           Notifications
                         </div>
-                        {this.state.notifications && this.state.notifications.length > 0 && <div className="col-md-7 no-padding notification-heading sett-text">
-                          <span onClick={() => this.readAllNotification()}>Mark All as Read</span>&nbsp;
-                        </div>}
+                        {this.state.notifications &&
+                          this.state.notifications.length > 0 && (
+                            <div className="col-md-7 no-padding notification-heading sett-text">
+                              <span onClick={() => this.readAllNotification()}>
+                                Mark All as Read
+                              </span>
+                              &nbsp;
+                            </div>
+                          )}
                       </div>
-                      {this.state.notifications && this.state.notifications.length > 0 ? <div>
-                        {this.state.notifications.map((eachNotification) => {
-                          return (<Dropdown.Item className="notification-box">
-                            <div className="row">
-                              <div className="col-md-1 no-padding">
-                                <div className="notification-img">
-                                  <img
-                                    alt={"userImg"}
-                                    src={userImg}
-                                    className="img-responsive"
-                                  />
-                                </div>
-                              </div>
+                      {this.state.notifications &&
+                        this.state.notifications.length > 0 ? (
+                          <div>
+                            {this.state.notifications.map((eachNotification) => {
+                              return (
+                                <Dropdown.Item className="notification-box">
+                                  <div className="row">
+                                    <div className="col-md-1 no-padding">
+                                      <div className="notification-img">
+                                        <img
+                                          alt={"userImg"}
+                                          src={userImg}
+                                          className="img-responsive"
+                                        />
+                                      </div>
+                                    </div>
 
-                              <div className="notification-text">
-                                {eachNotification.data.message}
-                                {/* <span>
+                                    <div className="notification-text">
+                                      {eachNotification.data.message}
+                                      {/* <span>
                                     Aviabird
                                 <br />
                                     Technologies
                               </span> */}
-                              </div>
-                              <div className="col-md-12 no-padding notification-text text-right">
-                                <span>{this.returnDaysAgo(eachNotification.inserted_at)}</span>
-                                {/* {eachNotification.inserted_at} */}
-                              </div>
+                                    </div>
+                                    <div className="col-md-12 no-padding notification-text text-right">
+                                      <span>
+                                        {this.returnDaysAgo(
+                                          eachNotification.inserted_at
+                                        )}
+                                      </span>
+                                      {/* {eachNotification.inserted_at} */}
+                                    </div>
+                                  </div>
+                                </Dropdown.Item>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <Dropdown.Item className="notification-box">
+                            {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                            <div>
+                              <i
+                                class="fa fa-info-circle"
+                                style={{ fontSize: "48px", marginBottom: "8px" }}
+                              ></i>
                             </div>
-                          </Dropdown.Item>)
-                        })}
-                      </div> : <Dropdown.Item className="notification-box">
-                          <div>There is no notification for you</div>
-                        </Dropdown.Item>}
+                            <div>There is no notification for you</div>
+                          </Dropdown.Item>
+                        )}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
