@@ -4609,6 +4609,49 @@ table.scheduler-table tr:last-child td {
       text-align: left;
       color: $color-text1;
       margin-left: 31px;
+      // .track-time-edit{
+      //   input{
+      //     width: 100px;
+      //     border: solid 1px #d1d1d1;
+      //     border-radius: 5px;
+      //   }
+      // }
+      .track-time-edit{
+        .rc-time-picker-input{
+          padding: 0px 10px !important;
+          font-size: 16px !important;
+          width: 92px;
+        }
+        .rc-time-picker-clear{
+          top: 1px;
+          right: 5px;
+        }
+        .rc-time-picker-panel{
+          width: 100px !important;
+          .rc-time-picker-panel-inner{
+            width: 92px !important;
+            .rc-time-picker-panel-combobox{
+              .rc-time-picker-panel-select{
+                width: 45px !important;
+              }
+            }
+          }
+        }
+        .react-datepicker-popper{
+          left: -45px !important;
+        }
+        .react-datepicker-wrapper{
+          input{
+            width: 105px;
+            border: solid 1px #d1d1d1;
+            border-radius: 5px;
+            text-align: center;
+          }
+        }
+        .react-datepicker{
+          display: flex !important;
+        }
+      }
     }
     .contact{
       margin-left: 31px;
@@ -5351,11 +5394,20 @@ table.scheduler-table tr:last-child td {
         padding: 5px;
       }
       padding: 5px;
+      .img-name{
+        font-size: 12px;
+        color: $color-text3;
+      }
     }
   }
   .comment-action{
     display: flex !important;
     justify-content: flex-end !important;
+  }
+  .suport{
+    font-size: 9px;
+    padding: 0px 20px;
+    text-transform: lowercase;
   }
 }
 .task-comments{

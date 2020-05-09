@@ -6,7 +6,7 @@ import { get, post, mockPost } from "../../utils/API";
 import {
   validateName,
   validateEmail,
-  validatePhone
+  validatePhone,
 } from "../../utils/validation";
 import { toast } from "react-toastify";
 import AddProjectModal from "./AddProjectModal";
@@ -23,16 +23,16 @@ export default class MenuBar extends Component {
     this.sortValues = [
       {
         content: "Daily",
-        value: "day"
+        value: "day",
       },
       {
         content: "Weekly",
-        value: "week"
+        value: "week",
       },
       {
         content: "Monthly",
-        value: "month"
-      }
+        value: "month",
+      },
     ];
     this.colors = [
       "#b9e1ff",
@@ -42,7 +42,7 @@ export default class MenuBar extends Component {
       "#ffc6ac",
       "#ffa2a2",
       "#e9ff71",
-      "#d7a0ff"
+      "#d7a0ff",
     ];
     this.state = {
       projectName: "",
@@ -84,9 +84,9 @@ export default class MenuBar extends Component {
         {
           name: "",
           email: "",
-          phone_number: ""
-        }
-      ]
+          phone_number: "",
+        },
+      ],
     };
   }
 
@@ -110,7 +110,7 @@ export default class MenuBar extends Component {
     let contact = contacts.find((contact, index) => idx === index);
     contact[name] = value;
     this.setState({
-      contacts: contacts
+      contacts: contacts,
     });
   };
 
@@ -119,17 +119,17 @@ export default class MenuBar extends Component {
     contacts.push({
       name: "",
       email: "",
-      phone_number: ""
+      phone_number: "",
     });
     this.setState({
-      contacts: contacts
+      contacts: contacts,
     });
   };
 
-  removeContactsRow = idx => {
+  removeContactsRow = (idx) => {
     let contacts = this.state.contacts.filter((contact, index) => idx != index);
     this.setState({
-      contacts: contacts
+      contacts: contacts,
     });
   };
 
@@ -144,7 +144,7 @@ export default class MenuBar extends Component {
     ) {
       flag = true;
     } else {
-      var updatedContacts = this.state.contacts.map(contact => {
+      var updatedContacts = this.state.contacts.map((contact) => {
         let nm = validateName(contact.name);
         if (nm) {
           contact["nameError"] = nm;
@@ -198,7 +198,7 @@ export default class MenuBar extends Component {
       });
     }
     this.setState({
-      contacts: updatedContacts
+      contacts: updatedContacts,
     });
     return flag;
   };
@@ -220,8 +220,8 @@ export default class MenuBar extends Component {
             )
               ? [...this.state.projectMembers, ...addOwner]
               : this.state.projectMembers,
-            color_code: this.state.background
-          }
+            color_code: this.state.background,
+          },
         };
         if (this.state.contacts.length > 0) {
           projectData.project["contacts"] = this.state.contacts;
@@ -252,7 +252,7 @@ export default class MenuBar extends Component {
                 />,
                 { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
               );
-              setTimeout(function() {
+              setTimeout(function () {
                 self.setState({ saveDisable: false });
               }, 2000);
             } else if (errors && errors.name) {
@@ -263,7 +263,7 @@ export default class MenuBar extends Component {
                 />,
                 { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
               );
-              setTimeout(function() {
+              setTimeout(function () {
                 self.setState({ saveDisable: false });
               }, 2000);
             } else {
@@ -280,7 +280,7 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-      setTimeout(function() {
+      setTimeout(function () {
         self.setState({ saveDisable: false });
       }, 2000);
     }
@@ -294,8 +294,8 @@ export default class MenuBar extends Component {
         status: "Pending",
         workspace_id: Number(this.props.workspaceId),
         role_id: Number(this.state.memberRole),
-        working_hours: Number(this.state.memberWorkingHours)
-      }
+        working_hours: Number(this.state.memberWorkingHours),
+      },
     };
     if (this.state.memberProject) {
       memberData.invitation["project_id"] = this.state.memberProject;
@@ -334,7 +334,7 @@ export default class MenuBar extends Component {
         // );
         this.setState({
           isLoading: false,
-          error: "User already exists in workspace."
+          error: "User already exists in workspace.",
         });
       } else {
         this.setState({ isLoading: false, error: "" });
@@ -347,53 +347,53 @@ export default class MenuBar extends Component {
       memberName: "",
       memberEmail: "",
       memberRole: "",
-      memberWorkingHours: ""
+      memberWorkingHours: "",
     });
   };
 
-  handleChangeMember = selectedTags => {
-    var ids = selectedTags.map(option => option.id);
+  handleChangeMember = (selectedTags) => {
+    var ids = selectedTags.map((option) => option.id);
     this.setState({ projectMembers: ids, selectedTags: selectedTags });
   };
 
-  handleChangeInput = e => {
+  handleChangeInput = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value, saveDisable: false });
   };
 
-  handleChangeMemberInput = e => {
+  handleChangeMemberInput = (e) => {
     const { name, value } = e.target;
     if (name === "memberName") {
       let suggestions = [];
       var searchOptions = this.props.state.isLogedInUserEmailArr.map(
-        user => user.name
+        (user) => user.name
       );
       if (value.length > 0) {
         const regex = new RegExp(`^${value}`, "i");
-        suggestions = searchOptions.sort().filter(v => regex.test(v));
+        suggestions = searchOptions.sort().filter((v) => regex.test(v));
         this.setState({
           [name]: value,
           suggestions: suggestions,
           btnEnable: true,
           error: "",
-          [`${name}Error`]: ""
+          [`${name}Error`]: "",
         });
       } else {
         this.setState({
           [name]: value,
           suggestions: suggestions,
           btnEnable: true,
-          [`${name}Error`]: "please select"
+          [`${name}Error`]: "please select",
         });
       }
     } else if (name === "memberEmail") {
       let suggestions = [];
       var searchOptions = this.props.state.isLogedInUserEmailArr.map(
-        user => user.name
+        (user) => user.name
       );
       if (value.length > 0) {
         const regex = new RegExp(`^${value}`, "i");
-        suggestions = searchOptions.sort().filter(v => regex.test(v));
+        suggestions = searchOptions.sort().filter((v) => regex.test(v));
         var error = validateEmail(value);
         this.setState({
           [name]: value,
@@ -401,14 +401,14 @@ export default class MenuBar extends Component {
           btnEnable: true,
           error: "",
           [`${name}Error`]: error,
-          btnEnable: error ? false : true
+          btnEnable: error ? false : true,
         });
       } else {
         this.setState({
           [name]: value,
           suggestions: suggestions,
           btnEnable: true,
-          [`${name}Error`]: "please select"
+          [`${name}Error`]: "please select",
         });
       }
     } else {
@@ -416,23 +416,23 @@ export default class MenuBar extends Component {
       this.setState({
         [name]: value,
         btnEnable: true,
-        [`${name}Error`]: value != "" ? "" : "please select"
+        [`${name}Error`]: value != "" ? "" : "please select",
       });
     }
   };
 
-  handleChangeProjectSelect = value => {
+  handleChangeProjectSelect = (value) => {
     this.setState({ memberProject: value ? value.id : "" });
   };
 
-  selectAutoSuggestion = option => {
+  selectAutoSuggestion = (option) => {
     var filterArr = this.props.state.isLogedInUserEmailArr.filter(
-      user => user.name === option
+      (user) => user.name === option
     );
-    var filterProjectIds = filterArr[0].projects.map(project => project.id);
+    var filterProjectIds = filterArr[0].projects.map((project) => project.id);
     let memberRole = filterArr[0].role === "admin" ? "1" : "2";
     let memberProjects = this.props.state.projects.filter(
-      project => !filterProjectIds.includes(project.id)
+      (project) => !filterProjectIds.includes(project.id)
     );
     this.setState({
       memberName: filterArr[0].name,
@@ -441,18 +441,18 @@ export default class MenuBar extends Component {
       memberWorkingHours: filterArr[0].working_hours,
       projectsListing: memberProjects,
       suggestions: [],
-      memberEmailError: ""
+      memberEmailError: "",
     });
   };
 
-  handleChangeMemberRadio = e => {
+  handleChangeMemberRadio = (e) => {
     this.setState({ memberAccess: e.target.value });
   };
 
-  handleDateFrom = date => {
+  handleDateFrom = (date) => {
     this.setState({ dateFrom: date });
   };
-  handleDateTo = date => {
+  handleDateTo = (date) => {
     this.setState({ dateTo: date });
   };
 
@@ -464,7 +464,7 @@ export default class MenuBar extends Component {
       dateTo: null,
       background: "#b9e1ff",
       dateFrom: new Date(),
-      reset: false
+      reset: false,
     });
   };
 
@@ -473,27 +473,27 @@ export default class MenuBar extends Component {
       setShow: true,
       show: true,
       saveDisable: false,
-      reset: true
+      reset: true,
     });
   };
 
   handleMemberClose = () => {
     this.setState({
-      memberShow: false
+      memberShow: false,
     });
   };
   handleMemberShow = () => {
     this.setState({
       memberSetShow: true,
       memberShow: true,
-      projectsListing: this.props.state.projects
+      projectsListing: this.props.state.projects,
     });
   };
 
   handleChangeComplete = (color, event) => {
     this.setState({
       background: color.hex,
-      displayColorPicker: !this.state.displayColorPicker
+      displayColorPicker: !this.state.displayColorPicker,
     });
   };
 
@@ -514,7 +514,7 @@ export default class MenuBar extends Component {
     this.setState({
       disabledDateTo: !this.state.disabledDateTo,
       disableColor: disableColor,
-      dateTo: null
+      dateTo: null,
     });
   };
 
@@ -533,7 +533,7 @@ export default class MenuBar extends Component {
                 classNameRoute={this.props.classNameRoute}
                 workspaceId={this.props.workspaceId}
               />
-              <div className="col-md-6 text-right">
+              <div className="col-md-8 text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
                   isDeleteShow={this.props.state.isDeleteShow}
@@ -552,7 +552,7 @@ export default class MenuBar extends Component {
                       <Dropdown.Item
                         onClick={this.handleShow}
                         style={{
-                          borderBottom: "1px solid rgba(210, 210, 210, 1)"
+                          borderBottom: "1px solid rgba(210, 210, 210, 1)",
                         }}
                       >
                         Project
