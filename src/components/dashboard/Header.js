@@ -161,7 +161,7 @@ class Header extends Component {
                           <span>.&nbsp;Settings</span>
                         </div>
                       </div>
-                      {/* <Dropdown.Item className="notification-box">
+                      <Dropdown.Item className="notification-box">
                         <div className="row">
                           <div className="col-md-1 no-padding">
                             <div className="notification-img">
@@ -214,7 +214,7 @@ class Header extends Component {
                             </div>
                           </div>
                         </div>
-                      </Dropdown.Item> */}
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
