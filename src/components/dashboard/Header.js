@@ -5,7 +5,7 @@ import { Dropdown } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import setting from "../../assets/images/setting.png";
 import "../../assets/css/dashboard.scss";
-import { get } from "../../utils/API";
+import { get, put } from "../../utils/API";
 import { firstTwoLetter } from "../../utils/function";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
@@ -27,6 +27,7 @@ class Header extends Component {
       userRole: "",
       userId: "",
       searchFlag: "My Reports",
+      notifications: [],
     };
   }
 
@@ -41,11 +42,16 @@ class Header extends Component {
           userEmail: data.email,
         });
 
+
       } catch (e) {
         console.log("err", e);
       }
     } else {
+      let notificataionData = await get(
+        `users/${loggedInData.id}/notifications`
+      );
       this.setState({
+        notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [],
         userId: loggedInData.id,
         userName: loggedInData.name,
         userEmail: loggedInData.email,
@@ -66,6 +72,28 @@ class Header extends Component {
         this.setState({ userRole: data.role });
       } catch (e) {
         console.log("err", e);
+      }
+    }
+  }
+
+  readAllNotification = async () => {
+    if (this.state.notifications) {
+      let notification_ids = this.state.notifications.map((data) => {
+        return data.id
+      })
+      let params = {
+        notification_ids: notification_ids
+      }
+      try {
+        const { data } = await put(
+          params,
+          `users/${this.state.userId}/notifications/mark_all_as_read`
+        );
+        this.setState({
+          notifications: []
+        });
+      } catch (e) {
+        console.log("error", e);
       }
     }
   }
@@ -154,8 +182,8 @@ class Header extends Component {
                     >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
-                    {this.props.notification && this.props.notification.length && <div className="notification-icon right">
-                      <span className="num-count">{this.props.notification.length}</span>
+                    {this.state.notifications && this.state.notifications.length && <div className="notification-icon right">
+                      <span className="num-count">{this.state.notifications.length}</span>
                     </div>}
 
                     <Dropdown.Menu className="dropdown-notification">
@@ -163,13 +191,13 @@ class Header extends Component {
                         <div className="col-md-5 no-padding notification-heading">
                           Notifications
                         </div>
-                        {this.props.notification && this.props.notification.length > 0 && <div className="col-md-7 no-padding notification-heading sett-text">
+                        {this.state.notifications && this.state.notifications.length > 0 && <div className="col-md-7 no-padding notification-heading sett-text">
                           <span onClick={() => this.props.readAllNotification()}>Mark All as Read</span>&nbsp;
                           {/* <span>.&nbsp;Settings</span> */}
                         </div>}
                       </div>
-                      {this.props.notification && this.props.notification.length > 0 ? <div>
-                        {this.props.notification.map((eachNotification) => {
+                      {this.state.notifications && this.state.notifications.length > 0 ? <div>
+                        {this.state.notifications.map((eachNotification) => {
                           return (<Dropdown.Item className="notification-box">
                             <div className="row">
                               <div className="col-md-1 no-padding">
@@ -198,6 +226,7 @@ class Header extends Component {
                           </Dropdown.Item>)
                         })}
                       </div> : <Dropdown.Item className="notification-box">
+                          {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
                           <div>There is no notification for you</div>
                         </Dropdown.Item>}
                     </Dropdown.Menu>

@@ -97,8 +97,7 @@ class Workspace extends Component {
       workspaceName: "",
       loggedInUserName: "",
       timeTracked: [],
-      event: null,
-      notifications: [],
+      event: null
     };
   }
 
@@ -125,10 +124,10 @@ class Workspace extends Component {
           path: "/"
         });
       }
-      let notificataionData = await get(
-        `users/${workspaceId}/notifications`
-      );
-      this.setState({ notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [] })
+      // let notificataionData = await get(
+      //   `users/${workspaceId}/notifications`
+      // );
+      // this.setState({ notifications: notificataionData && notificataionData.data ? notificataionData.data.notifications : [] })
     } catch (e) {
       console.log("err", e);
     }
