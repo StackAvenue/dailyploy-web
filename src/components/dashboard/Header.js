@@ -182,7 +182,7 @@ class Header extends Component {
                     >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
-                    {this.state.notifications && this.state.notifications.length && <div className="notification-icon right">
+                    {this.state.notifications && this.state.notifications.length > 0 && <div className="notification-icon right">
                       <span className="num-count">{this.state.notifications.length}</span>
                     </div>}
 
@@ -193,7 +193,6 @@ class Header extends Component {
                         </div>
                         {this.state.notifications && this.state.notifications.length > 0 && <div className="col-md-7 no-padding notification-heading sett-text">
                           <span onClick={() => this.readAllNotification()}>Mark All as Read</span>&nbsp;
-                          {/* <span>.&nbsp;Settings</span> */}
                         </div>}
                       </div>
                       {this.state.notifications && this.state.notifications.length > 0 ? <div>
