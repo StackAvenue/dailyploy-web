@@ -13,7 +13,7 @@ import {
   getFisrtDate,
   convertUTCToLocalDate,
   convertUTCDateToLocalDate,
-  getMiddleDates
+  getMiddleDates,
 } from "../utils/function";
 import DailyPloyToast from "../components/DailyPloyToast";
 import {
@@ -22,7 +22,7 @@ import {
   DATE_FORMAT1,
   HRMIN,
   FULL_DATE,
-  DATE_FORMAT5
+  DATE_FORMAT5,
 } from "../utils/Constants";
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
@@ -32,13 +32,11 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.format = "h:mm";
-    this.now = moment()
-      .hour(0)
-      .minute(0);
+    this.now = moment().hour(0).minute(0);
     this.viewType = {
       weekly: "week",
       daily: "day",
-      monthly: "month"
+      monthly: "month",
     };
     this.state = {
       loadFireBase: false,
@@ -104,12 +102,12 @@ class Dashboard extends Component {
         dateToError: "",
         timeFromError: "",
         timeToError: "",
-        categoryError: ""
+        categoryError: "",
       },
       taskPrioritie: {
         name: "no_priority",
         color_code: "#9B9B9B",
-        label: "no priority"
+        label: "no priority",
       },
       showEventAlertId: "",
       trackingEvent: null,
@@ -119,7 +117,7 @@ class Dashboard extends Component {
       taskComments: null,
       isPlayPause: false,
       taskContacts: [],
-      isStart: false
+      isStart: false,
     };
   }
 
@@ -138,7 +136,7 @@ class Dashboard extends Component {
     }
     this.setState({
       taskFrequency: viewType,
-      taskStartDate: getFisrtDate(date, type)
+      taskStartDate: getFisrtDate(date, type),
     });
   };
 
@@ -155,13 +153,13 @@ class Dashboard extends Component {
         this.props.handleLoading(true);
         var userIds =
           this.props.searchUserDetails.length > 0
-            ? this.props.searchUserDetails.map(member => member.member_id)
+            ? this.props.searchUserDetails.map((member) => member.member_id)
             : [];
         var searchData = {
           frequency: this.state.taskFrequency,
           start_date: getFisrtDate(this.state.taskStartDate),
           user_id: userIds.join(","),
-          project_ids: this.props.searchProjectIds.join(",")
+          project_ids: this.props.searchProjectIds.join(","),
         };
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks`,
@@ -177,7 +175,7 @@ class Dashboard extends Component {
         var taskRunningObj = {
           status: false,
           startOn: null,
-          taskId: ""
+          taskId: "",
         };
         var trackingEvent = this.state.trackingEvent;
         let generatedObj = this.generateTaskObject(
@@ -185,7 +183,7 @@ class Dashboard extends Component {
           {
             id: this.state.userId,
             name: this.state.userName,
-            email: this.state.userEmail
+            email: this.state.userEmail,
           },
           taskRunningObj,
           trackingEvent
@@ -193,9 +191,9 @@ class Dashboard extends Component {
         taskRunningObj = generatedObj.taskRunningObj;
         trackingEvent = generatedObj.trackingEvent;
         var tasksUser = generatedObj.tasksUser;
-        var tasksResources = tasksUser.map(user => user.usersObj);
+        var tasksResources = tasksUser.map((user) => user.usersObj);
         var taskEvents = tasksUser
-          .map(user => user.tasks)
+          .map((user) => user.tasks)
           .flat(2)
           .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
         this.setState({
@@ -206,13 +204,13 @@ class Dashboard extends Component {
             : this.state.status,
           taskId: taskRunningObj.taskId,
           startOn: taskRunningObj.startOn,
-          trackingEvent: trackingEvent
+          trackingEvent: trackingEvent,
         });
         let projects = [];
-        this.state.projects.forEach(project => {
+        this.state.projects.forEach((project) => {
           let flag = true;
-          userIds.map(id => {
-            if (!project.members.map(m => m.id).includes(id)) {
+          userIds.map((id) => {
+            if (!project.members.map((m) => m.id).includes(id)) {
               flag = false;
             }
           });
@@ -222,10 +220,10 @@ class Dashboard extends Component {
         });
         this.createUserProjectList(
           projects.filter(
-            project => !this.props.searchProjectIds.includes(project.id)
+            (project) => !this.props.searchProjectIds.includes(project.id)
           ),
           this.state.worksapceUsers.filter(
-            member => !userIds.includes(member.id)
+            (member) => !userIds.includes(member.id)
           )
         );
         this.props.handleLoading(false);
@@ -254,7 +252,7 @@ class Dashboard extends Component {
     }
 
     if (prevState.status != this.state.status && this.state.status) {
-      let event = this.state.events.find(e => e.id == this.state.taskId);
+      let event = this.state.events.find((e) => e.id == this.state.taskId);
       this.props.handleTaskBottomPopup(
         this.state.startOn,
         this.state.trackingEvent,
@@ -276,8 +274,8 @@ class Dashboard extends Component {
         prevProps.state.event.id == this.state.taskId
       ) {
         let id = this.state.taskId.split("-")[0];
-        var filterEvents = events.filter(e => e.taskId == id);
-        filterEvents.forEach(event => {
+        var filterEvents = events.filter((e) => e.taskId == id);
+        filterEvents.forEach((event) => {
           event["trackingStatus"] = "play";
           event["startOn"] = "";
         });
@@ -285,7 +283,7 @@ class Dashboard extends Component {
           status: false,
           startOn: "",
           taskId: "",
-          events: events
+          events: events,
         });
       }
     }
@@ -334,9 +332,9 @@ class Dashboard extends Component {
     try {
       const { data } = await get(`workspaces/${workspaceId}/members`);
       var worksapceUsers = data.members;
-      var userArr = data.members.map(user => user);
+      var userArr = data.members.map((user) => user);
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email
+        (user) => user.email !== loggedInData.email
       );
     } catch (e) {
       console.log("users Error", e);
@@ -352,18 +350,18 @@ class Dashboard extends Component {
     try {
       var userIds =
         this.props.searchUserDetails.length > 0
-          ? this.props.searchUserDetails.map(member => member.member_id)
+          ? this.props.searchUserDetails.map((member) => member.member_id)
           : [];
       var searchData = {
         frequency: this.state.taskFrequency,
         start_date: getWeekFisrtDate(this.state.taskStartDate),
         user_id: userIds.join(","),
-        project_ids: this.props.searchProjectIds.join(",")
+        project_ids: this.props.searchProjectIds.join(","),
       };
       var taskRunningObj = {
         status: false,
         startOn: null,
-        taskId: ""
+        taskId: "",
       };
       var trackingEvent = null;
       const { data } = await get(
@@ -383,9 +381,9 @@ class Dashboard extends Component {
       taskRunningObj = generatedObj.taskRunningObj;
       trackingEvent = generatedObj.trackingEvent;
       var tasksUser = generatedObj.tasksUser;
-      var tasksResources = tasksUser.map(user => user.usersObj);
+      var tasksResources = tasksUser.map((user) => user.usersObj);
       var taskEvents = tasksUser
-        .map(user => user.tasks)
+        .map((user) => user.tasks)
         .flat(2)
         .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
     } catch (e) {
@@ -427,7 +425,7 @@ class Dashboard extends Component {
       taskId: taskRunningObj.taskId,
       startOn: taskRunningObj.startOn,
       trackingEvent: trackingEvent,
-      loadFireBase: true
+      loadFireBase: true,
     });
     this.createUserProjectList(this.state.projects, this.state.worksapceUsers);
     this.handleLoad(false);
@@ -440,18 +438,18 @@ class Dashboard extends Component {
     trackingEvent
   ) => {
     var trackingEvent = trackingEvent;
-    var tasksUser = sortedUsers.map(user => {
+    var tasksUser = sortedUsers.map((user) => {
       var usersObj = {
         id: user.id,
-        name: user.email === userData.email ? user.name + " (Me)" : user.name
+        name: user.email === userData.email ? user.name + " (Me)" : user.name,
       };
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
-        var task = dateWiseTasks.tasks.map(task => {
+        var task = dateWiseTasks.tasks.map((task) => {
           var tasksObj = this.createTaskObject(task, user, dateWiseTasks.date);
           if (user.id == userData.id && task.time_tracked.length > 0) {
             let runningTask = task.time_tracked
               .flat()
-              .find(ttt => ttt.status == "running");
+              .find((ttt) => ttt.status == "running");
             if (runningTask) {
               let taskStartOn = new Date(runningTask.start_time).getTime();
               // let taskStartOn = convertUTCToLocalDate(
@@ -460,7 +458,7 @@ class Dashboard extends Component {
               taskRunningObj = {
                 status: true,
                 startOn: taskStartOn,
-                taskId: tasksObj.id
+                taskId: tasksObj.id,
               };
               tasksObj["trackingStatus"] = "pause";
               tasksObj["startOn"] = taskStartOn;
@@ -469,7 +467,7 @@ class Dashboard extends Component {
           } else {
             let runningTask = task.time_tracked
               .flat()
-              .find(ttt => ttt.status == "running");
+              .find((ttt) => ttt.status == "running");
             if (runningTask) {
               let taskStartOn = new Date(runningTask.start_time).getTime();
               // let taskStartOn = convertUTCToLocalDate(
@@ -488,7 +486,7 @@ class Dashboard extends Component {
     return {
       taskRunningObj: taskRunningObj,
       trackingEvent: trackingEvent,
-      tasksUser: tasksUser
+      tasksUser: tasksUser,
     };
   };
 
@@ -514,7 +512,7 @@ class Dashboard extends Component {
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks
       ? task.date_formatted_time_tracks.find(
-          dateLog => dateLog.date == dateWiseTasksDate
+          (dateLog) => dateLog.date == dateWiseTasksDate
         )
       : null;
     return {
@@ -543,7 +541,7 @@ class Dashboard extends Component {
       priority: task.priority,
       status: task.status,
       trackingStatus: task.status == "completed" ? "completed" : "play",
-      startOn: null
+      startOn: null,
     };
   };
 
@@ -556,7 +554,7 @@ class Dashboard extends Component {
         projectList.push({
           value: project.name,
           project_id: project.id,
-          type: "project"
+          type: "project",
         });
       });
     }
@@ -568,13 +566,13 @@ class Dashboard extends Component {
           member_id: member.id,
           email: member.email,
           type: "member",
-          role: member.role
+          role: member.role,
         });
       });
     }
     var searchOptions = {
       members: memberList,
-      projects: projectList
+      projects: projectList,
     };
     this.props.setSearchOptions(searchOptions);
   };
@@ -613,7 +611,7 @@ class Dashboard extends Component {
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
         let dates = getMiddleDates(task.start_datetime, task.end_datetime);
-        let taskObjects = dates.map(date => {
+        let taskObjects = dates.map((date) => {
           return this.createTaskSyncObject(date, task, this.state.project);
         });
         var events = [this.state.events, ...taskObjects]
@@ -624,7 +622,7 @@ class Dashboard extends Component {
           border: "solid 1px #ffffff",
           taskName: "",
           project: null,
-          taskCategorie: ""
+          taskCategorie: "",
         });
         let start = moment(
           convertUTCToLocalDate(moment(task.start_datetime).format(FULL_DATE))
@@ -655,7 +653,7 @@ class Dashboard extends Component {
         this.setState({
           show: false,
           taskloader: false,
-          border: "solid 1px #ffffff"
+          border: "solid 1px #ffffff",
         });
       }
     }
@@ -680,7 +678,7 @@ class Dashboard extends Component {
         newTask: task,
         taskConfirmModal: false,
         backFromTaskEvent: true,
-        border: "solid 1px #ffffff"
+        border: "solid 1px #ffffff",
       });
     } catch (e) {
       this.setState({ show: false, border: "solid 1px #ffffff" });
@@ -721,17 +719,17 @@ class Dashboard extends Component {
         priority:
           this.state.taskPrioritie && this.state.taskPrioritie.name
             ? this.state.taskPrioritie.name
-            : "no_priority"
-      }
+            : "no_priority",
+      },
     };
     return taskData;
   };
 
-  onSelectSort = value => {
+  onSelectSort = (value) => {
     this.setState({ sort: value });
   };
 
-  handleLoad = value => {
+  handleLoad = (value) => {
     this.setState({ isLoading: value });
   };
 
@@ -767,17 +765,17 @@ class Dashboard extends Component {
           dateToError: "",
           timeFromError: "",
           timeToError: "",
-          categoryError: ""
-        }
+          categoryError: "",
+        },
       });
     } else {
-      var memberProjects = this.state.projects.filter(project =>
-        project.members.map(member => member.id).includes(this.state.userId)
+      var memberProjects = this.state.projects.filter((project) =>
+        project.members.map((member) => member.id).includes(this.state.userId)
       );
       let selected = {
         email: this.state.userEmail,
         id: this.state.userId,
-        name: this.state.userName
+        name: this.state.userName,
       };
       this.setState({
         setShow: true,
@@ -797,8 +795,8 @@ class Dashboard extends Component {
           dateToError: "",
           timeFromError: "",
           timeToError: "",
-          categoryError: ""
-        }
+          categoryError: "",
+        },
       });
     }
   };
@@ -808,7 +806,7 @@ class Dashboard extends Component {
       this.closeTaskModal();
     } else {
       this.setState({
-        show: false
+        show: false,
       });
     }
   };
@@ -851,16 +849,16 @@ class Dashboard extends Component {
         dateToError: "",
         timeFromError: "",
         timeToError: "",
-        categoryError: ""
+        categoryError: "",
       },
       taskloader: false,
       taskContacts: [],
       taskComments: null,
-      isStart: false
+      isStart: false,
     });
   };
 
-  handleDateFrom = date => {
+  handleDateFrom = (date) => {
     var errors = this.state.errors;
     errors["dateFromError"] = "";
     if (date > new Date()) {
@@ -868,20 +866,20 @@ class Dashboard extends Component {
       this.setState({
         dateFrom: date,
         dateTo: null,
-        errors: errors
+        errors: errors,
       });
     } else {
       this.setState({ dateFrom: date, errors: errors });
     }
   };
 
-  handleDateTo = date => {
+  handleDateTo = (date) => {
     var errors = this.state.errors;
     errors["dateToError"] = "";
     this.setState({ dateTo: date, errors: errors });
   };
 
-  handleTimeFrom = value => {
+  handleTimeFrom = (value) => {
     var errors = this.state.errors;
     errors["timeFromError"] = "";
     this.setState({
@@ -891,16 +889,16 @@ class Dashboard extends Component {
         value != null && value.format("HH:mm:ss") > this.state.timeTo
           ? null
           : this.state.timeTo,
-      validateTimefrom: value != null ? value.format("HH.mm") : null
+      validateTimefrom: value != null ? value.format("HH.mm") : null,
     });
   };
 
-  handleTimeTo = value => {
+  handleTimeTo = (value) => {
     var errors = this.state.errors;
     errors["timeToError"] = "";
     this.setState({
       timeTo: value != null ? value.format("HH:mm:ss") : null,
-      errors: errors
+      errors: errors,
     });
   };
 
@@ -951,34 +949,34 @@ class Dashboard extends Component {
         taskEvent["allTimeTracked"] = data.time_tracked;
         var taskEvent = this.state.taskEvent;
         this.setState({
-          taskEvent: taskEvent
+          taskEvent: taskEvent,
         });
       } catch (e) {}
       this.loadUserTask(this.state.workspaceId);
     }
   };
 
-  handleUserSelect = e => {
+  handleUserSelect = (e) => {
     const { name, value } = e.target;
     let userIdArr = [];
     userIdArr.push(value);
     this.setState({ [name]: userIdArr });
   };
 
-  handleMemberSelect = member => {
+  handleMemberSelect = (member) => {
     var errors = this.state.errors;
     errors["memberError"] = "";
     if (member) {
       this.setState({
         taskUser: [member.id],
         selectedMembers: [member],
-        errors: errors
+        errors: errors,
       });
     } else {
       this.setState({
         taskUser: [],
         selectedMembers: [],
-        errors: errors
+        errors: errors,
       });
     }
   };
@@ -1007,7 +1005,7 @@ class Dashboard extends Component {
   //   }
   // };
 
-  updateTaskComments = comments => {
+  updateTaskComments = (comments) => {
     this.setState({ taskComments: comments });
   };
 
@@ -1031,22 +1029,24 @@ class Dashboard extends Component {
   //   }
   // };
 
-  deleteComments = async comment => {
+  deleteComments = async (comment) => {
     try {
       const { data } = await del(`comment/${comment.id}`);
-      var taskComments = this.state.taskComments.filter(c => c.id !== data.id);
+      var taskComments = this.state.taskComments.filter(
+        (c) => c.id !== data.id
+      );
       this.setState({ taskComments: taskComments });
     } catch (e) {}
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     const { name, value } = e.target;
     var errors = this.state.errors;
     errors[`${name}Error`] = "";
     this.setState({ [name]: value, errors: errors });
   };
 
-  handleProjectSelect = option => {
+  handleProjectSelect = (option) => {
     let options = [];
     var memberIds = [];
     if (option) {
@@ -1059,18 +1059,18 @@ class Dashboard extends Component {
         // });
       } else {
         options = option.members.filter(
-          member => member.id === this.state.userId
+          (member) => member.id === this.state.userId
         );
       }
       options = Array.from(new Set(options.map(JSON.stringify))).map(
         JSON.parse
       );
-      memberIds = options.map(member => member.id);
+      memberIds = options.map((member) => member.id);
       memberIds = Array.from(new Set(memberIds));
-      var removedMembers = this.state.selectedMembers.filter(selecteMember =>
+      var removedMembers = this.state.selectedMembers.filter((selecteMember) =>
         memberIds.includes(selecteMember.id)
       );
-      var taskUsers = removedMembers.map(m => m.id);
+      var taskUsers = removedMembers.map((m) => m.id);
       var errors = this.state.errors;
       errors["projectError"] = "";
       this.setState({
@@ -1081,7 +1081,7 @@ class Dashboard extends Component {
         modalMemberSearchOptions: options,
         border: "solid 1px #9b9b9b",
         isBorder: false,
-        errors: errors
+        errors: errors,
       });
     } else {
       this.setState({
@@ -1089,7 +1089,7 @@ class Dashboard extends Component {
         selectedMembers: [],
         project: option,
         taskUser: [],
-        modalMemberSearchOptions: []
+        modalMemberSearchOptions: [],
       });
     }
   };
@@ -1105,7 +1105,7 @@ class Dashboard extends Component {
   };
 
   memberSearchOptions = (userId, projectId) => {
-    var projects = this.state.projects.filter(project =>
+    var projects = this.state.projects.filter((project) =>
       project.id === projectId
         ? projectId
         : this.state.newAddedProject
@@ -1114,7 +1114,7 @@ class Dashboard extends Component {
     );
     var members = projects.length > 0 ? projects[0].members : [];
     if (this.state.user.role === "member") {
-      members = members.filter(member => member.id === userId);
+      members = members.filter((member) => member.id === userId);
     }
     return members;
   };
@@ -1124,17 +1124,17 @@ class Dashboard extends Component {
     var endDate = new Date(endDate.replace(/-/g, "/"));
     let members = this.memberSearchOptions(memberId);
     var selectedMembers = this.state.users.filter(
-      member => memberId === member.id
+      (member) => memberId === member.id
     );
 
-    var memberProjects = this.state.projects.filter(project =>
-      project.members.map(member => member.id).includes(memberId)
+    var memberProjects = this.state.projects.filter((project) =>
+      project.members.map((member) => member.id).includes(memberId)
     );
-    var selecteMember = selectedMembers.map(member => {
+    var selecteMember = selectedMembers.map((member) => {
       return { email: member.email, id: member.id, name: member.name };
     });
     let newSelected = this.state.newAddedProject
-      ? this.state.newAddedProject.members.map(m => m.id).includes(memberId)
+      ? this.state.newAddedProject.members.map((m) => m.id).includes(memberId)
         ? selecteMember
         : []
       : selecteMember;
@@ -1181,13 +1181,13 @@ class Dashboard extends Component {
           dateToError: "",
           timeFromError: "",
           timeToError: "",
-          categoryError: ""
-        }
+          categoryError: "",
+        },
       });
     }
   };
 
-  isCurrentDateTask = startDate => {
+  isCurrentDateTask = (startDate) => {
     return (
       moment().format(DATE_FORMAT1) == moment(startDate).format(DATE_FORMAT1)
     );
@@ -1298,7 +1298,7 @@ class Dashboard extends Component {
     }
   };
 
-  convertUTCDateToLocalDate = date => {
+  convertUTCDateToLocalDate = (date) => {
     var newDate = new Date(
       date.getTime() + date.getTimezoneOffset() * 60 * 1000
     );
@@ -1309,17 +1309,17 @@ class Dashboard extends Component {
 
   editAddTaskDetails = async (taskId, event) => {
     let members = this.memberSearchOptions(event.resourceId, event.projectId);
-    var memberProjects = this.state.projects.filter(project =>
-      project.members.map(member => member.id).includes(event.resourceId)
+    var memberProjects = this.state.projects.filter((project) =>
+      project.members.map((member) => member.id).includes(event.resourceId)
     );
     var project = this.state.projects.filter(
-      project => project.id === event.projectId
+      (project) => project.id === event.projectId
     );
     var eventTasks = this.state.events.filter(
-      taskEvent => taskEvent.id === event.id
+      (taskEvent) => taskEvent.id === event.id
     );
-    var memberIds = eventTasks.map(filterEvent => filterEvent.resourceId);
-    var selectedMembers = this.state.users.filter(member =>
+    var memberIds = eventTasks.map((filterEvent) => filterEvent.resourceId);
+    var selectedMembers = this.state.users.filter((member) =>
       memberIds.includes(member.id)
     );
     var taskComments = null;
@@ -1348,7 +1348,7 @@ class Dashboard extends Component {
       var timeTracked = data.time_tracked;
       event["dateFormattedTimeTrack"] = data.date_formatted_time_tracks;
       event["allTimeTracked"] = data.time_tracked;
-      var taskPrioritie = PRIORITIES.find(opt => opt.name === data.priority);
+      var taskPrioritie = PRIORITIES.find((opt) => opt.name === data.priority);
     } catch (e) {}
     if (
       this.state.user.role === "admin" ||
@@ -1377,13 +1377,13 @@ class Dashboard extends Component {
         taskEvent: event,
         timeTracked: timeTracked,
         taskPrioritie: taskPrioritie,
-        taskComments: taskComments
+        taskComments: taskComments,
       });
     }
     this.loadTaskContackts(event.projectId);
   };
 
-  loadTaskContackts = async projectId => {
+  loadTaskContackts = async (projectId) => {
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects/${projectId}/contact`
@@ -1396,17 +1396,17 @@ class Dashboard extends Component {
     this.setState({
       showInfo: false,
       show: true,
-      fromInfoEdit: true
+      fromInfoEdit: true,
     });
   };
 
-  confirmModal = modal => {
+  confirmModal = (modal) => {
     if (modal != "") {
       this.setState({
         confirmModalText: modal,
         showInfo: false,
         taskConfirmModal: true,
-        show: false
+        show: false,
       });
     }
   };
@@ -1416,7 +1416,7 @@ class Dashboard extends Component {
       showInfo: true,
       taskConfirmModal: false,
       show: false,
-      backFromTaskEvent: true
+      backFromTaskEvent: true,
     });
   };
 
@@ -1431,8 +1431,8 @@ class Dashboard extends Component {
       ) {
         var searchData = {
           task: {
-            status: "completed"
-          }
+            status: "completed",
+          },
         };
         if (this.state.logTimeFrom && this.state.logTimeTo) {
           var startDateTime =
@@ -1454,7 +1454,7 @@ class Dashboard extends Component {
           this.handleTaskStop(event, Date.now());
         }
         if (contacts.length > 0) {
-          let contactIds = contacts.map(contact => contact.id);
+          let contactIds = contacts.map((contact) => contact.id);
           searchData.task["contact_ids"] = contactIds.join(",");
         }
         let taskId = event.id.split("-")[0];
@@ -1465,9 +1465,9 @@ class Dashboard extends Component {
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
           );
           var events = this.state.events;
-          var filterEvents = events.filter(e => e.taskId != event.taskId);
-          var updateEvents = events.filter(e => e.taskId == event.taskId);
-          updateEvents.forEach(event => {
+          var filterEvents = events.filter((e) => e.taskId != event.taskId);
+          var updateEvents = events.filter((e) => e.taskId == event.taskId);
+          updateEvents.forEach((event) => {
             event["timeTracked"] = data.task.time_tracked;
             event["status"] = "completed";
             event["trackingStatus"] = "completed";
@@ -1479,7 +1479,7 @@ class Dashboard extends Component {
             taskConfirmModal: false,
             backFromTaskEvent: true,
             showInfo: true,
-            taskloader: false
+            taskloader: false,
           });
         } catch (e) {}
       } else {
@@ -1488,7 +1488,7 @@ class Dashboard extends Component {
             ? ""
             : "please select time from",
           logTimeToError: this.state.logTimeTo ? "" : "please select time to",
-          taskloader: false
+          taskloader: false,
         });
       }
     }
@@ -1503,7 +1503,7 @@ class Dashboard extends Component {
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
       );
       var events = this.state.events;
-      var event = events.find(e => e.id == event.id);
+      var event = events.find((e) => e.id == event.id);
       event["timeTracked"] = data.task.time_tracked;
       event["status"] = data.task.status;
       event["trackingStatus"] = data.task.status == "completed" ? "" : "play";
@@ -1513,7 +1513,7 @@ class Dashboard extends Component {
         taskConfirmModal: false,
         backFromTaskEvent: true,
         showInfo: true,
-        taskloader: false
+        taskloader: false,
       });
     } catch (e) {
       this.setState({ taskloader: false });
@@ -1521,11 +1521,11 @@ class Dashboard extends Component {
   };
 
   validCrossMove = (resourceId, event) => {
-    let project = this.state.projects.find(p => p.id === event.projectId);
-    return project && project.members.map(m => m.id).includes(resourceId);
+    let project = this.state.projects.find((p) => p.id === event.projectId);
+    return project && project.members.map((m) => m.id).includes(resourceId);
   };
 
-  taskDelete = async event => {
+  taskDelete = async (event) => {
     if (event) {
       let taskId = event.id.split("-")[0];
       this.setState({ taskloader: true });
@@ -1533,14 +1533,14 @@ class Dashboard extends Component {
         const { data } = await del(
           `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
         );
-        var events = this.state.events.filter(e => e.taskId != event.taskId);
+        var events = this.state.events.filter((e) => e.taskId != event.taskId);
         this.setState({
           events: events,
           taskEvent: "",
           taskConfirmModal: false,
           backFromTaskEvent: false,
           showInfo: false,
-          taskloader: false
+          taskloader: false,
         });
         if (
           this.state.status &&
@@ -1548,7 +1548,7 @@ class Dashboard extends Component {
         ) {
           this.setState({
             status: false,
-            trackingEvent: null
+            trackingEvent: null,
           });
         }
         this.closeTaskModal();
@@ -1565,11 +1565,11 @@ class Dashboard extends Component {
             />,
             {
               autoClose: 2000,
-              position: toast.POSITION.TOP_CENTER
+              position: toast.POSITION.TOP_CENTER,
             }
           );
           let self = this;
-          setTimeout(function() {
+          setTimeout(function () {
             self.setState({ taskloader: false });
           }, 2000);
         }
@@ -1577,10 +1577,10 @@ class Dashboard extends Component {
     }
   };
 
-  taskResume = event => {
+  taskResume = (event) => {
     if (event) {
       let searchData = {
-        status: "running"
+        status: "running",
       };
       this.updateTaskEvent(event, searchData);
     }
@@ -1638,31 +1638,36 @@ class Dashboard extends Component {
   // };
 
   taskEventResumeConfirm = (event, modalText) => {
-    this.setState({
-      dateFrom: new Date(event.start),
-      dateTo: new Date(event.end),
-      taskId: event.id,
-      taskName: event.title,
-      projectId: event.projectId,
-      project: { name: event.projectName, color_code: event.bgColor },
-      comments: event.comments,
-      taskConfirmModal: true,
-      backFromTaskEvent: false,
-      taskEvent: event,
-      confirmModalText: modalText
-    });
-    if (modalText === "mark as completed") {
-      this.loadTaskContackts(event.projectId);
+    debugger;
+    if (modalText == "edit") {
+      this.editAddTaskDetails(event.taskId, event);
+    } else {
+      this.setState({
+        dateFrom: new Date(event.start),
+        dateTo: new Date(event.end),
+        taskId: event.id,
+        taskName: event.title,
+        projectId: event.projectId,
+        project: { name: event.projectName, color_code: event.bgColor },
+        comments: event.comments,
+        taskConfirmModal: true,
+        backFromTaskEvent: false,
+        taskEvent: event,
+        confirmModalText: modalText,
+      });
+      if (modalText === "mark as completed") {
+        this.loadTaskContackts(event.projectId);
+      }
     }
   };
 
-  handleCategoryChange = option => {
+  handleCategoryChange = (option) => {
     var errors = this.state.errors;
     errors["categoryError"] = "";
     this.setState({ taskCategorie: option, errors: errors });
   };
 
-  handlePrioritiesChange = option => {
+  handlePrioritiesChange = (option) => {
     this.setState({ taskPrioritie: option });
   };
 
@@ -1675,7 +1680,7 @@ class Dashboard extends Component {
         // let newDateTime = moment(d + " " + t);
         var taskDate = {
           start_time: new Date(dateTime),
-          status: "running"
+          status: "running",
         };
         try {
           const { data } = await post(
@@ -1683,18 +1688,18 @@ class Dashboard extends Component {
             `tasks/${taskId}/start-tracking`
           );
           var events = this.state.events;
-          var filterEvents = events.filter(event => event.taskId === taskId);
-          filterEvents.forEach(event => {
+          var filterEvents = events.filter((event) => event.taskId === taskId);
+          filterEvents.forEach((event) => {
             event["trackingStatus"] = "pause";
             event["startOn"] = dateTime;
           });
-          var event = filterEvents.find(dd => dd.id == eventTask.id);
+          var event = filterEvents.find((dd) => dd.id == eventTask.id);
           this.setState({
             status: true,
             startOn: dateTime,
             taskId: eventTask.id,
             trackingEvent: event,
-            events: events
+            events: events,
           });
         } catch (e) {}
       } else if (taskType === "stop") {
@@ -1703,15 +1708,15 @@ class Dashboard extends Component {
         // let newDateTime = moment(d + " " + t);
         var taskDate = {
           end_time: new Date(dateTime),
-          status: "stopped"
+          status: "stopped",
         };
         try {
           const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
           var events = this.state.events;
           var filterEvents = events.filter(
-            event => event.taskId === eventTask.taskId
+            (event) => event.taskId === eventTask.taskId
           );
-          filterEvents.forEach(event => {
+          filterEvents.forEach((event) => {
             var timeTracked = [...event.timeTracked, ...[data]];
             event["timeTracked"] = timeTracked;
             event["startOn"] = null;
@@ -1721,7 +1726,7 @@ class Dashboard extends Component {
           this.setState({
             events: events,
             timeTracked: infoTimeTrackLog,
-            trackingEvent: null
+            trackingEvent: null,
           });
         } catch (e) {}
       }
@@ -1741,7 +1746,7 @@ class Dashboard extends Component {
       var taskId = eventTask.id.split("-")[0];
       var taskDate = {
         start_time: new Date(dateTime),
-        status: "running"
+        status: "running",
       };
       try {
         const { data } = await post(taskDate, `tasks/${taskId}/start-tracking`);
@@ -1756,20 +1761,20 @@ class Dashboard extends Component {
         //     event["status"] = "running";
         //   });
         // }
-        var filterEvents = events.filter(event => event.taskId == taskId);
-        filterEvents.forEach(event => {
+        var filterEvents = events.filter((event) => event.taskId == taskId);
+        filterEvents.forEach((event) => {
           event["trackingStatus"] = "pause";
           event["startOn"] = dateTime;
           event["status"] = "running";
         });
-        var event = filterEvents.find(dd => dd.id == eventTask.id);
+        var event = filterEvents.find((dd) => dd.id == eventTask.id);
         this.setState({
           status: true,
           startOn: dateTime,
           taskId: eventTask.id,
           trackingEvent: event,
           events: events,
-          isPlayPause: false
+          isPlayPause: false,
         });
       } catch (e) {}
     }
@@ -1780,15 +1785,15 @@ class Dashboard extends Component {
       var taskId = eventTask.id.split("-")[0];
       var taskDate = {
         end_time: new Date(dateTime),
-        status: "stopped"
+        status: "stopped",
       };
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
         var events = this.state.events;
         var filterEvents = events.filter(
-          event => event.taskId == eventTask.taskId
+          (event) => event.taskId == eventTask.taskId
         );
-        filterEvents.forEach(event => {
+        filterEvents.forEach((event) => {
           var timeTracked = [...event.timeTracked, ...[data]];
           event["timeTracked"] = timeTracked;
           event["startOn"] = null;
@@ -1800,23 +1805,23 @@ class Dashboard extends Component {
           status: false,
           events: events,
           timeTracked: infoTimeTrackLog,
-          trackingEvent: null
+          trackingEvent: null,
         });
       } catch (e) {}
     }
   };
 
-  handleLogTimeFrom = value => {
+  handleLogTimeFrom = (value) => {
     this.setState({
       logTimeFrom: value,
-      logTimeFromError: ""
+      logTimeFromError: "",
     });
   };
 
-  handleLogTimeTo = value => {
+  handleLogTimeTo = (value) => {
     this.setState({
       logTimeTo: value,
-      logTimeToError: ""
+      logTimeToError: "",
     });
   };
 
@@ -1825,12 +1830,12 @@ class Dashboard extends Component {
     this.updateTask({ task: data }, taskId, event.projectId);
   };
 
-  toggleTaskStartState = e => {
+  toggleTaskStartState = (e) => {
     var checked = e.target.checked;
     this.setState({ isStart: checked });
   };
 
-  addCategory = async categoryName => {
+  addCategory = async (categoryName) => {
     if (categoryName != "") {
       try {
         const { data } = await post(
@@ -1840,12 +1845,12 @@ class Dashboard extends Component {
         var taskCategory = data;
         toast(<DailyPloyToast message="Category Added" status="success" />, {
           autoClose: 2000,
-          position: toast.POSITION.TOP_CENTER
+          position: toast.POSITION.TOP_CENTER,
         });
         var newTaskCategories = [...this.state.taskCategories, taskCategory];
         this.setState({
           taskCategories: newTaskCategories,
-          taskCategorie: taskCategory
+          taskCategorie: taskCategory,
         });
       } catch (e) {
         if (e.response && e.response.status === 400) {
@@ -1863,7 +1868,7 @@ class Dashboard extends Component {
               />,
               {
                 autoClose: 2000,
-                position: toast.POSITION.TOP_CENTER
+                position: toast.POSITION.TOP_CENTER,
               }
             );
           }
@@ -1872,21 +1877,21 @@ class Dashboard extends Component {
     }
   };
 
-  updateTaskEventLogTime = taskLog => {
+  updateTaskEventLogTime = (taskLog) => {
     var taskEvent = this.state.taskEvent;
-    var taskLogs = taskEvent.timeTracked.filter(l => l.id != taskLog.id);
+    var taskLogs = taskEvent.timeTracked.filter((l) => l.id != taskLog.id);
     let newlogs = [...taskLogs, taskLog];
     taskEvent["timeTracked"] = newlogs;
     this.setState({ taskEvent: taskEvent });
   };
 
-  manageProjectListing = project => {
+  manageProjectListing = (project) => {
     project["owner"] = { name: `${this.state.userName}` };
     var filterdProjects = [...this.state.projects, ...[project]];
     this.setState({
       projects: filterdProjects,
       // modalMemberSearchOptions: [],
-      newAddedProject: project
+      newAddedProject: project,
     });
   };
 
@@ -1900,20 +1905,20 @@ class Dashboard extends Component {
     this.handleTaskUpdate(workspaceId);
   }
 
-  handleTaskCreate = async workspaceId => {
+  handleTaskCreate = async (workspaceId) => {
     base
       .database()
       .ref(`task_created/${workspaceId}`)
-      .on("child_added", snap => {
+      .on("child_added", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
-          !this.state.events.map(task => task.taskId).includes(snap.val().id)
+          !this.state.events.map((task) => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
           let dates = getMiddleDates(task.start_datetime, task.end_datetime);
-          let taskObjects = dates.map(date => {
+          let taskObjects = dates.map((date) => {
             return this.createTaskSyncObject(date, task);
           });
           var events = [this.state.events, ...taskObjects].flat();
@@ -1925,37 +1930,37 @@ class Dashboard extends Component {
       });
   };
 
-  handleTaskDelete = async workspaceId => {
+  handleTaskDelete = async (workspaceId) => {
     base
       .database()
       .ref(`task_deleted/${workspaceId}`)
-      .on("child_added", snap => {
+      .on("child_added", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
-          this.state.events.map(task => task.taskId).includes(snap.val().id)
+          this.state.events.map((task) => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
           let events = this.state.events.filter(
-            event => event.taskId != task.id
+            (event) => event.taskId != task.id
           );
           this.setState({ events: events });
         }
       });
   };
 
-  handleTaskSyncTracking = async workspaceId => {
+  handleTaskSyncTracking = async (workspaceId) => {
     base
       .database()
       .ref(`task_status/${workspaceId}`)
-      .on("child_added", snap => {
+      .on("child_added", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
           !this.state.events
-            .map(task => task.taskId)
+            .map((task) => task.taskId)
             .includes(snap.val().task_id)
         ) {
           this.loadUserTask(workspaceId);
@@ -1965,23 +1970,23 @@ class Dashboard extends Component {
     base
       .database()
       .ref(`task_status/${workspaceId}`)
-      .on("child_changed", snap => {
+      .on("child_changed", (snap) => {
         this.loadUserTask(workspaceId);
       });
   };
 
-  loadUserTask = async workspaceId => {
+  loadUserTask = async (workspaceId) => {
     if (this.state.workspaceId) {
       try {
         var userIds =
           this.props.searchUserDetails.length > 0
-            ? this.props.searchUserDetails.map(member => member.member_id)
+            ? this.props.searchUserDetails.map((member) => member.member_id)
             : [];
         var searchData = {
           frequency: this.state.taskFrequency,
           start_date: getFisrtDate(this.state.taskStartDate),
           user_id: userIds.join(","),
-          project_ids: this.props.searchProjectIds.join(",")
+          project_ids: this.props.searchProjectIds.join(","),
         };
         const { data } = await get(
           `workspaces/${workspaceId}/user_tasks`,
@@ -1997,7 +2002,7 @@ class Dashboard extends Component {
         var taskRunningObj = {
           status: false,
           startOn: null,
-          taskId: ""
+          taskId: "",
         };
         var trackingEvent = this.state.trackingEvent;
         let generatedObj = this.generateTaskObject(
@@ -2005,7 +2010,7 @@ class Dashboard extends Component {
           {
             id: this.state.userId,
             name: this.state.userName,
-            email: this.state.userEmail
+            email: this.state.userEmail,
           },
           taskRunningObj,
           trackingEvent
@@ -2013,9 +2018,9 @@ class Dashboard extends Component {
         taskRunningObj = generatedObj.taskRunningObj;
         trackingEvent = generatedObj.trackingEvent;
         var tasksUser = generatedObj.tasksUser;
-        var tasksResources = tasksUser.map(user => user.usersObj);
+        var tasksResources = tasksUser.map((user) => user.usersObj);
         var taskEvents = tasksUser
-          .map(user => user.tasks)
+          .map((user) => user.tasks)
           .flat(2)
           .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
 
@@ -2025,7 +2030,7 @@ class Dashboard extends Component {
           status: taskRunningObj.status,
           taskId: taskRunningObj.taskId,
           startOn: taskRunningObj.startOn,
-          trackingEvent: trackingEvent
+          trackingEvent: trackingEvent,
         });
       } catch (e) {}
     }
@@ -2079,7 +2084,7 @@ class Dashboard extends Component {
       priority: task.priority,
       status: task.status,
       trackingStatus: "play",
-      startOn: null
+      startOn: null,
     };
   };
 
@@ -2107,7 +2112,7 @@ class Dashboard extends Component {
     let sortedTime = moment(created).format("HH.mm");
 
     let newTaskId = task.id + "-" + date;
-    let event = this.state.events.find(e => e.id == newTaskId);
+    let event = this.state.events.find((e) => e.id == newTaskId);
     return {
       date: date,
       id: newTaskId,
@@ -2131,27 +2136,27 @@ class Dashboard extends Component {
       priority: task.priority,
       status: task.status,
       trackingStatus: task.status == "completed" ? "check" : "play",
-      startOn: null
+      startOn: null,
     };
   };
 
-  handleTaskUpdate = async workspaceId => {
+  handleTaskUpdate = async (workspaceId) => {
     base
       .database()
       .ref(`task_update/${workspaceId}`)
-      .on("child_added", snap => {
+      .on("child_added", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
-          this.state.events.map(task => task.taskId).includes(snap.val().id)
+          this.state.events.map((task) => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
           let dates = getMiddleDates(task.start_datetime, task.end_datetime);
           let events = this.state.events.filter(
-            event => event.taskId != task.id
+            (event) => event.taskId != task.id
           );
-          let taskObjects = dates.map(date => {
+          let taskObjects = dates.map((date) => {
             return this.updateTaskSyncObject(date, task);
           });
           var finalEvents = [events, ...taskObjects]
@@ -2164,19 +2169,19 @@ class Dashboard extends Component {
     base
       .database()
       .ref(`task_update/${workspaceId}`)
-      .on("child_changed", snap => {
+      .on("child_changed", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
-          this.state.events.map(task => task.taskId).includes(snap.val().id)
+          this.state.events.map((task) => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
           let dates = getMiddleDates(task.start_datetime, task.end_datetime);
           let events = this.state.events.filter(
-            event => event.taskId != task.id
+            (event) => event.taskId != task.id
           );
-          let taskObjects = dates.map(date => {
+          let taskObjects = dates.map((date) => {
             return this.updateTaskSyncObject(date, task);
           });
           var finalEvents = [events, ...taskObjects]
@@ -2189,17 +2194,17 @@ class Dashboard extends Component {
     base
       .database()
       .ref(`task_completed/${workspaceId}`)
-      .on("child_added", snap => {
+      .on("child_added", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
-          this.state.events.map(task => task.taskId).includes(snap.val().id)
+          this.state.events.map((task) => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
           var events = this.state.events;
-          var filterEvents = events.filter(event => event.taskId == task.id);
-          filterEvents.forEach(event => {
+          var filterEvents = events.filter((event) => event.taskId == task.id);
+          filterEvents.forEach((event) => {
             event["trackingStatus"] =
               task.status == "completed" ? "check" : "play";
             event["status"] = task.status;
@@ -2214,17 +2219,17 @@ class Dashboard extends Component {
     base
       .database()
       .ref(`task_completed/${workspaceId}`)
-      .on("child_changed", snap => {
+      .on("child_changed", (snap) => {
         if (
           snap.val() &&
           snap.val().id &&
           this.state.loadFireBase &&
-          this.state.events.map(task => task.taskId).includes(snap.val().id)
+          this.state.events.map((task) => task.taskId).includes(snap.val().id)
         ) {
           let task = snap.val();
           var events = this.state.events;
-          var filterEvents = events.filter(event => event.taskId == task.id);
-          filterEvents.forEach(event => {
+          var filterEvents = events.filter((event) => event.taskId == task.id);
+          filterEvents.forEach((event) => {
             event["trackingStatus"] =
               task.status == "completed" ? "check" : "play";
             event["status"] = task.status;
@@ -2352,6 +2357,7 @@ class Dashboard extends Component {
                 handleLogTimeFrom={this.handleLogTimeFrom}
                 handleLogTimeTo={this.handleLogTimeTo}
                 updateTaskEventLogTime={this.updateTaskEventLogTime}
+                timeTrackUpdate={this.timeTrackUpdate}
               />
             ) : null}
           </div>
