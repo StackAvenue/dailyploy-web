@@ -39,7 +39,9 @@ class ShowMembers extends Component {
       isDeleteShow: false,
       selectMemberArr: [],
       isAllChecked: false,
-      showConfirm: false
+      showConfirm: false,
+      showDeleteConfirm: false,
+      deleteMember: null,
     };
   }
   logout = async () => {
@@ -83,16 +85,16 @@ class ShowMembers extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`
       );
-      var userArr = data.members.map(user => user.email);
+      var userArr = data.members.map((user) => user.email);
       var worksapceUsers = data.members;
       var worksapceUser = data.members.find(
-        user => user.email === loggedInData.email
+        (user) => user.email === loggedInData.email
       );
       var memberArr = data.members.filter(
-        user => user.email !== loggedInData.email
+        (user) => user.email !== loggedInData.email
       );
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email
+        (user) => user.email !== loggedInData.email
       );
       this.props.handleLoading(false);
     } catch (e) {
@@ -110,7 +112,7 @@ class ShowMembers extends Component {
       userRole: worksapceUser ? worksapceUser.role : null,
       worksapceUsers: worksapceUsers,
       worksapceUser: worksapceUser,
-      members: memberArr
+      members: memberArr,
     });
     this.createUserProjectList();
   }
@@ -123,7 +125,7 @@ class ShowMembers extends Component {
     ) {
       var userIds =
         this.props.searchUserDetails.length > 0
-          ? this.props.searchUserDetails.map(member => member.member_id)
+          ? this.props.searchUserDetails.map((member) => member.member_id)
           : [];
       var searchData = {};
       if (userIds.length > 0) {
@@ -137,10 +139,10 @@ class ShowMembers extends Component {
           `workspaces/${this.state.workspaceId}/members`,
           searchData
         );
-        var userArr = data.members.map(user => user.email);
+        var userArr = data.members.map((user) => user.email);
         var worksapceUsers = data.members;
         var memberArr = data.members.filter(
-          user => user.email !== this.state.userEmail
+          (user) => user.email !== this.state.userEmail
         );
       } catch (e) {
         console.log("users Error", e);
@@ -149,7 +151,7 @@ class ShowMembers extends Component {
       this.setState({
         users: userArr,
         worksapceUsers: worksapceUsers,
-        members: memberArr
+        members: memberArr,
       });
     }
   }
@@ -159,7 +161,7 @@ class ShowMembers extends Component {
     this.setState({ workspaceId: workspaceId });
   };
 
-  onSelectSort = value => {
+  onSelectSort = (value) => {
     this.setState({ sort: value });
   };
 
@@ -177,14 +179,14 @@ class ShowMembers extends Component {
   //   const value = e.target.checked;
   // };
 
-  displayProjects = projects => {
-    let arr = projects.map(project => project.name);
+  displayProjects = (projects) => {
+    let arr = projects.map((project) => project.name);
     let projectShow = arr.length > 1 ? arr[0] + ", " + arr[1] : arr[0];
     return projectShow;
   };
 
-  countProject = projects => {
-    let arr = projects.map(project => project.name);
+  countProject = (projects) => {
+    let arr = projects.map((project) => project.name);
     let count;
     if (arr.length > 2) {
       count = arr.length - 2;
@@ -207,7 +209,7 @@ class ShowMembers extends Component {
 
   handleClose = () => {
     this.setState({
-      show: false
+      show: false,
     });
   };
 
@@ -220,14 +222,14 @@ class ShowMembers extends Component {
       memberEmail: member.email,
       memberRole: member.role,
       memberHours: member.working_hours,
-      memberProjects: member.projects
+      memberProjects: member.projects,
     });
   };
 
-  editMemberHandleChange = e => {
+  editMemberHandleChange = (e) => {
     const { name, value } = e.target;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -235,7 +237,7 @@ class ShowMembers extends Component {
     var roleId = this.state.memberRole === "admin" ? 1 : 2;
     const editMemberData = {
       role_id: roleId,
-      working_hours: Number(this.state.memberHours)
+      working_hours: Number(this.state.memberHours),
     };
     this.setState({ isLoading: true });
     try {
@@ -245,14 +247,14 @@ class ShowMembers extends Component {
       );
       this.setState({
         show: false,
-        isLoading: false
+        isLoading: false,
       });
     } catch (e) {
       console.log("error", e);
     }
   };
 
-  handleSearchFilterResult = data => {
+  handleSearchFilterResult = (data) => {
     var searchUserDetails = [];
     var projectIds = [];
     {
@@ -266,7 +268,7 @@ class ShowMembers extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails
+      searchUserDetails: searchUserDetails,
     });
   };
 
@@ -280,7 +282,7 @@ class ShowMembers extends Component {
             value: project.name,
             project_id: project.id,
             type: "project",
-            id: (index += 1)
+            id: (index += 1),
           });
         });
       }
@@ -292,20 +294,19 @@ class ShowMembers extends Component {
           member_id: member.id,
           email: member.email,
           type: "member",
-          role: member.role
+          role: member.role,
         });
       });
     }
     var searchOptions = {
       members: memberList,
-      projects: projectList
+      projects: projectList,
     };
-    console.log("searchOptions", searchOptions);
     this.setState({ searchOptions: searchOptions });
     this.props.setSearchOptions(searchOptions);
   };
 
-  handleLoad = value => {
+  handleLoad = (value) => {
     this.setState({ isLoading: value });
   };
 
@@ -334,7 +335,7 @@ class ShowMembers extends Component {
     }
     this.setState({
       selectMemberArr: arrProject,
-      isAllChecked: allCheckboxChecked
+      isAllChecked: allCheckboxChecked,
     });
   };
 
@@ -345,7 +346,7 @@ class ShowMembers extends Component {
       arrProject = [...this.state.selectMemberArr, ...[project]];
     } else {
       let filterProjectArr = this.state.selectMemberArr.filter(
-        item => item.id !== project.id
+        (item) => item.id !== project.id
       );
       arrProject = filterProjectArr;
     }
@@ -356,15 +357,15 @@ class ShowMembers extends Component {
     this.setState({ showConfirm: true });
   };
 
-  deleteMembers = async e => {
-    let memberIds = this.state.selectMemberArr.map(m => m.id).join(",");
+  deleteMembers = async (e) => {
+    let memberIds = this.state.selectMemberArr.map((m) => m.id).join(",");
     if (memberIds != "") {
       try {
         const { data } = await del(
           `workspaces/${this.state.workspaceId}/members?ids=${memberIds}`
         );
         let members = this.state.members.filter(
-          m => !this.state.selectMemberArr.includes(m)
+          (m) => !this.state.selectMemberArr.includes(m)
         );
         toast(
           <DailyPloyToast
@@ -376,7 +377,7 @@ class ShowMembers extends Component {
         this.setState({
           showConfirm: false,
           members: members,
-          selectMemberArr: []
+          selectMemberArr: [],
         });
       } catch (e) {
         toast(
@@ -410,6 +411,48 @@ class ShowMembers extends Component {
     }
   };
 
+  deleteMember = async () => {
+    if (this.state.deleteMember) {
+      let memberId = this.state.deleteMember.id;
+      try {
+        const { data } = await del(
+          `workspaces/${this.state.workspaceId}/members/${memberId}`
+        );
+        let members = this.state.members.filter((m) => m.id != memberId);
+        toast(
+          <DailyPloyToast
+            message="member Deleted Succesfully"
+            status="success"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+        this.setState({
+          members: members,
+          showDeleteConfirm: false,
+        });
+      } catch (e) {
+        toast(
+          <DailyPloyToast message="Something went wrong" status="error" />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
+      }
+    }
+  };
+
+  clickOnDeleteMember = (member) => {
+    this.setState({
+      deleteMember: member,
+      showDeleteConfirm: true,
+    });
+  };
+
+  closeDeleteConfirmModal = () => {
+    this.setState({
+      showDeleteConfirm: false,
+      deleteMember: null,
+    });
+  };
+
   render() {
     var userRole = localStorage.getItem("userRole");
     var isShowMember = this.state.members.length > 0;
@@ -424,7 +467,7 @@ class ShowMembers extends Component {
         />
         {isShowMember ? (
           <div className="show-projects padding-top-60px">
-            <div className={`${userRole == "admin" ? "members" : ""}`}>
+            {/* <div className={`${userRole == "admin" ? "members" : ""}`}>
               <div className="row no-margin">
                 <div
                   className="col-md-2 d-inline-block no-padding"
@@ -438,7 +481,7 @@ class ShowMembers extends Component {
                         id={`styled-checkbox`}
                         type="checkbox"
                         name="chk[]"
-                        onChange={e =>
+                        onChange={(e) =>
                           this.handleCheckAll(e, this.state.members)
                         }
                       />
@@ -459,7 +502,7 @@ class ShowMembers extends Component {
                       <div className="d-inline-block">
                         <button
                           className="btn btn-primary delete-button"
-                          onClick={e => this.toggleShowConfirm()}
+                          onClick={(e) => this.toggleShowConfirm()}
                         >
                           Delete
                         </button>
@@ -471,7 +514,7 @@ class ShowMembers extends Component {
                   ) : null}
                 </div>
               </div>
-            </div>
+            </div> */}
             <table className="table">
               <thead>
                 <tr>
@@ -502,14 +545,14 @@ class ShowMembers extends Component {
                         className="text-titlize"
                         style={{ paddingLeft: "60px" }}
                       >
-                        <input
+                        {/* <input
                           className="styled-checkbox"
                           id={`styled-checkbox-${index}`}
                           type="checkbox"
                           name="isChecked"
-                          onChange={e => this.handleCheck(e, member)}
+                          onChange={(e) => this.handleCheck(e, member)}
                         />
-                        <label htmlFor={`styled-checkbox-${index}`}></label>
+                        <label htmlFor={`styled-checkbox-${index}`}></label> */}
                         {member.name}
                       </td>
                       <td>{member.email}</td>
@@ -523,7 +566,9 @@ class ShowMembers extends Component {
                         <span
                           className="project-count"
                           style={{ pointer: "cursor" }}
-                          onMouseMove={e => this.countProjectView(e, member.id)}
+                          onMouseMove={(e) =>
+                            this.countProjectView(e, member.id)
+                          }
                         >
                           {this.countProject(member.projects)}
                         </span>
@@ -539,7 +584,7 @@ class ShowMembers extends Component {
                               </a>
                             </div>
                             <div className="project-body-box">
-                              {member.projects.map(project => (
+                              {member.projects.map((project) => (
                                 <div className="project-body-text">
                                   {project.name}
                                 </div>
@@ -559,9 +604,17 @@ class ShowMembers extends Component {
                       <td className={userRole === "member" ? "d-none" : null}>
                         <button
                           className="btn btn-link edit-btn"
-                          onClick={e => this.handleShow(e, member)}
+                          onClick={(e) => this.handleShow(e, member)}
+                          title="Edit"
                         >
                           <i className="fas fa-pencil-alt"></i>
+                        </button>
+                        <button
+                          className="btn btn-link edit-btn"
+                          onClick={(e) => this.clickOnDeleteMember(member)}
+                          title="Delete"
+                        >
+                          <i className="fas fa-trash"></i>
                         </button>
                         {this.state.show &&
                         this.state.projectShowMemberId === member.id ? (
@@ -595,6 +648,16 @@ class ShowMembers extends Component {
             closeModal={this.closeModal}
             buttonText="Delete"
             show={this.state.showConfirm}
+          />
+        ) : null}
+        {this.state.showDeleteConfirm ? (
+          <ConfirmModal
+            title="Delete Member"
+            message={`Are you sure you want to Delete this member ?`}
+            onClick={this.deleteMember}
+            closeModal={this.closeDeleteConfirmModal}
+            buttonText="Delete"
+            show={this.state.showDeleteConfirm}
           />
         ) : null}
       </>
