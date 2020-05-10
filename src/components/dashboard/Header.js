@@ -14,6 +14,8 @@ import { WORKSPACE_ID, FULL_DATE } from "./../../utils/Constants";
 import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
+import { base } from "../../../src/base";
+
 import {
   convertUTCToLocalDate,
   convertUTCDateToLocalDate,
@@ -40,16 +42,8 @@ class Header extends Component {
     if (!loggedInData) {
       try {
         let { data } = await get("logged_in_user");
-        let notificataionData = await get(
-          `users/${
-          loggedInData.id
-          }/notifications?workspace_id=${getWorkspaceId()}`
-        );
+        this.getNotifications(data.id);
         this.setState({
-          notifications:
-            notificataionData && notificataionData.data
-              ? notificataionData.data.notifications
-              : [],
           userId: data.id,
           userName: data.name,
           userEmail: data.email,
@@ -58,22 +52,42 @@ class Header extends Component {
         console.log("err", e);
       }
     } else {
-      let notificataionData = await get(
-        `users/${
-        loggedInData.id
-        }/notifications?workspace_id=${getWorkspaceId()}`
-      );
+      this.getNotifications(loggedInData.id);
       this.setState({
-        notifications:
-          notificataionData && notificataionData.data
-            ? notificataionData.data.notifications
-            : [],
         userId: loggedInData.id,
         userName: loggedInData.name,
         userEmail: loggedInData.email,
       });
     }
   }
+
+  async getNotifications(useId) {
+    let notificataionData = await get(
+      `users/${
+      useId
+      }/notifications?workspace_id=${getWorkspaceId()}`
+    );
+    this.setState({
+      notifications:
+        notificataionData && notificataionData.data
+          ? notificataionData.data.notifications
+          : []
+    });
+  }
+
+  componentWillMount() {
+    var workspaceId = getWorkspaceId()
+    this.handleNotification(workspaceId);
+  }
+
+  handleNotification = async (workspaceId) => {
+    base
+      .database()
+      .ref(`notification/${workspaceId}`)
+      .on("child_changed", (snap) => {
+        this.getNotifications(this.state.userId)
+      });
+  };
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -274,7 +288,7 @@ class Header extends Component {
                                 style={{ fontSize: "48px", marginBottom: "8px" }}
                               ></i>
                             </div>
-                            <div>There is no notification for you</div>
+                            <div>There are no notifications for you</div>
                           </Dropdown.Item>
                         )}
                     </Dropdown.Menu>
