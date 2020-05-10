@@ -5,14 +5,21 @@ import { Dropdown } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import setting from "../../assets/images/setting.png";
 import "../../assets/css/dashboard.scss";
-import { get } from "../../utils/API";
+import { get, put } from "../../utils/API";
 import { firstTwoLetter } from "../../utils/function";
 import userImg from "../../assets/images/profile.png";
 import Member from "../../assets/images/member.png";
 import Admin from "../../assets/images/admin.png";
-import { WORKSPACE_ID } from "./../../utils/Constants";
+import { WORKSPACE_ID, FULL_DATE } from "./../../utils/Constants";
 import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
+import moment from "moment";
+import { base } from "../../../src/base";
+
+import {
+  convertUTCToLocalDate,
+  convertUTCDateToLocalDate,
+} from "./../../utils/function";
 
 class Header extends Component {
   constructor(props) {
@@ -25,7 +32,8 @@ class Header extends Component {
       userEmail: "",
       userRole: "",
       userId: "",
-      searchFlag: "My Reports"
+      searchFlag: "My Reports",
+      notifications: [],
     };
   }
 
@@ -33,23 +41,53 @@ class Header extends Component {
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
-        const { data } = await get("logged_in_user");
+        let { data } = await get("logged_in_user");
+        this.getNotifications(data.id);
         this.setState({
           userId: data.id,
           userName: data.name,
-          userEmail: data.email
+          userEmail: data.email,
         });
       } catch (e) {
         console.log("err", e);
       }
     } else {
+      this.getNotifications(loggedInData.id);
       this.setState({
         userId: loggedInData.id,
         userName: loggedInData.name,
-        userEmail: loggedInData.email
+        userEmail: loggedInData.email,
       });
     }
   }
+
+  async getNotifications(useId) {
+    let notificataionData = await get(
+      `users/${
+      useId
+      }/notifications?workspace_id=${getWorkspaceId()}`
+    );
+    this.setState({
+      notifications:
+        notificataionData && notificataionData.data
+          ? notificataionData.data.notifications
+          : []
+    });
+  }
+
+  componentWillMount() {
+    var workspaceId = getWorkspaceId()
+    this.handleNotification(workspaceId);
+  }
+
+  handleNotification = async (workspaceId) => {
+    base
+      .database()
+      .ref(`notification/${workspaceId}`)
+      .on("child_changed", (snap) => {
+        this.getNotifications(this.state.userId)
+      });
+  };
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -68,12 +106,34 @@ class Header extends Component {
     }
   }
 
+  readAllNotification = async () => {
+    if (this.state.notifications) {
+      let notification_ids = this.state.notifications.map((data) => {
+        return data.id;
+      });
+      let params = {
+        notification_ids: notification_ids,
+      };
+      try {
+        const { data } = await put(
+          params,
+          `users/${this.state.userId}/notifications/mark_all_as_read`
+        );
+        this.setState({
+          notifications: [],
+        });
+      } catch (e) {
+        console.log("error", e);
+      }
+    }
+  };
+
   closeSettingModal = () => {
     this.clickClose.current.click();
   };
 
-  textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function(a) {
+  textTitlize = (text) => {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
@@ -86,10 +146,14 @@ class Header extends Component {
     return false;
   };
 
-  toggleSearchBy = text => {
+  toggleSearchBy = (text) => {
     this.setState({
-      searchFlag: text
+      searchFlag: text,
     });
+  };
+
+  returnDaysAgo = (date) => {
+    return moment.utc(date).fromNow();
   };
 
   render() {
@@ -139,7 +203,7 @@ class Header extends Component {
                 id="navbarTogglerDemo03"
               >
                 <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-                  {/* <Dropdown>
+                  <Dropdown>
                     <Dropdown.Toggle
                       variant="link"
                       id="dropdown-basic"
@@ -147,76 +211,98 @@ class Header extends Component {
                     >
                       <i className="fas fa-bell" style={{ fontSize: "25px" }} />
                     </Dropdown.Toggle>
+                    {this.state.notifications &&
+                      this.state.notifications.length > 0 && (
+                        <div className="notification-icon right">
+                          <span className="num-count">
+                            {this.state.notifications.length}
+                          </span>
+                        </div>
+                      )}
 
                     <Dropdown.Menu className="dropdown-notification">
-                      <div className="col-md-12">
-                        <div className="col-md-6 notification-heading">
+                      <div
+                        className="col-md-12"
+                        style={{
+                          backgroundColor: "rgb(96, 190, 130)",
+                          // backgroundColor: "#28b458",
+                        }}
+                      >
+                        <div className="col-md-5 no-padding notification-heading">
                           Notifications
                         </div>
+                        {this.state.notifications &&
+                          this.state.notifications.length > 0 && (
+                            <div className="col-md-7 no-padding notification-heading sett-text">
+                              <span onClick={() => this.readAllNotification()}>
+                                Mark all as read
+                              </span>
+                              &nbsp;
+                            </div>
+                          )}
                       </div>
-                      <Dropdown.Item className="notification-box">
-                        <div className="row">
-                          <div className="col-md-1 no-padding">
-                            <div className="notification-img">
-                              <img
-                                alt={"userImg"}
-                                src={userImg}
-                                className="img-responsive"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-11">
-                            <div className="notification-text">
-                              Amit Shah added you to the project{" "}
-                              <span>
-                                Aviabird
+                      {this.state.notifications &&
+                        this.state.notifications.length > 0 ? (
+                          <div className="col-md-12 no-padding dropdown-scroll">
+                            {this.state.notifications.map((eachNotification) => {
+                              return (
+                                <Dropdown.Item className="notification-box">
+                                  <div className="row" style={{ width: "100%" }}>
+                                    {/* <div className="col-md-1 no-padding">
+                                      <div className="notification-img">
+                                        <img
+                                          alt={"userImg"}
+                                          src={userImg}
+                                          className="img-responsive"
+                                        />
+                                      </div>
+                                    </div> */}
+
+                                    <div className="col-md-12 no-padding notification-text wrap-text">
+                                      {eachNotification.data.message}
+                                      {/* <span>
+                                    Aviabird
                                 <br />
-                                Technologies
-                              </span>
-                            </div>
-                            <div className="col-md-12 no-padding notification-text text-right">
-                              <span>4h </span>
-                              Jan 19, 2019
-                            </div>
+                                    Technologies
+                              </span> */}
+                                    </div>
+                                    <div className="col-md-12 no-padding notification-text text-right">
+                                      <span>
+                                        {this.returnDaysAgo(
+                                          eachNotification.inserted_at
+                                        )}
+                                      </span>
+                                      {/* {eachNotification.inserted_at} */}
+                                    </div>
+                                  </div>
+                                </Dropdown.Item>
+                              );
+                            })}
                           </div>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="notification-box">
-                        <div className="row">
-                          <div className="col-md-1 no-padding">
-                            <div className="notification-img">
-                              <img
-                                alt={"userImg"}
-                                src={userImg}
-                                className="img-responsive"
-                              />
+                        ) : (
+                          <Dropdown.Item
+                            className="notification-box"
+                            style={{ height: "91%" }}
+                          >
+                            {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                            <div>
+                              <i
+                                class="fa fa-info-circle"
+                                style={{ fontSize: "48px", marginBottom: "8px" }}
+                              ></i>
                             </div>
-                          </div>
-                          <div className="col-md-11">
-                            <div className="notification-text">
-                              Amit Shah added you to the project{" "}
-                              <span>
-                                Aviabird
-                                <br />
-                                Technologies
-                              </span>
-                            </div>
-                            <div className="col-md-12 no-padding notification-text text-right">
-                              <span>4h </span>
-                              Jan 19, 2019
-                            </div>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
+                            <div>There are no notifications for you</div>
+                          </Dropdown.Item>
+                        )}
                     </Dropdown.Menu>
-                  </Dropdown> */}
+                  </Dropdown>
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
                       className={`header-auth-btn text-titlize ${
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                      } `}
+                        } `}
                       id="dropdown-basic"
                     >
                       {x}
@@ -228,7 +314,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                          } `}
+                            } `}
                         >
                           {x}
                         </div>

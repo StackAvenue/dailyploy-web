@@ -169,8 +169,8 @@ class Dashboard extends Component {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-            ? 1
-            : 0;
+              ? 1
+              : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -326,7 +326,7 @@ class Dashboard extends Component {
         `workspaces/${workspaceId}/members/${loggedInData.id}`
       );
       var user = data;
-    } catch (e) {}
+    } catch (e) { }
 
     // workspace Member Listing
     try {
@@ -344,7 +344,7 @@ class Dashboard extends Component {
     try {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
     // workspace Tasks Listing
     try {
@@ -512,8 +512,8 @@ class Dashboard extends Component {
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks
       ? task.date_formatted_time_tracks.find(
-          (dateLog) => dateLog.date == dateWiseTasksDate
-        )
+        (dateLog) => dateLog.date == dateWiseTasksDate
+      )
       : null;
     return {
       date: dateWiseTasksDate,
@@ -749,8 +749,8 @@ class Dashboard extends Component {
         modalMemberSearchOptions: this.state.newAddedProject
           ? this.state.newAddedProject.members
           : this.state.project
-          ? this.state.project.members
-          : members,
+            ? this.state.project.members
+            : members,
         project: this.state.newAddedProject
           ? this.state.newAddedProject
           : this.state.project,
@@ -951,7 +951,7 @@ class Dashboard extends Component {
         this.setState({
           taskEvent: taskEvent,
         });
-      } catch (e) {}
+      } catch (e) { }
       this.loadUserTask(this.state.workspaceId);
     }
   };
@@ -1036,7 +1036,7 @@ class Dashboard extends Component {
         (c) => c.id !== data.id
       );
       this.setState({ taskComments: taskComments });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   handleInputChange = (e) => {
@@ -1109,8 +1109,8 @@ class Dashboard extends Component {
       project.id === projectId
         ? projectId
         : this.state.newAddedProject
-        ? this.state.newAddedProject.id
-        : null
+          ? this.state.newAddedProject.id
+          : null
     );
     var members = projects.length > 0 ? projects[0].members : [];
     if (this.state.user.role === "member") {
@@ -1149,15 +1149,15 @@ class Dashboard extends Component {
           : this.state.project &&
             this.state.taskUser &&
             this.state.taskUser[0] == memberId
-          ? this.state.project
-          : null,
+            ? this.state.project
+            : null,
         projectId: this.state.newAddedProject
           ? this.state.newAddedProject.id
           : this.state.project &&
             this.state.taskUser &&
             this.state.taskUser[0] == memberId
-          ? this.state.project.id
-          : null,
+            ? this.state.project.id
+            : null,
         taskId: "",
         modalMemberSearchOptions: this.addTaskMembers(members, selecteMember),
         dateFrom: new Date(startDate),
@@ -1242,14 +1242,14 @@ class Dashboard extends Component {
       this.state.timeFrom &&
       !this.state.timeTo &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) !==
-        moment().format(DATE_FORMAT1)
+      moment().format(DATE_FORMAT1)
     ) {
       errors["timeToError"] = "please select time to";
     } else if (
       this.state.timeFrom &&
       !this.state.timeTo &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) ===
-        moment().format(DATE_FORMAT1)
+      moment().format(DATE_FORMAT1)
     ) {
       errors["timeToError"] = "";
     } else if (
@@ -1288,7 +1288,7 @@ class Dashboard extends Component {
       this.state.timeFrom != null &&
       this.state.timeTo == null &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) ===
-        moment().format(DATE_FORMAT1)
+      moment().format(DATE_FORMAT1)
     ) {
       return true;
     } else if (this.state.timeFrom == null && this.state.timeTo != null) {
@@ -1349,7 +1349,7 @@ class Dashboard extends Component {
       event["dateFormattedTimeTrack"] = data.date_formatted_time_tracks;
       event["allTimeTracked"] = data.time_tracked;
       var taskPrioritie = PRIORITIES.find((opt) => opt.name === data.priority);
-    } catch (e) {}
+    } catch (e) { }
     if (
       this.state.user.role === "admin" ||
       this.state.userId == event.resourceId
@@ -1389,7 +1389,7 @@ class Dashboard extends Component {
         `workspaces/${this.state.workspaceId}/projects/${projectId}/contact`
       );
       this.setState({ taskContacts: data.contacts });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   taskInfoEdit = () => {
@@ -1481,7 +1481,7 @@ class Dashboard extends Component {
             showInfo: true,
             taskloader: false,
           });
-        } catch (e) {}
+        } catch (e) { }
       } else {
         this.setState({
           logTimeFromError: this.state.logTimeFrom
@@ -1701,7 +1701,7 @@ class Dashboard extends Component {
             trackingEvent: event,
             events: events,
           });
-        } catch (e) {}
+        } catch (e) { }
       } else if (taskType === "stop") {
         // let d = moment(eventTask.start).format(DATE_FORMAT1);
         // let t = moment(dateTime).format(HHMMSS);
@@ -1728,7 +1728,7 @@ class Dashboard extends Component {
             timeTracked: infoTimeTrackLog,
             trackingEvent: null,
           });
-        } catch (e) {}
+        } catch (e) { }
       }
     }
   };
@@ -1776,7 +1776,7 @@ class Dashboard extends Component {
           events: events,
           isPlayPause: false,
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -1807,7 +1807,7 @@ class Dashboard extends Component {
           timeTracked: infoTimeTrackLog,
           trackingEvent: null,
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -1996,8 +1996,8 @@ class Dashboard extends Component {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-            ? 1
-            : 0;
+              ? 1
+              : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -2032,7 +2032,7 @@ class Dashboard extends Component {
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent,
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -2098,7 +2098,7 @@ class Dashboard extends Component {
       " " +
       moment(new Date(task.end_datetime)).format("HH:mm");
     // let sortedTime =
-    //   moment(convertUTCToLocalDate(task.start_datetime)).format("HH:mm") !=
+    //   moment(ut(task.start_datetime)).format("HH:mm") !=
     //   "00:00"
     //     ? moment(convertUTCToLocalDate(task.start_datetime)).format("HH.mm")
     //     : moment(task.inserted_at).format("HH.mm");
@@ -2246,7 +2246,7 @@ class Dashboard extends Component {
     this.setState({ [name]: value });
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   render() {
     return (
