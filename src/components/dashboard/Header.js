@@ -42,7 +42,7 @@ class Header extends Component {
         let { data } = await get("logged_in_user");
         let notificataionData = await get(
           `users/${
-          loggedInData.id
+            loggedInData.id
           }/notifications?workspace_id=${getWorkspaceId()}`
         );
         this.setState({
@@ -60,7 +60,7 @@ class Header extends Component {
     } else {
       let notificataionData = await get(
         `users/${
-        loggedInData.id
+          loggedInData.id
         }/notifications?workspace_id=${getWorkspaceId()}`
       );
       this.setState({
@@ -140,7 +140,7 @@ class Header extends Component {
 
   returnDaysAgo = (date) => {
     return moment.utc(date).fromNow();
-  }
+  };
 
   render() {
     const x = firstTwoLetter(this.props.loggedInUserName);
@@ -210,8 +210,8 @@ class Header extends Component {
                       <div
                         className="col-md-12"
                         style={{
-                          // backgroundColor: "#10b857",
-                          backgroundColor: "#28b458",
+                          backgroundColor: "rgb(96, 190, 130)",
+                          // backgroundColor: "#28b458",
                         }}
                       >
                         <div className="col-md-5 no-padding notification-heading">
@@ -221,20 +221,20 @@ class Header extends Component {
                           this.state.notifications.length > 0 && (
                             <div className="col-md-7 no-padding notification-heading sett-text">
                               <span onClick={() => this.readAllNotification()}>
-                                Mark All as Read
+                                Mark all as read
                               </span>
                               &nbsp;
                             </div>
                           )}
                       </div>
                       {this.state.notifications &&
-                        this.state.notifications.length > 0 ? (
-                          <div>
-                            {this.state.notifications.map((eachNotification) => {
-                              return (
-                                <Dropdown.Item className="notification-box">
-                                  <div className="row">
-                                    <div className="col-md-1 no-padding">
+                      this.state.notifications.length > 0 ? (
+                        <div className="col-md-12 no-padding dropdown-scroll">
+                          {this.state.notifications.map((eachNotification) => {
+                            return (
+                              <Dropdown.Item className="notification-box">
+                                <div className="row" style={{ width: "100%" }}>
+                                  {/* <div className="col-md-1 no-padding">
                                       <div className="notification-img">
                                         <img
                                           alt={"userImg"}
@@ -242,41 +242,44 @@ class Header extends Component {
                                           className="img-responsive"
                                         />
                                       </div>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="notification-text">
-                                      {eachNotification.data.message}
-                                      {/* <span>
+                                  <div className="col-md-12 no-padding notification-text wrap-text">
+                                    {eachNotification.data.message}
+                                    {/* <span>
                                     Aviabird
                                 <br />
                                     Technologies
                               </span> */}
-                                    </div>
-                                    <div className="col-md-12 no-padding notification-text text-right">
-                                      <span>
-                                        {this.returnDaysAgo(
-                                          eachNotification.inserted_at
-                                        )}
-                                      </span>
-                                      {/* {eachNotification.inserted_at} */}
-                                    </div>
                                   </div>
-                                </Dropdown.Item>
-                              );
-                            })}
+                                  <div className="col-md-12 no-padding notification-text text-right">
+                                    <span>
+                                      {this.returnDaysAgo(
+                                        eachNotification.inserted_at
+                                      )}
+                                    </span>
+                                    {/* {eachNotification.inserted_at} */}
+                                  </div>
+                                </div>
+                              </Dropdown.Item>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <Dropdown.Item
+                          className="notification-box"
+                          style={{ height: "91%" }}
+                        >
+                          {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                          <div>
+                            <i
+                              class="fa fa-info-circle"
+                              style={{ fontSize: "48px", marginBottom: "8px" }}
+                            ></i>
                           </div>
-                        ) : (
-                          <Dropdown.Item className="notification-box">
-                            {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
-                            <div>
-                              <i
-                                class="fa fa-info-circle"
-                                style={{ fontSize: "48px", marginBottom: "8px" }}
-                              ></i>
-                            </div>
-                            <div>There is no notification for you</div>
-                          </Dropdown.Item>
-                        )}
+                          <div>There is no notification for you</div>
+                        </Dropdown.Item>
+                      )}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
@@ -285,7 +288,7 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
+                      } `}
                       id="dropdown-basic"
                     >
                       {x}
@@ -297,7 +300,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}
+                          } `}
                         >
                           {x}
                         </div>
