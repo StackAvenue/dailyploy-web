@@ -13,6 +13,12 @@
 .display-flex {
   display: flex !important;
 }
+.wrap-text{
+  width: 100%;
+  overflow: hidden;
+  white-space: initial;
+  text-align: justify;
+}
 
 .dashbaord-header-bg {
   background-color: $color-header !important;
@@ -130,6 +136,11 @@
     }
   }
 
+  .dropdown-scroll{
+    overflow-y: scroll !important;
+    height: 100%;
+  }
+
   .notification-icon{
     position: relative;
     margin-right: 1em;
@@ -168,8 +179,10 @@
     background-color: $color-white !important;
     transform: translate3d(-145px, 48px, 0px) !important;
     padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    // overflow-y: scroll !important;
     .notification-heading {
-      color: $color-text2 !important;
+      color: #000000 !important;
       font-family: $font-family-roboto !important;
       font-size: 16px !important;
       font-weight: bold;
@@ -179,12 +192,13 @@
     }
     .sett-text{
       text-align: end;
+      cursor: pointer;
     }
 
     .notification-box {
       // height: 61px;
-      height: 50%;
-
+      // height: 91%;  
+      overflow-y: hidden;
       background-color: $color-background;
       border-bottom: 1px solid $color-borders;
       display: flex;

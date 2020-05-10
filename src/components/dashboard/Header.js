@@ -154,7 +154,7 @@ class Header extends Component {
 
   returnDaysAgo = (date) => {
     return moment.utc(date).fromNow();
-  }
+  };
 
   render() {
     const x = firstTwoLetter(this.props.loggedInUserName);
@@ -224,8 +224,8 @@ class Header extends Component {
                       <div
                         className="col-md-12"
                         style={{
-                          // backgroundColor: "#10b857",
-                          backgroundColor: "#28b458",
+                          backgroundColor: "rgb(96, 190, 130)",
+                          // backgroundColor: "#28b458",
                         }}
                       >
                         <div className="col-md-5 no-padding notification-heading">
@@ -235,7 +235,7 @@ class Header extends Component {
                           this.state.notifications.length > 0 && (
                             <div className="col-md-7 no-padding notification-heading sett-text">
                               <span onClick={() => this.readAllNotification()}>
-                                Mark All as Read
+                                Mark all as read
                               </span>
                               &nbsp;
                             </div>
@@ -243,12 +243,12 @@ class Header extends Component {
                       </div>
                       {this.state.notifications &&
                         this.state.notifications.length > 0 ? (
-                          <div>
+                          <div className="col-md-12 no-padding dropdown-scroll">
                             {this.state.notifications.map((eachNotification) => {
                               return (
                                 <Dropdown.Item className="notification-box">
-                                  <div className="row">
-                                    <div className="col-md-1 no-padding">
+                                  <div className="row" style={{ width: "100%" }}>
+                                    {/* <div className="col-md-1 no-padding">
                                       <div className="notification-img">
                                         <img
                                           alt={"userImg"}
@@ -256,9 +256,9 @@ class Header extends Component {
                                           className="img-responsive"
                                         />
                                       </div>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="notification-text">
+                                    <div className="col-md-12 no-padding notification-text wrap-text">
                                       {eachNotification.data.message}
                                       {/* <span>
                                     Aviabird
@@ -280,7 +280,10 @@ class Header extends Component {
                             })}
                           </div>
                         ) : (
-                          <Dropdown.Item className="notification-box">
+                          <Dropdown.Item
+                            className="notification-box"
+                            style={{ height: "91%" }}
+                          >
                             {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
                             <div>
                               <i
