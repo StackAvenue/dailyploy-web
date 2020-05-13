@@ -108,7 +108,8 @@ class GeneralSettings extends Component {
                 ? this.filterEmailMember(data.cc_mails, members)
                 : [],
             isActive: data.is_active,
-            emailText: data.email_text,
+            // emailText: data.email_text,
+            emailText:" ",
             isConfig: false,
             members: members,
           });
@@ -680,7 +681,7 @@ class GeneralSettings extends Component {
 
   handleEmailText = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: "" });
   };
 
   toggleActiveFlag = async (flag) => {
@@ -1085,7 +1086,7 @@ class GeneralSettings extends Component {
             </div>
           </div>
            */}
-          <div className="col-md-12 hr1"></div>
+          {/* <div className="col-md-12 hr1"></div>
 
           <div className="col-md-12 config-heading">Delete Workspace</div>
           <div className="col-md-12 delete-text">
@@ -1102,7 +1103,7 @@ class GeneralSettings extends Component {
               state={this.state}
               handleClose={this.handleDeleteClose}
             />
-          </div>
+          </div> */}
         </div>
       </>
     );

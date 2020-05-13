@@ -84,6 +84,9 @@
 
 .text-titlize {
   text-transform: capitalize;
+  a{
+    text-decoration: none!important;
+  }
 }
 
 .left-padding-50px {

@@ -8,6 +8,7 @@ import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 import { toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
+import VideoLoader from "../components/dashboard/VideoLoader"
 import {
   getWeekFisrtDate,
   getFisrtDate,
@@ -2251,7 +2252,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        {this.state.isLoading ? <div className="loading"></div> : null}
+        {this.state.isLoading ? <div className="loading1"><VideoLoader></VideoLoader></div> : null}
         <div
           className="row no-margin"
           style={this.state.isLoading ? { pointerEvents: "none" } : {}}

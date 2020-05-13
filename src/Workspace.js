@@ -23,7 +23,7 @@ import { workspaceNameSplit } from "./utils/function";
 import moment from "moment";
 import { base } from "./../src/base";
 import "../src/assets/css/loader.scss";
-
+import VideoLoader from "./components/dashboard/VideoLoader"
 class Workspace extends Component {
   constructor(props) {
     super(props);

@@ -75,7 +75,7 @@ const EmailConfigModal = props => {
                 </div>
               </div>
             </div>
-            <div className="col-md-12 input-row">
+             {/* <div className="col-md-12 input-row">
               <div className="col-md-2 label">Bcc</div>
               <div className="col-md-10 no-padding d-inline-block">
                 <div className="project-member-search">
@@ -115,7 +115,8 @@ const EmailConfigModal = props => {
                   </div>
                 </>
               ) : null}
-            </div>
+            </div>  */}
+            
             <div className="col-md-12 no-padding input-row">
               <div className="col-md-4 ml-auto no-padding">
                 <button

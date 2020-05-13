@@ -13,7 +13,7 @@ import {
   convertUTCToLocalDate,
   getContrastColor,
 } from "./../../utils/function";
-import Timer from "./../dashboard/Timer";
+import TimerCardTask from "./../dashboard/TimerCardTask";
 import TaskAction from "./../dashboard/TaskAction";
 import { Alert, UncontrolledAlert } from "reactstrap";
 import { OverlayTrigger } from "react-bootstrap";
@@ -38,6 +38,8 @@ class DashboardEvent extends Component {
       taskTimerLog: [],
       showAlert: false,
       show: false,
+      middelText:"",
+      event:[]
     };
   }
 
@@ -123,7 +125,9 @@ class DashboardEvent extends Component {
       showAction: false,
     });
   };
-
+  displaytext=(event)=>{
+return event;
+  }
   calculateTime = (event) => {
     var start = new Date(
       moment(convertUTCToLocalDate(event.taskStartDateTime))
@@ -135,23 +139,88 @@ class DashboardEvent extends Component {
         .format(FULL_DATE)
         .replace(/-/g, "/")
     );
-    var timeDiff = "00:00";
-    if (
-      moment(start).format("HH:mm") != "00:00" &&
-      moment(end).format("HH:mm") != "00:00"
-    ) {
+
+    const totalSeconds = this.props.event.allTimeTracked
+    .map((log) => log.duration)
+    .flat()
+    .reduce((a, b) => a + b, 0);
+
+    var timeDiff = "No Est";
+    var text1=" of ";
+    var text=" Est. ";
+   
+    if (moment(start).format("HH:mm") != "00:00" && moment(end).format("HH:mm") != "00:00" && moment(totalSeconds).format("mm")!== "00") {
       let totalSeconds = (end - start) / 1000;
       totalSeconds = Number(totalSeconds);
       var h = Math.floor(totalSeconds / 3600);
       var m = Math.floor((totalSeconds % 3600) / 60);
-      var s = Math.floor((totalSeconds % 3600) % 60);
-      var timeDiff =
-        ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
-        ":" +
-        ("0" + m).slice(-2);
+      var h1 = Math.floor(totalSeconds / 3600);
+      var m1 = Math.floor((totalSeconds % 3600) / 60);
+      if(h1>=0 && m1!==0 || h1<=0 && m1!==0){
+    if(m>10 && h>10){
+        return (
+          text1 +(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)
+        );
     }
-    return timeDiff;
+    else
+    if(m<10 && h>10){
+        return (
+      
+          
+          text1+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)
+        );
+    } else
+    if(m===0 && h>10){
+        return (
+          text1+(h+"h").slice(`${h}`.length > 2 ? -3 : -3)
+        );
+    } else
+  {
+    return( text1+( h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m+"min").slice(-7));
+    }
+    
+  }else{
+  
+      if(m>10 && h>10){
+        return (
+          text +(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)
+        );
+    }
+    else
+    if(m<10 && h>10){
+        return (
+      
+          
+          text+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)
+        );
+    } else
+    if(m===0 && h>10){
+        return (
+          text+(h+"h").slice(`${h}`.length > 2 ? -3 : -3)
+        );
+    } else
+  {
+    return( text+( h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m+"min").slice(-7));
+    }
+    }
+  }
+
+   return timeDiff  
+   
   };
+
+  formattedSeconds = () => {
+    const totalSeconds = this.props.event.allTimeTracked
+      .map((log) => log.duration)
+      .flat()
+      .reduce((a, b) => a + b, 0);
+   
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = Math.floor((totalSeconds % 3600) % 60);
+    return((h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7))
+  }
+
 
   onClickOutside = () => {
     this.setState({
@@ -159,7 +228,9 @@ class DashboardEvent extends Component {
       showAction: false,
     });
   };
-
+  updateMiddelText=(text)=>{
+    this.setState({middelText:text})
+  }
   actionOnClickOutside = () => {
     this.setState({
       showAction: !this.state.showAction,
@@ -180,7 +251,7 @@ class DashboardEvent extends Component {
       titleText,
       state,
     } = this.props;
-
+    
     const totalTrackTime = this.props.event.allTimeTracked
       .map((log) => log.duration)
       .flat()
@@ -291,20 +362,20 @@ class DashboardEvent extends Component {
               </div>
             </div>
 
-            <div className="row date-div-card">
+            {/* <div className="row date-div-card">
               <span>
                 {moment(convertUTCToLocalDate(event.taskStartDateTime)).format(
                   COMMENT_DATETIME
                 )}
                 {" - "}
               </span>
-              {/* <span className="margin-none">-</span> */}
+              {/* <span className="margin-none">-</span> 
               <span>
                 {moment(convertUTCToLocalDate(event.taskEndDateTime)).format(
                   COMMENT_DATETIME
                 )}
               </span>
-            </div>
+            </div> */}
 
             <div className="row item dashboard-event-box">
               <OverlayTrigger
@@ -325,17 +396,30 @@ class DashboardEvent extends Component {
                   </div>
                   <div className="col-md-3 no-padding d-inline-block ">
                     <span className="task-timer">
-                      <Timer
+                      <TimerCardTask
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
                         isStart={this.props.event.startOn ? true : false}
                       />
-                      {" of"} {this.calculateTime(event)}
+                      {this.state.middelText} {this.calculateTime(event)}
                     </span>
                   </div>
                 </div>
               </OverlayTrigger>
             </div>
+            <div className="row item dashboard-event-box">
+              <OverlayTrigger
+                placement="auto"
+                trigger="hover"
+                overlay={this.props.eventItemPopoverTemplateResolver(
+                  schedulerData,
+                  event,
+                  titleText,
+                  start,
+                  end,
+                  this.props.bgColor
+                )}
+              >
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding"
@@ -354,6 +438,8 @@ class DashboardEvent extends Component {
                   <span className="project-task-name">{titleText}</span>
                 </div>
               </div>
+            </div>
+            </OverlayTrigger>
             </div>
           </div>
         ) : null}
@@ -463,20 +549,20 @@ class DashboardEvent extends Component {
               </div>
             </div>
 
-            <div className="row date-div-card">
+            {/* <div className="row date-div-card">
               <span>
                 {moment(convertUTCToLocalDate(event.taskStartDateTime)).format(
                   COMMENT_DATETIME
                 )}
                 {" - "}
               </span>
-              {/* <span className="margin-none">-</span> */}
+              {/* <span className="margin-none">-</span> 
               <span>
                 {moment(convertUTCToLocalDate(event.taskEndDateTime)).format(
                   COMMENT_DATETIME
                 )}
               </span>
-            </div>
+            </div> */}
 
             <div className="row item dashboard-event-box">
               <OverlayTrigger
@@ -497,24 +583,38 @@ class DashboardEvent extends Component {
                   </div>
                   <div className="col-md-3 no-padding d-inline-block ">
                     <span className="task-timer">
-                      <Timer
+                      <TimerCardTask
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
                         isStart={this.props.event.startOn ? true : false}
                       />
-                      {" of"} {this.calculateTime(event)}
+                      {this.state.middelText} {this.calculateTime(event)}
                     </span>
                   </div>
                 </div>
               </OverlayTrigger>
             </div>
+
+            <div className="row item dashboard-event-box">
+              <OverlayTrigger
+                placement="auto"
+                trigger="hover"
+                overlay={this.props.eventItemPopoverTemplateResolver(
+                  schedulerData,
+                  event,
+                  titleText,
+                  start,
+                  end,
+                  this.props.bgColor
+                )}
+              >
             <div className="row item dashboard-event-box">
               <div
                 className="col-md-12 no-padding"
                 // style={{ color: contColor }}
               >
                 <div
-                  className="col-md-12 no-padding pointer item-heading text-wraper"
+                  className="col-md-12  pointer item-heading text-wraper"
                   style={{
                     padding: "5px 5px 0px 5px",
                     // color: getContrastColor(this.props.bgColor)
@@ -526,6 +626,8 @@ class DashboardEvent extends Component {
                   <span className="project-task-name">{titleText}</span>
                 </div>
               </div>
+            </div>
+            </OverlayTrigger>
             </div>
           </div>
         ) : null}
