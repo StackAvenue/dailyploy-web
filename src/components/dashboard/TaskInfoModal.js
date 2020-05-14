@@ -658,15 +658,22 @@ class TaskInfoModal extends Component {
             </div>
 
             <div className="col-md-12 body">
+              
               <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
+                <table className="tc">
+                  <tr>
+                  <td className="label1">
+                 <div > 
                   Name
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">
-                    {props.state.taskName}
-                  </span>
-                </div>
+                 </div> 
+                </td>
+                <td className="tabledata">
+                 <div className="col-md-10 d-inline-block">
+               {props.state.taskName}
+                </div> 
+                </td>
+                </tr>
+                </table>
               </div>
 
               <div className="col-md-12 no-padding input-row text-titlize">

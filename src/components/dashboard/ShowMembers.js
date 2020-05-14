@@ -405,7 +405,7 @@ class ShowMembers extends Component {
     } else {
       return (
         <div className="list-not-found padding-top-60px">
-          <span>Please Add Members</span>
+          {/* <span>Please Add Members</span> */}
         </div>
       );
     }

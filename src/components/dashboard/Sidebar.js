@@ -101,7 +101,7 @@ class Sidebar extends Component {
                   +
                 </button>
               </div>
-              <div className="workspace-add-btn">Add New</div>
+              {/* <div className="workspace-add-btn">Add New</div> */}
               {/* <AddWorkspaceModal
                 state={this.state}
                 onHideModal={this.closeTaskModal}

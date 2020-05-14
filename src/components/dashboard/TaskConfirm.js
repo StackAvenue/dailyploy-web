@@ -731,6 +731,7 @@ class TaskConfirm extends Component {
             </div>
             <div className="body text-titlize">
               <div className="col-md-12 no-padding input-row">
+               
                 <div className="col-md-2 d-inline-block no-padding label">
                   Name
                 </div>
@@ -754,6 +755,7 @@ class TaskConfirm extends Component {
                     </div>
                   ) : null}
                 </div>
+              
               </div>
 
               <div className="col-md-12 no-padding input-row">

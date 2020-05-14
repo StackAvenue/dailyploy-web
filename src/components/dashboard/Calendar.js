@@ -609,7 +609,7 @@ class Calendar extends Component {
     agendaMaxEventWidth
     // marginOf
   ) => {
-    let backgroundColor = bgColor;
+    let backgroundColor =bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
       event
@@ -617,18 +617,18 @@ class Calendar extends Component {
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start);
     var end = moment(event.end);
-    let contColor = getContrastColor(bgColor);
+  //  let contColor = getContrastColor(bgColor);
     let divStyle = {
       borderRadius: "5px",
-      backgroundColor: backgroundColor,
+      // backgroundColor: backgroundColor,
       // height: mustBeHeight
-      color: contColor,
+      color: bgColor,
       height: "75%",
       marginTop: "4px",
       padding: "2px"
     };
     let borderLeft = {
-      borderLeft: "4px solid backgroundColor"
+      borderLeft: "4px solid "+bgColor
     };
     if (!!agendaMaxEventWidth)
       // divStyle = { marginOf, maxWidth: agendaMaxEventWidth };

@@ -580,7 +580,7 @@ class ShowProjects extends Component {
     } else {
       return (
         <div className="list-not-found padding-top-60px">
-          <span>Please Add Projects</span>
+          {/* <span>Please Add Projects</span> */}
         </div>
       );
     }
