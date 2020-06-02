@@ -207,6 +207,8 @@ export default class MenuBar extends Component {
     let addOwner = [];
     addOwner.push(this.props.state.userId);
     var self = this;
+    var preProjectData={}
+    this.handleClose();
     if (this.state.projectName != "") {
       if (this.validateContackts()) {
         this.setState({ saveDisable: true });
@@ -223,7 +225,23 @@ export default class MenuBar extends Component {
             color_code: this.state.background,
           },
         };
-        if (this.state.contacts.length > 0) {
+
+        preProjectData={
+          project: {
+            color_code:this.state.background,
+            contacts: [],
+            created_at:Date.now(),
+            description: null,
+            end_date: null,
+            id: 99999,
+            members: [{email: " ", id: 99, name: " "}],
+            name:this.state.projectName,
+            start_date: "2020-05-20"
+          }
+        };
+        this.props.manageProjectListing(preProjectData.project,0);
+
+     if (this.state.contacts.length > 0) {
           projectData.project["contacts"] = this.state.contacts;
         }
         try {
@@ -231,15 +249,17 @@ export default class MenuBar extends Component {
             projectData,
             `workspaces/${this.props.workspaceId}/projects`
           );
-          toast(
-            <DailyPloyToast
-              message="Project added successfully!"
-              status="success"
-            />,
-            { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-          );
-          this.handleClose();
-          this.props.manageProjectListing(data.project);
+          // toast(
+          //   <DailyPloyToast
+          //     message="Project added successfully!"
+          //     status="success"
+          //   />,
+          //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+          // );
+          console.log(data)
+          console.log(projectData) 
+          
+          this.props.manageProjectListing(data.project,1);
           this.props.handleLoad(false);
         } catch (e) {
           if (e.response && e.response.data) {
@@ -252,6 +272,8 @@ export default class MenuBar extends Component {
                 />,
                 { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
               );
+              this.props.manageProjectListing(preProjectData.project,2);
+              this.handleShow();
               setTimeout(function () {
                 self.setState({ saveDisable: false });
               }, 2000);
@@ -266,7 +288,11 @@ export default class MenuBar extends Component {
               setTimeout(function () {
                 self.setState({ saveDisable: false });
               }, 2000);
+              this.props.manageProjectListing(preProjectData.project,2);
+              this.handleShow();
             } else {
+              this.handleShow();
+              this.props.manageProjectListing(preProjectData.project,2);
               this.setState({ show: false });
             }
           }
@@ -280,6 +306,8 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
+      this.props.manageProjectListing(preProjectData.project,2);
+      this.handleShow();
       setTimeout(function () {
         self.setState({ saveDisable: false });
       }, 2000);
@@ -300,6 +328,8 @@ export default class MenuBar extends Component {
     if (this.state.memberProject) {
       memberData.invitation["project_id"] = this.state.memberProject;
     }
+    this.clearAddMemberModaldata();
+    this.setState({ memberShow: false, isLoading: false, error: "" });
     try {
       this.setState({ isLoading: true, btnEnable: false });
       const { data } = await post(memberData, "invitations");
@@ -310,7 +340,7 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-      this.clearAddMemberModaldata();
+      
       this.setState({ memberShow: false, isLoading: false, error: "" });
       // this.props.handleLoad(true);
     } catch (e) {
@@ -319,7 +349,8 @@ export default class MenuBar extends Component {
         //   <DailyPloyToast message={`${e.response.data}`} status="error" />,
         //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         // );
-        this.setState({ isLoading: false, error: e.response.data });
+        this.handleMemberShow();
+        this.setState({ isLoading: false, error: e.response.data,memberShow: false });
       } else if (
         e.response.data &&
         e.response.data.user_already_exists &&
@@ -332,12 +363,23 @@ export default class MenuBar extends Component {
         //   />,
         //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         // );
+
         this.setState({
           isLoading: false,
           error: "User already exists in workspace.",
         });
+        toast( <DailyPloyToast
+        message="User already exists in workspace!"
+        status="error"
+      />,
+      { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+
+    );
+    this.handleMemberShow();
+    this.setState({ memberShow: false, isLoading: false, error: "" });
       } else {
-        this.setState({ isLoading: false, error: "" });
+        this.setState({ isLoading: false, error: "",memberShow: false });
+        this.handleMemberShow();
       }
     }
   };

@@ -38,6 +38,7 @@ class ShowProjects extends Component {
       projectNames: [],
       sort: "week",
       projects: [],
+      mainProject:[],
       isChecked: true,
       isLogedInUserEmailArr: [],
       userId: "",
@@ -151,6 +152,7 @@ class ShowProjects extends Component {
       userName: loggedInData.name,
       userEmail: loggedInData.email,
       workspaces: workspacesData,
+      mainProject:projectsData,
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
@@ -386,10 +388,27 @@ class ShowProjects extends Component {
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   };
 
-  manageProjectListing = project => {
-    project["owner"] = { name: `${this.state.userName}` };
-    var filterdProjects = [...this.state.projects, ...[project]];
+  manageProjectListing = (project,check) => {
+    if(check===0)
+{   project["owner"] = { name: `${this.state.userName}` };
+    var filterdProjects = [...this.state.mainProject, ...[project]];
     this.setState({ projects: filterdProjects });
+  }else
+  if(check===1){
+    project["owner"] = { name: `${this.state.userName}` };
+    var filterdProjects = [...this.state.mainProject, ...[project]];
+    this.setState({ projects: filterdProjects });
+
+  }
+  else
+  if(check===2){
+    
+    var filterdProjects = [...this.state.projects];
+    this.setState({ projects: filterdProjects });
+
+  }
+
+  
   };
 
   manageUpdateProjectListing = project => {
