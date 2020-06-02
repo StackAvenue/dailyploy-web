@@ -145,7 +145,7 @@ return event;
     .flat()
     .reduce((a, b) => a + b, 0);
 
-    var timeDiff = "No Est";
+    var timeDiff = "No Estimate";
     var text1=" of ";
     var text=" Est. ";
    
@@ -154,58 +154,53 @@ return event;
       totalSeconds = Number(totalSeconds);
       var h = Math.floor(totalSeconds / 3600);
       var m = Math.floor((totalSeconds % 3600) / 60);
-      var h1 = Math.floor(totalSeconds / 3600);
-      var m1 = Math.floor((totalSeconds % 3600) / 60);
-      if(h1>=0 && m1!==0 || h1<=0 && m1!==0){
-    if(m>10 && h>10){
-        return (
-          text1 +(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)
-        );
+     
+    if(m>0 && h>0){
+
+      if(m>10)
+      {
+  return (
+      (h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)+" Estimate"
+      );
+    }else
+    if(m<10)
+    {
+      return (
+          
+        (h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)+" Estimate"
+      );
+    }    
     }
     else
-    if(m<10 && h>10){
+
+    if(m===0 && h>0){
         return (
-      
-          
-          text1+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)
+          (h+"h").slice(`${h}`.length > 2 ? -3 : -3)+" Estimate"
         );
     } else
-    if(m===0 && h>10){
-        return (
-          text1+(h+"h").slice(`${h}`.length > 2 ? -3 : -3)
-        );
-    } else
+  if(m>0 || h===0)
+  {  
+    if(m>10)
+    {
+  return (  (m+"min").slice(-7)+" Estimate" );
+  }else
+  if(m<10)
   {
-    return( text1+( h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m+"min").slice(-7));
-    }
-    
-  }else{
-  
-      if(m>10 && h>10){
-        return (
-          text +(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)
-        );
-    }
-    else
-    if(m<10 && h>10){
-        return (
-      
-          
-          text+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)
-        );
-    } else
-    if(m===0 && h>10){
-        return (
-          text+(h+"h").slice(`${h}`.length > 2 ? -3 : -3)
-        );
-    } else
-  {
-    return( text+( h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m+"min").slice(-7));
-    }
-    }
+      return ( ("0"+m+"min").slice(-7)+" Estimate");
   }
 
-   return timeDiff  
+
+    }else{
+      return(" ")
+    }
+  }
+    else{
+  return(" ")
+    }
+
+  
+
+  
    
   };
 
@@ -400,6 +395,8 @@ return event;
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
                         isStart={this.props.event.startOn ? true : false}
+                        calculateTime={this.calculateTime}
+                        event={event}
                       />
                       {this.state.middelText} {this.calculateTime(event)}
                     </span>
@@ -587,6 +584,8 @@ return event;
                         totalDuration={totalTrackTime}
                         startOn={this.props.event.startOn}
                         isStart={this.props.event.startOn ? true : false}
+                        calculateTime={this.calculateTime}
+                        event={event}
                       />
                       {this.state.middelText} {this.calculateTime(event)}
                     </span>

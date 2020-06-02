@@ -300,7 +300,7 @@ class Workspace extends Component {
   render() {
     return (
       <div>
-        {this.state.isLoading ? <div className="loading"></div> : null}
+        {this.state.isLoading ? <div className="loading1"><VideoLoader/></div> : null}
         <ToastContainer />
         <div
           className="row no-margin"

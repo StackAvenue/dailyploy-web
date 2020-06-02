@@ -16,8 +16,8 @@
  
   position: fixed;
   z-index: 999;
-  height: 2em;
-  width: 2em;
+  height: 7em;
+  width: 7em;
   overflow: show;
   margin: auto;
 
@@ -25,6 +25,10 @@
   left: 0;
   bottom: 0;
   right: 0;
+  img{
+    height: 100%;
+    width: 100%;
+  }
 }
 
 /* Transparent Overlay */

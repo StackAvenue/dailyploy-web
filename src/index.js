@@ -10,6 +10,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import 'react-notifications/lib/notifications.css';
 axiosInitializer.config();
 toast.configure();
 

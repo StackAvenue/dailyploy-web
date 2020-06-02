@@ -48,30 +48,76 @@ class Timer extends Component {
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
     var s = Math.floor((totalSeconds % 3600) % 60);
-   if(h>0){
-    if(h===0 && m===0){
-    return ("");
-    }else
-    if(m>10){
-    return (
-  
-      
-      (h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)
-    );
+    var time=this.props.calculateTime(this.props.event);
+    if(h===0 && m===0 && time===" "){
+    return ("No Estimate");
     }
-    else{
-        return (
-          (h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)
-        );
-        }
-      }
-    else{
-          return(" ");
-      }
+    else
+    if(h===0 && m===0 && time!==" "){
+      return(" ")
+    }
+    else
+    if(h>0 && m>0 && time===" ")
+  {
+      if(m>10)
+      {
+    return (  "Logged "+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7) );
+    }else
+    if(m<10)
+    {
+        return ( "Logged "+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7) );
+    }
+  } else
+  if(h>0 && m===0 && time===" ")
+  {
+    return (  "Logged "+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) );
+    
+  } else
+  if(h===0 && m>0 && time===" ")
+  {
+      if(m>10)
+      {
+    return (   "Logged " + (m+"min").slice(-7) );
+    }else
+    if(m<10)
+    {
+        return ("Logged " + ("0"+m+"min").slice(-7) );
+    }
+  } else
+  
+  if(h>0 && m>0 && time!==" ")
+  {
+      if(m>10)
+      {
+    return (  "Logged "+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)+" of " );
+    }else
+    if(m<10)
+    {
+        return ( "Logged "+(h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)+" of " );
+    }
+  } else
+  if(h>0 && m===0 && time!==" ")
+  {
+    return (  "Logged "+(h+"h").slice(`${h}`.length > 2 ? -3 : -3)+" of " );
+    
+  } else
+  if(h===0 && m>0 && time!==" ")
+  {
+      if(m>10)
+      {
+    return (   "Logged " + (m+"min").slice(-7)+" of " );
+    }else
+    if(m<10)
+    {
+        return ("Logged " + ("0"+m+"min").slice(-7)+" of " );
+    }
+  }else{
+    return(" ")
+  }
+      
+  
     
   };
-  
- 
 
   render() {
     return this.formattedSeconds(

@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import DailyPloyToast from "./../DailyPloyToast";
 import SummuryReportCharts from "./Reports/SummuryReportCharts";
 import Loader from "react-loader-spinner";
+import VideoLoader from "./VideoLoader";
 
 class Reports extends Component {
   constructor(props) {
@@ -73,7 +74,8 @@ class Reports extends Component {
       columnChartData: [],
       barChartArray: this.generateDailyBarChartData(new Date()),
       isLoading: false,
-      loadReportsData: false
+      loadReportsData: false,
+      loadingGif:false
     };
   }
 
@@ -340,6 +342,7 @@ class Reports extends Component {
   };
 
   async componentDidMount() {
+    this.setState({loadingGif:true});
     this.props.handleLoading(true);
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -484,7 +487,8 @@ class Reports extends Component {
       taskCategories: taskCategories,
       projectReports: projectReportData,
       categoryReports: categoryReportData,
-      priorityReports: priorityReportData
+      priorityReports: priorityReportData,
+      loadingGif:false
     });
     this.loadMultipleApiData({ user_ids: loggedInData.id });
     this.createUserProjectList();
@@ -515,6 +519,7 @@ class Reports extends Component {
       prevState.loadReportsData !== this.state.loadReportsData
     ) {
       this.props.handleLoading(true);
+      this.setState({loadingGif:true})
       let userIds = this.props.searchUserDetails.map(
         member => member.member_id
       );
@@ -597,6 +602,7 @@ class Reports extends Component {
         this.props.searchUserDetails.length > 0
           ? userIds.join(",")
           : this.state.userId;
+          this.setState({loadingGif:false})
       this.props.handleLoading(false);
       this.setState({
         priorityReports: priorityReportData,
@@ -1048,6 +1054,7 @@ class Reports extends Component {
           state={this.state}
           manageProjectListing={() => {}}
         />
+        
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
             <div className="report-viewtype-btns d-inline-block">
@@ -1134,7 +1141,7 @@ class Reports extends Component {
                   </button>
                 </div>
               </div>
-
+              {this.state.loadingGif ? <div className="loading1"><VideoLoader/></div> : <>
               <div className="">
                 <SummuryReportCharts
                   priorities={PRIORITIES}
@@ -1157,9 +1164,11 @@ class Reports extends Component {
                   timeTrackUpdate={this.timeTrackUpdate}
                 />
               </div>
+  </>}
             </div>
           </div>
         </div>
+
         {/* </div> */}
       </>
     );

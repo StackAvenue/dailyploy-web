@@ -20,6 +20,7 @@ class WorkspaceSettings extends Component {
       adminUserArr: [],
       workspaceId: "",
       userArr: [],
+      userMembers:[],
       isSaveWorkspaceName: false,
     };
   }
@@ -40,6 +41,7 @@ class WorkspaceSettings extends Component {
         adminUserArr: adminUserArr,
         workspaceId: this.props.workspaceObj.id,
         userArr: this.props.state.allMembers,
+        userMembers: this.props.state.allMembers.members,
       });
     }
   }
@@ -56,6 +58,47 @@ class WorkspaceSettings extends Component {
     });
   };
 
+  UserNameHandler=(id)=>{
+    var members =[]
+
+    
+    this.state.userMembers.map((user) =>{
+      if(user.id!==id){
+        members.push(user);
+      }
+      });
+    this.setState({userMembers:members});
+return members;
+
+    
+  }
+  UserNameAddHandler=(obj)=>{
+    var members =[...this.state.userMembers]
+    
+        members.push(obj);
+   
+    this.setState({userMembers:members});
+return members;
+  }
+  UserNameHandler2=(obj)=>{
+    let count=0  
+    var members =[]
+    this.state.userMembers.map((user) =>{
+      obj.map((user1)=>{
+      if(user.id===user1.id){
+        count=count+1;
+       }
+       })
+       
+       if(count===0){
+        members.push(user)
+
+       }
+       count=0;
+      });
+    this.setState({userMembers:members});
+    return members;
+  }
   updateWorkspaceName = async () => {
     const updateWorkspaceName = {
       user: {
@@ -95,6 +138,8 @@ class WorkspaceSettings extends Component {
 
           <TabPanel>
             <GeneralSettings
+              UserNameHandler={this.UserNameHandler}
+              UserNameAddHandler={this.UserNameAddHandler}
               worskpaceNameHandler={this.worskpaceNameHandler}
               state={this.state}
               workspaceName={this.props.workspaceName}
@@ -105,6 +150,7 @@ class WorkspaceSettings extends Component {
               handleChangeAdminUsers={this.handleChangeAdminUsers}
               workspace={this.props.workspaceObj}
               loggedInUser={this.props.state.loggedInUser}
+              UserNameHandler2={this.UserNameHandler2}
             />
           </TabPanel>
           <TabPanel>

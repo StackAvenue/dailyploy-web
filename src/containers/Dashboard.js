@@ -28,6 +28,7 @@ import {
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
 import { base } from "./../../src/base";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -119,6 +120,9 @@ class Dashboard extends Component {
       isPlayPause: false,
       taskContacts: [],
       isStart: false,
+      allData:[],
+      updateNewTask:[],
+      allData1:[]
     };
   }
 
@@ -145,13 +149,13 @@ class Dashboard extends Component {
     if (
       (prevState.taskStartDate !== this.state.taskStartDate ||
         prevState.taskFrequency !== this.state.taskFrequency ||
-        prevState.newTask !== this.state.newTask ||
+        prevState.newTask !== this.state.newTask||
         prevProps.searchProjectIds !== this.props.searchProjectIds ||
         prevProps.searchUserDetails !== this.props.searchUserDetails) &&
       this.state.workspaceId != ""
     ) {
       try {
-        this.props.handleLoading(true);
+        this.props.handleLoading(false);
         var userIds =
           this.props.searchUserDetails.length > 0
             ? this.props.searchUserDetails.map((member) => member.member_id)
@@ -166,6 +170,9 @@ class Dashboard extends Component {
           `workspaces/${this.state.workspaceId}/user_tasks`,
           searchData
         );
+        this.setState({allData:data})
+        this.setState({allData1:data})
+       
         var sortedUsers = data.users.sort((x, y) => {
           return x.id === this.state.userId
             ? -1
@@ -232,6 +239,106 @@ class Dashboard extends Component {
         this.props.handleLoading(false);
       }
     }
+
+
+
+
+
+
+
+
+      if(prevState.updateNewTask !== this.state.updateNewTask){
+        
+        this.state.updateNewTask.map((taks)=>{
+         
+        var userIds =
+        this.props.searchUserDetails.length > 0
+          ? this.props.searchUserDetails.map((member) => member.member_id)
+          : [];
+      var searchData = {
+        frequency: this.state.taskFrequency,
+        start_date: getFisrtDate(this.state.taskStartDate),
+        user_id: userIds.join(","),
+        project_ids: this.props.searchProjectIds.join(","),
+      };
+
+
+        var sortedUsers = this.state.allData.users.sort((x, y) => {
+          return x.id === this.state.userId
+            ? -1
+            : y.id === this.state.userId
+              ? 1
+              : 0;
+        });
+        var taskRunningObj = {
+          status: false,
+          startOn: null,
+          taskId: "",
+        };
+        var trackingEvent = this.state.trackingEvent;
+        let generatedObj = this.updateGenerateTaskObject(
+          sortedUsers,
+          {
+            id: this.state.userId,
+            name: this.state.userName,
+            email: this.state.userEmail,
+          },
+          taskRunningObj,
+          trackingEvent,taks
+        );
+        // let generatedObj = this.generateTaskObject(
+        //   sortedUsers,
+        //   {
+        //     id: this.state.userId,
+        //     name: this.state.userName,
+        //     email: this.state.userEmail,
+        //   },
+        //   taskRunningObj,
+        //   trackingEvent
+        // );
+
+        taskRunningObj = generatedObj.taskRunningObj;
+        trackingEvent = generatedObj.trackingEvent;
+        var tasksUser = generatedObj.tasksUser;
+        var tasksResources = tasksUser.map((user) => user.usersObj);
+        var taskEvents = tasksUser
+          .map((user) => user.tasks)
+          .flat(2)
+          .sort((a, b) => Number(a.sortedTime) - Number(b.sortedTime));
+        this.setState({
+          resources: tasksResources ? tasksResources : [],
+          events: taskEvents ? taskEvents : [],
+          status: taskRunningObj.status
+            ? taskRunningObj.status
+            : this.state.status,
+          taskId: taskRunningObj.taskId,
+          startOn: taskRunningObj.startOn,
+          trackingEvent: trackingEvent,
+        });
+        let projects = [];
+        this.state.projects.forEach((project) => {
+          let flag = true;
+          userIds.map((id) => {
+            if (!project.members.map((m) => m.id).includes(id)) {
+              flag = false;
+            }
+          });
+          if (flag) {
+            projects.push(project);
+          }
+        });
+        this.createUserProjectList(
+          projects.filter(
+            (project) => !this.props.searchProjectIds.includes(project.id)
+          ),
+          this.state.worksapceUsers.filter(
+            (member) => !userIds.includes(member.id)
+          )
+        );
+      });
+      }
+
+
 
     if (prevState.timeFrom !== this.state.timeFrom) {
       var startDateTime = null;
@@ -326,8 +433,10 @@ class Dashboard extends Component {
       const { data } = await get(
         `workspaces/${workspaceId}/members/${loggedInData.id}`
       );
+    
       var user = data;
     } catch (e) { }
+    
 
     // workspace Member Listing
     try {
@@ -369,6 +478,8 @@ class Dashboard extends Component {
         `workspaces/${workspaceId}/user_tasks`,
         searchData
       );
+      this.setState({allData:data});
+      this.setState({allData1:data})
       var userId = loggedInData.id;
       var sortedUsers = data.users.sort((x, y) => {
         return x.id === userId ? -1 : y.id === userId ? 1 : 0;
@@ -446,6 +557,7 @@ class Dashboard extends Component {
       };
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
         var task = dateWiseTasks.tasks.map((task) => {
+          
           var tasksObj = this.createTaskObject(task, user, dateWiseTasks.date);
           if (user.id == userData.id && task.time_tracked.length > 0) {
             let runningTask = task.time_tracked
@@ -480,10 +592,13 @@ class Dashboard extends Component {
           }
           return tasksObj;
         });
+        
         return task;
       });
+     
       return { usersObj, tasks };
     });
+    
     return {
       taskRunningObj: taskRunningObj,
       trackingEvent: trackingEvent,
@@ -544,6 +659,173 @@ class Dashboard extends Component {
       trackingStatus: task.status == "completed" ? "completed" : "play",
       startOn: null,
     };
+  };
+
+
+
+
+
+
+
+  updateGenerateTaskObject = (
+    sortedUsers,
+    userData,
+    taskRunningObj,
+    trackingEvent,
+    taks
+  ) => {
+    var trackingEvent = trackingEvent;
+    var tasksUser = sortedUsers.map((user) => {
+      var usersObj = {
+        id: user.id,
+        name: user.email === userData.email ? user.name + " (Me)" : user.name,
+      };
+      var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
+        var task = dateWiseTasks.tasks.map((task) => {
+          var tasksObj = this.updateCreateTaskObject(task, user, dateWiseTasks.date,taks);
+          if (user.id == userData.id && task.time_tracked.length > 0) {
+            let runningTask = task.time_tracked.flat().find((ttt) => ttt.status == "running");
+            if (runningTask) {
+              let taskStartOn = new Date(runningTask.start_time).getTime();
+              taskRunningObj = {
+                status: true,
+                startOn: taskStartOn,
+                taskId: tasksObj.id,
+              };
+              tasksObj["trackingStatus"] = "pause";
+              tasksObj["startOn"] = taskStartOn;
+              trackingEvent = tasksObj;
+            }
+          } else {
+            let runningTask = task.time_tracked.flat().find((ttt) => ttt.status == "running");
+            if (runningTask) {
+              let taskStartOn = new Date(runningTask.start_time).getTime();
+              tasksObj["trackingStatus"] = "pause";
+              tasksObj["startOn"] = taskStartOn;
+            }
+          }
+          return tasksObj;
+        });
+        return task;
+      }); 
+      return { usersObj, tasks };
+    });
+    
+    return {
+      taskRunningObj: taskRunningObj,
+      trackingEvent: trackingEvent,
+      tasksUser: tasksUser,
+    };
+  };
+
+  updateCreateTaskObject = (task, user, dateWiseTasksDate,taks) => {
+    if(taks.start_datetime && taks.end_datetime){
+     
+    if(task.id===taks.taskId){
+    
+    let startDateTime =
+      moment(taks.start_datetime).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(taks.start_datetime)).format("HH:mm");
+    let endDateTime =
+      moment(taks.start_datetime).format(DATE_FORMAT1) +
+      " " +
+      moment(new Date(taks.end_datetime)).format("HH:mm");
+    let start = convertUTCToLocalDate(
+      moment(taks.start_datetime).format(FULL_DATE)
+    );
+    let created = moment(Date.now()).format(FULL_DATE);
+    let sortedTime = moment(created).format("HH.mm");
+    let newTaskId = task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
+    let dateFormattedTimeTracks = task.date_formatted_time_tracks
+      ? task.date_formatted_time_tracks.find(
+        (dateLog) => dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
+      )
+      : null;
+    return {
+      date: moment(taks.start_datetime).format(DATE_FORMAT1),
+      id:newTaskId,
+      taskId: task.id,
+      created_at: task.created_at,
+      sortedTime: sortedTime,
+      start: moment(startDateTime).format("YYYY-MM-DD") + " 00:00",
+      end: moment(endDateTime).format("YYYY-MM-DD") + " 23:59",
+      taskStartDate: moment(taks.start_datetime).format(DATE_FORMAT1),
+      taskEndDate: moment(taks.end_datetime).format(DATE_FORMAT1),
+      taskStartDateTime: moment(taks.start_datetime).format(FULL_DATE),
+      taskEndDateTime: moment(taks.end_datetime).format(FULL_DATE),
+      resourceId: user.id,
+      title: task.name,
+      bgColor: task.project.color_code,
+      projectName: task.project.name,
+      comments: task.comments,
+      projectId: task.project.id,
+      timeTracked: dateFormattedTimeTracks
+        ? dateFormattedTimeTracks.time_tracks
+        : [],
+      allTimeTracked: task.time_tracked,
+      dateFormattedTimeTrack: task.date_formatted_time_tracks,
+      priority: task.priority,
+      status: task.status,
+      trackingStatus: task.status == "completed" ? "completed" : "play",
+      startOn: null,
+    };
+  }else{
+    let startDateTime =
+    moment(dateWiseTasksDate).format(DATE_FORMAT1) +
+    " " +
+    moment(new Date(task.start_datetime)).format("HH:mm");
+  let endDateTime =
+    moment(dateWiseTasksDate).format(DATE_FORMAT1) +
+    " " +
+    moment(new Date(task.end_datetime)).format("HH:mm");
+  let start = convertUTCToLocalDate(
+    moment(task.start_datetime).format(FULL_DATE)
+  );
+  let created = moment(task.created_at).format(FULL_DATE);
+  // let sortedTime =
+  //   moment(start).format("HH:mm") != "00:00"
+  //     ? moment(start).format("HH.mm")
+  //     : moment(created).format("HH.mm");
+
+  let sortedTime = moment(created).format("HH.mm");
+  let newTaskId = task.id + "-" + dateWiseTasksDate;
+  let dateFormattedTimeTracks = task.date_formatted_time_tracks
+    ? task.date_formatted_time_tracks.find(
+      (dateLog) => dateLog.date == dateWiseTasksDate
+    )
+    : null;
+  return  {
+      date: dateWiseTasksDate,
+      id: newTaskId,
+      taskId: task.id,
+      created_at: task.created_at,
+      sortedTime: sortedTime,
+      start: moment(startDateTime).format("YYYY-MM-DD") + " 00:00",
+      end: moment(endDateTime).format("YYYY-MM-DD") + " 23:59",
+      taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
+      taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
+      taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
+      taskEndDateTime: moment(task.end_datetime).format(FULL_DATE),
+      resourceId: user.id,
+      title: task.name,
+      bgColor: task.project.color_code,
+      projectName: task.project.name,
+      comments: task.comments,
+      projectId: task.project.id,
+      timeTracked: dateFormattedTimeTracks
+        ? dateFormattedTimeTracks.time_tracks
+        : [],
+      allTimeTracked: task.time_tracked,
+      dateFormattedTimeTrack: task.date_formatted_time_tracks,
+      priority: task.priority,
+      status: task.status,
+      trackingStatus: task.status == "completed" ? "completed" : "play",
+      startOn: null,
+    };
+  }
+     
+    }
   };
 
   createUserProjectList = (projects, users) => {
@@ -611,6 +893,7 @@ class Dashboard extends Component {
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
+        this.setState({newTask: task});
         let dates = getMiddleDates(task.start_datetime, task.end_datetime);
         let taskObjects = dates.map((date) => {
           return this.createTaskSyncObject(date, task, this.state.project);
@@ -660,13 +943,177 @@ class Dashboard extends Component {
     }
   };
 
-  updateTask = async (taskData, taskId, projectId) => {
+
+  
+  
+  countOfDay=(taskStartDate,taskEndDate)=>{
+    var dateArray = [];
+    var currentDate = moment(taskStartDate);
+    var stopDate = moment(taskEndDate);
+    while (currentDate <= stopDate) {
+        dateArray.push( moment(currentDate).format('YYYY-MM-DD') )
+        currentDate = moment(currentDate).add(1, 'days');
+    }   
+return dateArray;   
+  }
+
+
+//   getTaksInfomation=(taskName)=>{
+//    var users=this.state.allData1.users;
+// var temp=[]
+
+          
+// this.state.allData1.users.map((user,uid) => {
+//       user.date_formatted_tasks.map((dateWiseTasks, did) => {
+//         dateWiseTasks.tasks.map((task,tid) => { 
+//           if(taskName[0].taskId===task.id)
+//           {
+           
+//         taskName.map((tasks)=>{
+      
+//             let startDateTime =
+//       moment(tasks.start_datetime).format(DATE_FORMAT1) +
+//       " " +
+//       moment(new Date(tasks.start_datetime)).format("HH:mm");
+//     let endDateTime =
+//       moment(tasks.start_datetime).format(DATE_FORMAT1) +
+//       " " +
+//       moment(new Date(tasks.end_datetime)).format("HH:mm");
+//     let start = convertUTCToLocalDate(
+// moment(tasks.start_datetime).format(DATE_FORMAT1));
+//    if(tasks.date1===dateWiseTasks.date)
+//        {
+//     console.log(users[uid].date_formatted_tasks[did].tasks.push({
+//       comments: task.comments,
+//       created_at: task.created_at,
+//       date_formatted_time_tracks: task.date_formatted_time_tracks,
+//       duration:task.duration,
+//       end_datetime:endDateTime,
+//       id:task.id,
+//       name:task.name,
+//       priority: task.priority,
+//       project:task.project,
+//       start_datetime:startDateTime,
+//       status: task.status,
+//       time_tracked:task.time_tracked, 
+//     }),"id",did,"uid",uid)
+//   }
+  
+//   else{
+
+
+//     temp.push({
+//       comments: task.comments,
+//       created_at: task.created_at,
+//       date_formatted_time_tracks: task.date_formatted_time_tracks,
+//       duration:task.duration,
+//       end_datetime:endDateTime,
+//       id:task.id,
+//       name:task.name,
+//       priority: task.priority,
+//       project:task.project,
+//       start_datetime:startDateTime,
+//       status: task.status,
+//       time_tracked:task.time_tracked, 
+//     })
+//     console.log(users,"data", this.state.allData1.users,"obj")
+//     console.log(users[uid].date_formatted_tasks.push({date:tasks.date1,tasks:temp}),"id",did,"uid",uid)
+//   }
+//   });
+
+//      }
+//         });
+    
+//       });
+//     });
+//     //this.setState({allData:{users}});
+//   }
+// createNotification = () => {
+// // console.log(NotificationManager.info('Warning message', 'Close after 3000ms', 3000))
+//   return (NotificationManager.info('Warning message', 'Close after 3000ms', 3000))
+// }
+
+  updateTask = async (taskData, taskId, projectId,...key) => {
+    
+    if(key[0]===1){
+      var taskName =[] 
+      var task={};
+   var taskStartDate=key[1].taskStartDate;
+    var taskEndDate=key[1].taskEndDate;
+    var newStartTime = moment(convertUTCToLocalDate(key[1].taskStartDateTime)).format("HH:mm:ss");
+    var newEndTime = moment(convertUTCToLocalDate(key[1].taskEndDateTime)).format("HH:mm:ss");  
+    if(taskData.task.start_datetime && taskData.task.end_datetime){
+        taskName.push({
+        taskId:Number(taskId),
+        start_datetime:taskData.task.start_datetime,
+        end_datetime:taskData.task.end_datetime,
+        
+      });
+      // this.getTaksInfomation(taskName);
+      }else
+        if(taskData.task.end_datetime){
+         var dateArray=this.countOfDay(taskStartDate,key[2]);
+         dateArray.map((date,i)=>{   
+           taskName.push({
+            taskId:Number(taskId),
+            start_datetime:moment(dateArray[i]).format(DATE_FORMAT1) + " " + newStartTime,
+            end_datetime:moment(dateArray[i]).format(DATE_FORMAT1) + " " + newEndTime,
+            date1:dateArray[i]
+          });
+         // this.getTaksInfomation(taskName);
+        })
+      }else
+      if(taskData.task.start_datetime){
+        var dateArray=this.countOfDay(key[2],taskEndDate)
+        dateArray.map((date,i)=>{      
+          taskName.push({
+           taskId:Number(taskId),
+           start_datetime:moment(dateArray[i]).format(DATE_FORMAT1) + " " + newStartTime,
+           end_datetime:moment(dateArray[i]).format(DATE_FORMAT1) + " " + newEndTime,
+           date1:dateArray[i]
+         });
+       })
+      // this.getTaksInfomation(taskName);
+
+    }
+    
+    this.setState({
+      updateNewTask:taskName,
+      border: "solid 1px #ffffff",
+      taskConfirmModal: false,
+        backFromTaskEvent: true,
+    });
+   
     try {
       const { data } = await put(
         taskData,
         `workspaces/${this.state.workspaceId}/projects/${projectId}/tasks/${taskId}`
       );
-      var task = data.task;
+      toast(
+        <DailyPloyToast
+          message="Task Updated successfully!"
+          status="success"
+        />,
+
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
+     // this.createNotification()
+      this.setState({
+        show: false,
+        newTask: task,
+        taskConfirmModal: false,
+        backFromTaskEvent: true,
+        border: "solid 1px #ffffff",
+      });
+    } catch (e) {
+      this.setState({ show: false, border: "solid 1px #ffffff" });
+    }
+  }else{
+    try {
+      const { data } = await put(
+        taskData,
+        `workspaces/${this.state.workspaceId}/projects/${projectId}/tasks/${taskId}`
+      );
       toast(
         <DailyPloyToast
           message="Task Updated successfully!"
@@ -684,6 +1131,7 @@ class Dashboard extends Component {
     } catch (e) {
       this.setState({ show: false, border: "solid 1px #ffffff" });
     }
+  }
   };
 
   editTask = async () => {
@@ -1639,7 +2087,7 @@ class Dashboard extends Component {
   // };
 
   taskEventResumeConfirm = (event, modalText) => {
-    debugger;
+   
     if (modalText == "edit") {
       this.editAddTaskDetails(event.taskId, event);
     } else {
@@ -1826,9 +2274,10 @@ class Dashboard extends Component {
     });
   };
 
-  updateTaskEvent = async (event, data) => {
+  updateTaskEvent = async (event, data,...key) => {
     let taskId = event.id.split("-")[0];
-    this.updateTask({ task: data }, taskId, event.projectId);
+    this.updateTask({ task: data }, taskId, event.projectId,key[0],event,key[1]);
+
   };
 
   toggleTaskStartState = (e) => {
@@ -2252,7 +2701,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        {this.state.isLoading ? <div className="loading1"><VideoLoader></VideoLoader></div> : null}
+        {this.state.isLoading ? <div className="loading1"><VideoLoader/></div> : null}
         <div
           className="row no-margin"
           style={this.state.isLoading ? { pointerEvents: "none" } : {}}
@@ -2292,6 +2741,7 @@ class Dashboard extends Component {
           </div>
 
           <div>
+          
             <button
               className="btn menubar-task-btn"
               onClick={this.showTaskModal}
@@ -2323,7 +2773,7 @@ class Dashboard extends Component {
               saveComments={this.saveComments}
               toggleTaskStartState={this.toggleTaskStartState}
             />
-
+<NotificationContainer/>
             <TaskInfoModal
               showInfo={this.state.showInfo && this.state.backFromTaskEvent}
               state={this.state}

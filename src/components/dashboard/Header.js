@@ -15,12 +15,7 @@ import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import { base } from "../../../src/base";
-
-import {
-  convertUTCToLocalDate,
-  convertUTCDateToLocalDate,
-} from "./../../utils/function";
-
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +29,8 @@ class Header extends Component {
       userId: "",
       searchFlag: "My Reports",
       notifications: [],
+      tempSize:0,
+      size:0
     };
   }
 
@@ -42,17 +39,18 @@ class Header extends Component {
     if (!loggedInData) {
       try {
         let { data } = await get("logged_in_user");
-        this.getNotifications(data.id);
+        this.componentDidMountGetNotifications(data.id);
         this.setState({
           userId: data.id,
           userName: data.name,
           userEmail: data.email,
         });
+        
       } catch (e) {
         console.log("err", e);
       }
     } else {
-      this.getNotifications(loggedInData.id);
+      this.componentDidMountGetNotifications(loggedInData.id);
       this.setState({
         userId: loggedInData.id,
         userName: loggedInData.name,
@@ -61,12 +59,33 @@ class Header extends Component {
     }
   }
 
+
+async componentDidMountGetNotifications(useId) {
+  let notificataionData = await get(
+    `users/${
+    useId
+    }/notifications?workspace_id=${getWorkspaceId()}`
+  );
+  this.setState({
+    tempSize:notificataionData.data.notifications.length,
+    notifications:
+      notificataionData && notificataionData.data
+        ? notificataionData.data.notifications
+        : []
+  });
+}
+
+
   async getNotifications(useId) {
     let notificataionData = await get(
       `users/${
       useId
       }/notifications?workspace_id=${getWorkspaceId()}`
     );
+    console.log(notificataionData.data.notifications)
+    // let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
+    // let sound = new Audio(src);
+    // sound.play();
     this.setState({
       notifications:
         notificataionData && notificataionData.data
@@ -77,6 +96,7 @@ class Header extends Component {
 
   componentWillMount() {
     var workspaceId = getWorkspaceId()
+
     this.handleNotification(workspaceId);
   }
 
@@ -85,9 +105,38 @@ class Header extends Component {
       .database()
       .ref(`notification/${workspaceId}`)
       .on("child_changed", (snap) => {
+        this.getNotificationsUpdate(this.state.userId)        
         this.getNotifications(this.state.userId)
       });
+
+
   };
+
+  async getNotificationsUpdate(useId) {
+    var user=""
+  let notificataionData = await get(
+    `users/${
+    useId
+    }/notifications?workspace_id=${getWorkspaceId()}`
+  );
+      
+try {
+  const { data } = await get(
+    `workspaces/${getWorkspaceId()}/members/${this.state.userId}`
+  );
+  
+   user = data;} catch (e) {console.log(e) }
+
+if(user.role!=="admin"){
+if(notificataionData.data.notifications.length>this.state.tempSize && notificataionData.data.notifications.length!==0){
+  let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
+  let sound = new Audio(src);
+  sound.play();
+  this.setState({tempSize:notificataionData.data.notifications.length});}
+  this.createNotification(notificataionData.data.notifications);
+  }
+  }
+
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -127,7 +176,13 @@ class Header extends Component {
       }
     }
   };
-
+  createNotification = (dataNotification) => {
+ if(dataNotification){
+   if(dataNotification.length>0)
+      return (NotificationManager.info(dataNotification[dataNotification.length-1].data.message,dataNotification[dataNotification.length-1].data.source, 3000))
+    }
+    
+  }
   closeSettingModal = () => {
     this.clickClose.current.click();
   };
