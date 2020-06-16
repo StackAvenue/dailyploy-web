@@ -1,7 +1,7 @@
 @import "./styles";
 
 .signup-container {
-  margin-top: 2%;
+  margin-top: 2.5%;
 }
 
 .main-container1 {
@@ -277,10 +277,35 @@ a {
   width: 30% !important;
 }
 
-.flower-pot-div, .right-boys-content, .left-girls-content, .flower2-pot-div{
-  width: 226px;
-  height: 225px;
-  display: inline-flex;
+.right-boys-content {
+  width: 248px;
+  height: 548px;
+  position: absolute;
+  top: 30%;
+  right: 10%;
+}
+.left-girls-content{
+  width: 248px;
+  height: 548px;
+  position: absolute;
+  top: 30%;
+  left: 10%;
+
+}
+.flower-pot-div {
+  width: 224px;
+  height: 224px;
+  position: absolute;
+  top: 54%;
+  left: 1%;
+  
+}
+.flower2-pot-div{
+  width: 224px;
+  height: 224px;
+  position: absolute;
+  top: 54%;
+  right: 0%;
 }
 
 .sign-up1-div, .sign-up2-div, .sign-up3-div, .sign-up4-div {
