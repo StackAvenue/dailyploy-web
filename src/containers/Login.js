@@ -22,6 +22,18 @@ import { GOOGLE_CLIENT_ID } from "../utils/Constants";
 import GoogleLogin from "react-google-login";
 import DailyPloyToast from "./../../src/components/DailyPloyToast";
 
+import FlowerPot1 from "../assets/images/signUp1.svg";
+import Girls from "../assets/images/Girls.svg";
+
+import FlowerPot2 from "../assets/images/signUp2.svg";
+import Boys from "../assets/images/Boys.svg";
+
+import SignUp1 from "../assets/images/signUp5.svg";
+import SignUp2 from "../assets/images/signUp6.svg";
+import SignUp3 from "../assets/images/signUp4.svg";
+import SignUp4 from "../assets/images/signUp7.svg";
+import GoogleAuth from "../assets/images/GoogleAuth.svg";
+
 class Signin extends Component {
   constructor(props) {
     super(props);
@@ -296,16 +308,36 @@ class Signin extends Component {
         ) : null} */}
 
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-        <div className="container-fluid">
-          <div className="main-container">
+        <div className="container-fluid padding-0">
+          <div className="main-container1">
             <Header />
             <div className="row no-margin signup signup-container">
-              <div className="col-md-6 no-padding width">
-                <img
+              <div className="no-padding width">
+                <div className="flower-pot-div">
+                  <img
+                    src={FlowerPot1}
+                    alt=""
+                    title=""
+                    className="flowerpot1-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
+                <div className="left-girls-content">
+                  <img
+                    src={Girls}
+                    alt=""
+                    title=""
+                    className="girls-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
+                {/* <img
                   src={signup}
                   alt="signup"
                   className="img-responsive image"
-                />
+                /> */}
               </div>
               {this.state.isLogin ? (
                 <div className="form-wrap">
@@ -318,7 +350,7 @@ class Signin extends Component {
                       <div className="success">{this.state.resetSusses}</div>
                     ) : null}
                     <form onSubmit={this.login}>
-                      <div className="col-md-10 offset-1 no-padding signup-form text-left">
+                      <div className="col-md-12  no-padding signup-form text-left">
                         <div className="form-group">
                           <label>Email</label>
                           {this.state.errors.emailError ? (
@@ -404,7 +436,7 @@ class Signin extends Component {
                     <br />
                     <div
                       style={{ margin: "0" }}
-                      className="col-md-10 offset-1 no-padding googleIcon"
+                      className="col-md-12  no-padding googleIcon"
                     >
                       <GoogleLogin
                         clientId={GOOGLE_CLIENT_ID}
@@ -417,7 +449,7 @@ class Signin extends Component {
                     <br />
                     <div
                       style={{ margin: "0" }}
-                      className="col-md-8 offset-2 googleIcon"
+                      className="col-md-12  googleIcon"
                     >
                       <span>New to DailyPloy?</span>
                       <Link to={`/signup`} className="link">
@@ -427,70 +459,145 @@ class Signin extends Component {
                   </div>
                 </div>
               ) : (
-                <div className="form-wrap">
-                  <div className="col-md-5 sub-container">
-                    <div className="col-md-12 heading">Forgot Password</div>
-                    {this.state.error ? (
-                      <div className="invalid-error">{this.state.error}</div>
-                    ) : null}
-                    {this.state.resetSusses ? (
-                      <div className="success">{this.state.resetSusses}</div>
-                    ) : null}
-                    <form onSubmit={this.resetPassword}>
-                      <div className="col-md-10 offset-1 no-padding signup-form text-left">
-                        <div className="form-group">
-                          <label>Email</label>
-                          {this.state.errors.emailError ? (
-                            <span className="error-warning">
-                              {this.state.errors.emailError}
-                            </span>
-                          ) : null}
-                          <input
-                            type="email"
-                            name="email"
-                            value={email}
-                            onChange={this.handleChange}
-                            className="form-control login-form-field"
-                            placeholder="johndoe1234@amazon.com"
-                          />
-                        </div>
-                        <br />
-                        <div className="col-md-12 no-padding text-center">
-                          <button
-                            disabled={this.state.loadingReset}
-                            className="d-inline-block btn form-btn"
-                          >
-                            <span>Send Password Reset Link &nbsp;&nbsp;</span>
-                            {this.state.loadingReset ? (
-                              <Loader
-                                type="Oval"
-                                color="#FFFFFF"
-                                height={20}
-                                width={20}
-                                className="d-inline-block login-signup-loader"
-                              />
+                  <div className="form-wrap">
+                    <div className="col-md-5 sub-container">
+                      <div className="col-md-12 heading">Forgot Password</div>
+                      {this.state.error ? (
+                        <div className="invalid-error">{this.state.error}</div>
+                      ) : null}
+                      {this.state.resetSusses ? (
+                        <div className="success">{this.state.resetSusses}</div>
+                      ) : null}
+                      <form onSubmit={this.resetPassword}>
+                        <div className="col-md-12  no-padding signup-form text-left">
+                          <div className="form-group">
+                            <label>Email</label>
+                            {this.state.errors.emailError ? (
+                              <span className="error-warning">
+                                {this.state.errors.emailError}
+                              </span>
                             ) : null}
-                          </button>
+                            <input
+                              type="email"
+                              name="email"
+                              value={email}
+                              onChange={this.handleChange}
+                              className="form-control login-form-field"
+                              placeholder="johndoe1234@amazon.com"
+                            />
+                          </div>
+                          <br />
+                          <div className="col-md-12 no-padding text-center">
+                            <button
+                              disabled={this.state.loadingReset}
+                              className="d-inline-block btn form-btn"
+                            >
+                              <span>Send Password Reset Link &nbsp;&nbsp;</span>
+                              {this.state.loadingReset ? (
+                                <Loader
+                                  type="Oval"
+                                  color="#FFFFFF"
+                                  height={20}
+                                  width={20}
+                                  className="d-inline-block login-signup-loader"
+                                />
+                              ) : null}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </form>
-                    <br />
-                    <div className="col-md-12 googleIcon">
-                      <span className="d-inline-block">
-                        Already have DailyPloy Account?
+                      </form>
+                      <br />
+                      <div className="col-md-12 googleIcon">
+                        <span className="d-inline-block">
+                          Already have DailyPloy Account?
                       </span>
 
-                      <Link
-                        to="/login"
-                        onClick={this.toggleResetPassword}
-                        className="link"
-                      >
-                        Sign in
+                        <Link
+                          to="/login"
+                          onClick={this.toggleResetPassword}
+                          className="link"
+                        >
+                          Sign in
                       </Link>
+                      </div>
                     </div>
                   </div>
+                )}
+              <div className="no-padding width1">
+                <div className="right-boys-content">
+                  <img
+                    src={Boys}
+                    alt=""
+                    title=""
+                    className="boys-img"
+                    height="100%"
+                    width="100%"
+                  />
                 </div>
-              )}
+
+                <div className="flower2-pot-div">
+                  <img
+                    src={FlowerPot2}
+                    alt=""
+                    title=""
+                    className="flowerpot2-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
+              </div>
+
+            </div>
+            <div className="row no-margin images-div">
+              {/* <div className="col-sm-12 col-md-4 col-lg-4 padding-0"> */}
+              <div className="sign-up3-div">
+                <img
+                  src={SignUp3}
+                  alt=""
+                  title=""
+                  className="sign-up3-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+              {/* </div> */}
+              {/* <div className="col-sm-12 col-md-3 col-lg-3 padding-0 col-middle"> */}
+              <div className="sign-up1-div">
+                <img
+                  src={SignUp1}
+                  alt=""
+                  title=""
+                  className="sign-up1-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+              {/* </div> */}
+              {/* <div className="col-sm-12 col-md-3 col-lg-3 padding-0 col-middle"> */}
+
+              <div className="sign-up2-div">
+                <img
+                  src={SignUp2}
+                  alt=""
+                  title=""
+                  className="sign2-up-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+              {/* </div> */}
+              {/* <div className="col-sm-12 col-md-3 col-lg-3 padding-0 col-last"> */}
+              <div className="sign-up4-div">
+                <img
+                  src={SignUp4}
+                  alt=""
+                  title=""
+                  className="sign-up4-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>
