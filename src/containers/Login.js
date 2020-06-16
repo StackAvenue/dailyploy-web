@@ -549,7 +549,6 @@ class Signin extends Component {
 
             </div>
             <div className="row no-margin images-div">
-              {/* <div className="col-sm-12 col-md-4 col-lg-4 padding-0"> */}
               <div className="sign-up3-div">
                 <img
                   src={SignUp3}
@@ -560,8 +559,6 @@ class Signin extends Component {
                   width="100%"
                 />
               </div>
-              {/* </div> */}
-              {/* <div className="col-sm-12 col-md-3 col-lg-3 padding-0 col-middle"> */}
               <div className="sign-up1-div">
                 <img
                   src={SignUp1}
@@ -572,8 +569,6 @@ class Signin extends Component {
                   width="100%"
                 />
               </div>
-              {/* </div> */}
-              {/* <div className="col-sm-12 col-md-3 col-lg-3 padding-0 col-middle"> */}
 
               <div className="sign-up2-div">
                 <img
@@ -585,8 +580,6 @@ class Signin extends Component {
                   width="100%"
                 />
               </div>
-              {/* </div> */}
-              {/* <div className="col-sm-12 col-md-3 col-lg-3 padding-0 col-last"> */}
               <div className="sign-up4-div">
                 <img
                   src={SignUp4}

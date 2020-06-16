@@ -23,6 +23,18 @@ import cookie from "react-cookies";
 import axios from "axios";
 import "../assets/css/login.scss";
 
+import FlowerPot1 from "../assets/images/signUp1.svg";
+import Girls from "../assets/images/Girls.svg";
+
+import FlowerPot2 from "../assets/images/signUp2.svg";
+import Boys from "../assets/images/Boys.svg";
+
+import SignUp1 from "../assets/images/signUp5.svg";
+import SignUp2 from "../assets/images/signUp6.svg";
+import SignUp3 from "../assets/images/signUp4.svg";
+import SignUp4 from "../assets/images/signUp7.svg";
+import GoogleAuth from "../assets/images/GoogleAuth.svg";
+
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -364,35 +376,52 @@ class Signup extends Component {
         <div className="signup-toaster">
           <ToastContainer position={toast.POSITION.TOP_CENTER} />
         </div>
-        <div className="container-fluid">
-          <div className="main-container">
+        <div className="container-fluid  padding-0">
+          <div className="main-container1">
             <Header />
             <div className="row no-margin signup signup-container">
-              <div className="col-md-6 no-padding width">
-                <img
-                  src={signup}
-                  alt="signup"
-                  className="img-responsive image"
-                />
+              {/* <div className="col-md-6 no-padding width"> */}
+              <div className="no-padding width">
+                <div className="flower-pot-div">
+                  <img
+                    src={FlowerPot1}
+                    alt=""
+                    title=""
+                    className="flowerpot1-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
+                <div className="left-girls-content">
+                  <img
+                    src={Girls}
+                    alt=""
+                    title=""
+                    className="girls-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
               </div>
 
+
               <div
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-                className="col-md-5 sub-container"
+                // style={{
+                //   height: "100%",
+                //   display: "flex",
+                //   alignItems: "center",
+                //   justifyContent: "center"
+                // }}
+                className="sub-container1"
               >
                 <div
-                  style={{ width: "100%" }}
+                  // style={{ width: "100%" }}
                   className="signup-form-container"
                 >
                   <div className="col-md-12 heading">Sign up</div>
                   <Tabs
                     defaultActiveKey="individual"
-                    className="col-md-10 offset-1 main-tabs"
+                    className="col-md-12 main-tabs"
                     id="uncontrolled-tab-example"
                     onSelect={key => this.companyFlag(key)}
                   >
@@ -423,7 +452,7 @@ class Signup extends Component {
                     </Tab>
                   </Tabs>
                   <br />
-                  <div className="col-md-8 offset-2 googleIcon">
+                  <div className="col-md-12 googleIcon">
                     <span>Already have DailyPloy Account?</span>
                     <Link to={`/login`} className="link">
                       Sign in
@@ -431,7 +460,73 @@ class Signup extends Component {
                   </div>
                 </div>
               </div>
+              <div className="no-padding width1">
+                <div className="right-boys-content">
+                  <img
+                    src={Boys}
+                    alt=""
+                    title=""
+                    className="boys-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
+
+                <div className="flower2-pot-div">
+                  <img
+                    src={FlowerPot2}
+                    alt=""
+                    title=""
+                    className="flowerpot2-img"
+                    height="100%"
+                    width="100%"
+                  />
+                </div>
+              </div>
             </div>{" "}
+            <div className="row no-margin images-div">
+              <div className="sign-up3-div">
+                <img
+                  src={SignUp3}
+                  alt=""
+                  title=""
+                  className="sign-up3-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+              <div className="sign-up1-div">
+                <img
+                  src={SignUp1}
+                  alt=""
+                  title=""
+                  className="sign-up1-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+
+              <div className="sign-up2-div">
+                <img
+                  src={SignUp2}
+                  alt=""
+                  title=""
+                  className="sign2-up-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+              <div className="sign-up4-div">
+                <img
+                  src={SignUp4}
+                  alt=""
+                  title=""
+                  className="sign-up4-img"
+                  height="100%"
+                  width="100%"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </>

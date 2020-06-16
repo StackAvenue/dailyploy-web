@@ -4,6 +4,11 @@
   margin-top: 2%;
 }
 
+.main-container1 {
+  width: 100% !important;
+  padding-top: 24px !important;
+}
+
 .signup {
   .image {
     width: $wd-100;
@@ -258,4 +263,47 @@ a {
 
 .tooltip-pwd:hover .tooltiptext-pwd {
   visibility: visible;
+}
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.width1 {
+  width: 30% !important;
+}
+
+.flower-pot-div, .right-boys-content, .left-girls-content, .flower2-pot-div{
+  width: 226px;
+  height: 225px;
+  display: inline-flex;
+}
+
+.sign-up1-div, .sign-up2-div, .sign-up3-div, .sign-up4-div {
+
+  height: 70px;
+  width: 50px;
+}
+
+.images-div{
+  display: flex;
+  justify-content: space-between;
+  // margin: 0px 20px !important;
+}
+
+.signup-form-container{
+  width: 100% !important;
+  height: 778px;
+  border-radius: 3px;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
+  padding: 40px 80px;
+}
+
+.sub-container1{
+  width: 40% !important;
 }
