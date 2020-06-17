@@ -4,11 +4,15 @@
 
 .form-control:focus {
   border-color: #80bdff !important;
+  background-color: #fff !important;
+
 }
 .margin-0{
   margin: 0 !important;
 }
-
+.padding-top-28 {
+  padding-top: 28px !important;
+}
 .error-warning {
   color: $red-color;
   font-family: $font-family-roboto;

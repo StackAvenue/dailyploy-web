@@ -451,8 +451,8 @@ class Signup extends Component {
                       />
                     </Tab>
                   </Tabs>
-                  <br />
-                  <div className="col-md-12 googleIcon">
+                  {/* <br /> */}
+                  <div className="padding-top-28 googleIcon">
                     <span>Already have DailyPloy Account?</span>
                     <Link to={`/login`} className="link">
                       Sign in

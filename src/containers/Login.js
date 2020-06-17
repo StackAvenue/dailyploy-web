@@ -351,8 +351,12 @@ class Signin extends Component {
                     ) : null}
                     <form onSubmit={this.login}>
                       <div className="col-md-12  no-padding signup-form text-left">
-                        <div className="form-group">
-                          <label>Email</label>
+                        <div className=" input-data padding-top-28">
+                          <span class="span-icon">
+                            <i class="fa fa-envelope icon-5" aria-hidden="true"></i>
+                          </span>
+                          <span class="lines"></span>
+                          {/* <label>Email</label> */}
                           {this.state.errors.emailError ? (
                             <span className="error-warning">
                               {this.state.errors.emailError}
@@ -363,12 +367,16 @@ class Signin extends Component {
                             name="email"
                             value={email}
                             onChange={this.handleChange}
-                            className="form-control login-form-field"
-                            placeholder="johndoe1234@amazon.com"
+                            className="form-control form-input login-form-field"
+                            placeholder="Email"
                           />
                         </div>
-                        <div className="form-group">
-                          <label>Password</label>
+                        <div className="input-data padding-top-28">
+                          {/* <label>Password</label> */}
+                          <span class="span-icon">
+                            <i class="fas fa-lock icon-5" aria-hidden="true" ></i>
+                          </span>
+                          <span class="lines"></span>
                           {this.state.errors.passwordError ? (
                             <span className="error-warning">
                               {this.state.errors.passwordError}
@@ -396,12 +404,12 @@ class Signin extends Component {
                           </span>
                         </div>
                         <div className="text-right forgot-pass">
-                          Forgot Password?{" "}
+                          {" "}
                           <div
-                            className="btn btn-link no-padding click-here"
+                            className="click-here  no-padding "
                             onClick={this.toggleResetPassword}
                           >
-                            Click here
+                            Forgot Password?
                           </div>
                           {this.state.loadingReset ? (
                             <Loader
@@ -413,8 +421,8 @@ class Signin extends Component {
                             />
                           ) : null}
                         </div>
-                        <br />
-                        <div className="col-md-12 no-padding text-center">
+                        {/* <br /> */}
+                        <div className=" padding-top-28">
                           <button
                             disabled={!isEnabled}
                             className="d-inline-block btn form-btn"
@@ -433,10 +441,10 @@ class Signin extends Component {
                         </div>
                       </div>
                     </form>
-                    <br />
+                    {/* <br /> */}
                     <div
-                      style={{ margin: "0" }}
-                      className="col-md-12  no-padding googleIcon"
+                      style={{ margin: "0", textAlign: "center" }}
+                      className="padding-top-28 googleIcon"
                     >
                       <GoogleLogin
                         clientId={GOOGLE_CLIENT_ID}
@@ -446,10 +454,10 @@ class Signin extends Component {
                         onFailure={this.errorGoogle}
                       />
                     </div>
-                    <br />
+                    {/* <br /> */}
                     <div
                       style={{ margin: "0" }}
-                      className="col-md-12  googleIcon"
+                      className="padding-top-28  googleIcon"
                     >
                       <span>New to DailyPloy?</span>
                       <Link to={`/signup`} className="link">
@@ -470,8 +478,12 @@ class Signin extends Component {
                       ) : null}
                       <form onSubmit={this.resetPassword}>
                         <div className="col-md-12  no-padding signup-form text-left">
-                          <div className="form-group">
-                            <label>Email</label>
+                          <div className="input-data padding-top-28">
+                            {/* <label>Email</label> */}
+                            <span class="span-icon">
+                              <i class="fa fa-envelope icon-5" aria-hidden="true"></i>
+                            </span>
+                            <span class="lines"></span>
                             {this.state.errors.emailError ? (
                               <span className="error-warning">
                                 {this.state.errors.emailError}
@@ -483,14 +495,14 @@ class Signin extends Component {
                               value={email}
                               onChange={this.handleChange}
                               className="form-control login-form-field"
-                              placeholder="johndoe1234@amazon.com"
+                              placeholder="Email"
                             />
                           </div>
-                          <br />
-                          <div className="col-md-12 no-padding text-center">
+                          {/* <br /> */}
+                          <div className=" text-center padding-top-28">
                             <button
                               disabled={this.state.loadingReset}
-                              className="d-inline-block btn form-btn"
+                              className="d-inline-block btn form-btn "
                             >
                               <span>Send Password Reset Link &nbsp;&nbsp;</span>
                               {this.state.loadingReset ? (
@@ -506,7 +518,7 @@ class Signin extends Component {
                           </div>
                         </div>
                       </form>
-                      <br />
+                      {/* <br /> */}
                       <div className="col-md-12 googleIcon">
                         <span className="d-inline-block">
                           Already have DailyPloy Account?
