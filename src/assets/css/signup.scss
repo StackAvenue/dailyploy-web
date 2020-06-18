@@ -47,6 +47,7 @@
         font-size: 13px !important;
         color: #000000 !important;
         text-decoration: none !important;
+        cursor: pointer;
       }
     }
   }
@@ -74,14 +75,22 @@
     margin-bottom: 20px;
   }
   .form-btn {
-    border-radius: 2px;
-    border: 1px solid $color-brand3 !important;
-    background-color: $color-brand3 !important;
-    font-family: $font-family-robomed !important;
-    font-weight: 500 !important;
+    // border-radius: 2px;
+    // border: 1px solid $color-brand3 !important;
+    // background-color: $color-brand3 !important;
+    // font-family: $font-family-robomed !important;
+    // font-weight: 500 !important;
     color: $color-white !important;
+    height: 45px;
+    border-radius: 4px;
+    background-color: #1d2d42 !important;
     text-align: center !important;
     width: $wd-100 !important;
+    font-size: 18px !important;
+    :hover{
+    box-shadow: 0 0 14px 0 rgba(29, 45, 66, 0.4) !important;
+
+    }
     &:disabled {
       cursor: not-allowed;
     }
@@ -97,12 +106,12 @@
       // text-decoration: underline !important;
       // color: $color-text3 !important;
       color:  #10b857 !important;
-      font-size: $font-12 !important;
+      font-size: 16px !important;
     }
     span {
       font-family: $font-family-roboto !important;
-      color: $color-text3 !important;
-      font-size: 12px !important;
+      color: #000000 !important;
+      font-size: 16px !important;
     }
     .google-auth{
       border-radius: 2px;
@@ -114,12 +123,15 @@
       text-align: center !important;
       box-shadow: none !important;
       width: 100% !important;
+      opacity: 0.9 !important;
     }
     .signup{
-      padding: 0px 30% 0px 20% !important;
+      // padding: 0px 30% 0px 20% !important;
+      padding: 0% 12% !important;
+
     }
     .login{
-      padding: 0px 30% 0px 30% !important;
+      padding: 0px 24% 0px 28% !important;
     }
   }
 }
@@ -310,7 +322,7 @@ a {
 }
 
 .width1 {
-  width: 30% !important;
+  width: 33% !important;
 }
 
 .right-boys-content {
@@ -366,7 +378,7 @@ a {
 }
 
 .sub-container1{
-  width: 40% !important;
+  width: 34% !important;
 }
 
 .submit-btn-div {

@@ -519,7 +519,7 @@ class Signin extends Component {
                         </div>
                       </form>
                       {/* <br /> */}
-                      <div className="col-md-12 googleIcon">
+                      <div className="padding-top-28 googleIcon">
                         <span className="d-inline-block">
                           Already have DailyPloy Account?
                       </span>
