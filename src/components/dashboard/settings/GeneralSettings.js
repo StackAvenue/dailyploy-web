@@ -109,7 +109,7 @@ class GeneralSettings extends Component {
                 : [],
             isActive: data.is_active,
             // emailText: data.email_text,
-            emailText:" ",
+            emailText: " ",
             isConfig: false,
             members: members,
           });
@@ -120,7 +120,7 @@ class GeneralSettings extends Component {
         this.setState({ isConfig: true });
       }
     }
-    
+
   };
 
   filterEmailMember = (emails, members) => {
@@ -162,14 +162,14 @@ class GeneralSettings extends Component {
   };
 
   handleEditShow = () => {
-   let temp=[...this.state.selectCcMembers,...this.state.selectToMembers]
-  
-    
-      this.props.UserNameHandler2(temp);
-      
-   
-    
-   
+    let temp = [...this.state.selectCcMembers, ...this.state.selectToMembers]
+
+
+    this.props.UserNameHandler2(temp);
+
+
+
+
     this.setState({
       editShow: true,
       editSetShow: true,
@@ -264,14 +264,14 @@ class GeneralSettings extends Component {
   handleToChange = (e) => {
     const { name, value } = e.target;
     let toEmailSuggestions = [];
-      var searchOptions = this.props.state.userMembers.map((user) =>user);
-      if (value.length > 0) {
-        const regex = new RegExp(`^${value}`, "i");
-        toEmailSuggestions = searchOptions
-          .sort()
-          .filter((v) => regex.test(v.email));
-      }
-  
+    var searchOptions = this.props.state.userMembers.map((user) => user);
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      toEmailSuggestions = searchOptions
+        .sort()
+        .filter((v) => regex.test(v.email));
+    }
+
     this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
   };
 
@@ -313,7 +313,7 @@ class GeneralSettings extends Component {
     });
   };
 
-  removeSelectedToTag = (index,obj) => {
+  removeSelectedToTag = (index, obj) => {
     var selectToMembers = this.state.selectToMembers;
     this.props.UserNameAddHandler(obj);
     selectToMembers = selectToMembers.filter((_, idx) => idx !== index);
@@ -324,29 +324,29 @@ class GeneralSettings extends Component {
 
   initalChar = (str) => {
     var matches = str.match(/\b(\w)/g);
-    
+
     return matches.join("").toUpperCase();
   };
 
   renderSelectedToMembers = () => {
-    
+
     return (
       <>
         {this.state.selectToMembers.map((option, index) => {
-          
+
           return (
             <div className="select-member" key={index}>
               <div className="member-title d-inline-block">
                 {this.initalChar(option.name)}
-               
-                
+
+
               </div>
               <div className="right-left-space-5 d-inline-block">
                 {option.name}
               </div>
               <a
                 className="right-left-space-5 d-inline-block"
-                onClick={() => this.removeSelectedToTag(index,option)}
+                onClick={() => this.removeSelectedToTag(index, option)}
               >
                 {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
                   this.placeCloseIcon(option, state)
@@ -364,7 +364,7 @@ class GeneralSettings extends Component {
   handleCcChange = (e) => {
     const { name, value } = e.target;
     let ccEmailSuggestions = [];
-    var searchOptions = this.props.state.userMembers.map((user) =>user);
+    var searchOptions = this.props.state.userMembers.map((user) => user);
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       ccEmailSuggestions = searchOptions
@@ -412,7 +412,7 @@ class GeneralSettings extends Component {
     });
   };
 
-  removeSelectedCcTag = (index,obj) => {
+  removeSelectedCcTag = (index, obj) => {
     var selectCcMembers = this.state.selectCcMembers;
     this.props.UserNameAddHandler(obj);
     selectCcMembers = selectCcMembers.filter((_, idx) => idx !== index);
@@ -434,15 +434,15 @@ class GeneralSettings extends Component {
             <div className="select-member" key={index}>
               <div className="member-title d-inline-block">
                 {this.initalChar(option.name)}
-                
-                
+
+
               </div>
               <div className="right-left-space-5 d-inline-block">
                 {option.name}
               </div>
               <a
                 className="right-left-space-5 d-inline-block"
-                onClick={() => this.removeSelectedCcTag(index,option)}
+                onClick={() => this.removeSelectedCcTag(index, option)}
               >
                 {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
                   this.placeCloseIcon(option, state)
@@ -663,7 +663,7 @@ class GeneralSettings extends Component {
           `workspaces/${this.props.state.workspaceId}/update_daily_status_mail`
         );
         this.setEmailState(data);
-        
+
       } catch (e) {
         console.log("error", e);
       }
@@ -672,21 +672,21 @@ class GeneralSettings extends Component {
 
   setEmailState = (data) => {
     this.setState({
-      toMails: data.to_mails?data.to_mails:[],
-      bccMails: data.bcc_mails?data.bcc_mails:[],
-      ccMails: data.cc_mails?data.cc_mails:[],
-      selectToMembers:data.to_mails?
+      toMails: data.to_mails ? data.to_mails : [],
+      bccMails: data.bcc_mails ? data.bcc_mails : [],
+      ccMails: data.cc_mails ? data.cc_mails : [],
+      selectToMembers: data.to_mails ?
         data.to_mails.length > 0
           ? this.filterEmailMember(data.to_mails, this.state.members)
-          : []:[],
-      selectBccMembers:data.bcc_mails?
+          : [] : [],
+      selectBccMembers: data.bcc_mails ?
         data.bcc_mails.length > 0
           ? this.filterEmailMember(data.bcc_mails, this.state.members)
-          : []:[],
-      selectCcMembers:data.cc_mails?
+          : [] : [],
+      selectCcMembers: data.cc_mails ?
         data.cc_mails.length > 0
           ? this.filterEmailMember(data.cc_mails, this.state.members)
-          : []:[],
+          : [] : [],
       isActive: data.is_active,
       emailText: data.email_text,
       editShow: false,
@@ -725,7 +725,7 @@ class GeneralSettings extends Component {
   };
 
   render() {
-    
+
     return (
       <>
         <div className="row no-margin general-setting">
@@ -749,16 +749,19 @@ class GeneralSettings extends Component {
                   this.props.state.isSaveWorkspaceName
                     ? "btn-blue"
                     : "btn-disable"
-                }`}
+                  }`}
                 onClick={this.props.updateWorkspaceName}
               >
                 Save
               </button>
             </div>
           </div>
+
+          <div className="col-md-12 hr1"></div>
+
           <div
             className="col-md-12 workspace-name"
-            style={{ marginTop: "10px" }}
+            style={{ marginTop: "0px", paddingTop: "20px" }}
           >
             <div className="col-md-2 no-padding name">Admins</div>
           </div>
@@ -779,56 +782,56 @@ class GeneralSettings extends Component {
                 {(this.props.loggedInUser &&
                   this.props.loggedInUser.role !== "member" &&
                   this.props.state.adminUserArr.length > 1) ||
-                (this.props.state.adminUserArr.length == 1 &&
-                  this.props.loggedInUser &&
-                  this.props.loggedInUser.id ===
+                  (this.props.state.adminUserArr.length == 1 &&
+                    this.props.loggedInUser &&
+                    this.props.loggedInUser.id ===
                     this.props.workspace.owner.id) ? (
-                  <button
-                    className="btn btn-link triple-dot"
-                    onClick={() =>
-                      this.handleRemoveAdmin(
-                        this.state.isShowRemoveAdmin,
-                        admin.id,
-                        admin.name
-                      )
-                    }
-                  >
-                    <i className="fas fa-ellipsis-v"></i>
-                  </button>
-                ) : null}
+                    <button
+                      className="btn btn-link triple-dot"
+                      onClick={() =>
+                        this.handleRemoveAdmin(
+                          this.state.isShowRemoveAdmin,
+                          admin.id,
+                          admin.name
+                        )
+                      }
+                    >
+                      <i className="fas fa-ellipsis-v"></i>
+                    </button>
+                  ) : null}
                 <div style={{ position: "absolute" }}>
                   {this.state.isShowRemoveAdmin &&
-                  this.state.showRemoveAdminId === admin.id ? (
-                    <>
-                      <button
-                        className="btn btn-primary remove-btn"
-                        onClick={this.handleRemoveShow}
-                      >
-                        Remove
+                    this.state.showRemoveAdminId === admin.id ? (
+                      <>
+                        <button
+                          className="btn btn-primary remove-btn"
+                          onClick={this.handleRemoveShow}
+                        >
+                          Remove
                       </button>
-                      <RemoveAdminModal
-                        state={this.state}
-                        handleClose={this.handleRemoveClose}
-                        removeAdmin={this.removeAdmin}
-                      />
-                    </>
-                  ) : null}
+                        <RemoveAdminModal
+                          state={this.state}
+                          handleClose={this.handleRemoveClose}
+                          removeAdmin={this.removeAdmin}
+                        />
+                      </>
+                    ) : null}
                 </div>
               </div>
             ))}
             {(this.props.loggedInUser &&
               this.props.loggedInUser.role === "admin") ||
-            (this.props.workspace && this.props.loggedInUser
-              ? this.props.loggedInUser.id === this.props.workspace.owner.id
-              : false) ? (
-              <button
-                className="btn btn-primary addnew-button"
-                onClick={this.handleAddAdminShow}
-              >
-                {" "}
+              (this.props.workspace && this.props.loggedInUser
+                ? this.props.loggedInUser.id === this.props.workspace.owner.id
+                : false) ? (
+                <button
+                  className="btn btn-primary addnew-button"
+                  onClick={this.handleAddAdminShow}
+                >
+                  {" "}
                 + Add New
-              </button>
-            ) : null}
+                </button>
+              ) : null}
             <AddAdminModal
               state={this.state}
               handleClose={this.handleAddAdminClose}
@@ -872,13 +875,13 @@ class GeneralSettings extends Component {
                       Suspend
                     </button>
                   ) : (
-                    <button
-                      className="btn btn-primary resume-btn"
-                      onClick={() => this.handleResumeShow("resume")}
-                    >
-                      Resume
-                    </button>
-                  )}
+                      <button
+                        className="btn btn-primary resume-btn"
+                        onClick={() => this.handleResumeShow("resume")}
+                      >
+                        Resume
+                      </button>
+                    )}
                   <EmailConfigurationModal
                     state={this.state}
                     handleClose={this.handleResumeClose}
