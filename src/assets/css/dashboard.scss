@@ -533,6 +533,10 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           border: 0 !important;
+          &:hover{
+            background-color: #0056b3 !important;
+
+          }
         }
         .button2 {
           border-radius: 5px !important;
@@ -703,6 +707,10 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           border: 0 !important;
+          &:hover{
+            background-color: #0056b3 !important;
+
+          }
         }
         .button2 {
           border-radius: 5px !important;
@@ -862,6 +870,10 @@
           border: 0 !important;
           // margin-left: 7% !important;
           width: 93px;
+          &:hover{
+            background-color: #0056b3 !important;
+
+          }
         }
         .button2 {
           border-radius: 5px !important;
@@ -1096,6 +1108,10 @@
           font-size: 17px !important;
           font-weight: 500 !important;
           border: 0 !important;
+          &:hover{
+            background-color: #0056b3 !important;
+
+          }
         }
         .button2 {
           border-radius: 5px !important;
@@ -1519,7 +1535,9 @@ table.scheduler-table tr:last-child td {
 
 .resource-table {
   tbody {
-    background-color: #ededed;
+    // background-color: #ededed;
+    background-color: #F8F8F8 !important;
+
     border: 1px solid $color-borders;
     .header2-text {
       color: $color-text2 !important;
@@ -1778,6 +1796,10 @@ table.scheduler-table tr:last-child td {
       font-size: 17px !important;
       font-weight: 500 !important;
       border: 0 !important;
+      &:hover{
+        background-color: #0056b3 !important;
+
+      }
     }
     .button2 {
       border-radius: 5px !important;
@@ -2277,6 +2299,10 @@ table.scheduler-table tr:last-child td {
               font-size: 17px !important;
               font-weight: 500 !important;
               border: 0 !important;
+              &:hover{
+                background-color: #0056b3 !important;
+
+              }
             }
             .button2 {
               border-radius: 5px !important;
@@ -2291,6 +2317,7 @@ table.scheduler-table tr:last-child td {
           }
         }
       }
+
       .project-member-search {
         width: 100%;
         height: 90px;
@@ -2605,6 +2632,9 @@ table.scheduler-table tr:last-child td {
         display: inline-block;
         vertical-align: top;
       }
+      .addnew-button:hover {
+        background-color: #0056b3 !important;
+      }
     }
     .hr1 {
       border-bottom: 1px solid $color-borders;
@@ -2854,7 +2884,9 @@ table.scheduler-table tr:last-child td {
   padding-top: 50px !important;
   padding-bottom: 20px !important;
   .side-tabs {
-    background-color: #f9f9f9 !important;
+    // background-color: #f9f9f9 !important;
+    background-color: #F8F8F8 !important;
+
     height: 650px !important;
     padding-top: 42px !important;
     .nav-link {
@@ -2871,7 +2903,9 @@ table.scheduler-table tr:last-child td {
     }
   }
   .body-tabs {
-    background-color: #f9f9f9 !important;
+    // background-color: #f9f9f9 !important;
+    background-color: #F8F8F8 !important;
+
     // height: 650px !important;
     padding-bottom: 60px;
     min-height: 650px !important;
@@ -2910,6 +2944,12 @@ table.scheduler-table tr:last-child td {
         font-family: $font-family-roboto !important;
         background-color: $color-white !important;
         border: 1px solid $color-borders !important;
+        // background-color: #33a1ff;
+        &:hover{
+          background-color: #0056b3 !important;
+          color: $color-white !important;
+
+        }
       }
     }
 
@@ -3199,10 +3239,14 @@ table.scheduler-table tr:last-child td {
           width: 93px !important;
           height: 40px !important;
           border-radius: 5px !important;
-          background-color: $color-brand3 !important;
           font-family: $font-family-roboto !important;
           font-size: 17px !important;
           color: $color-white !important;
+          background-color: #33a1ff;
+          &:hover{
+            background-color: #0056b3 !important;
+  
+          }
         }
         .cancel {
           width: 93px !important;
@@ -4444,6 +4488,10 @@ width: 446px;
           font-size: 17px !important;
           font-weight: 500 !important;
           border: 0 !important;
+          &:hover{
+            background-color: #0056b3 !important;
+
+          }
         }
         .button2 {
           border-radius: 5px !important;

@@ -257,7 +257,8 @@
   top: 0 !important;
   z-index: 100;
   width: 100%;
-  background-color: #f2f2f2 !important
+  // background-color: #f2f2f2 !important;
+  background-color: #F8F8F8 !important;
 }
 .sticky-menubar{
   position: fixed;
@@ -297,4 +298,27 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.addnew-button7 {
+  height: 40px !important;
+  width: 93px !important;
+  border-radius: 5px !important;
+  border: solid 1px $color-borders !important;
+  background-color: $color-brand3 !important;
+  font-family: $font-family-roboto !important;
+  font-size: 14px !important;
+  color: $color-white !important;
+  white-space: nowrap !important;
+  margin: 0px 16px;
+  display: inline-block;
+  vertical-align: top;
+}
+.addnew-button7:hover {
+  background-color: #0056b3 !important;
+}
+
+.list-icon i{
+  color: #33a1ff !important;
+  font-size: 18px;
 }

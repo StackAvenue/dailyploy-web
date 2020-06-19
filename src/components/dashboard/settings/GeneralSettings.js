@@ -846,7 +846,7 @@ class GeneralSettings extends Component {
             <div className="col-md-12 heading">
               <div className="col-md-6 no-padding d-inline-block">
                 Daily Status Mail
-                <button className="btn btn-link" onClick={this.handleEditShow}>
+                <button className="btn btn-link addnew-button7" onClick={this.handleEditShow}>
                   {this.state.isConfig ? "configure" : "Edit"}
                 </button>
               </div>

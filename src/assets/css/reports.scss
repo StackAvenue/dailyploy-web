@@ -181,12 +181,15 @@ justify-content: flex-end;
     height: 60px;
     // padding: 20px;
     padding: 20px 56px 0px 14px;
-    background-color: rgba(229, 229, 229, 0.6);
+    // background-color: rgba(229, 229, 229, 0.6);
+    background-color: #F8F8F8 !important;
   }
   .report-table-date{
     width: auto;
     height: 40px;
-    background-color: rgba(229, 229, 229, 0.5);
+    // background-color: rgba(229, 229, 229, 0.5);
+    background-color: #F8F8F8 !important;
+
   }
   .reports-track-logs{
     height: 34px !important;
@@ -526,7 +529,7 @@ justify-content: flex-end;
       text-align: center;
       border: solid 1px $color-background;
       border-radius: 3px;
-      color: $color-brandheading2
+      color: $color-brandheading2;
     }
     .cap-info-btn{
       button:first-child{
@@ -552,8 +555,13 @@ justify-content: flex-end;
         // color: $color-text3;
       }
       button:last-child{
-        background-color: #04505e;
+        // background-color: #04505e;
         color: $color-white;
+        background-color: #33a1ff;
+        &:hover{
+          background-color: #0056b3 !important;
+
+        }
       }
     }
   }
