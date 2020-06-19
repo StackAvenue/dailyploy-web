@@ -15,7 +15,7 @@ import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import { base } from "../../../src/base";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -29,8 +29,8 @@ class Header extends Component {
       userId: "",
       searchFlag: "My Reports",
       notifications: [],
-      tempSize:0,
-      size:0
+      tempSize: 0,
+      size: 0
     };
   }
 
@@ -45,7 +45,7 @@ class Header extends Component {
           userName: data.name,
           userEmail: data.email,
         });
-        
+
       } catch (e) {
         console.log("err", e);
       }
@@ -60,20 +60,20 @@ class Header extends Component {
   }
 
 
-async componentDidMountGetNotifications(useId) {
-  let notificataionData = await get(
-    `users/${
-    useId
-    }/notifications?workspace_id=${getWorkspaceId()}`
-  );
-  this.setState({
-    tempSize:notificataionData.data.notifications.length,
-    notifications:
-      notificataionData && notificataionData.data
-        ? notificataionData.data.notifications
-        : []
-  });
-}
+  async componentDidMountGetNotifications(useId) {
+    let notificataionData = await get(
+      `users/${
+      useId
+      }/notifications?workspace_id=${getWorkspaceId()}`
+    );
+    this.setState({
+      tempSize: notificataionData.data.notifications.length,
+      notifications:
+        notificataionData && notificataionData.data
+          ? notificataionData.data.notifications
+          : []
+    });
+  }
 
 
   async getNotifications(useId) {
@@ -82,7 +82,7 @@ async componentDidMountGetNotifications(useId) {
       useId
       }/notifications?workspace_id=${getWorkspaceId()}`
     );
-    console.log(notificataionData.data.notifications)
+    console.log('tets', notificataionData.data.notifications)
     // let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
     // let sound = new Audio(src);
     // sound.play();
@@ -95,17 +95,20 @@ async componentDidMountGetNotifications(useId) {
   }
 
   componentWillMount() {
+    debugger;
     var workspaceId = getWorkspaceId()
+    console.log('workspaceId', workspaceId)
 
     this.handleNotification(workspaceId);
   }
 
   handleNotification = async (workspaceId) => {
+
     base
       .database()
       .ref(`notification/${workspaceId}`)
       .on("child_changed", (snap) => {
-        this.getNotificationsUpdate(this.state.userId)        
+        this.getNotificationsUpdate(this.state.userId)
         this.getNotifications(this.state.userId)
       });
 
@@ -113,28 +116,30 @@ async componentDidMountGetNotifications(useId) {
   };
 
   async getNotificationsUpdate(useId) {
-    var user=""
-  let notificataionData = await get(
-    `users/${
-    useId
-    }/notifications?workspace_id=${getWorkspaceId()}`
-  );
-      
-try {
-  const { data } = await get(
-    `workspaces/${getWorkspaceId()}/members/${this.state.userId}`
-  );
-  
-   user = data;} catch (e) {console.log(e) }
+    var user = ""
+    let notificataionData = await get(
+      `users/${
+      useId
+      }/notifications?workspace_id=${getWorkspaceId()}`
+    );
 
-if(user.role!=="admin"){
-if(notificataionData.data.notifications.length>this.state.tempSize && notificataionData.data.notifications.length!==0){
-  let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
-  let sound = new Audio(src);
-  sound.play();
-  this.setState({tempSize:notificataionData.data.notifications.length});}
-  this.createNotification(notificataionData.data.notifications);
-  }
+    try {
+      const { data } = await get(
+        `workspaces/${getWorkspaceId()}/members/${this.state.userId}`
+      );
+
+      user = data;
+    } catch (e) { console.log(e) }
+
+    if (user.role !== "admin") {
+      if (notificataionData.data.notifications.length > this.state.tempSize && notificataionData.data.notifications.length !== 0) {
+        let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
+        let sound = new Audio(src);
+        sound.play();
+        this.setState({ tempSize: notificataionData.data.notifications.length });
+      }
+      this.createNotification(notificataionData.data.notifications);
+    }
   }
 
 
@@ -177,11 +182,11 @@ if(notificataionData.data.notifications.length>this.state.tempSize && notificata
     }
   };
   createNotification = (dataNotification) => {
- if(dataNotification){
-   if(dataNotification.length>0)
-      return (NotificationManager.info(dataNotification[dataNotification.length-1].data.message,dataNotification[dataNotification.length-1].data.source, 3000))
+    if (dataNotification) {
+      if (dataNotification.length > 0)
+        return (NotificationManager.info(dataNotification[dataNotification.length - 1].data.message, dataNotification[dataNotification.length - 1].data.source, 3000))
     }
-    
+
   }
   closeSettingModal = () => {
     this.clickClose.current.click();

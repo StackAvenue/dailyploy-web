@@ -12,6 +12,7 @@ class TaskAction extends Component {
 
   render() {
     const { props } = this;
+    console.log('props----->', props)
     return (
       <div
         className="d-inline-block timeline-event-drop event-action-dropdown"
@@ -43,34 +44,36 @@ class TaskAction extends Component {
             >
               Edit
             </div>
-            <div
-              className="border-bottom pointer"
-              style={{ padding: "5px 0px 0px 0px" }}
-              onClick={() =>
-                props.taskEventResumeConfirm(props.event, "mark as completed")
-              }
-            >
-              Mark Complete
+            {(this.props.state.user.role == 'admin' || this.props.state.user.id == this.props.event.resourceId) && <div>
+              <div
+                className="border-bottom pointer"
+                style={{ padding: "5px 0px 0px 0px" }}
+                onClick={() =>
+                  props.taskEventResumeConfirm(props.event, "mark as completed")
+                }
+              >
+                Mark Complete
             </div>
+              <div
+                className="pointer"
+                style={{ padding: "5px 0px 5px 0px" }}
+                onClick={() =>
+                  props.taskEventResumeConfirm(props.event, "delete")
+                }
+              >
+                Delete Task
+            </div>
+            </div>}
+          </>
+        ) : (
             <div
               className="pointer"
               style={{ padding: "5px 0px 5px 0px" }}
-              onClick={() =>
-                props.taskEventResumeConfirm(props.event, "delete")
-              }
+              onClick={() => props.taskEventResumeConfirm(props.event, "resume")}
             >
-              Delete Task
+              Resume
             </div>
-          </>
-        ) : (
-          <div
-            className="pointer"
-            style={{ padding: "5px 0px 5px 0px" }}
-            onClick={() => props.taskEventResumeConfirm(props.event, "resume")}
-          >
-            Resume
-          </div>
-        )}
+          )}
       </div>
     );
   }

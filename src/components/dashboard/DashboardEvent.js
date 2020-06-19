@@ -38,8 +38,8 @@ class DashboardEvent extends Component {
       taskTimerLog: [],
       showAlert: false,
       show: false,
-      middelText:"",
-      event:[]
+      middelText: "",
+      event: []
     };
   }
 
@@ -61,6 +61,7 @@ class DashboardEvent extends Component {
   };
 
   ToggleActionDropDown = (id) => {
+    console.log('ToggleActionDropDown', id)
     this.setState({
       clickEventId: id,
       showAction: !this.state.showAction,
@@ -73,7 +74,7 @@ class DashboardEvent extends Component {
       try {
         const { data } = await mockGet("mark-complete");
         var isComplete = data[0].complete;
-      } catch (e) {}
+      } catch (e) { }
       if (isComplete) {
         var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
         this.handleReset();
@@ -90,7 +91,7 @@ class DashboardEvent extends Component {
       try {
         const { data } = await mockGet("mark-complete");
         var isComplete = data[0].complete;
-      } catch (e) {}
+      } catch (e) { }
       if (isComplete) {
       }
     }
@@ -125,8 +126,8 @@ class DashboardEvent extends Component {
       showAction: false,
     });
   };
-  displaytext=(event)=>{
-return event;
+  displaytext = (event) => {
+    return event;
   }
   calculateTime = (event) => {
     var start = new Date(
@@ -141,67 +142,62 @@ return event;
     );
 
     const totalSeconds = this.props.event.allTimeTracked
-    .map((log) => log.duration)
-    .flat()
-    .reduce((a, b) => a + b, 0);
+      .map((log) => log.duration)
+      .flat()
+      .reduce((a, b) => a + b, 0);
 
     var timeDiff = "No Estimate";
-    var text1=" of ";
-    var text=" Est. ";
-   
-    if (moment(start).format("HH:mm") != "00:00" && moment(end).format("HH:mm") != "00:00" && moment(totalSeconds).format("mm")!== "00") {
+    var text1 = " of ";
+    var text = " Est. ";
+
+    if (moment(start).format("HH:mm") != "00:00" && moment(end).format("HH:mm") != "00:00" && moment(totalSeconds).format("mm") !== "00") {
       let totalSeconds = (end - start) / 1000;
       totalSeconds = Number(totalSeconds);
       var h = Math.floor(totalSeconds / 3600);
       var m = Math.floor((totalSeconds % 3600) / 60);
-     
-    if(m>0 && h>0){
 
-      if(m>10)
-      {
-  return (
-      (h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7)+" Estimate"
-      );
-    }else
-    if(m<10)
-    {
-      return (
-          
-        (h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0"+m+"min").slice(-7)+" Estimate"
-      );
-    }    
+      if (m > 0 && h > 0) {
+
+        if (m > 10) {
+          return (
+            (h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m + "min").slice(-7) + " Estimate"
+          );
+        } else
+          if (m < 10) {
+            return (
+
+              (h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m + "min").slice(-7) + " Estimate"
+            );
+          }
+      }
+      else
+
+        if (m === 0 && h > 0) {
+          return (
+            (h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " Estimate"
+          );
+        } else
+          if (m > 0 || h === 0) {
+            if (m > 10) {
+              return ((m + "min").slice(-7) + " Estimate");
+            } else
+              if (m < 10) {
+                return (("0" + m + "min").slice(-7) + " Estimate");
+              }
+
+
+          } else {
+            return (" ")
+          }
     }
-    else
-
-    if(m===0 && h>0){
-        return (
-          (h+"h").slice(`${h}`.length > 2 ? -3 : -3)+" Estimate"
-        );
-    } else
-  if(m>0 || h===0)
-  {  
-    if(m>10)
-    {
-  return (  (m+"min").slice(-7)+" Estimate" );
-  }else
-  if(m<10)
-  {
-      return ( ("0"+m+"min").slice(-7)+" Estimate");
-  }
-
-
-    }else{
-      return(" ")
-    }
-  }
-    else{
-  return(" ")
+    else {
+      return (" ")
     }
 
-  
 
-  
-   
+
+
+
   };
 
   formattedSeconds = () => {
@@ -209,11 +205,11 @@ return event;
       .map((log) => log.duration)
       .flat()
       .reduce((a, b) => a + b, 0);
-   
-      var h = Math.floor(totalSeconds / 3600);
-      var m = Math.floor((totalSeconds % 3600) / 60);
-      var s = Math.floor((totalSeconds % 3600) % 60);
-    return((h+"h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m+"min").slice(-7))
+
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = Math.floor((totalSeconds % 3600) % 60);
+    return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m + "min").slice(-7))
   }
 
 
@@ -223,8 +219,8 @@ return event;
       showAction: false,
     });
   };
-  updateMiddelText=(text)=>{
-    this.setState({middelText:text})
+  updateMiddelText = (text) => {
+    this.setState({ middelText: text })
   }
   actionOnClickOutside = () => {
     this.setState({
@@ -246,7 +242,7 @@ return event;
       titleText,
       state,
     } = this.props;
-    
+
     const totalTrackTime = this.props.event.allTimeTracked
       .map((log) => log.duration)
       .flat()
@@ -275,67 +271,67 @@ return event;
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
-                event.status === "running" ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStop(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-pause"></i>
-                    </span>
-                  </div>
-                ) : null}
+                  event.status === "running" ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${
+                          state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStop(event, Date.now())
+                        }
+                      >
+                        <i className="fa fa-pause"></i>
+                      </span>
+                    </div>
+                  ) : null}
 
                 {event.trackingStatus === "play" &&
-                event.status === "not_started" ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-power-off"></i>
-                    </span>
-                  </div>
-                ) : null}
+                  event.status === "not_started" ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${
+                          state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStart(event, Date.now())
+                        }
+                      >
+                        <i className="fa fa-power-off"></i>
+                      </span>
+                    </div>
+                  ) : null}
 
                 {event.trackingStatus === "play" &&
-                event.status === "running" ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-play"></i>
-                    </span>
-                  </div>
-                ) : null}
+                  event.status === "running" ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${
+                          state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStart(event, Date.now())
+                        }
+                      >
+                        <i className="fa fa-play"></i>
+                      </span>
+                    </div>
+                  ) : null}
 
                 {event.status === "completed" ? (
                   <div className=" no-padding d-inline-block">
@@ -417,26 +413,26 @@ return event;
                   this.props.bgColor
                 )}
               >
-            <div className="row item dashboard-event-box">
-              <div
-                className="col-md-12 no-padding"
-                // style={{ color: contColor }}
-              >
-                <div
-                  className="col-md-12 no-padding pointer item-heading text-wraper"
-                  style={{
-                    padding: "5px 5px 0px 5px",
-                    // color: getContrastColor(this.props.bgColor)
-                  }}
-                  onClick={() => {
-                    if (!!eventItemClick) eventItemClick(schedulerData, event);
-                  }}
-                >
-                  <span className="project-task-name">{titleText}</span>
+                <div className="row item dashboard-event-box">
+                  <div
+                    className="col-md-12 no-padding"
+                  // style={{ color: contColor }}
+                  >
+                    <div
+                      className="col-md-12 no-padding pointer item-heading text-wraper"
+                      style={{
+                        padding: "5px 5px 0px 5px",
+                        // color: getContrastColor(this.props.bgColor)
+                      }}
+                      onClick={() => {
+                        if (!!eventItemClick) eventItemClick(schedulerData, event);
+                      }}
+                    >
+                      <span className="project-task-name">{titleText}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            </OverlayTrigger>
+              </OverlayTrigger>
             </div>
           </div>
         ) : null}
@@ -464,67 +460,67 @@ return event;
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
-                event.status === "running" ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStop(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-pause"></i>
-                    </span>
-                  </div>
-                ) : null}
+                  event.status === "running" ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${
+                          state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStop(event, Date.now())
+                        }
+                      >
+                        <i className="fa fa-pause"></i>
+                      </span>
+                    </div>
+                  ) : null}
 
                 {event.trackingStatus === "play" &&
-                event.status === "not_started" ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-power-off"></i>
-                    </span>
-                  </div>
-                ) : null}
+                  event.status === "not_started" ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${
+                          state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStart(event, Date.now())
+                        }
+                      >
+                        <i className="fa fa-power-off"></i>
+                      </span>
+                    </div>
+                  ) : null}
 
                 {event.trackingStatus === "play" &&
-                event.status === "running" ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      <i className="fa fa-play"></i>
-                    </span>
-                  </div>
-                ) : null}
+                  event.status === "running" ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${
+                          state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStart(event, Date.now())
+                        }
+                      >
+                        <i className="fa fa-play"></i>
+                      </span>
+                    </div>
+                  ) : null}
 
                 {event.status === "completed" ? (
                   <div className=" no-padding d-inline-block">
@@ -607,26 +603,26 @@ return event;
                   this.props.bgColor
                 )}
               >
-            <div className="row item dashboard-event-box">
-              <div
-                className="col-md-12 no-padding"
-                // style={{ color: contColor }}
-              >
-                <div
-                  className="col-md-12  pointer item-heading text-wraper"
-                  style={{
-                    padding: "5px 5px 0px 5px",
-                    // color: getContrastColor(this.props.bgColor)
-                  }}
-                  onClick={() => {
-                    if (!!eventItemClick) eventItemClick(schedulerData, event);
-                  }}
-                >
-                  <span className="project-task-name">{titleText}</span>
+                <div className="row item dashboard-event-box">
+                  <div
+                    className="col-md-12 no-padding"
+                  // style={{ color: contColor }}
+                  >
+                    <div
+                      className="col-md-12  pointer item-heading text-wraper"
+                      style={{
+                        padding: "5px 5px 0px 5px",
+                        // color: getContrastColor(this.props.bgColor)
+                      }}
+                      onClick={() => {
+                        if (!!eventItemClick) eventItemClick(schedulerData, event);
+                      }}
+                    >
+                      <span className="project-task-name">{titleText}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            </OverlayTrigger>
+              </OverlayTrigger>
             </div>
           </div>
         ) : null}
@@ -663,6 +659,7 @@ return event;
 
         {this.state.showAction && this.state.clickEventId === event.id ? (
           <TaskAction
+            state={this.props.state}
             event={event}
             actionOnClickOutside={this.actionOnClickOutside}
             taskEventResumeConfirm={this.props.taskEventResumeConfirm}
@@ -672,13 +669,13 @@ return event;
         <div className="custom-event-popup">
           {this.state.showPopup
             ? this.props.eventItemPopoverTemplateResolver(
-                schedulerData,
-                event,
-                titleText,
-                start,
-                end,
-                this.props.bgColor
-              )
+              schedulerData,
+              event,
+              titleText,
+              start,
+              end,
+              this.props.bgColor
+            )
             : null}
         </div>
 
