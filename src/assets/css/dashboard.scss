@@ -1176,6 +1176,15 @@
   right: 16px !important;
   bottom: 16px !important;
 }
+.menubar-task-btn:hover{
+  background-color: $color-white !important;
+  // color: #33a1ff !important;
+  // border: 1px solid #33a1ff !important;
+  color: #0056b3 !important;
+  border: 1px solid #0056b3 !important;
+
+
+}
 
 .menubar-dropdown {
   width: 93px;
@@ -2606,7 +2615,9 @@ table.scheduler-table tr:last-child td {
       border: solid 1px $color-borders;
       background-color: #ffffff;
       padding: 21px 33px 30px 33px;
-      width: 876px;
+      // width: 876px;
+      width: 100%;
+
       .workdays-text {
         font-family: $font-family-roboto !important;
         font-size: 15px !important;
@@ -4270,6 +4281,7 @@ table.scheduler-table tr:last-child td {
   li {
     padding: 10px 0px;
     border-bottom: 1px solid rgba(209, 209, 209, 1);
+    padding-left: 24px !important;
   }
   .suggestions {
     position: absolute;
@@ -5007,7 +5019,13 @@ width: 446px;
     background-color: $color-brand3 !important;
     color: $color-white !important;
   }
+
 }
+
+// .viewtype-btns, .active:hover{
+//   background-color: #0056b3 !important;
+// }
+
 .day-format-width {
   .react-datepicker-wrapper {
     input {

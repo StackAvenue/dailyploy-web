@@ -2,18 +2,16 @@ import React, { Component } from "react";
 import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
-import ImageUploading from "react-images-uploading";
+// import ImageUploading from "react-images-uploading";
 
 
 const UserSettings = props => {
-  const maxNumber = 69;
-  const onChange = imageList => {
-    // data for submit
-    console.log(imageList);
-  };
+  // const maxNumber = 69;
+  // const onChange = imageList => {
+  //   console.log(imageList);
+  // };
   return (
     <>
-
       <div className="col-md-12 heading" style={{ paddingTop: "40px" }}>
         General Settings
       </div>
@@ -24,9 +22,8 @@ const UserSettings = props => {
             style={{ verticalAlign: "bottom" }}
           >
             <div className="user-icon">
-              <ImageUploading multiple onChange={onChange} maxNumber={maxNumber}>
+              {/* <ImageUploading onChange={onChange} maxNumber={maxNumber}>
                 {({ imageList, onImageUpload, onImageRemoveAll }) => (
-                  // write your building UI
                   <div className="upload__image-wrapper">
                     <button onClick={onImageUpload}>
                       <img alt={"profile"} src={Profile} className="img-responsive" />
@@ -35,11 +32,24 @@ const UserSettings = props => {
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                     </button>
-
+                    {imageList.map(image => (
+                      <div key={image.key} className="image-item">
+                        <img src={image.dataURL} alt="" width="100" />
+                        <div className="image-item__btn-wrapper">
+                          <button onClick={image.onUpdate}>Update</button>
+                          <button onClick={image.onRemove}>Remove</button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
-              </ImageUploading>
+              </ImageUploading> */}
 
+              <img alt={"profile"} src={Profile} className="img-responsive" />
+              <div className="overlay"></div>
+              <button className="btn btn-link">
+                <i className="fas fa-pencil-alt"></i>
+              </button>
             </div>
           </div>
           <div className="col-md-8 d-inline-block no-padding inner-box">
