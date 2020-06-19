@@ -75,7 +75,7 @@ class Reports extends Component {
       barChartArray: this.generateDailyBarChartData(new Date()),
       isLoading: false,
       loadReportsData: false,
-      loadingGif:false
+      loadingGif: false
     };
   }
 
@@ -136,7 +136,7 @@ class Reports extends Component {
   };
 
   textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function(a) {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
@@ -342,7 +342,7 @@ class Reports extends Component {
   };
 
   async componentDidMount() {
-    this.setState({loadingGif:true});
+    this.setState({ loadingGif: true });
     this.props.handleLoading(true);
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -412,7 +412,7 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
-    } catch (e) {}
+    } catch (e) { }
 
     // Category Listing
     try {
@@ -420,7 +420,7 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/task_category`
       );
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Projects
     searchData["end_date"] = moment(this.state.selectedDays[0]).format(
@@ -434,12 +434,12 @@ class Reports extends Component {
       var projectReportData =
         data.report_data.length > 0
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-              capacity: data.capacity
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+            capacity: data.capacity
+          }
           : "";
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Category
     try {
@@ -449,11 +449,11 @@ class Reports extends Component {
       );
       var categoryReportData = data.report_data
         ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time
-          }
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        }
         : "";
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Priority
     try {
@@ -463,11 +463,11 @@ class Reports extends Component {
       );
       var priorityReportData = data.report_data
         ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time
-          }
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        }
         : "";
-    } catch (e) {}
+    } catch (e) { }
 
     this.props.handleLoading(false);
     this.setState({
@@ -488,7 +488,7 @@ class Reports extends Component {
       projectReports: projectReportData,
       categoryReports: categoryReportData,
       priorityReports: priorityReportData,
-      loadingGif:false
+      loadingGif: false
     });
     this.loadMultipleApiData({ user_ids: loggedInData.id });
     this.createUserProjectList();
@@ -519,7 +519,7 @@ class Reports extends Component {
       prevState.loadReportsData !== this.state.loadReportsData
     ) {
       this.props.handleLoading(true);
-      this.setState({loadingGif:true})
+      this.setState({ loadingGif: true })
       let userIds = this.props.searchUserDetails.map(
         member => member.member_id
       );
@@ -551,7 +551,7 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) {}
+      } catch (e) { }
 
       // Summury reports Projects
       searchData["end_date"] = moment(
@@ -564,12 +564,12 @@ class Reports extends Component {
         );
         var projectReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-              capacity: data.capacity
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+            capacity: data.capacity
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       var message = this.displayMessage();
       try {
@@ -579,11 +579,11 @@ class Reports extends Component {
         );
         var categoryReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         const { data } = await get(
@@ -592,17 +592,17 @@ class Reports extends Component {
         );
         var priorityReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       let filterUserIds =
         this.props.searchUserDetails.length > 0
           ? userIds.join(",")
           : this.state.userId;
-          this.setState({loadingGif:false})
+      this.setState({ loadingGif: false })
       this.props.handleLoading(false);
       this.setState({
         priorityReports: priorityReportData,
@@ -885,7 +885,7 @@ class Reports extends Component {
             });
           }
         );
-        await Promise.all(finalArray).then(response => {});
+        await Promise.all(finalArray).then(response => { });
         resolve(results);
       } catch (err) {
         reject(err);
@@ -893,7 +893,7 @@ class Reports extends Component {
     });
     var newFinalResults = [];
     var self = this;
-    await finalResults.then(function(response) {
+    await finalResults.then(function (response) {
       newFinalResults = response;
       self.setState({ columnChartData: newFinalResults, ...newD });
     });
@@ -916,8 +916,8 @@ class Reports extends Component {
       user_ids:
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails
-              .map(member => member.member_id)
-              .join(",")
+            .map(member => member.member_id)
+            .join(",")
           : this.state.userId,
       frequency: this.returnFrequency()
     };
@@ -951,7 +951,7 @@ class Reports extends Component {
         position: toast.POSITION.TOP_CENTER
       });
       let self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.setState({ isLoading: false });
       }, 2000);
     }
@@ -1052,9 +1052,9 @@ class Reports extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
-          manageProjectListing={() => {}}
+          manageProjectListing={() => { }}
         />
-        
+
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
             <div className="report-viewtype-btns d-inline-block">
@@ -1070,7 +1070,7 @@ class Reports extends Component {
                 name="weekly"
                 className={`d-inline-block ${
                   this.state.weekly ? "active" : ""
-                }`}
+                  }`}
               >
                 Weekly
               </div>
@@ -1079,7 +1079,7 @@ class Reports extends Component {
                 name="monthly"
                 className={`d-inline-block ${
                   this.state.monthly ? "active" : ""
-                }`}
+                  }`}
               >
                 Monthly
               </div>
@@ -1124,7 +1124,7 @@ class Reports extends Component {
                   <button
                     className={`btn btn-sm btn-default ${
                       this.state.isLoading ? "disabled" : ""
-                    }`}
+                      }`}
                     onClick={() => this.downloadReportsCsv()}
                   >
                     {this.state.isLoading ? (
@@ -1141,30 +1141,30 @@ class Reports extends Component {
                   </button>
                 </div>
               </div>
-              {this.state.loadingGif ? <div className="loading1"><VideoLoader/></div> : <>
-              <div className="">
-                <SummuryReportCharts
-                  priorities={PRIORITIES}
-                  projects={this.state.projects}
-                  state={this.state}
-                  searchUserDetails={this.props.searchUserDetails}
-                  searchProjectIds={this.props.searchProjectIds}
-                  setColumnChartData={this.setColumnChartData}
-                  handleLoading={this.props.handleLoading}
-                />
-              </div>
+              {this.state.loadingGif ? <div className="loading1"><VideoLoader /></div> : <>
+                <div className="">
+                  <SummuryReportCharts
+                    priorities={PRIORITIES}
+                    projects={this.state.projects}
+                    state={this.state}
+                    searchUserDetails={this.props.searchUserDetails}
+                    searchProjectIds={this.props.searchProjectIds}
+                    setColumnChartData={this.setColumnChartData}
+                    handleLoading={this.props.handleLoading}
+                  />
+                </div>
 
-              <div className="report-table">
-                <ReportTable
-                  taskDetails={this.state.taskDetails}
-                  state={this.state}
-                  searchProjectIds={this.props.searchProjectIds}
-                  searchUserDetails={this.props.searchUserDetails}
-                  frequency={this.returnFrequency()}
-                  timeTrackUpdate={this.timeTrackUpdate}
-                />
-              </div>
-  </>}
+                <div className="report-table">
+                  <ReportTable
+                    taskDetails={this.state.taskDetails}
+                    state={this.state}
+                    searchProjectIds={this.props.searchProjectIds}
+                    searchUserDetails={this.props.searchUserDetails}
+                    frequency={this.returnFrequency()}
+                    timeTrackUpdate={this.timeTrackUpdate}
+                  />
+                </div>
+              </>}
             </div>
           </div>
         </div>

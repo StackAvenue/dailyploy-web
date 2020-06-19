@@ -193,25 +193,25 @@ class Calendar extends Component {
   removeDuplicates = (myArr, prop) => {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-      
+
     });
-  
+
   };
 
   renderData = () => {
     this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
     this.schedulerData.setResources(this.props.resources);
     let events = this.props.events
-    .sort(
-      (a, b) => Number(b.sortedTime) - Number(a.sortedTime)
-    );
-  
-    
+      .sort(
+        (a, b) => Number(b.sortedTime) - Number(a.sortedTime)
+      );
+
+
     let uniqEvents = this.removeDuplicates(events, "id");
     this.schedulerData.setEvents(uniqEvents);
-   
 
-   
+
+
   };
 
   nonAgendaCellHeaderTemplateResolver = (
@@ -257,11 +257,11 @@ class Calendar extends Component {
         <button
           className={`${
             this.state.viewModel.viewType == item.viewType ? "active" : ""
-          }`}
+            }`}
           onClick={e => this.onClickCustomButton(e)}
           value={`${item.viewType}${item.showAgenda ? 1 : 0}${
             item.isEventPerspective ? 1 : 0
-          }`}
+            }`}
         >
           {item.viewName}
         </button>
@@ -321,7 +321,7 @@ class Calendar extends Component {
               }
               customeVeiwTypeButtons={this.viewTypeButtons}
               customeDatePicker={() => null}
-              // customeDatePicker={this.customeDatePicker}
+            // customeDatePicker={this.customeDatePicker}
             />
           </div>
         </div>
@@ -499,13 +499,13 @@ class Calendar extends Component {
     this.setState({
       viewModel: schedulerData
     });
-   
+
     let newStartTime = moment(
       convertUTCToLocalDate(event.taskStartDateTime)
     ).format("HH:mm:ss");
     let newStartDateTime =
       moment(newStart).format(DATE_FORMAT1) + " " + newStartTime;
-    this.props.updateTaskEvent(event, { start_datetime: newStartDateTime },1,newStart);
+    this.props.updateTaskEvent(event, { start_datetime: newStartDateTime }, 1, newStart);
   };
 
   updateEventEnd = (schedulerData, event, newEnd) => {
@@ -516,13 +516,13 @@ class Calendar extends Component {
       convertUTCToLocalDate(event.taskEndDateTime)
     ).format("HH:mm:ss");
     let newEndDateTime = moment(newEnd).format(DATE_FORMAT1) + " " + newEndTime;
-    this.props.updateTaskEvent(event, { end_datetime: newEndDateTime },1,newEnd);
+    this.props.updateTaskEvent(event, { end_datetime: newEndDateTime }, 1, newEnd);
   };
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     let newStartTime = moment(convertUTCToLocalDate(event.taskStartDateTime)).format("HH:mm:ss");
     let newEndTime = moment(convertUTCToLocalDate(event.taskEndDateTime)).format("HH:mm:ss");
-    let newStartDateTime =moment(start).format(DATE_FORMAT1) + " " + newStartTime;
+    let newStartDateTime = moment(start).format(DATE_FORMAT1) + " " + newStartTime;
     let newEndDateTime = moment(end).format(DATE_FORMAT1) + " " + newEndTime;
     if (
       slotId !== event.resourceId &&
@@ -546,9 +546,9 @@ class Calendar extends Component {
     } else if (
       !(
         moment(start).format(DATE_FORMAT1) ===
-          moment(event.starsst).format(DATE_FORMAT1) &&
+        moment(event.starsst).format(DATE_FORMAT1) &&
         moment(end).format(DATE_FORMAT1) ===
-          moment(event.end).format(DATE_FORMAT1) &&
+        moment(event.end).format(DATE_FORMAT1) &&
         slotId === event.resourceId
       )
     ) {
@@ -565,7 +565,7 @@ class Calendar extends Component {
       this.props.updateTaskEvent(event, {
         start_datetime: newStartDateTime,
         end_datetime: newEndDateTime
-      },1);
+      }, 1);
     }
   };
 
@@ -613,7 +613,7 @@ class Calendar extends Component {
     agendaMaxEventWidth
     // marginOf
   ) => {
-    let backgroundColor =bgColor;
+    let backgroundColor = bgColor;
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
       event
@@ -621,7 +621,7 @@ class Calendar extends Component {
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start);
     var end = moment(event.end);
-  //  let contColor = getContrastColor(bgColor);
+    //  let contColor = getContrastColor(bgColor);
     let divStyle = {
       borderRadius: "5px",
       // backgroundColor: backgroundColor,
@@ -632,7 +632,7 @@ class Calendar extends Component {
       padding: "2px"
     };
     let borderLeft = {
-      borderLeft: "4px solid "+bgColor
+      borderLeft: "4px solid " + bgColor
     };
     if (!!agendaMaxEventWidth)
       // divStyle = { marginOf, maxWidth: agendaMaxEventWidth };
@@ -693,7 +693,7 @@ class Calendar extends Component {
     const type = this.schedulerData.viewType;
     return (
       <div className="viewtype-btns d-inline-block">
-        {config.views.map(function(item) {
+        {config.views.map(function (item) {
           var value =
             "" +
             item.viewType +
@@ -703,7 +703,7 @@ class Calendar extends Component {
             <div
               className={`d-inline-block ${
                 type === item.viewType ? "active" : ""
-              }`}
+                }`}
               key={
                 "" +
                 item.viewType +
@@ -726,7 +726,7 @@ class Calendar extends Component {
       <div
         className={`dashboard-calender ${
           viewType == "1" ? "week-format-width" : "day-format-width"
-        }`}
+          }`}
       >
         <DailyPloyDatePicker
           onSelectDate={this.onSelectDate}
