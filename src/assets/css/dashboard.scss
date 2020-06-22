@@ -541,6 +541,7 @@
           &:hover{
             background-color: #0056b3 !important;
 
+
           }
         }
         .button2 {
@@ -552,6 +553,11 @@
           font-weight: 500 !important;
           color: $color-text3 !important;
           margin-left: 7% !important;
+          &:hover{
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+
+          }
         }
       }
     }
@@ -726,6 +732,12 @@
           font-weight: 500 !important;
           color: $color-text3 !important;
           margin-left: 7% !important;
+          &:hover{
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+
+
+          }
         }
         .date-text-light {
           width: 50px !important;
@@ -890,6 +902,12 @@
           color: $color-text3 !important;
           // margin-left: 7% !important;
           width: 93px;
+          &:hover{
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+
+
+          }
         }
         .button3 {
           border-radius: 5px !important;
@@ -1127,6 +1145,12 @@
           font-weight: 500 !important;
           color: $color-text3 !important;
           margin-left: 7% !important;
+          &:hover{
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+
+
+          }
         }
       }
     }
@@ -1815,6 +1839,12 @@ table.scheduler-table tr:last-child td {
       font-weight: 500 !important;
       color: $color-text3 !important;
       margin-left: 7% !important;
+      &:hover{
+        background-color: #0056b3 !important;
+        color: #ffffff !important;
+
+
+      }
     }
   }
   .auto-search {
@@ -2318,6 +2348,12 @@ table.scheduler-table tr:last-child td {
               font-weight: 500 !important;
               color: $color-text3 !important;
               margin-left: 7% !important;
+            }
+            &:hover{
+              background-color: #0056b3 !important;
+            color: #ffffff !important;
+
+  
             }
           }
         }
@@ -4510,6 +4546,11 @@ width: 446px;
           height: 25px;
           text-align: center;
           padding: 2px;
+          &:hover{
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+
+          }
         }
         .button3 {
           border-radius: 5px !important;
@@ -4883,6 +4924,11 @@ width: 446px;
       color: $color-white !important;
       height: 40px;
       min-width: 93px !important;
+      &:hover{
+        background-color: #0056b3 !important;
+        color: #ffffff !important;
+
+      }
     }
     .button3 {
       border-radius: 5px !important;
@@ -5349,6 +5395,12 @@ width: 446px;
       height: 40px;
       min-width: 93px !important;
       margin: 20px 15px 0px 0px;
+      &:hover{
+        background-color: #0056b3 !important;
+        color: #ffffff !important;
+
+
+      }
     }
     .button3 {
       border-radius: 5px !important;
