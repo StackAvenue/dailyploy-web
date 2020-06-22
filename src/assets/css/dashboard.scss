@@ -257,10 +257,12 @@
     overflow: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
-    height: 19px;
+    // height: 19px;
     font-family: Roboto;
-    font-size: 16px;
-    font-weight: normal;
+    // font-size: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    // font-weight: normal;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.19;
@@ -286,6 +288,7 @@
     max-width: 6%;
     a {
       color: $color-text1 !important;
+      font-size: 16px !important;
       &:hover {
         text-decoration: none !important;
       }
@@ -303,6 +306,8 @@
     text-align: center;
     a {
       color: #000000 !important;
+      font-size: 16px !important;
+
       &:hover {
         text-decoration: none !important;
       }
@@ -1588,7 +1593,7 @@ table.scheduler-table tr:last-child td {
     .react-datepicker-wrapper {
       .react-datepicker__input-container input {
         font-family: Roboto !important;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
@@ -5046,7 +5051,7 @@ width: 446px;
     text-align: center;
     // padding-top: 5px;
     font-family: $font-family-roboto !important;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -5095,7 +5100,9 @@ width: 446px;
 .week-format-width {
   .react-datepicker-wrapper {
     input {
-      width: 235px !important;
+      // width: 235px !important;
+      width: 248px !important;
+
       border: none;
     }
   }
