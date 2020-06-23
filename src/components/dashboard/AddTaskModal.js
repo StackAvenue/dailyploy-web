@@ -174,11 +174,11 @@ class AddTaskModal extends React.Component {
                         // onBlur={this.onBlurInput}
                         placeholder="Task Name"
                         className="form-control"
-                        // ref={input => {
-                        //   this.nameInput = input;
-                        // }}
-                        // defaultValue=""
-                        // ref={input => input && input.focus()}
+                      // ref={input => {
+                      //   this.nameInput = input;
+                      // }}
+                      // defaultValue=""
+                      // ref={input => input && input.focus()}
                       />
                     </div>
 
@@ -203,7 +203,7 @@ class AddTaskModal extends React.Component {
                         props.state.taskButton !== "Add"
                           ? "disable-project-select"
                           : ""
-                      }`}
+                        }`}
                     >
                       <DailyPloySelect
                         options={this.props.state.memberProjects}
@@ -355,21 +355,21 @@ class AddTaskModal extends React.Component {
                       </div>
                     </div>
                     {this.props.state.errors.dateFromError ||
-                    this.props.state.errors.dateToError ? (
-                      <div className="col-md-12">
-                        <div className="col-md-2 d-inline-block no-padding"></div>
-                        <div className="col-md-5 d-inline-block no-padding">
-                          <span className="error-warning">
-                            {this.props.state.errors.dateFromError}
-                          </span>
+                      this.props.state.errors.dateToError ? (
+                        <div className="col-md-12">
+                          <div className="col-md-2 d-inline-block no-padding"></div>
+                          <div className="col-md-5 d-inline-block no-padding">
+                            <span className="error-warning">
+                              {this.props.state.errors.dateFromError}
+                            </span>
+                          </div>
+                          <div className="col-md-5 d-inline-block no-padding">
+                            <span className="error-warning">
+                              {this.props.state.errors.dateToError}
+                            </span>
+                          </div>
                         </div>
-                        <div className="col-md-5 d-inline-block no-padding">
-                          <span className="error-warning">
-                            {this.props.state.errors.dateToError}
-                          </span>
-                        </div>
-                      </div>
-                    ) : null}
+                      ) : null}
                   </div>
 
                   <div className="col-md-12 no-padding input-row">
@@ -383,7 +383,7 @@ class AddTaskModal extends React.Component {
                       <div className="col-md-12 d-inline-block no-padding">
                         <div
                           className="col-md-6 d-inline-block no-padding "
-                          // style={{ maxWidth: "219px" }}
+                        // style={{ maxWidth: "219px" }}
                         >
                           <div className="col-md-3 no-padding d-inline-block date-text-light">
                             <span>From:</span>
@@ -405,7 +405,7 @@ class AddTaskModal extends React.Component {
                         {/* <div className="col-md-1 d-inline-block no-padding">-</div> */}
                         <div
                           className="col-md-6 d-inline-block no-padding "
-                          // style={{ marginLeft: "22px" }}
+                        // style={{ marginLeft: "22px" }}
                         >
                           <div className="col-md-2 no-padding d-inline-block date-text-light">
                             <span>To:</span>
@@ -429,21 +429,21 @@ class AddTaskModal extends React.Component {
                     </div>
 
                     {this.props.state.errors.timeFromError ||
-                    this.props.state.errors.timeToError ? (
-                      <div className="col-md-12 d-inline-block no-padding">
-                        <div className="col-md-2 d-inline-block no-padding"></div>
-                        <div className="col-md-4 d-inline-block no-padding">
-                          <span className="error-warning">
-                            {this.props.state.errors.timeFromError}
-                          </span>
+                      this.props.state.errors.timeToError ? (
+                        <div className="col-md-12 d-inline-block no-padding">
+                          <div className="col-md-2 d-inline-block no-padding"></div>
+                          <div className="col-md-4 d-inline-block no-padding">
+                            <span className="error-warning">
+                              {this.props.state.errors.timeFromError}
+                            </span>
+                          </div>
+                          <div className="col-md-4 d-inline-block no-padding">
+                            <span className="error-warning">
+                              {this.props.state.errors.timeToError}
+                            </span>
+                          </div>
                         </div>
-                        <div className="col-md-4 d-inline-block no-padding">
-                          <span className="error-warning">
-                            {this.props.state.errors.timeToError}
-                          </span>
-                        </div>
-                      </div>
-                    ) : null}
+                      ) : null}
                   </div>
 
                   <div className="col-md-12 row no-margin no-padding input-row">
@@ -506,7 +506,7 @@ class AddTaskModal extends React.Component {
                         type="button"
                         className={`button1 btn-primary pull-right ${
                           props.state.taskloader ? "disabled" : ""
-                        }`}
+                          }`}
                         onClick={() =>
                           props.state.taskButton === "Add"
                             ? props.addTask()

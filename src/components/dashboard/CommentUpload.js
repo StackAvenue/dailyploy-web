@@ -47,40 +47,40 @@ class CommentUpload extends React.Component {
       <>
         <div className="">
           <div className="comment-container">
-            <textarea
+            <textarea style={{ width: "90%", padding: "16px 8px" }}
               name={`${this.props.commentName}`}
               value={this.props.comments ? this.props.comments : ""}
               onClick={this.props.showCommentBox}
               onChange={(e) => this.props.handleInputChange(e)}
               className="form-control"
               rows="1"
-              placeholder="Write Here..."
+              placeholder="Write a comment..."
             />
             <div className="uploded-img">
               {this.props.showBox
                 ? this.props.state.pictures.map((file, idx) => {
-                    return (
-                      <>
-                        {this.isImage(file.name) ? (
-                          <div className="img-container">
-                            <img
-                              src={`${URL.createObjectURL(file)}`}
-                              // onClick={() => this.openViewImage(attachment.imge_url)}
-                              height="42"
-                              width="42"
-                              style={{ cursor: "pointer" }}
-                            ></img>
-                            <span
-                              className="close-icon"
-                              onClick={() =>
-                                this.props.removeUploadedImage(idx)
-                              }
-                            >
-                              <i className="fa fa-close"></i>
-                            </span>
-                            <div className="img-name">{file.name}</div>
-                          </div>
-                        ) : (
+                  return (
+                    <>
+                      {this.isImage(file.name) ? (
+                        <div className="img-container">
+                          <img
+                            src={`${URL.createObjectURL(file)}`}
+                            // onClick={() => this.openViewImage(attachment.imge_url)}
+                            height="42"
+                            width="42"
+                            style={{ cursor: "pointer" }}
+                          ></img>
+                          <span
+                            className="close-icon"
+                            onClick={() =>
+                              this.props.removeUploadedImage(idx)
+                            }
+                          >
+                            <i className="fa fa-close"></i>
+                          </span>
+                          <div className="img-name">{file.name}</div>
+                        </div>
+                      ) : (
                           <>
                             <a
                               href="#"
@@ -101,9 +101,9 @@ class CommentUpload extends React.Component {
                             </span>
                           </>
                         )}
-                      </>
-                    );
-                  })
+                    </>
+                  );
+                })
                 : null}
             </div>
             <input
@@ -115,33 +115,39 @@ class CommentUpload extends React.Component {
               accept=".csv, .jpg, .png, .jpeg, .pdf, .doc, .docx"
               multiple
             ></input>
+            <span className="upload-files" onClick={this.handleImageRef}>
+              <i className="fas fa-paperclip tooltip-pwd7 d-inline-block">
+                <span className="tooltiptext-pwd7">
+                  (suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx)
+                </span>
+              </i>
+            </span>
             <div
               className={`${
                 this.props.showBox ? "show" : "hide"
-              } comment-action`}
+                } comment-action`}
             >
               <div
                 className={`${
                   !this.props.showSave && !this.props.showAttachIcon
                     ? "hide"
                     : "show"
-                }`}
+                  }`}
               >
-                <span className="suport">
+                {/* <span className="suport">
                   (suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx)
-                </span>
-                <span className="upload-files" onClick={this.handleImageRef}>
-                  <i className="fas fa-paperclip"></i>
-                </span>
-                <button
+                </span> */}
+
+
+                {/* <button
                   className={`btn save-button ${
                     this.props.state.taskloader
                       ? "disabled"
                       : this.props.comments ||
                         this.props.state.pictures.length > 0
-                      ? ""
-                      : "disabled"
-                  }`}
+                        ? ""
+                        : "disabled"
+                    }`}
                   onClick={this.props.save}
                   type="button"
                 >
@@ -156,9 +162,35 @@ class CommentUpload extends React.Component {
                       className="d-inline-block login-signup-loader"
                     />
                   ) : null}
-                </button>
+                </button> */}
               </div>
             </div>
+          </div>
+          <div className="" style={{ float: "right", margin: "4px 0px" }}>
+            <button
+              className={`btn save-button ${
+                this.props.state.taskloader
+                  ? "disabled"
+                  : this.props.comments ||
+                    this.props.state.pictures.length > 0
+                    ? ""
+                    : "disabled"
+                }`}
+              onClick={this.props.save}
+              type="button"
+            >
+              Save
+                  {this.props.state.taskloader ? (
+                <Loader
+                  type="Oval"
+                  color="#33a1ff"
+                  height={20}
+                  width={20}
+                  style={{ paddingLeft: "15px" }}
+                  className="d-inline-block login-signup-loader"
+                />
+              ) : null}
+            </button>
           </div>
         </div>
       </>
