@@ -346,20 +346,27 @@
       font-size: 14px !important;
       height: 34px !important;
       font-family: $font-family-roboto !important;
-      &:hover {
-        background-color: $color-dropdown !important;
-        color: $color-text1 !important;
-        font-weight: bold !important;
-        // border-radius: 5px;
-      }
+      color: #212529 !important;
+
+      // &:hover {
+      //   background-color: $color-dropdown !important;
+      //   color: $color-text1 !important;
+      //   font-weight: bold !important;
+      //   border-radius: 5px;
+      // }
     }
   }
   .dropdown-menu.show {
     left: 0px !important;
     min-width: 95px !important;
     height: 71px !important;
-    border-radius: 5px !important;
-    border: 1px solid rgba(170, 170, 170, 1) !important;
+    // border-radius: 5px !important;
+    // border: 1px solid rgba(170, 170, 170, 1) !important;
+    border: none !important;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 10px 6px !important;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.2, 0, 0.2, 1) !important;
+    // transform: translateY(-10px) scaleY(0.5) !important;
+    transform-origin: top;
   }
   .sort-bar {
     border: 1px solid $color-brandheading1;
@@ -1617,7 +1624,7 @@ table.scheduler-table tr:last-child td {
     .react-datepicker-wrapper {
       .react-datepicker__input-container input {
         font-family: Roboto !important;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
@@ -5235,7 +5242,7 @@ width: 446px;
         min-width: 0px !important;
       }
       .dropdown-menu:focus {
-        background-color: $color-white !important;
+        // background-color: $color-white !important;
         color: $color-brand3 !important;
       }
       .dropdown-item {
@@ -5245,10 +5252,10 @@ width: 446px;
       }
       .dropdown-item:active {
         color: $color-brand3 !important;
-        background-color: $color-white !important;
+        // background-color: $color-white !important;
       }
       .dropdown-item:hover {
-        color: $color-brand3 !important;
+        // color: $color-brand3 !important;
       }
     }
   }
@@ -5817,4 +5824,25 @@ font-family: 'Roboto' !important;
   // max-width: 88% !important;
   // margin: 0 auto !important;
   display: inline-block;
+}
+
+
+.cool-link {
+  display: inline-block;
+  // color: #000;
+  text-decoration: none;
+}
+
+.cool-link::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #10b857 !important;
+  transition: width .3s;
+}
+
+.cool-link:hover::after {
+  width: 100%;
+  //transition: width .3s;
 }
