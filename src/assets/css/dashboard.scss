@@ -4575,7 +4575,8 @@ width: 446px;
         }
       }
       .comments {
-        width: 389px;
+        display: inline-flex !important;
+        // width: 389px;
         font-family: Roboto;
         font-size: 15px;
         font-weight: normal;
@@ -5690,6 +5691,7 @@ width: 446px;
     .owner-name{
       color:  $color-text1;
       font-weight: 500;
+      display: inline-flex !important;
     }
     .comments{
       font-size: 14px;
@@ -5814,4 +5816,5 @@ font-family: 'Roboto' !important;
   border-radius: 10px;
   // max-width: 88% !important;
   // margin: 0 auto !important;
+  display: inline-block;
 }
