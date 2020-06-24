@@ -5696,13 +5696,16 @@ width: 446px;
     padding: 16px;
     // margin: 5px 0px;
     .owner-name{
-      color:  $color-text1;
-      font-weight: 500;
+      // color:  $color-text1;
+      // font-weight: 500;
+      color: #212529 !important;
       display: inline-flex !important;
     }
     .comments{
       font-size: 14px;
-      color: $color-text2;
+      // color: $color-text2;
+      color: #424242 !important;
+
     }
   }
   .upload-files{
