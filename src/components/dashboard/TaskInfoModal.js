@@ -915,7 +915,7 @@ class TaskInfoModal extends Component {
               ) : null}
 
               <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
+                <div className="col-md-2 d-inline-block no-padding label" style={{ verticalAlign: "top" }}>
                   Comments
                 </div>
                 <div className="col-md-10 d-inline-block">
@@ -982,126 +982,119 @@ class TaskInfoModal extends Component {
                             style={{
                               display: "inline-flex",
                               alignItems: "flex-start",
+                              margin: "8px 0px",
                             }}
                           >
                             <div
-                              className="col-md-2 d-inline-block no-padding label"
+                              className="col-md-1 d-inline-block no-padding label"
                               style={{
-                                marginTop: "20px",
+                                marginTop: "8px",
                               }}
                             >
                               <div className="comment-owner-dot">
                                 {firstTwoLetter(comment.user.name)}
                               </div>
                             </div>
-                            <div className="col-md-10 d-inline-block">
-                              <div className="commnet-card">
+                            <div className="col-md-11 d-inline-block ">
+                              <div className="commnet-card comment-bg-color">
                                 <div
-                                  className="col-md-12 no-padding"
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                  }}
+                                  className=""
+                                // style={{
+                                //   display: "flex",
+                                //   justifyContent: "space-between",
+                                // }}
                                 >
                                   <div className="owner-name text-titlize">
                                     {comment.user.name}
                                   </div>
-                                  {/* <div
+
+                                </div>
+                                <div className="comments">
+                                  {comment.comments}
+                                </div>
+                              </div>
+                              <div className="col-md-12 no-padding">
+                                {comment.attachments.map((attachment) => {
+                                  return (
+                                    <>
+                                      {this.isImage(attachment.imge_url) ? (
+                                        <div style={{ display: "grid" }}>
+                                          <img
+                                            src={`${attachment.imge_url}`}
+                                            onClick={() =>
+                                              this.openViewImage(
+                                                attachment.imge_url
+                                              )
+                                            }
+                                            alt={this.returnAlt(
+                                              attachment.imge_url
+                                            )}
+                                            height="42"
+                                            width="42"
+                                            style={{
+                                              cursor: "pointer",
+                                              marginRight: "10px",
+                                            }}
+                                          ></img>
+                                          <a
+                                            href={`${attachment.imge_url}`}
+                                            download
+                                            style={{
+                                              fontSize: "12px",
+                                              padding: "5px",
+                                            }}
+                                          >
+                                            {this.returnAlt(
+                                              attachment.imge_url
+                                            )}
+                                          </a>
+                                        </div>
+                                      ) : (
+                                          <a
+                                            href={`${attachment.imge_url}`}
+                                            download
+                                            style={{ fontSize: "12px" }}
+                                          >
+                                            {this.returnAlt(attachment.imge_url)}
+                                          </a>
+                                        )}
+                                    </>
+                                  );
+                                })}
+                              </div>
+                              {this.state.viewerIsOpen ? (
+                                <ImgsViewer
+                                  imgs={[{ src: `${this.state.imge_url}` }]}
+                                  isOpen={this.state.viewerIsOpen}
+                                  onClose={this.closeViewer}
+                                />
+                              ) : null}
+                              <div className="col-md-12" style={{ paddingLeft: "20px" }}>
+                                <span
+                                  onClick={() => this.editComments(comment)}
+                                >
+                                  Edit
+                                </span>
+                                <span
+                                  onClick={() =>
+                                    this.props.deleteComments(comment)
+                                  }
+                                >
+                                  Delete
+                                </span>
+                                <div
                                   className=""
                                   style={{
+                                    display: "inline",
                                     fontSize: "11px",
                                     padding: "3px 0px 0px 25px",
                                   }}
                                   title={this.titleDateTime(comment)}
                                 >
                                   {this.commentsTime(comment)}
-                                </div> */}
-                                </div>
-                                <div className="col-md-12 comments">
-                                  {comment.comments}
-                                </div>
-                                <div className="col-md-12 no-padding">
-                                  {comment.attachments.map((attachment) => {
-                                    return (
-                                      <>
-                                        {this.isImage(attachment.imge_url) ? (
-                                          <div style={{ display: "grid" }}>
-                                            <img
-                                              src={`${attachment.imge_url}`}
-                                              onClick={() =>
-                                                this.openViewImage(
-                                                  attachment.imge_url
-                                                )
-                                              }
-                                              alt={this.returnAlt(
-                                                attachment.imge_url
-                                              )}
-                                              height="42"
-                                              width="42"
-                                              style={{
-                                                cursor: "pointer",
-                                                marginRight: "10px",
-                                              }}
-                                            ></img>
-                                            <a
-                                              href={`${attachment.imge_url}`}
-                                              download
-                                              style={{
-                                                fontSize: "12px",
-                                                padding: "5px",
-                                              }}
-                                            >
-                                              {this.returnAlt(
-                                                attachment.imge_url
-                                              )}
-                                            </a>
-                                          </div>
-                                        ) : (
-                                            <a
-                                              href={`${attachment.imge_url}`}
-                                              download
-                                              style={{ fontSize: "12px" }}
-                                            >
-                                              {this.returnAlt(attachment.imge_url)}
-                                            </a>
-                                          )}
-                                      </>
-                                    );
-                                  })}
-                                </div>
-                                {this.state.viewerIsOpen ? (
-                                  <ImgsViewer
-                                    imgs={[{ src: `${this.state.imge_url}` }]}
-                                    isOpen={this.state.viewerIsOpen}
-                                    onClose={this.closeViewer}
-                                  />
-                                ) : null}
-                                <div className="col-md-12 no-padding">
-                                  <span
-                                    onClick={() => this.editComments(comment)}
-                                  >
-                                    Edit
-                                </span>
-                                  <span
-                                    onClick={() =>
-                                      this.props.deleteComments(comment)
-                                    }
-                                  >
-                                    Delete
-                                </span>
-                                  <div
-                                    className=""
-                                    style={{
-                                      display: "inline",
-                                      fontSize: "11px",
-                                      padding: "3px 0px 0px 25px",
-                                    }}
-                                    title={this.titleDateTime(comment)}
-                                  >
-                                    {this.commentsTime(comment)}
-                                  </div>
                                 </div>
                               </div>
+                              {/* </div> */}
                             </div>
                           </div>
                         );

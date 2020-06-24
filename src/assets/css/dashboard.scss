@@ -589,7 +589,7 @@
   border: 0 !important;
   color: #010101 !important;
   text-align: center !important;
-  font-size: 15px !important;
+  font-size: 16px !important;
   padding: 5px 8px 5px 8px !important;
 }
 .admin-circle {
@@ -1571,8 +1571,8 @@ table.scheduler-table tr:last-child td {
     .header2-text {
       color: $color-text2 !important;
       font-family: $font-family-roboto !important;
-      font-size: 15px !important;
-      font-weight: 900;
+      font-size: 16px !important;
+      // font-weight: 900;
       text-align: center !important;
     }
   }
@@ -4462,6 +4462,7 @@ table.scheduler-table tr:last-child td {
         // padding-bottom: 15px !important;
           padding-top: 8px !important;
           padding-bottom: 8px !important;
+          // display: flex;
           .label {
             font-family: $font-family-roboto;
             font-size: 15px;
@@ -5117,6 +5118,9 @@ width: 446px;
     border: solid 1px $color-brand3 !important;
     background-color: $color-brand3 !important;
     color: $color-white !important;
+    &:hover{
+      background-color: #0056b3 !important;
+    }
   }
 
 }
@@ -5681,8 +5685,8 @@ width: 446px;
     }
   }
   .commnet-card{
-    padding: 10px;
-    margin: 5px 0px;
+    padding: 16px;
+    // margin: 5px 0px;
     .owner-name{
       color:  $color-text1;
       font-weight: 500;
@@ -5756,7 +5760,7 @@ font-family: 'Roboto' !important;
   overflow: hidden !important;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  font-size: 15px;
+  font-size: 14px;
   font-family: 'Roboto' !important;
 
 
@@ -5803,4 +5807,11 @@ font-family: 'Roboto' !important;
   color: $color-white !important;
   // margin:0px 10px 5px 5px !important;
   width: auto !important;
+}
+
+.comment-bg-color{
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  // max-width: 88% !important;
+  // margin: 0 auto !important;
 }

@@ -47,13 +47,13 @@ class CommentUpload extends React.Component {
       <>
         <div className="">
           <div className="comment-container">
-            <textarea style={{ width: "90%", padding: "16px 8px" }}
+            <textarea
               name={`${this.props.commentName}`}
               value={this.props.comments ? this.props.comments : ""}
               onClick={this.props.showCommentBox}
               onChange={(e) => this.props.handleInputChange(e)}
               className="form-control"
-              rows="1"
+              rows="auto"
               placeholder="Write a comment..."
             />
             <div className="uploded-img">

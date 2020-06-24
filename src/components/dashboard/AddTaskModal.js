@@ -447,7 +447,7 @@ class AddTaskModal extends React.Component {
                   </div>
 
                   <div className="col-md-12 row no-margin no-padding input-row">
-                    <div className="col-md-2 no-padding label">Comments</div>
+                    <div className="col-md-2 no-padding label" style={{ verticalAlign: "top" }}>Comments</div>
                     <div className="col-md-10">
                       <textarea
                         name={`comments`}
