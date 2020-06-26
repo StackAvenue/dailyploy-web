@@ -40,6 +40,13 @@ class CommentUpload extends React.Component {
     let nameSplit = name.split(".");
     return ["png", "jpeg", "jpg"].includes(nameSplit[nameSplit.length - 1]);
   };
+  onEnterPress = (e) => {
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      // e.preventDefault();
+      // this.myFormRef.submit();
+      this.props.save();
+    }
+  }
 
   render() {
     const { props } = this;
@@ -47,15 +54,19 @@ class CommentUpload extends React.Component {
       <>
         <div className="">
           <div className="comment-container">
+            {/* <form ref={el => this.myFormRef = el} className=""> */}
+            {/* <form onSubmit={e => { e.preventDefault(); }}> */}
             <textarea
               name={`${this.props.commentName}`}
               value={this.props.comments ? this.props.comments : ""}
               onClick={this.props.showCommentBox}
               onChange={(e) => this.props.handleInputChange(e)}
+              onKeyDown={this.onEnterPress}
               className="form-control"
               rows="auto"
               placeholder="Write a comment..."
             />
+
             <div className="uploded-img">
               {this.props.showBox
                 ? this.props.state.pictures.map((file, idx) => {
@@ -165,8 +176,10 @@ class CommentUpload extends React.Component {
                 </button> */}
               </div>
             </div>
+            {/* </form> */}
+
           </div>
-          <div className="" style={{ float: "right", margin: "4px 0px" }}>
+          {/* <div className="" style={{ float: "right", margin: "4px 0px" }}>
             <button
               className={`btn save-button ${
                 this.props.state.taskloader
@@ -191,7 +204,7 @@ class CommentUpload extends React.Component {
                 />
               ) : null}
             </button>
-          </div>
+          </div> */}
         </div>
       </>
     );
