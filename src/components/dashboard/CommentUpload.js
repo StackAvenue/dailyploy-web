@@ -55,14 +55,15 @@ class CommentUpload extends React.Component {
           <div className="comment-container">
             <div className="cmnt-input-div">
               <div className="cmnt-input-div-sub1">
-                <input
+                <textarea
                   name={`${this.props.commentName}`}
                   value={this.props.comments ? this.props.comments : ""}
                   onClick={this.props.showCommentBox}
                   onChange={(e) => this.props.handleInputChange(e)}
                   onKeyDown={this.onEnterPress}
                   className="comment-input"
-
+                  rows="auto"
+                  style={{ paddingTop: "0px", paddingBottom: "0px" }}
                   placeholder="Write a comment..."
                 />
               </div>
