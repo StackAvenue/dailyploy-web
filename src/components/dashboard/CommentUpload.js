@@ -56,14 +56,15 @@ class CommentUpload extends React.Component {
           <div className="comment-container">
             {/* <form ref={el => this.myFormRef = el} className=""> */}
             {/* <form onSubmit={e => { e.preventDefault(); }}> */}
-            <textarea
+            <input
               name={`${this.props.commentName}`}
               value={this.props.comments ? this.props.comments : ""}
               onClick={this.props.showCommentBox}
               onChange={(e) => this.props.handleInputChange(e)}
               onKeyDown={this.onEnterPress}
-              className="form-control"
-              rows="auto"
+              className="comment-input"
+              // rows="auto"
+              // style={{ border: "none", padding: "8px" }}
               placeholder="Write a comment..."
             />
 

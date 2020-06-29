@@ -1012,63 +1012,65 @@ class TaskInfoModal extends Component {
                                 <div className="comments">
                                   {comment.comments}
                                 </div>
-                              </div>
-                              <div className="col-md-12 no-padding">
-                                {comment.attachments.map((attachment) => {
-                                  return (
-                                    <>
-                                      {this.isImage(attachment.imge_url) ? (
-                                        <div style={{ display: "grid" }}>
-                                          <img
-                                            src={`${attachment.imge_url}`}
-                                            onClick={() =>
-                                              this.openViewImage(
+                                {/* </div> */}
+                                <div className="col-md-12 no-padding">
+                                  {comment.attachments.map((attachment) => {
+                                    return (
+                                      <>
+                                        {this.isImage(attachment.imge_url) ? (
+                                          <div style={{ display: "grid" }}>
+                                            <img
+                                              src={`${attachment.imge_url}`}
+                                              onClick={() =>
+                                                this.openViewImage(
+                                                  attachment.imge_url
+                                                )
+                                              }
+                                              alt={this.returnAlt(
                                                 attachment.imge_url
-                                              )
-                                            }
-                                            alt={this.returnAlt(
-                                              attachment.imge_url
-                                            )}
-                                            height="42"
-                                            width="42"
-                                            style={{
-                                              cursor: "pointer",
-                                              marginRight: "10px",
-                                            }}
-                                          ></img>
-                                          <a
-                                            href={`${attachment.imge_url}`}
-                                            download
-                                            style={{
-                                              fontSize: "12px",
-                                              padding: "5px",
-                                            }}
-                                          >
-                                            {this.returnAlt(
-                                              attachment.imge_url
-                                            )}
-                                          </a>
-                                        </div>
-                                      ) : (
-                                          <a
-                                            href={`${attachment.imge_url}`}
-                                            download
-                                            style={{ fontSize: "12px" }}
-                                          >
-                                            {this.returnAlt(attachment.imge_url)}
-                                          </a>
-                                        )}
-                                    </>
-                                  );
-                                })}
+                                              )}
+                                              height="42"
+                                              width="42"
+                                              style={{
+                                                cursor: "pointer",
+                                                marginRight: "10px",
+                                              }}
+                                            ></img>
+                                            <a
+                                              href={`${attachment.imge_url}`}
+                                              download
+                                              style={{
+                                                fontSize: "12px",
+                                                padding: "5px",
+                                              }}
+                                            >
+                                              {this.returnAlt(
+                                                attachment.imge_url
+                                              )}
+                                            </a>
+                                          </div>
+                                        ) : (
+                                            <a
+                                              href={`${attachment.imge_url}`}
+                                              download
+                                              style={{ fontSize: "12px" }}
+                                            >
+                                              {this.returnAlt(attachment.imge_url)}
+                                            </a>
+                                          )}
+                                      </>
+                                    );
+                                  })}
+                                </div>
+                                {this.state.viewerIsOpen ? (
+                                  <ImgsViewer
+                                    imgs={[{ src: `${this.state.imge_url}` }]}
+                                    isOpen={this.state.viewerIsOpen}
+                                    onClose={this.closeViewer}
+                                  />
+                                ) : null}
                               </div>
-                              {this.state.viewerIsOpen ? (
-                                <ImgsViewer
-                                  imgs={[{ src: `${this.state.imge_url}` }]}
-                                  isOpen={this.state.viewerIsOpen}
-                                  onClose={this.closeViewer}
-                                />
-                              ) : null}
+
                               <div className="col-md-12" style={{ paddingLeft: "20px" }}>
                                 <span
                                   onClick={() => this.editComments(comment)}

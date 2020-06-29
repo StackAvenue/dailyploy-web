@@ -4489,12 +4489,12 @@ padding-left: 60px!important;
 width: 446px;
           }
         input {
-          height: 26px !important;
-          border: 1px solid $color-borders !important;
+          // height: 26px !important;
+          // border: 1px solid $color-borders !important;
           font-size: 13px !important;
           font-family: $font-family-roboto !important;
           color: $color-text1 !important;
-          padding: 0px !important;
+          // padding: 0px !important;
           &::placeholder {
             font-size: 15px !important;
             font-family: $font-family-roboto !important;
@@ -4595,6 +4595,8 @@ width: 446px;
         text-align: left;
         color: $color-brandheading2;
         text-transform: none !important;
+        max-width: 100%;
+        word-break: break-all;
       }
       .color-block {
         vertical-align: text-bottom !important;
@@ -5539,7 +5541,7 @@ width: 446px;
   content: "";
   position: absolute;
   top: 38px;
-  left: 67%;
+  left: 68%;
   margin-top: -5px;
   border-width: 6px;
   border-style: solid;
@@ -5560,13 +5562,14 @@ width: 446px;
 
 .tooltip-pwd7 .tooltiptext-pwd7 {
   visibility: hidden;
-  width: 270px;
+  width: 276px;
   height: 33px;
   top: -44px;
   left: -178px !important;
   // right: -78px !important;
   font-size: 12px !important;
-  background-color: #ecf6ff;
+  background-color: #f1f1f1;
+  // background-color: #f0f2f5;
   color: #9b9b9b !important;
   text-align: center;
   font-family: "Roboto-Regular", "Roboto" !important;
@@ -5582,12 +5585,22 @@ width: 446px;
 }
 
 .comment-container{
-  border: solid 1px #d6d6d6;
-  border-radius: 5px;
+  // border: solid 1px #d6d6d6;
+  // border-radius: 5px;
+  padding-left: 14px;
   textarea{
     border: none;
     resize: none;
     overflow-y: hidden;
+  }
+  .comment-input{
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    outline: none !important;
+    border-radius: 10px !important;
+    background-color: #f0f2f5 !important;
+    padding: 8px !important;
   }
   .save-button {
     border-radius: 5px !important;
@@ -5606,7 +5619,7 @@ width: 446px;
     // float: right;
     // bottom: 0px !important;
     right: 30px !important;
-    top: 18px !important;
+    top: 8px !important;
     // left: 0px !important;
     color: $color-brand3;
     cursor: pointer;
