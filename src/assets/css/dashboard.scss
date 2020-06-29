@@ -5564,8 +5564,8 @@ width: 446px;
   visibility: hidden;
   width: 276px;
   height: 33px;
-  top: -44px;
-  left: -178px !important;
+  top: -36px;
+  left: 47% !important;
   // right: -78px !important;
   font-size: 12px !important;
   background-color: #f1f1f1;
@@ -5598,9 +5598,9 @@ width: 446px;
     height: auto !important;
     border: none !important;
     outline: none !important;
-    border-radius: 10px !important;
-    background-color: #f0f2f5 !important;
-    padding: 8px !important;
+    // border-radius: 10px !important;
+    // background-color: #f0f2f5 !important;
+    background-color: transparent;
   }
   .save-button {
     border-radius: 5px !important;
@@ -5615,11 +5615,11 @@ width: 446px;
     width: auto !important;
   }
   .upload-files{
-    position: absolute;
+    // position: absolute;
     // float: right;
     // bottom: 0px !important;
-    right: 30px !important;
-    top: 8px !important;
+    // right: 30px !important;
+    // top: 8px !important;
     // left: 0px !important;
     color: $color-brand3;
     cursor: pointer;
@@ -5891,4 +5891,22 @@ font-family: 'Roboto' !important;
     margin-left: 0%;
     width: 100%;
   }
+}
+
+.cmnt-input-div{
+  width: 100%;
+  background-color: #f0f2f5 !important;
+  border-radius: 10px !important;
+  padding: 8px !important;
+
+}
+.cmnt-input-div-sub1{
+  display: inline-flex;
+  width: 90% !important;
+}
+.cmnt-input-div-sub2{
+  display: inline-flex;
+  width: 10% !important;
+  justify-content: center;
+  align-items: center;
 }

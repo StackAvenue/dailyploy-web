@@ -42,8 +42,7 @@ class CommentUpload extends React.Component {
   };
   onEnterPress = (e) => {
     if (e.keyCode == 13 && e.shiftKey == false) {
-      // e.preventDefault();
-      // this.myFormRef.submit();
+
       this.props.save();
     }
   }
@@ -54,19 +53,38 @@ class CommentUpload extends React.Component {
       <>
         <div className="">
           <div className="comment-container">
-            {/* <form ref={el => this.myFormRef = el} className=""> */}
-            {/* <form onSubmit={e => { e.preventDefault(); }}> */}
-            <input
-              name={`${this.props.commentName}`}
-              value={this.props.comments ? this.props.comments : ""}
-              onClick={this.props.showCommentBox}
-              onChange={(e) => this.props.handleInputChange(e)}
-              onKeyDown={this.onEnterPress}
-              className="comment-input"
-              // rows="auto"
-              // style={{ border: "none", padding: "8px" }}
-              placeholder="Write a comment..."
-            />
+            <div className="cmnt-input-div">
+              <div className="cmnt-input-div-sub1">
+                <input
+                  name={`${this.props.commentName}`}
+                  value={this.props.comments ? this.props.comments : ""}
+                  onClick={this.props.showCommentBox}
+                  onChange={(e) => this.props.handleInputChange(e)}
+                  onKeyDown={this.onEnterPress}
+                  className="comment-input"
+
+                  placeholder="Write a comment..."
+                />
+              </div>
+              <div className="cmnt-input-div-sub2">
+                <input
+                  ref={this.onImageDropRef}
+                  type="file"
+                  className="hide"
+                  onChange={this.onImageDrop}
+                  name="uploadedfile"
+                  accept=".csv, .jpg, .png, .jpeg, .pdf, .doc, .docx"
+                  multiple
+                ></input>
+                <span className="upload-files" onClick={this.handleImageRef}>
+                  <i className="fas fa-paperclip tooltip-pwd7 d-inline-block">
+                    <span className="tooltiptext-pwd7">
+                      (suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx)
+                </span>
+                  </i>
+                </span>
+              </div>
+            </div>
 
             <div className="uploded-img">
               {this.props.showBox
@@ -118,7 +136,7 @@ class CommentUpload extends React.Component {
                 })
                 : null}
             </div>
-            <input
+            {/* <input
               ref={this.onImageDropRef}
               type="file"
               className="hide"
@@ -133,7 +151,7 @@ class CommentUpload extends React.Component {
                   (suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx)
                 </span>
               </i>
-            </span>
+            </span> */}
             <div
               className={`${
                 this.props.showBox ? "show" : "hide"
