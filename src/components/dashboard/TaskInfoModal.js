@@ -915,10 +915,17 @@ class TaskInfoModal extends Component {
               ) : null}
 
               <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label" style={{ verticalAlign: "top" }}>
-                  Comments
+                <div className="col-md-1 d-inline-block no-padding label" style={{ verticalAlign: "top" }}>
+                  {/* Comments */}
+                  <div className="comment-owner-dot">
+                    {firstTwoLetter(this.props.state.user.name)}
+
+                    {/* {firstTwoLetter(this.props.loggedInUserName)}
+                    {firstTwoLetter(this.state.userName)} */}
+
+                  </div>
                 </div>
-                <div className="col-md-10 d-inline-block">
+                <div className="col-md-11 d-inline-block">
                   <CommentUpload
                     save={this.saveComments}
                     comments={this.state.comments}
@@ -1053,7 +1060,7 @@ class TaskInfoModal extends Component {
                                             <a
                                               href={`${attachment.imge_url}`}
                                               download
-                                              style={{ fontSize: "12px" }}
+                                              style={{ fontSize: "12px", }}
                                             >
                                               {this.returnAlt(attachment.imge_url)}
                                             </a>

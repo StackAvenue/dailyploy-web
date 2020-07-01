@@ -117,13 +117,15 @@ class CommentUpload extends React.Component {
                               href="#"
                               style={{
                                 fontSize: "12px",
-                                padding: "5px",
+                                padding: "12px",
+                                // color: "#d3e5f5",
+
                               }}
                             >
                               {file.name}
                             </a>
                             <span
-                              className="close-icon"
+                              className="close-icon center-icon"
                               onClick={() =>
                                 this.props.removeUploadedImage(idx)
                               }
