@@ -318,7 +318,10 @@ class SearchFilter extends Component {
                 className={`search-icon-${option.type} d-inline-block`}
                 key={index}
               >
-                <i className="fa fa-user member-icon right-left-space-5 d-inline-block"></i>
+                {/* <i className="fa fa-user member-icon right-left-space-5 d-inline-block"></i> */}
+                <span className="list-icon">
+                  <i class="fa fa-user-circle member-icon right-left-space-5 d-inline-block" aria-hidden="true"></i>
+                </span>
                 <div className="tag-text right-left-space-5 d-inline-block">
                   {option.value}
                 </div>
@@ -336,7 +339,10 @@ class SearchFilter extends Component {
                 className={`search-icon-${option.type} d-inline-block`}
                 key={index}
               >
-                <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i>
+                {/* <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i> */}
+                <span className="list-icon">
+                  <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i>
+                </span>
                 <div className="tag-text right-left-space-5 d-inline-block">
                   {option.value}
                 </div>

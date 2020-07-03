@@ -1401,6 +1401,7 @@ table.scheduler-table {
 table.scheduler-table {
   border: 1px solid $color-borders;
   tbody {
+
     .header2-text {
       font-family: $font-family-roboto;
       font-size: 15px;
@@ -1408,8 +1409,10 @@ table.scheduler-table {
       color: $color-text2;
     }
     tr td:first-child {
-      background-color: #ededed;
-      border-right: solid 2px #d6d6d6 !important;
+      // background-color: #ededed;
+      // border-right: solid 2px #d6d6d6 !important;
+      background-color: #f8f8f8!important;
+      border: 1px solid #d6d6d6;
     }
   }
 }
@@ -2356,12 +2359,10 @@ table.scheduler-table tr:last-child td {
               color: $color-text3 !important;
               margin-left: 7% !important;
             }
-            &:hover{
-              background-color: #0056b3 !important;
-            color: #ffffff !important;
-
-  
-            }
+            // &:hover{
+            //   background-color: #0056b3 !important;
+            // color: #ffffff !important;
+            // }
           }
         }
       }
@@ -2775,6 +2776,10 @@ table.scheduler-table tr:last-child td {
         background-color: $color-brand3 !important;
         width: 93px;
         height: 32px;
+        &:hover{
+          background-color: #0056b3 !important;
+        color: #ffffff !important;
+        }
       }
     }
     .category-box {
