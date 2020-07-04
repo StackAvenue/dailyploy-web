@@ -7,11 +7,13 @@ class Timer extends Component {
 		this.state = {
 			runningTime: 0
 		};
+		this.handleReset();
+		this.handleClick();
 	}
 
 	componentDidMount = () => {
-		this.handleReset();
-		this.handleClick();
+		// this.handleReset();
+		// this.handleClick();
 	};
 
 	componentDidUpdate = (prevProps, prevState) => {
