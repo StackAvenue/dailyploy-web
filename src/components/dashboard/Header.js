@@ -94,7 +94,7 @@ async componentDidMountGetNotifications(useId) {
     });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var workspaceId = getWorkspaceId()
 
     this.handleNotification(workspaceId);

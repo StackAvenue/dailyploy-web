@@ -260,7 +260,7 @@ class SearchFilter extends Component {
                         onClick={() => this.selectSuggestion(option)}
                       >
                         <span className="list-icon">
-                          <i class="fa fa-user-circle" aria-hidden="true"></i>
+                          <i className="fa fa-user-circle" aria-hidden="true"></i>
                         </span>
                         <span className="right-left-space-5">
                           {option.value}

@@ -145,7 +145,7 @@ class Workspace extends Component {
     });
   }
 
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     var workspaceId = this.props.match.params.workspaceId;
 
     base

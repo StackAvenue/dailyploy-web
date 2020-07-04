@@ -375,7 +375,7 @@ return event;
             <div className="row item dashboard-event-box">
               <OverlayTrigger
                 placement="auto"
-                trigger="hover"
+                trigger={['hover', 'focus']}
                 overlay={this.props.eventItemPopoverTemplateResolver(
                   schedulerData,
                   event,
@@ -407,7 +407,7 @@ return event;
             <div className="row item dashboard-event-box">
               <OverlayTrigger
                 placement="auto"
-                trigger="hover"
+                trigger={['hover', 'focus']}
                 overlay={this.props.eventItemPopoverTemplateResolver(
                   schedulerData,
                   event,
@@ -564,7 +564,7 @@ return event;
             <div className="row item dashboard-event-box">
               <OverlayTrigger
                 placement="auto"
-                trigger="hover"
+                trigger={['hover', 'focus']}
                 overlay={this.props.eventItemPopoverTemplateResolver(
                   schedulerData,
                   event,
@@ -597,7 +597,7 @@ return event;
             <div className="row item dashboard-event-box">
               <OverlayTrigger
                 placement="auto"
-                trigger="hover"
+                trigger={['hover', 'focus']}
                 overlay={this.props.eventItemPopoverTemplateResolver(
                   schedulerData,
                   event,

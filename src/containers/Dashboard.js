@@ -2345,13 +2345,11 @@ return dateArray;
     });
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var workspaceId = this.props.match.params.workspaceId;
     this.handleTaskCreate(workspaceId);
     this.handleTaskDelete(workspaceId);
     this.handleTaskSyncTracking(workspaceId);
-    // this.handleTaskRunning(workspaceId);
-    // this.handleTaskSyncStop(workspaceId);
     this.handleTaskUpdate(workspaceId);
   }
 
