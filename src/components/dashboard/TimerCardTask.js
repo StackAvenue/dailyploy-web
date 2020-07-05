@@ -90,7 +90,7 @@ class Timer extends Component {
 				return 'Logged ' + ('0' + m + 'min').slice(-7) + ' of ';
 			}
 		} else {
-			return ' ';
+			return 'NA';
 		}
 	};
 
