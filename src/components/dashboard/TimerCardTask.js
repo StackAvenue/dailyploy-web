@@ -95,7 +95,12 @@ class Timer extends Component {
 	};
 
 	render() {
-		return this.formattedSeconds(this.state.runningTime, this.props.totalDuration);
+
+		return (
+			<>
+				{this.formattedSeconds(this.state.runningTime, this.props.totalDuration)}
+			</>
+		)
 	}
 }
 
