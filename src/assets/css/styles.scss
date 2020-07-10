@@ -325,6 +325,46 @@ input[type=number] {
 li i:hover{
   color:  #0056b3 !important;
 }
+
+.height-14{
+  height: 14px !important;
+}
+.height-24{
+  height: 30px !important;
+}
+.height-22{
+  height: 22px !important;
+}
+.height-20{
+  height: 20px !important;
+}
+.pad-left-0{
+  padding-left: 0 !important;
+}
+.day-task-name-padd{
+  padding-top: 6px !important;
+  padding-left: 6px !important;
+}
+
+.task-text-hover{
+  width: 100% !important;
+  height: 60px !important;
+  overflow: hidden;
+  // text-overflow: ellipsis;
+  // white-space: nowrap;
+  // direction: ltr;
+  overflow-wrap: break-word;
+  // word-wrap: break-word;
+  // word-break: break-all;
+  // display: block;
+  // display: -webkit-box !important;
+  // max-width: 240px !important;
+  // -webkit-line-clamp: 4 !important;
+  // -webkit-box-orient: vertical !important;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+}
+  
 .list-icon i:hover{
   color:  #0056b3 !important;
 

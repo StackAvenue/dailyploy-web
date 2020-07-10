@@ -533,6 +533,9 @@ class TaskInfoModal extends Component {
 
   render() {
     const { props } = this;
+    console.log(props);
+    console.log(this.state);
+
     return (
       <>
         <Modal

@@ -17,6 +17,15 @@ import TimerCardTask from "./../dashboard/TimerCardTask";
 import TaskAction from "./../dashboard/TaskAction";
 import { Alert, UncontrolledAlert } from "reactstrap";
 import { OverlayTrigger } from "react-bootstrap";
+import ReactTooltip from "react-tooltip";
+
+
+import ClockIcon from "../../assets/images/hourglasss.gif";
+
+import PauseIcon from "../../assets/images/hourglasss.gif";
+import PlayIcon from "../../assets/images/hourglass1.png";
+
+
 
 class DashboardEvent extends Component {
   constructor(props) {
@@ -255,16 +264,16 @@ class DashboardEvent extends Component {
       <>
         {schedulerData.viewType === 0 ? (
           <div key={event.id} className={mustAddCssClass}>
-            <div className="row item dashboard-event-box ABS">
+            <div className="row item dashboard-event-box height-22 ">
               <div className="col-md-7 no-padding">
                 <div
-                  className="project-name-text cursor"
+                  className="project-name-text cursor pad-left-0"
                   style={divStyle}
                   onClick={() => {
                     if (!!eventItemClick) eventItemClick(schedulerData, event);
                   }}
                 >
-                  <span className="name-text-dot">{event.projectName}</span>
+                  <span className="name-text-dot ">{event.projectName}</span>
                 </div>
               </div>
 
@@ -285,8 +294,26 @@ class DashboardEvent extends Component {
                           this.props.handleTaskStop(event, Date.now())
                         }
                       >
-                        <i className="fa fa-pause"></i>
+                        {/* <i className="fa fa-pause"></i> */}
+                        <img
+                          src={PauseIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip data-for="registerTip1"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+
+                        />
+
+
                       </span>
+
+                      <ReactTooltip id="registerTip1" place="top" effect="solid">
+                        Stop the task
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
@@ -306,8 +333,25 @@ class DashboardEvent extends Component {
                           this.props.handleTaskStart(event, Date.now())
                         }
                       >
-                        <i className="fa fa-power-off"></i>
+                        {/* <i className="fa fa-power-off"></i> */}
+                        <img
+                          src={PlayIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip data-for="registerTip"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                          data-place="bottom"
+                          data-effect="float"
+
+                        />
                       </span>
+                      <ReactTooltip id="registerTip" place="top" effect="solid">
+                        Start the task
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
@@ -327,8 +371,25 @@ class DashboardEvent extends Component {
                           this.props.handleTaskStart(event, Date.now())
                         }
                       >
-                        <i className="fa fa-play"></i>
+                        {/* <i className="fa fa-play"></i> */}
+                        <img
+                          src={PlayIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip data-for="registerTip"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                          data-place="bottom"
+                          data-effect="float"
+                        />
+
                       </span>
+                      <ReactTooltip id="registerTip" place="top" effect="solid">
+                        Start the task
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
@@ -367,7 +428,7 @@ class DashboardEvent extends Component {
               </span>
             </div> */}
 
-            <div className="row item dashboard-event-box">
+            <div className="row item dashboard-event-box height-20">
               <OverlayTrigger
                 placement="auto"
                 trigger={['hover', 'focus']}
@@ -382,7 +443,18 @@ class DashboardEvent extends Component {
               >
                 <div className="col-md-9 no-padding flex-center">
                   <div className="col-md-2 no-padding flex-center">
-                    <div className={`${this.props.event.priority}`}></div>
+                    {/* <div className={`${this.props.event.priority}`}></div> */}
+                    <div className="clock-img-div1">
+                      {/* <img
+                        src={ClockIcon}
+                        alt=""
+                        title=""
+                        className="clock-img"
+                        height="100%"
+                        width="100%"
+                      /> */}
+                      <svg id="Capa_1" enable-background="new 0 0 512 512" height="100%" viewBox="0 0 512 512" width="100%" xmlns="http://www.w3.org/2000/svg"><g><path d="m256 0-128 256 128 256c141.385 0 256-114.615 256-256s-114.615-256-256-256z" fill="#28abfa" /><path d="m0 256c0 141.385 114.615 256 256 256v-512c-141.385 0-256 114.615-256 256z" fill="#14cfff" /><path d="m256 60-98 196 98 196c108.248 0 196-87.752 196-196s-87.752-196-196-196z" fill="#c4f3ff" /><path d="m60 256c0 108.248 87.752 196 196 196v-392c-108.248 0-196 87.752-196 196z" fill="#fff" /><path d="m298.426 277.213-42.426-42.426h-20l20 42.426 21.213 21.213z" fill="#340d66" /><path d="m170.794 149.581-21.213 21.213 106.419 106.419v-42.426z" fill="#373e9f" /><path d="m341.561 149.227-85.561 85.56-20 42.426h20l106.773-106.774z" fill="#373e9f" /><path d="m213.574 277.213 21.213 21.213 21.213-21.213v-42.426z" fill="#3857bc" /><path d="m271 90h-15l-10 15 10 15h15z" fill="#340d66" /><path d="m241 90h15v30h-15z" fill="#373e9f" /><path d="m271 392h-15l-10 15 10 15h15z" fill="#340d66" /><path d="m241 392h15v30h-15z" fill="#373e9f" /><path d="m90 241h30v30h-30z" fill="#373e9f" transform="matrix(0 -1 1 0 -151 361)" /><path d="m392 241h30v30h-30z" fill="#340d66" transform="matrix(0 -1 1 0 151 663)" /></g></svg>
+                    </div>
                   </div>
                   <div className="col-md-3 no-padding d-inline-block ">
                     <span className="task-timer">
@@ -418,16 +490,17 @@ class DashboardEvent extends Component {
                   // style={{ color: contColor }}
                   >
                     <div
-                      className="col-md-12 no-padding pointer item-heading text-wraper"
+                      className="col-md-12 no-padding pointer text-wraper "
                       style={{
-                        padding: "5px 5px 0px 5px",
+                        paddingTop: "6px",
+                        paddingLeft: "8px"
                         // color: getContrastColor(this.props.bgColor)
                       }}
                       onClick={() => {
                         if (!!eventItemClick) eventItemClick(schedulerData, event);
                       }}
                     >
-                      <span className="project-task-name">{titleText}</span>
+                      <span className="project-task-name day-task-name-padd">{titleText}</span>
                     </div>
                   </div>
                 </div>
@@ -444,7 +517,7 @@ class DashboardEvent extends Component {
             // style={divStyle}
             style={borderLeft}
           >
-            <div className="row item dashboard-event-box">
+            <div className="row item dashboard-event-box height-24">
               <div className="col-md-7 no-padding">
                 <div
                   className="project-name-text cursor"
@@ -474,8 +547,26 @@ class DashboardEvent extends Component {
                           this.props.handleTaskStop(event, Date.now())
                         }
                       >
-                        <i className="fa fa-pause"></i>
+                        {/* <i className="fa fa-pause "></i> */}
+                        <img
+                          src={PauseIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip data-for="registerTip1"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+
+                        />
+
+
                       </span>
+
+                      <ReactTooltip id="registerTip1" place="top" effect="solid">
+                        Stop the task
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
@@ -495,8 +586,24 @@ class DashboardEvent extends Component {
                           this.props.handleTaskStart(event, Date.now())
                         }
                       >
-                        <i className="fa fa-power-off"></i>
+                        {/* <i className="fa fa-power-off"></i> */}
+                        <img
+                          src={PlayIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip data-for="registerTip"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                          data-place="bottom"
+                          data-effect="float"
+                        />
                       </span>
+                      <ReactTooltip id="registerTip" place="top" effect="solid">
+                        Start the task
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
@@ -516,8 +623,25 @@ class DashboardEvent extends Component {
                           this.props.handleTaskStart(event, Date.now())
                         }
                       >
-                        <i className="fa fa-play"></i>
+                        {/* <i className="fa fa-play"></i> */}
+                        <img
+                          src={PlayIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip data-for="registerTip"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                          data-place="bottom"
+                          data-effect="float"
+                        />
+
                       </span>
+                      <ReactTooltip id="registerTip" place="top" effect="solid">
+                        Start the task
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
@@ -556,7 +680,7 @@ class DashboardEvent extends Component {
               </span>
             </div> */}
 
-            <div className="row item dashboard-event-box">
+            <div className="row item dashboard-event-box height-14">
               <OverlayTrigger
                 placement="auto"
                 trigger={['hover', 'focus']}
@@ -570,8 +694,19 @@ class DashboardEvent extends Component {
                 )}
               >
                 <div className="col-md-9 no-padding flex-center">
-                  <div className="col-md-2 no-padding flex-center">
-                    <div className={`${this.props.event.priority}`}></div>
+                  <div className="col-md-2 no-padding flex-center ">
+                    {/* <div className={`${this.props.event.priority}`}></div> */}
+                    <div className="clock-img-div">
+                      {/* <img
+                        src={ClockIcon}
+                        alt=""
+                        title=""
+                        className="clock-img"
+                        height="100%"
+                        width="100%"
+                      /> */}
+                      <svg id="Capa_1" enable-background="new 0 0 512 512" height="100%" viewBox="0 0 512 512" width="100%" xmlns="http://www.w3.org/2000/svg"><g><path d="m256 0-128 256 128 256c141.385 0 256-114.615 256-256s-114.615-256-256-256z" fill="#28abfa" /><path d="m0 256c0 141.385 114.615 256 256 256v-512c-141.385 0-256 114.615-256 256z" fill="#14cfff" /><path d="m256 60-98 196 98 196c108.248 0 196-87.752 196-196s-87.752-196-196-196z" fill="#c4f3ff" /><path d="m60 256c0 108.248 87.752 196 196 196v-392c-108.248 0-196 87.752-196 196z" fill="#fff" /><path d="m298.426 277.213-42.426-42.426h-20l20 42.426 21.213 21.213z" fill="#340d66" /><path d="m170.794 149.581-21.213 21.213 106.419 106.419v-42.426z" fill="#373e9f" /><path d="m341.561 149.227-85.561 85.56-20 42.426h20l106.773-106.774z" fill="#373e9f" /><path d="m213.574 277.213 21.213 21.213 21.213-21.213v-42.426z" fill="#3857bc" /><path d="m271 90h-15l-10 15 10 15h15z" fill="#340d66" /><path d="m241 90h15v30h-15z" fill="#373e9f" /><path d="m271 392h-15l-10 15 10 15h15z" fill="#340d66" /><path d="m241 392h15v30h-15z" fill="#373e9f" /><path d="m90 241h30v30h-30z" fill="#373e9f" transform="matrix(0 -1 1 0 -151 361)" /><path d="m392 241h30v30h-30z" fill="#340d66" transform="matrix(0 -1 1 0 151 663)" /></g></svg>
+                    </div>
                   </div>
                   <div className="col-md-3 no-padding d-inline-block ">
                     <span className="task-timer">
@@ -608,7 +743,7 @@ class DashboardEvent extends Component {
                   // style={{ color: contColor }}
                   >
                     <div
-                      className="col-md-12  pointer item-heading text-wraper"
+                      className="col-md-12  pointer  text-wraper"
                       style={{
                         padding: "5px 5px 0px 5px",
                         // color: getContrastColor(this.props.bgColor)

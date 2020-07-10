@@ -53,8 +53,8 @@ class Calendar extends Component {
         monthMaxEvents: 99,
         customMaxEvents: 99,
 
-        // eventItemHeight: 85,
-        eventItemHeight: 108,
+        eventItemHeight: 85,
+        // eventItemHeight: 108,
         eventItemLineHeight: this.calculateResouceHeight(),
         nonAgendaSlotMinHeight: 0,
         dayStartFrom: 0,
@@ -150,9 +150,9 @@ class Calendar extends Component {
     heights.set(8, finalSceenHeight / 8);
     let height = heights.get(resourcesLength);
     if (height === undefined) {
-      return 108;
-    } else if (height < 108) {
-      return 108;
+      return 85;
+    } else if (height < 85) {
+      return 85;
     } else {
       return height;
     }
@@ -368,12 +368,20 @@ class Calendar extends Component {
       return (
         <div className="custom-event-popup">
           <div className="event-task-hover">
-            <div className="title">
+            <div className="title task-text-hover">
               <span className="" title={title}>
-                {title}
+
+
+                {title.length > 110 ? title.substr(0, 110) + "...." : title}
+
               </span>
             </div>
-            <div className="project">
+
+            <div className="">
+              <span className="">Task status</span>
+            </div>
+
+            {/* <div className="project">
               <div
                 className="status-dot d-inline-block"
                 style={{ backgroundColor: `${eventItem.bgColor}` }}
@@ -391,7 +399,7 @@ class Calendar extends Component {
                 {moment(end).format(FULL_DATE_FORMAT3)}
               </div>
               <div className="d-inline-block pull-right">{timeDiff}</div>
-            </div>
+            </div> */}
           </div>
         </div>
       );
@@ -447,9 +455,9 @@ class Calendar extends Component {
     );
     schedulerData.setEvents(this.state.events);
     if (view.viewType === 0) {
-      schedulerData.setEventItemHeight(108);
+      schedulerData.setEventItemHeight(85);
     } else if (view.viewType === 1) {
-      schedulerData.setEventItemHeight(108);
+      schedulerData.setEventItemHeight(85);
     } else if (view.viewType === 2) {
       schedulerData.setEventItemHeight(51);
     }

@@ -51,47 +51,60 @@ class Timer extends Component {
 		var m = Math.floor((totalSeconds % 3600) / 60);
 		var s = Math.floor((totalSeconds % 3600) % 60);
 		var time = this.props.calculateTime(this.props.event);
-		if (h === 0 && m === 0 && time === ' ') {
-			return 'No Estimate';
-		} else if (h === 0 && m === 0 && time !== ' ') {
-			return ' ';
-		} else if (h > 0 && m > 0 && time === ' ') {
-			if (m > 10) {
-				return 'Logged ' + (h + 'h').slice(`${h}`.length > 2 ? -3 : -3) + ' ' + (m + 'min').slice(-7);
-			} else if (m < 10) {
-				return 'Logged ' + (h + 'h').slice(`${h}`.length > 2 ? -3 : -3) + ' ' + ('0' + m + 'min').slice(-7);
-			}
-		} else if (h > 0 && m === 0 && time === ' ') {
-			return 'Logged ' + (h + 'h').slice(`${h}`.length > 2 ? -3 : -3);
-		} else if (h === 0 && m > 0 && time === ' ') {
-			if (m > 10) {
-				return 'Logged ' + (m + 'min').slice(-7);
-			} else if (m < 10) {
-				return 'Logged ' + ('0' + m + 'min').slice(-7);
-			}
-		} else if (h > 0 && m > 0 && time !== ' ') {
-			if (m > 10) {
-				return 'Logged ' + (h + 'h').slice(`${h}`.length > 2 ? -3 : -3) + ' ' + (m + 'min').slice(-7) + ' of ';
-			} else if (m < 10) {
-				return (
-					'Logged ' +
-					(h + 'h').slice(`${h}`.length > 2 ? -3 : -3) +
-					' ' +
-					('0' + m + 'min').slice(-7) +
-					' of '
-				);
-			}
-		} else if (h > 0 && m === 0 && time !== ' ') {
-			return 'Logged ' + (h + 'h').slice(`${h}`.length > 2 ? -3 : -3) + ' of ';
-		} else if (h === 0 && m > 0 && time !== ' ') {
-			if (m > 10) {
-				return 'Logged ' + (m + 'min').slice(-7) + ' of ';
-			} else if (m < 10) {
-				return 'Logged ' + ('0' + m + 'min').slice(-7) + ' of ';
-			}
-		} else {
-			return 'NA';
+		if (h === 0 && m === 0 && time === " ") {
+			return (" - ");
 		}
+		else
+			if (h === 0 && m === 0 && time !== " ") {
+				return (" ")
+			}
+			else
+				if (h > 0 && m > 0 && time === " ") {
+					if (m > 10) {
+						return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m + "m").slice(-7));
+					} else
+						if (m < 10) {
+							return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m + "m").slice(-7));
+						}
+				} else
+					if (h > 0 && m === 0 && time === " ") {
+						return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3));
+
+					} else
+						if (h === 0 && m > 0 && time === " ") {
+							if (m > 10) {
+								return ((m + "m").slice(-7));
+							} else
+								if (m < 10) {
+									return (("0" + m + "m").slice(-7));
+								}
+						} else
+
+							if (h > 0 && m > 0 && time !== " ") {
+								if (m > 10) {
+									return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m + "m").slice(-7) + " of ");
+								} else
+									if (m < 10) {
+										return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m + "m").slice(-7) + " of ");
+									}
+							} else
+								if (h > 0 && m === 0 && time !== " ") {
+									return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " of ");
+
+								} else
+									if (h === 0 && m > 0 && time !== " ") {
+										if (m > 10) {
+											return ((m + "m").slice(-7) + " of ");
+										} else
+											if (m < 10) {
+												return (("0" + m + "m").slice(-7) + " of ");
+											}
+									} else {
+										return (" ")
+									}
+
+
+
 	};
 
 	render() {
