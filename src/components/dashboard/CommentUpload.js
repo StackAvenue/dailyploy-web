@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
 import onClickOutside from "react-onclickoutside";
 import Loader from "react-loader-spinner";
+import ReactTooltip from "react-tooltip";
+
+
 class CommentUpload extends React.Component {
   constructor(props) {
     super(props);
@@ -78,11 +81,17 @@ class CommentUpload extends React.Component {
                   multiple
                 ></input>
                 <span className="upload-files" onClick={this.handleImageRef}>
-                  <i className="fas fa-paperclip tooltip-pwd7 d-inline-block">
-                    <span className="tooltiptext-pwd7">
+                  <i className="fas fa-paperclip  d-inline-block" data-tip data-for="registerTip7"
+                    data-background-color="#f0f2f5"
+                    data-text-color="#010101">
+                    {/* <span className="tooltiptext-pwd7">
                       (suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx)
-                </span>
+                </span> */}
                   </i>
+
+                  <ReactTooltip id="registerTip7" place="top" effect="solid">
+                    suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx
+                      </ReactTooltip>
                 </span>
               </div>
             </div>
