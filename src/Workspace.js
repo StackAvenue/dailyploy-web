@@ -40,12 +40,12 @@ class Workspace extends Component {
         component: Settings,
         title: "settings"
       },
-      {
-        path: "/analysis",
-        exact: true,
-        component: Analysis,
-        title: "analysis"
-      },
+      // {
+      //   path: "/analysis",
+      //   exact: true,
+      //   component: Analysis,
+      //   title: "analysis"
+      // },
       {
         path: "/projects",
         exact: true,
@@ -64,12 +64,12 @@ class Workspace extends Component {
         component: Reports,
         title: "reports"
       },
-      {
-        path: "/task_list",
-        exact: true,
-        component: TaskList,
-        title: "taskList"
-      },
+      // {
+      //   path: "/task_list",
+      //   exact: true,
+      //   component: TaskList,
+      //   title: "taskList"
+      // },
       {
         component: NotFound,
         title: "pageNotFound"
@@ -300,7 +300,7 @@ class Workspace extends Component {
   render() {
     return (
       <div>
-        {this.state.isLoading ? <div className="loading1"><VideoLoader/></div> : null}
+        {this.state.isLoading ? <div className="loading1"><VideoLoader /></div> : null}
         <ToastContainer />
         <div
           className="row no-margin"

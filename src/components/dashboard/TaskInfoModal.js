@@ -583,82 +583,6 @@ class TaskInfoModal extends Component {
               </button>
             </div>
 
-            <div className="col-md-12 body d-inline-block text-titlize">
-              <div className="input-row">
-                <div className="d-inline-block">
-                  {this.props.state.taskEvent.trackingStatus == "pause" ? (
-                    <div
-                      style={{
-                        pointerEvents: this.isValidUserDate() ? "" : "none",
-                      }}
-                      className="d-inline-block task-play-btn pointer"
-                      onClick={() =>
-                        this.props.handleTaskStop(
-                          this.props.state.taskEvent,
-                          Date.now()
-                        )
-                      }
-                    >
-                      <i className="fa fa-pause"></i>
-                    </div>
-                  ) : null}
-
-                  {this.props.state.taskEvent.trackingStatus == "play" ? (
-                    <div
-                      style={{
-                        pointerEvents: this.isValidUserDate() ? "" : "none",
-                      }}
-                      className="d-inline-block task-play-btn pointer"
-                      onClick={() =>
-                        this.props.handleTaskStart(
-                          this.props.state.taskEvent,
-                          Date.now()
-                        )
-                      }
-                    >
-                      <i className="fa fa-play"></i>
-                    </div>
-                  ) : null}
-                  {this.props.state.taskEvent.status === "completed" ? (
-                    <div className="d-inline-block task-play-btn">
-                      <i className="fa fa-check"></i>
-                    </div>
-                  ) : null}
-
-                  {this.props.state.showAlert &&
-                    this.props.state.showEventAlertId ==
-                    this.props.state.taskEvent.id ? (
-                      <UncontrolledAlert
-                        className="task-war-alert"
-                        color="warning"
-                      >
-                        one task already ongoing !
-                      </UncontrolledAlert>
-                    ) : null}
-                </div>
-                <div className="d-inline-block header-2">
-                  <span>
-                    {this.secondsToHours(
-                      this.addTotalDuration(
-                        props.state.taskEvent.allTimeTracked
-                      )
-                    )}
-                  </span>
-                </div>
-                {this.props.state.taskEvent.status === "completed" ? (
-                  <div className="d-inline-block button3">
-                    <span>Completed</span>
-                  </div>
-                ) : (
-                    <div
-                      onClick={() => props.confirmModal("mark as completed")}
-                      className="d-inline-block button2 pointer"
-                    >
-                      <span>Mark Complete</span>
-                    </div>
-                  )}
-              </div>
-            </div>
 
             <div className="col-md-12 body">
 
@@ -696,6 +620,19 @@ class TaskInfoModal extends Component {
                   <span className="left-padding-20px">
                     {props.state.taskCategorie
                       ? props.state.taskCategorie.name
+                      : "---"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="col-md-12 no-padding input-row text-titlize">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Status
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">
+                    {props.state.taskStatus
+                      ? props.state.taskStatus.name
                       : "---"}
                   </span>
                 </div>
@@ -1017,7 +954,6 @@ class TaskInfoModal extends Component {
                                   <div className="owner-name text-titlize">
                                     {comment.user.name}
                                   </div>
-
                                 </div>
                                 <div className="comments">
                                   {comment.comments}

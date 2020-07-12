@@ -130,7 +130,7 @@ class ShowProjects extends Component {
         searchData
       );
       var projectsData = data.projects;
-      this.props.handleLoading(false);
+      
     } catch (e) {
       console.log("err", e);
     }
@@ -162,6 +162,7 @@ class ShowProjects extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
+    
     if (
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
       prevProps.searchUserDetails !== this.props.searchUserDetails

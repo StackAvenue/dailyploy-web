@@ -121,6 +121,7 @@ class Calendar extends Component {
     );
 
     this.state = {
+      countData: [],
       viewModel: this.schedulerData,
       resources: [],
       events: [],
@@ -296,6 +297,7 @@ class Calendar extends Component {
         <div>
           <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
             <Scheduler
+
               schedulerData={viewModel}
               prevClick={this.prevClick}
               nextClick={this.nextClick}
@@ -337,33 +339,33 @@ class Calendar extends Component {
     end,
     statusColor
   ) => {
-    var start = new Date(
-      moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
-    );
-    var end = new Date(
-      moment(convertUTCToLocalDate(eventItem.taskEndDateTime))
-        .format(`${DATE_FORMAT1} HH:mm:ss`)
-        .replace(/-/g, "/")
-    );
+    // var start = new Date(
+    //   moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
+    // );
+    // var end = new Date(
+    //   moment(convertUTCToLocalDate(eventItem.taskEndDateTime))
+    //     .format(`${DATE_FORMAT1} HH:mm:ss`)
+    //     .replace(/-/g, "/")
+    // );
 
-    var timeDiff = "00h 00m";
-    if (
-      moment(start).format("HH:mm") != "00:00" &&
-      moment(end).format("HH:mm") != "00:00"
-    ) {
-      let totalSeconds = (end - start) / 1000;
-      totalSeconds = Number(totalSeconds);
-      var h = Math.floor(totalSeconds / 3600);
-      var m = Math.floor((totalSeconds % 3600) / 60);
-      var s = Math.floor((totalSeconds % 3600) % 60);
+    // var timeDiff = "00h 00m";
+    // if (
+    //   moment(start).format("HH:mm") != "00:00" &&
+    //   moment(end).format("HH:mm") != "00:00"
+    // ) {
+    //   let totalSeconds = (end - start) / 1000;
+    //   totalSeconds = Number(totalSeconds);
+    //   var h = Math.floor(totalSeconds / 3600);
+    //   var m = Math.floor((totalSeconds % 3600) / 60);
+    //   var s = Math.floor((totalSeconds % 3600) % 60);
 
-      var timeDiff =
-        ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
-        "h" +
-        " " +
-        ("0" + m).slice(-2) +
-        "m";
-    }
+    //   var timeDiff =
+    //     ("0" + h).slice(`${h}`.length > 2 ? -3 : -2) +
+    //     "h" +
+    //     " " +
+    //     ("0" + m).slice(-2) +
+    //     "m";
+    // }
     if (schedulerData.viewType !== 2) {
       return (
         <div className="custom-event-popup">
@@ -377,49 +379,30 @@ class Calendar extends Component {
               </span>
             </div>
 
-            <div className="">
-              <span className="">Task status</span>
-            </div>
-
-            {/* <div className="project">
-              <div
-                className="status-dot d-inline-block"
-                style={{ backgroundColor: `${eventItem.bgColor}` }}
-              ></div>
-              <div className="d-inline-block">{eventItem.projectName}</div>
-            </div>
-            <div className="time">
-              <div className="d-inline-block">
-                {moment(start).format(FULL_DATE_FORMAT3)}
-                {" - "}
-              </div>
-            </div>
-            <div className="time-2">
-              <div className="d-inline-block">
-                {moment(end).format(FULL_DATE_FORMAT3)}
-              </div>
-              <div className="d-inline-block pull-right">{timeDiff}</div>
-            </div> */}
+            {eventItem.status && <div className="text-bold">
+              <span className="text-bold">Task is in {eventItem.status.name} State</span>
+            </div>}
           </div>
         </div>
       );
-    } else {
-      return (
-        <MonthlyTaskOverPopup
-          event={eventItem}
-          titleText={title}
-          end={end}
-          schedulerData={this.schedulerData}
-          scheduler={this.schedulerData}
-          workspaceId={this.props.workspaceId}
-          times={this.times}
-          bgColor={eventItem.bgColor}
-          handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-          userId={this.props.state.userId}
-          onGoingTask={this.props.onGoingTask}
-        />
-      );
     }
+    // else {
+    //   return (
+    //     <MonthlyTaskOverPopup
+    //       event={eventItem}
+    //       titleText={title}
+    //       end={end}
+    //       schedulerData={this.schedulerData}
+    //       scheduler={this.schedulerData}
+    //       workspaceId={this.props.workspaceId}
+    //       times={this.times}
+    //       bgColor={eventItem.bgColor}
+    //       handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+    //       userId={this.props.state.userId}
+    //       onGoingTask={this.props.onGoingTask}
+    //     />
+    //   );
+    // }
   };
 
   prevClick = schedulerData => {
@@ -629,8 +612,20 @@ class Calendar extends Component {
     titleText = titleText[0].toUpperCase() + titleText.slice(1);
     var start = moment(event.start);
     var end = moment(event.end);
-    //  let contColor = getContrastColor(bgColor);
-    let divStyle = {
+
+    let divStyle1 = {
+      borderLeft: `4px solid ${backgroundColor}`,
+      // borderRight: `2px solid ${backgroundColor}`,
+      // borderBottom: `2px solid ${backgroundColor}`,
+      // borderTop: `2px solid ${backgroundColor}`,
+      borderRight: `2px solid #ededed `,
+      borderBottom: `2px solid #ededed `,
+      borderTop: `2px solid #ededed `,
+      paddingLeft: "4px",
+      borderRadius: "5px"
+    }
+
+    var divStyle = {
       borderRadius: "5px",
       // backgroundColor: backgroundColor,
       // height: mustBeHeight
@@ -638,7 +633,7 @@ class Calendar extends Component {
       height: "75%",
       marginTop: "4px",
       padding: "2px"
-    };
+    }
     let borderLeft = {
       borderLeft: "4px solid " + bgColor
     };
@@ -650,19 +645,10 @@ class Calendar extends Component {
       <>
         <div
           className="text"
-          style={{
-            borderLeft: `4px solid ${backgroundColor}`,
-            // borderRight: `2px solid ${backgroundColor}`,
-            // borderBottom: `2px solid ${backgroundColor}`,
-            // borderTop: `2px solid ${backgroundColor}`,
-            borderRight: `2px solid #ededed `,
-            borderBottom: `2px solid #ededed `,
-            borderTop: `2px solid #ededed `,
-            paddingLeft: "4px",
-            borderRadius: "5px"
-          }}
+          style={divStyle1}
         >
           <DashboardEvent
+            countData={this.state.countData}
             eventItemClick={eventItemClick}
             schedulerData={schedulerData}
             event={event}
@@ -684,6 +670,8 @@ class Calendar extends Component {
             eventItemPopoverTemplateResolver={
               this.eventItemPopoverTemplateResolver
             }
+            handleHoverId={this.props.handleHoverId}
+            hoverId={this.props.hoverId}
             userId={this.props.state.userId}
             taskEventResumeConfirm={this.props.taskEventResumeConfirm}
             handleTaskTracking={this.props.handleTaskTracking}

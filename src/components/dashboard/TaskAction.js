@@ -41,9 +41,9 @@ class TaskAction extends Component {
               style={{ padding: "5px 0px 0px 0px" }}
               onClick={() => props.taskEventResumeConfirm(props.event, "edit")}
             >
-              Edit
+              View Details
             </div>
-            <div
+            {/* <div
               className="border-bottom pointer"
               style={{ padding: "5px 0px 0px 0px" }}
               onClick={() =>
@@ -51,7 +51,7 @@ class TaskAction extends Component {
               }
             >
               Mark Complete
-            </div>
+            </div> */}
             <div
               className="pointer"
               style={{ padding: "5px 0px 5px 0px" }}
