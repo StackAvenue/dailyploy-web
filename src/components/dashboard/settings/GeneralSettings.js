@@ -264,14 +264,15 @@ class GeneralSettings extends Component {
   handleToChange = (e) => {
     const { name, value } = e.target;
     let toEmailSuggestions = [];
-    var searchOptions = this.props.state.userMembers.map((user) => user);
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      toEmailSuggestions = searchOptions
-        .sort()
-        .filter((v) => regex.test(v.email));
-    }
-
+      var searchOptions = this.props.state.userMembers.map((user) =>user);
+      if (value.length > 0) {
+        const regex = new RegExp(`^${value}`, "i");
+        toEmailSuggestions = searchOptions
+          .sort()
+          .filter((v) =>{
+             regex.test(v.email)});
+      }
+  
     this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
   };
 
