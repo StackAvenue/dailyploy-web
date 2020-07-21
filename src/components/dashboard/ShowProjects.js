@@ -159,6 +159,7 @@ class ShowProjects extends Component {
       worksapceUsers: worksapceUsers
     });
     this.createUserProjectList();
+    this.props.handleLoading(false);
   }
 
   async componentDidUpdate(prevProps, prevState) {
