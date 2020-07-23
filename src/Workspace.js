@@ -9,6 +9,7 @@ import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import TaskList from "./components/dashboard/TaskList";
+import TaskProjectList from "./components/TaskList/TaskProjectList";
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -23,7 +24,7 @@ import { workspaceNameSplit } from "./utils/function";
 import moment from "moment";
 import { base } from "./../src/base";
 import "../src/assets/css/loader.scss";
-import VideoLoader from "./components/dashboard/VideoLoader"
+import VideoLoader from "./components/dashboard/VideoLoader";
 class Workspace extends Component {
   constructor(props) {
     super(props);
@@ -32,13 +33,13 @@ class Workspace extends Component {
         path: "/dashboard",
         exact: false,
         component: Dashboard,
-        title: "dashboard"
+        title: "dashboard",
       },
       {
         path: "/settings",
         exact: true,
         component: Settings,
-        title: "settings"
+        title: "settings",
       },
       // {
       //   path: "/analysis",
@@ -50,30 +51,36 @@ class Workspace extends Component {
         path: "/projects",
         exact: true,
         component: ShowProjects,
-        title: "showProjects"
+        title: "showProjects",
       },
       {
         path: "/members",
         exact: true,
         component: ShowMembers,
-        title: "showMembers"
+        title: "showMembers",
       },
       {
         path: "/reports",
         exact: true,
         component: Reports,
-        title: "reports"
+        title: "reports",
       },
-      // {
-      //   path: "/task_list",
-      //   exact: true,
-      //   component: TaskList,
-      //   title: "taskList"
-      // },
+      {
+        path: "/task_list",
+        exact: true,
+        component: TaskList,
+        title: "taskList",
+      },
+      {
+        path: "/TaskProjectList",
+        exact: true,
+        component: TaskProjectList,
+        title: "TaskProjectList",
+      },
       {
         component: NotFound,
-        title: "pageNotFound"
-      }
+        title: "pageNotFound",
+      },
     ];
     this.state = {
       workspaceId: null,
@@ -97,7 +104,7 @@ class Workspace extends Component {
       workspaceName: "",
       loggedInUserName: "",
       timeTracked: [],
-      event: null
+      event: null,
     };
   }
 
@@ -118,10 +125,10 @@ class Workspace extends Component {
       const { data } = await get("workspaces");
       var workspacesData = data.workspaces;
       this.setState({ isLoading: true });
-      var workspace = workspacesData.filter(ws => ws.id == workspaceId);
+      var workspace = workspacesData.filter((ws) => ws.id == workspaceId);
       if (workspace.length > 0 && workspace[0]) {
         cookie.save("workspaceName", workspaceNameSplit(workspace[0].name), {
-          path: "/"
+          path: "/",
         });
       }
       // let notificataionData = await get(
@@ -141,7 +148,7 @@ class Workspace extends Component {
         workspace.length > 0 && workspace[0]
           ? workspaceNameSplit(workspace[0].name)
           : "",
-      loggedInUserName: userData.name
+      loggedInUserName: userData.name,
     });
   }
 
@@ -151,7 +158,7 @@ class Workspace extends Component {
     base
       .database()
       .ref(`task_stopped/${workspaceId}`)
-      .on("child_added", snap => {
+      .on("child_added", (snap) => {
         if (this.state.event && this.state.event.taskId == snap.key) {
           this.setState({ event: null });
         }
@@ -160,21 +167,21 @@ class Workspace extends Component {
     base
       .database()
       .ref(`task_stopped/${workspaceId}`)
-      .on("child_changed", snap => {
+      .on("child_changed", (snap) => {
         if (this.state.event && this.state.event.taskId == snap.key) {
           this.setState({ event: null });
         }
       });
   };
 
-  componentWillUnmount() { }
+  componentWillUnmount() {}
 
   logout = async () => {
     await logout();
     this.props.history.push("/login");
   };
 
-  handleSearchFilterResult = data => {
+  handleSearchFilterResult = (data) => {
     var searchUserDetails = [];
     var projectIds = [];
     if (data) {
@@ -188,15 +195,15 @@ class Workspace extends Component {
     }
     this.setState({
       searchProjectIds: projectIds,
-      searchUserDetails: searchUserDetails
+      searchUserDetails: searchUserDetails,
     });
   };
 
-  setSearchOptions = searchOptions => {
+  setSearchOptions = (searchOptions) => {
     this.setState({ searchOptions: searchOptions });
   };
 
-  handleLoad = value => {
+  handleLoad = (value) => {
     this.setState({ isLoading: value });
   };
 
@@ -218,7 +225,7 @@ class Workspace extends Component {
       handleTaskBottomPopup: this.handleTaskBottomPopup,
       handleLoading: this.handleLoad,
       workspaceNameUpdate: this.workspaceNameUpdate,
-      state: this.state
+      state: this.state,
     };
     var newProps = { ...props, ...props1 };
     if (
@@ -235,11 +242,11 @@ class Workspace extends Component {
   handleTaskBottomPopup = (startOn, event, trackStatus) => {
     if (trackStatus === "start") {
       this.setState({
-        event: event
+        event: event,
       });
     } else if (trackStatus === "stop") {
       this.setState({
-        event: null
+        event: null,
       });
     }
   };
@@ -257,19 +264,19 @@ class Workspace extends Component {
     if (this.state.event) {
       var taskDate = {
         end_time: new Date(),
-        status: "stopped"
+        status: "stopped",
       };
       var taskId = this.state.event.id.split("-")[0];
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-      } catch (e) { }
+      } catch (e) {}
       this.setState({
-        event: null
+        event: null,
       });
     }
   };
 
-  updateWorkspaces = workspace => {
+  updateWorkspaces = (workspace) => {
     if (workspace) {
       this.setState({ workspaces: [...this.state.workspaces, workspace] });
     }
@@ -278,29 +285,33 @@ class Workspace extends Component {
   readAllNotification = async () => {
     if (this.state.notifications) {
       let notification_ids = this.state.notifications.map((data) => {
-        return data.id
-      })
+        return data.id;
+      });
       let params = {
-        notification_ids: notification_ids
-      }
+        notification_ids: notification_ids,
+      };
       try {
         const { data } = await put(
           params,
           `users/${this.state.workspaceId}/notifications/mark_all_as_read`
         );
         this.setState({
-          notifications: []
+          notifications: [],
         });
       } catch (e) {
         console.log("error", e);
       }
     }
-  }
+  };
 
   render() {
     return (
       <div>
-        {this.state.isLoading ? <div className="loading1"><VideoLoader /></div> : null}
+        {this.state.isLoading ? (
+          <div className="loading1">
+            <VideoLoader />
+          </div>
+        ) : null}
         <ToastContainer />
         <div
           className="row no-margin"
@@ -344,7 +355,7 @@ class Workspace extends Component {
                   key={i}
                   exact={route.exact}
                   path={this.props.props.match.path + route.path}
-                  render={props =>
+                  render={(props) =>
                     this.isAllowed(props, route.component, route.title)
                   }
                 />

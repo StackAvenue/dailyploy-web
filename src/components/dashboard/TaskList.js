@@ -119,7 +119,7 @@ class TaskList extends Component {
       );
       var taskList = data.recurring_task;
       this.props.handleLoading(false);
-    } catch (e) {}
+    } catch (e) { }
 
     // Category Listing
     try {
@@ -127,7 +127,7 @@ class TaskList extends Component {
         `workspaces/${this.state.workspaceId}/task_category`
       );
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
     this.setState({
       userId: loggedInData.id,
@@ -144,7 +144,7 @@ class TaskList extends Component {
     this.createUserProjectList();
   }
 
-  async componentDidUpdate(prevProps, prevState) {}
+  async componentDidUpdate(prevProps, prevState) { }
 
   getWorkspaceParams = () => {
     const { workspaceId } = this.props.match.params;
@@ -417,7 +417,7 @@ class TaskList extends Component {
       );
       var taskList = data.recurring_task;
       this.setState({ taskList: taskList });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   handlePrioritiesChange = option => {
@@ -551,8 +551,8 @@ class TaskList extends Component {
                       {this.state.isAllChecked ? (
                         <span>All Selected</span>
                       ) : (
-                        <span>Select All</span>
-                      )}
+                          <span>Select All</span>
+                        )}
                     </label>
                   </>
                 ) : null}
@@ -622,22 +622,22 @@ class TaskList extends Component {
                         {this.countProject(task.projects)}
                       </span>
                       {this.state.isProjectListShow &&
-                      this.state.projectShowTaskId === task.id ? (
-                        <div className="project-count-list-show">
-                          <div className="close-div">
-                            <a onClick={this.countProjectViewClose}>
-                              <i className="fa fa-times" aria-hidden="true"></i>
-                            </a>
+                        this.state.projectShowTaskId === task.id ? (
+                          <div className="project-count-list-show">
+                            <div className="close-div">
+                              <a onClick={this.countProjectViewClose}>
+                                <i className="fa fa-times" aria-hidden="true"></i>
+                              </a>
+                            </div>
+                            <div className="project-body-box">
+                              {task.projects.map(project => (
+                                <div className="project-body-text">
+                                  {project.name}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <div className="project-body-box">
-                            {task.projects.map(project => (
-                              <div className="project-body-text">
-                                {project.name}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
+                        ) : null}
                     </td>
                     <td className="text-titlize">
                       <span>{task.category.name}</span>
@@ -698,11 +698,11 @@ class TaskList extends Component {
         {this.state.showConfirm ? (
           <ConfirmModal
             title="Delete Task"
-            message={`Are you sure you want to Delete ${
+            message={`Are you sure you want to Delete ?${
               this.state.selectTaskArr.length == 1
                 ? " this task"
                 : "these tasks"
-            }?`}
+              }?`}
             onClick={this.deleteTasks}
             closeModal={this.closeModal}
             buttonText="Delete"

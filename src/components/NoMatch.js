@@ -1,7 +1,7 @@
 import React from "react";
 
 const NoMatch = () => {
-  return <h1>Page Not Found</h1>;
+  return <img src="src/assets/images/No-Data-found.jpg" />;
 };
 
 export default NoMatch;

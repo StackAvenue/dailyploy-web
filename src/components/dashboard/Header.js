@@ -15,7 +15,10 @@ import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import { base } from "../../../src/base";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +33,7 @@ class Header extends Component {
       searchFlag: "My Reports",
       notifications: [],
       tempSize: 0,
-      size: 0
+      size: 0,
     };
   }
 
@@ -45,11 +48,12 @@ class Header extends Component {
           userName: data.name,
           userEmail: data.email,
         });
-
+        localStorage.setItem("logedInId", data.id);
       } catch (e) {
         console.log("err", e);
       }
     } else {
+      localStorage.setItem("logedInId", loggedInData.id);
       this.componentDidMountGetNotifications(loggedInData.id);
       this.setState({
         userId: loggedInData.id,
@@ -59,30 +63,24 @@ class Header extends Component {
     }
   }
 
-
   async componentDidMountGetNotifications(useId) {
     let notificataionData = await get(
-      `users/${
-      useId
-      }/notifications?workspace_id=${getWorkspaceId()}`
+      `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
     );
     this.setState({
       tempSize: notificataionData.data.notifications.length,
       notifications:
         notificataionData && notificataionData.data
           ? notificataionData.data.notifications
-          : []
+          : [],
     });
   }
 
-
   async getNotifications(useId) {
     let notificataionData = await get(
-      `users/${
-      useId
-      }/notifications?workspace_id=${getWorkspaceId()}`
+      `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
     );
-    console.log(notificataionData.data.notifications)
+    console.log(notificataionData.data.notifications);
     // let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
     // let sound = new Audio(src);
     // sound.play();
@@ -90,12 +88,12 @@ class Header extends Component {
       notifications:
         notificataionData && notificataionData.data
           ? notificataionData.data.notifications
-          : []
+          : [],
     });
   }
 
   UNSAFE_componentWillMount() {
-    var workspaceId = getWorkspaceId()
+    var workspaceId = getWorkspaceId();
 
     this.handleNotification(workspaceId);
   }
@@ -105,19 +103,15 @@ class Header extends Component {
       .database()
       .ref(`notification/${workspaceId}`)
       .on("child_changed", (snap) => {
-        this.getNotificationsUpdate(this.state.userId)
-        this.getNotifications(this.state.userId)
+        this.getNotificationsUpdate(this.state.userId);
+        this.getNotifications(this.state.userId);
       });
-
-
   };
 
   async getNotificationsUpdate(useId) {
-    var user = ""
+    var user = "";
     let notificataionData = await get(
-      `users/${
-      useId
-      }/notifications?workspace_id=${getWorkspaceId()}`
+      `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
     );
 
     try {
@@ -126,19 +120,26 @@ class Header extends Component {
       );
 
       user = data;
-    } catch (e) { console.log(e) }
+    } catch (e) {
+      console.log(e);
+    }
 
     if (user.role !== "admin") {
-      if (notificataionData.data.notifications.length > this.state.tempSize && notificataionData.data.notifications.length !== 0) {
-        let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
+      if (
+        notificataionData.data.notifications.length > this.state.tempSize &&
+        notificataionData.data.notifications.length !== 0
+      ) {
+        let src =
+          "https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav";
         let sound = new Audio(src);
         sound.play();
-        this.setState({ tempSize: notificataionData.data.notifications.length });
+        this.setState({
+          tempSize: notificataionData.data.notifications.length,
+        });
       }
       this.createNotification(notificataionData.data.notifications);
     }
   }
-
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -181,10 +182,13 @@ class Header extends Component {
   createNotification = (dataNotification) => {
     if (dataNotification) {
       if (dataNotification.length > 0)
-        return (NotificationManager.info(dataNotification[dataNotification.length - 1].data.message, dataNotification[dataNotification.length - 1].data.source, 3000))
+        return NotificationManager.info(
+          dataNotification[dataNotification.length - 1].data.message,
+          dataNotification[dataNotification.length - 1].data.source,
+          3000
+        );
     }
-
-  }
+  };
   closeSettingModal = () => {
     this.clickClose.current.click();
   };
@@ -299,13 +303,13 @@ class Header extends Component {
                           )}
                       </div>
                       {this.state.notifications &&
-                        this.state.notifications.length > 0 ? (
-                          <div className="col-md-12 no-padding dropdown-scroll">
-                            {this.state.notifications.map((eachNotification) => {
-                              return (
-                                <Dropdown.Item className="notification-box">
-                                  <div className="row" style={{ width: "100%" }}>
-                                    {/* <div className="col-md-1 no-padding">
+                      this.state.notifications.length > 0 ? (
+                        <div className="col-md-12 no-padding dropdown-scroll">
+                          {this.state.notifications.map((eachNotification) => {
+                            return (
+                              <Dropdown.Item className="notification-box">
+                                <div className="row" style={{ width: "100%" }}>
+                                  {/* <div className="col-md-1 no-padding">
                                       <div className="notification-img">
                                         <img
                                           alt={"userImg"}
@@ -315,42 +319,42 @@ class Header extends Component {
                                       </div>
                                     </div> */}
 
-                                    <div className="col-md-12 no-padding notification-text wrap-text">
-                                      {eachNotification.data.message}
-                                      {/* <span>
+                                  <div className="col-md-12 no-padding notification-text wrap-text">
+                                    {eachNotification.data.message}
+                                    {/* <span>
                                     Aviabird
                                 <br />
                                     Technologies
                               </span> */}
-                                    </div>
-                                    <div className="col-md-12 no-padding notification-text text-right">
-                                      <span>
-                                        {this.returnDaysAgo(
-                                          eachNotification.inserted_at
-                                        )}
-                                      </span>
-                                      {/* {eachNotification.inserted_at} */}
-                                    </div>
                                   </div>
-                                </Dropdown.Item>
-                              );
-                            })}
+                                  <div className="col-md-12 no-padding notification-text text-right">
+                                    <span>
+                                      {this.returnDaysAgo(
+                                        eachNotification.inserted_at
+                                      )}
+                                    </span>
+                                    {/* {eachNotification.inserted_at} */}
+                                  </div>
+                                </div>
+                              </Dropdown.Item>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <Dropdown.Item
+                          className="notification-box"
+                          style={{ height: "91%" }}
+                        >
+                          {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                          <div>
+                            <i
+                              class="fa fa-info-circle"
+                              style={{ fontSize: "48px", marginBottom: "8px" }}
+                            ></i>
                           </div>
-                        ) : (
-                          <Dropdown.Item
-                            className="notification-box"
-                            style={{ height: "91%" }}
-                          >
-                            {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
-                            <div>
-                              <i
-                                class="fa fa-info-circle"
-                                style={{ fontSize: "48px", marginBottom: "8px" }}
-                              ></i>
-                            </div>
-                            <div>There are no notifications for you</div>
-                          </Dropdown.Item>
-                        )}
+                          <div>There are no notifications for you</div>
+                        </Dropdown.Item>
+                      )}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
@@ -359,7 +363,7 @@ class Header extends Component {
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
+                      } `}
                       id="dropdown-basic"
                     >
                       {x}
@@ -371,7 +375,7 @@ class Header extends Component {
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}
+                          } `}
                         >
                           {x}
                         </div>
