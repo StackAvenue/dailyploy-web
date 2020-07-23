@@ -1,12 +1,83 @@
-.addProjectDiv{
-    .react-datepicker-wrapper{
-        display: block!important;
-      
-      }
-      .react-datepicker-wrapper {
-        .react-datepicker__input-container input {
-          width: 100%!important
-        }
+.AddDatePicker{
+  display: flex;
+  font-family: Roboto!important;
+  font-size: 14px!important;
+  width: 100%;
+  input{
+    width: 100px!important;
+    border: none;
+    height: 35px!important;
+  }
+  .divInline-from{
+    display: flex;
+    flex-direction: column;
+    // width: 95%;
+    width: 50%;
+    margin-right: 10px;
+    .datefromto{
+      margin-bottom: .5rem;
+    }
+    .dateDiv{
+      text-align: center;
+      overflow: hidden!important;
+      border: 1px solid #ced4da;
+      height: 40px!important;
+      border-radius: 4px;
+      width: 100%;
+      // margin-left: 5px;
+
     }
 
+  }
+  .divInline-to{
+    display: flex;
+    flex-direction: column;
+    // width: 95%;
+    width: 50%;
+    margin-left: 10px;
+    .datefromto{
+      margin-bottom: .5rem;
+    }
+    .dateDiv{
+      text-align: center;
+      overflow: hidden!important;
+      border: 1px solid #ced4da;
+      height: 40px!important;
+      border-radius: 4px;
+      width: 100%;
+    }
+  }
+}
+
+.inputtext{
+  font-family: Roboto!important;
+  font-size: 14px!important;
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  input{
+    height: 40px!important;
+    // width: 90%;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px !important;
+    
+  }
+}
+
+
+.modal-content{
+  .modal-header{
+     border-bottom: none !important;
+  }
+}
+
+.modal-footer{
+  border-top: none !important;
+  justify-content: center !important;
+  .btn-primary{
+    width: 100px;
+  }
 }

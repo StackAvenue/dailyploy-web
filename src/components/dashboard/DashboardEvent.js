@@ -637,7 +637,7 @@ class DashboardEvent extends Component {
                 )}
               >
                 <div className="col-md-9 no-padding flex-center">
-                  <div className="col-md-2 no-padding flex-center ">
+                  <div className="col-md-2 no-padding flex-center clock-margin">
                     {/* <div className={`${this.props.event.priority}`}></div> */}
                     <div className="clock-img-div">
                       {/* <img
