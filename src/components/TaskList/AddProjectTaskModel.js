@@ -15,6 +15,10 @@ const AddProjectTaskModel = (props) => {
     calendarToRef.current.setOpen(true);
   };
 
+  const handleDateChangeRaw = (e) => {
+    e.preventDefault();
+  }
+
   return (
     <div className="addProjectDiv">
       <Modal show={props.show} onHide={props.closeTaskModal} animation={false}>
@@ -43,14 +47,15 @@ const AddProjectTaskModel = (props) => {
                     className=""
                     ref={calendarFromRef}
                     selected={props.state.dateFrom}
-                    minDate={props.state.dateFrom}
+                    // minDate={props.state.dateFrom}
                     onChange={props.handleDateFrom}
                     maxDate={props.state.dateTo}
                     placeholderText="Select Date"
+                    onChangeRaw={handleDateChangeRaw}
                   />
                   <i
                     onClick={openFromCalender}
-                    className="fa fa-calendar"
+                    className="fa fa-calendar calendar-icon"
                     aria-hidden="true"
                   ></i>
                 </div>
@@ -66,10 +71,11 @@ const AddProjectTaskModel = (props) => {
                     selected={props.state.dateTo}
                     onChange={props.handleDateTo}
                     placeholderText="Select Date"
+                    onChangeRaw={handleDateChangeRaw}
                   />
                   <i
                     onClick={openToCalender}
-                    className="fa fa-calendar"
+                    className="fa fa-calendar calendar-icon"
                     aria-hidden="true"
                   ></i>
                 </div>
@@ -80,9 +86,7 @@ const AddProjectTaskModel = (props) => {
         <Modal.Footer>
           <Button
             variant="primary"
-            disabled={
-              !props.state.dateFrom || !props.state.dateTo || !props.state.Name
-            }
+            disabled={!props.state.Name}
             onClick={(e) => {
               e.preventDefault();
               props.handleSaveTaskData();

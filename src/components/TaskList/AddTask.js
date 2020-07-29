@@ -21,6 +21,8 @@ const AddTask = (props) => {
   const [openCalenderModal, setOpenCalenderModal] = useState(false);
   const [selectedFromDate, setSelectedFromDate] = useState(new Date());
   const [selectedToDate, setSelectedToDate] = useState(new Date());
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [taskCategories, setTaskCategories] = useState();
 
   const [priorities, setPriorities] = useState({
     name: "no_priority",
@@ -32,7 +34,12 @@ const AddTask = (props) => {
     statusName: "Not Started",
     id: 6,
   });
-
+  const showDeleteModal = () => {
+    setIsDeleteModal(true)
+  }
+  const hideDeleteModal = () => {
+    setIsDeleteModal(false)
+  }
   const calendarFromRef = useRef(null);
   const calendarToRef = useRef(null);
 
@@ -54,7 +61,7 @@ const AddTask = (props) => {
         estimation: estimation,
         list_id: props.list_id,
         priority: prioritie,
-        status: status.statusName,
+        status: status,
         description: description,
         assigne_id: member,
       };
@@ -75,7 +82,6 @@ const AddTask = (props) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     switch (name) {
       case "taskName":
         setTaskName(value);
@@ -86,12 +92,17 @@ const AddTask = (props) => {
         break;
       case "estimation":
         setEstimation(value);
+
         break;
       case "status":
-        console.log("e.target", props.taskStatus[e.target.value]);
-
         setstatus({ ...props.taskStatus[e.target.value] });
         break;
+
+      case "category":
+        console.log("e.target.value", e.target.value);
+        setTaskCategories(e.target.value);
+        break;
+
       case "prioritie":
         setPrioritie(value);
         break;
@@ -131,6 +142,7 @@ const AddTask = (props) => {
       startDate: selectedFromDate,
       endDate: selectedToDate,
       tltId: props.task_lists_task.id,
+      categoryId: taskCategories,
     };
 
     props.moveToDashBoard(dataObject);
@@ -153,7 +165,8 @@ const AddTask = (props) => {
           : "Not Started",
         color: "#53a4f0",
         id: props.task_lists_task.status
-          ? props.task_lists_task.status.id : 'null'
+          ? props.task_lists_task.status.id
+          : "null",
       });
       setPrioritie(props.task_lists_task.priority);
       setMember(
@@ -204,10 +217,12 @@ const AddTask = (props) => {
           </div> */}
           <div className="Estimation">
             <input
-              type={Number}
+              type="number"
+              min="0"
+              max="100"
               disabled={props.showTask}
               name="estimation"
-              placeholder="Estimation"
+              placeholder="Estmt."
               value={estimation}
               onChange={(e) => handleInputChange(e)}
               className="form-control"
@@ -215,16 +230,34 @@ const AddTask = (props) => {
             {/* <p className="text-Estimation">1hr=1pt</p> */}
           </div>
           <div className="status">
-            <input
-              type={Text}
-              disabled={props.showTask}
+            <select
               name="status"
-              disabled="disabled"
-              value={status.statusName}
-              onChange={(e) => handleInputChange(e)}
-              style={{ backgroundColor: `${status.color}` }}
+              onChange={(e) => {
+                handleInputChange(e);
+              }}
+              disabled={props.showTask}
               className="form-control"
-            />
+            >
+              <option value={""}>Status</option>
+              {props.taskStatus &&
+                props.taskStatus.map((status, index) => {
+                  console.log("status", status);
+                  return (
+                    <option
+                      key={index}
+                      selected={
+                        props.task_lists_task &&
+                        props.task_lists_task.status &&
+                        props.task_lists_task.status.id &&
+                        status.id == props.task_lists_task.status.id
+                      }
+                      value={index}
+                    >
+                      {status.statusName}
+                    </option>
+                  );
+                })}
+            </select>
           </div>
           <div className="time">
             <div
@@ -299,10 +332,7 @@ const AddTask = (props) => {
                   )}
                   <Dropdown.Item
                     eventKey=""
-                    onClick={(e) => {
-                      e.preventDefault();
-                      props.deleteTlt(props.task_lists_task.id);
-                    }}
+                    onClick={showDeleteModal}
                   >
                     Delete
                   </Dropdown.Item>
@@ -406,8 +436,36 @@ const AddTask = (props) => {
                   {props.taskStatus.map((status, index) => {
                     console.log("status", status);
                     return (
-                      <option key={index} value={index}>
+                      <option
+                        key={index}
+                        value={index}
+                        selected={
+                          props.task_lists_task &&
+                          props.task_lists_task.status &&
+                          props.task_lists_task.status.id &&
+                          status.id == props.task_lists_task.status.id
+                        }
+                      >
                         {status.statusName}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
+
+              {props.categories && props.categories.length > 0 && (
+                <select
+                  name="category"
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  className="form-control work-status"
+                >
+                  <option value={""}>Category</option>
+                  {props.categories.map((cate, index) => {
+                    return (
+                      <option key={cate.id} value={index}>
+                        {cate.name}
                       </option>
                     );
                   })}
@@ -468,6 +526,36 @@ const AddTask = (props) => {
       </Modal>
 
       {/* --------move to Dashboard modal end--------- */}
+
+      {/*---------- Delete task list task modal start ---------- */}
+      <Modal
+        className="tlt-delete-confirm-modal "
+        show={isDeleteModal}
+        onHide={hideDeleteModal}
+        style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
+      >
+        {/* <div className="delete-tag">
+          Warning !
+        </div> */}
+        <div className="content-deldesc">
+          All the tasks related to this task will also be deleted from dashboard. Please confirm.
+        </div>
+
+        <div className="button-delcancel">
+          <button className="del-button"
+            onClick={(e) => {
+              e.preventDefault();
+              props.deleteTlt(props.task_lists_task.id);
+            }}>Delete</button>
+          <button
+            className="cancel-button"
+            onClick={hideDeleteModal}
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
+      {/* ----------- Delete task list task modal end ------------ */}
     </>
   );
 };

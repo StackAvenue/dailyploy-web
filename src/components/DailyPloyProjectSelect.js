@@ -182,7 +182,7 @@ class DailyPloyProjectSelect extends Component {
                 value={this.state.value}
                 onChange={this.onSearchTextChange}
                 placeholder={"search projects"}
-                // onKeyUp={this.handleKeyPress}
+              // onKeyUp={this.handleKeyPress}
               />
             </div>
             {this.state.suggestions.length > 0 ? (
@@ -203,7 +203,7 @@ class DailyPloyProjectSelect extends Component {
                           width: "12%",
                           padding: "8px"
                         }}
-                        // onClick={() => this.toggleSelectedTag(option)}
+                      // onClick={() => this.toggleSelectedTag(option)}
                       >
                         <div
                           className={`d-inline-block color-block`}
@@ -220,7 +220,7 @@ class DailyPloyProjectSelect extends Component {
                           width: "88%",
                           padding: "8px"
                         }}
-                        // onClick={() => this.selectSuggestion(option)}
+                      // onClick={() => this.selectSuggestion(option)}
                       >
                         <span className="right-left-space-5">
                           {option.name}
@@ -291,7 +291,7 @@ class DailyPloyProjectSelect extends Component {
           <div
             className={`no-padding d-inline-block ${
               this.props.isReports ? "report-search-bar" : "search-bar"
-            }`}
+              }`}
             onClick={() => this.onClickInput()}
           >
             <div className="d-inline-block user-project-search text-titlize">
@@ -310,8 +310,8 @@ class DailyPloyProjectSelect extends Component {
                     true
                   )
                 ) : (
-                  <span className="placeholder">{this.props.placeholder}</span>
-                )}
+                    <span className="placeholder">{this.props.placeholder}</span>
+                  )}
               </div>
               {this.state.wrapProjectCount > 0 ? (
                 <div className="d-inline-block project-wrap-count">
@@ -321,7 +321,7 @@ class DailyPloyProjectSelect extends Component {
               <div
                 className={`suggestion-holder  ${
                   this.state.show ? "suggestion-holder-border" : null
-                }`}
+                  }`}
               >
                 {this.renderSearchSuggestion()}
               </div>

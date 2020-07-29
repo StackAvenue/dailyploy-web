@@ -6,6 +6,7 @@
     "node": "12.13.0"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bourbon": "^6.0.0",

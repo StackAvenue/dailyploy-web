@@ -253,33 +253,33 @@ class AddTaskModal extends React.Component {
                       </div>
                     ) : null}
                   </div>
-                 {this.props.state.showStatus?
-                  <div className="col-md-12 no-padding input-row">
-                    <div className="col-md-2 d-inline-block no-padding label">
-                      Status
+                  {this.props.state.showStatus ?
+                    <div className="col-md-12 no-padding input-row">
+                      <div className="col-md-2 d-inline-block no-padding label">
+                        Status
                     </div>
-                    <div className="col-md-10 d-inline-block">
-                      <SelectStatus
-                        options={this.props.state.taskStatuss}
-                        placeholder="Select Status"
-                        className="suggestion-z-index-50"
-                        default={this.props.state.taskStatus}
-                        onChange={this.props.handleaddStatusChange}
-                        canAdd={true}
-                        addNew={this.props.addStatus}
-                      />
-                    </div>
-                    {this.props.state.errors.statusError ? (
-                      <div className="col-md-12">
-                        <div className="col-md-2 d-inline-block no-padding"></div>
-                        <div className="col-md-10 d-inline-block no-padding">
-                          <span className="error-warning">
-                            {this.props.state.errors.statusError}
-                          </span>
-                        </div>
+                      <div className="col-md-10 d-inline-block">
+                        <SelectStatus
+                          options={this.props.state.taskStatuss}
+                          placeholder="Select Status"
+                          className="suggestion-z-index-50"
+                          default={this.props.state.taskStatus}
+                          onChange={this.props.handleaddStatusChange}
+                          canAdd={true}
+                          addNew={this.props.addStatus}
+                        />
                       </div>
-                    ) : null}
-                  </div>:null}
+                      {this.props.state.errors.statusError ? (
+                        <div className="col-md-12">
+                          <div className="col-md-2 d-inline-block no-padding"></div>
+                          <div className="col-md-10 d-inline-block no-padding">
+                            <span className="error-warning">
+                              {this.props.state.errors.statusError}
+                            </span>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div> : null}
 
                   <div className="col-md-12 no-padding input-row">
                     <div className="col-md-2 d-inline-block no-padding label">

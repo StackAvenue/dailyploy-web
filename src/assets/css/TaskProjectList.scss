@@ -48,6 +48,7 @@
           color:black;
           height: 40px;
           background-color: #fcfcfc !important;
+          cursor: pointer;
           // border: 4px !important;
           .projectListInCard{
               height: 32px;
@@ -210,7 +211,8 @@
         text-align:justify;
         white-space: nowrap;
         justify-content: space-between;
-        overflow-y: hidden!important; 
+        overflow-y: hidden!important;
+        overflow: hidden; 
         .DisplayprojectListTopCard{
             margin:5px;
             border-radius: 4px;
@@ -232,7 +234,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     // width: 1000px!important;
-                    width: 800px !important;
+                    width: 90% !important;
                     // font-size: 14px!important;
                     // font-weight: bold!important;
                     margin-left: 5px!important;
@@ -259,11 +261,23 @@
                       color: #a2aab8;
                       font-size: 13px;
                       padding: 0px 10px;
+                      .chg-text-icon{
+                        cursor: pointer;
+                      }
+
                     }
                     .delete-icon{
-                      color: #a2aab8;
+                      // color: #a2aab8;
                       font-size: 13px;
                       padding: 0px 10px;
+                      .del-icon{
+                        color: red;
+                        opacity: .6;
+                        cursor: pointer;
+                        &:hover{
+                          color : red;
+                        }
+                      }
                     }
                   }
                 .buttonCard{
@@ -297,9 +311,22 @@
                         height: 100%;
                       }
                     }
-                    // .fa{
-                    //   font-size: 13px;
-                    // } 
+                    .minus-icon-tasklist{
+                      height: 10px;
+                      width: 10px;
+                      position: absolute;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      // img{
+                      //   width: 100%;
+                      //   height: 100%;
+                      // }
+                      .fa{
+                         font-size: 13px;
+                       }
+                    }
+                    
                   }
 
                 .btn-color{
@@ -333,20 +360,25 @@
                 .task{
                   // align-items: center;
                   display: flex;
+                  width: 100%;
+                  position: relative;
                   .taskNo{
                     // margin-top: 10px;
                     margin-left: 20px;
+                    width: 37%;
                     span{
                       color: red;
                       font-size: 13px;
                       font-family: Roboto,sans-serif;
+                      position: absolute;
                     }
                     input{
                       border-radius: 5px;
                       font-size: 13px;
                       font-family: Roboto;
                       color:black;
-                      width: 350px;
+                      // width: 350px;
+                      width: 100%;
                       height: 30px;
                     }
                   }
@@ -366,13 +398,16 @@
                   .Estimation{
                     // margin-top: 10px;
                     margin-left: 20px;
+                    width: 5%;
                     input{
                       border-radius: 5px;
-                      width: 40px;
+                      // width: 40px;
+                      width: 100%;
                       font-size: 13px;
                       font-family: Roboto;
                       color:black;
                       height:30px;
+                      padding: 5px 10px !important;
                     }
                     p{
                       text-align: center!important;
@@ -384,14 +419,18 @@
                   .status{
                     // margin-top: 10px;
                     margin-left: 20px;
-                    input{
-                      border-radius: 20px;
-                      width:90px;
-                      border: none;
+                    width: 10%;
+                    display: flex;
+                    select{
+                      border-radius: 5px;
+                      width: 100%;
                       font-size: 13px;
                       font-family: Roboto;
-                      color:black;
-                      height: 30px; 
+                      color: black;
+                      padding: 0px !important;
+                      height: 30px;
+                      text-transform: capitalize;
+
                     }
                   
                   }
@@ -399,6 +438,7 @@
                     // margin-top: 10px;
                     margin-left: 20px;
                     display: flex;
+                    width: 12%;
                     .disc{
                       margin-top: 10px;
                       width: 10px;
@@ -407,7 +447,8 @@
                     }
                     select{
                       border-radius: 5px;
-                      width: 90px;
+                      // width: 90px;
+                      width: 82%;
                       font-size: 13px;
                       font-family: Roboto;
                       color:black;
@@ -446,6 +487,7 @@
                     margin-left: 30px;
                     font-size: 13px;
                       font-family: Roboto;
+                      width: 13%;
                       .navDiv{
 
                           span{
@@ -454,7 +496,8 @@
                           }
                           select{
                             border-radius: 5px;
-                            width: 120px;
+                            // width: 120px;
+                            width: 100%;
                             font-size: 13px;
                             font-family: Roboto;
                             color:black;
@@ -494,7 +537,8 @@
                         margin-top: 0px;
                         margin-left: 10px;
                         font-size: 13px;
-                          font-family: Roboto;
+                        font-family: Roboto;
+                        width: 4%;
                         .dropdown-toggle::after {
                           content: none;
 
@@ -513,20 +557,20 @@
 
                     }
                   }
-                  .option{
-                    .navDiv{
-                      .list-group{
-                        .list-group-item{
-                          height: 30px;
-                          display: flex;
-                          align-items: center;
-                          padding: 5px 10px;
-                          justify-content: center;
-                          font-size: 13px;
-                        }
-                      }
-                    }
-                  }
+                  // .option{
+                  //   .navDiv{
+                  //     .list-group{
+                  //       .list-group-item{
+                  //         height: 30px;
+                  //         display: flex;
+                  //         align-items: center;
+                  //         padding: 5px 10px;
+                  //         justify-content: center;
+                  //         font-size: 13px;
+                  //       }
+                  //     }
+                  //   }
+                  // }
 
 
             }
@@ -536,6 +580,7 @@
                 display: flex;
                 // align-items: center;
                 // margin-top: 10px;
+                width: 4%;
                 .btn-colo{
                 display: flex;
                 height: 30px;
@@ -662,39 +707,37 @@
                 align-items: center;
                 border-radius: 4px;
                 .task{
-                  
+                  width: 100%;
                   display: flex;
+                  position: relative;
                   .taskNo{
                     // margin-top: 10px;
                     margin-left: 20px;
+                    width: 37%;
                     input{
                       border-radius: 5px;
                       font-size: 13px;
                       font-family: Roboto;
                       color:black;
-                      width: 350px;
+                      // width: 350px;
+                      width: 100%;
                       height: 30px;
                     }
+                    span{
+                      font-family: Roboto,sans-serif;
+                      font-size: 13px;
+                      color: red;
+                      position: absolute;
+                    }
                   }
-                  // .Description{
-                  //   margin-top: 10px;
-                  //   margin-left: 20px;
-                  //   input{
-                  //     border-radius: 5px;
-                  //     width: 250px;
-                  //     font-size: 13px;
-                  //     font-family: Roboto;
-                  //     color:black;
-
-                  //   }
-                  
-                  // }
                   .Estimation{
                     // margin-top: 10px;
                     margin-left: 20px;
+                    width: 5%;
                     input{
                       border-radius: 5px;
-                      width: 40px;
+                      // width: 40px;
+                      width: 100%;
                       font-size: 13px;
                       font-family: Roboto;
                       color:black;
@@ -710,14 +753,18 @@
                   .status{
                     // margin-top: 10px;
                     margin-left: 20px;
-                    input{
-                      border-radius: 20px;
-                      width:90px;
-                      border: none;
+                    width: 10%;
+                    display: flex;
+                    select{
+                      border-radius: 5px;
+                      width: 100%;
                       font-size: 13px;
                       font-family: Roboto;
-                      color:black;
+                      color: black;
+                      padding: 0px !important;
                       height: 30px;
+                      text-transform: capitalize;
+
                     }
                   
                   }
@@ -725,6 +772,7 @@
                     // margin-top: 10px;
                     margin-left: 20px;
                     display: flex;
+                    width: 12%;
                     .disc{
                       margin-top: 10px;
                       width: 10px;
@@ -737,7 +785,8 @@
                     }
                     select{
                       border-radius: 5px;
-                      width: 90px;
+                      // width: 90px;
+                      width: 82%;
                       font-size: 13px;
                       font-family: Roboto;
                       color:black;
@@ -752,10 +801,12 @@
                       margin-left: 30px;
                       font-size: 13px;
                       font-family: Roboto;
+                      width: 13%;
                       .navDiv{
                         select{
                           border-radius: 5px;
-                          width: 120px;
+                          // width: 120px;
+                          width: 100%;
                           font-size: 13px;
                           font-family: Roboto;
                           color:black;
@@ -798,7 +849,8 @@
                     // margin-top: 10px;
                     margin-left: 10px;
                     font-size: 13px;
-                      font-family: Roboto;
+                    font-family: Roboto;
+                    // width: 4%;
                     .dropdown-toggle::after {
                       content: none;
                       
@@ -834,74 +886,74 @@
                       }
                     }
                   }
-                  .move-to-dashboard{
-                    display: flex !important;
-                    flex-direction: column;
-                    .react-datepicker-wrapper{
-                      width: 130px !important;
-                      display: flex;
-                      align-items: center;
-                      .react-datepicker__input-container{
-                        width: 140px;
-                        display: flex;
-                        align-items: center;
-                        input{
-                          width: 100%;
-                          height: 30px !important;
-                          font-size: 13px;
-                          padding: 6px 10px;
-                          border-radius: 5px;
-                          border: 1px solid #ced4da;
-                          background-color: #fff;
-                          display: flex;
-                          align-items: center;
-                        }
+                  // .move-to-dashboard{
+                  //   display: flex !important;
+                  //   flex-direction: column;
+                  //   .react-datepicker-wrapper{
+                  //     width: 130px !important;
+                  //     display: flex;
+                  //     align-items: center;
+                  //     .react-datepicker__input-container{
+                  //       width: 140px;
+                  //       display: flex;
+                  //       align-items: center;
+                  //       input{
+                  //         width: 100%;
+                  //         height: 30px !important;
+                  //         font-size: 13px;
+                  //         padding: 6px 10px;
+                  //         border-radius: 5px;
+                  //         border: 1px solid #ced4da;
+                  //         background-color: #fff;
+                  //         display: flex;
+                  //         align-items: center;
+                  //       }
                         
-                      }
-                    }
-                    .react-datepicker__tab-loop{
+                  //     }
+                  //   }
+                  //   .react-datepicker__tab-loop{
 
-                      .react-datepicker-popper{
-                        left: -125px !important;
-                        z-index: 1000 !important;
-                        .react-datepicker{
-                          .react-datepicker__triangle{
-                            position: absolute;
-                            right: 0;
-                            left: 200px;
-                          }
-                        }
-                      }
-                    }
-                    .calendar-icon{
-                      position: absolute;
-                      right: 10px;
-                      /* bottom: 25px; */
-                      /* left: 116px; */
-                      display: flex;
-                      align-items: center;
-                      height: 30px;
-                      .fa-calendar{
-                        font-size: 13px;
-                      }
-                    }
-                    .savdel-icons{
-                      display: flex;
-                      justify-content: flex-start;
-                      .save-icon{
-                        margin-right: 10px;
-                        margin-left: 5px;
-                        font-size: 14px;
-                        color: blue;
-                      }
-                      .del-icon{
-                        // margin-right: 10px;
-                        margin-left: 10px;
-                        font-size: 14px;
-                        color:salmon;
-                      }
-                    }
-                  }
+                  //     .react-datepicker-popper{
+                  //       left: -125px !important;
+                  //       z-index: 1000 !important;
+                  //       .react-datepicker{
+                  //         .react-datepicker__triangle{
+                  //           position: absolute;
+                  //           right: 0;
+                  //           left: 200px;
+                  //         }
+                  //       }
+                  //     }
+                  //   }
+                  //   .calendar-icon{
+                  //     position: absolute;
+                  //     right: 10px;
+                  //     /* bottom: 25px; */
+                  //     /* left: 116px; */
+                  //     display: flex;
+                  //     align-items: center;
+                  //     height: 30px;
+                  //     .fa-calendar{
+                  //       font-size: 13px;
+                  //     }
+                  //   }
+                  //   .savdel-icons{
+                  //     display: flex;
+                  //     justify-content: flex-start;
+                  //     .save-icon{
+                  //       margin-right: 10px;
+                  //       margin-left: 5px;
+                  //       font-size: 14px;
+                  //       color: blue;
+                  //     }
+                  //     .del-icon{
+                  //       // margin-right: 10px;
+                  //       margin-left: 10px;
+                  //       font-size: 14px;
+                  //       color:salmon;
+                  //     }
+                  //   }
+                  // }
 
                 }
 
@@ -909,6 +961,7 @@
               .rightMark{
                 display: flex;
                 // align-items: center;
+                width: 4%;
                 .btn-colo{
                 text-align: center;
                 border-radius: 60%;
@@ -1035,7 +1088,15 @@
 
               .option{
                 .navDiv{
+                  // width: 100px;
+                  position: relative;
                   .list-group{
+                    width: 64px;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    left: 0;
+                    // bottom: 0;
                     .list-group-item{
                       height: 30px;
                       display: flex;
@@ -1043,6 +1104,11 @@
                       padding: 5px 10px;
                       justify-content: center;
                       font-size: 13px;
+                      cursor: pointer;
+                      &:hover{
+                        background-color: #33a1ff;
+                        color: #fff;
+                      }
                     }
                   }
                 }
@@ -1070,11 +1136,68 @@
           }
           .task-date{
             margin-top: 10px;
+            .divInline-from{
+              .dateDiv{
+                .fa-calendar{
+                  padding-right: 10px;
+                }
+              }
+            }
+            .divInline-to{
+              .dateDiv{
+                .fa-calendar{
+                  padding-right: 10px;
+                }
+              }
+            }
           }
         }
       }
     }
 
+    .tlt-delete-confirm-modal{
+      .modal-dialog{
+        .modal-content{
+          width: 500px !important;
+          height: 140px !important;
+          /* margin-left: 10px; */
+          padding: 10px 20px !important;
+          /* display: flex; */
+          justify-content: space-around !important;
+          flex-direction: column;
+          // .delete-tag{
+          //   font-size: 20px;
+          //   font-weight: 600;
+          //   font-family: Roboto;
+          //   color: red;
+          // }
+          .content-deldesc{
+            font-size: 16px;
+          }
+          .button-delcancel{
+            margin-top: 20px;
+            .del-button{
+              margin-right: 10px;
+              border-radius: 5px;
+              font-size: 18px;
+              color: #fff;
+              background-color: SALMON;
+              border: 1px solid transparent;
+              padding: 5px 10px;
+            }
+            .cancel-button{
+              margin-left: 10px;
+              border-radius: 5px;
+              font-size: 18px;
+              color: #fff;
+              background-color: #33a1ff;
+              border: 1px solid transparent;
+              padding: 5px 10px;
+            }
+          }
+        }
+      }
+    }
 
 
 

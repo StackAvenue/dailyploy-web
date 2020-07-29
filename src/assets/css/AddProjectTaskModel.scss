@@ -4,9 +4,11 @@
   font-size: 14px!important;
   width: 100%;
   input{
-    width: 100px!important;
+    width: 100%!important;
     border: none;
     height: 35px!important;
+    text-align: center;
+
   }
   .divInline-from{
     display: flex;
@@ -25,7 +27,32 @@
       border-radius: 4px;
       width: 100%;
       // margin-left: 5px;
-
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      .react-datepicker-wrapper{
+        width: 100%;
+        display: flex !important;
+        justify-content: center;
+        .react-datepicker__input-container{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        }
+      }
+      .react-datepicker-popper{
+        .react-datepicker{
+          .react-datepicker__triangle{
+            position: absolute;
+            left: 200px;
+            right: 0;
+          }
+        }
+      }
+      .calendar-icon{
+        padding-right: 10px;
+      }
     }
 
   }
@@ -45,6 +72,32 @@
       height: 40px!important;
       border-radius: 4px;
       width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      .react-datepicker-wrapper{
+        width: 100%;
+        display: flex !important;
+        justify-content: center;
+        .react-datepicker__input-container{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        }
+      }
+      .react-datepicker-popper{
+        .react-datepicker{
+          .react-datepicker__triangle{
+            position: absolute;
+            left: 200px;
+            right: 0;
+          }
+        }
+      }
+      .calendar-icon{
+        padding-right: 10px;
+      }
     }
   }
 }
