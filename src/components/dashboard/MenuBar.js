@@ -16,6 +16,7 @@ import ConditionalElements from "./MenuBar/ConditionalElements";
 import DailyPloyToast from "./../DailyPloyToast";
 import cookie from "react-cookies";
 import { USER_ROLE } from "../../utils/Constants";
+import AOS from "aos";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -102,6 +103,12 @@ export default class MenuBar extends Component {
     } else {
       this.setState({ logedInUserEmail: loggedInData.email });
     }
+  }
+
+  componentDidMount() {
+    AOS.init({
+      duration: 2000
+    });
   }
 
   handleContactChangeInput = (e, idx) => {
@@ -590,9 +597,12 @@ export default class MenuBar extends Component {
                       &nbsp;ADD
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className="dropdownMenu">
+                    <Dropdown.Menu className="dropdownMenu" >
                       <Dropdown.Item className="cool-link"
                         onClick={this.handleShow}
+                        data-aos="fade-down"
+                        data-aos-easing="linear"
+                        data-aos-duration="1500"
                       // style={{
                       //   borderBottom: "1px solid rgba(210, 210, 210, 1)",
                       // }}
@@ -620,7 +630,7 @@ export default class MenuBar extends Component {
                         workspaceId={this.props.workspaceId}
                         ownerClassName={"d-none"}
                       />
-                      <Dropdown.Item className="cool-link" onClick={this.handleMemberShow} >
+                      <Dropdown.Item className="cool-link" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500" onClick={this.handleMemberShow} >
                         People
                       </Dropdown.Item>
                       {this.state.memberShow ? (

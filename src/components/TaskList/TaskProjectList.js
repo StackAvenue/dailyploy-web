@@ -49,6 +49,7 @@ class TaskProjectList extends Component {
       showDeleteConfirm: false,
       editTaskId: -1,
       projects: [],
+      categories: [],
       errors: {
         taskNameError: "",
         dateFromError: "",
@@ -70,6 +71,8 @@ class TaskProjectList extends Component {
       editTltId: -1,
     };
   }
+
+  roleType = localStorage.getItem("userRole");
 
   async componentDidMount() {
     this.props.handleLoading(true);
@@ -124,6 +127,13 @@ class TaskProjectList extends Component {
       var emailArr = data.members;
     } catch (e) { }
 
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/task_category`
+      );
+      var taskCategories = data.task_categories;
+    } catch (e) { }
+
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -133,6 +143,7 @@ class TaskProjectList extends Component {
       users: userArr,
       isLogedInUserEmailArr: emailArr,
       worksapceUsers: worksapceUsers,
+      categories: taskCategories,
     });
     this.createUserProjectList();
   }
@@ -264,6 +275,9 @@ class TaskProjectList extends Component {
   };
 
   openAddProjectTaskModal = () => {
+    if (this.roleType != "admin") {
+      return;
+    }
     this.setState({
       show: true,
       isEdit: false,
@@ -332,7 +346,10 @@ class TaskProjectList extends Component {
         e.response.data.errors.message.project[0] == "has already been taken"
       ) {
         toast(
-          <DailyPloyToast message="Task name already taken" status="error" />,
+          <DailyPloyToast
+            message="This roadmap is already present, Please create a different roadmap "
+            status="error"
+          />,
           {
             autoClose: 2000,
             position: toast.POSITION.TOP_CENTER,
@@ -358,6 +375,7 @@ class TaskProjectList extends Component {
         description: saveTaskParams.description,
         priority: saveTaskParams.priority,
         owner_id: saveTaskParams.assigne_id,
+        task_status_id: saveTaskParams.status ? saveTaskParams.status.id : "",
       };
       const { data } =
         this.state.editTltId == -1
@@ -385,6 +403,7 @@ class TaskProjectList extends Component {
         tasks[tltIndex].description = saveTaskParams.description;
         tasks[tltIndex].assigne_id = saveTaskParams.assigne_id;
         tasks[tltIndex].list_id = saveTaskParams.list_id;
+        tasks[tltIndex].status = saveTaskParams.status;
       } else {
         tasks.push({
           name: saveTaskParams.name,
@@ -421,6 +440,31 @@ class TaskProjectList extends Component {
     }
   };
 
+  handleErroMsg = (e) => {
+    if (
+      e &&
+      e.response.data &&
+      e.response.data.errors &&
+      e.response.data.errors.message
+    ) {
+      toast(
+        <DailyPloyToast
+          message={e.response.data.errors.message}
+          status="error"
+        />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    } else {
+      toast(<DailyPloyToast message="Something went wrong" status="error" />, {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
+
   displayList = async (taskListId) => {
     if (this.state.list_id != taskListId) {
       let taslListTask = [];
@@ -440,12 +484,14 @@ class TaskProjectList extends Component {
                 description: eachEntry.description,
                 assigne_id: eachEntry.owner_id,
                 id: eachEntry.id,
-                task_id: eachEntry.task_id
+                task_id: eachEntry.task_id,
               };
             })
             : [];
         this.setState({ list_id: taskListId, task_lists: taslListTask });
-      } catch (e) { }
+      } catch (e) {
+        this.handleErroMsg(e);
+      }
     } else this.setState({ list_id: -1 });
   };
 
@@ -468,7 +514,9 @@ class TaskProjectList extends Component {
             };
           })
           : [];
-    } catch (e) { }
+    } catch (e) {
+      this.handleErroMsg(e);
+    }
 
     try {
       const { data } = await get(
@@ -490,7 +538,9 @@ class TaskProjectList extends Component {
         });
       }
       console.log("data", taskStatusArray);
-    } catch (e) { }
+    } catch (e) {
+      this.handleErroMsg(e);
+    }
 
     this.setState({
       projectId: id,
@@ -598,6 +648,7 @@ class TaskProjectList extends Component {
           start_datetime: saveTaskParams.startDate,
           end_datetime: saveTaskParams.endDate,
           owner_id: saveTaskParams.assigne_id,
+          category_id: saveTaskParams.categoryId,
           task_status_id: saveTaskParams.status.id,
         },
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/move/${saveTaskParams.tltId}`
@@ -721,6 +772,7 @@ class TaskProjectList extends Component {
                         moveToDashBoard={this.moveToDashBoard}
                         worksapceMembers={this.state.worksapceUsers}
                         taskStatus={this.state.taskStatus}
+                        categories={this.state.categories}
                       />
                     );
                   } else {

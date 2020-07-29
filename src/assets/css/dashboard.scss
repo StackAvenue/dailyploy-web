@@ -365,6 +365,7 @@
     border: none !important;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 10px 6px !important;
     transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.2, 0, 0.2, 1) !important;
+    // transition: all 0.3s;
     // transform: translateY(-10px) scaleY(0.5) !important;
     transform-origin: top;
   }
@@ -5344,7 +5345,7 @@ width: 446px;
   margin-right: 20px;
 }
 
-.task-delete-confirm-modal {
+.task-delete-confirm-modal-dashboard {
   .modal-content {
     width: 550px;
     .header {
@@ -6472,33 +6473,33 @@ font-family: 'Roboto' !important;
 
 
 .cool-link {
-  animation: move 3s;
+  animation: move 3s; 
   -webkit-animation: move 3s;
 }
 
-@keyframes move {
-  from {
-    margin-left: 100%;
-    width: 300%; 
-  }
+// @keyframes move {
+//   from {
+//     margin-left: 100%;
+//     width: 300%; 
+//   }
 
-  to {
-    margin-left: 0%;
-    width: 100%;
-  }
-}
+//   to {
+//     margin-left: 0%;
+//     width: 100%;
+//   }
+// }
             
-@-webkit-keyframes move {
-  from {
-    margin-left: 100%;
-    width: 300%; 
-  }
+// @-webkit-keyframes move {
+//   from {
+//     margin-left: 100%;
+//     width: 300%; 
+//   }
 
-  to {
-    margin-left: 0%;
-    width: 100%;
-  }
-}
+//   to {
+//     margin-left: 0%;
+//     width: 100%;
+//   }
+// }
 
 .cmnt-input-div{
   width: 100%;

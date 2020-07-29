@@ -5,11 +5,14 @@ import { NavDropdown, DropdownButton, Dropdown } from "react-bootstrap";
 import addIcon from "../../assets/images/plus-icon.svg";
 import moment from "moment";
 import { Modal } from "react-bootstrap";
-import "../../assets/css/TaskProjectList.scss";
+import "../../assets/css/TaskProjectList.scss"
+import ReactTooltip from "react-tooltip";
+
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
 
+  let roleType = localStorage.getItem("userRole");
   const changeDeleteModal = (value) => {
     setDeleteModal(value);
   };
@@ -42,8 +45,16 @@ const DisplayTaskList = (props) => {
                   ></img>
                 </div>
               ) : (
-                <i class="fa fa-minus" />
-              )}
+                  <div className="minus-icon-tasklist">
+                    <i class="fa fa-minus" />
+
+                    {/* <img
+                      src={substract}
+                      className="minus-icon"
+                      alt="minus icon"
+                    /> */}
+                  </div>
+                )}
             </button>
           </div>
           <div className="textCard">
@@ -65,19 +76,36 @@ const DisplayTaskList = (props) => {
               className="edit-icon"
               onClick={(e) => {
                 e.preventDefault();
+                if (roleType != "admin") {
+                  return;
+                }
                 props.editTaskList(props.ProjectTask);
               }}
             >
-              <i class="fas fa-pencil-alt"></i>
+              <i class="fas fa-pencil-alt chg-text-icon"
+                data-tip data-for="editTask"
+
+              ></i>
+              <ReactTooltip id="editTask" effect="solid">
+                Edit Roadmap
+              </ReactTooltip>
             </div>
             <div
               className="delete-icon"
               onClick={(e) => {
                 e.preventDefault();
+                if (roleType != "admin") {
+                  return;
+                }
                 changeDeleteModal(true);
               }}
             >
-              <i class="fas fa-trash-alt"></i>
+              <i class="fas fa-trash-alt del-icon"
+                data-tip data-for="deleteTask"
+              ></i>
+              <ReactTooltip id="deleteTask" effect="solid">
+                Delete Roadmap
+              </ReactTooltip>
             </div>
           </div>
         </div>
@@ -88,25 +116,26 @@ const DisplayTaskList = (props) => {
           <div className="showCardDetails2">
             {props.task_lists && props.task_lists.length > 0
               ? props.task_lists.map((task_lists_task) => {
-                  return (
-                    <AddTask
-                      projects={props.projects}
-                      list_id={props.list_id}
-                      task_lists_task={task_lists_task}
-                      showTask={
-                        props.editTltId != task_lists_task.id ? true : false
-                      }
-                      worksapceMembers={props.worksapceMembers}
-                      deleteTlt={props.deleteTlt}
-                      moveToDashBoard={props.moveToDashBoard}
-                      projectTaskList={props.projectTaskList}
-                      switchTask={props.switchTask}
-                      EditTlt={props.EditTlt}
-                      handleSaveTask={props.handleSaveTask}
-                      taskStatus={props.taskStatus}
-                    />
-                  );
-                })
+                return (
+                  <AddTask
+                    projects={props.projects}
+                    list_id={props.list_id}
+                    task_lists_task={task_lists_task}
+                    showTask={
+                      props.editTltId != task_lists_task.id ? true : false
+                    }
+                    worksapceMembers={props.worksapceMembers}
+                    deleteTlt={props.deleteTlt}
+                    moveToDashBoard={props.moveToDashBoard}
+                    projectTaskList={props.projectTaskList}
+                    switchTask={props.switchTask}
+                    EditTlt={props.EditTlt}
+                    handleSaveTask={props.handleSaveTask}
+                    taskStatus={props.taskStatus}
+                    categories={props.categories}
+                  />
+                );
+              })
               : ""}
           </div>
           {props.TaskShow ? (
@@ -118,6 +147,7 @@ const DisplayTaskList = (props) => {
                   list_id={props.list_id}
                   handleSaveTask={props.handleSaveTask}
                   showTask={false}
+                  taskStatus={props.taskStatus}
                 />
               </div>
             </>

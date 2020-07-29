@@ -174,7 +174,7 @@ class Workspace extends Component {
       });
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   logout = async () => {
     await logout();
@@ -269,7 +269,7 @@ class Workspace extends Component {
       var taskId = this.state.event.id.split("-")[0];
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-      } catch (e) {}
+      } catch (e) { }
       this.setState({
         event: null,
       });

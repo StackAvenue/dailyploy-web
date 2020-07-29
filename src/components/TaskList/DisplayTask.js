@@ -121,9 +121,10 @@ class DisplayTask extends Component {
                       </div> */}
                       <div className="Estimation">
                         <input
-                          type={Text}
+                          type="number"
                           name="estimation"
-                          placeholder="Estimation"
+                          min="0"
+                          placeholder="EST"
                           value={task.estimation}
                           onChange={(e) => this.handleInputChange(e)}
                           className="form-control"

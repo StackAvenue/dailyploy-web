@@ -413,7 +413,7 @@ class TaskConfirm extends Component {
     return (
       <>
         <Modal
-          className="task-delete-confirm-modal"
+          className="task-delete-confirm-modal-dashboard"
           show={this.props.state.taskConfirmModal}
           onHide={props.closeTaskModal}
           style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
