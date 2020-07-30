@@ -2929,7 +2929,7 @@ class Dashboard extends PureComponent {
               addStatus={this.addStatus}
             />
             <NotificationContainer />
-            <TaskInfoModal
+            {(this.state.showInfo && this.state.backFromTaskEvent) && <TaskInfoModal
               showInfo={this.state.showInfo && this.state.backFromTaskEvent}
               state={this.state}
               closeTaskModal={this.closeTaskModal}
@@ -2947,7 +2947,7 @@ class Dashboard extends PureComponent {
               deleteComments={this.deleteComments}
               updateComments={this.updateComments}
               timeTrackUpdate={this.timeTrackUpdate}
-            />
+            />}
             {this.state.taskConfirmModal ? (
               <TaskConfirm
                 taskConfirmModal={this.state.taskConfirmModal}

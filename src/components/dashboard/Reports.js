@@ -453,7 +453,7 @@ class Reports extends Component {
     }
 
     if (this.state.frequency != 'custom') {
-      searchData["end_date"] = moment(this.state.selectedDays[0]).format(
+      searchData["end_date"] = moment(this.state.selectedDays[this.state.selectedDays.length - 1]).format(
         DATE_FORMAT1
       );
     } else {
@@ -602,7 +602,7 @@ class Reports extends Component {
       }
 
       if (this.state.frequency != 'custom') {
-        searchData["end_date"] = moment(this.state.selectedDays[0]).format(
+        searchData["end_date"] = moment(this.state.selectedDays[this.state.selectedDays.length - 1]).format(
           DATE_FORMAT1
         );
       } else {
