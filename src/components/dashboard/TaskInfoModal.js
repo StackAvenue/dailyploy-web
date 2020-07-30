@@ -60,6 +60,10 @@ class TaskInfoModal extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.showInfo != this.props.showInfo;
+  }
+
   isToday = () => {
     return this.props.state.dateTo
       ? moment(this.props.state.dateTo).format(DATE_FORMAT1) ==
@@ -533,7 +537,7 @@ class TaskInfoModal extends Component {
 
   render() {
     const { props } = this;
-    console.log(props);
+    console.log('TaskInfo Modal' + props);
     console.log(this.state);
 
     return (
@@ -588,18 +592,20 @@ class TaskInfoModal extends Component {
 
               <div className="col-md-12 no-padding input-row text-titlize">
                 <table className="tc">
-                  <tr>
-                    <td className="label1">
-                      <div >
-                        Name
+                  <tbody>
+                    <tr>
+                      <td className="label1">
+                        <div >
+                          Name
                  </div>
-                    </td>
-                    <td className="tabledata">
-                      <div className="col-md-10 d-inline-block">
-                        {props.state.taskName}
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                      <td className="tabledata">
+                        <div className="col-md-10 d-inline-block">
+                          {props.state.taskName}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
 
@@ -695,7 +701,7 @@ class TaskInfoModal extends Component {
                               }}
                               onChange={(e) => this.makeLogEditable(e)}
                             >
-                              <option value="" key={0}>
+                              <option value="" key={'0'}>
                                 Select tracked time to edit/delete
                             </option>
                               {this.props.state.taskEvent.dateFormattedTimeTrack.map(
