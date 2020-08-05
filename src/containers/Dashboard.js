@@ -2488,10 +2488,10 @@ class Dashboard extends PureComponent {
 
   UNSAFE_componentWillMount() {
     var workspaceId = this.props.match.params.workspaceId;
-    this.handleTaskCreate(workspaceId);
-    this.handleTaskDelete(workspaceId);
-    this.handleTaskSyncTracking(workspaceId);
-    this.handleTaskUpdate(workspaceId);
+    // this.handleTaskCreate(workspaceId);
+    // this.handleTaskDelete(workspaceId);
+    // this.handleTaskSyncTracking(workspaceId);
+    // this.handleTaskUpdate(workspaceId);
   }
 
   handleTaskCreate = async (workspaceId) => {
