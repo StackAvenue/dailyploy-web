@@ -7,6 +7,7 @@ import moment from "moment";
 import { Modal } from "react-bootstrap";
 import "../../assets/css/TaskProjectList.scss"
 import ReactTooltip from "react-tooltip";
+import { debounce } from "../../utils/function";
 
 
 const DisplayTaskList = (props) => {
@@ -17,10 +18,10 @@ const DisplayTaskList = (props) => {
     setDeleteModal(value);
   };
 
-  const deleteTask = () => {
+  const deleteTask = debounce(() => {
     props.deleteTaskList(props.ProjectTask.id);
     changeDeleteModal(false);
-  };
+  }, 250);
 
   return (
     <div key={props.id} className="DisplayprojectListTopCard">
@@ -120,6 +121,7 @@ const DisplayTaskList = (props) => {
                   <AddTask
                     projects={props.projects}
                     list_id={props.list_id}
+                    projectMembers={props.projectMembers}
                     task_lists_task={task_lists_task}
                     showTask={
                       props.editTltId != task_lists_task.id ? true : false
@@ -142,6 +144,7 @@ const DisplayTaskList = (props) => {
             <>
               <div className="showCardDetails">
                 <AddTask
+                  projectMembers={props.projectMembers}
                   worksapceMembers={props.worksapceMembers}
                   projects={props.projects}
                   list_id={props.list_id}
