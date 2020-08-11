@@ -43,6 +43,7 @@ class Dashboard extends PureComponent {
     this.state = {
       loadFireBase: false,
       taskName: "",
+      estimate: "",
       projectId: "",
       taskUser: [],
       sort: "week",
@@ -689,8 +690,10 @@ class Dashboard extends PureComponent {
       taskId: task.id,
       created_at: task.created_at,
       sortedTime: sortedTime,
-      start: moment(startDateTime).format("YYYY-MM-DD") + " 00:00",
-      end: moment(endDateTime).format("YYYY-MM-DD") + " 23:59",
+      // start: moment(startDateTime).format("YYYY-MM-DD") + " 00:00",
+      // end: moment(endDateTime).format("YYYY-MM-DD") + " 23:59",
+      start: task.start_datetime,
+      end: task.end_datetime,
       taskStartDate: moment(task.start_datetime).format(DATE_FORMAT1),
       taskEndDate: moment(task.end_datetime).format(DATE_FORMAT1),
       taskStartDateTime: moment(task.start_datetime).format(FULL_DATE),
@@ -1104,6 +1107,7 @@ class Dashboard extends PureComponent {
           events: events,
           border: "solid 1px #ffffff",
           taskName: "",
+          estimate: "",
           project: null,
           taskCategorie: "",
         });
@@ -1360,6 +1364,7 @@ class Dashboard extends PureComponent {
     var taskData = {
       task: {
         name: this.state.taskName,
+        estimation: this.state.estimate,
         start_datetime: startDateTime,
         end_datetime: endDateTime,
         comments: this.state.comments,
@@ -1481,6 +1486,7 @@ class Dashboard extends PureComponent {
       taskId: "",
       selectedMembers: [],
       taskName: "",
+      estimate: "",
       projectId: "",
       project: null,
       comments: "",
@@ -1965,6 +1971,7 @@ class Dashboard extends PureComponent {
           taskId: event.id,
           selectedMembers: selectedMembers,
           taskName: event.title,
+          estimate: data.estimation,
           editProjectId: event.projectId,
           projectId: event.projectId,
           project: project[0],

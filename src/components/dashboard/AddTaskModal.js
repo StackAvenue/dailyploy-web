@@ -127,6 +127,26 @@ class AddTaskModal extends React.Component {
     });
   };
 
+  handleBlur(e) {
+    if (e.currentTarget.value === '0') e.currentTarget.value = '1'
+  }
+
+  handleKeypress(e) {
+    const characterCode = e.key
+    if (characterCode === 'Backspace') return
+
+    const characterNumber = Number(characterCode)
+    if (characterNumber >= 0 && characterNumber <= 9) {
+      if (e.currentTarget.value && e.currentTarget.value.length) {
+        return
+      } else if (characterNumber === 0) {
+        e.preventDefault()
+      }
+    } else {
+      e.preventDefault()
+    }
+  }
+
   render() {
     const { props } = this;
     return (
@@ -192,6 +212,27 @@ class AddTaskModal extends React.Component {
                         </div>
                       </div>
                     ) : null}
+                  </div>
+
+                  <div className="col-md-12 no-padding input-row">
+                    <div className="col-md-2 d-inline-block no-padding label">
+                      Estimate
+                    </div>
+                    <div className="col-md-10 d-inline-block">
+                      <input
+                        type="number"
+                        min="0"
+                        name="estimate"
+                        onKeyDown={this.handleKeypress}
+                        onBlur={this.handleBlur}
+                        min='1'
+                        step='1'
+                        value={props.state.estimate}
+                        onChange={props.handleInputChange}
+                        placeholder="Estimated Time"
+                        className="form-control"
+                      />
+                    </div>
                   </div>
 
                   <div className="col-md-12 no-padding input-row">

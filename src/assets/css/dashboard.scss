@@ -1496,6 +1496,7 @@ table.scheduler-table tr:last-child td {
   white-space: nowrap;
   color: #fff;
   padding-right: 20px !important;
+  background-color: white;
 }
 
 .overflow-text {
@@ -2065,7 +2066,15 @@ table.scheduler-table tr:last-child td {
 }
 }
 
- 
+.time-task{
+  height: 30px;
+  width: 60px;
+}
+
+.time-task-week{
+  height: 30px;
+  width: 60px;
+}
   
   
  

@@ -13,6 +13,7 @@ class ProjectList extends Component {
 
   handleData = debounce(() => {
     if (this.props.id) {
+      localStorage.setItem('selProject', this.props.id);
       this.props.handleOpenTaskData(this.props.id);
       this.setState({ showbutton: true });
     }

@@ -16,7 +16,9 @@ import DailyPloyToast from "./../DailyPloyToast";
 class TaskProjectList extends Component {
   constructor(props) {
     super(props);
+    let projectId = (localStorage.getItem('selProject') != '') ? localStorage.getItem('selProject') : '';
     this.state = {
+      projectMembers: [],
       show: false,
       isEdit: false,
       taskName: "",
@@ -58,14 +60,14 @@ class TaskProjectList extends Component {
       TaskShow: false,
       list_id: -1,
 
-      projectId: 0,
+      projectId: projectId,
       showbutton: true,
       showAddTaskButton: false,
       Projecttask: {
         name: "a",
         start_date: "a",
         end_date: "a",
-        projectId: 7,
+        projectId: projectId,
       },
       task_lists: [],
       editTltId: -1,
@@ -75,6 +77,7 @@ class TaskProjectList extends Component {
   roleType = localStorage.getItem("userRole");
 
   async componentDidMount() {
+
     this.props.handleLoading(true);
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -83,6 +86,9 @@ class TaskProjectList extends Component {
         var loggedInData = data;
       } catch (e) { }
     }
+
+    // get  projet selected state
+    const projectId = (localStorage.getItem('selProject') != '') ? parseInt(localStorage.getItem('selProject')) : '';
 
     // workspace Listing
     try {
@@ -111,9 +117,7 @@ class TaskProjectList extends Component {
         searchData
       );
       var projectsData = data.projects;
-      if (projectsData && projectsData.length > 0) {
-        this.handleOpenTaskData(projectsData[0].id);
-      }
+
       this.props.handleLoading(false);
     } catch (e) { }
 
@@ -133,7 +137,6 @@ class TaskProjectList extends Component {
       );
       var taskCategories = data.task_categories;
     } catch (e) { }
-
     this.setState({
       userId: loggedInData.id,
       userName: loggedInData.name,
@@ -145,6 +148,9 @@ class TaskProjectList extends Component {
       worksapceUsers: worksapceUsers,
       categories: taskCategories,
     });
+    if (projectsData && projectsData.length > 0) {
+      this.handleOpenTaskData(projectId != '' ? projectId : projectsData[0].id);
+    }
     this.createUserProjectList();
   }
 
@@ -498,6 +504,7 @@ class TaskProjectList extends Component {
   handleOpenTaskData = async (id) => {
     let taskListEntries = [];
     let taskStatusArray = [];
+    let project = this.state.projects.find(project => project.id == id)
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects/${id}/task_lists`
@@ -541,13 +548,13 @@ class TaskProjectList extends Component {
     } catch (e) {
       this.handleErroMsg(e);
     }
-
     this.setState({
       projectId: id,
       showbutton: false,
       showAddTaskButton: true,
       project_task_lists: taskListEntries,
       taskStatus: taskStatusArray,
+      projectMembers: project && project.members ? project.members : []
     });
   };
 
@@ -583,10 +590,13 @@ class TaskProjectList extends Component {
   };
 
   deleteTlt = async (tltId) => {
+
+    // localStorage.setItem("isTLTDelete", true);
     try {
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/task_list_tasks/${tltId}`
       );
+      // localStorage.removeItem("isTLTDelete");
       let task_lists = this.state.task_lists.filter((eachTlt) => {
         return tltId != eachTlt.id;
       });
@@ -754,6 +764,7 @@ class TaskProjectList extends Component {
                     return (
                       <DisplayTaskList
                         id={project.id}
+                        projectMembers={this.state.projectMembers}
                         ProjectTask={project}
                         projects={this.state.projects}
                         task_lists={this.state.task_lists}

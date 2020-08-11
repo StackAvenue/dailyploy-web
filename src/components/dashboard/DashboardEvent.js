@@ -324,7 +324,7 @@ class DashboardEvent extends Component {
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" && event.status != null && event.status.name != "completed" ? (
-                  <div className=" no-padding d-inline-block">
+                  <div className=" no-padding d-inline-block time-task">
                     <span
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
@@ -362,7 +362,7 @@ class DashboardEvent extends Component {
                 ) : null}
 
                 {event.trackingStatus === "play" && event.status && event.status.name != "completed" ? (
-                  <div className=" no-padding d-inline-block">
+                  <div className=" no-padding d-inline-block time-task">
                     <span
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
@@ -514,7 +514,7 @@ class DashboardEvent extends Component {
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" && event.status && event.status.name != "completed" ? (
-                  <div className=" no-padding d-inline-block">
+                  <div className=" no-padding d-inline-block time-task-week">
                     <span
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
@@ -552,7 +552,7 @@ class DashboardEvent extends Component {
                 ) : null}
 
                 {event.trackingStatus === "play" && event.status && event.status.name != "completed" ? (
-                  <div className=" no-padding d-inline-block">
+                  <div className=" no-padding d-inline-block time-task-week">
                     <span
                       style={{
                         pointerEvents: this.isValidUserDate(event.resourceId)
