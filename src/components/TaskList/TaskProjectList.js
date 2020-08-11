@@ -77,7 +77,6 @@ class TaskProjectList extends Component {
   roleType = localStorage.getItem("userRole");
 
   async componentDidMount() {
-
     this.props.handleLoading(true);
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -117,7 +116,6 @@ class TaskProjectList extends Component {
         searchData
       );
       var projectsData = data.projects;
-
       this.props.handleLoading(false);
     } catch (e) { }
 

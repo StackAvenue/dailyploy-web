@@ -160,7 +160,6 @@ const AddTask = (props) => {
       startDate: selectedFromDate,
       endDate: selectedToDate,
       tltId: props.task_lists_task.id,
-      categoryId: taskCategories,
     };
 
     props.moveToDashBoard(dataObject);
@@ -597,36 +596,8 @@ const AddTask = (props) => {
                   {props.taskStatus.map((status, index) => {
                     console.log("status", status);
                     return (
-                      <option
-                        key={index}
-                        value={index}
-                        selected={
-                          props.task_lists_task &&
-                          props.task_lists_task.status &&
-                          props.task_lists_task.status.id &&
-                          status.id == props.task_lists_task.status.id
-                        }
-                      >
+                      <option key={index} value={index}>
                         {status.statusName}
-                      </option>
-                    );
-                  })}
-                </select>
-              )}
-
-              {props.categories && props.categories.length > 0 && (
-                <select
-                  name="category"
-                  onChange={(e) => {
-                    handleInputChange(e);
-                  }}
-                  className="form-control work-status"
-                >
-                  <option value={""}>Category</option>
-                  {props.categories.map((cate, index) => {
-                    return (
-                      <option key={cate.id} value={index}>
-                        {cate.name}
                       </option>
                     );
                   })}
