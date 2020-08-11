@@ -229,7 +229,7 @@ class AddTaskModal extends React.Component {
                         step='1'
                         value={props.state.estimate}
                         onChange={props.handleInputChange}
-                        placeholder="Estimated Time"
+                        placeholder="Estimated time(hour)"
                         className="form-control"
                       />
                     </div>
