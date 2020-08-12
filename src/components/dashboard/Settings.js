@@ -315,6 +315,8 @@ class Settings extends Component {
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <WorkspaceSettings
+                    searchUserDetails={this.props.searchUserDetails}
+                    searchProjectIds={this.props.searchProjectIds}
                       workspaceObj={filterArr[0]}
                       state={this.state}
                       workspaceName={this.props.state.workspaceName}

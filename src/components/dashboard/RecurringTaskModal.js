@@ -648,7 +648,7 @@ class RecurringTaskModal extends React.Component {
               className={`col-md-10 d-inline-block ${
                 ""
                 // props.state.taskButton !== "Add" ? "disable-project-select" : ""
-              }`}
+                }`}
             >
               <DailyPloyProjectSelect
                 options={this.props.state.memberProjects}
@@ -751,7 +751,7 @@ class RecurringTaskModal extends React.Component {
             <div
               className={`col-md-3 d-inline-block ${
                 this.state.frequency == "days" ? "disabled" : ""
-              }`}
+                }`}
             >
               <input
                 type="number"
@@ -771,21 +771,21 @@ class RecurringTaskModal extends React.Component {
               />
             </div>
             {this.state.errors.repeatOnError ||
-            this.state.errors.numberError ? (
-              <div className="col-md-12">
-                <div className="col-md-2 d-inline-block no-padding"></div>
-                <div className="col-md-4 d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.numberError}
-                  </span>
+              this.state.errors.numberError ? (
+                <div className="col-md-12">
+                  <div className="col-md-2 d-inline-block no-padding"></div>
+                  <div className="col-md-4 d-inline-block no-padding">
+                    <span className="error-warning">
+                      {this.state.errors.numberError}
+                    </span>
+                  </div>
+                  <div className="col-md-6 d-inline-block no-padding">
+                    <span className="error-warning">
+                      {this.state.errors.repeatOnError}
+                    </span>
+                  </div>
                 </div>
-                <div className="col-md-6 d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.repeatOnError}
-                  </span>
-                </div>
-              </div>
-            ) : null}
+              ) : null}
           </div>
 
           {this.state.repeatOn && this.state.repeatOn.name == "weekly" ? (
@@ -800,7 +800,7 @@ class RecurringTaskModal extends React.Component {
                       key={day.id}
                       className={`d-inline-block day-icon ${
                         day.status ? "selected" : ""
-                      }`}
+                        }`}
                       onClick={() => this.changeDay(day)}
                     >
                       {day.initial}
@@ -935,21 +935,21 @@ class RecurringTaskModal extends React.Component {
               </div>
             </div>
             {this.state.errors.dateFromError ||
-            this.state.errors.dateToError ? (
-              <div className="col-md-12">
-                <div className="col-md-2 d-inline-block no-padding"></div>
-                <div className="col-md-5 d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.dateFromError}
-                  </span>
+              this.state.errors.dateToError ? (
+                <div className="col-md-12">
+                  <div className="col-md-2 d-inline-block no-padding"></div>
+                  <div className="col-md-5 d-inline-block no-padding">
+                    <span className="error-warning">
+                      {this.state.errors.dateFromError}
+                    </span>
+                  </div>
+                  <div className="col-md-5 d-inline-block no-padding">
+                    <span className="error-warning">
+                      {this.state.errors.dateToError}
+                    </span>
+                  </div>
                 </div>
-                <div className="col-md-5 d-inline-block no-padding">
-                  <span className="error-warning">
-                    {this.state.errors.dateToError}
-                  </span>
-                </div>
-              </div>
-            ) : null}
+              ) : null}
           </div>
 
           <div className="col-md-12 row no-margin no-padding input-row">
@@ -985,7 +985,7 @@ class RecurringTaskModal extends React.Component {
                 type="button"
                 className={`button1 btn-primary pull-right ${
                   this.state.taskloader ? "disabled" : ""
-                }`}
+                  }`}
                 onClick={() => this.createRecurringTask()}
               >
                 {props.state.taskButton}

@@ -32,7 +32,9 @@ class Reports extends Component {
     this.calendarDayRef = React.createRef();
     this.calendarWeekRef = React.createRef();
     this.calendarMonthRef = React.createRef();
-    this.calenderArr = ["daily", "weekly", "monthly"];
+    this.calendarDate1Ref = React.createRef();
+    this.calendarDate2Ref = React.createRef();
+    this.calenderArr = ["daily", "weekly", "monthly", "custom"];
     this.now = moment()
       .hour(0)
       .minute(0);
@@ -75,7 +77,7 @@ class Reports extends Component {
       barChartArray: this.generateDailyBarChartData(new Date()),
       isLoading: false,
       loadReportsData: false,
-      loadingGif:false
+      loadingGif: false
     };
   }
 
@@ -86,6 +88,9 @@ class Reports extends Component {
       return "monthly";
     } else if (this.state.weekly) {
       return "weekly";
+    }
+    else if (this.state.custom) {
+      return "custom";
     }
   };
 
@@ -136,7 +141,7 @@ class Reports extends Component {
   };
 
   textTitlize = text => {
-    return text.replace(/(?:^|\s)\S/g, function(a) {
+    return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
@@ -221,6 +226,7 @@ class Reports extends Component {
         weekly: false,
         daily: true,
         monthly: false,
+        custom: false,
         barChartArray: this.generateDailyBarChartData(new Date()),
         frequency: "daily",
         columnChartData: [],
@@ -240,6 +246,7 @@ class Reports extends Component {
         weekly: false,
         daily: false,
         monthly: true,
+        custom: false,
         frequency: "monthly",
         columnChartData: [],
         dateFrom: new Date(startDate),
@@ -263,7 +270,34 @@ class Reports extends Component {
         weekly: true,
         daily: false,
         monthly: false,
+        custom: false,
         frequency: "weekly",
+        columnChartData: [],
+        selectedDays: weekdays,
+        dateFrom: weekdays[0],
+        dateTo: weekdays[weekdays.length - 1],
+        weekNumber: week,
+        displayWeek: weekFormated,
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
+      });
+    }
+    if (name == "custom") {
+      let week = moment().week();
+      let weekdays = this.getWeekDays(this.getWeekRange(new Date()).from);
+      let fm = "DD MMM";
+      let weekFormated =
+        moment(weekdays[0]).format(fm) +
+        " - " +
+        moment(weekdays[6]).format(fm) +
+        " (Week " +
+        week +
+        ")";
+      self.setState({
+        weekly: false,
+        daily: false,
+        monthly: false,
+        custom: true,
+        frequency: "custom",
         columnChartData: [],
         selectedDays: weekdays,
         dateFrom: weekdays[0],
@@ -294,6 +328,20 @@ class Reports extends Component {
       barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
     });
   };
+
+  onclickStartDate = value => {
+    console.log('Start' + value);
+    this.setState({
+      dateFrom: value
+    });
+  }
+
+  onclickEndDate = value => {
+    console.log('EndDate' + value);
+    this.setState({
+      dateTo: value
+    });
+  }
 
   getWeekDays = weekStart => {
     const days = [weekStart];
@@ -342,7 +390,7 @@ class Reports extends Component {
   };
 
   async componentDidMount() {
-    this.setState({loadingGif:true});
+    this.setState({ loadingGif: true });
     this.props.handleLoading(true);
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
@@ -397,11 +445,21 @@ class Reports extends Component {
     // MIS report listing
     var searchData = {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      user_ids: loggedInData.id,
-      frequency: "daily"
+      user_ids: loggedInData.id
+      // frequency: "daily"
     };
     if (this.props.searchProjectIds.length > 0) {
       searchData["project_ids"] = this.props.searchProjectIds.join(",");
+    }
+
+    if (this.state.frequency != 'custom') {
+      searchData["end_date"] = moment(this.state.selectedDays[this.state.selectedDays.length - 1]).format(
+        DATE_FORMAT1
+      );
+    } else {
+      searchData["end_date"] = moment(this.state.dateTo).format(
+        DATE_FORMAT1
+      );
     }
 
     try {
@@ -412,7 +470,7 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
-    } catch (e) {}
+    } catch (e) { }
 
     // Category Listing
     try {
@@ -420,12 +478,9 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/task_category`
       );
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Projects
-    searchData["end_date"] = moment(this.state.selectedDays[0]).format(
-      DATE_FORMAT1
-    );
     try {
       const { data } = await get(
         `workspaces/${workspaceId}/project_summary_report`,
@@ -434,12 +489,12 @@ class Reports extends Component {
       var projectReportData =
         data.report_data.length > 0
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-              capacity: data.capacity
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+            capacity: data.capacity
+          }
           : "";
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Category
     try {
@@ -449,11 +504,11 @@ class Reports extends Component {
       );
       var categoryReportData = data.report_data
         ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time
-          }
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        }
         : "";
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Priority
     try {
@@ -463,11 +518,11 @@ class Reports extends Component {
       );
       var priorityReportData = data.report_data
         ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time
-          }
+          data: data.report_data,
+          estimateTime: data.total_estimated_time
+        }
         : "";
-    } catch (e) {}
+    } catch (e) { }
 
     this.props.handleLoading(false);
     this.setState({
@@ -488,9 +543,12 @@ class Reports extends Component {
       projectReports: projectReportData,
       categoryReports: categoryReportData,
       priorityReports: priorityReportData,
-      loadingGif:false
+      loadingGif: false
     });
-    this.loadMultipleApiData({ user_ids: loggedInData.id });
+    if (this.state.frequency != 'custom') {
+      this.loadMultipleApiData({ user_ids: loggedInData.id });
+    }
+
     this.createUserProjectList();
   }
 
@@ -519,7 +577,7 @@ class Reports extends Component {
       prevState.loadReportsData !== this.state.loadReportsData
     ) {
       this.props.handleLoading(true);
-      this.setState({loadingGif:true})
+      this.setState({ loadingGif: true })
       let userIds = this.props.searchUserDetails.map(
         member => member.member_id
       );
@@ -529,7 +587,7 @@ class Reports extends Component {
           this.props.searchUserDetails.length > 0
             ? userIds.join(",")
             : this.state.userId,
-        frequency: this.returnFrequency()
+        // frequency: this.returnFrequency()
       };
       if (this.props.searchProjectIds.length > 0) {
         searchData["project_ids"] = this.props.searchProjectIds.join(",");
@@ -542,6 +600,17 @@ class Reports extends Component {
       if (this.state.selectedPriority) {
         searchData["priorities"] = this.state.selectedPriority.name;
       }
+
+      if (this.state.frequency != 'custom') {
+        searchData["end_date"] = moment(this.state.selectedDays[this.state.selectedDays.length - 1]).format(
+          DATE_FORMAT1
+        );
+      } else {
+        searchData["end_date"] = moment(this.state.dateTo).format(
+          DATE_FORMAT1
+        );
+      }
+
       // Reports data
       try {
         const { data } = await get(
@@ -551,12 +620,9 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) {}
+      } catch (e) { }
 
       // Summury reports Projects
-      searchData["end_date"] = moment(
-        this.state.selectedDays[this.state.selectedDays.length - 1]
-      ).format(DATE_FORMAT1);
       try {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/project_summary_report`,
@@ -564,12 +630,12 @@ class Reports extends Component {
         );
         var projectReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-              capacity: data.capacity
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+            capacity: data.capacity
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       var message = this.displayMessage();
       try {
@@ -579,11 +645,11 @@ class Reports extends Component {
         );
         var categoryReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         const { data } = await get(
@@ -592,17 +658,17 @@ class Reports extends Component {
         );
         var priorityReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       let filterUserIds =
         this.props.searchUserDetails.length > 0
           ? userIds.join(",")
           : this.state.userId;
-          this.setState({loadingGif:false})
+      this.setState({ loadingGif: false })
       this.props.handleLoading(false);
       this.setState({
         priorityReports: priorityReportData,
@@ -613,7 +679,10 @@ class Reports extends Component {
         projectReports: projectReportData,
         loadReportsData: false
       });
-      this.loadMultipleApiData({ user_ids: filterUserIds });
+      if (this.state.frequency != 'custom') {
+        this.loadMultipleApiData({ user_ids: filterUserIds });
+      }
+
     }
   }
 
@@ -885,7 +954,7 @@ class Reports extends Component {
             });
           }
         );
-        await Promise.all(finalArray).then(response => {});
+        await Promise.all(finalArray).then(response => { });
         resolve(results);
       } catch (err) {
         reject(err);
@@ -893,7 +962,7 @@ class Reports extends Component {
     });
     var newFinalResults = [];
     var self = this;
-    await finalResults.then(function(response) {
+    await finalResults.then(function (response) {
       newFinalResults = response;
       self.setState({ columnChartData: newFinalResults, ...newD });
     });
@@ -916,11 +985,20 @@ class Reports extends Component {
       user_ids:
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails
-              .map(member => member.member_id)
-              .join(",")
+            .map(member => member.member_id)
+            .join(",")
           : this.state.userId,
-      frequency: this.returnFrequency()
+      // frequency: this.returnFrequency()
     };
+    if (this.state.frequency != 'custom') {
+      searchData["end_date"] = moment(this.state.selectedDays[0]).format(
+        DATE_FORMAT1
+      );
+    } else {
+      searchData["end_date"] = moment(this.state.dateTo).format(
+        DATE_FORMAT1
+      );
+    }
     if (this.props.searchProjectIds.length > 0) {
       searchData["project_ids"] = this.props.searchProjectIds.join(",");
     }
@@ -951,7 +1029,7 @@ class Reports extends Component {
         position: toast.POSITION.TOP_CENTER
       });
       let self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.setState({ isLoading: false });
       }, 2000);
     }
@@ -964,6 +1042,19 @@ class Reports extends Component {
   openWeekCalender = () => {
     this.calendarWeekRef.current.setOpen(true);
   };
+
+  openDateRangeCalender = isDate1 => {
+    if (isDate1) {
+      if (this.calendarDate1Ref && this.calendarDate1Ref.current) {
+        this.calendarDate1Ref.current.setOpen(true);
+      }
+    } else {
+      if (this.calendarDate2Ref && this.calendarDate2Ref.current) {
+        this.calendarDate2Ref.current.setOpen(true);
+      }
+    }
+
+  }
 
   openMonthCalender = () => {
     this.calendarMonthRef.current.setOpen(true);
@@ -979,20 +1070,22 @@ class Reports extends Component {
     const Daily = props => {
       return (
         <>
-          <DatePicker
-            ref={this.calendarDayRef}
-            selected={this.state.dateFrom}
-            onChange={this.handleDateFrom}
-            startDate={this.state.dateFrom}
-            dateFormat="dd MMMM, yyyy"
-          />
-          <span style={{ position: "relative", right: "28px" }}>
-            <i
-              onClick={this.openDayCalender}
-              className="fa fa-calendar"
-              aria-hidden="true"
-            ></i>
-          </span>
+          <div className="position-relative d-inline-block  AB">
+            <DatePicker
+              ref={this.calendarDayRef}
+              selected={this.state.dateFrom}
+              onChange={this.handleDateFrom}
+              startDate={this.state.dateFrom}
+              dateFormat="dd MMMM, yyyy"
+            />
+            <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
+              <i
+                onClick={this.openDayCalender}
+                className="fa fa-calendar"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </div>
         </>
       );
     };
@@ -1000,20 +1093,22 @@ class Reports extends Component {
     const Monthly = props => {
       return (
         <>
-          <DatePicker
-            ref={this.calendarMonthRef}
-            selected={this.state.dateFrom}
-            onChange={this.handleMonthlyDateFrom}
-            dateFormat="MMMM yyyy"
-            showMonthYearPicker
-          />
-          <span style={{ position: "relative", right: "28px" }}>
-            <i
-              onClick={this.openMonthCalender}
-              className="fa fa-calendar"
-              aria-hidden="true"
-            ></i>
-          </span>
+          <div className="position-relative d-inline-block  AB">
+            <DatePicker
+              ref={this.calendarMonthRef}
+              selected={this.state.dateFrom}
+              onChange={this.handleMonthlyDateFrom}
+              dateFormat="MMMM yyyy"
+              showMonthYearPicker
+            />
+            <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
+              <i
+                onClick={this.openMonthCalender}
+                className="fa fa-calendar"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </div>
         </>
       );
     };
@@ -1021,7 +1116,7 @@ class Reports extends Component {
     const Weekly = props => {
       return (
         <>
-          <div className="week-hover-bg d-inline-block  AB">
+          <div className="position-relative week-hover-bg d-inline-block  AB">
             <DatePicker
               ref={this.calendarWeekRef}
               showWeekNumbers
@@ -1033,9 +1128,53 @@ class Reports extends Component {
               value={this.state.displayWeek}
               showWeekNumbers
             />
-            <span style={{ position: "relative", right: "28px" }}>
+            <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
               <i
                 onClick={this.openWeekCalender}
+                className="fa fa-calendar"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </div>
+        </>
+      );
+    };
+
+    const Custom = props => {
+      return (
+        <>
+          <div className="position-relative d-inline-block  AB">
+            <DatePicker
+              ref={this.calendarDate1Ref}
+              selectsStart
+              selected={this.state.dateFrom}
+              onChange={this.onclickStartDate}
+              startDate={this.state.dateFrom}
+              endDate={this.state.dateTo}
+              dateFormat="dd MMMM, yyyy"
+            />
+            <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
+              <i
+                onClick={this.openDateRangeCalender(true)}
+                className="fa fa-calendar"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </div>
+          <div className="position-relative  d-inline-block  AB">
+            <DatePicker
+              ref={this.calendarDate2Ref}
+              selectsEnd
+              selected={this.state.dateTo}
+              onChange={this.onclickEndDate}
+              startDate={this.state.dateFrom}
+              endDate={this.state.dateTo}
+              minDate={this.state.dateFrom}
+              dateFormat="dd MMMM, yyyy"
+            />
+            <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
+              <i
+                onClick={this.openDateRangeCalender(false)}
                 className="fa fa-calendar"
                 aria-hidden="true"
               ></i>
@@ -1052,9 +1191,9 @@ class Reports extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
-          manageProjectListing={() => {}}
+          manageProjectListing={() => { }}
         />
-        
+
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
             <div className="report-viewtype-btns d-inline-block">
@@ -1070,7 +1209,7 @@ class Reports extends Component {
                 name="weekly"
                 className={`d-inline-block ${
                   this.state.weekly ? "active" : ""
-                }`}
+                  }`}
               >
                 Weekly
               </div>
@@ -1079,9 +1218,18 @@ class Reports extends Component {
                 name="monthly"
                 className={`d-inline-block ${
                   this.state.monthly ? "active" : ""
-                }`}
+                  }`}
               >
                 Monthly
+              </div>
+              <div
+                onClick={() => this.calenderButtonHandle("custom")}
+                name="custom"
+                className={`d-inline-block ${
+                  this.state.custom ? "active" : ""
+                  }`}
+              >
+                Custom
               </div>
             </div>
             <div className="reports-container col-sm-offset-2">
@@ -1096,6 +1244,7 @@ class Reports extends Component {
                   {this.state.daily ? <Daily /> : null}
                   {this.state.weekly ? <Weekly /> : null}
                   {this.state.monthly ? <Monthly /> : null}
+                  {this.state.custom ? <Custom /> : null}
                   <button onClick={this.setNextDate} className="arrow-button">
                     <i className="fa fa-angle-right"></i>
                   </button>
@@ -1124,7 +1273,7 @@ class Reports extends Component {
                   <button
                     className={`btn btn-sm btn-default ${
                       this.state.isLoading ? "disabled" : ""
-                    }`}
+                      }`}
                     onClick={() => this.downloadReportsCsv()}
                   >
                     {this.state.isLoading ? (
@@ -1141,30 +1290,30 @@ class Reports extends Component {
                   </button>
                 </div>
               </div>
-              {this.state.loadingGif ? <div className="loading1"><VideoLoader/></div> : <>
-              <div className="">
-                <SummuryReportCharts
-                  priorities={PRIORITIES}
-                  projects={this.state.projects}
-                  state={this.state}
-                  searchUserDetails={this.props.searchUserDetails}
-                  searchProjectIds={this.props.searchProjectIds}
-                  setColumnChartData={this.setColumnChartData}
-                  handleLoading={this.props.handleLoading}
-                />
-              </div>
+              {this.state.loadingGif ? <div className="loading1"><VideoLoader /></div> : <>
+                <div className="">
+                  <SummuryReportCharts
+                    priorities={PRIORITIES}
+                    projects={this.state.projects}
+                    state={this.state}
+                    searchUserDetails={this.props.searchUserDetails}
+                    searchProjectIds={this.props.searchProjectIds}
+                    setColumnChartData={this.setColumnChartData}
+                    handleLoading={this.props.handleLoading}
+                  />
+                </div>
 
-              <div className="report-table">
-                <ReportTable
-                  taskDetails={this.state.taskDetails}
-                  state={this.state}
-                  searchProjectIds={this.props.searchProjectIds}
-                  searchUserDetails={this.props.searchUserDetails}
-                  frequency={this.returnFrequency()}
-                  timeTrackUpdate={this.timeTrackUpdate}
-                />
-              </div>
-  </>}
+                <div className="report-table">
+                  <ReportTable
+                    taskDetails={this.state.taskDetails}
+                    state={this.state}
+                    searchProjectIds={this.props.searchProjectIds}
+                    searchUserDetails={this.props.searchUserDetails}
+                    frequency={this.returnFrequency()}
+                    timeTrackUpdate={this.timeTrackUpdate}
+                  />
+                </div>
+              </>}
             </div>
           </div>
         </div>

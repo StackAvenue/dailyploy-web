@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
 
-const EmailConfigModal = props => {
+const EmailConfigModal = (props) => {
   return (
     <>
       <Modal
@@ -34,7 +34,7 @@ const EmailConfigModal = props => {
                       name="toSearchText"
                       type="text"
                       value={props.state.toSearchText}
-                      placeholder="Select Memebrs"
+                      placeholder="Select Members"
                       onChange={props.handleToChange}
                     />
                   </div>
@@ -65,7 +65,7 @@ const EmailConfigModal = props => {
                       name="ccSearchText"
                       type="text"
                       value={props.state.ccSearchText}
-                      placeholder="Select Memebrs"
+                      placeholder="Select Members"
                       onChange={props.handleCcChange}
                     />
                   </div>
@@ -75,7 +75,7 @@ const EmailConfigModal = props => {
                 </div>
               </div>
             </div>
-             {/* <div className="col-md-12 input-row">
+            {/* <div className="col-md-12 input-row">
               <div className="col-md-2 label">Bcc</div>
               <div className="col-md-10 no-padding d-inline-block">
                 <div className="project-member-search">
@@ -116,7 +116,7 @@ const EmailConfigModal = props => {
                 </>
               ) : null}
             </div>  */}
-            
+
             <div className="col-md-12 no-padding input-row">
               <div className="col-md-4 ml-auto no-padding">
                 <button

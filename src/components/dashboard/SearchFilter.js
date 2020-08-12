@@ -36,14 +36,14 @@ class SearchFilter extends Component {
     } else if (!this.props.isReports) {
       memberSuggestions = this.props.searchOptions.members
         ? this.props.searchOptions.members.filter(
-            option => !this.state.selectedTags.includes(option)
-          )
+          option => !this.state.selectedTags.includes(option)
+        )
         : [];
     }
     let projectSuggestions = this.props.searchOptions.projects
       ? this.props.searchOptions.projects.filter(
-          option => !this.state.selectedTags.includes(option)
-        )
+        option => !this.state.selectedTags.includes(option)
+      )
       : [];
 
     this.setState({
@@ -54,7 +54,7 @@ class SearchFilter extends Component {
     // document.querySelector(".suggessionSearchInput").focus();
   };
 
-  async componentDidMount() {}
+  async componentDidMount() { }
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.state.searchFlag != this.props.state.searchFlag) {
@@ -229,11 +229,11 @@ class SearchFilter extends Component {
         {this.state.show ? (
           <>
             {(this.props.isReports && this.state.selectedTags.length > 3) ||
-            this.state.selectedTags.length > 4 ? (
-              <div className="extra-selected-tags">
-                {this.renderSelectedTags(this.state.selectedTags, false)}
-              </div>
-            ) : null}
+              this.state.selectedTags.length > 4 ? (
+                <div className="extra-selected-tags">
+                  {this.renderSelectedTags(this.state.selectedTags, false)}
+                </div>
+              ) : null}
             <div>
               <input
                 style={{ width: "100%", paddingLeft: "20px" }}
@@ -260,7 +260,7 @@ class SearchFilter extends Component {
                         onClick={() => this.selectSuggestion(option)}
                       >
                         <span className="list-icon">
-                          <i className="fa fa-user"></i>
+                          <i className="fa fa-user-circle" aria-hidden="true"></i>
                         </span>
                         <span className="right-left-space-5">
                           {option.value}
@@ -299,9 +299,9 @@ class SearchFilter extends Component {
               </ul>
             ) : null}
             {this.state.projectSuggestions.length == 0 &&
-            this.state.memberSuggestions.length == 0 ? (
-              <div style={{ padding: "10px" }}>record not found</div>
-            ) : null}
+              this.state.memberSuggestions.length == 0 ? (
+                <div style={{ padding: "10px" }}>record not found</div>
+              ) : null}
           </>
         ) : null}
       </>
@@ -318,7 +318,10 @@ class SearchFilter extends Component {
                 className={`search-icon-${option.type} d-inline-block`}
                 key={index}
               >
-                <i className="fa fa-user member-icon right-left-space-5 d-inline-block"></i>
+                {/* <i className="fa fa-user member-icon right-left-space-5 d-inline-block"></i> */}
+                <span className="list-icon">
+                  <i class="fa fa-user-circle member-icon right-left-space-5 d-inline-block" aria-hidden="true"></i>
+                </span>
                 <div className="tag-text right-left-space-5 d-inline-block">
                   {option.value}
                 </div>
@@ -336,7 +339,10 @@ class SearchFilter extends Component {
                 className={`search-icon-${option.type} d-inline-block`}
                 key={index}
               >
-                <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i>
+                {/* <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i> */}
+                <span className="list-icon">
+                  <i className="fa fa-list-alt project-icon right-left-space-5 d-inline-block"></i>
+                </span>
                 <div className="tag-text right-left-space-5 d-inline-block">
                   {option.value}
                 </div>
@@ -392,9 +398,9 @@ class SearchFilter extends Component {
                     style={
                       this.props.state.searchFlag === "My Reports"
                         ? {
-                            backgroundColor: "#ffffff",
-                            color: "#33a1ff !important"
-                          }
+                          backgroundColor: "#ffffff",
+                          color: "#33a1ff !important"
+                        }
                         : { backgroundColor: "#ffffff" }
                     }
                     onClick={() => this.props.toggleSearchBy("My Reports")}
@@ -405,7 +411,7 @@ class SearchFilter extends Component {
                     style={{ backgroundColor: "#ffffff" }}
                     className={`${
                       this.props.state.searchFlag === "Members" ? "active" : ""
-                    }`}
+                      }`}
                     onClick={() => this.props.toggleSearchBy("Members")}
                   >
                     Members
@@ -417,7 +423,7 @@ class SearchFilter extends Component {
           <div
             className={`no-padding d-inline-block ${
               this.props.isReports ? "report-search-bar" : "search-bar"
-            }`}
+              }`}
             onClick={this.onClickInput}
           >
             <div className="d-inline-block user-project-search text-titlize">
@@ -429,18 +435,18 @@ class SearchFilter extends Component {
               <div className="selected-tags">
                 {this.props.isReports
                   ? this.renderSelectedTags(
-                      this.state.selectedTags.slice(-3).reverse(),
-                      true
-                    )
+                    this.state.selectedTags.slice(-3).reverse(),
+                    true
+                  )
                   : this.renderSelectedTags(
-                      this.state.selectedTags.slice(-4).reverse(),
-                      true
-                    )}
+                    this.state.selectedTags.slice(-4).reverse(),
+                    true
+                  )}
               </div>
               <div
                 className={`suggestion-holder  ${
                   this.state.show ? "suggestion-holder-border" : null
-                }`}
+                  }`}
               >
                 {this.renderSearchSuggestion()}
               </div>

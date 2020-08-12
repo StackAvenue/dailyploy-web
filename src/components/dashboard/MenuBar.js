@@ -16,6 +16,7 @@ import ConditionalElements from "./MenuBar/ConditionalElements";
 import DailyPloyToast from "./../DailyPloyToast";
 import cookie from "react-cookies";
 import { USER_ROLE } from "../../utils/Constants";
+import AOS from "aos";
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -102,6 +103,12 @@ export default class MenuBar extends Component {
     } else {
       this.setState({ logedInUserEmail: loggedInData.email });
     }
+  }
+
+  componentDidMount() {
+    AOS.init({
+      duration: 2000
+    });
   }
 
   handleContactChangeInput = (e, idx) => {
@@ -207,7 +214,7 @@ export default class MenuBar extends Component {
     let addOwner = [];
     addOwner.push(this.props.state.userId);
     var self = this;
-    var preProjectData={}
+    var preProjectData = {}
     this.handleClose();
     if (this.state.projectName != "") {
       if (this.validateContackts()) {
@@ -226,22 +233,22 @@ export default class MenuBar extends Component {
           },
         };
 
-        preProjectData={
+        preProjectData = {
           project: {
-            color_code:this.state.background,
+            color_code: this.state.background,
             contacts: [],
-            created_at:Date.now(),
+            created_at: Date.now(),
             description: null,
             end_date: null,
             id: 99999,
-            members: [{email: " ", id: 99, name: " "}],
-            name:this.state.projectName,
+            members: [{ email: " ", id: 99, name: " " }],
+            name: this.state.projectName,
             start_date: "2020-05-20"
           }
         };
-        this.props.manageProjectListing(preProjectData.project,0);
+        this.props.manageProjectListing(preProjectData.project, 0);
 
-     if (this.state.contacts.length > 0) {
+        if (this.state.contacts.length > 0) {
           projectData.project["contacts"] = this.state.contacts;
         }
         try {
@@ -257,9 +264,9 @@ export default class MenuBar extends Component {
           //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
           // );
           console.log(data)
-          console.log(projectData) 
-          
-          this.props.manageProjectListing(data.project,1);
+          console.log(projectData)
+
+          this.props.manageProjectListing(data.project, 1);
           this.props.handleLoad(false);
         } catch (e) {
           if (e.response && e.response.data) {
@@ -272,7 +279,7 @@ export default class MenuBar extends Component {
                 />,
                 { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
               );
-              this.props.manageProjectListing(preProjectData.project,2);
+              this.props.manageProjectListing(preProjectData.project, 2);
               this.handleShow();
               setTimeout(function () {
                 self.setState({ saveDisable: false });
@@ -288,11 +295,11 @@ export default class MenuBar extends Component {
               setTimeout(function () {
                 self.setState({ saveDisable: false });
               }, 2000);
-              this.props.manageProjectListing(preProjectData.project,2);
+              this.props.manageProjectListing(preProjectData.project, 2);
               this.handleShow();
             } else {
               this.handleShow();
-              this.props.manageProjectListing(preProjectData.project,2);
+              this.props.manageProjectListing(preProjectData.project, 2);
               this.setState({ show: false });
             }
           }
@@ -306,7 +313,7 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-      this.props.manageProjectListing(preProjectData.project,2);
+      this.props.manageProjectListing(preProjectData.project, 2);
       this.handleShow();
       setTimeout(function () {
         self.setState({ saveDisable: false });
@@ -340,7 +347,7 @@ export default class MenuBar extends Component {
         />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
-      
+
       this.setState({ memberShow: false, isLoading: false, error: "" });
       // this.props.handleLoad(true);
     } catch (e) {
@@ -350,7 +357,7 @@ export default class MenuBar extends Component {
         //   { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         // );
         this.handleMemberShow();
-        this.setState({ isLoading: false, error: e.response.data,memberShow: false });
+        this.setState({ isLoading: false, error: e.response.data, memberShow: false });
       } else if (
         e.response.data &&
         e.response.data.user_already_exists &&
@@ -368,17 +375,17 @@ export default class MenuBar extends Component {
           isLoading: false,
           error: "User already exists in workspace.",
         });
-        toast( <DailyPloyToast
-        message="User already exists in workspace!"
-        status="error"
-      />,
-      { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        toast(<DailyPloyToast
+          message="User already exists in workspace!"
+          status="error"
+        />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
 
-    );
-    this.handleMemberShow();
-    this.setState({ memberShow: false, isLoading: false, error: "" });
+        );
+        this.handleMemberShow();
+        this.setState({ memberShow: false, isLoading: false, error: "" });
       } else {
-        this.setState({ isLoading: false, error: "",memberShow: false });
+        this.setState({ isLoading: false, error: "", memberShow: false });
         this.handleMemberShow();
       }
     }
@@ -560,7 +567,7 @@ export default class MenuBar extends Component {
     });
   };
 
-  handleProjectByUser = () => {};
+  handleProjectByUser = () => { };
 
   render() {
     this.handleProjectByUser();
@@ -590,12 +597,15 @@ export default class MenuBar extends Component {
                       &nbsp;ADD
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className="dropdownMenu">
-                      <Dropdown.Item
+                    <Dropdown.Menu className="dropdownMenu" >
+                      <Dropdown.Item className="cool-link"
                         onClick={this.handleShow}
-                        style={{
-                          borderBottom: "1px solid rgba(210, 210, 210, 1)",
-                        }}
+                        data-aos="fade-down"
+                        data-aos-easing="linear"
+                        data-aos-duration="1500"
+                      // style={{
+                      //   borderBottom: "1px solid rgba(210, 210, 210, 1)",
+                      // }}
                       >
                         Project
                       </Dropdown.Item>
@@ -620,7 +630,7 @@ export default class MenuBar extends Component {
                         workspaceId={this.props.workspaceId}
                         ownerClassName={"d-none"}
                       />
-                      <Dropdown.Item onClick={this.handleMemberShow}>
+                      <Dropdown.Item className="cool-link" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500" onClick={this.handleMemberShow} >
                         People
                       </Dropdown.Item>
                       {this.state.memberShow ? (

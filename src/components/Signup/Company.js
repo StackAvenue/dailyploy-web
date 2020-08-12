@@ -14,9 +14,17 @@ const Company = props => {
   return (
     <>
       <form onSubmit={props.signup}>
-        <div className="col-md-10 offset-1 no-padding signup-form text-left">
-          <div className="form-group">
-            <label>Name</label>
+        <div className="col-md-12 no-padding signup-form text-left">
+          <div className="input-data padding-top-28">
+            {/* <label>Name</label> */}
+            <span class="span-icon">
+              {" "}
+              <i
+                class="fa fa-user-circle icon-1"
+                aria-hidden="true"
+              ></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.nameError ? (
               <span className="error-warning">
                 {props.state.errors.nameError}
@@ -28,11 +36,15 @@ const Company = props => {
               value={name}
               onChange={props.changeHandler}
               className="form-control login-form-field"
-              placeholder="John Doe"
+              placeholder="Name"
             />
           </div>
-          <div className="form-group">
-            <label>Email</label>
+          <div className="input-data padding-top-28">
+            {/* <label>Email</label> */}
+            <span class="span-icon">
+              <i class="fa fa-envelope icon-5" aria-hidden="true"></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.emailError ? (
               <span className="error-warning">
                 {props.state.errors.emailError}
@@ -46,22 +58,27 @@ const Company = props => {
                 disabled={isDisabled}
                 onChange={props.changeHandler}
                 className="form-control login-form-field error"
-                placeholder="john@daiilyploy.com"
+                placeholder="Email"
               />
             ) : (
-              <input
-                type="email"
-                name="email"
-                value={email}
-                disabled={isDisabled}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="john@daiilyploy.com"
-              />
-            )}
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  disabled={isDisabled}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Email"
+                />
+              )}
           </div>
-          <div className="form-group">
-            <label>Organization Name</label>
+          <div className="input-data padding-top-28">
+            {/* <label>Organization Name</label> */}
+            <span class="span-icon">
+              {" "}
+              <i class="fa fa-building-o icon-1" aria-hidden="true"></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.companyNameError ? (
               <span className="error-warning">
                 {props.state.errors.companyNameError}
@@ -73,18 +90,22 @@ const Company = props => {
               value={companyName}
               onChange={props.changeHandler}
               className="form-control login-form-field"
-              placeholder="DailyPloy"
+              placeholder="Company Name"
             />
           </div>
-          <div className="form-group">
-            <label>
+          <div className="input-data padding-top-28">
+            {/* <label>
               Password
               <i className="fa fa-info-circle tooltip-pwd d-inline-block">
                 <span className="tooltiptext-pwd">
                   Min 8 characters at least 1 number and 1 special character
                 </span>
               </i>
-            </label>
+            </label> */}
+            <span class="span-icon">
+              <i class="fas fa-lock icon-5" aria-hidden="true" ></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.passwordError ? (
               <span className="error-warning info-icon text-wraping ">
                 Must be Valid
@@ -112,30 +133,34 @@ const Company = props => {
                 </span>
               </>
             ) : (
-              <>
-                <input
-                  type={props.state.showPassword ? "text" : "password"}
-                  name="password"
-                  value={password}
-                  onChange={props.changeHandler}
-                  className="form-control login-form-field"
-                  placeholder="Password"
-                />
-                <span
-                  className="signup-password-eye-1"
-                  onClick={props.handlePasswordShow}
-                >
-                  <i
-                    className={
-                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
-                    }
-                  ></i>
-                </span>
-              </>
-            )}
+                <>
+                  <input
+                    type={props.state.showPassword ? "text" : "password"}
+                    name="password"
+                    value={password}
+                    onChange={props.changeHandler}
+                    className="form-control login-form-field"
+                    placeholder="Password"
+                  />
+                  <span
+                    className="signup-password-eye-1"
+                    onClick={props.handlePasswordShow}
+                  >
+                    <i
+                      className={
+                        props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                      }
+                    ></i>
+                  </span>
+                </>
+              )}
           </div>
-          <div className="form-group">
-            <label>Confirm Password</label>
+          <div className="input-data padding-top-28">
+            {/* <label>Confirm Password</label> */}
+            <span class="span-icon">
+              <i class="fas fa-lock icon-5" aria-hidden="true" ></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.confirmPasswordError ? (
               <span className="error-warning">
                 {props.state.errors.confirmPasswordError}
@@ -163,29 +188,29 @@ const Company = props => {
                 </span>
               </>
             ) : (
-              <>
-                <input
-                  type={props.state.showPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={props.changeHandler}
-                  className="form-control login-form-field"
-                  placeholder="Confirm Password"
-                />
-                <span
-                  className="signup-password-eye-2"
-                  onClick={props.handlePasswordShow}
-                >
-                  <i
-                    className={
-                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
-                    }
-                  ></i>
-                </span>
-              </>
-            )}
+                <>
+                  <input
+                    type={props.state.showPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={props.changeHandler}
+                    className="form-control login-form-field"
+                    placeholder="Confirm Password"
+                  />
+                  <span
+                    className="signup-password-eye-2"
+                    onClick={props.handlePasswordShow}
+                  >
+                    <i
+                      className={
+                        props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                      }
+                    ></i>
+                  </span>
+                </>
+              )}
           </div>
-          <div className="col-md-12 no-padding text-center">
+          <div className=" text-center padding-top-28">
             <button
               disabled={!props.enable}
               onClick={props.signup}

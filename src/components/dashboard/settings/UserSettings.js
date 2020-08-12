@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
+// import ImageUploading from "react-images-uploading";
+
 
 const UserSettings = props => {
+  // const maxNumber = 69;
+  // const onChange = imageList => {
+  //   console.log(imageList);
+  // };
   return (
     <>
       <div className="col-md-12 heading" style={{ paddingTop: "40px" }}>
@@ -16,6 +22,29 @@ const UserSettings = props => {
             style={{ verticalAlign: "bottom" }}
           >
             <div className="user-icon">
+              {/* <ImageUploading onChange={onChange} maxNumber={maxNumber}>
+                {({ imageList, onImageUpload, onImageRemoveAll }) => (
+                  <div className="upload__image-wrapper">
+                    <button onClick={onImageUpload}>
+                      <img alt={"profile"} src={Profile} className="img-responsive" />
+                      <div className="overlay"></div>
+                      <button className="btn btn-link">
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                    </button>
+                    {imageList.map(image => (
+                      <div key={image.key} className="image-item">
+                        <img src={image.dataURL} alt="" width="100" />
+                        <div className="image-item__btn-wrapper">
+                          <button onClick={image.onUpdate}>Update</button>
+                          <button onClick={image.onRemove}>Remove</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </ImageUploading> */}
+
               <img alt={"profile"} src={Profile} className="img-responsive" />
               <div className="overlay"></div>
               <button className="btn btn-link">
@@ -39,7 +68,7 @@ const UserSettings = props => {
                   placeholder="Name"
                   className={`form-control input ${
                     props.state.nameError ? " input-error-border" : ""
-                  }`}
+                    }`}
                   name="userName"
                   value={props.state.userName}
                   onChange={props.handleChange}
@@ -49,7 +78,7 @@ const UserSettings = props => {
                 <button
                   className={`btn btn-primary save-button ${
                     props.state.isSaveEnable ? "btn-blue" : "btn-disable"
-                  }`}
+                    }`}
                   onClick={props.updateUserName}
                 >
                   Save
@@ -65,11 +94,11 @@ const UserSettings = props => {
                     Admin
                   </>
                 ) : (
-                  <>
-                    <img src={Member} />
+                    <>
+                      <img src={Member} />
                     Member
                   </>
-                )}
+                  )}
               </div>
             </div>
           </div>
@@ -104,7 +133,7 @@ const UserSettings = props => {
               placeholder="Old Password"
               className={`form-control input ${
                 props.state.oldPasswordError ? " input-error-border" : ""
-              }`}
+                }`}
               name="oldPassword"
               value={props.state.oldPassword}
               onChange={props.handleChange}
@@ -136,7 +165,7 @@ const UserSettings = props => {
               placeholder="New Password"
               className={`form-control input ${
                 props.state.passwordError ? " input-error-border" : ""
-              }`}
+                }`}
               name="newPassword"
               value={props.state.newPassword}
               onChange={props.handlePasswordChange}
@@ -163,7 +192,7 @@ const UserSettings = props => {
               placeholder="Confirm Password"
               className={`form-control input ${
                 props.state.confirmPasswordError ? " input-error-border" : ""
-              }`}
+                }`}
               name="confirmPassword"
               value={props.state.confirmPassword}
               onChange={props.handleConfirmPassChange}
@@ -186,7 +215,7 @@ const UserSettings = props => {
             <button
               className={`btn btn-default button ${
                 props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
-              }`}
+                }`}
               onClick={props.updatePassword}
             >
               Save & Confirm

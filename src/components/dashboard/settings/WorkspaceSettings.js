@@ -4,6 +4,8 @@ import Admin from "../../../assets/images/admin.png";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import GeneralSettings from "./GeneralSettings";
 import CategoriesSettings from "./CategoriesSettings";
+import StatusProjectList from "./StatusProjectList";
+import StatusSettings from "./StatusSettings";
 import EmployeeReportsSettings from "./EmployeeReportsSettings";
 import ProjectReportsSettings from "./ProjectReportsSettings";
 import { toast } from "react-toastify";
@@ -20,7 +22,7 @@ class WorkspaceSettings extends Component {
       adminUserArr: [],
       workspaceId: "",
       userArr: [],
-      userMembers:[],
+      userMembers: [],
       isSaveWorkspaceName: false,
     };
   }
@@ -29,7 +31,7 @@ class WorkspaceSettings extends Component {
     if (
       prevProps.workspaceObj !== this.props.workspaceObj ||
       prevProps.state.adminUserArr.length !==
-        this.props.state.adminUserArr.length ||
+      this.props.state.adminUserArr.length ||
       prevProps.state.allMembers.length !== this.props.state.allMembers.length
     ) {
       let workspaceName = this.props.workspaceObj
@@ -58,45 +60,45 @@ class WorkspaceSettings extends Component {
     });
   };
 
-  UserNameHandler=(id)=>{
-    var members =[]
+  UserNameHandler = (id) => {
+    var members = []
 
-    
-    this.state.userMembers.map((user) =>{
-      if(user.id!==id){
+
+    this.state.userMembers.map((user) => {
+      if (user.id !== id) {
         members.push(user);
       }
-      });
-    this.setState({userMembers:members});
-return members;
+    });
+    this.setState({ userMembers: members });
+    return members;
 
-    
+
   }
-  UserNameAddHandler=(obj)=>{
-    var members =[...this.state.userMembers]
-    
-        members.push(obj);
-   
-    this.setState({userMembers:members});
-return members;
+  UserNameAddHandler = (obj) => {
+    var members = [...this.state.userMembers]
+
+    members.push(obj);
+
+    this.setState({ userMembers: members });
+    return members;
   }
-  UserNameHandler2=(obj)=>{
-    let count=0  
-    var members =[]
-    this.state.userMembers.map((user) =>{
-      obj.map((user1)=>{
-      if(user.id===user1.id){
-        count=count+1;
-       }
-       })
-       
-       if(count===0){
+  UserNameHandler2 = (obj) => {
+    let count = 0
+    var members = []
+    this.state.userMembers.map((user) => {
+      obj.map((user1) => {
+        if (user.id === user1.id) {
+          count = count + 1;
+        }
+      })
+
+      if (count === 0) {
         members.push(user)
 
-       }
-       count=0;
-      });
-    this.setState({userMembers:members});
+      }
+      count = 0;
+    });
+    this.setState({ userMembers: members });
     return members;
   }
   updateWorkspaceName = async () => {
@@ -132,6 +134,7 @@ return members;
           <TabList>
             <Tab>General</Tab>
             <Tab>Categories</Tab>
+            <Tab>Configure Statuses</Tab>
             {/* <Tab>Employee Reports</Tab> */}
             {/* <Tab>Project Reports</Tab> */}
           </TabList>
@@ -155,6 +158,14 @@ return members;
           </TabPanel>
           <TabPanel>
             <CategoriesSettings workspaceId={this.props.state.workspaceId} />
+          </TabPanel>
+          <TabPanel>
+            {/* <StatusSettings workspaceId={this.props.state.workspaceId}
+             searchUserDetails={this.props.searchUserDetails}
+             searchProjectIds={this.props.searchProjectIds} /> */}
+            <StatusProjectList workspaceId={this.props.state.workspaceId}
+              searchUserDetails={this.props.searchUserDetails}
+              searchProjectIds={this.props.searchProjectIds} />
           </TabPanel>
           {/* <TabPanel>
             <EmployeeReportsSettings />
