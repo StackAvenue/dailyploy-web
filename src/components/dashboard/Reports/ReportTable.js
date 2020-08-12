@@ -124,7 +124,7 @@ class ReportTable extends Component {
         <th scope="col-md-3">Project Name</th>
         <th scope="col-md-1">Category</th>
         <th scope="col-md-1">Priority</th>
-        <th scope="col">Estimate Time</th>
+        <th scope="col">Estimate Time(hours)</th>
         <th scope="col-md-1">Duration</th>
       </>
     );
