@@ -445,7 +445,7 @@ class ReportTableRow extends Component {
       return (
         <tr key={index} className="report-table-row">
           <td className="td-1">
-            {task.status == "running" ? (
+            {/* {task && task.status == "running" ? (
               <div className="progress-btn">In progress</div>
             ) : null}
             {task.status == "completed" ? (
@@ -453,6 +453,9 @@ class ReportTableRow extends Component {
             ) : null}
             {task.status == "not_started" ? (
               <div className="not-start-btn">Not started</div>
+            ) : null} */}
+            {task && task.status && task.status.name ? (
+              <div>{task.status.name}</div>
             ) : null}
           </td>
           {/* <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td> */}
@@ -468,7 +471,8 @@ class ReportTableRow extends Component {
             {this.showCategory(task.priority)}
           </td>
           <td className="td-7">
-            {this.dateFormater(this.getEstimateTimeOfTask(task))}
+            {/* {this.dateFormater(this.getEstimateTimeOfTask(task))} */}
+            {task.estimation}
           </td>
           <td
             className="td-8"
