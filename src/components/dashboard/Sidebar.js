@@ -34,6 +34,7 @@ class Sidebar extends Component {
 
   callWorkspace = id => {
     cookie.save("workspaceId", id, { path: "/" });
+    localStorage.setItem('selProject', '');
   };
 
   handleInputChange = e => {

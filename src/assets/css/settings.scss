@@ -13,25 +13,34 @@
   padding-top: 10px !important;
 }
 .tooltip-pwd1 .tooltiptext-pwd1::after {
+  // content: "";
+  // position: absolute;
+  // top: 35px;
+  //  left: -4px; 
+  // margin-top: -5px;
+  // border-width: 6px;
+  // border-style: solid;
+  // border-color: transparent black transparent transparent;
+  // transform: rotateX(1deg) rotateY(8deg) rotateZ(1735deg);
   content: "";
   position: absolute;
-  top: 35px;
-  // right: 100%; 
-   left: -4px; 
+  top: 38px;
+  left: 60%;
   margin-top: -5px;
   border-width: 6px;
   border-style: solid;
   border-color: transparent black transparent transparent;
-  transform: rotateX(1deg) rotateY(8deg) rotateZ(1735deg);
+  transform: rotateX(22deg) rotateY(32deg) rotateZ(1698deg);
 }
 
 
 
 
 .tooltip-pwd1 {
-  position: absolute;
-  top: 3px;
-    right: 28px;
+  // position: absolute;
+  // top: 3px;
+  // right: 28px;
+  margin-left: 6px
  
 }
 

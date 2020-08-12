@@ -54,6 +54,51 @@ class GeneralSettings extends Component {
     };
   }
 
+  componentDidMount = async () => {
+    try {
+      const { data } = await get(
+        `workspaces/${this.props.workspaceId}/members`
+      );
+      var members = data.members;
+    } catch (e) {
+      console.log("users Error", e);
+    }
+    this.setState({ members: members });
+    try {
+      const { data } = await get(
+        `workspaces/${this.props.workspaceId}/workspace_settings/show_daily_status_mail`
+      );
+      if (data) {
+        this.setState({
+          toMails: data.to_mails,
+          bccMails: data.bcc_mails,
+          ccMails: data.cc_mails,
+          selectToMembers:
+            data.to_mails.length > 0
+              ? this.filterEmailMember(data.to_mails, members)
+              : [],
+          selectBccMembers:
+            data.bcc_mails.length > 0
+              ? this.filterEmailMember(data.bcc_mails, members)
+              : [],
+          selectCcMembers:
+            data.cc_mails.length > 0
+              ? this.filterEmailMember(data.cc_mails, members)
+              : [],
+          isActive: data.is_active,
+          // emailText: data.email_text,
+          emailText: " ",
+          isConfig: false,
+          members: members,
+        });
+      } else {
+        this.setState({ isConfig: true });
+      }
+    } catch (e) {
+      this.setState({ isConfig: true });
+    }
+  };
+
   componentDidUpdate = async (prevProps, prevState) => {
     if (
       prevProps.state.userArr !== this.props.state.userArr ||
@@ -109,7 +154,7 @@ class GeneralSettings extends Component {
                 : [],
             isActive: data.is_active,
             // emailText: data.email_text,
-            emailText:" ",
+            emailText: " ",
             isConfig: false,
             members: members,
           });
@@ -120,7 +165,6 @@ class GeneralSettings extends Component {
         this.setState({ isConfig: true });
       }
     }
-    
   };
 
   filterEmailMember = (emails, members) => {
@@ -162,14 +206,10 @@ class GeneralSettings extends Component {
   };
 
   handleEditShow = () => {
-   let temp=[...this.state.selectCcMembers,...this.state.selectToMembers]
-  
-    
-      this.props.UserNameHandler2(temp);
-      
-   
-    
-   
+    let temp = [...this.state.selectCcMembers, ...this.state.selectToMembers];
+
+    this.props.UserNameHandler2(temp);
+
     this.setState({
       editShow: true,
       editSetShow: true,
@@ -264,14 +304,14 @@ class GeneralSettings extends Component {
   handleToChange = (e) => {
     const { name, value } = e.target;
     let toEmailSuggestions = [];
-      var searchOptions = this.props.state.userMembers.map((user) =>user);
-      if (value.length > 0) {
-        const regex = new RegExp(`^${value}`, "i");
-        toEmailSuggestions = searchOptions
-          .sort()
-          .filter((v) => regex.test(v.email));
-      }
-  
+    var searchOptions = this.props.state.userMembers.map((user) => user);
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      toEmailSuggestions = searchOptions.sort().filter((v) => {
+        regex.test(v.email);
+      });
+    }
+
     this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
   };
 
@@ -313,7 +353,7 @@ class GeneralSettings extends Component {
     });
   };
 
-  removeSelectedToTag = (index,obj) => {
+  removeSelectedToTag = (index, obj) => {
     var selectToMembers = this.state.selectToMembers;
     this.props.UserNameAddHandler(obj);
     selectToMembers = selectToMembers.filter((_, idx) => idx !== index);
@@ -324,29 +364,25 @@ class GeneralSettings extends Component {
 
   initalChar = (str) => {
     var matches = str.match(/\b(\w)/g);
-    
+
     return matches.join("").toUpperCase();
   };
 
   renderSelectedToMembers = () => {
-    
     return (
       <>
         {this.state.selectToMembers.map((option, index) => {
-          
           return (
             <div className="select-member" key={index}>
               <div className="member-title d-inline-block">
                 {this.initalChar(option.name)}
-               
-                
               </div>
               <div className="right-left-space-5 d-inline-block">
                 {option.name}
               </div>
               <a
                 className="right-left-space-5 d-inline-block"
-                onClick={() => this.removeSelectedToTag(index,option)}
+                onClick={() => this.removeSelectedToTag(index, option)}
               >
                 {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
                   this.placeCloseIcon(option, state)
@@ -364,7 +400,7 @@ class GeneralSettings extends Component {
   handleCcChange = (e) => {
     const { name, value } = e.target;
     let ccEmailSuggestions = [];
-    var searchOptions = this.props.state.userMembers.map((user) =>user);
+    var searchOptions = this.props.state.userMembers.map((user) => user);
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
       ccEmailSuggestions = searchOptions
@@ -401,7 +437,7 @@ class GeneralSettings extends Component {
   handleSelectCcMembers = (option) => {
     var selectCcMembers = new Array(...this.state.selectCcMembers);
     selectCcMembers.push(option);
-    this.props.UserNameHandler(option.id)
+    this.props.UserNameHandler(option.id);
     var ccEmailSuggestions = this.state.ccEmailSuggestions.map(
       (user) => !selectCcMembers.map((m) => m.id).includes(user.id)
     );
@@ -412,7 +448,7 @@ class GeneralSettings extends Component {
     });
   };
 
-  removeSelectedCcTag = (index,obj) => {
+  removeSelectedCcTag = (index, obj) => {
     var selectCcMembers = this.state.selectCcMembers;
     this.props.UserNameAddHandler(obj);
     selectCcMembers = selectCcMembers.filter((_, idx) => idx !== index);
@@ -434,15 +470,13 @@ class GeneralSettings extends Component {
             <div className="select-member" key={index}>
               <div className="member-title d-inline-block">
                 {this.initalChar(option.name)}
-                
-                
               </div>
               <div className="right-left-space-5 d-inline-block">
                 {option.name}
               </div>
               <a
                 className="right-left-space-5 d-inline-block"
-                onClick={() => this.removeSelectedCcTag(index,option)}
+                onClick={() => this.removeSelectedCcTag(index, option)}
               >
                 {/* {state.taskButton === "Save" && state.user.role !== "admin" ? (
                   this.placeCloseIcon(option, state)
@@ -608,6 +642,7 @@ class GeneralSettings extends Component {
   };
 
   emailConfigObject = () => {
+    console.log(this.state.toSearchText);
     var configEmailStatusData = {
       is_active: this.state.isActive,
     };
@@ -616,7 +651,9 @@ class GeneralSettings extends Component {
     var ccMember = this.state.selectCcMembers.map((e) => e.email);
 
     toMember =
-      toMember.length > 0 ? (configEmailStatusData["to_mails"] = toMember) : "";
+      toMember.length > 0
+        ? (configEmailStatusData["to_mails"] = toMember)
+        : (configEmailStatusData["to_mails"] = "jeshankhanjak@outlook.com");
     bccMember =
       bccMember.length > 0
         ? (configEmailStatusData["bcc_mails"] = bccMember)
@@ -632,9 +669,9 @@ class GeneralSettings extends Component {
   checkValidate = () => {
     var toError = "";
     var emailTextError = "";
-    if (this.state.selectToMembers.length == 0) {
-      toError = "please select to emails";
-    }
+    // if (this.state.selectToMembers.length == 0) {
+    //   toError = "please select to emails";
+    // }
     if (this.state.emailText == "") {
       emailTextError = "please enter email text";
     }
@@ -663,7 +700,6 @@ class GeneralSettings extends Component {
           `workspaces/${this.props.state.workspaceId}/update_daily_status_mail`
         );
         this.setEmailState(data);
-        
       } catch (e) {
         console.log("error", e);
       }
@@ -672,21 +708,24 @@ class GeneralSettings extends Component {
 
   setEmailState = (data) => {
     this.setState({
-      toMails: data.to_mails?data.to_mails:[],
-      bccMails: data.bcc_mails?data.bcc_mails:[],
-      ccMails: data.cc_mails?data.cc_mails:[],
-      selectToMembers:data.to_mails?
-        data.to_mails.length > 0
+      toMails: data.to_mails ? data.to_mails : [],
+      bccMails: data.bcc_mails ? data.bcc_mails : [],
+      ccMails: data.cc_mails ? data.cc_mails : [],
+      selectToMembers: data.to_mails
+        ? data.to_mails.length > 0
           ? this.filterEmailMember(data.to_mails, this.state.members)
-          : []:[],
-      selectBccMembers:data.bcc_mails?
-        data.bcc_mails.length > 0
+          : []
+        : [],
+      selectBccMembers: data.bcc_mails
+        ? data.bcc_mails.length > 0
           ? this.filterEmailMember(data.bcc_mails, this.state.members)
-          : []:[],
-      selectCcMembers:data.cc_mails?
-        data.cc_mails.length > 0
+          : []
+        : [],
+      selectCcMembers: data.cc_mails
+        ? data.cc_mails.length > 0
           ? this.filterEmailMember(data.cc_mails, this.state.members)
-          : []:[],
+          : []
+        : [],
       isActive: data.is_active,
       emailText: data.email_text,
       editShow: false,
@@ -725,7 +764,6 @@ class GeneralSettings extends Component {
   };
 
   render() {
-    
     return (
       <>
         <div className="row no-margin general-setting">
@@ -756,9 +794,12 @@ class GeneralSettings extends Component {
               </button>
             </div>
           </div>
+
+          <div className="col-md-12 hr1"></div>
+
           <div
             className="col-md-12 workspace-name"
-            style={{ marginTop: "10px" }}
+            style={{ marginTop: "0px", paddingTop: "20px" }}
           >
             <div className="col-md-2 no-padding name">Admins</div>
           </div>
@@ -843,7 +884,10 @@ class GeneralSettings extends Component {
             <div className="col-md-12 heading">
               <div className="col-md-6 no-padding d-inline-block">
                 Daily Status Mail
-                <button className="btn btn-link" onClick={this.handleEditShow}>
+                <button
+                  className="btn btn-link addnew-button7"
+                  onClick={this.handleEditShow}
+                >
                   {this.state.isConfig ? "configure" : "Edit"}
                 </button>
               </div>

@@ -22,8 +22,8 @@ class TaskAction extends Component {
           textAlign: "center",
           right: "3px",
           // left: "100%",
-          // top: "32px",
-          top: "86px",
+          top: "54px",
+          // top: "86px",
           backgroundColor: "#ffffff",
           border: "1px solid #e5e5e5",
           borderRadius: "5px",
@@ -41,9 +41,9 @@ class TaskAction extends Component {
               style={{ padding: "5px 0px 0px 0px" }}
               onClick={() => props.taskEventResumeConfirm(props.event, "edit")}
             >
-              Edit
+              View Details
             </div>
-            <div
+            {/* <div
               className="border-bottom pointer"
               style={{ padding: "5px 0px 0px 0px" }}
               onClick={() =>
@@ -51,7 +51,7 @@ class TaskAction extends Component {
               }
             >
               Mark Complete
-            </div>
+            </div> */}
             <div
               className="pointer"
               style={{ padding: "5px 0px 5px 0px" }}
@@ -63,14 +63,14 @@ class TaskAction extends Component {
             </div>
           </>
         ) : (
-          <div
-            className="pointer"
-            style={{ padding: "5px 0px 5px 0px" }}
-            onClick={() => props.taskEventResumeConfirm(props.event, "resume")}
-          >
-            Resume
-          </div>
-        )}
+            <div
+              className="pointer"
+              style={{ padding: "5px 0px 5px 0px" }}
+              onClick={() => props.taskEventResumeConfirm(props.event, "resume")}
+            >
+              Resume
+            </div>
+          )}
       </div>
     );
   }

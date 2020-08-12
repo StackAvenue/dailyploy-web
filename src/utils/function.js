@@ -18,18 +18,33 @@ export const getFisrtDate = (date, type) => {
 export const firstTwoLetter = name => {
   return name
     ? name
-        .split(" ")
-        .slice(0, 2)
-        .map(x => x[0])
-        .join("")
-        .toUpperCase()
+      .split(" ")
+      .slice(0, 2)
+      .map(x => x[0])
+      .join("")
+      .toUpperCase()
     : null;
 };
 
 export const textTitlize = text => {
-  return text.replace(/(?:^|\s)\S/g, function(a) {
+  return text.replace(/(?:^|\s)\S/g, function (a) {
     return a.toUpperCase();
   });
+};
+
+export const debounce = (func, wait, immediate) => {
+  var timeout;
+  return function () {
+    var context = this, args = arguments;
+    var later = function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
 };
 
 export const workspaceNameSplit = name => {

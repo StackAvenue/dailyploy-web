@@ -11,7 +11,10 @@ const ConditionalElements = props => {
     classNameRoute = <></>;
   } else if (routeName === "membersTrue") {
     classNameRoute = <></>;
-  } else {
+  }else if (routeName === "TaskProjectListTrue") {
+    classNameRoute = <></>;
+  } 
+  else {
     classNameRoute = <></>;
   }
   return classNameRoute;

@@ -1,36 +1,50 @@
+
+.main-container1 {
+  width: 100% !important;
+  padding-top: 24px !important;
+  background-color: #eafff3;
+}
 .signup-container {
-  height: 85vh;
+  // height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-bottom: 28px !important;
   .width {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgb(250, 250, 250);
-    min-width: 65% !important;
-    img {
-      width: 90%;
-      height: 75%;
-    }
+    width: 33%;
+    // height: 100%;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // background: rgb(250, 250, 250);
+    // min-width: 65% !important;
+    // img {
+    //   width: 90%;
+    //   height: 75%;
+    // }
   }
   .form-wrap {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    height: 100%;
-    justify-content: center;
+    // display: flex;
+    // align-items: center;
+    // flex: 1;
+    // height: 100%;
+    // justify-content: center;
+    width: 34%;
+    height: 778px;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    padding: 40px;
 
     .sub-container {
       min-width: 100%;
-      background: #fafafa;
-      min-height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      // background: #fafafa;
+      // min-height: 100%;
+      // display: flex;
+      // align-items: center;
+      // justify-content: center;
+      // flex-direction: column;
       form {
         min-width: 100%;
         // .forgot-pass {
@@ -45,3 +59,60 @@
     }
   }
 }
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.width1 {
+  width: 33%;
+}
+
+ .right-boys-content {
+  width: 248px;
+  height: 548px;
+  position: absolute;
+  top: 30%;
+  right: 10%;
+}
+.left-girls-content{
+  width: 248px;
+  height: 548px;
+  position: absolute;
+  top: 30%;
+  left: 10%;
+
+}
+.flower-pot-div {
+  width: 224px;
+  height: 224px;
+  position: absolute;
+  top: 54%;
+  left: 1%;
+}
+.flower2-pot-div{
+  width: 224px;
+  height: 224px;
+  position: absolute;
+  top: 54%;
+  right: 0%;
+}
+
+.sign-up1-div, .sign-up2-div, .sign-up3-div, .sign-up4-div {
+
+  height: 70px;
+  width: 50px;
+}
+
+.images-div{
+  display: flex;
+  justify-content: space-between;
+  // margin: 0px 20px !important;
+}
+
+
+

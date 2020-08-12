@@ -15,22 +15,25 @@ import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import { base } from "../../../src/base";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 class Header extends Component {
   constructor(props) {
     super(props);
     this.clickClose = React.createRef();
     this.closeSettingModal = this.closeSettingModal.bind(this);
     this.state = {
-      workspaces: [],
+      // workspaces: [],
       userName: "",
       userEmail: "",
       userRole: "",
       userId: "",
       searchFlag: "My Reports",
       notifications: [],
-      tempSize:0,
-      size:0
+      tempSize: 0,
+      size: 0,
     };
   }
 
@@ -45,11 +48,12 @@ class Header extends Component {
           userName: data.name,
           userEmail: data.email,
         });
-        
+        localStorage.setItem("logedInId", data.id);
       } catch (e) {
         console.log("err", e);
       }
     } else {
+      localStorage.setItem("logedInId", loggedInData.id);
       this.componentDidMountGetNotifications(loggedInData.id);
       this.setState({
         userId: loggedInData.id,
@@ -59,30 +63,24 @@ class Header extends Component {
     }
   }
 
-
-async componentDidMountGetNotifications(useId) {
-  let notificataionData = await get(
-    `users/${
-    useId
-    }/notifications?workspace_id=${getWorkspaceId()}`
-  );
-  this.setState({
-    tempSize:notificataionData.data.notifications.length,
-    notifications:
-      notificataionData && notificataionData.data
-        ? notificataionData.data.notifications
-        : []
-  });
-}
-
+  async componentDidMountGetNotifications(useId) {
+    let notificataionData = await get(
+      `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
+    );
+    this.setState({
+      tempSize: notificataionData.data.notifications.length,
+      notifications:
+        notificataionData && notificataionData.data
+          ? notificataionData.data.notifications
+          : [],
+    });
+  }
 
   async getNotifications(useId) {
     let notificataionData = await get(
-      `users/${
-      useId
-      }/notifications?workspace_id=${getWorkspaceId()}`
+      `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
     );
-    console.log(notificataionData.data.notifications)
+    console.log(notificataionData.data.notifications);
     // let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
     // let sound = new Audio(src);
     // sound.play();
@@ -90,12 +88,12 @@ async componentDidMountGetNotifications(useId) {
       notifications:
         notificataionData && notificataionData.data
           ? notificataionData.data.notifications
-          : []
+          : [],
     });
   }
 
-  componentWillMount() {
-    var workspaceId = getWorkspaceId()
+  UNSAFE_componentWillMount() {
+    var workspaceId = getWorkspaceId();
 
     this.handleNotification(workspaceId);
   }
@@ -105,38 +103,43 @@ async componentDidMountGetNotifications(useId) {
       .database()
       .ref(`notification/${workspaceId}`)
       .on("child_changed", (snap) => {
-        this.getNotificationsUpdate(this.state.userId)        
-        this.getNotifications(this.state.userId)
+        this.getNotificationsUpdate(this.state.userId);
+        this.getNotifications(this.state.userId);
       });
-
-
   };
 
   async getNotificationsUpdate(useId) {
-    var user=""
-  let notificataionData = await get(
-    `users/${
-    useId
-    }/notifications?workspace_id=${getWorkspaceId()}`
-  );
-      
-try {
-  const { data } = await get(
-    `workspaces/${getWorkspaceId()}/members/${this.state.userId}`
-  );
-  
-   user = data;} catch (e) {console.log(e) }
+    var user = "";
+    let notificataionData = await get(
+      `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
+    );
 
-if(user.role!=="admin"){
-if(notificataionData.data.notifications.length>this.state.tempSize && notificataionData.data.notifications.length!==0){
-  let src = 'https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav';
-  let sound = new Audio(src);
-  sound.play();
-  this.setState({tempSize:notificataionData.data.notifications.length});}
-  this.createNotification(notificataionData.data.notifications);
-  }
-  }
+    try {
+      const { data } = await get(
+        `workspaces/${getWorkspaceId()}/members/${this.state.userId}`
+      );
 
+      user = data;
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (user.role !== "admin") {
+      if (
+        notificataionData.data.notifications.length > this.state.tempSize &&
+        notificataionData.data.notifications.length !== 0
+      ) {
+        let src =
+          "https://notificationsounds.com/soundfiles/d7a728a67d909e714c0774e22cb806f2/file-sounds-1150-pristine.wav";
+        let sound = new Audio(src);
+        sound.play();
+        this.setState({
+          tempSize: notificataionData.data.notifications.length,
+        });
+      }
+      this.createNotification(notificataionData.data.notifications);
+    }
+  }
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -177,12 +180,15 @@ if(notificataionData.data.notifications.length>this.state.tempSize && notificata
     }
   };
   createNotification = (dataNotification) => {
- if(dataNotification){
-   if(dataNotification.length>0)
-      return (NotificationManager.info(dataNotification[dataNotification.length-1].data.message,dataNotification[dataNotification.length-1].data.source, 3000))
+    if (dataNotification) {
+      if (dataNotification.length > 0)
+        return NotificationManager.info(
+          dataNotification[dataNotification.length - 1].data.message,
+          dataNotification[dataNotification.length - 1].data.source,
+          3000
+        );
     }
-    
-  }
+  };
   closeSettingModal = () => {
     this.clickClose.current.click();
   };
@@ -297,13 +303,13 @@ if(notificataionData.data.notifications.length>this.state.tempSize && notificata
                           )}
                       </div>
                       {this.state.notifications &&
-                        this.state.notifications.length > 0 ? (
-                          <div className="col-md-12 no-padding dropdown-scroll">
-                            {this.state.notifications.map((eachNotification) => {
-                              return (
-                                <Dropdown.Item className="notification-box">
-                                  <div className="row" style={{ width: "100%" }}>
-                                    {/* <div className="col-md-1 no-padding">
+                      this.state.notifications.length > 0 ? (
+                        <div className="col-md-12 no-padding dropdown-scroll">
+                          {this.state.notifications.map((eachNotification) => {
+                            return (
+                              <Dropdown.Item className="notification-box">
+                                <div className="row" style={{ width: "100%" }}>
+                                  {/* <div className="col-md-1 no-padding">
                                       <div className="notification-img">
                                         <img
                                           alt={"userImg"}
@@ -313,42 +319,42 @@ if(notificataionData.data.notifications.length>this.state.tempSize && notificata
                                       </div>
                                     </div> */}
 
-                                    <div className="col-md-12 no-padding notification-text wrap-text">
-                                      {eachNotification.data.message}
-                                      {/* <span>
+                                  <div className="col-md-12 no-padding notification-text wrap-text">
+                                    {eachNotification.data.message}
+                                    {/* <span>
                                     Aviabird
                                 <br />
                                     Technologies
                               </span> */}
-                                    </div>
-                                    <div className="col-md-12 no-padding notification-text text-right">
-                                      <span>
-                                        {this.returnDaysAgo(
-                                          eachNotification.inserted_at
-                                        )}
-                                      </span>
-                                      {/* {eachNotification.inserted_at} */}
-                                    </div>
                                   </div>
-                                </Dropdown.Item>
-                              );
-                            })}
+                                  <div className="col-md-12 no-padding notification-text text-right">
+                                    <span>
+                                      {this.returnDaysAgo(
+                                        eachNotification.inserted_at
+                                      )}
+                                    </span>
+                                    {/* {eachNotification.inserted_at} */}
+                                  </div>
+                                </div>
+                              </Dropdown.Item>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <Dropdown.Item
+                          className="notification-box"
+                          style={{ height: "91%" }}
+                        >
+                          {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                          <div>
+                            <i
+                              class="fa fa-info-circle"
+                              style={{ fontSize: "48px", marginBottom: "8px" }}
+                            ></i>
                           </div>
-                        ) : (
-                          <Dropdown.Item
-                            className="notification-box"
-                            style={{ height: "91%" }}
-                          >
-                            {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
-                            <div>
-                              <i
-                                class="fa fa-info-circle"
-                                style={{ fontSize: "48px", marginBottom: "8px" }}
-                              ></i>
-                            </div>
-                            <div>There are no notifications for you</div>
-                          </Dropdown.Item>
-                        )}
+                          <div>There are no notifications for you</div>
+                        </Dropdown.Item>
+                      )}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
@@ -357,7 +363,7 @@ if(notificataionData.data.notifications.length>this.state.tempSize && notificata
                         this.state.userRole === "admin"
                           ? "admin-circle"
                           : "member-circle"
-                        } `}
+                      } `}
                       id="dropdown-basic"
                     >
                       {x}
@@ -369,7 +375,7 @@ if(notificataionData.data.notifications.length>this.state.tempSize && notificata
                             this.state.userRole === "admin"
                               ? "admin-circle"
                               : "member-circle"
-                            } `}
+                          } `}
                         >
                           {x}
                         </div>

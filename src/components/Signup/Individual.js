@@ -16,9 +16,17 @@ const Individual = props => {
   return (
     <>
       <form onSubmit={props.signup} className="signup-form">
-        <div className="col-md-10 offset-1 no-padding text-left">
-          <div className="form-group">
-            <label>Name</label>
+        <div className="col-md-12 no-padding text-left">
+          <div className="input-data padding-top-28">
+            {/* <label>Name</label> */}
+            <span class="span-icon">
+              {" "}
+              <i
+                class="fa fa-user-circle icon-1"
+                aria-hidden="true"
+              ></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.nameError ? (
               <span className="error-warning">
                 {props.state.errors.nameError}
@@ -30,12 +38,17 @@ const Individual = props => {
               value={name}
               onChange={props.changeHandler}
               className="form-control login-form-field"
-              placeholder="John Doe"
+              placeholder="Name"
             />
           </div>
 
-          <div className="form-group">
-            <label>Email</label>
+          <div className="input-data padding-top-28">
+            {/* <label>Email</label> */}
+            <span class="span-icon">
+              <i class="fa fa-envelope icon-5" aria-hidden="true"></i>
+            </span>
+            <span class="lines"></span>
+
             {props.state.errors.emailError ? (
               <span className="error-warning">
                 {props.state.errors.emailError}
@@ -49,29 +62,33 @@ const Individual = props => {
                 value={email}
                 onChange={props.changeHandler}
                 className="form-control login-form-field error"
-                placeholder="john@daiilyploy.com"
+                placeholder="Email"
               />
             ) : (
-              <input
-                type="email"
-                name="email"
-                disabled={isDisabled}
-                value={email}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="john@daiilyploy.com"
-              />
-            )}
+                <input
+                  type="email"
+                  name="email"
+                  disabled={isDisabled}
+                  value={email}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="Email"
+                />
+              )}
           </div>
-          <div className="form-group">
-            <label>
+          <div className="input-data padding-top-28">
+            {/* <label>
               Password
               <i className="fa fa-info-circle tooltip-pwd d-inline-block">
                 <span className="tooltiptext-pwd">
                   Min 8 characters at least 1 number and 1 special character
                 </span>
               </i>
-            </label>
+            </label> */}
+            <span class="span-icon">
+              <i class="fas fa-lock icon-5" aria-hidden="true" ></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.passwordError ? (
               <div className="d-inline-block info-icon error-warning text-wraping">
                 Must be Valid
@@ -99,30 +116,34 @@ const Individual = props => {
                 </span>
               </>
             ) : (
-              <>
-                <input
-                  type={props.state.showPassword ? "text" : "password"}
-                  name="password"
-                  value={password}
-                  onChange={props.changeHandler}
-                  className="form-control login-form-field"
-                  placeholder="Password"
-                />
-                <span
-                  className="signup-password-eye-1"
-                  onClick={props.handlePasswordShow}
-                >
-                  <i
-                    className={
-                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
-                    }
-                  ></i>
-                </span>
-              </>
-            )}
+                <>
+                  <input
+                    type={props.state.showPassword ? "text" : "password"}
+                    name="password"
+                    value={password}
+                    onChange={props.changeHandler}
+                    className="form-control login-form-field"
+                    placeholder="Password"
+                  />
+                  <span
+                    className="signup-password-eye-1"
+                    onClick={props.handlePasswordShow}
+                  >
+                    <i
+                      className={
+                        props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                      }
+                    ></i>
+                  </span>
+                </>
+              )}
           </div>
-          <div className="form-group">
-            <label>Confirm Password</label>
+          <div className="input-data padding-top-28">
+            {/* <label>Confirm Password</label> */}
+            <span class="span-icon">
+              <i class="fas fa-lock icon-5" aria-hidden="true" ></i>
+            </span>
+            <span class="lines"></span>
             {props.state.errors.confirmPasswordError ? (
               <span className="error-warning">
                 {props.state.errors.confirmPasswordError}
@@ -150,31 +171,31 @@ const Individual = props => {
                 </span>
               </>
             ) : (
-              <>
-                <input
-                  type={props.state.showPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={props.changeHandler}
-                  className="form-control login-form-field"
-                  placeholder="Confirm Password"
-                />
-                <span
-                  className="signup-password-eye-2"
-                  onClick={props.handlePasswordShow}
-                >
-                  <i
-                    className={
-                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
-                    }
-                  ></i>
-                </span>
-              </>
-            )}
+                <>
+                  <input
+                    type={props.state.showPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={props.changeHandler}
+                    className="form-control login-form-field"
+                    placeholder="Confirm Password"
+                  />
+                  <span
+                    className="signup-password-eye-2"
+                    onClick={props.handlePasswordShow}
+                  >
+                    <i
+                      className={
+                        props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                      }
+                    ></i>
+                  </span>
+                </>
+              )}
           </div>
           {/* <br /> */}
           <div
-            className="col-md-12 no-padding text-center"
+            className="text-center padding-top-28"
             data-toggle="tooltip"
             title="Fill All Fields"
           >
@@ -196,8 +217,8 @@ const Individual = props => {
             </button>
           </div>
         </div>
-        <br />
-        <div className="col-md-10 offset-1 no-padding text-center googleIcon">
+        {/* <br /> */}
+        <div className="padding-top-28 text-center googleIcon">
           <GoogleLogin
             clientId={GOOGLE_CLIENT_ID}
             buttonText="Sign up with your Google account"

@@ -50,22 +50,50 @@ class ReportTable extends Component {
   };
 
   renderTableData = () => {
-    return this.props.state.selectedDays.map((date, index) => {
-      var date = moment(date).format(DATE_FORMAT1);
-      var tasks =
-        this.props.taskDetails && this.props.taskDetails[date] !== undefined
-          ? this.props.taskDetails[date]
-          : [];
-      return (
-        <ReportTableRow
-          key={index}
-          tasks={tasks}
-          date={date}
-          frequency={this.props.frequency}
-          timeTrackUpdate={this.props.timeTrackUpdate}
-        />
-      );
-    });
+    if (this.props.frequency != 'custom') {
+      return this.props.state.selectedDays.map((date, index) => {
+        var date = moment(date).format(DATE_FORMAT1);
+        var tasks =
+          this.props.taskDetails && this.props.taskDetails[date] !== undefined
+            ? this.props.taskDetails[date]
+            : [];
+        return (
+          <ReportTableRow
+            key={index}
+            tasks={tasks}
+            date={date}
+            frequency={this.props.frequency}
+            timeTrackUpdate={this.props.timeTrackUpdate}
+          />
+        );
+      });
+    }
+    else {
+      let index = 0;
+      let ReportTableArr = [];
+      let startDate = this.props.state.dateFrom;
+      let endDate = this.props.state.dateTo;
+      while (moment(startDate) <= moment(endDate)) {
+        let date = moment(startDate).format(DATE_FORMAT1);
+        startDate = moment(startDate).add(1, 'days').format(DATE_FORMAT1);
+        index++;
+        var tasks =
+          this.props.taskDetails && this.props.taskDetails[date] !== undefined
+            ? this.props.taskDetails[date]
+            : [];
+        ReportTableArr.push(
+          <ReportTableRow
+            key={index - 1}
+            tasks={tasks}
+            date={date}
+            frequency={this.props.frequency}
+            timeTrackUpdate={this.props.timeTrackUpdate}
+          />
+        );
+      }
+      return ReportTableArr
+    }
+
   };
 
   renderTable2Data = () => {
@@ -96,7 +124,7 @@ class ReportTable extends Component {
         <th scope="col-md-3">Project Name</th>
         <th scope="col-md-1">Category</th>
         <th scope="col-md-1">Priority</th>
-        <th scope="col">Estimate Time</th>
+        <th scope="col">Estimate Time(hours)</th>
         <th scope="col-md-1">Duration</th>
       </>
     );
@@ -165,9 +193,9 @@ class ReportTable extends Component {
               <span className="pull-right">
                 {"Total Time: " +
                   `${
-                    this.props.state.totalTime
-                      ? this.props.state.totalTime
-                      : "0H 0M"
+                  this.props.state.totalTime
+                    ? this.props.state.totalTime
+                    : "0H 0M"
                   }`}
               </span>
             </div>
