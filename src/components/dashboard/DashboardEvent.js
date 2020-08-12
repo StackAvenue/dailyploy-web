@@ -308,25 +308,15 @@ class DashboardEvent extends Component {
       task_items.forEach(task => {
         task.addEventListener('mouseenter', event => {
           for (let i = 0; i < task_items.length; i++) {
-            if (task_items[i].id !== event.target.id) {
-              task_items[i].parentElement.parentElement.style.opacity = "0.5";
-
-            }
             if (task_items[i].id === event.target.id) {
-              let task_container = task_items[i].parentElement.parentElement;
               task_items[i].parentElement.style.boxShadow = "0px 0px 3px 3px #f1f1f1";
-
             }
           }
         })
 
         task.addEventListener('mouseleave', event => {
           for (let i = 0; i < task_items.length; i++) {
-            if (task_items[i].id !== event.target.id) {
-              task_items[i].parentElement.parentElement.style.opacity = "1";
-            }
             if (task_items[i].id === event.target.id) {
-              let task_container = task_items[i].parentElement.parentElement;
               task_items[i].parentElement.style.boxShadow = "none";
             }
           }
