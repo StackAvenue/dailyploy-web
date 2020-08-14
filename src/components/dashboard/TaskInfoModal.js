@@ -57,12 +57,15 @@ class TaskInfoModal extends Component {
       toDateTime: null,
       trackTimeError: null,
       showConfirm: false,
+      // editable: false
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.showInfo != this.props.showInfo;
+    // return nextProps.showInfo != this.props.showInfo;
+    return true;
   }
+
 
   isToday = () => {
     return this.props.state.dateTo
@@ -404,6 +407,7 @@ class TaskInfoModal extends Component {
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+
   };
 
   disabledHours = () => {
@@ -435,6 +439,7 @@ class TaskInfoModal extends Component {
   };
 
   makeLogEditable = (e) => {
+
     if (e.target.value) {
       let log = this.props.state.taskEvent.allTimeTracked.find(
         (tt) => tt.id == e.target.value
@@ -463,14 +468,18 @@ class TaskInfoModal extends Component {
         fromDateTime: null,
         toDateTime: null,
       });
+
     }
+
   };
 
   toggleEditableBox = () => {
     this.setState({
       editLog: !this.state.editLog,
+
     });
   };
+
 
   handleTimeFrom = (value) => {
     var value = moment(value);
@@ -539,6 +548,7 @@ class TaskInfoModal extends Component {
     const { props } = this;
     console.log('TaskInfo Modal' + props);
     console.log(this.state);
+
 
     return (
       <>
@@ -863,6 +873,7 @@ class TaskInfoModal extends Component {
                               ) : null}
                             </div>
                           </>
+
                         )
                     ) : (
                       <div className="left-padding-17px">No tracked time</div>
