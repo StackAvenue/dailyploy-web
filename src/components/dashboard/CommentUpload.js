@@ -31,23 +31,28 @@ class CommentUpload extends React.Component {
     this.props.updateUploadedState(pictures);
   };
 
-  handleInputChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-    if (this.props.handleInputChange) {
-      this.props.handleInputChange(e);
-    }
-  };
+  // handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   this.setState({ [name]: value });
+  //   if (this.props.handleInputChange) {
+  //     this.props.handleInputChange(e);
+  //   }
+  // };
 
   isImage = (name) => {
     let nameSplit = name.split(".");
     return ["png", "jpeg", "jpg"].includes(nameSplit[nameSplit.length - 1]);
   };
   onEnterPress = (e) => {
+
     if (e.keyCode == 13 && e.shiftKey == false) {
 
+      // if (e.target.value !== "") {
+      //   this.props.save();
+      // }
       this.props.save();
     }
+
   }
 
   render() {
