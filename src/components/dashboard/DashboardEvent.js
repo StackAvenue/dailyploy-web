@@ -167,7 +167,7 @@ class DashboardEvent extends Component {
       totalSeconds = Number(totalSeconds);
       var h = Math.floor(totalSeconds / 3600);
       var m = Math.floor((totalSeconds % 3600) / 60);
-
+      var s = Math.floor((totalSeconds % 3600) % 60);
       if (m > 0 && h > 0) {
 
         if (m > 10) {
@@ -195,6 +195,10 @@ class DashboardEvent extends Component {
             } else
               if (m < 10) {
                 return (("0" + m + "min").slice(-7) + " Estimate");
+              }
+              else
+              if(m < 1) {
+                return ((s + "s").slice(-7) + " Estimate")
               }
 
 

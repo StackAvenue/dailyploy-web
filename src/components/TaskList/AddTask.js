@@ -603,6 +603,26 @@ const AddTask = (props) => {
                   })}
                 </select>
               )}
+
+              {props.categories && props.categories.length > 0 && (
+                <select
+                  name="category"
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  className="form-control work-status"
+                >
+                  <option value={""}>Category</option>
+                  {props.categories.map((cate, index) => {
+                    return (
+                      <option key={cate.id} value={index}>
+                        {cate.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
+
             </div>
           </div>
           <div className="AddDatePicker task-date">
