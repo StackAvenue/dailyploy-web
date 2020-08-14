@@ -755,7 +755,7 @@ class TaskInfoModal extends Component {
                               )}
                             </select>
                           </div>
-                          {this.state.editableLog != null ? (
+                          {(
                             <>
                               <div
                                 className="col-md-1 d-inline-block"
@@ -780,7 +780,7 @@ class TaskInfoModal extends Component {
                                 <i class="fas fa-trash-alt"></i>
                               </div>
                             </>
-                          ) : null}
+                          )}
                         </>
                       ) : (
                           <>
