@@ -1285,12 +1285,12 @@ class Dashboard extends PureComponent {
 
           }
 
-      this.setState({
-        updateNewTask: taskName,
-        border: "solid 1px #ffffff",
-        taskConfirmModal: false,
-        backFromTaskEvent: true,
-      });
+      // this.setState({
+      //   updateNewTask: taskName,
+      //   border: "solid 1px #ffffff",
+      //   taskConfirmModal: false,
+      //   backFromTaskEvent: true,
+      // });
 
 
       try {
@@ -1306,6 +1306,7 @@ class Dashboard extends PureComponent {
 
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
+
         // this.createNotification()
         this.setState({
           show: false,
