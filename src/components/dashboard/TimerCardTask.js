@@ -49,11 +49,15 @@ class Timer extends Component {
 		var m = Math.floor((totalSeconds % 3600) / 60);
 		var s = Math.floor((totalSeconds % 3600) % 60);
 		var time = this.props.calculateTime(this.props.event);
-		if (h === 0 && m === 0 && time === " ") {
+		if (h === 0 && m === 0 && s === 0 && time === " ") {
 			return (" - ");
 		}
 		else
-			if (h === 0 && m === 0 && time !== " ") {
+			if(h === 0 && m===0 && s > 0 && time === " ") {
+				return ((s + "s").slice(-7))
+			}
+			else
+			if (h === 0 && m === 0 && s ===0 && time !== " ") {
 				return (" ")
 			}
 			else
@@ -76,26 +80,30 @@ class Timer extends Component {
 								if (m < 10) {
 									return (("0" + m + "m").slice(-7));
 								}
+								else
+								if (m < 1) {
+									return ((s + "sec").slice(-7));
+								}
 						} else
 
 							if (h > 0 && m > 0 && time !== " ") {
 								if (m > 10) {
-									return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m + "m").slice(-7) + " of ");
+									return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + (m + "m").slice(-7));
 								} else
 									if (m < 10) {
-										return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m + "m").slice(-7) + " of ");
+										return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " " + ("0" + m + "m").slice(-7));
 									}
 							} else
 								if (h > 0 && m === 0 && time !== " ") {
-									return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3) + " of ");
+									return ((h + "h").slice(`${h}`.length > 2 ? -3 : -3));
 
 								} else
 									if (h === 0 && m > 0 && time !== " ") {
 										if (m > 10) {
-											return ((m + "m").slice(-7) + " of ");
+											return ((m + "m").slice(-7));
 										} else
 											if (m < 10) {
-												return (("0" + m + "m").slice(-7) + " of ");
+												return (("0" + m + "m").slice(-7));
 											}
 									} else {
 										return (" ")

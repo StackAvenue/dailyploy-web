@@ -167,7 +167,7 @@ class DashboardEvent extends Component {
       totalSeconds = Number(totalSeconds);
       var h = Math.floor(totalSeconds / 3600);
       var m = Math.floor((totalSeconds % 3600) / 60);
-
+      var s = Math.floor((totalSeconds % 3600) % 60);
       if (m > 0 && h > 0) {
 
         if (m > 10) {
@@ -195,6 +195,10 @@ class DashboardEvent extends Component {
             } else
               if (m < 10) {
                 return (("0" + m + "min").slice(-7) + " Estimate");
+              }
+              else
+              if(m < 1) {
+                return ((s + "s").slice(-7) + " Estimate")
               }
 
 
@@ -560,8 +564,8 @@ class DashboardEvent extends Component {
                           alt=""
                           title=""
                           className="clock-img"
-                          height="100%"
-                          width="100%"
+                          height="35px"
+                          width="60px"
                           data-tip data-for="registerTip1"
                           data-background-color="#f0f2f5"
                           data-text-color="#010101"
@@ -598,8 +602,8 @@ class DashboardEvent extends Component {
                           alt=""
                           title=""
                           className="clock-img"
-                          height="100%"
-                          width="100%"
+                          height="35px"
+                          width="60px"
                           data-tip data-for="registerTip"
                           data-background-color="#f0f2f5"
                           data-text-color="#010101"

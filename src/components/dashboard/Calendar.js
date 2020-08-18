@@ -370,17 +370,16 @@ class Calendar extends Component {
       return (
         <div className="custom-event-popup">
           <div className="event-task-hover">
-            <div className="title task-text-hover">
-              <span className="" title={title}>
-
-
+              <div className="title task-text-hover">
+                <span className="" title={title}>
                 {title.length > 110 ? title.substr(0, 110) + "...." : title}
-
-              </span>
-            </div>
-
-            {eventItem.status && <div className="text-bold">
-              <span className="text-bold">Task is in {eventItem.status.name} State</span>
+                </span>
+              </div>
+              {eventItem.est_time && <div className="text-est">
+              <span className="text-est">Estimation : {eventItem.est_time} hrs</span>
+              </div>}
+              {eventItem.status && <div className="text-bold status-name">
+              <span className="text-bold status-name">Task is in {eventItem.status.name} State</span>
             </div>}
           </div>
         </div>
