@@ -277,13 +277,14 @@ class AddTaskModal extends React.Component {
                         options={this.props.state.taskCategories}
                         placeholder="Select Category"
                         className="suggestion-z-index-50"
-                        default={this.props.state.taskCategorie}
+                        default={this.props.state.taskCategories[0]}
+                        selected={this.props.state.taskCategories[0]}
                         onChange={this.props.handleCategoryChange}
                         canAdd={true}
                         addNew={this.props.addCategory}
                       />
                     </div>
-                    {this.props.state.errors.categoryError ? (
+                    {/* {this.props.state.errors.categoryError ? (
                       <div className="col-md-12">
                         <div className="col-md-2 d-inline-block no-padding"></div>
                         <div className="col-md-10 d-inline-block no-padding">
@@ -292,7 +293,7 @@ class AddTaskModal extends React.Component {
                           </span>
                         </div>
                       </div>
-                    ) : null}
+                    ) : null} */}
                   </div>
                   {this.props.state.showStatus ?
                     <div className="col-md-12 no-padding input-row">
@@ -304,13 +305,14 @@ class AddTaskModal extends React.Component {
                           options={this.props.state.taskStatuss}
                           placeholder="Select Status"
                           className="suggestion-z-index-50"
-                          default={this.props.state.taskStatus}
+                          default={this.props.state.taskStatuss[0]}
+                          selected={this.props.state.taskStatuss[0]}
                           onChange={this.props.handleaddStatusChange}
                           canAdd={true}
                           addNew={this.props.addStatus}
                         />
                       </div>
-                      {this.props.state.errors.statusError ? (
+                      {/* {this.props.state.errors.statusError ? (
                         <div className="col-md-12">
                           <div className="col-md-2 d-inline-block no-padding"></div>
                           <div className="col-md-10 d-inline-block no-padding">
@@ -319,7 +321,7 @@ class AddTaskModal extends React.Component {
                             </span>
                           </div>
                         </div>
-                      ) : null}
+                      ) : null} */}
                     </div> : null}
 
                   <div className="col-md-12 no-padding input-row">
@@ -328,7 +330,7 @@ class AddTaskModal extends React.Component {
                     </div>
                     <div className="col-md-10 d-inline-block">
                       <DailyPloySelect
-                        options={PRIORITIES}
+                        options={PRIORITIES.slice(0,3)}
                         placeholder="Select priority"
                         iconType="circle"
                         default={this.props.state.taskPrioritie}
