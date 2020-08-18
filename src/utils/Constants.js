@@ -58,9 +58,9 @@ export const PRIORITIES = [
   }
 ];
 export const DEFAULT_PRIORITIE = {
-  name: "no_priority",
-  color_code: "#9B9B9B",
-  label: "no priority"
+    name: "low",
+    color_code: "#555555",
+    label: "low"
 };
 export const PRIORITIES_MAP = new Map();
 PRIORITIES_MAP.set("high", {

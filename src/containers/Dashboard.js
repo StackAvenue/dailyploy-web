@@ -111,9 +111,9 @@ class Dashboard extends PureComponent {
         statusError: "",
       },
       taskPrioritie: {
-        name: "no_priority",
-        color_code: "#9B9B9B",
-        label: "no priority",
+        name: "low",
+        color_code: "#555555",
+        label: "low"
       },
       showEventAlertId: "",
       trackingEvent: null,
@@ -1285,12 +1285,12 @@ class Dashboard extends PureComponent {
 
           }
 
-      this.setState({
-        updateNewTask: taskName,
-        border: "solid 1px #ffffff",
-        taskConfirmModal: false,
-        backFromTaskEvent: true,
-      });
+      // this.setState({
+      //   updateNewTask: taskName,
+      //   border: "solid 1px #ffffff",
+      //   taskConfirmModal: false,
+      //   backFromTaskEvent: true,
+      // });
 
 
       try {
@@ -1306,6 +1306,7 @@ class Dashboard extends PureComponent {
 
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
+
         // this.createNotification()
         this.setState({
           show: false,
@@ -1375,13 +1376,13 @@ class Dashboard extends PureComponent {
         comments: this.state.comments,
         member_ids: this.state.taskUser,
         project_id: this.state.project.id,
-        category_id: this.state.taskCategorie.task_category_id,
+        category_id: this.state.taskCategorie ? this.state.taskCategorie.task_category_id : this.state.taskCategories[0].task_category_id,
 
         priority:
           this.state.taskPrioritie && this.state.taskPrioritie.name
             ? this.state.taskPrioritie.name
             : "no_priority",
-        task_status_id: this.state.taskStatus.id
+        task_status_id: this.state.taskStatus ? this.state.taskStatus.id : this.state.taskStatuss[0].id
       },
     };
     return taskData;
@@ -1819,7 +1820,7 @@ class Dashboard extends PureComponent {
     errors["dateFromError"] = this.state.dateFrom
       ? ""
       : "please select date from";
-    errors["categoryError"] = this.state.taskCategorie
+    errors["categoryError"] = this.state.taskCategorie > 0
       ? ""
       : "please select category";
     errors["statusError"] = this.state.taskStatus
@@ -1875,8 +1876,8 @@ class Dashboard extends PureComponent {
       this.state.taskUser.length > 0 &&
       this.validateTime() &&
       this.state.dateFrom &&
-      this.state.taskCategorie &&
-      this.state.taskStatus &&
+      //this.state.taskCategorie &&
+      //this.state.taskStatus &&
       flag
     );
   };
@@ -2325,7 +2326,7 @@ class Dashboard extends PureComponent {
         filterEvents.forEach((event) => {
           event["trackingStatus"] = "pause";
           event["startOn"] = dateTime;
-          event.status.name = "running";
+          //event.status.name = "running";
         });
         var event = filterEvents.find((dd) => dd.id == eventTask.id);
         this.setState({
