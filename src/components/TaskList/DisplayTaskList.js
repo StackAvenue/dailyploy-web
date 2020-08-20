@@ -63,13 +63,9 @@ const DisplayTaskList = (props) => {
               {props.ProjectTask.name}&nbsp;
             </div>
             <div className="project-task-date">
-              {props.ProjectTask
-                ? moment(props.ProjectTask.start_date).format("DD MMM, YY")
-                : null}
+              {props.ProjectTask ? props.ProjectTask.start_date ? moment(props.ProjectTask.start_date).format("DD MMM, YY") : "Starts :-" : null}
               &nbsp;to&nbsp;
-              {props.ProjectTask
-                ? moment(props.ProjectTask.end_date).format("DD MMM, YY")
-                : null}
+              {props.ProjectTask ? props.ProjectTask.end_date ? moment(props.ProjectTask.end_date).format("DD MMM, YY") : "Ends :-" : null}
             </div>
           </div>
           <div className="option-icons">
