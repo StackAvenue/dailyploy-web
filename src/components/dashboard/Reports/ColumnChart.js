@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Highcharts, { Color } from "highcharts/highstock";
 import moment from "moment";
 import { CHART_COLOR } from "./../../../utils/Constants";
+window.Highcharts = Highcharts;
+
 
 class ColumnChart extends Component {
   constructor(props) {
@@ -96,7 +98,7 @@ class ColumnChart extends Component {
         time: time,
         totalTime: total,
         dataLabels: {
-          formatter: function() {
+          formatter: function () {
             return "<b>" + time + " hours</b>";
           },
           enabled: true,
@@ -117,7 +119,7 @@ class ColumnChart extends Component {
       time: time,
       totalTime: total,
       dataLabels: {
-        formatter: function() {
+        formatter: function () {
           return "<b>" + time + " hours</b>";
         },
         enabled: true,
@@ -143,7 +145,7 @@ class ColumnChart extends Component {
       time: time,
       totalTime: total,
       dataLabels: {
-        formatter: function() {
+        formatter: function () {
           return "<b>" + time + " hours</b>";
         },
         enabled: false,
@@ -172,7 +174,7 @@ class ColumnChart extends Component {
       time: time,
       totalTime: total,
       dataLabels: {
-        formatter: function() {
+        formatter: function () {
           return "<b>" + time + " hours</b>";
         },
         enabled: true,
