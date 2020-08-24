@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Highcharts from "highcharts/highstock";
 import { PRIORITIES, CHART_COLOR } from "../../../utils/Constants";
 import { textTitlize } from "../../../utils/function";
+window.Highcharts = Highcharts;
+
 
 class PieChart extends Component {
   constructor(props) {
@@ -48,7 +50,7 @@ class PieChart extends Component {
             style: {
               fontWeight: "bold"
             },
-            formatter: function() {
+            formatter: function () {
               return "<b class='hour-popup'>" + time + "</b> ";
             }
           }
@@ -64,7 +66,7 @@ class PieChart extends Component {
           color: "#ececec",
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter: function () {
               // return "<b>" + this.point.name + ":</b> " + this.y + "%";
               return "<span class='hour-popup'>" + time + "</span> ";
             }
@@ -88,7 +90,7 @@ class PieChart extends Component {
             style: {
               fontWeight: "bold"
             },
-            formatter: function() {
+            formatter: function () {
               return "<b class='hour-popup'>" + time + "</b> ";
             }
           }
@@ -113,7 +115,7 @@ class PieChart extends Component {
           y: item.tracked_time,
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter: function () {
               return "<b>" + time + "</b>";
             }
           }
@@ -129,7 +131,7 @@ class PieChart extends Component {
           color: "#e5e5e5",
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter: function () {
               return "<span class='hour-popup'>" + time + "</span> ";
             }
           }
@@ -148,7 +150,7 @@ class PieChart extends Component {
           y: item.tracked_time,
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter: function () {
               return "<b>" + time + "</b>";
             }
           }
@@ -182,7 +184,7 @@ class PieChart extends Component {
             style: {
               fontWeight: "bold"
             },
-            formatter: function() {
+            formatter: function () {
               return "<b class='hour-popup'>" + time + "</b> ";
             }
           }
@@ -198,7 +200,7 @@ class PieChart extends Component {
           color: "#e5e5e5",
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter: function () {
               return "<span class='hour-popup'>" + time + "</span> ";
             }
           }
@@ -221,7 +223,7 @@ class PieChart extends Component {
             style: {
               fontWeight: "bold"
             },
-            formatter: function() {
+            formatter: function () {
               return "<b class='hour-popup'>" + time + "</b> ";
             }
           }
@@ -368,7 +370,7 @@ class PieChart extends Component {
           }
         },
         tooltip: {
-          formatter: function() {
+          formatter: function () {
             return (
               "<b>" +
               this.point.name +

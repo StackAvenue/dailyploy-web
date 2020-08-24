@@ -172,6 +172,7 @@ class Dashboard extends PureComponent {
           start_date: getFisrtDate(this.state.taskStartDate),
           user_id: userIds.join(","),
           project_ids: this.props.searchProjectIds.join(","),
+          status_ids: ''
         };
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks`,
@@ -552,6 +553,7 @@ class Dashboard extends PureComponent {
         start_date: getWeekFisrtDate(this.state.taskStartDate),
         user_id: userIds.join(","),
         project_ids: this.props.searchProjectIds.join(","),
+        status_ids: ''
       };
       var taskRunningObj = {
         status: false,
@@ -2076,7 +2078,8 @@ class Dashboard extends PureComponent {
           this.setState({ taskloader: true });
           const { data } = await put(
             searchData,
-            `workspaces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
+            `works
+            paces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
           );
           var events = this.state.events;
           var filterEvents = events.filter((e) => e.taskId != event.taskId);
@@ -2589,6 +2592,7 @@ class Dashboard extends PureComponent {
           start_date: getFisrtDate(this.state.taskStartDate),
           user_id: userIds.join(","),
           project_ids: this.props.searchProjectIds.join(","),
+          status_ids: ''
         };
         const { data } = await get(
           `workspaces/${workspaceId}/user_tasks`,
