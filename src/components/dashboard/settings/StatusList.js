@@ -24,7 +24,7 @@ const StatusList = (props) => {
 
     const onDragEnd = async (result) => {
 
-        if (result && result.draggableId) {
+        if (result && result.draggableId && result.destination) {
             //console.log('ID' + result.draggableId + ' : ' + result.source.index + ': >' + result.destination.index)
             setdragLoader(true);
             const { data } = await put(

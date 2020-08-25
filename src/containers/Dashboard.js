@@ -97,6 +97,7 @@ class Dashboard extends PureComponent {
       timeTracked: [],
       taskCategorie: "",
       taskStatus: "",
+      defaultStatus: {},
       showAlert: false,
       newAddedProject: null,
       errors: {
@@ -716,6 +717,7 @@ class Dashboard extends PureComponent {
       status: task.status,
       trackingStatus: task.status == "completed" ? "completed" : "play",
       startOn: null,
+      is_complete: task.is_complete
     };
   };
 
@@ -1302,7 +1304,7 @@ class Dashboard extends PureComponent {
         );
         toast(
           <DailyPloyToast
-            message="Task Updated successfully!"
+            message="Task Updated"
             status="success"
           />,
 
@@ -1328,7 +1330,7 @@ class Dashboard extends PureComponent {
         );
         toast(
           <DailyPloyToast
-            message="Task Updated successfully!"
+            message="Task Updated"
             status="success"
           />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
@@ -1375,6 +1377,7 @@ class Dashboard extends PureComponent {
         estimation: this.state.estimate,
         start_datetime: startDateTime,
         end_datetime: endDateTime,
+        is_complete: false,
         comments: this.state.comments,
         member_ids: this.state.taskUser,
         project_id: this.state.project.id,
@@ -1677,9 +1680,10 @@ class Dashboard extends PureComponent {
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/projects/${option.id}/task_status?page_number=1&page_size=5`
         );
-        var taskStatu = data.task_status;
+        var taskStatus = data.task_status;
+        let defaultStatus = taskStatus.find((item) => item.is_default);
 
-        this.setState({ taskStatuss: taskStatu, showStatus: true })
+        this.setState({ taskStatuss: taskStatus, showStatus: true, defaultStatus: defaultStatus })
       } catch (e) { }
 
 
@@ -1918,8 +1922,8 @@ class Dashboard extends PureComponent {
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/task_status?page_number=1&page_size=5`
       );
       var taskStatu = data.task_status;
-
-      this.setState({ taskStatuss: taskStatu, showStatus: true })
+      const defaultStatus = taskStatu.find((item) => item.is_default);
+      this.setState({ taskStatuss: taskStatu, showStatus: true, defaultStatus: defaultStatus })
     } catch (e) { }
     let members = this.memberSearchOptions(event.resourceId, event.projectId);
     var memberProjects = this.state.projects.filter((project) =>
@@ -2076,10 +2080,11 @@ class Dashboard extends PureComponent {
         let taskId = event.id.split("-")[0];
         try {
           this.setState({ taskloader: true });
+          // mark complete flag
+          event.is_complete = true
           const { data } = await put(
-            searchData,
-            `works
-            paces/${this.state.workspaceId}/projects/${event.projectId}/make_as_complete/${taskId}`
+            { task: event },
+            `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
           );
           var events = this.state.events;
           var filterEvents = events.filter((e) => e.taskId != event.taskId);
@@ -2095,8 +2100,12 @@ class Dashboard extends PureComponent {
             taskEvent: event,
             taskConfirmModal: false,
             backFromTaskEvent: true,
-            showInfo: true,
+            showInfo: false,
             taskloader: false,
+          });
+          toast(<DailyPloyToast message="Task marked as completed" status="success" />, {
+            autoClose: 1000,
+            position: toast.POSITION.TOP_CENTER
           });
         } catch (e) { }
       } else {
@@ -2197,7 +2206,7 @@ class Dashboard extends PureComponent {
   taskResume = (event) => {
     if (event) {
       let searchData = {
-        status: "running",
+        is_complete: false,
       };
       this.updateTaskEvent(event, searchData);
     }
