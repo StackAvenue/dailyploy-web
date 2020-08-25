@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
-// import AddTask from "./AddTask";
-// import DisplayTask from "./DisplayTask";
 import { get, post, put, del } from "./../../../utils/API";
 
-import StatusSettings from "./StatusSettings";
+import StatusList from "./StatusList";
 class StatusProjectList extends Component {
   constructor(props) {
     super(props);
@@ -118,7 +116,13 @@ class StatusProjectList extends Component {
                   </div>
 
                   {data.id === this.state.listID ? <>
-                    <StatusSettings workspaceId={this.state.workspaceId}
+                    {/* <StatusSettings workspaceId={this.state.workspaceId}
+                      searchUserDetails={this.props.searchUserDetails}
+                      searchProjectIds={this.props.searchProjectIds}
+                      projectId={data.id}
+                      color={data.color_code}
+                      projectName={data.name} /> */}
+                    <StatusList workspaceId={this.state.workspaceId}
                       searchUserDetails={this.props.searchUserDetails}
                       searchProjectIds={this.props.searchProjectIds}
                       projectId={data.id}
