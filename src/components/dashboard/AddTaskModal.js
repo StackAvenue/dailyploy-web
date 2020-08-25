@@ -305,23 +305,13 @@ class AddTaskModal extends React.Component {
                           options={this.props.state.taskStatuss}
                           placeholder="Select Status"
                           className="suggestion-z-index-50"
-                          default={this.props.state.taskStatuss[0]}
+                          default={this.props.state.defaultStatus}
                           selected={this.props.state.taskStatuss[0]}
                           onChange={this.props.handleaddStatusChange}
                           canAdd={true}
                           addNew={this.props.addStatus}
                         />
                       </div>
-                      {/* {this.props.state.errors.statusError ? (
-                        <div className="col-md-12">
-                          <div className="col-md-2 d-inline-block no-padding"></div>
-                          <div className="col-md-10 d-inline-block no-padding">
-                            <span className="error-warning">
-                              {this.props.state.errors.statusError}
-                            </span>
-                          </div>
-                        </div>
-                      ) : null} */}
                     </div> : null}
 
                   <div className="col-md-12 no-padding input-row">
@@ -330,7 +320,7 @@ class AddTaskModal extends React.Component {
                     </div>
                     <div className="col-md-10 d-inline-block">
                       <DailyPloySelect
-                        options={PRIORITIES.slice(0,3)}
+                        options={PRIORITIES.slice(0, 3)}
                         placeholder="Select priority"
                         iconType="circle"
                         default={this.props.state.taskPrioritie}

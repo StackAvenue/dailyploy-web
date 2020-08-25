@@ -80,20 +80,20 @@ class DashboardEvent extends Component {
   };
 
   async markCompleteTask(id) {
-    if (id) {
-      try {
-        const { data } = await mockGet("mark-complete");
-        var isComplete = data[0].complete;
-      } catch (e) { }
-      if (isComplete) {
-        var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
-        this.handleReset();
-        this.setState({ icon: "check", showAction: false });
-        if (taskId === id) {
-          this.props.handleTaskBottomPopup("", this.props.event, "stop");
-        }
-      }
-    }
+    // if (id) {
+    //   try {
+    //     const { data } = await mockGet("mark-complete");
+    //     var isComplete = data[0].complete;
+    //   } catch (e) { }
+    //   if (isComplete) {
+    //     var taskId = localStorage.getItem(`taskId-${this.props.workspaceId}`);
+    //     this.handleReset();
+    //     this.setState({ icon: "check", showAction: false });
+    //     if (taskId === id) {
+    //       this.props.handleTaskBottomPopup("", this.props.event, "stop");
+    //     }
+    //   }
+    // }
   }
 
   async deleteTask(id) {
@@ -197,9 +197,9 @@ class DashboardEvent extends Component {
                 return (("0" + m + "min").slice(-7) + " Estimate");
               }
               else
-              if(m < 1) {
-                return ((s + "s").slice(-7) + " Estimate")
-              }
+                if (m < 1) {
+                  return ((s + "s").slice(-7) + " Estimate")
+                }
 
 
           } else {
@@ -349,7 +349,7 @@ class DashboardEvent extends Component {
                 </div>
 
                 <div className="col-md-4 align-center no-padding">
-                  {event.trackingStatus === "pause" && event.status != null && event.status.name != "completed" ? (
+                  {(event.trackingStatus === "pause" && !event.is_complete) ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -387,7 +387,7 @@ class DashboardEvent extends Component {
                     </div>
                   ) : null}
 
-                  {event.trackingStatus === "play" && event.status && event.status.name != "completed" ? (
+                  {(event.trackingStatus === "play" && !event.is_complete) ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -424,7 +424,7 @@ class DashboardEvent extends Component {
                     </div>
                   ) : null}
 
-                  {event.status && event.status.name === "completed" ? (
+                  {(event && event.is_complete) ? (
                     <div className=" no-padding d-inline-block">
                       <span className="task-play-btn">
                         <i className="fa fa-check"></i>
@@ -543,7 +543,7 @@ class DashboardEvent extends Component {
                 </div>
 
                 <div className="col-md-4 align-center no-padding">
-                  {event.trackingStatus === "pause" && event.status && event.status.name != "completed" ? (
+                  {event.trackingStatus === "pause" && !event.is_complete ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -581,7 +581,7 @@ class DashboardEvent extends Component {
                     </div>
                   ) : null}
 
-                  {event.trackingStatus === "play" && event.status && event.status.name != "completed" ? (
+                  {event.trackingStatus === "play" && !event.is_complete ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -618,7 +618,7 @@ class DashboardEvent extends Component {
                   ) : null}
 
 
-                  {event.status && event.status.name === "completed" ? (
+                  {(event && event.is_complete) ? (
                     <div className=" no-padding d-inline-block">
                       <span className="task-play-btn">
                         <i className="fa fa-check"></i>
