@@ -10,6 +10,7 @@ import { checkPassword, validateName } from "../../utils/validation";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../../../src/components/DailyPloyToast";
 import "../../assets/css/settings.scss";
+import "../../assets/css/icons.css";
 
 class Settings extends Component {
   constructor(props) {
@@ -315,8 +316,8 @@ class Settings extends Component {
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <WorkspaceSettings
-                    searchUserDetails={this.props.searchUserDetails}
-                    searchProjectIds={this.props.searchProjectIds}
+                      searchUserDetails={this.props.searchUserDetails}
+                      searchProjectIds={this.props.searchProjectIds}
                       workspaceObj={filterArr[0]}
                       state={this.state}
                       workspaceName={this.props.state.workspaceName}
