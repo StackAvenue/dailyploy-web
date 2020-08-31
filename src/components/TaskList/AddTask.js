@@ -217,9 +217,7 @@ const AddTask = (props) => {
           : ""
       );
     }
-  }, []);
-
-  useEffect(() => {
+    console.log("filtered tasks", props.task_lists_task)
     if (props.projectTaskList) {
       let taskLists = [];
       taskLists = props.projectTaskList.filter((eachTask) => {
@@ -228,7 +226,7 @@ const AddTask = (props) => {
 
       setProjectTasks(taskLists);
     }
-  }, [props]);
+  }, [props.task_lists_task, props.showTask]);
 
   const onDoubleClickEnable = (e) => {
     e.preventDefault();
@@ -576,7 +574,7 @@ const AddTask = (props) => {
                 value={member}
               >
                 <option value={""}>Member</option>
-                {props.worksapceMembers.map((member, inde) => {
+                {props.projectMembers.map((member, inde) => {
                   return (
                     <option value={member.id}>&nbsp;&nbsp;{member.name}</option>
                   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddTask from "./AddTask";
 import { Button } from "react-bootstrap";
 import { NavDropdown, DropdownButton, Dropdown } from "react-bootstrap";
@@ -8,11 +8,13 @@ import { Modal } from "react-bootstrap";
 import "../../assets/css/TaskProjectList.scss"
 import ReactTooltip from "react-tooltip";
 import { debounce } from "../../utils/function";
+import Filter from "./Filter";
+import Summary from "./Summary";
 
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
-
+  
   let roleType = localStorage.getItem("userRole");
   const changeDeleteModal = (value) => {
     setDeleteModal(value);
@@ -34,6 +36,8 @@ const DisplayTaskList = (props) => {
               onClick={(e) => {
                 e.preventDefault();
                 props.displayList(props.ProjectTask.id);
+                props.closeFilter();
+                props.closeSummary();
               }}
             >
               {props.list_id != props.id ? (
@@ -70,9 +74,35 @@ const DisplayTaskList = (props) => {
               {props.ProjectTask
                 ? moment(props.ProjectTask.end_date).format("DD MMM, YY")
                 : null}
+              &nbsp;&nbsp;&nbsp;
+              <Button variant="outline-dark" 
+              onClick={(e)=>{
+                e.preventDefault();
+                props.isSummaryOpen(props.ProjectTask.id);
+                props.closeFilter();
+               }}>Summary</Button>
+               {/* <span className="task-card-complete-tasks">2 out of 7 completed</span> */}
+              
             </div>
           </div>
           <div className="option-icons">
+          {props.list_id == props.id ? (
+          <div
+              className="filter-icon"
+              onClick={(e) => {
+                e.preventDefault();
+                if (roleType != "admin") {
+                  return;
+                }
+                props.isFilterOpen();
+                props.closeSummary();
+              }}
+            >
+             <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"></i>
+              <ReactTooltip id="filterTask" effect="solid">
+                Filter Roadmap
+              </ReactTooltip>
+            </div>) : null}
             <div
               className="edit-icon"
               onClick={(e) => {
@@ -112,6 +142,28 @@ const DisplayTaskList = (props) => {
         </div>
       </div>
 
+      {props.showSummary && props.ProjectTask.id == props.state.summaryID ? (
+          <div className="statusModal">
+          <Summary
+          id={props.ProjectTask.id}
+          state={props.state}
+          closeSummary={props.closeSummary}
+          ></Summary>
+        </div>
+      ):null}
+
+      {props.showFilter && props.list_id == props.id ? (
+      <div className="filter-modal">
+              <Filter 
+              state={props.state}
+              projectMembers={props.projectMembers}
+              taskStatus={props.taskStatus}
+              displayList={props.displayList}
+              list_id={props.list_id}
+              closeFilter={props.closeFilter}
+              />
+      </div> ): null}
+
       {props.list_id == props.id ? (
         <>
           <div className="showCardDetails2">
@@ -119,14 +171,12 @@ const DisplayTaskList = (props) => {
               ? props.task_lists.map((task_lists_task) => {
                 return (
                   <AddTask
-                    projects={props.projects}
                     list_id={props.list_id}
                     projectMembers={props.projectMembers}
                     task_lists_task={task_lists_task}
                     showTask={
                       props.editTltId != task_lists_task.id ? true : false
                     }
-                    worksapceMembers={props.worksapceMembers}
                     deleteTlt={props.deleteTlt}
                     moveToDashBoard={props.moveToDashBoard}
                     projectTaskList={props.projectTaskList}
@@ -145,8 +195,6 @@ const DisplayTaskList = (props) => {
               <div className="showCardDetails">
                 <AddTask
                   projectMembers={props.projectMembers}
-                  worksapceMembers={props.worksapceMembers}
-                  projects={props.projects}
                   list_id={props.list_id}
                   handleSaveTask={props.handleSaveTask}
                   showTask={false}

@@ -8,7 +8,8 @@ class TaskBottomPopup extends Component {
     super(props);
     this.state = {
       runningTime: 0,
-      showTimerMenu: false
+      showTimerMenu: false,
+      event: null
     };
   }
 
@@ -23,6 +24,7 @@ class TaskBottomPopup extends Component {
   };
 
   render() {
+    //const eventTimes = this.props.event && this.props.event !="STOP"
     const eventTimes = this.props.event
       ? this.props.event.timeTracked.filter(time => time.status != "running")
       : [];
@@ -39,6 +41,7 @@ class TaskBottomPopup extends Component {
             <Timer
               startOn={this.props.event.startOn}
               isStart={this.props.event ? true : false}
+              //isStart={this.props.event && this.props.event !="STOP" ? true : false}
               totalDuration={0}
             />
           </div>
