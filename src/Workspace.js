@@ -107,7 +107,7 @@ class Workspace extends Component {
       event: null,
     };
   }
-
+  
   async componentDidMount() {
     //Logged In User
     try {
@@ -239,6 +239,18 @@ class Workspace extends Component {
     return <Redirect to={`/workspace/${getWorkspaceId()}/dashboard`} />;
   };
 
+  // handleTaskBottomPopup = (startOn, event, trackStatus) => {
+  //   if (trackStatus === "start") {
+  //     this.setState({
+  //       event: event,
+  //     });
+  //   } else if (trackStatus === "stop") {
+  //     this.setState({
+  //       event: "STOP",
+  //     });
+  //   }
+  // };
+
   handleTaskBottomPopup = (startOn, event, trackStatus) => {
     if (trackStatus === "start") {
       this.setState({
@@ -250,6 +262,7 @@ class Workspace extends Component {
       });
     }
   };
+
 
   isBottomPopup = () => {
     return (
