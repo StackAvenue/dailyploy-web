@@ -49,6 +49,27 @@ class EditableTimeTrack extends Component {
     this.setState({ show: !this.state.show, suggestions: this.props.options });
   };
 
+  timeConversion = (millisec) => {
+
+    var seconds = (millisec / 1000).toFixed(1);
+
+    var minutes = (millisec / (1000 * 60)).toFixed(1);
+
+    var hours = (millisec / (1000 * 60 * 60)).toFixed(1);
+
+    var days = (millisec / (1000 * 60 * 60 * 24)).toFixed(1);
+
+    if (seconds < 60) {
+      return seconds + "sec";
+    } else if (minutes < 60) {
+      return minutes + "min";
+    } else if (hours < 24) {
+      return hours + "h";
+    } else {
+      return days + "days"
+    }
+  }
+
   renderSearchSuggestions = () => {
     return (
       <>
@@ -56,8 +77,10 @@ class EditableTimeTrack extends Component {
           <ul>
             {this.props.options.map((option, idx) => {
               return (
-                <li key={idx} onClick={() => this.selectSuggestion(option)}>
-                  <span className="d-inline-block right-left-space-5 text-titlize">{`${option["name"]}`}</span>
+                <li key={idx} onClick={() => this.selectSuggestion(
+
+                )}>
+                  <span className="d-inline-block right-left-space-5 font-10 text-titlize">{`${option["name"]}` + ' (' + `${this.timeConversion(new Date(option["end"]) - new Date(option["start"]))}` + ')'}</span>
                 </li>
               );
             })}
@@ -98,7 +121,7 @@ class EditableTimeTrack extends Component {
             style={{ height: "34px", display: "flex" }}
             className={`no-padding ${props.className ? props.className : ""}`}
           >
-            <div className="custom-search-select" style={{ width: "80%" }}>
+            <div className="custom-search-select" style={{ width: "80% !important" }}>
               <div onClick={this.onClickInput}>
                 <input
                   className={`d-inline-block`}
