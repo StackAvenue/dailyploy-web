@@ -205,6 +205,7 @@
       }
     }
     .first{
+      position: relative;
       font-size: 13px;
       margin-left: 35px;
       display: flex;
@@ -213,18 +214,23 @@
       padding-left: 19px;
       padding-top: 9px;
       padding-bottom: 8px;
-      width: 446px;
+      width: 42%;
       padding-right: 19px;
       border-radius: 4px;
       font-family: 'Roboto';
       line-height: 171%;
+      .one-col{
+        width: 39%;
+      }
       .two-col{
         margin-top: -22px;
-        margin-left: 3pc;
+        margin-left: 1pc;
       }
       .close-icon{
         margin-left: 0px;
         margin-top: -12px;
+        position: absolute;
+        right: 0px;
         .fa{
           cursor: pointer;
         }

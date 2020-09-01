@@ -11,7 +11,6 @@ const Summary = props => {
     const[totalTime, setTotaltime]=useState(null)
     const[remainTime, setRemaintime]=useState(null)
 
-
     const getSummary = async () => {
         try {
             const { data } = await get(
@@ -23,7 +22,7 @@ const Summary = props => {
               var taskleft= save.total_tasks - save.completed_task
               setTasksleft(taskleft)
               setTotaltime(save.total_estimate_hours)
-              setRemaintime(save.remaining_hours)
+              setRemaintime(Math.round(save.remaining_hours * 10) / 10)
               console.log(data)
         } catch (e) { }
     }

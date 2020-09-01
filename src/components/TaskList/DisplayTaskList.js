@@ -91,9 +91,6 @@ const DisplayTaskList = (props) => {
               className="filter-icon"
               onClick={(e) => {
                 e.preventDefault();
-                if (roleType != "admin") {
-                  return;
-                }
                 props.isFilterOpen();
                 props.closeSummary();
               }}
