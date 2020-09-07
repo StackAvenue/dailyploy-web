@@ -586,9 +586,10 @@ export default class MenuBar extends Component {
             <div className="row no-margin dashboard-menubar-container">
               <Tabs
                 classNameRoute={this.props.classNameRoute}
+                userRole={userRole}
                 workspaceId={this.props.workspaceId}
               />
-              <div className="col-md-8 text-right">
+              <div className="col-md-7 text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
                   isDeleteShow={this.props.state.isDeleteShow}
