@@ -507,7 +507,7 @@ class AddProjectModal extends Component {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-md-12 no-padding input-row">
+              <div className="col-md-12 no-padding input-row">
                 <div className="col-md-2 d-inline-block no-padding label">
                   Budget
                 </div>
@@ -519,9 +519,12 @@ class AddProjectModal extends Component {
                     type="text"
                     placeholder="Enter amount"
                     className="form-control"
+                    name="monthlyBudget"
+                    onChange={props.handleChangeInput}
+                    value={props.state.monthlyBudget}
                   />
                 </div>
-              </div> */}
+              </div>
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Select Color</div>
                 <div className="col-md-10">
@@ -582,194 +585,194 @@ class AddProjectModal extends Component {
                 >
                   {props.state.contacts
                     ? props.state.contacts.map((contact, idx) => {
-                        return (
-                          <>
-                            <div className="col-md-12 no-padding">
-                              <div className="col-md-11 no-padding">
-                                <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label-1">
-                                    Name
+                      return (
+                        <>
+                          <div className="col-md-12 no-padding">
+                            <div className="col-md-11 no-padding">
+                              <div className="col-md-12 row no-margin no-padding input-row">
+                                <div className="col-md-2 no-padding label-1">
+                                  Name
                                   </div>
-                                  <div className="col-md-10">
-                                    <input
-                                      type="text"
-                                      name="name"
-                                      placeholder="Name"
-                                      onChange={e =>
-                                        props.handleContactChangeInput(
-                                          e,
-                                          idx,
-                                          "contacts"
-                                        )
-                                      }
-                                      className={`form-control ${
-                                        contact.nameError
-                                          ? " input-error-border"
-                                          : ""
+                                <div className="col-md-10">
+                                  <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name"
+                                    onChange={e =>
+                                      props.handleContactChangeInput(
+                                        e,
+                                        idx,
+                                        "contacts"
+                                      )
+                                    }
+                                    className={`form-control ${
+                                      contact.nameError
+                                        ? " input-error-border"
+                                        : ""
                                       }`}
-                                      value={contact.name}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label-1">
-                                    Email
-                                  </div>
-                                  <div className="col-md-10">
-                                    <input
-                                      type="email"
-                                      name="email"
-                                      onChange={e =>
-                                        props.handleContactChangeInput(
-                                          e,
-                                          idx,
-                                          "contacts"
-                                        )
-                                      }
-                                      placeholder="Email"
-                                      className={`form-control ${
-                                        contact.emailError
-                                          ? " input-error-border"
-                                          : ""
-                                      }`}
-                                      value={contact.email}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label-1">
-                                    Mobile No
-                                  </div>
-                                  <div className="col-md-10">
-                                    <input
-                                      type="number"
-                                      name="phone_number"
-                                      onChange={e =>
-                                        props.handleContactChangeInput(
-                                          e,
-                                          idx,
-                                          "contacts"
-                                        )
-                                      }
-                                      placeholder="Mobile No"
-                                      className={`form-control ${
-                                        contact.phoneError
-                                          ? " input-error-border"
-                                          : ""
-                                      }`}
-                                      value={contact.phone_number}
-                                    />
-                                  </div>
+                                    value={contact.name}
+                                  />
                                 </div>
                               </div>
-                              {props.btnText === "Save"
-                                ? this.renderEditIcons(
-                                    idx,
-                                    contactsLength,
-                                    contact
-                                  )
-                                : this.renderAddIcons(idx, contactsLength)}
-                              <hr></hr>
+                              <div className="col-md-12 row no-margin no-padding input-row">
+                                <div className="col-md-2 no-padding label-1">
+                                  Email
+                                  </div>
+                                <div className="col-md-10">
+                                  <input
+                                    type="email"
+                                    name="email"
+                                    onChange={e =>
+                                      props.handleContactChangeInput(
+                                        e,
+                                        idx,
+                                        "contacts"
+                                      )
+                                    }
+                                    placeholder="Email"
+                                    className={`form-control ${
+                                      contact.emailError
+                                        ? " input-error-border"
+                                        : ""
+                                      }`}
+                                    value={contact.email}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-12 row no-margin no-padding input-row">
+                                <div className="col-md-2 no-padding label-1">
+                                  Mobile No
+                                  </div>
+                                <div className="col-md-10">
+                                  <input
+                                    type="number"
+                                    name="phone_number"
+                                    onChange={e =>
+                                      props.handleContactChangeInput(
+                                        e,
+                                        idx,
+                                        "contacts"
+                                      )
+                                    }
+                                    placeholder="Mobile No"
+                                    className={`form-control ${
+                                      contact.phoneError
+                                        ? " input-error-border"
+                                        : ""
+                                      }`}
+                                    value={contact.phone_number}
+                                  />
+                                </div>
+                              </div>
                             </div>
-                          </>
-                        );
-                      })
+                            {props.btnText === "Save"
+                              ? this.renderEditIcons(
+                                idx,
+                                contactsLength,
+                                contact
+                              )
+                              : this.renderAddIcons(idx, contactsLength)}
+                            <hr></hr>
+                          </div>
+                        </>
+                      );
+                    })
                     : null}
 
                   {props.state.editNewCommnets
                     ? props.state.editNewCommnets.map((contact, idx) => {
-                        return (
-                          <>
-                            <div className="col-md-12 no-padding">
-                              <div className="col-md-11 no-padding">
-                                <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label-1">
-                                    Name
+                      return (
+                        <>
+                          <div className="col-md-12 no-padding">
+                            <div className="col-md-11 no-padding">
+                              <div className="col-md-12 row no-margin no-padding input-row">
+                                <div className="col-md-2 no-padding label-1">
+                                  Name
                                   </div>
-                                  <div className="col-md-10">
-                                    <input
-                                      type="text"
-                                      name="name"
-                                      placeholder="Name"
-                                      onChange={e =>
-                                        props.handleContactChangeInput(
-                                          e,
-                                          idx,
-                                          "editNewCommnets"
-                                        )
-                                      }
-                                      className={`form-control ${
-                                        contact.nameError
-                                          ? " input-error-border"
-                                          : ""
+                                <div className="col-md-10">
+                                  <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name"
+                                    onChange={e =>
+                                      props.handleContactChangeInput(
+                                        e,
+                                        idx,
+                                        "editNewCommnets"
+                                      )
+                                    }
+                                    className={`form-control ${
+                                      contact.nameError
+                                        ? " input-error-border"
+                                        : ""
                                       }`}
-                                      value={contact.name}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label-1">
-                                    Email
-                                  </div>
-                                  <div className="col-md-10">
-                                    <input
-                                      type="email"
-                                      name="email"
-                                      onChange={e =>
-                                        props.handleContactChangeInput(
-                                          e,
-                                          idx,
-                                          "editNewCommnets"
-                                        )
-                                      }
-                                      placeholder="Email"
-                                      className={`form-control ${
-                                        contact.emailError
-                                          ? " input-error-border"
-                                          : ""
-                                      }`}
-                                      value={contact.email}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="col-md-12 row no-margin no-padding input-row">
-                                  <div className="col-md-2 no-padding label-1">
-                                    Mobile No
-                                  </div>
-                                  <div className="col-md-10">
-                                    <input
-                                      type="number"
-                                      name="phone_number"
-                                      onChange={e =>
-                                        props.handleContactChangeInput(
-                                          e,
-                                          idx,
-                                          "editNewCommnets"
-                                        )
-                                      }
-                                      placeholder="Mobile No"
-                                      className={`form-control ${
-                                        contact.phoneError
-                                          ? " input-error-border"
-                                          : ""
-                                      }`}
-                                      value={contact.phone_number}
-                                    />
-                                  </div>
+                                    value={contact.name}
+                                  />
                                 </div>
                               </div>
-                              {props.btnText === "Save"
-                                ? this.renderAddEditIcons(
-                                    idx,
-                                    newContactsLength,
-                                    contact
-                                  )
-                                : null}
-                              <hr></hr>
+                              <div className="col-md-12 row no-margin no-padding input-row">
+                                <div className="col-md-2 no-padding label-1">
+                                  Email
+                                  </div>
+                                <div className="col-md-10">
+                                  <input
+                                    type="email"
+                                    name="email"
+                                    onChange={e =>
+                                      props.handleContactChangeInput(
+                                        e,
+                                        idx,
+                                        "editNewCommnets"
+                                      )
+                                    }
+                                    placeholder="Email"
+                                    className={`form-control ${
+                                      contact.emailError
+                                        ? " input-error-border"
+                                        : ""
+                                      }`}
+                                    value={contact.email}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-12 row no-margin no-padding input-row">
+                                <div className="col-md-2 no-padding label-1">
+                                  Mobile No
+                                  </div>
+                                <div className="col-md-10">
+                                  <input
+                                    type="number"
+                                    name="phone_number"
+                                    onChange={e =>
+                                      props.handleContactChangeInput(
+                                        e,
+                                        idx,
+                                        "editNewCommnets"
+                                      )
+                                    }
+                                    placeholder="Mobile No"
+                                    className={`form-control ${
+                                      contact.phoneError
+                                        ? " input-error-border"
+                                        : ""
+                                      }`}
+                                    value={contact.phone_number}
+                                  />
+                                </div>
+                              </div>
                             </div>
-                          </>
-                        );
-                      })
+                            {props.btnText === "Save"
+                              ? this.renderAddEditIcons(
+                                idx,
+                                newContactsLength,
+                                contact
+                              )
+                              : null}
+                            <hr></hr>
+                          </div>
+                        </>
+                      );
+                    })
                     : null}
                 </div>
               </div>
@@ -780,7 +783,7 @@ class AddProjectModal extends Component {
                     type="button"
                     className={`btn col-md-5 button1 btn-primary ${
                       this.props.state.saveDisable ? "disabled" : ""
-                    }`}
+                      }`}
                     onClick={() => props.addProject()}
                   >
                     {props.btnText}
