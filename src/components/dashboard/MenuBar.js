@@ -81,6 +81,7 @@ export default class MenuBar extends Component {
       memberNameError: "",
       saveDisable: true,
       reset: false,
+      monthlyBudget: "",
       contacts: [
         {
           name: "",
@@ -224,6 +225,7 @@ export default class MenuBar extends Component {
             name: this.state.projectName,
             start_date: this.state.dateFrom,
             end_date: this.state.dateTo,
+            monthly_budget: this.state.monthlyBudget,
             members: !this.state.projectMembers.includes(
               this.props.state.userId
             )
@@ -514,6 +516,7 @@ export default class MenuBar extends Component {
       background: "#b9e1ff",
       dateFrom: new Date(),
       reset: false,
+      monthlyBudget: ""
     });
   };
 
@@ -566,7 +569,10 @@ export default class MenuBar extends Component {
       dateTo: null,
     });
   };
-
+  handleBudget = (e) => {
+    const { name, value } = e.target;
+    this.setState({ monthlyBudget: value })
+  }
   handleProjectByUser = () => { };
 
   render() {
@@ -618,6 +624,7 @@ export default class MenuBar extends Component {
                         handleChangeMember={this.handleChangeMember}
                         handleChangeColor={this.handleChangeColor}
                         handleChangeComplete={this.handleChangeComplete}
+                        handleBudget={this.handleBudget}
                         colors={this.colors}
                         addProject={this.addProject}
                         handleContactChangeInput={this.handleContactChangeInput}

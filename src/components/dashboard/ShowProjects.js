@@ -38,7 +38,7 @@ class ShowProjects extends Component {
       projectNames: [],
       sort: "week",
       projects: [],
-      mainProject:[],
+      mainProject: [],
       isChecked: true,
       isLogedInUserEmailArr: [],
       userId: "",
@@ -51,6 +51,7 @@ class ShowProjects extends Component {
       projectMembers: [],
       projectId: null,
       background: null,
+      monthlyBudget: null,
       userName: "",
       displayColorPicker: false,
       selectedTags: [],
@@ -130,7 +131,7 @@ class ShowProjects extends Component {
         searchData
       );
       var projectsData = data.projects;
-      
+
     } catch (e) {
       console.log("err", e);
     }
@@ -152,7 +153,7 @@ class ShowProjects extends Component {
       userName: loggedInData.name,
       userEmail: loggedInData.email,
       workspaces: workspacesData,
-      mainProject:projectsData,
+      mainProject: projectsData,
       projects: projectsData,
       users: userArr,
       isLogedInUserEmailArr: emailArr,
@@ -163,7 +164,7 @@ class ShowProjects extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    
+
     if (
       prevProps.searchProjectIds !== this.props.searchProjectIds ||
       prevProps.searchUserDetails !== this.props.searchUserDetails
@@ -186,7 +187,7 @@ class ShowProjects extends Component {
         );
         var projectsData = data.projects;
         this.props.handleLoading(false);
-      } catch (e) {}
+      } catch (e) { }
 
       this.setState({
         projects: projectsData
@@ -280,6 +281,7 @@ class ShowProjects extends Component {
       projectId: project.id,
       projectOwner: project.owner.name,
       projectName: project.name,
+      monthlyBudget: project.monthly_budget,
       dateFrom: new Date(project.start_date),
       dateTo: this.handleDateToDisable(project),
       background: project.color_code,
@@ -293,7 +295,7 @@ class ShowProjects extends Component {
       );
       var contacts = this.returnContacts(data.contacts);
       this.setState({ contacts: contacts });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   returnContacts = contacts => {
@@ -390,27 +392,27 @@ class ShowProjects extends Component {
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   };
 
-  manageProjectListing = (project,check) => {
-    if(check===0)
-{   project["owner"] = { name: `${this.state.userName}` };
-    var filterdProjects = [...this.state.mainProject, ...[project]];
-    this.setState({ projects: filterdProjects });
-  }else
-  if(check===1){
-    project["owner"] = { name: `${this.state.userName}` };
-    var filterdProjects = [...this.state.mainProject, ...[project]];
-    this.setState({ projects: filterdProjects });
+  manageProjectListing = (project, check) => {
+    if (check === 0) {
+      project["owner"] = { name: `${this.state.userName}` };
+      var filterdProjects = [...this.state.mainProject, ...[project]];
+      this.setState({ projects: filterdProjects });
+    } else
+      if (check === 1) {
+        project["owner"] = { name: `${this.state.userName}` };
+        var filterdProjects = [...this.state.mainProject, ...[project]];
+        this.setState({ projects: filterdProjects });
 
-  }
-  else
-  if(check===2){
-    
-    var filterdProjects = [...this.state.projects];
-    this.setState({ projects: filterdProjects });
+      }
+      else
+        if (check === 2) {
 
-  }
+          var filterdProjects = [...this.state.projects];
+          this.setState({ projects: filterdProjects });
 
-  
+        }
+
+
   };
 
   manageUpdateProjectListing = project => {
@@ -432,7 +434,8 @@ class ShowProjects extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         members: this.state.projectMembers,
-        color_code: this.state.background
+        color_code: this.state.background,
+        monthly_budget: this.state.monthlyBudget
       }
     };
     try {
@@ -622,7 +625,7 @@ class ShowProjects extends Component {
         contact["email"] = data.email ? data.email : "";
         contact["title"] = "";
         this.setState({ contacts: contacts });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -633,7 +636,7 @@ class ShowProjects extends Component {
       );
       let contacts = this.state.contacts.filter(c => c.id != contact.id);
       this.setState({ contacts: contacts });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   addNewContact = async idx => {
@@ -651,7 +654,7 @@ class ShowProjects extends Component {
         );
         var contacts = [...this.state.contacts, ...this.returnContacts([data])];
         this.setState({ contacts: contacts, editNewCommnets: editNewCommnets });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -791,8 +794,8 @@ class ShowProjects extends Component {
                           {this.state.isAllChecked ? (
                             <span>All Selected</span>
                           ) : (
-                            <span>Select All</span>
-                          )}
+                              <span>Select All</span>
+                            )}
                         </label>
                       </>
                     ) : null}
@@ -800,20 +803,20 @@ class ShowProjects extends Component {
 
                   <div className="select col-md-4 d-inline-block no-padding">
                     {this.state.selectProjectArr.length > 0 &&
-                    userRole == "admin" ? (
-                      <>
-                        <button
-                          className="btn btn-primary delete-button"
-                          onClick={this.confirmDeleteProject}
-                        >
-                          Delete
+                      userRole == "admin" ? (
+                        <>
+                          <button
+                            className="btn btn-primary delete-button"
+                            onClick={this.confirmDeleteProject}
+                          >
+                            Delete
                         </button>
-                        <div className="d-inline-block select-project-text">
-                          {this.state.selectProjectArr.length +
-                            " Project Selected"}
-                        </div>
-                      </>
-                    ) : null}
+                          <div className="d-inline-block select-project-text">
+                            {this.state.selectProjectArr.length +
+                              " Project Selected"}
+                          </div>
+                        </>
+                      ) : null}
                   </div>
                   <div className="col-md-6 tab">
                     <TabList>
@@ -962,29 +965,29 @@ class ShowProjects extends Component {
                                   )}
                                 </span>
                                 {this.state.showMemberList &&
-                                this.state.showMemberProjectId ===
+                                  this.state.showMemberProjectId ===
                                   project.id ? (
-                                  <div
-                                    className="project-count-list-show"
-                                    style={{ right: "70px" }}
-                                  >
-                                    <div className="close-div">
-                                      <a onClick={this.countMemberViewClose}>
-                                        <i
-                                          className="fa fa-times"
-                                          aria-hidden="true"
-                                        ></i>
-                                      </a>
+                                    <div
+                                      className="project-count-list-show"
+                                      style={{ right: "70px" }}
+                                    >
+                                      <div className="close-div">
+                                        <a onClick={this.countMemberViewClose}>
+                                          <i
+                                            className="fa fa-times"
+                                            aria-hidden="true"
+                                          ></i>
+                                        </a>
+                                      </div>
+                                      <div className="project-body-box">
+                                        {project.members.map(member => (
+                                          <div className="project-body-text">
+                                            {member.name}
+                                          </div>
+                                        ))}
+                                      </div>
                                     </div>
-                                    <div className="project-body-box">
-                                      {project.members.map(member => (
-                                        <div className="project-body-text">
-                                          {member.name}
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ) : null}
+                                  ) : null}
                               </td>
                               <td
                                 className={
@@ -1009,8 +1012,8 @@ class ShowProjects extends Component {
             </div>
           </div>
         ) : (
-          this.renderMessage()
-        )}
+            this.renderMessage()
+          )}
         {this.state.showConfirm ? (
           <ConfirmModal
             title="Delete Project"
@@ -1018,7 +1021,7 @@ class ShowProjects extends Component {
               this.state.selectProjectArr.length == 1
                 ? " this project"
                 : "these projects"
-            }?`}
+              }?`}
             onClick={this.deleteProjects}
             closeModal={this.closeModal}
             buttonText="Delete"
