@@ -10,6 +10,7 @@ import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import TaskList from "./components/dashboard/TaskList";
 import TaskProjectList from "./components/TaskList/TaskProjectList";
+import Milestone from './components/Milestone/Milestone';
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -78,6 +79,12 @@ class Workspace extends Component {
         title: "TaskProjectList",
       },
       {
+        path: "/milestone",
+        exact: true,
+        component: Milestone,
+        title: "milestone",
+      },
+      {
         component: NotFound,
         title: "pageNotFound",
       },
@@ -107,7 +114,7 @@ class Workspace extends Component {
       event: null,
     };
   }
-  
+
   async componentDidMount() {
     //Logged In User
     try {

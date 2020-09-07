@@ -37,6 +37,8 @@ export const logout = async () => {
   await cookie.remove("loggedInUser", { path: "/" });
   await cookie.remove("workspaceId", { path: "/" });
   await cookie.remove("workspaceName", { path: "/" });
+  localStorage.removeItem('projectName')
+  localStorage.removeItem('projectId')
 };
 
 export const post = async (data, basePath) => {

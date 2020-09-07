@@ -14,7 +14,7 @@ import Summary from "./Summary";
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
-  
+
   let roleType = localStorage.getItem("userRole");
   const changeDeleteModal = (value) => {
     setDeleteModal(value);
@@ -75,31 +75,31 @@ const DisplayTaskList = (props) => {
                 ? moment(props.ProjectTask.end_date).format("DD MMM, YY")
                 : null}
               &nbsp;&nbsp;&nbsp;
-              <Button variant="outline-dark" 
-              onClick={(e)=>{
-                e.preventDefault();
-                props.isSummaryOpen(props.ProjectTask.id);
-                props.closeFilter();
-               }}>Summary</Button>
-               {/* <span className="task-card-complete-tasks">2 out of 7 completed</span> */}
-              
+              <Button variant="outline-dark"
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.isSummaryOpen(props.ProjectTask.id);
+                  props.closeFilter();
+                }}>Summary</Button>
+              {/* <span className="task-card-complete-tasks">2 out of 7 completed</span> */}
+
             </div>
           </div>
           <div className="option-icons">
-          {props.list_id == props.id ? (
-          <div
-              className="filter-icon"
-              onClick={(e) => {
-                e.preventDefault();
-                props.isFilterOpen();
-                props.closeSummary();
-              }}
-            >
-             <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"></i>
-              <ReactTooltip id="filterTask" effect="solid">
-                Filter Roadmap
+            {props.list_id == props.id ? (
+              <div
+                className="filter-icon"
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.isFilterOpen();
+                  props.closeSummary();
+                }}
+              >
+                <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"></i>
+                <ReactTooltip id="filterTask" effect="solid">
+                  Filter Roadmap
               </ReactTooltip>
-            </div>) : null}
+              </div>) : null}
             <div
               className="edit-icon"
               onClick={(e) => {
@@ -140,26 +140,26 @@ const DisplayTaskList = (props) => {
       </div>
 
       {props.showSummary && props.ProjectTask.id == props.state.summaryID ? (
-          <div className="statusModal">
+        <div className="statusModal">
           <Summary
-          id={props.ProjectTask.id}
-          state={props.state}
-          closeSummary={props.closeSummary}
+            id={props.ProjectTask.id}
+            state={props.state}
+            closeSummary={props.closeSummary}
           ></Summary>
         </div>
-      ):null}
+      ) : null}
 
       {props.showFilter && props.list_id == props.id ? (
-      <div className="filter-modal">
-              <Filter 
-              state={props.state}
-              projectMembers={props.projectMembers}
-              taskStatus={props.taskStatus}
-              displayList={props.displayList}
-              list_id={props.list_id}
-              closeFilter={props.closeFilter}
-              />
-      </div> ): null}
+        <div className="filter-modal">
+          <Filter
+            state={props.state}
+            projectMembers={props.projectMembers}
+            taskStatus={props.taskStatus}
+            displayList={props.displayList}
+            list_id={props.list_id}
+            closeFilter={props.closeFilter}
+          />
+        </div>) : null}
 
       {props.list_id == props.id ? (
         <>
