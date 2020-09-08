@@ -19,7 +19,7 @@ const DisplayTaskList = (props) => {
     statusName: "Not Started",
     id: 1,
   });
-  
+
   let roleType = localStorage.getItem("userRole");
   const changeDeleteModal = (value) => {
     setDeleteModal(value);
@@ -32,7 +32,7 @@ const DisplayTaskList = (props) => {
 
   const handleInputChange = (e) => {
     setRoadmapStatus({ ...props.taskStatus[e.target.value] });
-    props.getRoadmapStatus(e.target.value,props.ProjectTask.id);
+    props.getRoadmapStatus(e.target.value, props.ProjectTask.id);
   }
 
   return (
@@ -75,40 +75,14 @@ const DisplayTaskList = (props) => {
           <div className="textCard">
             <div className="project-task-name">
               {props.ProjectTask.name}&nbsp;&nbsp;&nbsp;
-              <select
-                name="statusName"
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                className="roadmap-status"
-              >
-                <option value={""}>Status</option>
-                {props.taskStatus &&
-                  props.taskStatus.map((roadmapStatus, index) => {
-                    return (
-                      <option
-                        key={index}
-                        selected={
-                          props.ProjectTask &&
-                          props.ProjectTask.roadmap_status &&
-                          roadmapStatus.id == props.ProjectTask.roadmap_status.id
-                        }
-                        value={roadmapStatus.id}
-                      >
-                        {roadmapStatus.statusName}
-                      </option>
-                    );
-                  })}
-              </select>
             </div>
             <div className="project-task-date">
-              {props.ProjectTask
-                ? moment(props.ProjectTask.start_date).format("DD MMM, YY")
-                : null}
-              &nbsp;to&nbsp;
-              {props.ProjectTask
-                ? moment(props.ProjectTask.end_date).format("DD MMM, YY")
-                : null}
+              {props.ProjectTask ? props.ProjectTask.start_date && !props.ProjectTask.end_date ? "Starts:-" : null : null}
+              {props.ProjectTask ? props.ProjectTask.start_date ? moment(props.ProjectTask.start_date).format("DD MMM, YY") : null : null}
+              {props.ProjectTask.start_date && props.ProjectTask.end_date ? " to " : null}
+              {props.ProjectTask ? !props.ProjectTask.start_date && props.ProjectTask.end_date ? "Ends:-" : null : null}
+              {props.ProjectTask ? props.ProjectTask.end_date ? moment(props.ProjectTask.end_date).format("DD MMM, YY") : null : null}
+              {props.ProjectTask ? !props.ProjectTask.start_date && !props.ProjectTask.end_date ? "No timeline" : null : null}
               &nbsp;&nbsp;&nbsp;
               <Button variant="outline-dark"
                 onClick={(e) => {
@@ -116,9 +90,34 @@ const DisplayTaskList = (props) => {
                   props.isSummaryOpen(props.ProjectTask.id);
                   props.closeFilter();
                 }}>Summary</Button>
-              {/* <span className="task-card-complete-tasks">2 out of 7 completed</span> */}
-
             </div>
+          </div>
+          <div className="roadmap-status-box">
+            <select
+              name="statusName"
+              onChange={(e) => {
+                handleInputChange(e);
+              }}
+              className="roadmap-status"
+            >
+              <option value={""}>Select status</option>
+              {props.taskStatus &&
+                props.taskStatus.map((roadmapStatus, index) => {
+                  return (
+                    <option
+                      key={index}
+                      selected={
+                        props.ProjectTask &&
+                        props.ProjectTask.roadmap_status &&
+                        roadmapStatus.id == props.ProjectTask.roadmap_status.id
+                      }
+                      value={roadmapStatus.id}
+                    >
+                      {roadmapStatus.statusName}
+                    </option>
+                  );
+                })}
+            </select>
           </div>
           <div className="option-icons">
             {props.list_id == props.id ? (
