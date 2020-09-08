@@ -14,7 +14,12 @@ import Summary from "./Summary";
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
-
+  const [roadmapStatus, setRoadmapStatus] = useState({
+    color: "#53a4f0",
+    statusName: "Not Started",
+    id: 1,
+  });
+  
   let roleType = localStorage.getItem("userRole");
   const changeDeleteModal = (value) => {
     setDeleteModal(value);
@@ -24,6 +29,11 @@ const DisplayTaskList = (props) => {
     props.deleteTaskList(props.ProjectTask.id);
     changeDeleteModal(false);
   }, 250);
+
+  const handleInputChange = (e) => {
+    setRoadmapStatus({ ...props.taskStatus[e.target.value] });
+    props.getRoadmapStatus(e.target.value,props.ProjectTask.id);
+  }
 
   return (
     <div key={props.id} className="DisplayprojectListTopCard">
@@ -64,7 +74,32 @@ const DisplayTaskList = (props) => {
           </div>
           <div className="textCard">
             <div className="project-task-name">
-              {props.ProjectTask.name}&nbsp;
+              {props.ProjectTask.name}&nbsp;&nbsp;&nbsp;
+              <select
+                name="statusName"
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
+                className="roadmap-status"
+              >
+                <option value={""}>Status</option>
+                {props.taskStatus &&
+                  props.taskStatus.map((roadmapStatus, index) => {
+                    return (
+                      <option
+                        key={index}
+                        selected={
+                          props.ProjectTask &&
+                          props.ProjectTask.roadmap_status &&
+                          roadmapStatus.id == props.ProjectTask.roadmap_status.id
+                        }
+                        value={roadmapStatus.id}
+                      >
+                        {roadmapStatus.statusName}
+                      </option>
+                    );
+                  })}
+              </select>
             </div>
             <div className="project-task-date">
               {props.ProjectTask
