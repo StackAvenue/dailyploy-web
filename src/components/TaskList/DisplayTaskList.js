@@ -75,31 +75,6 @@ const DisplayTaskList = (props) => {
           <div className="textCard">
             <div className="project-task-name">
               {props.ProjectTask.name}&nbsp;&nbsp;&nbsp;
-              <select
-                name="statusName"
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                className="roadmap-status"
-              >
-                <option value={""}>Status</option>
-                {props.taskStatus &&
-                  props.taskStatus.map((roadmapStatus, index) => {
-                    return (
-                      <option
-                        key={index}
-                        selected={
-                          props.ProjectTask &&
-                          props.ProjectTask.roadmap_status &&
-                          roadmapStatus.id == props.ProjectTask.roadmap_status.id
-                        }
-                        value={roadmapStatus.id}
-                      >
-                        {roadmapStatus.statusName}
-                      </option>
-                    );
-                  })}
-              </select>
             </div>
             <div className="project-task-date">
               {props.ProjectTask ? props.ProjectTask.start_date && !props.ProjectTask.end_date ? "Starts:-" : null : null}
@@ -113,7 +88,35 @@ const DisplayTaskList = (props) => {
                   e.preventDefault();
                   props.isSummaryOpen(props.ProjectTask.id);
                   props.closeFilter();
-                }}>Summary</Button>            </div>
+                }}>Summary</Button>
+            </div>
+          </div>
+          <div className="roadmap-status-box">
+            <select
+              name="statusName"
+              onChange={(e) => {
+                handleInputChange(e);
+              }}
+              className="roadmap-status"
+            >
+              <option value={""}>Select status</option>
+              {props.taskStatus &&
+                props.taskStatus.map((roadmapStatus, index) => {
+                  return (
+                    <option
+                      key={index}
+                      selected={
+                        props.ProjectTask &&
+                        props.ProjectTask.roadmap_status &&
+                        roadmapStatus.id == props.ProjectTask.roadmap_status.id
+                      }
+                      value={roadmapStatus.id}
+                    >
+                      {roadmapStatus.statusName}
+                    </option>
+                  );
+                })}
+            </select>
           </div>
           <div className="option-icons">
             {props.list_id == props.id ? (

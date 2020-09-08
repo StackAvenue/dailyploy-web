@@ -64,11 +64,16 @@ class Signin extends Component {
 
   componentDidMount() {
     const token = cookie.load("accessToken");
+    this.walk();
     if (token !== "undefined" && token !== null) {
       return this.props.history.push("/login");
     } else {
       return null;
     }
+  }
+
+  walk() {
+    console.log('The code set code');
   }
 
   login = async e => {
