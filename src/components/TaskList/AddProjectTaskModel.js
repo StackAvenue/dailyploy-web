@@ -38,7 +38,6 @@ const AddProjectTaskModel = (props) => {
                 className=""
               />
             </div>
-
             <div className="AddDatePicker">
               <div className="divInline-from">
                 <div className="datefromto">From&nbsp; </div>

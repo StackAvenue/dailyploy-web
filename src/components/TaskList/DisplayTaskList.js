@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddTask from "./AddTask";
 import { Button } from "react-bootstrap";
 import { NavDropdown, DropdownButton, Dropdown } from "react-bootstrap";
@@ -8,10 +8,17 @@ import { Modal } from "react-bootstrap";
 import "../../assets/css/TaskProjectList.scss"
 import ReactTooltip from "react-tooltip";
 import { debounce } from "../../utils/function";
+import Filter from "./Filter";
+import Summary from "./Summary";
 
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
+  const [roadmapStatus, setRoadmapStatus] = useState({
+    color: "#53a4f0",
+    statusName: "Not Started",
+    id: 1,
+  });
 
   let roleType = localStorage.getItem("userRole");
   const changeDeleteModal = (value) => {
@@ -22,6 +29,11 @@ const DisplayTaskList = (props) => {
     props.deleteTaskList(props.ProjectTask.id);
     changeDeleteModal(false);
   }, 250);
+
+  const handleInputChange = (e) => {
+    setRoadmapStatus({ ...props.taskStatus[e.target.value] });
+    props.getRoadmapStatus(e.target.value, props.ProjectTask.id);
+  }
 
   return (
     <div key={props.id} className="DisplayprojectListTopCard">
@@ -34,6 +46,8 @@ const DisplayTaskList = (props) => {
               onClick={(e) => {
                 e.preventDefault();
                 props.displayList(props.ProjectTask.id);
+                props.closeFilter();
+                props.closeSummary();
               }}
             >
               {props.list_id != props.id ? (
@@ -60,7 +74,32 @@ const DisplayTaskList = (props) => {
           </div>
           <div className="textCard">
             <div className="project-task-name">
-              {props.ProjectTask.name}&nbsp;
+              {props.ProjectTask.name}&nbsp;&nbsp;&nbsp;
+              <select
+                name="statusName"
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
+                className="roadmap-status"
+              >
+                <option value={""}>Status</option>
+                {props.taskStatus &&
+                  props.taskStatus.map((roadmapStatus, index) => {
+                    return (
+                      <option
+                        key={index}
+                        selected={
+                          props.ProjectTask &&
+                          props.ProjectTask.roadmap_status &&
+                          roadmapStatus.id == props.ProjectTask.roadmap_status.id
+                        }
+                        value={roadmapStatus.id}
+                      >
+                        {roadmapStatus.statusName}
+                      </option>
+                    );
+                  })}
+              </select>
             </div>
             <div className="project-task-date">
               {props.ProjectTask ? props.ProjectTask.start_date && !props.ProjectTask.end_date ? "Starts:-" : null : null}
@@ -68,9 +107,29 @@ const DisplayTaskList = (props) => {
               {props.ProjectTask.start_date && props.ProjectTask.end_date ? " to " : null}
               {props.ProjectTask ? !props.ProjectTask.start_date && props.ProjectTask.end_date ? "Ends:-" : null : null}
               {props.ProjectTask ? props.ProjectTask.end_date ? moment(props.ProjectTask.end_date).format("DD MMM, YY") : null : null}
-            </div>
+              &nbsp;&nbsp;&nbsp;
+              <Button variant="outline-dark"
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.isSummaryOpen(props.ProjectTask.id);
+                  props.closeFilter();
+                }}>Summary</Button>            </div>
           </div>
           <div className="option-icons">
+            {props.list_id == props.id ? (
+              <div
+                className="filter-icon"
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.isFilterOpen();
+                  props.closeSummary();
+                }}
+              >
+                <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"></i>
+                <ReactTooltip id="filterTask" effect="solid">
+                  Filter Roadmap
+              </ReactTooltip>
+              </div>) : null}
             <div
               className="edit-icon"
               onClick={(e) => {
@@ -110,6 +169,28 @@ const DisplayTaskList = (props) => {
         </div>
       </div>
 
+      {props.showSummary && props.ProjectTask.id == props.state.summaryID ? (
+        <div className="statusModal">
+          <Summary
+            id={props.ProjectTask.id}
+            state={props.state}
+            closeSummary={props.closeSummary}
+          ></Summary>
+        </div>
+      ) : null}
+
+      {props.showFilter && props.list_id == props.id ? (
+        <div className="filter-modal">
+          <Filter
+            state={props.state}
+            projectMembers={props.projectMembers}
+            taskStatus={props.taskStatus}
+            displayList={props.displayList}
+            list_id={props.list_id}
+            closeFilter={props.closeFilter}
+          />
+        </div>) : null}
+
       {props.list_id == props.id ? (
         <>
           <div className="showCardDetails2">
@@ -117,14 +198,12 @@ const DisplayTaskList = (props) => {
               ? props.task_lists.map((task_lists_task) => {
                 return (
                   <AddTask
-                    projects={props.projects}
                     list_id={props.list_id}
                     projectMembers={props.projectMembers}
                     task_lists_task={task_lists_task}
                     showTask={
                       props.editTltId != task_lists_task.id ? true : false
                     }
-                    worksapceMembers={props.worksapceMembers}
                     deleteTlt={props.deleteTlt}
                     moveToDashBoard={props.moveToDashBoard}
                     projectTaskList={props.projectTaskList}
@@ -143,8 +222,6 @@ const DisplayTaskList = (props) => {
               <div className="showCardDetails">
                 <AddTask
                   projectMembers={props.projectMembers}
-                  worksapceMembers={props.worksapceMembers}
-                  projects={props.projects}
                   list_id={props.list_id}
                   handleSaveTask={props.handleSaveTask}
                   showTask={false}
