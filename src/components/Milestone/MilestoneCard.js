@@ -200,7 +200,7 @@ function MilestoneCard(props) {
                             <h3>
                                 {props.milestone.name}
                             </h3>
-                            {new Date(props.milestone.due_date) > props.currentDate
+                            {new Date(props.milestone.due_date) < props.currentDate
                                 && props.milestone.status === INPROGRESS
                                 ? <button
                                     type="button"
