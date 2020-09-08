@@ -67,6 +67,11 @@ class TaskProjectList extends Component {
       TaskShow: false,
       list_id: -1,
       projectId: projectId,
+      statusTask: {
+        color: "#53a4f0",
+        statusName: "Not Started",
+        id: 1,
+      },
       showbutton: true,
       showAddTaskButton: false,
       Projecttask: {
@@ -333,6 +338,7 @@ class TaskProjectList extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         creator_id: loggedInUser,
+        task_status_id: this.state.statusTask.id
       };
       const { data } = !this.state.isEdit
         ? await post(
@@ -401,6 +407,21 @@ class TaskProjectList extends Component {
       }
     }
   };
+
+  getRoadmapStatus = async (statusId, taskListId) => {
+    try {
+      let params = {
+        task_status_id: statusId
+      };
+        const { data } = await put(
+          params,
+            `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}`
+          );
+          this.setState({
+            statusTask : data.task_status
+          })
+    } catch (e) { }
+}
 
   handleSaveTask = async (saveTaskParams, isMove) => {
     try {
@@ -563,6 +584,7 @@ class TaskProjectList extends Component {
               start_date: data.start_date,
               end_date: data.end_date,
               projectId: data.project_id,
+              roadmap_status: data.task_status
             };
           })
           : [];
@@ -808,6 +830,7 @@ class TaskProjectList extends Component {
                   if (this.state.projectId === project.projectId) {
                     return (
                       <DisplayTaskList
+                        state={this.state}
                         showFilter={this.state.showFilter}
                         showSummary={this.state.showSummary}
                         id={project.id}
@@ -817,6 +840,7 @@ class TaskProjectList extends Component {
                         projects={this.state.projects}
                         task_lists={this.state.task_lists}
                         handleSaveTask={this.handleSaveTask}
+                        getRoadmapStatus={this.getRoadmapStatus}
                         displayAddTask={this.displayAddTask}
                         displayList={this.displayList}
                         isFilterOpen={this.isFilterOpen}
