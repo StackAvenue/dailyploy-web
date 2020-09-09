@@ -513,7 +513,7 @@ class AddProjectModal extends Component {
                 </div>
                 <div
                   className="col-md-5 d-inline-block"
-                  style={{ maxWidth: "240px" }}
+                  style={{ maxWidth: "160px" }}
                 >
                   <input
                     type="text"
@@ -524,6 +524,7 @@ class AddProjectModal extends Component {
                     value={props.state.monthlyBudget}
                   />
                 </div>
+                <div className="col-md-3 d-inline-block no-padding label">per month</div>
               </div>
               <div className="col-md-12 row no-margin no-padding input-row">
                 <div className="col-md-2 no-padding label">Select Color</div>
