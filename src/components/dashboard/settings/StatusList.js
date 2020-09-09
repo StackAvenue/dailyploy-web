@@ -145,7 +145,7 @@ const StatusList = (props) => {
     const getStatus = async () => {
         try {
             const { data } = await get(
-                `workspaces/${props.workspaceId}/projects/${props.projectId}/task_status?page_number=1&page_size=5`
+                `workspaces/${props.workspaceId}/projects/${props.projectId}/task_status?page_number=1&page_size=20`
             );
             if (data && data.task_status) {
                 setStatusList(data.task_status)

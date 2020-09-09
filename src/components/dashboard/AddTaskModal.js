@@ -277,7 +277,7 @@ class AddTaskModal extends React.Component {
                         options={this.props.state.taskCategories}
                         placeholder="Select Category"
                         className="suggestion-z-index-50"
-                        default={this.props.state.taskCategories[0]}
+                        default={this.props.state.taskCategorie ? this.props.state.taskCategorie : this.props.state.taskCategories[0]}
                         selected={this.props.state.taskCategories[0]}
                         onChange={this.props.handleCategoryChange}
                         canAdd={true}
@@ -305,8 +305,8 @@ class AddTaskModal extends React.Component {
                           options={this.props.state.taskStatuss}
                           placeholder="Select Status"
                           className="suggestion-z-index-50"
-                          default={this.props.state.defaultStatus}
-                          selected={this.props.state.taskStatuss[0]}
+                          default={this.props.state.taskStatus ? this.props.state.taskStatus : this.props.state.taskStatuss[0]}
+                          selected={this.props.state.taskStatus}
                           onChange={this.props.handleaddStatusChange}
                           canAdd={true}
                           addNew={this.props.addStatus}

@@ -10,6 +10,7 @@ import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import TaskList from "./components/dashboard/TaskList";
 import TaskProjectList from "./components/TaskList/TaskProjectList";
+import Milestone from './components/Milestone/Milestone';
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -76,6 +77,12 @@ class Workspace extends Component {
         exact: true,
         component: TaskProjectList,
         title: "TaskProjectList",
+      },
+      {
+        path: "/milestone",
+        exact: true,
+        component: Milestone,
+        title: "milestone",
       },
       {
         component: NotFound,
@@ -239,6 +246,18 @@ class Workspace extends Component {
     return <Redirect to={`/workspace/${getWorkspaceId()}/dashboard`} />;
   };
 
+  // handleTaskBottomPopup = (startOn, event, trackStatus) => {
+  //   if (trackStatus === "start") {
+  //     this.setState({
+  //       event: event,
+  //     });
+  //   } else if (trackStatus === "stop") {
+  //     this.setState({
+  //       event: "STOP",
+  //     });
+  //   }
+  // };
+
   handleTaskBottomPopup = (startOn, event, trackStatus) => {
     if (trackStatus === "start") {
       this.setState({
@@ -250,6 +269,7 @@ class Workspace extends Component {
       });
     }
   };
+
 
   isBottomPopup = () => {
     return (

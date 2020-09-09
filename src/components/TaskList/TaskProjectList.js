@@ -20,6 +20,11 @@ class TaskProjectList extends Component {
     this.state = {
       projectMembers: [],
       show: false,
+      showFilter: false,
+      showSummary: false,
+      summaryID: null,
+      memberID: null,
+      statusID: null,
       isEdit: false,
       taskName: "",
       Name: "",
@@ -32,6 +37,8 @@ class TaskProjectList extends Component {
       workspaceId: "",
       projectNames: [],
       sort: "week",
+      MEMBER: "member",
+      STATUS: "status",
       members: [],
       isLogedInUserEmailArr: [],
       projects: [],
@@ -59,8 +66,12 @@ class TaskProjectList extends Component {
       },
       TaskShow: false,
       list_id: -1,
-
       projectId: projectId,
+      statusTask: {
+        color: "#53a4f0",
+        statusName: "Not Started",
+        id: 1,
+      },
       showbutton: true,
       showAddTaskButton: false,
       Projecttask: {
@@ -288,6 +299,31 @@ class TaskProjectList extends Component {
     });
   };
 
+  isFilterOpen = () => {
+    this.setState({
+      showFilter: !this.state.showFilter
+    });
+  }
+
+  closeFilter = () => {
+    this.setState({
+      showFilter: false
+    })
+  }
+
+  isSummaryOpen = (taskID) => {
+    this.setState ({
+      showSummary: !this.state.showSummary,
+      summaryID: taskID
+    });
+  }
+
+  closeSummary = () => {
+    this.setState({
+      showSummary: false
+    })
+  }
+
   editTlt = (tltID) => {
     this.setState({
       editTltId: tltID,
@@ -302,6 +338,7 @@ class TaskProjectList extends Component {
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
         creator_id: loggedInUser,
+        task_status_id: this.state.statusTask.id
       };
       const { data } = !this.state.isEdit
         ? await post(
@@ -370,6 +407,21 @@ class TaskProjectList extends Component {
       }
     }
   };
+
+  getRoadmapStatus = async (statusId, taskListId) => {
+    try {
+      let params = {
+        task_status_id: statusId
+      };
+        const { data } = await put(
+          params,
+            `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}`
+          );
+          this.setState({
+            statusTask : data.task_status
+          })
+    } catch (e) { }
+}
 
   handleSaveTask = async (saveTaskParams, isMove) => {
     try {
@@ -469,12 +521,28 @@ class TaskProjectList extends Component {
     }
   };
 
-  displayList = async (taskListId) => {
-    if (this.state.list_id != taskListId) {
+  displayList = async (taskListId, ID, type) => {
+    if (this.state.list_id != taskListId || ID != null) {
+      let params;
+      if(type === this.state.MEMBER)
+      {
+        params = { member_ids:ID }
+      }
+      else
+      if(type === this.state.STATUS)
+      {
+        params = { status_ids:ID }
+      }
+      else
+      {
+        params = ""
+      }
       let taslListTask = [];
+
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}/task_list_tasks`
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}/task_list_tasks`,
+          params
         );
         taslListTask =
           data.entries && data.entries.length > 0
@@ -516,6 +584,7 @@ class TaskProjectList extends Component {
               start_date: data.start_date,
               end_date: data.end_date,
               projectId: data.project_id,
+              roadmap_status: data.task_status
             };
           })
           : [];
@@ -761,14 +830,23 @@ class TaskProjectList extends Component {
                   if (this.state.projectId === project.projectId) {
                     return (
                       <DisplayTaskList
+                        state={this.state}
+                        showFilter={this.state.showFilter}
+                        showSummary={this.state.showSummary}
                         id={project.id}
+                        state={this.state}
                         projectMembers={this.state.projectMembers}
                         ProjectTask={project}
                         projects={this.state.projects}
                         task_lists={this.state.task_lists}
                         handleSaveTask={this.handleSaveTask}
+                        getRoadmapStatus={this.getRoadmapStatus}
                         displayAddTask={this.displayAddTask}
                         displayList={this.displayList}
+                        isFilterOpen={this.isFilterOpen}
+                        isSummaryOpen={this.isSummaryOpen}
+                        closeFilter={this.closeFilter}
+                        closeSummary={this.closeSummary}
                         TaskShow={this.state.TaskShow}
                         list_id={this.state.list_id}
                         deleteTaskList={this.deleteTaskList}
@@ -782,6 +860,7 @@ class TaskProjectList extends Component {
                         worksapceMembers={this.state.worksapceUsers}
                         taskStatus={this.state.taskStatus}
                         categories={this.state.categories}
+                        memeberSelected={this.memeberSelected}
                       />
                     );
                   } else {
@@ -790,6 +869,32 @@ class TaskProjectList extends Component {
                 })
                 : null}
             </div>
+
+            <div className="container4">
+              {this.state.project_task_lists.taskName !== ""
+                ? this.state.project_task_lists.map((project, index) => {
+                  if (this.state.projectId === project.projectId) {
+                    return (
+                      <AddProjectTaskModel
+              show={this.state.show}
+              state={this.state}
+              closeTaskModal={this.closeOnlyTaskModal}
+              handleDateFrom={this.handleDateFrom}
+              handleDateTo={this.handleDateTo}
+              handleInputChange={this.handleInputChange}
+              handleTaskNameChange={this.handleTaskNameChange}
+              handleSaveTaskData={this.handleSaveTaskData}
+              isEdit={this.state.isEdit}
+            />
+                    );
+                  } else {
+                    return null;
+                  }
+                })
+                : null}
+            </div>
+
+
             {/* ) : null} */}
             <AddProjectTaskModel
               show={this.state.show}

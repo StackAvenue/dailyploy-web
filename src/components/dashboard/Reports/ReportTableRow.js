@@ -180,63 +180,19 @@ class ReportTableRow extends Component {
     return (
       <div className="reports-track-logs">
         {trackLogs.length > 0 ? (
-          // this.state.editable &&
-          // this.state.editableLog &&
-          // this.state.editableLog.task_id === task.id ? (
-          //   <div style={{ display: "flex" }}>
-          //     <TimePicker
-          //       value={this.state.fromDateTime}
-          //       placeholder="Select"
-          //       showSecond={false}
-          //       onChange={this.handleTimeFrom}
-          //     />
-          //     <div style={{ margin: "0px 10px" }}>
-          //       <TimePicker
-          //         value={this.state.toDateTime}
-          //         placeholder="Select"
-          //         showSecond={false}
-          //         onChange={this.handleTimeTo}
-          //         disabledMinutes={this.disabledMinutes}
-          //         disabledHours={this.disabledHours}
-          //       />
-          //     </div>
-          //     <div
-          //       className=""
-          //       onClick={this.toggleEditableBox}
-          //       title={"Back"}
-          //       style={{
-          //         cursor: "pointer",
-          //         padding: "0px 10px"
-          //       }}
-          //     >
-          //       <i className="far fa-arrow-alt-circle-left"></i>
-          //     </div>
-          //     <div
-          //       className=""
-          //       onClick={this.editTimeTrack}
-          //       title={"Edit"}
-          //       style={{
-          //         cursor: "pointer",
-          //         padding: "0px 10px"
-          //       }}
-          //     >
-          //       <i className="fa fa-check" aria-hidden="true"></i>
-          //     </div>
-          //   </div>
-          // ) : (
           <EditableTimeTrack
             options={trackLogs}
             value={first}
             action={true}
             handleEditLog={this.handleEditLog}
             handleDeleteLog={this.handleDeleteLog}
-            saveInputEditable={() => {}}
+            saveInputEditable={() => { }}
             state={this.state}
           />
         ) : (
-          // )
-          <span>No tracked Time</span>
-        )}
+            // )
+            <span>No tracked Time</span>
+          )}
       </div>
     );
   };
@@ -411,9 +367,9 @@ class ReportTableRow extends Component {
               date +
               " " +
               `${
-                startTime == "00:00:00" && endTime == "00:00:00"
-                  ? "00:00:00"
-                  : "23:59:59"
+              startTime == "00:00:00" && endTime == "00:00:00"
+                ? "00:00:00"
+                : "23:59:59"
               }`
           });
         }
@@ -445,21 +401,11 @@ class ReportTableRow extends Component {
       return (
         <tr key={index} className="report-table-row">
           <td className="td-1">
-            {/* {task && task.status == "running" ? (
-              <div className="progress-btn">In progress</div>
-            ) : null}
-            {task.status == "completed" ? (
-              <div className="complete-btn">Completed</div>
-            ) : null}
-            {task.status == "not_started" ? (
-              <div className="not-start-btn">Not started</div>
-            ) : null} */}
             {task && task.status && task.status.name ? (
               <div>{task.status.name}</div>
             ) : null}
           </td>
-          {/* <td>{this.calculateTime(task.start_datetime, task.end_datetime)}</td> */}
-          <td className="td-2" style={{ width: "270px" }}>
+          <td className="td-2" style={{ width: "290px" }}>
             {this.renderLog(task)}
           </td>
           <td className="td-3 text-titlize">{task.name}</td>
