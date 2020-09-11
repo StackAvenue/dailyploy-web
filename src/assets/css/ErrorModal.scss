@@ -1,0 +1,23 @@
+#custom-error-modal-container{
+    position: fixed;
+    z-index: 555;
+    width: 100%;
+    background: rgba(0,0,0,0.7);
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+#custom-error-modal-container.active{
+    display: flex;
+}
+#custom-error-modal-container .custom-error-modal-content{
+    background: #fff;
+    padding: 2px;
+    border-radius: 5px;
+    max-width: 700px;
+    padding: 10px 20px;
+    font-size: 15px;
+    padding-top: 55px;
+    font-family: Roboto;
+}

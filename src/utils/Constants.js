@@ -22,6 +22,7 @@ export const COMMENT_DATETIME = "DD MMM, HH:mm"; // 6 Oct 13:21
 export const HRMIN = "HH:mm"; // 27:20:19
 export const HHMMSS = "HH:mm:ss"; // 20:34:19
 export const MONTH_FORMAT = "DD MMM"; // November 2019
+export const ERR_MODAL_ID = "custom-error-modal-container";
 export const CHART_COLOR = {
   capacity: "#e5e5e5",
   scheduled: "#e5e5e5",
@@ -58,9 +59,9 @@ export const PRIORITIES = [
   }
 ];
 export const DEFAULT_PRIORITIE = {
-    name: "low",
-    color_code: "#555555",
-    label: "low"
+  name: "low",
+  color_code: "#555555",
+  label: "low"
 };
 export const PRIORITIES_MAP = new Map();
 PRIORITIES_MAP.set("high", {
