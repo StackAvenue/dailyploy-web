@@ -207,6 +207,127 @@
         
       }
     }
+    // .checklistModal{
+      .checklist-div{
+        margin-left: 54%;
+        font-family: Roboto;
+        border: 1px solid #dcdcdc;
+        border-radius: 5px;
+        background-color: #fcfcfc !important;
+        /* padding-top: 15px; */
+        margin-right: 38%;
+        padding: 14px;
+        margin-top: -25px;
+        width: 44%;
+        position: absolute;
+        z-index: +1;
+        .close-icon{
+          position: absolute;
+          margin-left: 0px;
+          margin-top: -38px;
+          right: -3px;
+          .fa{
+            cursor: pointer;
+          }
+        }
+        .spinner-grow{
+          margin-left: 46%;
+          margin-top: 5px;
+        }
+        .img-loader{
+          z-index: 999;
+          height: 7em;
+          width: 7em;
+          overflow: show;
+          margin: auto;
+          margin-bottom: -84px;
+          margin-top: 11px;
+          margin-left: 41%;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          img{
+            height: 15%;
+            width: 70%;
+          }
+        }
+        .progress{
+          width: 100% !important;
+          margin-top: 8px !important;
+          height: 8px !important;
+        }
+        .tick-checklist{
+          padding-top: 10px;
+          padding-left: 1px;
+           .checkbox{
+          // word-wrap: break-word;
+          //   width: 10px
+            width: 86% !important;
+          /* height: 100px; */
+            white-space: initial;
+           }
+          .checklist-input{
+            background-color: lightgray;
+            border: 1px;
+            width: 75%;
+          }
+          .btn-outline-success{
+            height: 29px;
+            margin-bottom: 6px;
+          }
+          .btn{
+            padding: 4px !important;
+            margin-top: 5px !important;
+            .btn-light{
+              margin-top: 7px !important;
+            }
+          }
+          .header{
+            margin-top: 10px !important;
+            .checklist-input{
+              width: 81%;
+              border: 1px;
+              background-color: lightgrey;
+            }
+            .btn-success{
+              width: 42px!important;
+            }
+            .btn{
+              height: 27px!important;
+              margin-top: -3px!important;
+              font-size: 15px !important;
+              
+            }
+            .form-input{
+              width: 15pc !important;
+            }
+          }
+          .checkbox:hover{
+            background-color: #DAE0E2;
+           
+          }
+          .fa-ellipsis-h{
+            //margin-left: 15pc !important;
+            position: absolute;
+            right: 20px;
+          }
+          .fa-trash-alt{
+            position: absolute;
+            right: 20px;
+            margin-top: 3px;
+            cursor: pointer;
+          }
+          .fa-pencil-alt{
+            position: absolute;
+            right: 50px;
+            margin-top: 3px;
+            cursor: pointer;
+          }
+        }
+      }
+    // /}
+
     .first{
       position: relative;
       font-size: 13px;
@@ -246,7 +367,7 @@
       }
     }
     .roadmap-status-box{
-      margin-right: 24px;
+      margin-right: 100px;
       margin-top: 4px;
       .roadmap-status{
         background-color: white;
@@ -339,9 +460,20 @@
                   }
                   .option-icons{
                     display: flex;
-                    width: 60px;
+                    width: 45px;
                     justify-content: space-around;
                     margin-top: 5px;
+                    margin-right: 10px;
+                    .checklist-icon{
+                      font-size: 18px;
+                      /* right: 8px; */
+                      margin-top: -3px;
+                      margin-right: 10px;
+                      margin-left: -50px;
+                      .fa-check-square-o{
+                        cursor: pointer;
+                      }
+                    }
                     .edit-icon{
                       color: #a2aab8;
                       font-size: 13px;

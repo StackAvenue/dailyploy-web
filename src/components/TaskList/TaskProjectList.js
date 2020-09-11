@@ -20,6 +20,8 @@ class TaskProjectList extends Component {
     this.state = {
       projectMembers: [],
       show: false,
+      showChecklist: false,
+      checklistID: null,
       showFilter: false,
       showSummary: false,
       summaryID: null,
@@ -299,6 +301,19 @@ class TaskProjectList extends Component {
     });
   };
 
+  isChecklistOpen = (ID) => {
+    this.setState({
+      showChecklist: !this.state.showChecklist,
+      checklistID: ID
+    })
+  }
+
+  closeChecklist = () => {
+    this.setState({
+      showChecklist: false
+    })
+  }
+  
   isFilterOpen = () => {
     this.setState({
       showFilter: !this.state.showFilter
@@ -830,6 +845,8 @@ class TaskProjectList extends Component {
                   if (this.state.projectId === project.projectId) {
                     return (
                       <DisplayTaskList
+                        showChecklist={this.state.showChecklist}
+                        checklistID={this.state.checklistID}
                         state={this.state}
                         showFilter={this.state.showFilter}
                         showSummary={this.state.showSummary}
@@ -843,10 +860,12 @@ class TaskProjectList extends Component {
                         getRoadmapStatus={this.getRoadmapStatus}
                         displayAddTask={this.displayAddTask}
                         displayList={this.displayList}
+                        isChecklistOpen={this.isChecklistOpen}
                         isFilterOpen={this.isFilterOpen}
                         isSummaryOpen={this.isSummaryOpen}
                         closeFilter={this.closeFilter}
                         closeSummary={this.closeSummary}
+                        closeChecklist={this.closeChecklist}
                         TaskShow={this.state.TaskShow}
                         list_id={this.state.list_id}
                         deleteTaskList={this.deleteTaskList}

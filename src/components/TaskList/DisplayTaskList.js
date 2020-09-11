@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AddTask from "./AddTask";
 import { Button } from "react-bootstrap";
 import { NavDropdown, DropdownButton, Dropdown } from "react-bootstrap";
@@ -8,12 +8,16 @@ import { Modal } from "react-bootstrap";
 import "../../assets/css/TaskProjectList.scss"
 import ReactTooltip from "react-tooltip";
 import { debounce } from "../../utils/function";
+import Checklist from "./Checklist";
 import Filter from "./Filter";
 import Summary from "./Summary";
+import useOnClickOutside from 'use-onclickoutside';
 
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false)
+  
   const [roadmapStatus, setRoadmapStatus] = useState({
     color: "#53a4f0",
     statusName: "Not Started",
@@ -30,6 +34,9 @@ const DisplayTaskList = (props) => {
     changeDeleteModal(false);
   }, 250);
 
+ const ref = useRef();
+ useOnClickOutside(ref, () => props.isChecklistOpen(props.ProjectTask.id));
+ 
   const handleInputChange = (e) => {
     setRoadmapStatus({ ...props.taskStatus[e.target.value] });
     props.getRoadmapStatus(e.target.value, props.ProjectTask.id);
@@ -74,7 +81,7 @@ const DisplayTaskList = (props) => {
           </div>
           <div className="textCard">
             <div className="project-task-name">
-              {props.ProjectTask.name}&nbsp;&nbsp;&nbsp;
+              {props.ProjectTask.name}&nbsp;
             </div>
             <div className="project-task-date">
               {props.ProjectTask ? props.ProjectTask.start_date && !props.ProjectTask.end_date ? "Starts:-" : null : null}
@@ -120,18 +127,34 @@ const DisplayTaskList = (props) => {
             </select>
           </div>
           <div className="option-icons">
-            {props.list_id == props.id ? (
-              <div
-                className="filter-icon"
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.isFilterOpen();
-                  props.closeSummary();
-                }}
-              >
-                <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"></i>
-                <ReactTooltip id="filterTask" effect="solid">
-                  Filter Roadmap
+          <div
+            className="checklist-icon"
+            onClick={(e) => {
+              e.preventDefault();
+              props.isChecklistOpen(props.ProjectTask.id);
+              //setIsOpen(true)
+            }}
+            >
+              <i class="fa fa-check-square-o" 
+              aria-hidden="true"
+              data-tip data-for="taskChecklist">
+              </i>
+              <ReactTooltip id="taskChecklist" effect="solid">
+                Roadmap Checklist
+              </ReactTooltip>
+            </div>
+          {props.list_id == props.id ? (
+          <div
+              className="filter-icon"
+              onClick={(e) => {
+                e.preventDefault();
+                props.isFilterOpen();
+                props.closeSummary();
+              }}
+            >
+             <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"></i>
+              <ReactTooltip id="filterTask" effect="solid">
+                Filter Roadmap
               </ReactTooltip>
               </div>) : null}
             <div
@@ -172,6 +195,16 @@ const DisplayTaskList = (props) => {
           </div>
         </div>
       </div>
+      {props.showChecklist && props.ProjectTask.id == props.checklistID ? (
+          <div ref={ref} className="checklistModal">
+            <Checklist
+            state={props.state}
+            id={props.ProjectTask.id}
+            closeChecklist={props.closeChecklist}
+            >
+            </Checklist>
+          </div>
+        ):null}
 
       {props.showSummary && props.ProjectTask.id == props.state.summaryID ? (
         <div className="statusModal">
