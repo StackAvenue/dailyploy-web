@@ -54,6 +54,8 @@ class GeneralSettings extends Component {
     };
   }
 
+  roleType = localStorage.getItem("userRole");
+
   componentDidMount = async () => {
     try {
       const { data } = await get(
@@ -772,6 +774,7 @@ class GeneralSettings extends Component {
               Workspace Name
             </div>
             <div className="col-md-6 d-inline-block">
+            {this.roleType == "admin" ? 
               <input
                 type="text"
                 placeholder="Workspace Name"
@@ -780,7 +783,18 @@ class GeneralSettings extends Component {
                 value={this.props.state.workspaceName}
                 onChange={this.props.worskpaceNameHandler}
               />
+            : 
+            <input
+                type="text"
+                disabled
+                placeholder="Workspace Name"
+                className="form-control input"
+                name="workspaceName"
+                value={this.props.state.workspaceName}
+              />
+            }
             </div>
+            {this.roleType == "admin" ?
             <div className="d-inline-block box-btn">
               <button
                 className={`btn btn-primary save-button ${
@@ -792,7 +806,7 @@ class GeneralSettings extends Component {
               >
                 Save
               </button>
-            </div>
+            </div> : null}
           </div>
 
           <div className="col-md-12 hr1"></div>
@@ -888,7 +902,7 @@ class GeneralSettings extends Component {
                   className="btn btn-link addnew-button7"
                   onClick={this.handleEditShow}
                 >
-                  {this.state.isConfig ? "configure" : "Edit"}
+                  {this.state.isConfig ? "Configure" : "Edit"}
                 </button>
               </div>
               <EmailConfigModal
@@ -932,9 +946,13 @@ class GeneralSettings extends Component {
               </div>
             </div>
             <div className="col-md-12 box no-padding">
+            {this.state.isActive ? (
               <div className="col-md-12 time-desc">
                 Daily status email will be sent by default at 12:00 AM everyday.
-              </div>
+              </div> ) : (
+              <div className="col-md-12 time-desc">
+                Your daily status email has been suspended. Please resume it to get daily status emails.
+              </div> )}
               <div className="col-md-12 inner-container">
                 <div className="col-md-1 no-padding time-desc d-inline-block">
                   To

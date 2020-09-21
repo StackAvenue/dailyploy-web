@@ -8,13 +8,17 @@ const Filter = (props) => {
   const [statusSelections, setStatusSelections] = useState("");
   const [multiSelections, setMultiSelections] = useState([]);
   const [selection, setSelection] = useState([]);
+  const [isSelected, setIsSelected] = useState(false)
+  const [isDropdownMemberSelected, setIsDropdownMemberSelected] = useState(false)
   const multiSelect = false;
 
   function handleOnClick(member, type) {
+    props.loadFilteredData(true)
     if (!selection.some((user) => user.id === member.id)) {
       props.displayList(props.list_id, member.id, type);
       if (!multiSelect) {
         setSelection([member]);
+        setIsSelected(true)
       } else if (multiSelect) {
         setSelection([...selection, member]);
       }
@@ -25,12 +29,14 @@ const Filter = (props) => {
       );
       setSelection([...selectionAfterRemoval]);
       props.displayList(props.list_id, 0, "all");
+      setIsSelected(false)
     }
   }
 
   function isItemInSelection(item) {
     if (selection.some((current) => current.id === item.id)) {
       return true;
+      //setIsSelected(true)
     }
     return false;
   }
@@ -57,6 +63,7 @@ const Filter = (props) => {
                 <Dropdown.Item
                   onClick={() => {
                     handleOnClick(member, props.state.MEMBER);
+                    //setIsDropdownMemberSelected(!isDropdownMemberSelected)
                   }}
                 >
                   {member.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -84,6 +91,7 @@ const Filter = (props) => {
       );
       if (selectedStatus != null) {
         console.log(selectedStatus.id);
+        props.loadFilteredData(true)
         props.displayList(props.list_id, selectedStatus.id, props.state.STATUS);
       } else {
         console.log("undefined");
@@ -91,6 +99,7 @@ const Filter = (props) => {
     } else if (event.keyCode === 8 && statusSelections.length > 0) {
       var flag = false;
       if (!flag) {
+        props.loadFilteredData(true)
         props.displayList(props.list_id, 0, "all");
         flag = true;
       }
@@ -113,6 +122,7 @@ const Filter = (props) => {
         />
       </div>
       <div className="member-filter">
+        {isSelected && props.projectMembers.length>4 && isDropdownMemberSelected ? <span class="member-selected">Member selected : 1</span> : null}
         <span>
           {props.projectMembers.slice(0, 4).map((member, index) => {
             return (
@@ -143,6 +153,7 @@ const Filter = (props) => {
         onClick={(e) => {
           e.preventDefault();
           props.closeFilter();
+          props.loadFilteredData(true)
           props.displayList(props.list_id, 0, "all");
         }}
       >

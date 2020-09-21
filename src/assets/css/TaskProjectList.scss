@@ -343,6 +343,9 @@
       border-radius: 4px;
       font-family: 'Roboto';
       line-height: 171%;
+      .spinner-grow{
+        margin-left: 44%;
+      }
       .one-col{
         width: 39%;
       }
@@ -352,9 +355,9 @@
       }
       .close-icon{
         margin-left: 0px;
-        margin-top: -12px;
+        margin-top: -11px;
         position: absolute;
-        right: 0px;
+        right: -2px;
         .fa{
           cursor: pointer;
         }
@@ -426,6 +429,10 @@
                       font-size: 16px;
                       margin-bottom: 5px;
                       letter-spacing: 1px;
+                      .spinner-border{
+                        width: 1rem !important;
+                        height: 1rem !important;
+                      }
                       .btn{
                         font-size: 12px !important;
                         height: 21px !important;
@@ -860,7 +867,10 @@
                   font-size: 15px !important;
                 }
                 .form-control{
-                  font-size: 11px !important;
+                  font-size: 12px !important;
+                  padding-top: 3px;
+                  padding-bottom: 3px;
+                  height: 28px;
                 }
                 .form-group{
                   margin-bottom: 0 !important; 
@@ -868,6 +878,12 @@
                 .member-filter{
                   position: relative;
                   top: -24px;
+                  .member-selected{
+                    position: fixed;
+                    margin-top: 71px;
+                    font-size: 12px;
+                    margin-left: 30px;
+                  }
                   .user-block{
                     position: relative;
                     bottom: -15px;
@@ -883,6 +899,7 @@
                     font-weight: 500;
                     padding-top: 5px;
                     margin-left: -6px;
+                    cursor: pointer;
                   }
                   
                   .user-block2{
@@ -929,6 +946,7 @@
                     padding-left: 8px;
                     padding-top: 4px;
                     top: -6px;
+                    
                   }
                   .dropdown-block:hover{
                     background-color:#33a1ff;
@@ -936,6 +954,10 @@
                   .dropdown-block:hover, .dropdown-block:active {font-size: 18px;
                     width: 41px;
                     height: 40px;
+                  }
+                  .dropdown-menu{
+                    font-size: 14px;
+                    font-family: Roboto;
                   }
 
                   .dropdown-toggle btn btn-primary{
@@ -950,6 +972,10 @@
                 vertical-align: middle;
                 width: 35%;
                 margin-right: 27px;
+                .dropdown-menu{
+                  font-size: 14px !important;
+                  font-family: 'Roboto' !important;
+                }
               }
               .user-block:hover{
                     background-color:#33a1ff;

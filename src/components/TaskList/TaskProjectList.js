@@ -12,6 +12,7 @@ import { Button } from "react-bootstrap";
 import DisplayTaskList from "./DisplayTaskList";
 import { toast } from "react-toastify";
 import DailyPloyToast from "./../DailyPloyToast";
+import VideoLoader from "../dashboard/VideoLoader"
 
 class TaskProjectList extends Component {
   constructor(props) {
@@ -52,6 +53,10 @@ class TaskProjectList extends Component {
       project_task_lists: [],
       taskStatus: [],
       isLoading: false,
+      isTaskListLoading: false,
+      isFilterLoading: false,
+      isTaskListTasksLoading: false,
+      taskListTasksLoadingID: null,
       isProjectListShow: false,
       projectShowMemberId: null,
       showInfo: false,
@@ -91,6 +96,7 @@ class TaskProjectList extends Component {
 
   async componentDidMount() {
     this.props.handleLoading(true);
+    this.handleTaskLoad(true)
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -246,6 +252,10 @@ class TaskProjectList extends Component {
   handleLoad = (value) => {
     this.setState({ isLoading: value });
   };
+
+  handleTaskLoad = (value) => {
+    this.setState({ isTaskListLoading: value });
+  }
 
   closeOnlyTaskModal = () => {
     this.setState({
@@ -536,6 +546,16 @@ class TaskProjectList extends Component {
     }
   };
 
+  loadFilteredData = (value) => {
+    this.setState({ isFilterLoading: value })
+  }
+
+  loadTaskListTaskData = (value, ID) => {
+    this.setState({ 
+      isTaskListTasksLoading : value,
+      taskListTasksLoadingID :ID })
+  }
+
   displayList = async (taskListId, ID, type) => {
     if (this.state.list_id != taskListId || ID != null) {
       let params;
@@ -575,7 +595,7 @@ class TaskProjectList extends Component {
               };
             })
             : [];
-        this.setState({ list_id: taskListId, task_lists: taslListTask });
+        this.setState({ list_id: taskListId, task_lists: taslListTask, isFilterLoading: false, isTaskListTasksLoading: false });
       } catch (e) {
         this.handleErroMsg(e);
       }
@@ -623,22 +643,36 @@ class TaskProjectList extends Component {
               name = status.name;
               break;
           }
-          return { id: status.id, statusName: name, color: "#53a4f0" };
+          return { id: status.id, isDefault: status.is_default, statusName: name, color: "#53a4f0" };
         });
       }
       console.log("data", taskStatusArray);
     } catch (e) {
       this.handleErroMsg(e);
     }
+    this.handleTaskLoad(false)
+    let taskStatuses = this.getIsDefault(taskStatusArray)
     this.setState({
       projectId: id,
       showbutton: false,
       showAddTaskButton: true,
       project_task_lists: taskListEntries,
-      taskStatus: taskStatusArray,
+      taskStatus: taskStatuses,
       projectMembers: project && project.members ? project.members : []
     });
   };
+
+  getIsDefault = (taskStatuses) => {
+    let taskStatus1 = [];
+    let taskStatus2 = [];
+    let taskStatus = [];
+    taskStatus1 = taskStatuses.filter(status => status.isDefault == !true)
+    taskStatus2 = taskStatuses.find(status => status.isDefault == true)
+    console.log("taskStatus2A1", taskStatus1)
+    console.log("taskStatus2A2", taskStatus2)
+    taskStatus = [taskStatus2, ...taskStatus1]
+    return taskStatus
+  }
 
   deleteTaskList = async (taskId) => {
     try {
@@ -798,6 +832,7 @@ class TaskProjectList extends Component {
           state={this.state}
         />
         <div className="task-body-box">
+          {this.state.isTaskListLoading ? null :
           <div className="search-project-list">
             <div className="project-heading">Projects</div>
             <div className="container1">
@@ -815,10 +850,11 @@ class TaskProjectList extends Component {
                 );
               })}
             </div>
-          </div>
+          </div>}
+          {this.state.isTaskListLoading ? <VideoLoader/> :
           <div className="add-task-card-box">
             <div className="container2">
-              {this.state.showAddTaskButton ? (
+              {this.state.showAddTaskButton && this.roleType == "admin" ? (
                 <div
                   className="container2OpenModal"
                   onClick={this.openAddProjectTaskModal}
@@ -876,6 +912,10 @@ class TaskProjectList extends Component {
                         EditTlt={this.editTlt}
                         editTltId={this.state.editTltId}
                         moveToDashBoard={this.moveToDashBoard}
+                        loadFilteredData={this.loadFilteredData}
+                        isFilterLoading={this.state.isFilterLoading}
+                        loadTaskListTaskData={this.loadTaskListTaskData}
+                        isTaskListTasksLoading={this.state.isTaskListTasksLoading}
                         worksapceMembers={this.state.worksapceUsers}
                         taskStatus={this.state.taskStatus}
                         categories={this.state.categories}
@@ -926,7 +966,7 @@ class TaskProjectList extends Component {
               handleSaveTaskData={this.handleSaveTaskData}
               isEdit={this.state.isEdit}
             />
-          </div>
+          </div>}
         </div>
       </>
     );
