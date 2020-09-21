@@ -19,7 +19,7 @@ const Tabs = (props) => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        <div className="col-md-1 analysis2">
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
           </Link>
@@ -55,7 +55,7 @@ const Tabs = (props) => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        <div className="col-md-1 analysis2">
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
           </Link>
@@ -83,7 +83,7 @@ const Tabs = (props) => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        <div className="col-md-1 analysis2">
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
           </Link>
@@ -122,7 +122,7 @@ const Tabs = (props) => {
         <div className="col-md-1 active">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        <div className="col-md-1 analysis2">
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
           </Link>
@@ -161,16 +161,17 @@ const Tabs = (props) => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        <div className="col-md-1 analysis2"> 
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
           </Link>
         </div>
-        <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/milestone`}>
-            Milestone
+        {props.userRole && props.userRole == "admin" &&
+          <div className="col-md-1 analysis">
+            <Link to={`/workspace/${props.workspaceId}/milestone`}>
+              Milestone
           </Link>
-        </div>
+          </div>}
         {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>Task</Link>
         </div> */}
@@ -204,12 +205,12 @@ const Tabs = (props) => {
             Roadmaps
           </Link>
         </div>
-        <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/milestone`}>
-            Milestone
+        {props.userRole && props.userRole == "admin" &&
+          <div className="col-md-1 analysis">
+            <Link to={`/workspace/${props.workspaceId}/milestone`}>
+              Milestone
           </Link>
-        </div>
-
+          </div>}
         {/* <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/analysis`}>Analysis</Link>
         </div>
@@ -235,7 +236,7 @@ const Tabs = (props) => {
         <div className="col-md-1 analysis">
           <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
         </div>
-        <div className="col-md-1 analysis">
+        <div className="col-md-1 analysis2">
           <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
           </Link>
