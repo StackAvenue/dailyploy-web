@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import { Modal, Button } from "react-bootstrap";
 import { debounce } from "../../utils/function";
 import "react-datepicker/dist/react-datepicker.css";
+import VideoLoader from "../dashboard/VideoLoader";
 
 const AddTask = (props) => {
   const [taskName, setTaskName] = useState("");
@@ -28,13 +29,7 @@ const AddTask = (props) => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [taskCategories, setTaskCategories] = useState();
   const [moveToOTherTask, setMoveToOTherTask] = useState();
-
-
-  const [status, setstatus] = useState({
-    color: "#53a4f0",
-    statusName: "Not Started",
-    id: 6,
-  });
+  const [status, setstatus] = useState({});
 
   const showDeleteModal = () => {
     setIsDeleteModal(true)
@@ -186,7 +181,13 @@ const AddTask = (props) => {
     }
   }
 
+  const setTaskStatuses = (taskStatus) => {
+    let status = taskStatus.find(status => status.isDefault == true)
+    setstatus(status)
+  }
+
   useEffect(() => {
+    setTaskStatuses(props.taskStatus)
     if (props.showTask) {
       setTaskName(props.task_lists_task.name);
       setDescription(
@@ -243,11 +244,12 @@ const AddTask = (props) => {
   return (
     <>
       <div className="InnershowCardDetails">
-        <div className="task-field">
+        {props.isFilterLoading ? <VideoLoader/> :
+          <div className="task-field">
           <div className="task" onDoubleClick={onDoubleClickEnable}>
             <div className="taskNo">
               <input
-                type={Text}
+                type='text'
                 disabled={props.showTask}
                 value={taskName}
                 placeholder="Task Name"
@@ -549,7 +551,7 @@ const AddTask = (props) => {
           )}
           {/* {openCalenderModal && selectMoveToDashboardDate()} */}
 
-        </div>
+        </div>}
       </div>
 
       {/* --------move to Dashboard modal start--------- */}

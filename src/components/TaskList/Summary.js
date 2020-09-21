@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { get, post, logout, put, del } from "../../utils/API";
 import ProjectReportsSettings from "../dashboard/settings/ProjectReportsSettings";
 import ReactTooltip from "react-tooltip";
+import Spinner from 'react-bootstrap/Spinner'
 
 const Summary = props => {
     const[totalTasks, setTotalTasks]=useState(null)
@@ -10,6 +11,7 @@ const Summary = props => {
     const[tasksleft, setTasksleft]=useState(null)
     const[totalTime, setTotaltime]=useState(null)
     const[remainTime, setRemaintime]=useState(null)
+    const[isLoading, setIsLoading]=useState(true)
 
     const getSummary = async () => {
         try {
@@ -23,6 +25,7 @@ const Summary = props => {
               setTasksleft(taskleft)
               setTotaltime(save.total_estimate_hours)
               setRemaintime(Math.round(save.remaining_hours * 10) / 10)
+              setIsLoading(false)
               console.log(data)
         } catch (e) { }
     }
@@ -34,6 +37,9 @@ const Summary = props => {
     return (
         <div>
             <div className="first">
+                {isLoading ? 
+                <Spinner animation="grow" variant="success" /> :
+                <>
                 <div className="one-col">
             <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;
                 Total tasks : {totalTasks}
@@ -65,7 +71,8 @@ const Summary = props => {
               <ReactTooltip id="closeTask" effect="solid">
                 Close
               </ReactTooltip>
-            </div>
+            </div></>
+            }
             </div>
         </div>
     )

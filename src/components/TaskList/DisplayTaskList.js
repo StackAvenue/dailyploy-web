@@ -11,6 +11,7 @@ import { debounce } from "../../utils/function";
 import Checklist from "./Checklist";
 import Filter from "./Filter";
 import Summary from "./Summary";
+import Spinner from 'react-bootstrap/Spinner'
 import useOnClickOutside from 'use-onclickoutside';
 
 
@@ -53,6 +54,9 @@ const DisplayTaskList = (props) => {
               onClick={(e) => {
                 e.preventDefault();
                 props.displayList(props.ProjectTask.id);
+                if(props.isTaskListTasksLoading==false && props.list_id != props.id){
+                  props.loadTaskListTaskData(true, props.ProjectTask.id)
+                }
                 props.closeFilter();
                 props.closeSummary();
               }}
@@ -81,7 +85,10 @@ const DisplayTaskList = (props) => {
           </div>
           <div className="textCard">
             <div className="project-task-name">
-              {props.ProjectTask.name}&nbsp;
+              {props.ProjectTask.name}&nbsp;&nbsp;&nbsp;
+              {props.isTaskListTasksLoading  && props.ProjectTask.id == props.state.taskListTasksLoadingID ? 
+              <Spinner animation="grow" variant="success" size="sm" />:
+              null} 
             </div>
             <div className="project-task-date">
               {props.ProjectTask ? props.ProjectTask.start_date && !props.ProjectTask.end_date ? "Starts:-" : null : null}
@@ -157,6 +164,7 @@ const DisplayTaskList = (props) => {
                 Filter Roadmap
               </ReactTooltip>
               </div>) : null}
+            {roleType == "admin" ? 
             <div
               className="edit-icon"
               onClick={(e) => {
@@ -174,7 +182,8 @@ const DisplayTaskList = (props) => {
               <ReactTooltip id="editTask" effect="solid">
                 Edit Roadmap
               </ReactTooltip>
-            </div>
+            </div> : null}
+            {roleType == "admin" ? 
             <div
               className="delete-icon"
               onClick={(e) => {
@@ -191,7 +200,7 @@ const DisplayTaskList = (props) => {
               <ReactTooltip id="deleteTask" effect="solid">
                 Delete Roadmap
               </ReactTooltip>
-            </div>
+            </div>: null}
           </div>
         </div>
       </div>
@@ -225,6 +234,7 @@ const DisplayTaskList = (props) => {
             displayList={props.displayList}
             list_id={props.list_id}
             closeFilter={props.closeFilter}
+            loadFilteredData={props.loadFilteredData}
           />
         </div>) : null}
 
@@ -249,6 +259,7 @@ const DisplayTaskList = (props) => {
                     handleSaveTask={props.handleSaveTask}
                     taskStatus={props.taskStatus}
                     categories={props.categories}
+                    isFilterLoading={props.isFilterLoading}
                   />
                 );
               })

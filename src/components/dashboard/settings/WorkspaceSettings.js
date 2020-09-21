@@ -27,6 +27,8 @@ class WorkspaceSettings extends Component {
     };
   }
 
+  roleType = localStorage.getItem("userRole");
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.workspaceObj !== this.props.workspaceObj ||
@@ -124,6 +126,10 @@ class WorkspaceSettings extends Component {
       this.props.workspaceNameUpdate("workspaceName", data.workspace_role);
     } catch (e) {
       console.log("error", e);
+      toast(
+        <DailyPloyToast message={"Only Admin can change the Workspace Name"} status="error" />,
+        { autoClose: 2500, position: toast.POSITION.TOP_CENTER }
+      );
     }
   };
 
@@ -133,8 +139,12 @@ class WorkspaceSettings extends Component {
         <Tabs>
           <TabList>
             <Tab>General</Tab>
+            {this.roleType =="admin" ? 
+            <>
             <Tab>Categories</Tab>
-            <Tab>Configure Statuses</Tab>
+            <Tab>Configure Statuses</Tab> 
+            </>
+            : null}
             {/* <Tab>Employee Reports</Tab> */}
             {/* <Tab>Project Reports</Tab> */}
           </TabList>

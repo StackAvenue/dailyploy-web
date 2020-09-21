@@ -1063,6 +1063,9 @@
 .member-modal {
   .modal-content {
     width: 658px;
+    .table{
+      width: 94% !important;
+    }
     .header {
       padding: 17px 0 0px 30px !important;
       span {
