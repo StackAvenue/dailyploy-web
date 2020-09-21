@@ -57,6 +57,7 @@ class GeneralSettings extends Component {
   roleType = localStorage.getItem("userRole");
 
   componentDidMount = async () => {
+    if(this.props.workspaceId){
     try {
       const { data } = await get(
         `workspaces/${this.props.workspaceId}/members`
@@ -99,7 +100,7 @@ class GeneralSettings extends Component {
     } catch (e) {
       this.setState({ isConfig: true });
     }
-  };
+  }};
 
   componentDidUpdate = async (prevProps, prevState) => {
     if (
