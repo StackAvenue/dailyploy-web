@@ -11,6 +11,7 @@ import ShowMembers from "./components/dashboard/ShowMembers";
 import TaskList from "./components/dashboard/TaskList";
 import TaskProjectList from "./components/TaskList/TaskProjectList";
 import Milestone from './components/Milestone/Milestone';
+import Allocation from './components/ResourceAllocation/Allocation';
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -83,6 +84,12 @@ class Workspace extends Component {
         exact: true,
         component: Milestone,
         title: "milestone",
+      },
+      {
+        path: "/allocation",
+        exact: true,
+        component: Allocation,
+        title: "allocation",
       },
       {
         component: NotFound,

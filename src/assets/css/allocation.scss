@@ -1,0 +1,160 @@
+.allocation-container {
+  .table {
+    .project-member-false {
+      cursor: pointer !important;
+    }
+  }
+  .allocation-table {
+    margin-top: 43px;
+    width: 100%;
+  }
+  .allocation {
+    width: 100%;
+  }
+}
+table.project-member-table tbody tr:nth-child(n) td:first-child{
+  z-index: 1;
+  position: sticky;
+  left: 73px;
+  margin-left: 23px;
+}
+table.project-member-table thead:first-child tr:first-child th:first-child {
+  position: sticky;
+  left: 73px;
+  z-index: 3;
+  background-color: #f2f2f2;
+}
+.project-member-false {
+  cursor: pointer !important;
+  text-align: center;
+  color: lightgray;
+  font-size: 13px;
+}
+.project-member-false:hover {
+  background-color: #ebfaeb;
+}
+.project-member-true {
+  cursor: pointer !important;
+  text-align: center;
+  color: #bfbfbf;
+  font-size: 13px;
+  background-color: #dae0e2;
+}
+.project-member-true:hover {
+  background-color: #e6e6e6;
+}
+.hide {
+  display: none;
+}
+.project-member-true:hover + .hide {
+  display: block;
+  color: red;
+}
+
+.project-member-false:hover .overlay {
+  opacity: 1;
+}
+
+//ERROR IN DASHBOARD
+
+.table td,
+.table th {
+  padding: 1.75rem !important;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.table th {
+  padding: 1.25rem !important;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.pro {
+  background-color: #ebfaeb;
+  text-align: center;
+}
+
+// table {
+//   empty-cells: show;
+//   border: 1px solid lightgrey;
+//   width: auto;
+//     height: 9pc;
+// }
+
+// table td,
+// table th {
+//   min-width: 2em;
+//   min-height: 2em;
+//   border: 1px solid lightgray;
+// }
+
+.card {
+  border-width: 2px 2px 2px 4px;
+  border-style: solid;
+  border-color: rgb(237, 237, 237) rgb(237, 237, 237) rgb(237, 237, 237)
+    rgb(199, 208, 255);
+  padding-left: 4px;
+  border-radius: 5px;
+  box-shadow: none;
+  height: 5pc;
+  margin-left: 3px;
+  margin-right: 4px;
+}
+
+.inner-card {
+  border-style: solid;
+  //border-color: lightblue;
+  border-radius: 5px;
+  width: 102%;
+  margin-left: -4px;
+}
+
+.project-name-card {
+  width: 10pc;
+  height: 111px;
+  position: sticky;
+  top: 110px;
+  margin-top: 15pc;
+  background-color: rgb(242, 242, 242);
+}
+
+.project-name {
+  text-align: center;
+  font-size: 22px;
+}
+
+.member-name-card {
+  position: relative;
+  bottom: -15px;
+  width: 41px;
+  height: 40px;
+  border-radius: 50%;
+  border: solid 2px #fffcfc;
+  color: #fff;
+  font-size: 15px;
+  background-color: #94a98e;
+  display: inline-block;
+  text-align: center;
+  font-weight: 500;
+  padding-top: 5px;
+  margin-left: -6px;
+}
+
+.member-row {
+  height: 72px;
+}
+
+table.project-member-table {
+  // margin:5px;
+  // padding:5px;
+  // background-color: green;
+  // width: auto;
+  // height: auto;
+  // overflow: auto;
+  // text-align:justify;
+  overflow-x: auto;
+  width: max-content;
+  margin-top: 60px;
+  position: absolute;
+}

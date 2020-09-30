@@ -57,8 +57,8 @@ export const get = async (basePath, data) => {
   return await axios.get(`/${basePath}`, { params: data ? data : {} });
 };
 
-export const del = async basePath => {
-  return await axios.delete(`/${basePath}`, {}, headerConfig);
+export const del = async (basePath, params) => {
+  return await axios.delete(`/${basePath}`, { data: params ? params : {} }, headerConfig);
 };
 
 export const mockGet = async basePath => {
