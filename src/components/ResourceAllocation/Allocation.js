@@ -24,6 +24,9 @@ const Allocation = (props) => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [projectMemberloaded, setProjectMemberLoaded] = useState(false)
   const [isDataLoading, setIsDataLoading] = useState(false)
+  const [isMemberAddedRemoved, setIsMemberAddedRemoved] = useState(false)
+  const [selectedMember, setSelectedMember] = useState(null)
+  const [selectedProject, setSelectedProject] = useState(null)
 
   const classNameRoute = () => {
     let route = props.history.location.pathname;
@@ -152,19 +155,28 @@ const Allocation = (props) => {
       setProjectMemberMap(myMap);
       setProjectMemberLoaded(true)
       setIsDataLoading(true)
+      setIsMemberAddedRemoved(false)
     } catch (e) {
       showToast("Something went wrong. Please contact support");
     }
   };
 
   const handleOnClick = debounce((projectId, memberId) => {
+    setIsMemberAddedRemoved(true);
     if (!checkProjectMemberId(memberId, projectId)) {
+      memberAddedRemoved(projectId, memberId)
       setProjectMember(projectId, memberId);
     } else {
+      memberAddedRemoved(projectId, memberId)
       removeMember(projectId, memberId);
     }
     setIsLoading(!isLoading);
   }, 250);
+
+  const memberAddedRemoved = (projectId, memberId) => {
+    setSelectedMember(memberId)
+    setSelectedProject(projectId)
+  }
 
   const setProjectMember = async (projectId, memberId) => {
     try {
@@ -203,6 +215,10 @@ const Allocation = (props) => {
   }
   }
 
+  const capitalizeName = (memberName) => {
+    return memberName.charAt(0).toUpperCase() + memberName.slice(1)
+  }
+
   return (
     <>
       <div className="allocation">
@@ -237,7 +253,7 @@ const Allocation = (props) => {
                         />
                         <div
                           className="project-name"
-                          style={{ marginTop: "17px" }}
+                          style={{ marginTop: "17px", textOverflow: "ellipsis" }}
                         >
                           {project.name}
                         </div>
@@ -253,7 +269,7 @@ const Allocation = (props) => {
                 return (
                   <tr className="member-row">
                     <td
-                      style={{ backgroundColor: "#f2f2f2", fontSize: "17px" }}
+                      style={{ backgroundColor: "#f2f2f2", fontSize: "17px", textTransform: "capitalize" }}
                     >
                       <div
                         className="member-name-card"
@@ -266,7 +282,7 @@ const Allocation = (props) => {
                       >
                         <span>{firstTwoLetter(member.name)}</span>
                       </div>
-                      {member.name}
+                      {capitalizeName(member.name)}
                     </td>
                     {projects.map((project) => {
                       return (
@@ -283,7 +299,10 @@ const Allocation = (props) => {
                             handleOnClick(project.id, member.id);
                           }}
                         >
-                          {member.id > 0 &&
+                          {isMemberAddedRemoved==true && selectedMember == member.id 
+                          && selectedProject == project.id
+                          ? <Spinner animation="grow" variant="success" /> :
+                          member.id > 0 &&
                           project.id > 0 &&
                           projectMemberloaded &&
                           checkProjectMemberId(member.id, project.id)
@@ -300,7 +319,10 @@ const Allocation = (props) => {
                 next={getNextMembers}
                 hasMore={true}
               ></InfinitScroll>
-              {projectMemberloaded ? null : <Spinner animation="border" variant="secondary" /> }
+              {projectMemberloaded ? null : 
+              <>
+              <Spinner animation="border" variant="success" />
+              <div style={{ height:"4pc" }}></div></>}
             </tbody>
           </table>
           : <VideoLoader/>}
