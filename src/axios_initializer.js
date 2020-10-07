@@ -26,8 +26,8 @@ const axiosInitializer = {
     axios.interceptors.response.use(
       response => {
         if (response.data && response.data.message) {
-          console.log("Props", this.props);
-          toast.success(response.data.message);
+          //console.log("Props", this.props);
+          //toast.success(response.data.message);
         }
         return response;
       },
