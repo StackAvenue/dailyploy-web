@@ -12,7 +12,7 @@
     width: 100%;
   }
 }
-table.project-member-table tbody tr:nth-child(n) td:first-child{
+table.project-member-table tbody tr:nth-child(n) td:first-child {
   z-index: 1;
   position: sticky;
   left: 66px;
@@ -92,8 +92,6 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
 .card {
   border-width: 2px 2px 2px 4px;
   border-style: solid;
-  border-color: rgb(237, 237, 237) rgb(237, 237, 237) rgb(237, 237, 237)
-    rgb(199, 208, 255);
   padding-left: 4px;
   border-radius: 5px;
   box-shadow: none;
@@ -106,7 +104,7 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
   border-style: solid;
   //border-color: lightblue;
   border-radius: 5px;
-  width: 102%;
+  width: 103%;
   margin-left: -4px;
 }
 
@@ -120,12 +118,13 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
 }
 
 .project-name {
-  margin-top: 12px;
   text-align: center;
   font-size: 17px;
-  white-space: inherit;
-  overflow-y: auto;
   margin-bottom: 6px;
+  white-space: nowrap;
+  width: 142px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .member-name-card {
@@ -164,11 +163,67 @@ table.project-member-table {
 }
 
 .spinner-border {
-  color: #158432!important;
+  color: #158432 !important;
   width: 2.5rem !important;
   height: 2.5rem !important;
   position: fixed;
   left: 43pc;
   z-index: 50;
   bottom: 11px;
+}
+
+.member-name {
+  margin-top: 6px;
+  white-space: nowrap;
+  width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-name-hover {
+  white-space: nowrap;
+  width: 144px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 4px;
+  //display: none;
+}
+
+.hover-detail {
+  display: none;
+}
+
+.project-name-hover:hover + .hover-detail {
+  display: block;
+  border: 1px solid transparent;
+  background-color: white;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  white-space: break-spaces;
+  text-overflow: ellipsis;
+  position: absolute;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: Roboto, sans-serif;
+  color: black;
+}
+
+.member-name:hover + .hover-detail {
+  display: block;
+  border: 1px solid transparent;
+  background-color: white;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  white-space: break-spaces;
+  text-overflow: ellipsis;
+  position: absolute;
+  padding: 5px 10px;
+  box-shadow: 0px 2px 2px 0px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: Roboto, sans-serif;
+  color: black;
 }

@@ -20,13 +20,14 @@ const Allocation = (props) => {
   const [totalMemberPages, setTotalMemberPages] = useState(null);
   const [count, setCount] = useState(1);
   const [isDeleteShow, setIsDeleteShow] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [projectMemberloaded, setProjectMemberLoaded] = useState(false)
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isMemberAddedRemoved, setIsMemberAddedRemoved] = useState(false)
   const [selectedMember, setSelectedMember] = useState(null)
   const [selectedProject, setSelectedProject] = useState(null)
+  const [isAdded, setIsAdded] = useState(false)
+  const [isRemoved, setIsRemoved] = useState(false)
 
   const classNameRoute = () => {
     let route = props.history.location.pathname;
@@ -77,7 +78,18 @@ const Allocation = (props) => {
     {
       getProjectMember();
     }
-  }, [isLoading, isDataLoaded]);
+  },[isDataLoaded])
+
+  useEffect(() => {
+    if(isRemoved)
+    {
+      removeMemberFromProject();
+    }
+    if(isAdded)
+    {
+      addMemberToProject();
+    }
+  }, [isAdded, isRemoved]);
 
   const showToast = (message) => {
     toast(<DailyPloyToast message={message} status="error" />, {
@@ -161,6 +173,75 @@ const Allocation = (props) => {
     }
   };
 
+  const removeMemberFromProject = async () => {
+    const { workspaceId } = props.match.params;
+    try {
+      let params = {
+        user_ids: [selectedMember],
+        project_ids: [selectedProject],
+      };
+      const { data } = await post(
+        params,
+        `workspaces/${workspaceId}/project_member`
+      );
+      var results = data.project_member.reduce(function (result, item) {
+        var key = Object.keys(item)[0];
+        var projectIdSet = new Set(item[key])
+        result[key] = projectIdSet;
+        return result;
+      }, {});
+      var map = Object.entries(results);
+      var myMap = new Map(map);
+      var projectidsSet = projectMemberMap.get(selectedMember.toString())
+      projectidsSet.delete(selectedProject)
+      var filteredData = projectMemberMap.set(selectedMember.toString(), projectidsSet)
+      setProjectMemberMap(filteredData);
+      setProjectMemberLoaded(true)
+      setIsDataLoading(true)
+      setIsMemberAddedRemoved(false)
+      setIsRemoved(false)
+    } catch (e) {
+      showToast("Something went wrong. Please contact support");
+    }
+  };
+
+  const addMemberToProject = async () => {
+    const { workspaceId } = props.match.params;
+    try {
+      let params = {
+        user_ids: [selectedMember],
+        project_ids: [selectedProject],
+      };
+      const { data } = await post(
+        params,
+        `workspaces/${workspaceId}/project_member`
+      );
+      var results = data.project_member.reduce(function (result, item) {
+        var key = Object.keys(item)[0];
+        var projectIdSet = new Set(item[key])
+        result[key] = projectIdSet;
+        return result;
+      }, {});
+      var map = Object.entries(results);
+      var myMap = new Map(map);
+      var projectidset = projectMemberMap.get(selectedMember.toString())
+      if(projectidset == null)
+      {
+        setProjectMemberMap(new Map([...projectMemberMap].concat([...myMap])));
+      }
+      else {
+        var appendedMemberProject = projectMemberMap.set(selectedMember.toString(), projectidset.add(selectedProject))
+        setProjectMemberMap(appendedMemberProject);
+      }
+      setProjectMemberLoaded(true)
+      setIsDataLoading(true)
+      setIsMemberAddedRemoved(false)
+      setIsAdded(false)
+    } catch (e) {
+      showToast("Something went wrong. Please contact support");
+    }
+  };
+
   const handleOnClick = debounce((projectId, memberId) => {
     setIsMemberAddedRemoved(true);
     if (!checkProjectMemberId(memberId, projectId)) {
@@ -170,12 +251,11 @@ const Allocation = (props) => {
       memberAddedRemoved(projectId, memberId)
       removeMember(projectId, memberId);
     }
-    setIsLoading(!isLoading);
   }, 250);
 
   const memberAddedRemoved = (projectId, memberId) => {
     setSelectedMember(memberId)
-    setSelectedProject(projectId)
+    setSelectedProject(projectId) 
   }
 
   const setProjectMember = async (projectId, memberId) => {
@@ -188,6 +268,7 @@ const Allocation = (props) => {
         params,
         `workspaces/${workspaceId}/resource_allocation`
       );
+      setIsAdded(true)
     } catch (e) {}
   };
 
@@ -200,6 +281,7 @@ const Allocation = (props) => {
         `workspaces/${workspaceId}/resource_allocation/${member}`,
         params
       );
+      setIsRemoved(true)
     } catch (e) {}
   };
 
@@ -235,6 +317,7 @@ const Allocation = (props) => {
               <tr>
                 <th
                   rowspan="2"
+                  className="project-name-card"
                   style={{
                     height: "7pc",
                     maxWidth: "15pc",
@@ -255,7 +338,8 @@ const Allocation = (props) => {
                           className="project-name"
                           style={{ marginTop: "17px", textOverflow: "ellipsis" }}
                         >
-                          {project.name}
+                          <div className="project-name-hover">{project.name}</div>
+                          <div className={`${project.name.length > 15 ? "hover-detail" : "hide"}`}>{project.name}</div>
                         </div>
                       </div>
                     </th>
@@ -270,7 +354,7 @@ const Allocation = (props) => {
                   <tr className="member-row">
                     <td
                       style={{ backgroundColor: "#f2f2f2", fontSize: "17px", textTransform: "capitalize" }}
-                    >
+                    ><div style={{ display:"flex" }}>
                       <div
                         className="member-name-card"
                         title={textTitlize(member.name)}
@@ -282,7 +366,11 @@ const Allocation = (props) => {
                       >
                         <span>{firstTwoLetter(member.name)}</span>
                       </div>
-                      {capitalizeName(member.name)}
+                      <div className="member-name">{capitalizeName(member.name)}</div>
+                      <div className={`${member.name.length > 16 ? 
+                        "hover-detail" : "hide"}`}>
+                          {capitalizeName(member.name)}</div>
+                          </div>
                     </td>
                     {projects.map((project) => {
                       return (
