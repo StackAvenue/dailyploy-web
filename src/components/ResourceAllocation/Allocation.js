@@ -28,6 +28,11 @@ const Allocation = (props) => {
   const [selectedProject, setSelectedProject] = useState(null)
   const [isAdded, setIsAdded] = useState(false)
   const [isRemoved, setIsRemoved] = useState(false)
+  const [minRowLength, setMinRowLength] = useState([1,2,3,4,5,6,7])
+  const [fillProjectRow, setFillProjectRow] = useState([])
+  const [fillMemberColumn, setFillMemberColumn] = useState([])
+  const [isFillProjectRow, setIsFillProjectRow] = useState(false)
+  const [isFillMemberColumn, setIsFillMemberColumn] = useState(false)
 
   const classNameRoute = () => {
     let route = props.history.location.pathname;
@@ -77,6 +82,7 @@ const Allocation = (props) => {
     if(isDataLoaded)
     {
       getProjectMember();
+      checkMemberProjectLength();
     }
   },[isDataLoaded])
 
@@ -301,6 +307,25 @@ const Allocation = (props) => {
     return memberName.charAt(0).toUpperCase() + memberName.slice(1)
   }
 
+  const checkMemberProjectLength = () => {
+    var projectsLength = 7 - projects.length
+    var membersLength = 7 - members.length
+    if(projectsLength > 0)
+    {
+      for (var i = 0; i < projectsLength; i++) {
+        fillProjectRow[i] = i;
+     }
+     setIsFillProjectRow(true)
+    }
+    if(membersLength > 0)
+    {
+      for (var i = 0; i < membersLength; i++) {
+        fillMemberColumn[i] = i;
+     }
+     setIsFillMemberColumn(true) 
+    }
+  }
+
   return (
     <>
       <div className="allocation">
@@ -339,11 +364,17 @@ const Allocation = (props) => {
                           style={{ marginTop: "17px", textOverflow: "ellipsis" }}
                         >
                           <div className="project-name-hover">{project.name}</div>
-                          <div className={`${project.name.length > 15 ? "hover-detail" : "hide"}`}>{project.name}</div>
+                          <div className={`${project.name.length > 14 ? "hover-detail" : "hide"}`}>{project.name}</div>
                         </div>
                       </div>
                     </th>
                   );
+                })}
+                {isFillProjectRow && fillProjectRow.map((row) => {
+                  return (
+                    <th className="project-name-card">
+                    </th>
+                  )
                 })}
               </tr>
             </thead>
@@ -398,6 +429,27 @@ const Allocation = (props) => {
                             : "+ Add to Project"}
                         </td>
                       );
+                    })}
+                    {isFillProjectRow && fillProjectRow.map((a) => {
+                      return (
+                        <td className="project-member-extends"></td>
+                      )
+                    })}
+                  </tr>
+                );
+              })}
+              {isFillMemberColumn && fillMemberColumn.map((member) => {
+                return (
+                  <tr className="member-row">
+                    <td
+                      style={{ backgroundColor: "#f2f2f2", fontSize: "17px", textTransform: "capitalize" }}
+                    ><div style={{ display:"flex" }}>
+                    </div>
+                    </td>
+                    {minRowLength.map((row) => {
+                      return (
+                        <td className="project-member-extends"></td>
+                      )
                     })}
                   </tr>
                 );

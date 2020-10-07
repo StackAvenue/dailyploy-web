@@ -29,6 +29,7 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
   text-align: center;
   color: lightgray;
   font-size: 13px;
+  border: 1px solid lightgray;
 }
 .project-member-false:hover {
   background-color: #ebfaeb;
@@ -39,6 +40,15 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
   color: #bfbfbf;
   font-size: 13px;
   background-color: #dae0e2;
+  border: 1px solid lightgray;
+}
+.project-member-extends {
+  cursor: pointer !important;
+  text-align: center;
+  color: #bfbfbf;
+  font-size: 13px;
+  background-color: white;
+  border: 1px solid lightgray;
 }
 .project-member-true:hover {
   background-color: #e6e6e6;
@@ -90,7 +100,7 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
 // }
 
 .card {
-  border-width: 2px 2px 2px 4px;
+  //border-width: 2px 2px 2px 4px;
   border-style: solid;
   padding-left: 4px;
   border-radius: 5px;
@@ -109,7 +119,8 @@ table.project-member-table thead:first-child tr:first-child th:first-child {
 }
 
 .project-name-card {
-  width: 10pc;
+  //width: 10pc;
+  width: 163px;
   height: 111px;
   position: sticky;
   top: 110px;
