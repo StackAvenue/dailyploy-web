@@ -28,7 +28,7 @@ const Allocation = (props) => {
   const [selectedProject, setSelectedProject] = useState(null)
   const [isAdded, setIsAdded] = useState(false)
   const [isRemoved, setIsRemoved] = useState(false)
-  const [minRowLength, setMinRowLength] = useState([1,2,3,4,5,6,7])
+  const [minRowLength, setMinRowLength] = useState([1,2,3,4,5,6,7,8,9,10])
   const [fillProjectRow, setFillProjectRow] = useState([])
   const [fillMemberColumn, setFillMemberColumn] = useState([])
   const [isFillProjectRow, setIsFillProjectRow] = useState(false)
@@ -308,8 +308,8 @@ const Allocation = (props) => {
   }
 
   const checkMemberProjectLength = () => {
-    var projectsLength = 7 - projects.length
-    var membersLength = 7 - members.length
+    var projectsLength = 10 - projects.length
+    var membersLength = 9 - members.length
     if(projectsLength > 0)
     {
       for (var i = 0; i < projectsLength; i++) {
@@ -364,7 +364,7 @@ const Allocation = (props) => {
                           style={{ marginTop: "17px", textOverflow: "ellipsis" }}
                         >
                           <div className="project-name-hover">{project.name}</div>
-                          <div className={`${project.name.length > 14 ? "hover-detail" : "hide"}`}>{project.name}</div>
+                          <div className={`${project.name.length > 8 ? "hover-detail" : "hide"}`}>{project.name}</div>
                         </div>
                       </div>
                     </th>

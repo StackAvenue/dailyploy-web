@@ -12,7 +12,8 @@ import { Button } from "react-bootstrap";
 import DisplayTaskList from "./DisplayTaskList";
 import { toast } from "react-toastify";
 import DailyPloyToast from "./../DailyPloyToast";
-import VideoLoader from "../dashboard/VideoLoader"
+import VideoLoader from "../dashboard/VideoLoader";
+import Loader from 'react-loader-spinner'
 
 class TaskProjectList extends Component {
   constructor(props) {
@@ -58,6 +59,7 @@ class TaskProjectList extends Component {
       isTaskListTasksLoading: false,
       taskListTasksLoadingID: null,
       isProjectListShow: false,
+      isTaskListLoaded: false,
       projectShowMemberId: null,
       showInfo: false,
       isAllChecked: false,
@@ -89,6 +91,7 @@ class TaskProjectList extends Component {
       },
       task_lists: [],
       editTltId: -1,
+      isCheckVisible: false,
     };
   }
 
@@ -97,6 +100,7 @@ class TaskProjectList extends Component {
   async componentDidMount() {
     this.props.handleLoading(true);
     this.handleTaskLoad(true)
+    this.handleTaskListLoad(true)
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -257,6 +261,10 @@ class TaskProjectList extends Component {
     this.setState({ isTaskListLoading: value });
   }
 
+  handleTaskListLoad = (value) => {
+    this.setState({ isTaskListLoaded: value });
+  }
+
   closeOnlyTaskModal = () => {
     this.setState({
       show: false,
@@ -276,6 +284,10 @@ class TaskProjectList extends Component {
       this.setState({ TaskShow: false });
     }
   };
+
+  closeAddTask = (value) => {
+    this.setState({ TaskShow : value })
+  }
 
   handleDateFrom = (date) => {
     let fromMoment = moment(date);
@@ -448,7 +460,14 @@ class TaskProjectList extends Component {
     } catch (e) { }
 }
 
+  addTaskLoading = (value) => {
+    this.setState({
+      isCheckVisible: value
+    })
+  }
+
   handleSaveTask = async (saveTaskParams, isMove) => {
+    this.addTaskLoading(true)
     try {
       let params = {
         name: saveTaskParams.name,
@@ -499,6 +518,7 @@ class TaskProjectList extends Component {
         });
       }
       console.log("tasks", tasks);
+      this.addTaskLoading(false)
       this.setState({
         show: false,
         task_lists: tasks,
@@ -603,6 +623,7 @@ class TaskProjectList extends Component {
   };
 
   handleOpenTaskData = async (id) => {
+    this.handleTaskListLoad(true)
     let taskListEntries = [];
     let taskStatusArray = [];
     let project = this.state.projects.find(project => project.id == id)
@@ -652,6 +673,7 @@ class TaskProjectList extends Component {
     }
     this.handleTaskLoad(false)
     let taskStatuses = this.getIsDefault(taskStatusArray)
+    this.handleTaskListLoad(false)
     this.setState({
       projectId: id,
       showbutton: false,
@@ -852,6 +874,15 @@ class TaskProjectList extends Component {
             </div>
           </div>}
           {this.state.isTaskListLoading ? <VideoLoader/> :
+          (this.state.isTaskListLoaded ?  
+          <Loader
+          type="Puff"
+          color="rgb(82 180 89)"
+          height={65}
+          width={65}
+          style={{marginLeft:"46pc",
+          marginTop:"13pc"}}
+          /> :
           <div className="add-task-card-box">
             <div className="container2">
               {this.state.showAddTaskButton && this.roleType == "admin" ? (
@@ -892,9 +923,11 @@ class TaskProjectList extends Component {
                         ProjectTask={project}
                         projects={this.state.projects}
                         task_lists={this.state.task_lists}
+                        addTaskLoading={this.addTaskLoading}
                         handleSaveTask={this.handleSaveTask}
                         getRoadmapStatus={this.getRoadmapStatus}
                         displayAddTask={this.displayAddTask}
+                        closeAddTask={this.closeAddTask}
                         displayList={this.displayList}
                         isChecklistOpen={this.isChecklistOpen}
                         isFilterOpen={this.isFilterOpen}
@@ -966,7 +999,7 @@ class TaskProjectList extends Component {
               handleSaveTaskData={this.handleSaveTaskData}
               isEdit={this.state.isEdit}
             />
-          </div>}
+          </div>)}
         </div>
       </>
     );
