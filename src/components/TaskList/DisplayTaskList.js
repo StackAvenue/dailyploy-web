@@ -269,11 +269,15 @@ const DisplayTaskList = (props) => {
             <>
               <div className="showCardDetails">
                 <AddTask
+                  state={props.state}
                   projectMembers={props.projectMembers}
                   list_id={props.list_id}
                   handleSaveTask={props.handleSaveTask}
                   showTask={false}
                   taskStatus={props.taskStatus}
+                  displayAddTask={props.displayAddTask}
+                  closeAddTask={props.closeAddTask}
+                  addTaskLoading={props.addTaskLoading}
                 />
               </div>
             </>

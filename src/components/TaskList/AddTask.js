@@ -7,6 +7,7 @@ import { Modal, Button } from "react-bootstrap";
 import { debounce } from "../../utils/function";
 import "react-datepicker/dist/react-datepicker.css";
 import VideoLoader from "../dashboard/VideoLoader";
+import Spinner from 'react-bootstrap/Spinner';
 
 const AddTask = (props) => {
   const [taskName, setTaskName] = useState("");
@@ -52,6 +53,7 @@ const AddTask = (props) => {
   // };
 
   const handleSave = debounce(() => {
+    props.addTaskLoading(true)
     if (taskName && member != -1) {
       var task_lists = {
         name: taskName,
@@ -168,7 +170,6 @@ const AddTask = (props) => {
   const handleKeypress = (e) => {
     const characterCode = e.key
     if (characterCode === 'Backspace') return
-
     const characterNumber = Number(characterCode)
     if (characterNumber >= 0 && characterNumber <= 9) {
       if (e.currentTarget.value && e.currentTarget.value.length) {
@@ -176,9 +177,10 @@ const AddTask = (props) => {
       } else if (characterNumber === 0) {
         e.preventDefault()
       }
-    } else {
+    }  else if(e.keyCode==189 || e.keyCode==190) {
       e.preventDefault()
     }
+    else {}
   }
 
   const setTaskStatuses = (taskStatus) => {
@@ -239,7 +241,14 @@ const AddTask = (props) => {
 
   }
 
-
+  const handleKeyDown = (e, taskName) => {
+    if (e.keyCode === 27 && taskName == "") {
+      props.closeAddTask(false)
+    }
+    else if(e.keyCode === 27){
+      handleSave()
+    }
+  }
 
   return (
     <>
@@ -256,7 +265,7 @@ const AddTask = (props) => {
                 onChange={(e) => handleInputChange(e)}
                 name="taskName"
                 className="form-control"
-
+                onKeyDown={(e) => handleKeyDown(e, taskName)}
               />
               <div className="hover-task" >{taskName}</div>
               {nameError && <span>Please add name</span>}
@@ -540,13 +549,15 @@ const AddTask = (props) => {
           )}
           {!props.showTask && (
             <div className="rightMark">
+              {props.state.isCheckVisible ? 
+               <Spinner animation="grow" variant="success" size="sm" /> :
               <button
                 variant="light"
                 className="btn btn-colo"
                 onClick={handleSave}
               >
                 <i class="fa fa-check" />
-              </button>
+              </button>}
             </div>
           )}
           {/* {openCalenderModal && selectMoveToDashboardDate()} */}
