@@ -245,6 +245,8 @@ const DisplayTaskList = (props) => {
               ? props.task_lists.map((task_lists_task) => {
                 return (
                   <AddTask
+                    state={props.state}
+                    addTaskLoading={props.addTaskLoading}
                     list_id={props.list_id}
                     projectMembers={props.projectMembers}
                     task_lists_task={task_lists_task}
