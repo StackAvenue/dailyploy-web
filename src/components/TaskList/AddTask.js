@@ -245,9 +245,8 @@ const AddTask = (props) => {
     if (e.keyCode === 27 && taskName == "") {
       props.closeAddTask(false)
     }
-    else if(e.keyCode === 27){
-      handleSave()
-    }
+    // else if(e.keyCode === 27){
+    // }
   }
 
   return (
