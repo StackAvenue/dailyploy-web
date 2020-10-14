@@ -309,10 +309,7 @@ class GeneralSettings extends Component {
     let toEmailSuggestions = [];
     var searchOptions = this.props.state.userMembers.map((user) => user);
     if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      toEmailSuggestions = searchOptions.sort().filter((v) => {
-        regex.test(v.email);
-      });
+      toEmailSuggestions = searchOptions.filter(v => v.email.toLowerCase().startsWith(value.toLowerCase()));
     }
 
     this.setState({ [name]: value, toEmailSuggestions: toEmailSuggestions });
@@ -897,15 +894,6 @@ class GeneralSettings extends Component {
           <div className="col-md-12 config-heading">Email Configuration</div>
           <div className="config-email-box">
             <div className="col-md-12 heading">
-              <div className="col-md-6 no-padding d-inline-block">
-                Daily Status Mail
-                <button
-                  className="btn btn-link addnew-button7"
-                  onClick={this.handleEditShow}
-                >
-                  {this.state.isConfig ? "Configure" : "Edit"}
-                </button>
-              </div>
               <EmailConfigModal
                 state={this.state}
                 handleClose={this.handleEditClose}
@@ -922,7 +910,16 @@ class GeneralSettings extends Component {
                 configEmailStatus={this.configEmailStatus}
               />
               <div className="col-md-6 no-padding d-inline-block">
+                Daily Status Mail
+              </div>
+              <div className="col-md-6 no-padding d-inline-block">
                 <div className="float-right">
+                  <button
+                    className="btn btn-link addnew-button7"
+                    onClick={this.handleEditShow}
+                  >
+                    {this.state.isConfig ? "Configure" : "Edit"}
+                  </button>
                   {this.state.isActive ? (
                     <button
                       className="btn btn-primary suspend-btn"
