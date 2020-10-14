@@ -660,9 +660,7 @@ class GeneralSettings extends Component {
         : "";
     ccMember =
       ccMember.length > 0 ? (configEmailStatusData["cc_mails"] = ccMember) : "";
-    var emailText = this.state.emailText
-      ? (configEmailStatusData["email_text"] = this.state.emailText)
-      : "";
+    configEmailStatusData["email_text"] = "Your email status"
     return configEmailStatusData;
   };
 
@@ -676,7 +674,8 @@ class GeneralSettings extends Component {
       emailTextError = "please enter email text";
     }
     this.setState({ toError: toError, emailTextError: emailTextError });
-    return this.state.selectToMembers.length > 0 && this.state.emailText !== "";
+    //return this.state.selectToMembers.length > 0 && this.state.emailText !== "";
+    return this.state.selectToMembers.length > 0;
   };
 
   configEmailStatus = async () => {
