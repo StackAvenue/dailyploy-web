@@ -1925,6 +1925,7 @@ table.scheduler-table tr:last-child td {
   padding: 50px 0px 0px 50px;
   .spinnerDive{
     text-align: center;
+        
   }
   .DisplayprojectListTopCard{
       //margin:10px;
@@ -2880,7 +2881,10 @@ table.scheduler-table tr:last-child td {
             border-radius: 24px;
             border: solid 1px #bfbfbf;
             background-color: #ffffff;
-            display: inline-block !important;
+            // display: inline-block !important;
+            display: flex;
+            align-items: center;
+            
           }
         }
         .remove-tag:hover {
@@ -2892,12 +2896,18 @@ table.scheduler-table tr:last-child td {
           opacity: 0.5;
         }
         .member-title {
-          width: 22px;
-          height: 22px;
-          border-radius: 20px;
-          background-color: #e5e5e5;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background-color: $color-heading3;
           margin-right: 10px;
           text-align: center;
+          font-size: 11px;
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          // margin-left: 10px;
+          color: #ffffff;
         }
       }
     }
@@ -3752,6 +3762,9 @@ table.scheduler-table tr:last-child td {
             cursor: not-allowed;
           }
         }
+        .loader-position{
+          
+        }
       }
       .box-btn {
         padding: 10px 0px 0px 15px !important;
@@ -3900,7 +3913,8 @@ table.scheduler-table tr:last-child td {
   box-shadow: 0px -3px 20px rgba(0, 0, 0, 0.0470588235294118);
   // background-color: #ffffff;
   //background-color: rgba(2, 40, 17, 0.5);
-  background-color: #839287;
+  // background-color: #839287;
+  background-color: #ffffff;
   border-right: 1px solid $color-borders;
   display: inline-flex;
   position: fixed;
@@ -4236,7 +4250,9 @@ table.scheduler-table tr:last-child td {
       border-radius: 24px;
       border: solid 1px #bfbfbf;
       background-color: #ffffff;
-      display: inline-block !important;
+      // display: inline-block !important;
+      display: flex;
+      align-items: center;
     }
   }
   .remove-tag:hover {
@@ -4248,12 +4264,18 @@ table.scheduler-table tr:last-child td {
     opacity: 0.5;
   }
   .member-title {
-    width: 22px;
-    height: 22px;
-    border-radius: 20px;
-    background-color: #e5e5e5;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $color-heading3;
     margin-right: 10px;
     text-align: center;
+    // margin-left: 10px;
+    font-size: 11px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
   }
   .task-project-color-code {
     width: 20px;
@@ -5040,7 +5062,9 @@ table.scheduler-table tr:last-child td {
       border-radius: 24px;
       border: solid 1px #bfbfbf;
       background-color: #ffffff;
-      display: inline-block !important;
+      // display: inline-block !important;
+      display: flex;
+      align-items: center;
     }
   }
   .remove-tag:hover {
@@ -5052,12 +5076,18 @@ table.scheduler-table tr:last-child td {
     opacity: 0.5;
   }
   .member-title {
-    width: 22px;
-    height: 22px;
-    border-radius: 20px;
-    background-color: #e5e5e5;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $color-heading3;
     margin-right: 10px;
     text-align: center;
+    font-size: 11px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    // margin-left: 10px;
+    color: #ffffff;
   }
   .task-project-color-code {
     width: 20px;
