@@ -1925,6 +1925,10 @@ table.scheduler-table tr:last-child td {
   padding: 50px 0px 0px 50px;
   .spinnerDive{
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
         
   }
   .DisplayprojectListTopCard{

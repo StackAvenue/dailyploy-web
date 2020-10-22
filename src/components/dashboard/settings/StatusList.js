@@ -8,6 +8,7 @@ import DailyPloyToast from "./../../../../src/components/DailyPloyToast";
 import ConfirmModal from "../../ConfirmModal";
 import { Button } from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
+import Loader from 'react-loader-spinner'
 import "../../../assets/css/TaskProjectList.scss";
 
 
@@ -255,8 +256,18 @@ const StatusList = (props) => {
                                     )
                                     :
                                     <div className="spinnerDive" >
-                                        <Spinner animation="border" role="status" aria-hidden="true" variant="success">
-                                        </Spinner>
+                                        {/* <Spinner animation="border" role="status" aria-hidden="true" variant="success">
+                                        </Spinner> */}
+                                        <Loader
+                                            type="Puff"
+                                            color="rgb(82 180 89)"
+                                            height={65}
+                                            width={65}
+                                            style={{
+                                                // marginLeft: "46pc",
+                                                // marginTop: "13pc"
+                                            }}
+                                        />
                                     </div>
 
                             }
@@ -285,8 +296,18 @@ const StatusList = (props) => {
                 }
             </div > :
             <div className="spinnerDive" >
-                <Spinner animation="border" role="status" aria-hidden="true" variant="success">
-                </Spinner>
+                {/* <Spinner animation="border" role="status" aria-hidden="true" variant="success">
+                </Spinner> */}
+                <Loader
+                    type="Puff"
+                    color="rgb(82 180 89)"
+                    height={65}
+                    width={65}
+                    style={{
+                        // marginLeft: "46pc",
+                        // marginTop: "13pc"
+                    }}
+                />
             </div>
     );
 

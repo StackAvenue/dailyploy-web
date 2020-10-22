@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
+// import VideoLoader from "../VideoLoader";
+import Loader from 'react-loader-spinner'
 import { get, post, put, del } from "./../../../utils/API";
 
 import StatusList from "./StatusList";
@@ -98,8 +100,19 @@ class StatusProjectList extends Component {
       <div className="status-setting">
         <div className="row no-margin category" style={{ marginTop: "50px" }}></div>
         {this.state.project.length === 0 ? <div className="spinnerDive" >
-          <Spinner animation="border" role="status" aria-hidden="true" variant="success">
-          </Spinner></div> : <>
+          {/* <Spinner animation="border" role="status" aria-hidden="true" variant="success">
+          </Spinner> */}
+          <Loader
+            type="Puff"
+            color="rgb(82 180 89)"
+            height={65}
+            width={65}
+            style={{
+              // marginLeft: "46pc",
+              // marginTop: "13pc"
+            }}
+          />
+        </div> : <>
             {this.state.project.map((data, i) => {
               return (
                 <div key={i} className="DisplayprojectListTopCard">
