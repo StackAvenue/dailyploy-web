@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
+import Spinner from 'react-bootstrap/Spinner'
 // import ImageUploading from "react-images-uploading";
 
 
@@ -66,18 +67,21 @@ const UserSettings = props => {
                 <input
                   type="text"
                   placeholder="Name"
-                  className={`form-control input ${
-                    props.state.nameError ? " input-error-border" : ""
+                  className={`form-control input ${props.state.nameError ? " input-error-border" : ""
                     }`}
                   name="userName"
                   value={props.state.userName}
                   onChange={props.handleChange}
                 />
+                {!props.state.userName ?
+                  <div className="loader-position">
+                    <Spinner animation="grow" variant="success" size="sm" />
+                  </div> :
+                  null}
               </div>
               <div className="d-inline-block box-btn">
                 <button
-                  className={`btn btn-primary save-button ${
-                    props.state.isSaveEnable ? "btn-blue" : "btn-disable"
+                  className={`btn btn-primary save-button ${props.state.isSaveEnable ? "btn-blue" : "btn-disable"
                     }`}
                   onClick={props.updateUserName}
                 >
@@ -131,8 +135,7 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="Old Password"
-              className={`form-control input ${
-                props.state.oldPasswordError ? " input-error-border" : ""
+              className={`form-control input ${props.state.oldPasswordError ? " input-error-border" : ""
                 }`}
               name="oldPassword"
               value={props.state.oldPassword}
@@ -163,8 +166,7 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="New Password"
-              className={`form-control input ${
-                props.state.passwordError ? " input-error-border" : ""
+              className={`form-control input ${props.state.passwordError ? " input-error-border" : ""
                 }`}
               name="newPassword"
               value={props.state.newPassword}
@@ -190,8 +192,7 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="Confirm Password"
-              className={`form-control input ${
-                props.state.confirmPasswordError ? " input-error-border" : ""
+              className={`form-control input ${props.state.confirmPasswordError ? " input-error-border" : ""
                 }`}
               name="confirmPassword"
               value={props.state.confirmPassword}
@@ -213,8 +214,7 @@ const UserSettings = props => {
           <div className="col-md-2 d-inline-block no-padding name"></div>
           <div className="col-md-5 d-inline-block save-conf-btn">
             <button
-              className={`btn btn-default button ${
-                props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
+              className={`btn btn-default button ${props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
                 }`}
               onClick={props.updatePassword}
             >
