@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 // import VideoLoader from "../VideoLoader";
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
 import { get, post, put, del } from "./../../../utils/API";
 
 import StatusList from "./StatusList";
