@@ -3749,7 +3749,7 @@ table.scheduler-table tr:last-child td {
           }
         }
         .save-button {
-          height: 40px !important;
+          height: 35px !important;
           width: 93px !important;
           border-radius: 5px !important;
           border: solid 1px $color-borders !important;
@@ -3760,6 +3760,9 @@ table.scheduler-table tr:last-child td {
           white-space: nowrap !important;
           padding-right: 20px !important;
           padding-left: 20px !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .save-conf-btn {
           padding-top: 30px;
