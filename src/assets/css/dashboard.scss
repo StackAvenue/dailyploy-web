@@ -3227,6 +3227,14 @@ table.scheduler-table tr:last-child td {
   }
   .categories-setting {
     padding: 50px 60px 0px 60px;
+    .spinnerDive{
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      // margin-top: 10px;
+    }
     .category {
       .category-cnt {
         padding-left: 20px;
@@ -3314,6 +3322,7 @@ table.scheduler-table tr:last-child td {
         }
       }
     }
+    
   }
 
 
