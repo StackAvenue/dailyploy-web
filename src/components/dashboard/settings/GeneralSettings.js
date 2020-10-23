@@ -51,56 +51,58 @@ class GeneralSettings extends Component {
       activeStatus: "",
       toError: "",
       emailTextError: "",
+      isTimetrackMode: this.props.state.isTimetrackMode,
     };
   }
 
   roleType = localStorage.getItem("userRole");
 
   componentDidMount = async () => {
-    if(this.props.workspaceId){
-    try {
-      const { data } = await get(
-        `workspaces/${this.props.workspaceId}/members`
-      );
-      var members = data.members;
-    } catch (e) {
-      console.log("users Error", e);
-    }
-    this.setState({ members: members });
-    try {
-      const { data } = await get(
-        `workspaces/${this.props.workspaceId}/workspace_settings/show_daily_status_mail`
-      );
-      if (data) {
-        this.setState({
-          toMails: data.to_mails,
-          bccMails: data.bcc_mails,
-          ccMails: data.cc_mails,
-          selectToMembers:
-            data.to_mails.length > 0
-              ? this.filterEmailMember(data.to_mails, members)
-              : [],
-          selectBccMembers:
-            data.bcc_mails.length > 0
-              ? this.filterEmailMember(data.bcc_mails, members)
-              : [],
-          selectCcMembers:
-            data.cc_mails.length > 0
-              ? this.filterEmailMember(data.cc_mails, members)
-              : [],
-          isActive: data.is_active,
-          // emailText: data.email_text,
-          emailText: " ",
-          isConfig: false,
-          members: members,
-        });
-      } else {
+    if (this.props.workspaceId) {
+      try {
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/members`
+        );
+        var members = data.members;
+      } catch (e) {
+        console.log("users Error", e);
+      }
+      this.setState({ members: members });
+      try {
+        const { data } = await get(
+          `workspaces/${this.props.workspaceId}/workspace_settings/show_daily_status_mail`
+        );
+        if (data) {
+          this.setState({
+            toMails: data.to_mails,
+            bccMails: data.bcc_mails,
+            ccMails: data.cc_mails,
+            selectToMembers:
+              data.to_mails.length > 0
+                ? this.filterEmailMember(data.to_mails, members)
+                : [],
+            selectBccMembers:
+              data.bcc_mails.length > 0
+                ? this.filterEmailMember(data.bcc_mails, members)
+                : [],
+            selectCcMembers:
+              data.cc_mails.length > 0
+                ? this.filterEmailMember(data.cc_mails, members)
+                : [],
+            isActive: data.is_active,
+            // emailText: data.email_text,
+            emailText: " ",
+            isConfig: false,
+            members: members,
+          });
+        } else {
+          this.setState({ isConfig: true });
+        }
+      } catch (e) {
         this.setState({ isConfig: true });
       }
-    } catch (e) {
-      this.setState({ isConfig: true });
     }
-  }};
+  };
 
   componentDidUpdate = async (prevProps, prevState) => {
     if (
@@ -771,42 +773,46 @@ class GeneralSettings extends Component {
               Workspace Name
             </div>
             <div className="col-md-6 d-inline-block">
-            {this.roleType == "admin" ? 
-              <input
-                type="text"
-                placeholder="Workspace Name"
-                className="form-control input"
-                name="workspaceName"
-                value={this.props.state.workspaceName}
-                onChange={this.props.worskpaceNameHandler}
-              />
-            : 
-            <input
-                type="text"
-                disabled
-                placeholder="Workspace Name"
-                className="form-control input"
-                name="workspaceName"
-                value={this.props.state.workspaceName}
-              />
-            }
+              {this.roleType == "admin" ? (
+                <input
+                  type="text"
+                  placeholder="Workspace Name"
+                  className="form-control input"
+                  name="workspaceName"
+                  value={this.props.state.workspaceName}
+                  onChange={this.props.worskpaceNameHandler}
+                />
+              ) : (
+                <input
+                  type="text"
+                  disabled
+                  placeholder="Workspace Name"
+                  className="form-control input"
+                  name="workspaceName"
+                  value={this.props.state.workspaceName}
+                />
+              )}
             </div>
-            {this.roleType == "admin" ?
-            <div className="d-inline-block box-btn">
-              <button
-                className={`btn btn-primary save-button ${
-                  this.props.state.isSaveWorkspaceName
-                    ? "btn-blue"
-                    : "btn-disable"
-                }`}
-                onClick={this.props.updateWorkspaceName}
-              >
-                Save
-              </button>
-            </div> : null}
+            {this.roleType == "admin" ? (
+              <div className="d-inline-block box-btn">
+                <button
+                  className={`btn btn-primary save-button ${
+                    this.props.state.isSaveWorkspaceName
+                      ? "btn-blue"
+                      : "btn-disable"
+                  }`}
+                  onClick={this.props.updateWorkspaceName}
+                >
+                  Save
+                </button>
+              </div>
+            ) : null}
           </div>
-
-          <div className="col-md-12 hr1"></div>
+          {this.state.isTimetrackMode && (
+            <div className="col-md-12 hr1 no-padding name ">
+              Time tracking enabled for this workspace
+            </div>
+          )}
 
           <div
             className="col-md-12 workspace-name"
@@ -943,13 +949,17 @@ class GeneralSettings extends Component {
               </div>
             </div>
             <div className="col-md-12 box no-padding">
-            {this.state.isActive ? (
-              <div className="col-md-12 time-desc">
-                Daily status email will be sent by default at 12:00 AM everyday.
-              </div> ) : (
-              <div className="col-md-12 time-desc">
-                Your daily status email has been suspended. Please resume it to get daily status emails.
-              </div> )}
+              {this.state.isActive ? (
+                <div className="col-md-12 time-desc">
+                  Daily status email will be sent by default at 12:00 AM
+                  everyday.
+                </div>
+              ) : (
+                <div className="col-md-12 time-desc">
+                  Your daily status email has been suspended. Please resume it
+                  to get daily status emails.
+                </div>
+              )}
               <div className="col-md-12 inner-container">
                 <div className="col-md-1 no-padding time-desc d-inline-block">
                   To

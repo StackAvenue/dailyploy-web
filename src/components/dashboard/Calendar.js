@@ -102,21 +102,21 @@ class Calendar extends Component {
             viewName: "Day",
             viewType: ViewTypes.Day,
             showAgenda: true,
-            isEventPerspective: false
+            isEventPerspective: false,
           },
           {
             viewName: "Week",
             viewType: ViewTypes.Week,
             showAgenda: false,
-            isEventPerspective: false
-          }
+            isEventPerspective: false,
+          },
           // {
           //   viewName: "Month",
           //   viewType: ViewTypes.Month,
           //   showAgenda: false,
           //   isEventPerspective: false
           // }
-        ]
+        ],
       }
     );
 
@@ -129,7 +129,7 @@ class Calendar extends Component {
       eventsForTaskView: [],
       show: false,
       setShow: false,
-      onGoingTask: false
+      onGoingTask: false,
     };
   }
 
@@ -193,26 +193,19 @@ class Calendar extends Component {
 
   removeDuplicates = (myArr, prop) => {
     return myArr.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-
+      return arr.map((mapObj) => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
-
   };
 
   renderData = () => {
     this.schedulerData.setEventItemLineHeight(this.calculateResouceHeight());
     this.schedulerData.setResources(this.props.resources);
-    let events = this.props.events
-      .sort(
-        (a, b) => Number(b.sortedTime) - Number(a.sortedTime)
-      );
-
+    let events = this.props.events.sort(
+      (a, b) => Number(b.sortedTime) - Number(a.sortedTime)
+    );
 
     let uniqEvents = this.removeDuplicates(events, "id");
     this.schedulerData.setEvents(uniqEvents);
-
-
-
   };
 
   nonAgendaCellHeaderTemplateResolver = (
@@ -240,7 +233,7 @@ class Calendar extends Component {
           <div
             key={index}
             dangerouslySetInnerHTML={{
-              __html: formattedItem.replace(/[0-9]/g, "<b>$&</b>")
+              __html: formattedItem.replace(/[0-9]/g, "<b>$&</b>"),
             }}
           />
         ))}
@@ -253,16 +246,16 @@ class Calendar extends Component {
   }
 
   renderButtons = () => {
-    return this.schedulerData.config.views.map(item => (
+    return this.schedulerData.config.views.map((item) => (
       <>
         <button
           className={`${
             this.state.viewModel.viewType == item.viewType ? "active" : ""
-            }`}
-          onClick={e => this.onClickCustomButton(e)}
+          }`}
+          onClick={(e) => this.onClickCustomButton(e)}
           value={`${item.viewType}${item.showAgenda ? 1 : 0}${
             item.isEventPerspective ? 1 : 0
-            }`}
+          }`}
         >
           {item.viewName}
         </button>
@@ -270,14 +263,14 @@ class Calendar extends Component {
     ));
   };
 
-  onClickCustomButton = e => {
+  onClickCustomButton = (e) => {
     var viewType = parseInt(e.target.value.charAt(0));
     var showAgenda = e.target.value.charAt(1) === "1";
     var isEventPerspective = e.target.value.charAt(2) === "1";
     this.onViewChange(this.schedulerData, {
       viewType: viewType,
       showAgenda: showAgenda,
-      isEventPerspective: isEventPerspective
+      isEventPerspective: isEventPerspective,
     });
   };
 
@@ -297,7 +290,6 @@ class Calendar extends Component {
         <div>
           <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
             <Scheduler
-
               schedulerData={viewModel}
               prevClick={this.prevClick}
               nextClick={this.nextClick}
@@ -323,7 +315,7 @@ class Calendar extends Component {
               }
               customeVeiwTypeButtons={this.viewTypeButtons}
               customeDatePicker={() => null}
-            // customeDatePicker={this.customeDatePicker}
+              // customeDatePicker={this.customeDatePicker}
             />
           </div>
         </div>
@@ -370,17 +362,25 @@ class Calendar extends Component {
       return (
         <div className="custom-event-popup">
           <div className="event-task-hover">
-              <div className="title task-text-hover">
-                <span className="" title={title}>
+            <div className="title task-text-hover">
+              <span className="" title={title}>
                 {title.length > 110 ? title.substr(0, 110) + "...." : title}
+              </span>
+            </div>
+            {eventItem.est_time && (
+              <div className="text-est">
+                <span className="text-est">
+                  Estimation : {eventItem.est_time} hrs
                 </span>
               </div>
-              {eventItem.est_time && <div className="text-est">
-              <span className="text-est">Estimation : {eventItem.est_time} hrs</span>
-              </div>}
-              {eventItem.status && <div className="text-bold status-name">
-              <span className="text-bold status-name">Task is in {eventItem.status.name} State</span>
-            </div>}
+            )}
+            {eventItem.status && (
+              <div className="text-bold status-name">
+                <span className="text-bold status-name">
+                  Task is in {eventItem.status.name} State
+                </span>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -404,11 +404,11 @@ class Calendar extends Component {
     // }
   };
 
-  prevClick = schedulerData => {
+  prevClick = (schedulerData) => {
     schedulerData.prev();
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
@@ -416,11 +416,11 @@ class Calendar extends Component {
     );
   };
 
-  nextClick = schedulerData => {
+  nextClick = (schedulerData) => {
     schedulerData.next();
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
@@ -444,7 +444,7 @@ class Calendar extends Component {
       schedulerData.setEventItemHeight(51);
     }
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
@@ -456,7 +456,7 @@ class Calendar extends Component {
     schedulerData.setDate(date);
     schedulerData.setEvents(this.state.events);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
     this.props.updateTaskDateView(
       schedulerData.viewType,
@@ -487,7 +487,7 @@ class Calendar extends Component {
 
   updateEventStart = (schedulerData, event, newStart) => {
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
 
     let newStartTime = moment(
@@ -495,24 +495,39 @@ class Calendar extends Component {
     ).format("HH:mm:ss");
     let newStartDateTime =
       moment(newStart).format(DATE_FORMAT1) + " " + newStartTime;
-    this.props.updateTaskEvent(event, { start_datetime: newStartDateTime }, 1, newStart);
+    this.props.updateTaskEvent(
+      event,
+      { start_datetime: newStartDateTime },
+      1,
+      newStart
+    );
   };
 
   updateEventEnd = (schedulerData, event, newEnd) => {
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
     let newEndTime = moment(
       convertUTCToLocalDate(event.taskEndDateTime)
     ).format("HH:mm:ss");
     let newEndDateTime = moment(newEnd).format(DATE_FORMAT1) + " " + newEndTime;
-    this.props.updateTaskEvent(event, { end_datetime: newEndDateTime }, 1, newEnd);
+    this.props.updateTaskEvent(
+      event,
+      { end_datetime: newEndDateTime },
+      1,
+      newEnd
+    );
   };
 
   moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    let newStartTime = moment(convertUTCToLocalDate(event.taskStartDateTime)).format("HH:mm:ss");
-    let newEndTime = moment(convertUTCToLocalDate(event.taskEndDateTime)).format("HH:mm:ss");
-    let newStartDateTime = moment(start).format(DATE_FORMAT1) + " " + newStartTime;
+    let newStartTime = moment(
+      convertUTCToLocalDate(event.taskStartDateTime)
+    ).format("HH:mm:ss");
+    let newEndTime = moment(
+      convertUTCToLocalDate(event.taskEndDateTime)
+    ).format("HH:mm:ss");
+    let newStartDateTime =
+      moment(start).format(DATE_FORMAT1) + " " + newStartTime;
     let newEndDateTime = moment(end).format(DATE_FORMAT1) + " " + newEndTime;
     if (
       slotId !== event.resourceId &&
@@ -526,19 +541,19 @@ class Calendar extends Component {
         newEndDateTime
       );
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
       this.props.updateTaskEvent(event, {
         start_datetime: newStartDateTime,
         end_datetime: newEndDateTime,
-        member_ids: [slotId]
+        member_ids: [slotId],
       });
     } else if (
       !(
         moment(start).format(DATE_FORMAT1) ===
-        moment(event.starsst).format(DATE_FORMAT1) &&
+          moment(event.starsst).format(DATE_FORMAT1) &&
         moment(end).format(DATE_FORMAT1) ===
-        moment(event.end).format(DATE_FORMAT1) &&
+          moment(event.end).format(DATE_FORMAT1) &&
         slotId === event.resourceId
       )
     ) {
@@ -550,12 +565,16 @@ class Calendar extends Component {
         newEndDateTime
       );
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
-      this.props.updateTaskEvent(event, {
-        start_datetime: newStartDateTime,
-        end_datetime: newEndDateTime
-      }, 1);
+      this.props.updateTaskEvent(
+        event,
+        {
+          start_datetime: newStartDateTime,
+          end_datetime: newEndDateTime,
+        },
+        1
+      );
     }
   };
 
@@ -564,7 +583,7 @@ class Calendar extends Component {
       schedulerData.next();
       schedulerData.setEvents(this.state.events);
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
 
       schedulerContent.scrollLeft = maxScrollLeft - 10;
@@ -576,7 +595,7 @@ class Calendar extends Component {
       schedulerData.prev();
       schedulerData.setEvents(this.state.events);
       this.setState({
-        viewModel: schedulerData
+        viewModel: schedulerData,
       });
 
       schedulerContent.scrollLeft = 10;
@@ -621,8 +640,8 @@ class Calendar extends Component {
       borderBottom: `2px solid #ededed `,
       borderTop: `2px solid #ededed `,
       paddingLeft: "4px",
-      borderRadius: "5px"
-    }
+      borderRadius: "5px",
+    };
 
     var divStyle = {
       borderRadius: "5px",
@@ -631,10 +650,10 @@ class Calendar extends Component {
       color: bgColor,
       height: "75%",
       marginTop: "4px",
-      padding: "2px"
-    }
+      padding: "2px",
+    };
     let borderLeft = {
-      borderLeft: "4px solid " + bgColor
+      borderLeft: "4px solid " + bgColor,
     };
     if (!!agendaMaxEventWidth)
       // divStyle = { marginOf, maxWidth: agendaMaxEventWidth };
@@ -642,10 +661,7 @@ class Calendar extends Component {
 
     return (
       <>
-        <div
-          className="text"
-          style={divStyle1}
-        >
+        <div className="text" style={divStyle1}>
           <DashboardEvent
             countData={this.state.countData}
             eventItemClick={eventItemClick}
@@ -678,6 +694,7 @@ class Calendar extends Component {
             handleTaskStartTop={this.props.handleTaskStartTop}
             handleTaskStart={this.props.handleTaskStart}
             handleTaskStop={this.props.handleTaskStop}
+            isTimetrackMode={this.props.isTimetrackMode}
           />
         </div>
       </>
@@ -698,14 +715,14 @@ class Calendar extends Component {
             <div
               className={`d-inline-block ${
                 type === item.viewType ? "active" : ""
-                }`}
+              }`}
               key={
                 "" +
                 item.viewType +
                 (item.showAgenda ? 1 : 0) +
                 (item.isEventPerspective ? 1 : 0)
               }
-              onClick={e => viewFunction(value)}
+              onClick={(e) => viewFunction(value)}
             >
               {item.viewName}
             </div>
@@ -721,7 +738,7 @@ class Calendar extends Component {
       <div
         className={`dashboard-calender ${
           viewType == "1" ? "week-format-width" : "day-format-width"
-          }`}
+        }`}
       >
         <DailyPloyDatePicker
           onSelectDate={this.onSelectDate}
@@ -746,7 +763,7 @@ class Calendar extends Component {
   toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId);
     this.setState({
-      viewModel: schedulerData
+      viewModel: schedulerData,
     });
   };
 }

@@ -255,7 +255,8 @@
 .sticky-header{
   position: fixed;
   top: 0 !important;
-  z-index: 100;
+  z-index: 15;
+  //z-index: 100;
   width: 100%;
   background-color: white !important;
 }

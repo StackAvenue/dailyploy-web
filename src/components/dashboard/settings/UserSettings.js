@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
+
 // import ImageUploading from "react-images-uploading";
 
 
@@ -66,8 +67,7 @@ const UserSettings = props => {
                 <input
                   type="text"
                   placeholder="Name"
-                  className={`form-control input ${
-                    props.state.nameError ? " input-error-border" : ""
+                  className={`form-control input ${props.state.nameError ? " input-error-border" : ""
                     }`}
                   name="userName"
                   value={props.state.userName}
@@ -76,8 +76,7 @@ const UserSettings = props => {
               </div>
               <div className="d-inline-block box-btn">
                 <button
-                  className={`btn btn-primary save-button ${
-                    props.state.isSaveEnable ? "btn-blue" : "btn-disable"
+                  className={`btn btn-primary save-button ${props.state.isSaveEnable ? "btn-blue" : "btn-disable"
                     }`}
                   onClick={props.updateUserName}
                 >
@@ -131,8 +130,7 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="Old Password"
-              className={`form-control input ${
-                props.state.oldPasswordError ? " input-error-border" : ""
+              className={`form-control input ${props.state.oldPasswordError ? " input-error-border" : ""
                 }`}
               name="oldPassword"
               value={props.state.oldPassword}
@@ -163,8 +161,7 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="New Password"
-              className={`form-control input ${
-                props.state.passwordError ? " input-error-border" : ""
+              className={`form-control input ${props.state.passwordError ? " input-error-border" : ""
                 }`}
               name="newPassword"
               value={props.state.newPassword}
@@ -190,8 +187,7 @@ const UserSettings = props => {
             <input
               type="password"
               placeholder="Confirm Password"
-              className={`form-control input ${
-                props.state.confirmPasswordError ? " input-error-border" : ""
+              className={`form-control input ${props.state.confirmPasswordError ? " input-error-border" : ""
                 }`}
               name="confirmPassword"
               value={props.state.confirmPassword}
@@ -199,6 +195,19 @@ const UserSettings = props => {
             />
           </div>
         </div>
+        {/* <div className="col-md-12 inner-box">
+          <div className="col-md-2 d-inline-block no-padding name">
+            Log time type
+            <i className="fa fa-info-circle tooltip-pwd1 d-inline-block">
+              <div class="tooltiptext-pwd1">
+                You can only set log time type during creation of the workspace.
+              </div>
+            </i>
+          </div>
+          <div className="col-md-5 d-inline-block">
+            {props.state.timetrack_enabled ? "tracking time " : "log time"}
+          </div>
+        </div> */}
         {props.state.confirmPasswordError ? (
           <div className="col-md-12">
             <div className="col-md-2 d-inline-block no-padding"></div>
@@ -213,8 +222,7 @@ const UserSettings = props => {
           <div className="col-md-2 d-inline-block no-padding name"></div>
           <div className="col-md-5 d-inline-block save-conf-btn">
             <button
-              className={`btn btn-default button ${
-                props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
+              className={`btn btn-default button ${props.state.isSaveConfirmEnable ? "btn-blue" : "btn-disable"
                 }`}
               onClick={props.updatePassword}
             >

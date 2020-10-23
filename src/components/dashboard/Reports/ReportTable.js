@@ -9,7 +9,7 @@ class ReportTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalTime: 0
+      totalTime: 0,
     };
   }
 
@@ -33,7 +33,7 @@ class ReportTable extends Component {
     return hours + " h";
   };
 
-  getTotalHours = tasks => {
+  getTotalHours = (tasks) => {
     if (tasks !== undefined) {
       var totalSec = null;
       {
@@ -50,7 +50,7 @@ class ReportTable extends Component {
   };
 
   renderTableData = () => {
-    if (this.props.frequency != 'custom') {
+    if (this.props.frequency != "custom") {
       return this.props.state.selectedDays.map((date, index) => {
         var date = moment(date).format(DATE_FORMAT1);
         var tasks =
@@ -64,18 +64,18 @@ class ReportTable extends Component {
             date={date}
             frequency={this.props.frequency}
             timeTrackUpdate={this.props.timeTrackUpdate}
+            isTimetrackMode={this.props.isTimetrackMode}
           />
         );
       });
-    }
-    else {
+    } else {
       let index = 0;
       let ReportTableArr = [];
       let startDate = this.props.state.dateFrom;
       let endDate = this.props.state.dateTo;
       while (moment(startDate) <= moment(endDate)) {
         let date = moment(startDate).format(DATE_FORMAT1);
-        startDate = moment(startDate).add(1, 'days').format(DATE_FORMAT1);
+        startDate = moment(startDate).add(1, "days").format(DATE_FORMAT1);
         index++;
         var tasks =
           this.props.taskDetails && this.props.taskDetails[date] !== undefined
@@ -91,9 +91,8 @@ class ReportTable extends Component {
           />
         );
       }
-      return ReportTableArr
+      return ReportTableArr;
     }
-
   };
 
   renderTable2Data = () => {
@@ -110,6 +109,7 @@ class ReportTable extends Component {
           date={date}
           userRole={this.props.state.userRole}
           frequency={this.props.frequency}
+          isTimetrackMode={this.state.isTimetrackMode}
         />
       );
     });
@@ -193,9 +193,9 @@ class ReportTable extends Component {
               <span className="pull-right">
                 {"Total Time: " +
                   `${
-                  this.props.state.totalTime
-                    ? this.props.state.totalTime
-                    : "0H 0M"
+                    this.props.state.totalTime
+                      ? this.props.state.totalTime
+                      : "0H 0M"
                   }`}
               </span>
             </div>

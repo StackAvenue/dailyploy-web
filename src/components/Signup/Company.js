@@ -1,6 +1,8 @@
 import React from "react";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import LogType from '../LogType';
+
 
 const Company = props => {
   const {
@@ -9,6 +11,7 @@ const Company = props => {
     email,
     password,
     confirmPassword,
+    timetrack_enabled,
     isDisabled
   } = props.state;
   return (
@@ -49,16 +52,16 @@ const Company = props => {
                 placeholder="john@daiilyploy.com"
               />
             ) : (
-              <input
-                type="email"
-                name="email"
-                value={email}
-                disabled={isDisabled}
-                onChange={props.changeHandler}
-                className="form-control login-form-field"
-                placeholder="john@daiilyploy.com"
-              />
-            )}
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  disabled={isDisabled}
+                  onChange={props.changeHandler}
+                  className="form-control login-form-field"
+                  placeholder="john@daiilyploy.com"
+                />
+              )}
           </div>
           <div className="form-group">
             <label>Organization Name</label>
@@ -112,27 +115,27 @@ const Company = props => {
                 </span>
               </>
             ) : (
-              <>
-                <input
-                  type={props.state.showPassword ? "text" : "password"}
-                  name="password"
-                  value={password}
-                  onChange={props.changeHandler}
-                  className="form-control login-form-field"
-                  placeholder="Password"
-                />
-                <span
-                  className="signup-password-eye-1"
-                  onClick={props.handlePasswordShow}
-                >
-                  <i
-                    className={
-                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
-                    }
-                  ></i>
-                </span>
-              </>
-            )}
+                <>
+                  <input
+                    type={props.state.showPassword ? "text" : "password"}
+                    name="password"
+                    value={password}
+                    onChange={props.changeHandler}
+                    className="form-control login-form-field"
+                    placeholder="Password"
+                  />
+                  <span
+                    className="signup-password-eye-1"
+                    onClick={props.handlePasswordShow}
+                  >
+                    <i
+                      className={
+                        props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                      }
+                    ></i>
+                  </span>
+                </>
+              )}
           </div>
           <div className="form-group">
             <label>Confirm Password</label>
@@ -163,27 +166,30 @@ const Company = props => {
                 </span>
               </>
             ) : (
-              <>
-                <input
-                  type={props.state.showPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={props.changeHandler}
-                  className="form-control login-form-field"
-                  placeholder="Confirm Password"
-                />
-                <span
-                  className="signup-password-eye-2"
-                  onClick={props.handlePasswordShow}
-                >
-                  <i
-                    className={
-                      props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
-                    }
-                  ></i>
-                </span>
-              </>
-            )}
+                <>
+                  <input
+                    type={props.state.showPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={props.changeHandler}
+                    className="form-control login-form-field"
+                    placeholder="Confirm Password"
+                  />
+                  <span
+                    className="signup-password-eye-2"
+                    onClick={props.handlePasswordShow}
+                  >
+                    <i
+                      className={
+                        props.state.showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                      }
+                    ></i>
+                  </span>
+                </>
+              )}
+          </div>
+          <div className="form-group">
+            <LogType timetrack_enabled={timetrack_enabled} changeLogType={props.changeLogType} />
           </div>
           <div className="col-md-12 no-padding text-center">
             <button

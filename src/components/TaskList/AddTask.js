@@ -7,6 +7,7 @@ import { Modal, Button } from "react-bootstrap";
 import { debounce } from "../../utils/function";
 import "react-datepicker/dist/react-datepicker.css";
 import VideoLoader from "../dashboard/VideoLoader";
+import taskImg from '../../assets/images/tasklist.png';
 import Spinner from 'react-bootstrap/Spinner';
 
 const AddTask = (props) => {
@@ -53,7 +54,7 @@ const AddTask = (props) => {
   // };
 
   const handleSave = debounce(() => {
-    props.addTaskLoading(true)
+    //props.addTaskLoading(true)
     if (taskName && member != -1) {
       var task_lists = {
         name: taskName,
@@ -64,7 +65,7 @@ const AddTask = (props) => {
         description: description,
         assigne_id: member,
       };
-      props.handleSaveTask(task_lists);
+      { props.isUserstory ? props.handleUserstoryTask(task_lists) : props.handleSaveTask(task_lists) }
       setNameError(false);
       setMemberError(false);
     } else {
@@ -84,8 +85,16 @@ const AddTask = (props) => {
   const otherTasksSave = debounce((e) => {
     e.preventDefault();
     setshowTaskListName(false);
+    var moveTaskId = null
+    if(moveToOTherTask == null)
+    {
+      moveTaskId = projectTasks[0].id;
+    }
+    else {
+      moveTaskId = moveToOTherTask;
+    }
     props.switchTask(
-      moveToOTherTask,
+      moveTaskId,
       props.task_lists_task.id
     );
   }, 250)
@@ -106,11 +115,11 @@ const AddTask = (props) => {
         console.log(estimation)
         break;
       case "status":
-        console.log("e.target", props.taskStatus[e.target.value]);
+        // console.log("e.target", props.taskStatus[e.target.value]);
         setstatus({ ...props.taskStatus[e.target.value] });
         break;
       case "category":
-        console.log("e.target.value", e.target.value);
+        // console.log("e.target.value", e.target.value);
         setTaskCategories(e.target.value);
         break;
       case "priority":
@@ -159,7 +168,7 @@ const AddTask = (props) => {
       tltId: props.task_lists_task.id,
     };
 
-    props.moveToDashBoard(dataObject);
+    { props.isUserstory ? props.moveToDashboardUTask(dataObject) : props.moveToDashBoard(dataObject); }
     changeCalenderModal(false);
   };
 
@@ -198,14 +207,26 @@ const AddTask = (props) => {
           : ""
       );
       setEstimation(props.task_lists_task.estimation);
-      setstatus({
-        statusName: props.task_lists_task.status
-          ? props.task_lists_task.status.name
-          : "Not Started",
-        color: "#53a4f0",
-        id: props.task_lists_task.status
-          ? props.task_lists_task.status.id : 'null'
-      });
+      if(props.isUserstory) {
+        setstatus({
+          statusName: props.task_lists_task.task_status.name
+            ? props.task_lists_task.task_status.name
+            : "Not Started",
+          color: "#53a4f0",
+          id: props.task_lists_task.task_status
+            ? props.task_lists_task.task_status.id : 'null'
+        });
+      } 
+      else {
+        setstatus({
+          statusName: props.task_lists_task.status
+            ? props.task_lists_task.status.name
+            : "Not Started",
+          color: "#53a4f0",
+          id: props.task_lists_task.status
+            ? props.task_lists_task.status.id : 'null'
+        });
+      }
 
       const prio = PRIORITIES.filter(
         priority => props.task_lists_task.priority && priority.label.toLowerCase() == props.task_lists_task.priority.toLowerCase())
@@ -213,12 +234,20 @@ const AddTask = (props) => {
       if (prio && prio.length > 0) {
         setPriority(prio[0])
       }
-
-      setMember(
-        props.task_lists_task && props.task_lists_task.assigne_id
-          ? props.task_lists_task.assigne_id.toString()
-          : ""
-      );
+      if(props.isUserstory) {
+        setMember(
+          props.task_lists_task && props.task_lists_task.owner_id
+            ? props.task_lists_task.owner_id.toString()
+            : ""
+        );
+      } 
+      else {
+        setMember(
+          props.task_lists_task && props.task_lists_task.assigne_id
+            ? props.task_lists_task.assigne_id.toString()
+            : ""
+        );
+      }
     }
     console.log("filtered tasks", props.task_lists_task)
     if (props.projectTaskList) {
@@ -234,6 +263,7 @@ const AddTask = (props) => {
   const onDoubleClickEnable = (e) => {
     e.preventDefault();
     props.EditTlt(props.task_lists_task.id);
+    props.taskEdit(true);
   }
 
   const togglTaskList = (e) => {
@@ -243,7 +273,7 @@ const AddTask = (props) => {
 
   const handleKeyDown = (e, taskName) => {
     if (e.keyCode === 27 && taskName == "") {
-      props.closeAddTask(false)
+      props.closeAddTask()
     }
     // else if(e.keyCode === 27){
     // }
@@ -251,107 +281,157 @@ const AddTask = (props) => {
 
   return (
     <>
-      <div className="InnershowCardDetails">
-        {props.isFilterLoading ? <VideoLoader/> :
-          <div className="task-field">
-          <div className="task" onDoubleClick={onDoubleClickEnable}>
-            <div className="taskNo">
-              <input
-                type='text'
-                disabled={props.showTask}
-                value={taskName}
-                placeholder="Task Name"
-                onChange={(e) => handleInputChange(e)}
-                name="taskName"
-                className="form-control"
-                onKeyDown={(e) => handleKeyDown(e, taskName)}
-              />
-              <div className="hover-task" >{taskName}</div>
-              {nameError && <span>Please add name</span>}
+      {/* <div className="InnershowCardDetails"> */}
+      <div className={`${props.isUserstory && props.isUserDetailOpen ? "addtask-UserStory" : "InnershowCardDetails"}`}>
+        {props.isFilterLoading ? <VideoLoader /> :
+          <>
+            <div className="drag-icon">
+              {/* <i class="fas fa-bars"></i> */}
             </div>
-            {/* <div className="Description">
-            <input
-              type={Text}
-              disabled={props.showTask}
-              name="description"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => handleInputChange(e)}
-              className="form-control"
-            />
-          </div> */}
-            <div className="Estimation">
-              <input
-                type="number"
-                onKeyDown={(e) => handleKeypress(e)}
-                onBlur={(e) => handleBlur(e)}
-                min='1'
-                step='1'
-                max='100'
-                disabled={props.showTask}
-                name="estimation"
-                placeholder="Estimation"
-                value={estimation}
-                onChange={(e) => handleInputChange(e)}
-                className="form-control"
-              />
-              {/* <p className="text-Estimation">1hr=1pt</p> */}
+            <div className="task-icon">
+              {/* <i class="fas fa-clipboard-check fa-lg"></i> */}
+              <i class="fa fa-file-text-o" aria-hidden="true" style={{fontSize: "18px",
+                color: "rgb(118 134 255)"}}></i>
             </div>
-            <div className="status">
-              <select
-                name="status"
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                disabled={props.showTask}
-                className="form-control"
-              >
-                {/* <option value={""}>Status</option> */}
-                {props.taskStatus &&
-                  props.taskStatus.map((status, index) => {
-                    console.log("status", status);
-                    return (
-                      <option
-                        key={index}
-                        selected={
-                          props.task_lists_task &&
-                          props.task_lists_task.status &&
-                          props.task_lists_task.status.id &&
-                          status.id == props.task_lists_task.status.id
-                        }
-                        value={index}
-                      >
-                        {status.statusName}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div className="time">
-              <div
-                className="disc"
-                style={{
-                  backgroundColor: `${priority.color_code}`,
-                }}
-              ></div>
+            <div className="task-field">
+
+              <div className="task" onDoubleClick={onDoubleClickEnable}>
+                <div className="taskNo">
+                  <input
+                    type='text'
+                    disabled={props.showTask}
+                    value={taskName}
+                    placeholder="Task Name"
+                    onChange={(e) => handleInputChange(e)}
+                    name="taskName"
+                    className={`form-control ${props.showTask ? "" : "editMode"}`}
+                  />
+                  <div className="hover-task" >{taskName}</div>
+                  {nameError && <span>Please add name</span>}
+                </div>
+                {/* <div className="Description">
+                <input
+                  type={Text}
+                  disabled={props.showTask}
+                  name="description"
+                  placeholder="Description"
+                  value={description}
+                  onChange={(e) => handleInputChange(e)}
+                  className="form-control"
+                />
+                </div> */}
+                <div className="Estimation" style={{display:"flex", width:"6%"}}>
+                  <input
+                    type="number"
+                    onKeyDown={(e) => handleKeypress(e)}
+                    onBlur={(e) => handleBlur(e)}
+                    min='1'
+                    step='1'
+                    max='100'
+                    disabled={props.showTask}
+                    style={{padding: "7px"}}
+                    name="estimation"
+                    placeholder="Estimation"
+                    value={estimation}
+                    onChange={(e) => handleInputChange(e)}
+                    className={`form-control ${props.showTask ? "" : "editMode"} `}
+                  />
+                  {props.showTask ? 
+                  <div style={{ fontSize:"13px", 
+                  marginTop:"6px", 
+                  marginLeft: "0px",
+                  position: "relative",
+                  left: "-6px"}}>hr</div> 
+                  : null}
+                  {/* <p className="text-Estimation">1hr=1pt</p> */}
+                </div>
+                {props.isUserstory ? 
+                <div className="status">
+                  <select
+                    name="status"
+                    onChange={(e) => {
+                      handleInputChange(e);
+                    }}
+                    disabled={props.showTask}
+                    className={`form-control ${props.showTask ? "" : "editMode"} `}
+                  >
+                    {/* <option value={""}>Status</option> */}
+                    {props.taskStatus &&
+                      props.taskStatus.map((status, index) => {
+                        // console.log("status", status);
+                        return (
+                          <option
+                            key={index}
+                            selected={
+                              props.task_lists_task &&
+                              props.task_lists_task.task_status &&
+                              props.task_lists_task.task_status.id &&
+                              status.id == props.task_lists_task.task_status.id
+                            }
+                            value={index}
+                          >
+                            {status.statusName}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>: 
+                <div className="status">
+                <select
+                  name="status"
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  disabled={props.showTask}
+                  className={`form-control ${props.showTask ? "" : "editMode"} `}
+                >
+                  {/* <option value={""}>Status</option> */}
+                  {props.taskStatus &&
+                    props.taskStatus.map((status, index) => {
+                      // console.log("status", status);
+                      return (
+                        <option
+                          key={index}
+                          selected={
+                            props.task_lists_task &&
+                            props.task_lists_task.status &&
+                            props.task_lists_task.status.id &&
+                            status.id == props.task_lists_task.status.id
+                          }
+                          value={index}
+                        >
+                          {status.statusName}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+                }
+                <div className="time">
+                  <div
+                    className="disc"
+                    style={{
+                      backgroundColor: `${priority.color_code}`,
+                    }}
+                  ></div>
             &nbsp;&nbsp;
             <select
-                name="priority"
-                onChange={(e) => handleInputChange(e)}
-                className="form-control"
-                placeholder="Priorities"
-                disabled={props.showTask}
-              //value={priority}
-              >
-                {/* <option value="low">Low</option> */}
-                {PRIORITIES.slice(0, 3).map((Priority, index) => (
-                  <option value={index} selected={priority.label.toLowerCase().trim() == Priority.label.toLowerCase().trim() ? priority.label : ""}>
-                    {Priority.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* <div className="member">
+                    name="priority"
+                    onChange={(e) => handleInputChange(e)}
+                    className={`form-control ${props.showTask ? "" : "editMode"} `}
+                    placeholder="Priorities"
+                   disabled={props.showTask}
+                  //value={priority}
+                  >
+                    {/* <option value="low">Low</option> */}
+                    {PRIORITIES.slice(0, 3).map((Priority, index) => (
+                      <option value={index} selected={priority.label.toLowerCase().trim() == Priority.label.toLowerCase().trim() ? priority.label : ""}>
+                        {Priority.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* <div className="member">
             <div className="navDiv">
               <select
                 name="status"
@@ -362,7 +442,7 @@ const AddTask = (props) => {
                 className="form-control"
               >
                 {/* <option value={""}>Status</option> */}
-            {/* {props.taskStatus &&
+                {/* {props.taskStatus &&
                   props.taskStatus.map((status, index) => {
                     console.log("status", status);
                     return (
@@ -406,78 +486,88 @@ const AddTask = (props) => {
                 })}
               </select>
               </div>*/}
-            <div className="member">
-              <div className="navDiv">
-                <select
-                  name="member"
-                  disabled={props.showTask}
-                  onChange={(e) => handleInputChange(e)}
-                  className="form-control"
-                  value={member}
-                >
-                  <option value={""}>Member</option>
-                  {props.projectMembers.map((member, inde) => {
-                    return (
-                      <option value={member.id}>&nbsp;&nbsp;{member.name}</option>
-                    );
-                  })}
-                </select>
-                {memberError && <span>Please add member</span>}
-              </div>
-            </div>
-          </div>
-          {!showTaskListName ?
-            props.showTask && (
-              <div className="option">
-                <div className="navDiv">
-                  <DropdownButton
-                    title={<i class="fas fa-ellipsis-h" />}
-                    id="basic-nav-dropdown"
-                    className="btn btn-color"
-                  >
-                    {projectTasks && projectTasks.length > 0 && (
-                      <Dropdown.Item
-                        eventKey=""
-                        onClick={(e) => {
-                          e.preventDefault();
-                          changeMoveTo(true);
-                        }}
-                      >
-                        Move to other Roadmap
-                      </Dropdown.Item>
-                    )}
-                    {!props.task_lists_task.task_id && (
-                      <Dropdown.Item
-                        eventKey=""
-                        onClick={(e) => {
-                          e.preventDefault();
-                          changeCalenderModal(true);
-                        }}
-                      >
-                        Move to Dashboard
-                      </Dropdown.Item>
-                    )}
-                    <Dropdown.Item
-                      eventKey=""
-                      onClick={showDeleteModal}
+                <div className="member">
+                  <div className="navDiv">
+                    <select
+                      name="member"
+                      disabled={props.showTask}
+                      onChange={(e) => handleInputChange(e)}
+                      className={`form-control ${props.showTask ? "" : "editMode"} `}
+                      value={member}
                     >
-                      Delete
-                  </Dropdown.Item>
-                    <Dropdown.Item
-                      eventKey=""
-                      onClick={(e) => {
-                        e.preventDefault();
-                        props.EditTlt(props.task_lists_task.id);
-                      }}
-                    >
-                      Edit
-                  </Dropdown.Item>
-                  </DropdownButton>
+                      <option value={""}>Member</option>
+                      {props.projectMembers.map((member, inde) => {
+                        return (
+                          <option value={member.id}>&nbsp;&nbsp;{member.name}</option>
+                        );
+                      })}
+                    </select>
+                    {memberError && <span>Please add member</span>}
+                  </div>
                 </div>
               </div>
-            ) : null}
-          {/* {} */}
-          {/* {showTaskListName && (
+              {!showTaskListName ?
+                props.showTask && (
+                  <div className="option">
+                    <div className="navDiv">
+                      <DropdownButton
+                        title={<i class="fas fa-ellipsis-h" />}
+                        id="basic-nav-dropdown"
+                        className="btn btn-color"
+                      >
+                        {projectTasks && projectTasks.length > 0 && (
+                          <Dropdown.Item
+                            eventKey=""
+                            onClick={(e) => {
+                              e.preventDefault();
+                              changeMoveTo(true);
+                            }}
+                          >
+                            Move to other Roadmap
+                          </Dropdown.Item>
+                        )}
+                        {!props.task_lists_task.task_id && (
+                          <Dropdown.Item
+                            eventKey=""
+                            onClick={(e) => {
+                              e.preventDefault();
+                              changeCalenderModal(true);
+                            }}
+                          >
+                            Move to Dashboard
+                          </Dropdown.Item>
+                        )}
+                        <Dropdown.Item
+                          eventKey=""
+                          onClick={(e) => {
+                            e.preventDefault();
+                            props.handleTaskDetails("task-details", props.task_lists_task)
+                          }}
+                        >
+                          Details
+                   </Dropdown.Item>
+                        <Dropdown.Item
+                          eventKey=""
+                          onClick={showDeleteModal}
+                        >
+                          Delete
+                   </Dropdown.Item>
+                        <Dropdown.Item
+                          eventKey=""
+                          onClick={(e) => {
+                            e.preventDefault();
+                            props.EditTlt(props.task_lists_task.id);
+                            props.taskEdit(true);
+                          }}
+                        >
+                          Edit
+                    </Dropdown.Item>
+                      </DropdownButton>
+                    </div>
+                  </div>
+                ) : null}
+              {/* {} */}
+              {/* {showTaskListName && (
             <div
               className="option"
               onMouseLeave={(e) => {
@@ -508,60 +598,112 @@ const AddTask = (props) => {
             </div>
                 )} */}
 
-          {showTaskListName && (
-            <div className="move-to-other-tasks-dropdown"
+              {showTaskListName && (
+                <div className="move-to-other-tasks-dropdown"
 
-            >
-              <div class="close-button"
-                onClick={togglTaskList}
-              >
-                <span className="tooltiptext">Close Move To OTher Task</span>
-                <i class="far fa-times-circle"></i>
-              </div>
-              <select
-                className="other-tasks"
-                name="moveOther"
-                onChange={handleInputChange}
-              >
-                {projectTasks.map((eachTask) => {
-                  return (
-                    <option
-                      value={eachTask.id}
-                      className="roadmaps-name"
-                    >
-                      {eachTask.name}
-                    </option>
-                  );
-                })}
-              </select>
-              <div className="rightcheck">
-                <button
-                  variant="light"
-                  className="green-clr-btn"
-                  onClick={otherTasksSave}
                 >
-                  <i class="fa fa-check" />
-                </button>
+                  <div class="close-button"
+                    onClick={togglTaskList}
+                  >
+                    <span className="tooltiptext">Close Move To OTher Task</span>
+                    <i class="far fa-times-circle"></i>
+                  </div>
+                  <select
+                    className="other-tasks"
+                    name="moveOther"
+                    onChange={(e) => handleInputChange(e)}
+                  >
+                    {projectTasks.map((eachTask) => {
+                      return (
+                        <option
+                          value={eachTask.id}
+                          className="roadmaps-name"
+                          //selected={eachTask.id}
+                        >
+                          {eachTask.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <div className="rightcheck">
+                    <button
+                      variant="light"
+                      className="green-clr-btn"
+                      onClick={otherTasksSave}
+                    >
+                      <i class="fa fa-check" />
+                    </button>
 
               </div>
             </div>
           )}
-          {!props.showTask && (
+          {!props.showTask && !props.state.task_edit && (
             <div className="rightMark">
               {props.state.isCheckVisible ? 
-               <Spinner animation="grow" variant="success" size="sm" /> :
+               <Spinner animation="grow" variant="success" size="sm" /> :<>
               <button
                 variant="light"
                 className="btn btn-colo"
                 onClick={handleSave}
               >
                 <i class="fa fa-check" />
-              </button>}
+              </button>
+              <button
+                variant="light"
+                className="btn btn-colo"
+                onClick={props.closeAddTask}
+              >
+                <i class="fa fa-times"
+                style={{color: "black"}}
+              ></i>
+              </button>
+              </>
+             }
+            </div>
+          )}
+          {!props.showTask && props.state.task_edit && (
+            <div className="rightMark">
+              {props.state.isCheckVisible ? 
+               <Spinner animation="grow" variant="success" size="sm" /> :<>
+              <button
+                variant="light"
+                className="btn btn-colo"
+                //onClick={handleSave}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSave();
+                  //props.closeAddTask();
+                  props.taskEdit(false);
+                  //props.EditTlt(null)
+                  
+                }}
+              >
+                <i class="fa fa-check" />
+              </button>
+              <button
+                variant="light"
+                className="btn btn-colo"
+                //onClick={props.closeAddTask}
+                
+                onClick={(e) => {
+                  e.preventDefault();
+                  //props.closeAddTask();
+                  props.taskEdit(false);
+                  props.EditTlt(null)
+                  
+                }}
+              >
+                <i class="fa fa-times"
+                style={{color: "black"}}
+              ></i>
+              </button>
+              </>
+             }
             </div>
           )}
           {/* {openCalenderModal && selectMoveToDashboardDate()} */}
 
-        </div>}
+            </div> </>}
       </div>
 
       {/* --------move to Dashboard modal start--------- */}
@@ -577,6 +719,12 @@ const AddTask = (props) => {
           <Modal.Title>Move to dashboard</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <i class="fas fa-asterisk"
+        style={{
+          color: "Red",
+          fontSize: "9px",
+          paddingLeft: "2px"
+        }}></i>
           <div className="member">
             <div className="navDiv">
               <select
@@ -604,7 +752,7 @@ const AddTask = (props) => {
                 >
                   <option value={""}>Status</option>
                   {props.taskStatus.map((status, index) => {
-                    console.log("status", status);
+                    // console.log("status", status);
                     return (
                       <option key={index} value={index}>
                         {status.statusName}
@@ -676,7 +824,7 @@ const AddTask = (props) => {
         <Modal.Footer>
           <Button
             variant="primary"
-            disabled={!member ? true : false}
+            // disabled={!member ? true : false}
             onClick={(e) => {
               e.preventDefault();
               changeToDashboard();
@@ -705,7 +853,7 @@ const AddTask = (props) => {
           <button className="del-button"
             onClick={debounce((e) => {
               e.preventDefault();
-              props.deleteTlt(props.task_lists_task.id);
+              { props.isUserstory ? props.deleteTask(props.task_lists_task.id) : props.deleteTlt(props.task_lists_task.id); }
             }, 250)}
           >Delete</button>
           <button

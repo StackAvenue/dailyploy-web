@@ -8,7 +8,7 @@ import {
   validateName,
   validateEmail,
   PASSWORDREGX,
-  EMAILREGX
+  EMAILREGX,
 } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +32,7 @@ class Signup extends Component {
       email: "",
       password: "",
       confirmPassword: "",
+      timetrack_enabled: false,
       workspaceName: "",
       isLoading: false,
       showPassword: false,
@@ -40,15 +41,16 @@ class Signup extends Component {
         companyNameError: null,
         emailError: null,
         passwordError: null,
-        confirmPasswordError: null
+        confirmPasswordError: null,
       },
       isCompany: false,
       tokenId: "",
-      isDisabled: false
+      isDisabled: false,
+      isTimeTrackEnabled: false,
     };
   }
 
-  companyFlag = word => {
+  companyFlag = (word) => {
     var company;
     if (word === "company") {
       company = true;
@@ -58,9 +60,14 @@ class Signup extends Component {
     return this.setState({ isCompany: company });
   };
 
-  changeHandler = e => {
+  changeHandler = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  };
+  changeLogType = (val) => {
+    this.setState({
+      timetrack_enabled: val,
+    });
   };
 
   async componentDidMount() {
@@ -83,12 +90,12 @@ class Signup extends Component {
         name: userName,
         email: userEmail,
         workspaceName: workspaceName,
-        isDisabled: isDisabled
+        isDisabled: isDisabled,
       });
     }
   }
 
-  signupForm = async e => {
+  signupForm = async (e) => {
     e.preventDefault();
     this.validateAllInputs();
     if (this.validityCheck()) {
@@ -103,11 +110,12 @@ class Signup extends Component {
             password: this.state.password,
             password_confirmation: this.state.confirmPassword,
             is_company_present: this.state.isCompany,
+            timetrack_enabled: this.state.timetrack_enabled,
             company: {
               name: this.state.companyName,
-              email: this.state.email
-            }
-          }
+              email: this.state.email,
+            },
+          },
         };
       } else if (!this.state.tokenId) {
         message = "User Created Successfully!";
@@ -118,8 +126,9 @@ class Signup extends Component {
             password: this.state.password,
             password_confirmation: this.state.confirmPassword,
             is_company_present: this.state.isCompany,
-            invitation_status: false
-          }
+            timetrack_enabled: this.state.timetrack_enabled,
+            invitation_status: false,
+          },
         };
       } else {
         message = `Successfully added in ${this.state.workspaceName} Workspace`;
@@ -130,11 +139,12 @@ class Signup extends Component {
             password: this.state.password,
             password_confirmation: this.state.confirmPassword,
             is_company_present: this.state.isCompany,
+            timetrack_enabled: this.state.timetrack_enabled,
             invitation_status: true,
             invitee_details: {
-              token_id: this.state.tokenId
-            }
-          }
+              token_id: this.state.tokenId,
+            },
+          },
         };
       }
       this.setState({ isLoading: true });
@@ -142,7 +152,7 @@ class Signup extends Component {
         const { signUpData } = await signUp(signupData);
         toast(<DailyPloyToast message={message} status="success" />, {
           autoClose: 2000,
-          position: toast.POSITION.TOP_CENTER
+          position: toast.POSITION.TOP_CENTER,
         });
         this.directLogin();
         // setTimeout(() => this.props.history.push("/login"), 1000);
@@ -180,7 +190,7 @@ class Signup extends Component {
   directLogin = async () => {
     const loginData = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     };
     try {
       const { data } = await login(loginData);
@@ -197,7 +207,7 @@ class Signup extends Component {
           cookie.save("workspaceName", workspace.company.name, { path: "/" });
         } else {
           cookie.save("workspaceName", workspace.name, {
-            path: "/"
+            path: "/",
           });
         }
         try {
@@ -216,7 +226,7 @@ class Signup extends Component {
     }
   };
 
-  directLoginGoogle = async data => {
+  directLoginGoogle = async (data) => {
     try {
       cookie.save("accessToken", data.access_token, { path: "/" });
       cookie.save("refreshToken", "adehbfjjnmmhdnmf", { path: "/" });
@@ -231,7 +241,7 @@ class Signup extends Component {
           cookie.save("workspaceName", workspace.company.name, { path: "/" });
         } else {
           cookie.save("workspaceName", workspace.name, {
-            path: "/"
+            path: "/",
           });
         }
         try {
@@ -263,7 +273,7 @@ class Signup extends Component {
       companyNameError: null,
       emailError: null,
       passwordError: null,
-      confirmPasswordError: null
+      confirmPasswordError: null,
     };
     errors.nameError = validateName(this.state.name);
     errors.passwordError = checkPassword(this.state.password);
@@ -288,11 +298,11 @@ class Signup extends Component {
     );
   };
 
-  errorGoogle = error => {
+  errorGoogle = (error) => {
     console.log(error);
   };
 
-  responseGoogle = response => {
+  responseGoogle = (response) => {
     this.signupOAuth(response, "google");
   };
 
@@ -311,8 +321,8 @@ class Signup extends Component {
           provider: type,
           // token: res.accessToken,
           provider_id: res.googleId,
-          provider_img: res.profileObj.imageUrl
-        }
+          provider_img: res.profileObj.imageUrl,
+        },
       };
     }
 
@@ -381,7 +391,7 @@ class Signup extends Component {
                   height: "100%",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
                 }}
                 className="col-md-5 sub-container"
               >
@@ -394,7 +404,7 @@ class Signup extends Component {
                     defaultActiveKey="individual"
                     className="col-md-10 offset-1 main-tabs"
                     id="uncontrolled-tab-example"
-                    onSelect={key => this.companyFlag(key)}
+                    onSelect={(key) => this.companyFlag(key)}
                   >
                     <Tab eventKey="individual" title="Individual">
                       <Individual
@@ -405,6 +415,7 @@ class Signup extends Component {
                         responseGoogle={this.responseGoogle}
                         errorGoogle={this.errorGoogle}
                         handlePasswordShow={this.handlePasswordShow}
+                        changeLogType={this.changeLogType}
                       />
                     </Tab>
                     <Tab
@@ -419,6 +430,7 @@ class Signup extends Component {
                         changeHandler={this.changeHandler}
                         signup={this.signupForm}
                         handlePasswordShow={this.handlePasswordShow}
+                        changeLogType={this.changeLogType}
                       />
                     </Tab>
                   </Tabs>

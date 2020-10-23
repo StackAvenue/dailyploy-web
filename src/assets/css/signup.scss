@@ -173,14 +173,14 @@ a {
   .signup-password-eye-1{
     position: absolute;
     right: 10px;
-    bottom: 136px;
+    bottom: 226px;
     color: $color-text3;
     cursor: pointer;
   }
   .signup-password-eye-2{
     position: absolute;
     right: 10px;
-    bottom: 58px;
+    bottom: 145px;
     color: $color-text3;
     cursor: pointer;
   }
@@ -261,4 +261,17 @@ a {
 
 .tooltip-pwd:hover .tooltiptext-pwd {
   visibility: visible;
+}
+
+.signup-form input[type='radio'],
+.workspace-modal input[type='radio'] {
+  height: auto !important;
+  margin-right: 12px;
+  position: relative;
+  top: 3px;
+}
+
+.signup-form label.radio-inline ,
+.workspace-modal label.radio-inline  {
+  margin-right: 4px;
 }

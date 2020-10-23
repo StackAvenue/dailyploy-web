@@ -103,7 +103,7 @@ class CommentUpload extends React.Component {
 
             <div className="uploded-img">
               {this.props.showBox
-                ? this.props.state.pictures.map((file, idx) => {
+                ? this.props.pictures.map((file, idx) => {
                   return (
                     <>
                       {this.isImage(file.name) ? (
@@ -170,15 +170,13 @@ class CommentUpload extends React.Component {
               </i>
             </span> */}
             <div
-              className={`${
-                this.props.showBox ? "show" : "hide"
+              className={`${this.props.showBox ? "show" : "hide"
                 } comment-action`}
             >
               <div
-                className={`${
-                  !this.props.showSave && !this.props.showAttachIcon
-                    ? "hide"
-                    : "show"
+                className={`${!this.props.showSave && !this.props.showAttachIcon
+                  ? "hide"
+                  : "show"
                   }`}
               >
                 {/* <span className="suport">
