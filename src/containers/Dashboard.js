@@ -8,7 +8,7 @@ import Calendar from "../components/dashboard/Calendar";
 import cookie from "react-cookies";
 import { toast } from "react-toastify";
 import AddTaskModal from "../components/dashboard/AddTaskModal";
-import VideoLoader from "../components/dashboard/VideoLoader"
+import VideoLoader from "../components/dashboard/VideoLoader";
 import {
   getWeekFisrtDate,
   getFisrtDate,
@@ -28,7 +28,10 @@ import {
 import TaskInfoModal from "./../components/dashboard/TaskInfoModal";
 import TaskConfirm from "./../components/dashboard/TaskConfirm";
 import { base } from "./../../src/base";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 
 class Dashboard extends PureComponent {
   constructor(props) {
@@ -114,7 +117,7 @@ class Dashboard extends PureComponent {
       taskPrioritie: {
         name: "low",
         color_code: "#555555",
-        label: "low"
+        label: "low",
       },
       showEventAlertId: "",
       trackingEvent: null,
@@ -130,6 +133,7 @@ class Dashboard extends PureComponent {
       allData1: [],
       showStatus: false,
       hoverID: 0,
+      isTimetrackMode: this.props.state.timetrack_enabled,
     };
   }
 
@@ -173,22 +177,22 @@ class Dashboard extends PureComponent {
           start_date: getFisrtDate(this.state.taskStartDate),
           user_id: userIds.join(","),
           project_ids: this.props.searchProjectIds.join(","),
-          status_ids: ''
+          status_ids: "",
         };
         const { data } = await get(
           `workspaces/${this.state.workspaceId}/user_tasks`,
           searchData
         );
 
-        this.setState({ allData: data })
-        this.setState({ allData1: data })
+        this.setState({ allData: data });
+        this.setState({ allData1: data });
 
         var sortedUsers = data.users.sort((x, y) => {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-              ? 1
-              : 0;
+            ? 1
+            : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -262,13 +266,12 @@ class Dashboard extends PureComponent {
         project_ids: this.props.searchProjectIds.join(","),
       };
 
-
       var sortedUsers = this.state.allData.users.sort((x, y) => {
         return x.id === this.state.userId
           ? -1
           : y.id === this.state.userId
-            ? 1
-            : 0;
+          ? 1
+          : 0;
       });
       var taskRunningObj = {
         status: false,
@@ -325,18 +328,10 @@ class Dashboard extends PureComponent {
           (member) => !userIds.includes(member.id)
         )
       );
-
     }
 
-
-
-
-
-
     if (prevState.updateNewTask !== this.state.updateNewTask) {
-
       this.state.updateNewTask.map((taks) => {
-
         var userIds =
           this.props.searchUserDetails.length > 0
             ? this.props.searchUserDetails.map((member) => member.member_id)
@@ -348,13 +343,12 @@ class Dashboard extends PureComponent {
           project_ids: this.props.searchProjectIds.join(","),
         };
 
-
         var sortedUsers = this.state.allData.users.sort((x, y) => {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-              ? 1
-              : 0;
+            ? 1
+            : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -370,7 +364,8 @@ class Dashboard extends PureComponent {
             email: this.state.userEmail,
           },
           taskRunningObj,
-          trackingEvent, taks
+          trackingEvent,
+          taks
         );
         // let generatedObj = this.generateTaskObject(
         //   sortedUsers,
@@ -423,8 +418,6 @@ class Dashboard extends PureComponent {
         );
       });
     }
-
-
 
     if (prevState.timeFrom !== this.state.timeFrom) {
       var startDateTime = null;
@@ -481,6 +474,7 @@ class Dashboard extends PureComponent {
         });
       }
     }
+    this.setState({ isTimetrackMode: this.props.state.timetrack_enabled });
   }
 
   async componentDidMount() {
@@ -521,9 +515,7 @@ class Dashboard extends PureComponent {
       );
 
       var user = data;
-    } catch (e) { }
-
-
+    } catch (e) {}
 
     // workspace Member Listing
     try {
@@ -541,7 +533,7 @@ class Dashboard extends PureComponent {
     try {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
-    } catch (e) { }
+    } catch (e) {}
 
     // workspace Tasks Listing
     try {
@@ -554,7 +546,7 @@ class Dashboard extends PureComponent {
         start_date: getWeekFisrtDate(this.state.taskStartDate),
         user_id: userIds.join(","),
         project_ids: this.props.searchProjectIds.join(","),
-        status_ids: ''
+        status_ids: "",
       };
       var taskRunningObj = {
         status: false,
@@ -568,7 +560,7 @@ class Dashboard extends PureComponent {
       );
 
       this.setState({ allData: data });
-      this.setState({ allData1: data })
+      this.setState({ allData1: data });
 
       var userId = loggedInData.id;
       var sortedUsers = data.users.sort((x, y) => {
@@ -631,7 +623,6 @@ class Dashboard extends PureComponent {
       };
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
         var task = dateWiseTasks.tasks.map((task) => {
-
           var tasksObj = this.createTaskObject(task, user, dateWiseTasks.date);
           if (task.time_track_status) {
             let taskStartOn = new Date(task.time_track.start_time).getTime();
@@ -675,17 +666,13 @@ class Dashboard extends PureComponent {
       moment(task.start_datetime).format(FULL_DATE)
     );
     let created = moment(task.created_at).format(FULL_DATE);
-    // let sortedTime =
-    //   moment(start).format("HH:mm") != "00:00"
-    //     ? moment(start).format("HH.mm")
-    //     : moment(created).format("HH.mm");
 
     let sortedTime = moment(created).format("HH.mm");
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks
       ? task.date_formatted_time_tracks.find(
-        (dateLog) => dateLog.date == dateWiseTasksDate
-      )
+          (dateLog) => dateLog.date == dateWiseTasksDate
+        )
       : null;
     return {
       date: dateWiseTasksDate,
@@ -717,15 +704,9 @@ class Dashboard extends PureComponent {
       status: task.status,
       trackingStatus: task.status == "completed" ? "completed" : "play",
       startOn: null,
-      is_complete: task.is_complete
+      is_complete: task.is_complete,
     };
   };
-
-
-
-
-
-
 
   updateGenerateTaskObject = (
     sortedUsers,
@@ -742,7 +723,12 @@ class Dashboard extends PureComponent {
       };
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
         var task = dateWiseTasks.tasks.map((task) => {
-          var tasksObj = this.updateCreateTaskObject(task, user, dateWiseTasks.date, taks);
+          var tasksObj = this.updateCreateTaskObject(
+            task,
+            user,
+            dateWiseTasks.date,
+            taks
+          );
           return tasksObj;
         });
         return task;
@@ -759,9 +745,7 @@ class Dashboard extends PureComponent {
 
   updateCreateTaskObject = (task, user, dateWiseTasksDate, taks) => {
     if (taks.start_datetime && taks.end_datetime) {
-
       if (task.id === taks.taskId) {
-
         let startDateTime =
           moment(taks.start_datetime).format(DATE_FORMAT1) +
           " " +
@@ -775,11 +759,13 @@ class Dashboard extends PureComponent {
         );
         let created = moment(Date.now()).format(FULL_DATE);
         let sortedTime = moment(created).format("HH.mm");
-        let newTaskId = task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
+        let newTaskId =
+          task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-            (dateLog) => dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
-          )
+              (dateLog) =>
+                dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
+            )
           : null;
         return {
           date: moment(taks.start_datetime).format(DATE_FORMAT1),
@@ -832,8 +818,8 @@ class Dashboard extends PureComponent {
         let newTaskId = task.id + "-" + dateWiseTasksDate;
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-            (dateLog) => dateLog.date == dateWiseTasksDate
-          )
+              (dateLog) => dateLog.date == dateWiseTasksDate
+            )
           : null;
         return {
           date: dateWiseTasksDate,
@@ -865,15 +851,8 @@ class Dashboard extends PureComponent {
           startOn: null,
         };
       }
-
     }
   };
-
-
-
-
-
-
 
   updateGenerateTaskObject = (
     sortedUsers,
@@ -890,9 +869,16 @@ class Dashboard extends PureComponent {
       };
       var tasks = user.date_formatted_tasks.map((dateWiseTasks, index) => {
         var task = dateWiseTasks.tasks.map((task) => {
-          var tasksObj = this.updateCreateTaskObject(task, user, dateWiseTasks.date, taks);
+          var tasksObj = this.updateCreateTaskObject(
+            task,
+            user,
+            dateWiseTasks.date,
+            taks
+          );
           if (user.id == userData.id && task.time_tracked.length > 0) {
-            let runningTask = task.time_tracked.flat().find((ttt) => ttt.status == "running");
+            let runningTask = task.time_tracked
+              .flat()
+              .find((ttt) => ttt.status == "running");
             if (runningTask) {
               let taskStartOn = new Date(runningTask.start_time).getTime();
               taskRunningObj = {
@@ -905,7 +891,9 @@ class Dashboard extends PureComponent {
               trackingEvent = tasksObj;
             }
           } else {
-            let runningTask = task.time_tracked.flat().find((ttt) => ttt.status == "running");
+            let runningTask = task.time_tracked
+              .flat()
+              .find((ttt) => ttt.status == "running");
             if (runningTask) {
               let taskStartOn = new Date(runningTask.start_time).getTime();
               tasksObj["trackingStatus"] = "pause";
@@ -928,9 +916,7 @@ class Dashboard extends PureComponent {
 
   updateCreateTaskObject = (task, user, dateWiseTasksDate, taks) => {
     if (taks.start_datetime && taks.end_datetime) {
-
       if (task.id === taks.taskId) {
-
         let startDateTime =
           moment(taks.start_datetime).format(DATE_FORMAT1) +
           " " +
@@ -944,11 +930,13 @@ class Dashboard extends PureComponent {
         );
         let created = moment(Date.now()).format(FULL_DATE);
         let sortedTime = moment(created).format("HH.mm");
-        let newTaskId = task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
+        let newTaskId =
+          task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-            (dateLog) => dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
-          )
+              (dateLog) =>
+                dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
+            )
           : null;
         return {
           date: moment(taks.start_datetime).format(DATE_FORMAT1),
@@ -1001,8 +989,8 @@ class Dashboard extends PureComponent {
         let newTaskId = task.id + "-" + dateWiseTasksDate;
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-            (dateLog) => dateLog.date == dateWiseTasksDate
-          )
+              (dateLog) => dateLog.date == dateWiseTasksDate
+            )
           : null;
         return {
           date: dateWiseTasksDate,
@@ -1034,7 +1022,6 @@ class Dashboard extends PureComponent {
           startOn: null,
         };
       }
-
     }
   };
 
@@ -1155,29 +1142,24 @@ class Dashboard extends PureComponent {
     }
   };
 
-
-
-
   countOfDay = (taskStartDate, taskEndDate) => {
     var dateArray = [];
     var currentDate = moment(taskStartDate);
     var stopDate = moment(taskEndDate);
     while (currentDate <= stopDate) {
-      dateArray.push(moment(currentDate).format('YYYY-MM-DD'))
-      currentDate = moment(currentDate).add(1, 'days');
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      currentDate = moment(currentDate).add(1, "days");
     }
     return dateArray;
-  }
-
+  };
 
   //   getTaksInfomation=(taskName)=>{
   //    var users=this.state.allData1.users;
   // var temp=[]
 
-
   // this.state.allData1.users.map((user,uid) => {
   //       user.date_formatted_tasks.map((dateWiseTasks, did) => {
-  //         dateWiseTasks.tasks.map((task,tid) => { 
+  //         dateWiseTasks.tasks.map((task,tid) => {
   //           if(taskName[0].taskId===task.id)
   //           {
 
@@ -1207,12 +1189,11 @@ class Dashboard extends PureComponent {
   //       project:task.project,
   //       start_datetime:startDateTime,
   //       status: task.status,
-  //       time_tracked:task.time_tracked, 
+  //       time_tracked:task.time_tracked,
   //     }),"id",did,"uid",uid)
   //   }
 
   //   else{
-
 
   //     temp.push({
   //       comments: task.comments,
@@ -1226,7 +1207,7 @@ class Dashboard extends PureComponent {
   //       project:task.project,
   //       start_datetime:startDateTime,
   //       status: task.status,
-  //       time_tracked:task.time_tracked, 
+  //       time_tracked:task.time_tracked,
   //     })
   //     console.log(users,"data", this.state.allData1.users,"obj")
   //     console.log(users[uid].date_formatted_tasks.push({date:tasks.date1,tasks:temp}),"id",did,"uid",uid)
@@ -1246,48 +1227,51 @@ class Dashboard extends PureComponent {
   // }
 
   updateTask = async (taskData, taskId, projectId, ...key) => {
-
     if (key[0] === 1) {
-      var taskName = []
+      var taskName = [];
       var task = {};
       var taskStartDate = key[1].taskStartDate;
       var taskEndDate = key[1].taskEndDate;
-      var newStartTime = moment(convertUTCToLocalDate(key[1].taskStartDateTime)).format("HH:mm:ss");
-      var newEndTime = moment(convertUTCToLocalDate(key[1].taskEndDateTime)).format("HH:mm:ss");
+      var newStartTime = moment(
+        convertUTCToLocalDate(key[1].taskStartDateTime)
+      ).format("HH:mm:ss");
+      var newEndTime = moment(
+        convertUTCToLocalDate(key[1].taskEndDateTime)
+      ).format("HH:mm:ss");
       if (taskData.task.start_datetime && taskData.task.end_datetime) {
         taskName.push({
           taskId: Number(taskId),
           start_datetime: taskData.task.start_datetime,
           end_datetime: taskData.task.end_datetime,
-
         });
         // this.getTaksInfomation(taskName);
-      } else
-        if (taskData.task.end_datetime) {
-          var dateArray = this.countOfDay(taskStartDate, key[2]);
-          dateArray.map((date, i) => {
-            taskName.push({
-              taskId: Number(taskId),
-              start_datetime: moment(dateArray[i]).format(DATE_FORMAT1) + " " + newStartTime,
-              end_datetime: moment(dateArray[i]).format(DATE_FORMAT1) + " " + newEndTime,
-              date1: dateArray[i]
-            });
-            // this.getTaksInfomation(taskName);
-          })
-        } else
-          if (taskData.task.start_datetime) {
-            var dateArray = this.countOfDay(key[2], taskEndDate)
-            dateArray.map((date, i) => {
-              taskName.push({
-                taskId: Number(taskId),
-                start_datetime: moment(dateArray[i]).format(DATE_FORMAT1) + " " + newStartTime,
-                end_datetime: moment(dateArray[i]).format(DATE_FORMAT1) + " " + newEndTime,
-                date1: dateArray[i]
-              });
-            })
-            // this.getTaksInfomation(taskName);
-
-          }
+      } else if (taskData.task.end_datetime) {
+        var dateArray = this.countOfDay(taskStartDate, key[2]);
+        dateArray.map((date, i) => {
+          taskName.push({
+            taskId: Number(taskId),
+            start_datetime:
+              moment(dateArray[i]).format(DATE_FORMAT1) + " " + newStartTime,
+            end_datetime:
+              moment(dateArray[i]).format(DATE_FORMAT1) + " " + newEndTime,
+            date1: dateArray[i],
+          });
+          // this.getTaksInfomation(taskName);
+        });
+      } else if (taskData.task.start_datetime) {
+        var dateArray = this.countOfDay(key[2], taskEndDate);
+        dateArray.map((date, i) => {
+          taskName.push({
+            taskId: Number(taskId),
+            start_datetime:
+              moment(dateArray[i]).format(DATE_FORMAT1) + " " + newStartTime,
+            end_datetime:
+              moment(dateArray[i]).format(DATE_FORMAT1) + " " + newEndTime,
+            date1: dateArray[i],
+          });
+        });
+        // this.getTaksInfomation(taskName);
+      }
 
       // this.setState({
       //   updateNewTask: taskName,
@@ -1296,17 +1280,13 @@ class Dashboard extends PureComponent {
       //   backFromTaskEvent: true,
       // });
 
-
       try {
         const { data } = await put(
           taskData,
           `workspaces/${this.state.workspaceId}/projects/${projectId}/tasks/${taskId}`
         );
         toast(
-          <DailyPloyToast
-            message="Task Updated"
-            status="success"
-          />,
+          <DailyPloyToast message="Task Updated" status="success" />,
 
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
@@ -1328,13 +1308,10 @@ class Dashboard extends PureComponent {
           taskData,
           `workspaces/${this.state.workspaceId}/projects/${projectId}/tasks/${taskId}`
         );
-        toast(
-          <DailyPloyToast
-            message="Task Updated"
-            status="success"
-          />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
-        );
+        toast(<DailyPloyToast message="Task Updated" status="success" />, {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        });
         this.setState({
           show: false,
           newTask: task,
@@ -1357,7 +1334,7 @@ class Dashboard extends PureComponent {
   };
 
   taskDetails = () => {
-    console.log(this.state.taskStatus.id)
+    console.log(this.state.taskStatus.id);
     var startDateTime =
       moment(this.state.dateFrom).format(DATE_FORMAT1) +
       (this.state.timeFrom && this.state.timeTo
@@ -1381,13 +1358,17 @@ class Dashboard extends PureComponent {
         comments: this.state.comments,
         member_ids: this.state.taskUser,
         project_id: this.state.project.id,
-        category_id: this.state.taskCategorie ? this.state.taskCategorie.task_category_id : this.state.taskCategories[0].task_category_id,
+        category_id: this.state.taskCategorie
+          ? this.state.taskCategorie.task_category_id
+          : this.state.taskCategories[0].task_category_id,
 
         priority:
           this.state.taskPrioritie && this.state.taskPrioritie.name
             ? this.state.taskPrioritie.name
             : "no_priority",
-        task_status_id: this.state.taskStatus ? this.state.taskStatus.id : this.state.taskStatuss[0].id
+        task_status_id: this.state.taskStatus
+          ? this.state.taskStatus.id
+          : this.state.taskStatuss[0].id,
       },
     };
     return taskData;
@@ -1417,8 +1398,8 @@ class Dashboard extends PureComponent {
         modalMemberSearchOptions: this.state.newAddedProject
           ? this.state.newAddedProject.members
           : this.state.project
-            ? this.state.project.members
-            : members,
+          ? this.state.project.members
+          : members,
         project: this.state.newAddedProject
           ? this.state.newAddedProject
           : this.state.project,
@@ -1523,7 +1504,7 @@ class Dashboard extends PureComponent {
         timeFromError: "",
         timeToError: "",
         categoryError: "",
-        statusError: ""
+        statusError: "",
       },
       taskloader: false,
       taskContacts: [],
@@ -1586,9 +1567,9 @@ class Dashboard extends PureComponent {
         var taskEvent = this.state.taskEvent;
         this.setState({
           taskEvent: taskEvent,
-          taskStatus: data.status
+          taskStatus: data.status,
         });
-      } catch (e) { }
+      } catch (e) {}
       this.loadUserTask(this.state.workspaceId);
     }
   };
@@ -1629,7 +1610,7 @@ class Dashboard extends PureComponent {
         (c) => c.id !== data.id
       );
       this.setState({ taskComments: taskComments });
-    } catch (e) { }
+    } catch (e) {}
   };
 
   handleInputChange = (e) => {
@@ -1683,11 +1664,12 @@ class Dashboard extends PureComponent {
         var taskStatus = data.task_status;
         let defaultStatus = taskStatus.find((item) => item.is_default);
 
-        this.setState({ taskStatuss: taskStatus, showStatus: true, defaultStatus: defaultStatus })
-      } catch (e) { }
-
-
-
+        this.setState({
+          taskStatuss: taskStatus,
+          showStatus: true,
+          defaultStatus: defaultStatus,
+        });
+      } catch (e) {}
     } else {
       this.setState({
         projectId: null,
@@ -1714,8 +1696,8 @@ class Dashboard extends PureComponent {
       project.id === projectId
         ? projectId
         : this.state.newAddedProject
-          ? this.state.newAddedProject.id
-          : null
+        ? this.state.newAddedProject.id
+        : null
     );
     var members = projects.length > 0 ? projects[0].members : [];
     if (this.state.user.role === "member") {
@@ -1754,15 +1736,15 @@ class Dashboard extends PureComponent {
           : this.state.project &&
             this.state.taskUser &&
             this.state.taskUser[0] == memberId
-            ? this.state.project
-            : null,
+          ? this.state.project
+          : null,
         projectId: this.state.newAddedProject
           ? this.state.newAddedProject.id
           : this.state.project &&
             this.state.taskUser &&
             this.state.taskUser[0] == memberId
-            ? this.state.project.id
-            : null,
+          ? this.state.project.id
+          : null,
         taskId: "",
         modalMemberSearchOptions: this.addTaskMembers(members, selecteMember),
         dateFrom: new Date(startDate),
@@ -1826,12 +1808,9 @@ class Dashboard extends PureComponent {
     errors["dateFromError"] = this.state.dateFrom
       ? ""
       : "please select date from";
-    errors["categoryError"] = this.state.taskCategorie > 0
-      ? ""
-      : "please select category";
-    errors["statusError"] = this.state.taskStatus
-      ? ""
-      : "please select Status";
+    errors["categoryError"] =
+      this.state.taskCategorie > 0 ? "" : "please select category";
+    errors["statusError"] = this.state.taskStatus ? "" : "please select Status";
     if (this.state.dateTo == null && this.state.dateFrom != null) {
       if (
         moment(this.state.dateFrom).format(DATE_FORMAT1) ===
@@ -1850,14 +1829,14 @@ class Dashboard extends PureComponent {
       this.state.timeFrom &&
       !this.state.timeTo &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) !==
-      moment().format(DATE_FORMAT1)
+        moment().format(DATE_FORMAT1)
     ) {
       errors["timeToError"] = "please select time to";
     } else if (
       this.state.timeFrom &&
       !this.state.timeTo &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) ===
-      moment().format(DATE_FORMAT1)
+        moment().format(DATE_FORMAT1)
     ) {
       errors["timeToError"] = "";
     } else if (
@@ -1897,7 +1876,7 @@ class Dashboard extends PureComponent {
       this.state.timeFrom != null &&
       this.state.timeTo == null &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) ===
-      moment().format(DATE_FORMAT1)
+        moment().format(DATE_FORMAT1)
     ) {
       return true;
     } else if (this.state.timeFrom == null && this.state.timeTo != null) {
@@ -1923,8 +1902,12 @@ class Dashboard extends PureComponent {
       );
       var taskStatu = data.task_status;
       const defaultStatus = taskStatu.find((item) => item.is_default);
-      this.setState({ taskStatuss: taskStatu, showStatus: true, defaultStatus: defaultStatus })
-    } catch (e) { }
+      this.setState({
+        taskStatuss: taskStatu,
+        showStatus: true,
+        defaultStatus: defaultStatus,
+      });
+    } catch (e) {}
     let members = this.memberSearchOptions(event.resourceId, event.projectId);
     var memberProjects = this.state.projects.filter((project) =>
       project.members.map((member) => member.id).includes(event.resourceId)
@@ -1996,10 +1979,10 @@ class Dashboard extends PureComponent {
           timeTracked: timeTracked,
           taskPrioritie: taskPrioritie,
           taskComments: taskComments,
-          taskStatus: data.status
+          taskStatus: data.status,
         });
       }
-    } catch (e) { }
+    } catch (e) {}
     this.loadTaskContackts(event.projectId);
   };
 
@@ -2009,7 +1992,7 @@ class Dashboard extends PureComponent {
         `workspaces/${this.state.workspaceId}/projects/${projectId}/contact`
       );
       this.setState({ taskContacts: data.contacts });
-    } catch (e) { }
+    } catch (e) {}
   };
 
   taskInfoEdit = () => {
@@ -2081,7 +2064,7 @@ class Dashboard extends PureComponent {
         try {
           this.setState({ taskloader: true });
           // mark complete flag
-          event.is_complete = true
+          event.is_complete = true;
           const { data } = await put(
             { task: event },
             `workspaces/${this.state.workspaceId}/projects/${event.projectId}/tasks/${taskId}`
@@ -2103,11 +2086,17 @@ class Dashboard extends PureComponent {
             showInfo: false,
             taskloader: false,
           });
-          toast(<DailyPloyToast message="Task marked as completed" status="success" />, {
-            autoClose: 1000,
-            position: toast.POSITION.TOP_CENTER
-          });
-        } catch (e) { }
+          toast(
+            <DailyPloyToast
+              message="Task marked as completed"
+              status="success"
+            />,
+            {
+              autoClose: 1000,
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } catch (e) {}
       } else {
         this.setState({
           logTimeFromError: this.state.logTimeFrom
@@ -2150,6 +2139,65 @@ class Dashboard extends PureComponent {
     let project = this.state.projects.find((p) => p.id === event.projectId);
     return project && project.members.map((m) => m.id).includes(resourceId);
   };
+
+  logTaskTime = async (event, timeLogged) => {
+    console.log(event + ":" + timeLogged);
+    const taskId = event.id.split("-")[0];
+    const taskObj = {
+      logged_time: timeLogged,
+      start_date: event.date
+    };
+    if(event.allTimeTracked && event.allTimeTracked.length > 0 ){
+      this.editTimeTrack(taskId, event.allTimeTracked[0], timeLogged)
+    }else{
+      try {
+        const { data } = await post(taskObj, `tasks/${taskId}/logg_time`);
+        toast(<DailyPloyToast message="Time logged" status="success" />, {
+          autoClose: 1000,
+          position: toast.POSITION.TOP_CENTER,
+        });
+        if(data){
+          this.timeTrackUpdate(data)
+          this.closeTaskModal();
+        }
+      } catch (err) {
+        toast(
+          <DailyPloyToast
+            message={"Something went wrong, Please try again"}
+            status="error"
+          />,
+          {
+            autoClose: 2000,
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+      }
+    }
+  };
+
+  editTimeTrack = async(taskId, event, timeLogged) => {
+    let newTrack = {
+      start_time: event.start_time,
+      end_time: new Date(moment(event.start_time).add(timeLogged, "hours").format(FULL_DATE)),
+    };
+    try {
+      const { data } = await put(
+        newTrack,
+        `tasks/${taskId}/edit_tracked_time/${event.id}`
+      );
+      if (data) {
+        this.timeTrackUpdate(data)
+        this.closeTaskModal();
+      }
+      toast(
+        <DailyPloyToast message={"log time updated"} status="success" />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    } catch (e) {}
+  }
 
   taskDelete = async (event) => {
     if (event) {
@@ -2217,7 +2265,6 @@ class Dashboard extends PureComponent {
   };
 
   taskEventResumeConfirm = (event, modalText) => {
-
     if (modalText == "edit") {
       this.editAddTaskDetails(event.taskId, event);
     } else {
@@ -2249,7 +2296,7 @@ class Dashboard extends PureComponent {
     var errors = this.state.errors;
     errors["statusError"] = "";
     this.setState({ taskStatus: option, errors: errors });
-  }
+  };
   handlePrioritiesChange = (option) => {
     this.setState({ taskPrioritie: option });
   };
@@ -2284,7 +2331,7 @@ class Dashboard extends PureComponent {
             trackingEvent: event,
             events: events,
           });
-        } catch (e) { }
+        } catch (e) {}
       } else if (taskType === "stop") {
         // let d = moment(eventTask.start).format(DATE_FORMAT1);
         // let t = moment(dateTime).format(HHMMSS);
@@ -2311,7 +2358,7 @@ class Dashboard extends PureComponent {
             timeTracked: infoTimeTrackLog,
             trackingEvent: null,
           });
-        } catch (e) { }
+        } catch (e) {}
       }
     }
   };
@@ -2349,7 +2396,7 @@ class Dashboard extends PureComponent {
           events: events,
           isPlayPause: false,
         });
-      } catch (e) { }
+      } catch (e) {}
     }
   };
 
@@ -2380,7 +2427,7 @@ class Dashboard extends PureComponent {
           timeTracked: infoTimeTrackLog,
           trackingEvent: null,
         });
-      } catch (e) { }
+      } catch (e) {}
     }
   };
 
@@ -2400,8 +2447,14 @@ class Dashboard extends PureComponent {
 
   updateTaskEvent = async (event, data, ...key) => {
     let taskId = event.id.split("-")[0];
-    this.updateTask({ task: data }, taskId, event.projectId, key[0], event, key[1]);
-
+    this.updateTask(
+      { task: data },
+      taskId,
+      event.projectId,
+      key[0],
+      event,
+      key[1]
+    );
   };
 
   toggleTaskStartState = (e) => {
@@ -2419,38 +2472,46 @@ class Dashboard extends PureComponent {
           );
           var newTaskStatus = [...this.state.taskStatuss, data];
           var taskStatu = data;
-          this.setState({ taskStatuss: newTaskStatus, taskStatus: taskStatu, showStatus: true })
+          this.setState({
+            taskStatuss: newTaskStatus,
+            taskStatus: taskStatu,
+            showStatus: true,
+          });
           toast(<DailyPloyToast message="Status Added" status="success" />, {
             autoClose: 2000,
-            position: toast.POSITION.TOP_CENTER
+            position: toast.POSITION.TOP_CENTER,
           });
         } catch (e) {
           if (e.response && e.response.status === 400) {
             toast(
-              <DailyPloyToast message="Please Enter Valid Status "
-                status="error" />,
-              { autoClose: 2000, position: toast.POSITION.TOP_CENTER });
-
+              <DailyPloyToast
+                message="Please Enter Valid Status "
+                status="error"
+              />,
+              { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+            );
           }
         }
-
-      }
-      else {
+      } else {
         toast(
-          <DailyPloyToast message="Please Enter Valid Status "
-            status="error" />,
-          { autoClose: 2000, position: toast.POSITION.TOP_CENTER });
+          <DailyPloyToast
+            message="Please Enter Valid Status "
+            status="error"
+          />,
+          { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+        );
       }
-
     } else {
       toast(
-        <DailyPloyToast message="Please Select Valid Project "
-          status="error" />,
-        { autoClose: 2000, position: toast.POSITION.TOP_CENTER });
+        <DailyPloyToast
+          message="Please Select Valid Project "
+          status="error"
+        />,
+        { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
+      );
       this.setState({ projectError: true, showAddCategoryTr: true });
     }
-
-  }
+  };
   addCategory = async (categoryName) => {
     if (categoryName != "") {
       try {
@@ -2601,7 +2662,7 @@ class Dashboard extends PureComponent {
           start_date: getFisrtDate(this.state.taskStartDate),
           user_id: userIds.join(","),
           project_ids: this.props.searchProjectIds.join(","),
-          status_ids: ''
+          status_ids: "",
         };
         const { data } = await get(
           `workspaces/${workspaceId}/user_tasks`,
@@ -2611,8 +2672,8 @@ class Dashboard extends PureComponent {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-              ? 1
-              : 0;
+            ? 1
+            : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -2647,7 +2708,7 @@ class Dashboard extends PureComponent {
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent,
         });
-      } catch (e) { }
+      } catch (e) {}
     }
   };
 
@@ -2701,7 +2762,6 @@ class Dashboard extends PureComponent {
       status: task.status,
       trackingStatus: "play",
       startOn: null,
-
     };
   };
 
@@ -2867,20 +2927,22 @@ class Dashboard extends PureComponent {
   // return id
   //   }
   handleHoverId = async (id, flag) => {
-
-
     if (flag) {
-      this.setState({ hoverID: id })
+      this.setState({ hoverID: id });
     } else {
-      this.setState({ hoverID: 0 })
+      this.setState({ hoverID: 0 });
     }
-  }
-  componentWillUnmount() { }
+  };
+  componentWillUnmount() {}
 
   render() {
     return (
       <>
-        {this.state.isLoading ? <div className="loading1"><VideoLoader /></div> : null}
+        {this.state.isLoading ? (
+          <div className="loading1">
+            <VideoLoader />
+          </div>
+        ) : null}
         <div
           className="row no-margin"
           style={this.state.isLoading ? { pointerEvents: "none" } : {}}
@@ -2918,11 +2980,11 @@ class Dashboard extends PureComponent {
               validCrossMove={this.validCrossMove}
               hoverId={this.state.hoverID}
               handleHoverId={this.handleHoverId}
+              isTimetrackMode={this.state.isTimetrackMode}
             />
           </div>
 
           <div>
-
             <button
               className="btn menubar-task-btn"
               onClick={this.showTaskModal}
@@ -2957,25 +3019,28 @@ class Dashboard extends PureComponent {
               addStatus={this.addStatus}
             />
             <NotificationContainer />
-            {(this.state.showInfo && this.state.backFromTaskEvent) && <TaskInfoModal
-              showInfo={this.state.showInfo && this.state.backFromTaskEvent}
-              state={this.state}
-              closeTaskModal={this.closeTaskModal}
-              handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-              onGoingTask={this.props.state.isStart}
-              taskInfoEdit={this.taskInfoEdit}
-              confirmModal={this.confirmModal}
-              resumeOrDeleteTask={this.resumeOrDeleteTask}
-              handleTaskPlay={this.handleTaskPlay}
-              icon={this.state.icon}
-              handleTaskStartTop={this.handleTaskStartTop}
-              handleTaskStart={this.handleTaskStart}
-              handleTaskStop={this.handleTaskStop}
-              updateTaskComments={this.updateTaskComments}
-              deleteComments={this.deleteComments}
-              updateComments={this.updateComments}
-              timeTrackUpdate={this.timeTrackUpdate}
-            />}
+            {this.state.showInfo && this.state.backFromTaskEvent && (
+              <TaskInfoModal
+                showInfo={this.state.showInfo && this.state.backFromTaskEvent}
+                state={this.state}
+                closeTaskModal={this.closeTaskModal}
+                handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+                onGoingTask={this.props.state.isStart}
+                taskInfoEdit={this.taskInfoEdit}
+                confirmModal={this.confirmModal}
+                resumeOrDeleteTask={this.resumeOrDeleteTask}
+                handleTaskPlay={this.handleTaskPlay}
+                icon={this.state.icon}
+                handleTaskStartTop={this.handleTaskStartTop}
+                handleTaskStart={this.handleTaskStart}
+                handleTaskStop={this.handleTaskStop}
+                updateTaskComments={this.updateTaskComments}
+                deleteComments={this.deleteComments}
+                updateComments={this.updateComments}
+                timeTrackUpdate={this.timeTrackUpdate}
+                isTimetrackMode={this.state.isTimetrackMode}
+              />
+            )}
             {this.state.taskConfirmModal ? (
               <TaskConfirm
                 taskConfirmModal={this.state.taskConfirmModal}
@@ -2988,10 +3053,12 @@ class Dashboard extends PureComponent {
                 taskMarkComplete={this.taskMarkComplete}
                 taskResume={this.taskResume}
                 taskDelete={this.taskDelete}
+                logTaskTime={this.logTaskTime}
                 handleLogTimeFrom={this.handleLogTimeFrom}
                 handleLogTimeTo={this.handleLogTimeTo}
                 updateTaskEventLogTime={this.updateTaskEventLogTime}
                 timeTrackUpdate={this.timeTrackUpdate}
+                isTimetrackMode={this.state.isTimetrackMode}
               />
             ) : null}
           </div>

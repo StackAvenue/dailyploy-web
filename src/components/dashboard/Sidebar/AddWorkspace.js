@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import Loader from "react-loader-spinner";
+import LogType from '../../LogType';
 
 const AddWorkspace = props => {
   return (
@@ -30,6 +31,7 @@ const AddWorkspace = props => {
               onChange={props.handleInputChange}
             />
           </div>
+          <LogType timetrack_enabled={props.state.timetrack_enabled} changeLogType={props.changeLogType} />
         </div>
         <div className="col-md-12 text-right no-padding">
           <button

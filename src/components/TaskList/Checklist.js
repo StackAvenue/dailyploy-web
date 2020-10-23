@@ -154,7 +154,7 @@ const Checklist = (props) => {
 
   return (
     <div className="checklist-div">
-      <i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;
+      <i class="fa fa-check-square-o" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;&nbsp;
       <strong>Checklist</strong>
       <br />
       <div
@@ -165,7 +165,7 @@ const Checklist = (props) => {
               }}
             >
               <i class="fa fa-times"
-                data-tip data-for="closeTask"
+                data-tip data-for="closeTask" style={{ color: "#6A7074" }}
               ></i>&nbsp;&nbsp;
               <ReactTooltip id="closeTask" effect="solid">
                 Close
@@ -217,12 +217,12 @@ const Checklist = (props) => {
                 </div>
               ) : (
                 <i
-                  class="fas fa-pencil-alt chg-text-icon"
+                  class="fas fa-pencil-alt chg-text-icon" style={{ color: "#a2aab8" }}
                   onClick={() => editChecklist(checklist.id, checklist.name)}
                 ></i>
               )}
               <i
-                class="fas fa-trash-alt"
+                class="fas fa-trash-alt" style={{ color: "red", opacity: "0.6" }}
                 onClick={() => deleteChecklistData(checklist.id)}
               ></i>
               <br />

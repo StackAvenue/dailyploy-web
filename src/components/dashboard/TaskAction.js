@@ -36,6 +36,17 @@ class TaskAction extends Component {
       >
         {!props.event.is_complete ? (
           <>
+            {!this.props.isTimetrackMode && (
+              <div
+                className="border-bottom pointer"
+                style={{ padding: "5px 0px 0px 0px" }}
+                onClick={() =>
+                  props.taskEventResumeConfirm(props.event, "TLOG")
+                }
+              >
+                Log time
+              </div>
+            )}
             <div
               className="border-bottom pointer"
               style={{ padding: "5px 0px 0px 0px" }}
@@ -63,23 +74,25 @@ class TaskAction extends Component {
             </div>
           </>
         ) : (
-            <>
-              <div
-                className="border-bottom pointer"
-                style={{ padding: "5px 0px 0px 0px" }}
-                onClick={() => props.taskEventResumeConfirm(props.event, "edit")}
-              >
-                View Details
-        </div>
-              <div
-                className="pointer"
-                style={{ padding: "5px 0px 5px 0px" }}
-                onClick={() => props.taskEventResumeConfirm(props.event, "resume")}
-              >
-                Resume Task
+          <>
+            <div
+              className="border-bottom pointer"
+              style={{ padding: "5px 0px 0px 0px" }}
+              onClick={() => props.taskEventResumeConfirm(props.event, "edit")}
+            >
+              View Details
             </div>
-            </>
-          )}
+            <div
+              className="pointer"
+              style={{ padding: "5px 0px 5px 0px" }}
+              onClick={() =>
+                props.taskEventResumeConfirm(props.event, "resume")
+              }
+            >
+              Resume Task
+            </div>
+          </>
+        )}
       </div>
     );
   }

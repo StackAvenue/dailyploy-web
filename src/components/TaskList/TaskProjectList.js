@@ -68,6 +68,19 @@ class TaskProjectList extends Component {
       editTaskId: -1,
       projects: [],
       categories: [],
+      userStories: [],
+      currentUserstory: null,
+      taskDescription: null,
+      storyDescription: null,
+      detailsModal: false,
+      updatedData: false,
+      updatedTask: false,
+      userstoryUpdateTask: false,
+      showUserstoryTasklist: false,
+      currentUserstoryTask: [],
+      checklistItem: null,
+      newChecklist: false,
+      action: null,
       errors: {
         taskNameError: "",
         dateFromError: "",
@@ -92,6 +105,12 @@ class TaskProjectList extends Component {
       task_lists: [],
       editTltId: -1,
       isCheckVisible: false,
+      isUserStoryLoading: false,
+      selectedUserStoryId: null,
+      isChecklistLoading: false,
+      progressPercent: 0,
+      task_edit: false,
+      isRoadmapCreateLoading: false
     };
   }
 
@@ -285,8 +304,8 @@ class TaskProjectList extends Component {
     }
   };
 
-  closeAddTask = (value) => {
-    this.setState({ TaskShow : value })
+  closeAddTask = () => {
+    this.setState({ TaskShow : false })
   }
 
   handleDateFrom = (date) => {
@@ -335,7 +354,7 @@ class TaskProjectList extends Component {
       showChecklist: false
     })
   }
-  
+
   isFilterOpen = () => {
     this.setState({
       showFilter: !this.state.showFilter
@@ -349,7 +368,7 @@ class TaskProjectList extends Component {
   }
 
   isSummaryOpen = (taskID) => {
-    this.setState ({
+    this.setState({
       showSummary: !this.state.showSummary,
       summaryID: taskID
     });
@@ -367,15 +386,77 @@ class TaskProjectList extends Component {
     });
   };
 
+  handleDescription = (e) => {
+    const { name, value } = e.target;
+    if (name === "user-story") {
+      this.setState({ storyDescription: value })
+    } else {
+      this.setState({ taskDescription: value })
+    }
+
+  }
+
+  editDescription = (e, id) => {
+    const { name, value } = e.target;
+    if (this.state.storyDescription !== "" || this.state.taskDescription !== "") {
+      const params = {
+        description: name === "user-story" ? this.state.storyDescription : this.state.taskDescription
+      }
+      name === "user-story" ? this.editUserstory(params, id) : this.editUserstory(params, id)
+    }
+  }
+
+  addTaskChecklist = async (params, roadMapTask) => {
+    try {
+      const { data } = await post(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists`)
+      //this.displayList(roadMapTask.list_id)
+      this.setState({ checklistItem: data, newChecklist: true })
+    } catch (error) {
+      console.log("sa", error)
+    }
+  }
+
+  updateTaskChecklist = async (id, params, roadMapTask) => {
+    try {
+      // console.log(id, roadMapTask )
+        const { data } = await put(
+          params,
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists/${id}`)
+          //this.displayList(roadMapTask.list_id)
+      this.setState({ checklistItem: data, action: "update", newChecklist: true })
+    } catch (error) {
+      
+    }
+  }
+
+  deleteTaskChecklist = async (id, roadMapTask) => {
+  try {
+    // console.log(id, roadMapTask )
+      const { data } = await del(
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists/${id}`)
+        //this.displayList(roadMapTask.list_id)
+    this.setState({ checklistItem: data, action: "delete", newChecklist: true })
+  } catch (error) {
+    
+  }
+  }
+
+  createRoadmapLoading = (value) => {
+    this.setState({ isRoadmapCreateLoading: value })
+  }
+
   handleSaveTaskData = async () => {
     let loggedInUser = localStorage.getItem("logedInId");
+    this.createRoadmapLoading(true)
     try {
       let params = {
         name: this.state.Name,
         start_date: this.state.dateFrom,
         end_date: this.state.dateTo,
-        creator_id: loggedInUser,
-        task_status_id: this.state.statusTask.id
+        creator_id: loggedInUser
+        // task_status_id: this.state.statusTask.id
       };
       const { data } = !this.state.isEdit
         ? await post(
@@ -396,7 +477,7 @@ class TaskProjectList extends Component {
         Project[projectIndex].start_date = data.start_date;
         Project[projectIndex].end_date = data.end_date;
       } else {
-        Project.push({
+        Project.unshift({
           id: data.id,
           name: data.name,
           start_date: data.start_date,
@@ -414,6 +495,7 @@ class TaskProjectList extends Component {
         dateFrom: "",
         dateTo: "",
       });
+      this.createRoadmapLoading(false)
     } catch (e) {
       if (
         e &&
@@ -450,15 +532,15 @@ class TaskProjectList extends Component {
       let params = {
         task_status_id: statusId
       };
-        const { data } = await put(
-          params,
-            `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}`
-          );
-          this.setState({
-            statusTask : data.task_status
-          })
+      const { data } = await put(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}`
+      );
+      this.setState({
+        statusTask: data.task_status
+      })
     } catch (e) { }
-}
+  }
 
   addTaskLoading = (value) => {
     this.setState({
@@ -476,6 +558,8 @@ class TaskProjectList extends Component {
         priority: saveTaskParams.priority,
         owner_id: saveTaskParams.assigne_id,
         task_status_id: saveTaskParams.status ? saveTaskParams.status.id : "",
+        tracked_time: saveTaskParams.tracked_time,
+        category_id: saveTaskParams.category_id
       };
       const { data } =
         this.state.editTltId == -1
@@ -485,10 +569,8 @@ class TaskProjectList extends Component {
           )
           : await put(
             params,
-            `workspaces/${this.state.workspaceId}/projects/${
-            this.state.projectId
-            }/task_lists/${this.state.list_id}/task_list_tasks/${
-            saveTaskParams.tltId
+            `workspaces/${this.state.workspaceId}/projects/${this.state.projectId
+            }/task_lists/${this.state.list_id}/task_list_tasks/${saveTaskParams.tltId
               ? saveTaskParams.tltId
               : this.state.editTltId
             }`
@@ -504,6 +586,10 @@ class TaskProjectList extends Component {
         tasks[tltIndex].assigne_id = saveTaskParams.assigne_id;
         tasks[tltIndex].list_id = saveTaskParams.list_id;
         tasks[tltIndex].status = saveTaskParams.status;
+        tasks[tltIndex].tracked_time = saveTaskParams.tracked_time;
+        tasks[tltIndex].category_id = saveTaskParams.category_id;
+        tasks[tltIndex].checklist = saveTaskParams.checklist;
+        console.log("sdssss", tasks[tltIndex])
       } else {
         tasks.push({
           name: saveTaskParams.name,
@@ -571,27 +657,25 @@ class TaskProjectList extends Component {
   }
 
   loadTaskListTaskData = (value, ID) => {
-    this.setState({ 
-      isTaskListTasksLoading : value,
-      taskListTasksLoadingID :ID })
+    this.setState({
+      isTaskListTasksLoading: value,
+      taskListTasksLoadingID: ID
+    })
   }
 
   displayList = async (taskListId, ID, type) => {
     if (this.state.list_id != taskListId || ID != null) {
       let params;
-      if(type === this.state.MEMBER)
-      {
-        params = { member_ids:ID }
+      if (type === this.state.MEMBER) {
+        params = { member_ids: ID }
       }
       else
-      if(type === this.state.STATUS)
-      {
-        params = { status_ids:ID }
-      }
-      else
-      {
-        params = ""
-      }
+        if (type === this.state.STATUS) {
+          params = { status_ids: ID }
+        }
+        else {
+          params = ""
+        }
       let taslListTask = [];
 
       try {
@@ -609,9 +693,20 @@ class TaskProjectList extends Component {
                 priority: eachEntry.priority,
                 status: eachEntry.task_status,
                 description: eachEntry.description,
+                checklist: eachEntry.checklist,
+                comments: eachEntry.comments,
+                // category: eachEntry.category,
+                category_id: eachEntry.category_id,
+                tracked_time: eachEntry.tracked_time,
                 assigne_id: eachEntry.owner_id,
+                assigne: eachEntry.owner,
+                start_date: eachEntry.task ? eachEntry.task.start_datetime : null,
+                end_date: eachEntry.task ? eachEntry.task.end_datetime : null,
+                is_complete: eachEntry.task ? eachEntry.task.is_complete : null,
                 id: eachEntry.id,
                 task_id: eachEntry.task_id,
+                owner: eachEntry.owner,
+                owner_id: eachEntry.owner_id
               };
             })
             : [];
@@ -640,7 +735,8 @@ class TaskProjectList extends Component {
               start_date: data.start_date,
               end_date: data.end_date,
               projectId: data.project_id,
-              roadmap_status: data.task_status
+              roadmap_status: data.task_status,
+              userStories: data.user_stories
             };
           })
           : [];
@@ -690,8 +786,8 @@ class TaskProjectList extends Component {
     let taskStatus = [];
     taskStatus1 = taskStatuses.filter(status => status.isDefault == !true)
     taskStatus2 = taskStatuses.find(status => status.isDefault == true)
-    console.log("taskStatus2A1", taskStatus1)
-    console.log("taskStatus2A2", taskStatus2)
+    // console.log("taskStatus2A1", taskStatus1)
+    // console.log("taskStatus2A2", taskStatus2)
     taskStatus = [taskStatus2, ...taskStatus1]
     return taskStatus
   }
@@ -833,7 +929,7 @@ class TaskProjectList extends Component {
     } catch (e) {
       if (e.message) {
         toast(
-          <DailyPloyToast message="Something went wrong" status="error" />,
+          <DailyPloyToast message="Please select a member" status="error" />,
           {
             autoClose: 2000,
             position: toast.POSITION.TOP_CENTER,
@@ -842,6 +938,218 @@ class TaskProjectList extends Component {
       }
     }
   };
+
+  showUserstoryTasks = (value) => {
+    this.setState({ showUserstoryTasklist: value })
+  }
+
+  addUserStory = async (params) => {
+    try {
+      const { data } = await post(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories`)
+      this.handleOpenTaskData(this.state.projectId)
+      // this.setState({ currentUserstoryTask: [...this.state.currentUserstoryTask, data] })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  editUserstory = async (params, id) => {
+    try {
+      const { data } = await put(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
+      this.fetchUserstory(id)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  saveUserstoryTask = async (saveTaskParams, id) => {
+    this.addTaskLoading(true)
+    try {
+      let params = {
+        name: saveTaskParams.name,
+        estimation: saveTaskParams.estimation,
+        description: saveTaskParams.description,
+        priority: saveTaskParams.priority,
+        owner_id: saveTaskParams.assigne_id,
+        task_status_id: saveTaskParams.status ? saveTaskParams.status.id : "",
+      };
+
+      const { data } = 
+      this.state.editTltId == -1 
+      ? await post(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${id}/task_list_tasks`
+      ): await put(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${id}/task_list_tasks/${this.state.editTltId}`
+      )
+      if(this.state.editTltId != -1){ 
+        const updatedTask =  this.state.currentUserstoryTask.filter(task => {
+          return task.id !== data.id
+        })
+        this.setState({ 
+          currentUserstoryTask: [...updatedTask, data],
+          show: false,
+          editTltId: -1,
+          TaskShow: false, })
+        this.fetchUserstory(id); 
+        this.addTaskLoading(false) 
+      } else {
+        this.setState({ 
+          currentUserstoryTask: [...this.state.currentUserstoryTask, data],
+          show: false,
+          editTltId: -1,
+          TaskShow: false, })
+        this.fetchUserstory(id);  
+        this.addTaskLoading(false)
+      }
+     
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  deleteUserstoryTask = async (userstoryId, tltId) => {
+    try {
+      const { data } = await del(
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstoryId}/task_list_tasks/${tltId}`);
+      // this.setState({ userstoryUpdateTask: true })
+      const newTaskList = this.state.currentUserstoryTask.filter(task => {
+        return task.id !== data.id
+      })
+      this.setState({ currentUserstoryTask: newTaskList })
+      // this.fetchUserstory(userstoryId);
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+
+  checklistLoading = (value) => {
+    this.setState({
+      isChecklistLoading: value
+    })
+  }
+
+  addUserstoryChecklist = async (checklist, userstory) => {
+    this.checklistLoading(true)
+    try {
+      const { data } = await post(
+        checklist,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists`)
+      this.fetchUserstory(userstory.id);
+    } catch (error) {
+      console.log("sa", error)
+    }
+  }
+
+  updateUserstoryChecklist = async (id, params, userstory) => {
+    try {
+      const { data } = await put(
+        params,
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists/${id}`)
+        this.fetchUserstory(userstory.id);
+    } catch (error) {
+      
+    }
+  }
+
+  deleteUserstoryChecklist = async (id, userstory) => {
+    try {
+      // console.log("mjnd", id, userstory.id)
+      const { data } = await del(
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists/${id}`)
+        this.fetchUserstory(userstory.id);
+    } catch (error) {
+      
+    }
+  }
+
+
+
+  usestoryMoveToDashboard = async (saveTaskParams, userstoryId) => {
+    console.log("dnjsd", saveTaskParams)
+    try {
+      const { data } = await post(
+        {
+          start_datetime: saveTaskParams.startDate,
+          end_datetime: saveTaskParams.endDate,
+          owner_id: saveTaskParams.assigne_id,
+          category_id: saveTaskParams.categoryId,
+          task_status_id: saveTaskParams.status.id,
+        },
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstoryId}/move/${saveTaskParams.tltId}`
+      );
+      this.fetchUserstory(userstoryId)
+    } catch (error) {
+      console.log("djsndjns")
+    }
+  }
+
+  userStoryLoading = (value, id) => {
+    this.setState({ 
+      isUserStoryLoading: value,
+      selectedUserStoryId : id
+    })
+  }
+
+  fetchUserstory = async (id) => {
+    this.userStoryLoading(true, id)
+    try {
+      const { data } = await get(`workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
+      this.checklistProgress(data)
+      this.setState({
+        currentUserstory: data,
+        detailsModal: this.state.showUserstoryTasklist ? false : true,
+        currentUserstoryTask: data.task_lists,
+        updatedData: this.state.detailsModal ? true : false,
+      })
+      this.userStoryLoading(false, id)
+      this.checklistLoading(false)
+     
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  checklistProgress = (currentUserstory) => {
+    let progressBar = currentUserstory.checklist.filter((checklist) => checklist.is_completed == true);
+    let progress_percentage =
+    Math.round((progressBar.length / currentUserstory.checklist.length) * 100 * 10) / 10;
+    if(progress_percentage == NaN)
+    {
+      this.setState({progressPercent: 0})
+    }
+    else
+    {
+      this.setState({ progressPercent : progress_percentage})
+    }
+    console.log("dataaa progress", progress_percentage)
+  }
+
+  showDetailsModal = () => {
+    // detailsModal: this.state.showUserstoryTasklist ? false : true,
+    this.setState({ detailsModal: !this.state.detailsModal })
+  }
+
+  handleUpdatedTask = () => {
+    this.setState({ userstoryUpdateTask: false })
+  }
+
+  handleUpdatedData = () => {
+    this.setState({ updatedData: false })
+  }
+
+  handleTaskC = () => {
+    this.setState({ newChecklist: false })
+  }
+
+  taskEdit = (value) => {
+    this.setState({ task_edit : value })
+  }
 
   render() {
     return (
@@ -883,6 +1191,15 @@ class TaskProjectList extends Component {
           style={{marginLeft:"46pc",
           marginTop:"13pc"}}
           /> :
+          this.state.isRoadmapCreateLoading ? 
+          <Loader
+          type="Puff"
+          color="rgb(82 180 89)"
+          height={65}
+          width={65}
+          style={{marginLeft:"46pc",
+          marginTop:"13pc"}}
+          /> :
           <div className="add-task-card-box">
             <div className="container2">
               {this.state.showAddTaskButton && this.roleType == "admin" ? (
@@ -893,8 +1210,132 @@ class TaskProjectList extends Component {
                   <Button variant="primary" className="add-tasklist-btn">
                     <i class="fa fa-plus" /> Create Road Map
                   </Button>
-                </div>
-              ) : null}
+                  </div>
+                ) : null}
+                <AddProjectTaskModel
+                  show={this.state.show}
+                  state={this.state}
+                  closeTaskModal={this.closeOnlyTaskModal}
+                  handleDateFrom={this.handleDateFrom}
+                  handleDateTo={this.handleDateTo}
+                  handleInputChange={this.handleInputChange}
+                  handleTaskNameChange={this.handleTaskNameChange}
+                  handleSaveTaskData={this.handleSaveTaskData}
+                />
+              </div>
+              <div className="container3">
+                {this.state.project_task_lists.taskName !== ""
+                  ? this.state.project_task_lists.map((project, index) => {
+                    if (this.state.projectId === project.projectId) {
+                      return (
+                        <DisplayTaskList
+                          showChecklist={this.state.showChecklist}
+                          checklistID={this.state.checklistID}
+                          state={this.state}
+                          showFilter={this.state.showFilter}
+                          showSummary={this.state.showSummary}
+                          id={project.id}
+                          state={this.state}
+                          projectMembers={this.state.projectMembers}
+                          ProjectTask={project}
+                          Userstories={project.userStories}
+                          projects={this.state.projects}
+                          task_lists={this.state.task_lists}
+                          taskEdit={this.taskEdit}
+                          handleSaveTask={this.handleSaveTask}
+                          getRoadmapStatus={this.getRoadmapStatus}
+                          displayAddTask={this.displayAddTask}
+                          closeAddTask={this.closeAddTask}
+                          displayList={this.displayList}
+                          isChecklistOpen={this.isChecklistOpen}
+                          isFilterOpen={this.isFilterOpen}
+                          isSummaryOpen={this.isSummaryOpen}
+                          closeFilter={this.closeFilter}
+                          closeSummary={this.closeSummary}
+                          addUserStory={this.addUserStory}
+                          saveUserstoryTask={this.saveUserstoryTask}
+                          closeChecklist={this.closeChecklist}
+                          TaskShow={this.state.TaskShow}
+                          list_id={this.state.list_id}
+                          deleteTaskList={this.deleteTaskList}
+                          editTaskList={this.editTaskList}
+                          deleteTlt={this.deleteTlt}
+                          projectTaskList={this.state.project_task_lists}
+                          switchTask={this.switchTask}
+                          EditTlt={this.editTlt}
+                          editTltId={this.state.editTltId}
+                          moveToDashBoard={this.moveToDashBoard}
+                          loadFilteredData={this.loadFilteredData}
+                          isFilterLoading={this.state.isFilterLoading}
+                          loadTaskListTaskData={this.loadTaskListTaskData}
+                          isTaskListTasksLoading={this.state.isTaskListTasksLoading}
+                          worksapceMembers={this.state.worksapceUsers}
+                          taskStatus={this.state.taskStatus}
+                          categories={this.state.categories}
+                          memeberSelected={this.memeberSelected}
+                          handleDescription={this.handleDescription}
+                          editUserstory={this.editUserstory}
+                          editDescription={this.editDescription}
+                          addTaskChecklist={this.addTaskChecklist}
+                          updateTaskChecklist={this.updateTaskChecklist}
+                          deleteTaskChecklist={this.deleteTaskChecklist}
+                          deleteUserstoryTask={this.deleteUserstoryTask}
+                          fetchUserstory={this.fetchUserstory}
+                          isUserStoryLoading={this.state.isUserStoryLoading}
+                          selectedUserStoryId={this.state.selectedUserStoryId}
+                          showDetailsModal={this.showDetailsModal}
+                          currentUserstory={this.state.currentUserstory}
+                          detailsModal={this.state.detailsModal}
+                          updatedData={this.state.updatedData}
+                          userstoryUpdateTask={this.state.userstoryUpdateTask}
+                          addUserstoryChecklist={this.addUserstoryChecklist}
+                          updateUserstoryChecklist={this.updateUserstoryChecklist}
+                          deleteUserstoryChecklist={this.deleteUserstoryChecklist}
+                          handleUpdatedTask={this.handleUpdatedTask}
+                          showUserstoryTasks={this.showUserstoryTasks}
+                          currentUserstoryTask={this.state.currentUserstoryTask}
+                          handleUpdatedData={this.handleUpdatedData}
+                          checklistItem={this.state.checklistItem}
+                          handleTaskC={this.handleTaskC}
+                          newChecklist={this.state.newChecklist}
+                          action={this.state.action}
+                          usestoryMoveToDashboard={this.usestoryMoveToDashboard}
+                          addTaskLoading={this.addTaskLoading}
+                        />
+                      );
+                    } else {
+                      return null;
+                    }
+                  })
+                  : null}
+              </div>
+
+              <div className="container4">
+                {this.state.project_task_lists.taskName !== ""
+                  ? this.state.project_task_lists.map((project, index) => {
+                    if (this.state.projectId === project.projectId) {
+                      return (
+                        <AddProjectTaskModel
+                          show={this.state.show}
+                          state={this.state}
+                          closeTaskModal={this.closeOnlyTaskModal}
+                          handleDateFrom={this.handleDateFrom}
+                          handleDateTo={this.handleDateTo}
+                          handleInputChange={this.handleInputChange}
+                          handleTaskNameChange={this.handleTaskNameChange}
+                          handleSaveTaskData={this.handleSaveTaskData}
+                          isEdit={this.state.isEdit}
+                        />
+                      );
+                    } else {
+                      return null;
+                    }
+                  })
+                  : null}
+              </div>
+
+
+              {/* ) : null} */}
               <AddProjectTaskModel
                 show={this.state.show}
                 state={this.state}
@@ -904,102 +1345,9 @@ class TaskProjectList extends Component {
                 handleInputChange={this.handleInputChange}
                 handleTaskNameChange={this.handleTaskNameChange}
                 handleSaveTaskData={this.handleSaveTaskData}
+                isEdit={this.state.isEdit}
               />
-            </div>
-            <div className="container3">
-              {this.state.project_task_lists.taskName !== ""
-                ? this.state.project_task_lists.map((project, index) => {
-                  if (this.state.projectId === project.projectId) {
-                    return (
-                      <DisplayTaskList
-                        showChecklist={this.state.showChecklist}
-                        checklistID={this.state.checklistID}
-                        state={this.state}
-                        showFilter={this.state.showFilter}
-                        showSummary={this.state.showSummary}
-                        id={project.id}
-                        state={this.state}
-                        projectMembers={this.state.projectMembers}
-                        ProjectTask={project}
-                        projects={this.state.projects}
-                        task_lists={this.state.task_lists}
-                        addTaskLoading={this.addTaskLoading}
-                        handleSaveTask={this.handleSaveTask}
-                        getRoadmapStatus={this.getRoadmapStatus}
-                        displayAddTask={this.displayAddTask}
-                        closeAddTask={this.closeAddTask}
-                        displayList={this.displayList}
-                        isChecklistOpen={this.isChecklistOpen}
-                        isFilterOpen={this.isFilterOpen}
-                        isSummaryOpen={this.isSummaryOpen}
-                        closeFilter={this.closeFilter}
-                        closeSummary={this.closeSummary}
-                        closeChecklist={this.closeChecklist}
-                        TaskShow={this.state.TaskShow}
-                        list_id={this.state.list_id}
-                        deleteTaskList={this.deleteTaskList}
-                        editTaskList={this.editTaskList}
-                        deleteTlt={this.deleteTlt}
-                        projectTaskList={this.state.project_task_lists}
-                        switchTask={this.switchTask}
-                        EditTlt={this.editTlt}
-                        editTltId={this.state.editTltId}
-                        moveToDashBoard={this.moveToDashBoard}
-                        loadFilteredData={this.loadFilteredData}
-                        isFilterLoading={this.state.isFilterLoading}
-                        loadTaskListTaskData={this.loadTaskListTaskData}
-                        isTaskListTasksLoading={this.state.isTaskListTasksLoading}
-                        worksapceMembers={this.state.worksapceUsers}
-                        taskStatus={this.state.taskStatus}
-                        categories={this.state.categories}
-                        memeberSelected={this.memeberSelected}
-                      />
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-                : null}
-            </div>
-
-            <div className="container4">
-              {this.state.project_task_lists.taskName !== ""
-                ? this.state.project_task_lists.map((project, index) => {
-                  if (this.state.projectId === project.projectId) {
-                    return (
-                      <AddProjectTaskModel
-              show={this.state.show}
-              state={this.state}
-              closeTaskModal={this.closeOnlyTaskModal}
-              handleDateFrom={this.handleDateFrom}
-              handleDateTo={this.handleDateTo}
-              handleInputChange={this.handleInputChange}
-              handleTaskNameChange={this.handleTaskNameChange}
-              handleSaveTaskData={this.handleSaveTaskData}
-              isEdit={this.state.isEdit}
-            />
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-                : null}
-            </div>
-
-
-            {/* ) : null} */}
-            <AddProjectTaskModel
-              show={this.state.show}
-              state={this.state}
-              closeTaskModal={this.closeOnlyTaskModal}
-              handleDateFrom={this.handleDateFrom}
-              handleDateTo={this.handleDateTo}
-              handleInputChange={this.handleInputChange}
-              handleTaskNameChange={this.handleTaskNameChange}
-              handleSaveTaskData={this.handleSaveTaskData}
-              isEdit={this.state.isEdit}
-            />
-          </div>)}
+            </div>)}
         </div>
       </>
     );

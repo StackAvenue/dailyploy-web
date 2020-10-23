@@ -8,7 +8,7 @@ import {
   DATE_FORMAT6,
   MONTH_FORMAT1,
   MONTH_FORMAT2,
-  PRIORITIES
+  PRIORITIES,
 } from "./../../utils/Constants";
 import moment from "moment";
 import MenuBar from "./MenuBar";
@@ -35,9 +35,7 @@ class Reports extends Component {
     this.calendarDate1Ref = React.createRef();
     this.calendarDate2Ref = React.createRef();
     this.calenderArr = ["daily", "weekly", "monthly", "custom"];
-    this.now = moment()
-      .hour(0)
-      .minute(0);
+    this.now = moment().hour(0).minute(0);
     this.state = {
       workspaces: [],
       workspaceId: "",
@@ -77,7 +75,8 @@ class Reports extends Component {
       barChartArray: this.generateDailyBarChartData(new Date()),
       isLoading: false,
       loadReportsData: false,
-      loadingGif: false
+      loadingGif: false,
+      isTimetrackMode: this.props.state.timetrack_enabled,
     };
   }
 
@@ -88,17 +87,16 @@ class Reports extends Component {
       return "monthly";
     } else if (this.state.weekly) {
       return "weekly";
-    }
-    else if (this.state.custom) {
+    } else if (this.state.custom) {
       return "custom";
     }
   };
 
   fetchProjectName = () => {
-    var projects = this.state.projects.filter(project =>
+    var projects = this.state.projects.filter((project) =>
       this.props.searchProjectIds.includes(project.id)
     );
-    var projectNames = projects.map(project => project.name);
+    var projectNames = projects.map((project) => project.name);
     return this.textTitlize(projectNames.join(", "));
   };
 
@@ -140,17 +138,17 @@ class Reports extends Component {
     }
   };
 
-  textTitlize = text => {
+  textTitlize = (text) => {
     return text.replace(/(?:^|\s)\S/g, function (a) {
       return a.toUpperCase();
     });
   };
 
-  generateDailyBarChartData = date => {
+  generateDailyBarChartData = (date) => {
     var weekDays = this.getWeekDays(this.getWeekRange(date).from);
     var data = [];
     let activeBar = moment(new Date()).format(DATE_FORMAT1);
-    var dates = weekDays.map(date => {
+    var dates = weekDays.map((date) => {
       let m = moment(date);
       let bar = moment(date).format(DATE_FORMAT1);
       data.push({ name: m.format(DATE_FORMAT6), activeBar: bar });
@@ -159,13 +157,13 @@ class Reports extends Component {
         startDate: m.format(DATE_FORMAT1),
         endDate: m.format(DATE_FORMAT1),
         name: m.format(DATE_FORMAT6),
-        frequency: "daily"
+        frequency: "daily",
       };
     });
     return { data: data, dates: dates, barWidth: 50, activeBar: activeBar };
   };
 
-  generateWeeklyBarChartData = date => {
+  generateWeeklyBarChartData = (date) => {
     var weekDays = this.getWeekDays(this.getWeekRange(date).from);
     let dates = [];
     let data = [];
@@ -181,7 +179,7 @@ class Reports extends Component {
         startDate: md.format(DATE_FORMAT1),
         endDate: lmd.format(DATE_FORMAT1),
         name: week,
-        frequency: "weekly"
+        frequency: "weekly",
       });
       let newDate = md.subtract(1, "days");
       weekDays = this.getWeekDays(this.getWeekRange(newDate).from);
@@ -190,20 +188,18 @@ class Reports extends Component {
       data: data.reverse(),
       dates: dates.reverse(),
       barWidth: 85,
-      activeBar: activeBar
+      activeBar: activeBar,
     };
   };
 
-  generateMonthlyBarChartData = d => {
+  generateMonthlyBarChartData = (d) => {
     let year = moment(d).year();
     let dates = [];
     let data = [];
     let activeBar = moment().format(MONTH_FORMAT2);
     for (let i = 1; i <= 12; i++) {
       var startDate = moment(`${year}-${i}-1`).format(DATE_FORMAT1);
-      var endDate = moment(startDate)
-        .endOf("month")
-        .format(DATE_FORMAT1);
+      var endDate = moment(startDate).endOf("month").format(DATE_FORMAT1);
       let month = moment(startDate).format(MONTH_FORMAT1);
       let bar = moment(startDate).format(MONTH_FORMAT2);
       data.push({ name: month, activeBar: bar });
@@ -212,13 +208,13 @@ class Reports extends Component {
         startDate: startDate,
         endDate: endDate,
         name: month,
-        frequency: "monthly"
+        frequency: "monthly",
       });
     }
     return { data: data, dates: dates, barWidth: 30, activeBar: activeBar };
   };
 
-  calenderButtonHandle = name => {
+  calenderButtonHandle = (name) => {
     var self = this;
     if (name == "daily") {
       self.setState({
@@ -231,16 +227,12 @@ class Reports extends Component {
         frequency: "daily",
         columnChartData: [],
         dateFrom: new Date(),
-        dateTo: new Date()
+        dateTo: new Date(),
       });
     }
     if (name == "monthly") {
-      let startDate = moment()
-        .startOf("month")
-        .format(DATE_FORMAT1);
-      let endDate = moment()
-        .endOf("month")
-        .format(DATE_FORMAT1);
+      let startDate = moment().startOf("month").format(DATE_FORMAT1);
+      let endDate = moment().endOf("month").format(DATE_FORMAT1);
       let days = this.getMonthDates(startDate, endDate);
       self.setState({
         weekly: false,
@@ -252,7 +244,7 @@ class Reports extends Component {
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
         selectedDays: days,
-        barChartArray: this.generateMonthlyBarChartData(new Date(startDate))
+        barChartArray: this.generateMonthlyBarChartData(new Date(startDate)),
       });
     }
     if (name == "weekly") {
@@ -278,7 +270,7 @@ class Reports extends Component {
         dateTo: weekdays[weekdays.length - 1],
         weekNumber: week,
         displayWeek: weekFormated,
-        barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0])),
       });
     }
     if (name == "custom") {
@@ -304,12 +296,12 @@ class Reports extends Component {
         dateTo: weekdays[weekdays.length - 1],
         weekNumber: week,
         displayWeek: weekFormated,
-        barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0])),
       });
     }
   };
 
-  handleDayChange = date => {
+  handleDayChange = (date) => {
     const week = moment(date, "MM-DD-YYYY").week();
     const weekdays = this.getWeekDays(this.getWeekRange(date).from);
     const fm = "DD MMM";
@@ -325,44 +317,36 @@ class Reports extends Component {
         " (Week " +
         week +
         ")",
-      barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
+      barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0])),
     });
   };
 
-  onclickStartDate = value => {
-    console.log('Start' + value);
+  onclickStartDate = (value) => {
+    console.log("Start" + value);
     this.setState({
-      dateFrom: value
+      dateFrom: value,
     });
-  }
+  };
 
-  onclickEndDate = value => {
-    console.log('EndDate' + value);
+  onclickEndDate = (value) => {
+    console.log("EndDate" + value);
     this.setState({
-      dateTo: value
+      dateTo: value,
     });
-  }
+  };
 
-  getWeekDays = weekStart => {
+  getWeekDays = (weekStart) => {
     const days = [weekStart];
     for (let i = 1; i < 7; i += 1) {
-      days.push(
-        moment(weekStart)
-          .add(i, "days")
-          .toDate()
-      );
+      days.push(moment(weekStart).add(i, "days").toDate());
     }
     return days;
   };
 
-  getWeekRange = date => {
+  getWeekRange = (date) => {
     return {
-      from: moment(date)
-        .startOf("week")
-        .toDate(),
-      to: moment(date)
-        .endOf("week")
-        .toDate()
+      from: moment(date).startOf("week").toDate(),
+      to: moment(date).endOf("week").toDate(),
     };
   };
 
@@ -380,7 +364,7 @@ class Reports extends Component {
         "(Week" +
         this.state.weekNumber +
         ")",
-      barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0]))
+      barChartArray: this.generateWeeklyBarChartData(new Date(weekdays[0])),
     });
   };
 
@@ -429,13 +413,13 @@ class Reports extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/members`
       );
-      var userArr = data.members.map(user => user.email);
+      var userArr = data.members.map((user) => user.email);
       var worksapceUsers = data.members;
       var worksapceUser = data.members.find(
-        user => user.email === loggedInData.email
+        (user) => user.email === loggedInData.email
       );
       var emailArr = data.members.filter(
-        user => user.email !== loggedInData.email
+        (user) => user.email !== loggedInData.email
       );
       // .map(user => user.email);
     } catch (e) {
@@ -445,21 +429,19 @@ class Reports extends Component {
     // MIS report listing
     var searchData = {
       start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
-      user_ids: loggedInData.id
+      user_ids: loggedInData.id,
       // frequency: "daily"
     };
     if (this.props.searchProjectIds.length > 0) {
       searchData["project_ids"] = this.props.searchProjectIds.join(",");
     }
 
-    if (this.state.frequency != 'custom') {
-      searchData["end_date"] = moment(this.state.selectedDays[this.state.selectedDays.length - 1]).format(
-        DATE_FORMAT1
-      );
+    if (this.state.frequency != "custom") {
+      searchData["end_date"] = moment(
+        this.state.selectedDays[this.state.selectedDays.length - 1]
+      ).format(DATE_FORMAT1);
     } else {
-      searchData["end_date"] = moment(this.state.dateTo).format(
-        DATE_FORMAT1
-      );
+      searchData["end_date"] = moment(this.state.dateTo).format(DATE_FORMAT1);
     }
 
     try {
@@ -470,7 +452,7 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
-    } catch (e) { }
+    } catch (e) {}
 
     // Category Listing
     try {
@@ -478,7 +460,7 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/task_category`
       );
       var taskCategories = data.task_categories;
-    } catch (e) { }
+    } catch (e) {}
 
     // Summury reports Projects
     try {
@@ -489,12 +471,12 @@ class Reports extends Component {
       var projectReportData =
         data.report_data.length > 0
           ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time,
-            capacity: data.capacity
-          }
+              data: data.report_data,
+              estimateTime: data.total_estimated_time,
+              capacity: data.capacity,
+            }
           : "";
-    } catch (e) { }
+    } catch (e) {}
 
     // Summury reports Category
     try {
@@ -504,11 +486,11 @@ class Reports extends Component {
       );
       var categoryReportData = data.report_data
         ? {
-          data: data.report_data,
-          estimateTime: data.total_estimated_time
-        }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+          }
         : "";
-    } catch (e) { }
+    } catch (e) {}
 
     // Summury reports Priority
     try {
@@ -518,11 +500,11 @@ class Reports extends Component {
       );
       var priorityReportData = data.report_data
         ? {
-          data: data.report_data,
-          estimateTime: data.total_estimated_time
-        }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+          }
         : "";
-    } catch (e) { }
+    } catch (e) {}
 
     this.props.handleLoading(false);
     this.setState({
@@ -543,9 +525,9 @@ class Reports extends Component {
       projectReports: projectReportData,
       categoryReports: categoryReportData,
       priorityReports: priorityReportData,
-      loadingGif: false
+      loadingGif: false,
     });
-    if (this.state.frequency != 'custom') {
+    if (this.state.frequency != "custom") {
       this.loadMultipleApiData({ user_ids: loggedInData.id });
     }
 
@@ -577,9 +559,9 @@ class Reports extends Component {
       prevState.loadReportsData !== this.state.loadReportsData
     ) {
       this.props.handleLoading(true);
-      this.setState({ loadingGif: true })
+      this.setState({ loadingGif: true });
       let userIds = this.props.searchUserDetails.map(
-        member => member.member_id
+        (member) => member.member_id
       );
       var searchData = {
         start_date: moment(this.state.dateFrom).format(DATE_FORMAT1),
@@ -601,14 +583,12 @@ class Reports extends Component {
         searchData["priorities"] = this.state.selectedPriority.name;
       }
 
-      if (this.state.frequency != 'custom') {
-        searchData["end_date"] = moment(this.state.selectedDays[this.state.selectedDays.length - 1]).format(
-          DATE_FORMAT1
-        );
+      if (this.state.frequency != "custom") {
+        searchData["end_date"] = moment(
+          this.state.selectedDays[this.state.selectedDays.length - 1]
+        ).format(DATE_FORMAT1);
       } else {
-        searchData["end_date"] = moment(this.state.dateTo).format(
-          DATE_FORMAT1
-        );
+        searchData["end_date"] = moment(this.state.dateTo).format(DATE_FORMAT1);
       }
 
       // Reports data
@@ -620,7 +600,7 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) { }
+      } catch (e) {}
 
       // Summury reports Projects
       try {
@@ -630,12 +610,12 @@ class Reports extends Component {
         );
         var projectReportData = data.report_data
           ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time,
-            capacity: data.capacity
-          }
+              data: data.report_data,
+              estimateTime: data.total_estimated_time,
+              capacity: data.capacity,
+            }
           : "";
-      } catch (e) { }
+      } catch (e) {}
 
       var message = this.displayMessage();
       try {
@@ -645,11 +625,11 @@ class Reports extends Component {
         );
         var categoryReportData = data.report_data
           ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time
-          }
+              data: data.report_data,
+              estimateTime: data.total_estimated_time,
+            }
           : "";
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         const { data } = await get(
@@ -658,17 +638,17 @@ class Reports extends Component {
         );
         var priorityReportData = data.report_data
           ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time
-          }
+              data: data.report_data,
+              estimateTime: data.total_estimated_time,
+            }
           : "";
-      } catch (e) { }
+      } catch (e) {}
 
       let filterUserIds =
         this.props.searchUserDetails.length > 0
           ? userIds.join(",")
           : this.state.userId;
-      this.setState({ loadingGif: false })
+      this.setState({ loadingGif: false });
       this.props.handleLoading(false);
       this.setState({
         priorityReports: priorityReportData,
@@ -677,23 +657,22 @@ class Reports extends Component {
         message: message,
         totalTime: totalTime,
         projectReports: projectReportData,
-        loadReportsData: false
+        loadReportsData: false,
       });
-      if (this.state.frequency != 'custom') {
+      if (this.state.frequency != "custom") {
         this.loadMultipleApiData({ user_ids: filterUserIds });
       }
-
     }
   }
 
-  makeDatesHash = reports => {
+  makeDatesHash = (reports) => {
     var taskReports = {};
     var totalSeconds = 0;
     reports.map((report, i) => {
       taskReports[report.date] = report.tasks;
     });
 
-    this.state.selectedDays.map(date => {
+    this.state.selectedDays.map((date) => {
       let dateFormated = moment(date).format(DATE_FORMAT1);
       var tasks = taskReports[dateFormated];
       if (tasks !== undefined) {
@@ -704,14 +683,14 @@ class Reports extends Component {
     return { taskReports: taskReports, totalTime: time };
   };
 
-  addTotalDuration = timeTracked => {
+  addTotalDuration = (timeTracked) => {
     return timeTracked
-      .map(log => log.duration)
+      .map((log) => log.duration)
       .flat()
       .reduce((a, b) => a + b, 0);
   };
 
-  secondsToHours = seconds => {
+  secondsToHours = (seconds) => {
     let totalSeconds = Number(seconds);
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
@@ -738,7 +717,7 @@ class Reports extends Component {
           projectList.push({
             value: project.name,
             project_id: project.id,
-            type: "project"
+            type: "project",
           });
         });
       }
@@ -751,7 +730,7 @@ class Reports extends Component {
             member_id: member.id,
             email: member.email,
             type: "member",
-            role: member.role
+            role: member.role,
           });
         });
       }
@@ -766,7 +745,7 @@ class Reports extends Component {
     this.setState({ workspaceId: workspaceId });
   };
 
-  onSelectSort = value => {
+  onSelectSort = (value) => {
     this.setState({ sort: value });
   };
 
@@ -780,15 +759,15 @@ class Reports extends Component {
     }
   };
 
-  handleDateFrom = date => {
+  handleDateFrom = (date) => {
     this.setState({
       dateFrom: date,
       selectedDays: [new Date(date)],
-      barChartArray: this.generateDailyBarChartData(new Date(date))
+      barChartArray: this.generateDailyBarChartData(new Date(date)),
     });
   };
 
-  handleMonthlyDateFrom = date => {
+  handleMonthlyDateFrom = (date) => {
     const output = moment(date, DATE_FORMAT1);
     var startDate = output.startOf("month").format(DATE_FORMAT1);
     var endDate = output.endOf("month").format(DATE_FORMAT1);
@@ -797,7 +776,7 @@ class Reports extends Component {
       dateFrom: new Date(startDate),
       dateTo: new Date(endDate),
       selectedDays: days,
-      barChartArray: this.generateMonthlyBarChartData(new Date(startDate))
+      barChartArray: this.generateMonthlyBarChartData(new Date(startDate)),
     });
   };
 
@@ -826,7 +805,7 @@ class Reports extends Component {
         dateFrom: new Date(prevDate),
         dateTo: new Date(prevDate),
         selectedDays: [new Date(prevDate)],
-        barChartArray: this.generateDailyBarChartData(new Date(startOfDate))
+        barChartArray: this.generateDailyBarChartData(new Date(startOfDate)),
       });
     } else if (this.state.weekly) {
       const format = "DD MMM";
@@ -847,22 +826,18 @@ class Reports extends Component {
           " (Week " +
           weekNumber +
           ")",
-        barChartArray: this.generateWeeklyBarChartData(new Date(weekStart))
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekStart)),
       });
     } else if (this.state.monthly) {
       const output = startOfDate.subtract(1, "days").format(DATE_FORMAT1);
-      var startDate = moment(output)
-        .startOf("month")
-        .format(DATE_FORMAT1);
-      var endDate = moment(output)
-        .endOf("month")
-        .format(DATE_FORMAT1);
+      var startDate = moment(output).startOf("month").format(DATE_FORMAT1);
+      var endDate = moment(output).endOf("month").format(DATE_FORMAT1);
       var monthDays = this.getMonthDates(startDate, endDate);
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
         selectedDays: monthDays,
-        barChartArray: this.generateMonthlyBarChartData(new Date(endDate))
+        barChartArray: this.generateMonthlyBarChartData(new Date(endDate)),
       });
     }
   };
@@ -878,7 +853,7 @@ class Reports extends Component {
         dateFrom: new Date(nextDate),
         dateTo: new Date(nextDate),
         selectedDays: [new Date(nextDate)],
-        barChartArray: this.generateDailyBarChartData(new Date(nextDate))
+        barChartArray: this.generateDailyBarChartData(new Date(nextDate)),
       });
     } else if (this.state.weekly) {
       const format = "DD MMM";
@@ -899,34 +874,30 @@ class Reports extends Component {
           " (Week " +
           weekNumber +
           ")",
-        barChartArray: this.generateWeeklyBarChartData(new Date(weekStart))
+        barChartArray: this.generateWeeklyBarChartData(new Date(weekStart)),
       });
     } else if (this.state.monthly) {
       const output = endOfDate.add(1, "days").format(DATE_FORMAT1);
-      var startDate = moment(output)
-        .startOf("month")
-        .format(DATE_FORMAT1);
-      var endDate = moment(output)
-        .endOf("month")
-        .format(DATE_FORMAT1);
+      var startDate = moment(output).startOf("month").format(DATE_FORMAT1);
+      var endDate = moment(output).endOf("month").format(DATE_FORMAT1);
       var monthDays = this.getMonthDates(startDate, endDate);
       this.setState({
         dateFrom: new Date(startDate),
         dateTo: new Date(endDate),
         selectedDays: monthDays,
-        barChartArray: this.generateMonthlyBarChartData(new Date(startDate))
+        barChartArray: this.generateMonthlyBarChartData(new Date(startDate)),
       });
     }
   };
 
-  handleCategoryChange = option => {
+  handleCategoryChange = (option) => {
     this.setState({ selectedCategory: option });
   };
-  handlePriorityChange = option => {
+  handlePriorityChange = (option) => {
     this.setState({ selectedPriority: option });
   };
 
-  setColumnChartData = data => {
+  setColumnChartData = (data) => {
     this.setState({ columnChartData: data });
   };
 
@@ -939,7 +910,7 @@ class Reports extends Component {
           async (option, index) => {
             let searchData = {
               start_date: option.startDate,
-              end_date: option.endDate
+              end_date: option.endDate,
             };
             const searchResult = await get(
               `workspaces/${workspaceId}/user_summary_report`,
@@ -950,11 +921,11 @@ class Reports extends Component {
               trackedTime: searchResult.data.total_tracked_time,
               date: searchData.start_date,
               id: index + 1,
-              activeBar: this.getActive(searchData.start_date)
+              activeBar: this.getActive(searchData.start_date),
             });
           }
         );
-        await Promise.all(finalArray).then(response => { });
+        await Promise.all(finalArray).then((response) => {});
         resolve(results);
       } catch (err) {
         reject(err);
@@ -968,7 +939,7 @@ class Reports extends Component {
     });
   };
 
-  getActive = date => {
+  getActive = (date) => {
     if (this.state.frequency == "weekly") {
       let md = moment(date);
       return `Week ${md.week()} ${md.year()}`;
@@ -985,19 +956,17 @@ class Reports extends Component {
       user_ids:
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails
-            .map(member => member.member_id)
-            .join(",")
+              .map((member) => member.member_id)
+              .join(",")
           : this.state.userId,
       // frequency: this.returnFrequency()
     };
-    if (this.state.frequency != 'custom') {
+    if (this.state.frequency != "custom") {
       searchData["end_date"] = moment(this.state.selectedDays[0]).format(
         DATE_FORMAT1
       );
     } else {
-      searchData["end_date"] = moment(this.state.dateTo).format(
-        DATE_FORMAT1
-      );
+      searchData["end_date"] = moment(this.state.dateTo).format(DATE_FORMAT1);
     }
     if (this.props.searchProjectIds.length > 0) {
       searchData["project_ids"] = this.props.searchProjectIds.join(",");
@@ -1026,7 +995,7 @@ class Reports extends Component {
     } catch (e) {
       toast(<DailyPloyToast message="something went wrong" status="error" />, {
         autoClose: 2000,
-        position: toast.POSITION.TOP_CENTER
+        position: toast.POSITION.TOP_CENTER,
       });
       let self = this;
       setTimeout(function () {
@@ -1043,7 +1012,7 @@ class Reports extends Component {
     this.calendarWeekRef.current.setOpen(true);
   };
 
-  openDateRangeCalender = isDate1 => {
+  openDateRangeCalender = (isDate1) => {
     if (isDate1) {
       if (this.calendarDate1Ref && this.calendarDate1Ref.current) {
         this.calendarDate1Ref.current.setOpen(true);
@@ -1053,8 +1022,7 @@ class Reports extends Component {
         this.calendarDate2Ref.current.setOpen(true);
       }
     }
-
-  }
+  };
 
   openMonthCalender = () => {
     this.calendarMonthRef.current.setOpen(true);
@@ -1062,12 +1030,12 @@ class Reports extends Component {
 
   timeTrackUpdate = () => {
     this.setState({
-      loadReportsData: true
+      loadReportsData: true,
     });
   };
 
   render() {
-    const Daily = props => {
+    const Daily = (props) => {
       return (
         <>
           <div className="position-relative d-inline-block  AB">
@@ -1090,7 +1058,7 @@ class Reports extends Component {
       );
     };
 
-    const Monthly = props => {
+    const Monthly = (props) => {
       return (
         <>
           <div className="position-relative d-inline-block  AB">
@@ -1113,7 +1081,7 @@ class Reports extends Component {
       );
     };
 
-    const Weekly = props => {
+    const Weekly = (props) => {
       return (
         <>
           <div className="position-relative week-hover-bg d-inline-block  AB">
@@ -1140,7 +1108,7 @@ class Reports extends Component {
       );
     };
 
-    const Custom = props => {
+    const Custom = (props) => {
       return (
         <>
           <div className="position-relative d-inline-block  AB">
@@ -1191,7 +1159,7 @@ class Reports extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
-          manageProjectListing={() => { }}
+          manageProjectListing={() => {}}
         />
 
         <div className="analysis-box row no-margin padding-top-60px">
@@ -1209,7 +1177,7 @@ class Reports extends Component {
                 name="weekly"
                 className={`d-inline-block ${
                   this.state.weekly ? "active" : ""
-                  }`}
+                }`}
               >
                 Weekly
               </div>
@@ -1218,7 +1186,7 @@ class Reports extends Component {
                 name="monthly"
                 className={`d-inline-block ${
                   this.state.monthly ? "active" : ""
-                  }`}
+                }`}
               >
                 Monthly
               </div>
@@ -1227,7 +1195,7 @@ class Reports extends Component {
                 name="custom"
                 className={`d-inline-block ${
                   this.state.custom ? "active" : ""
-                  }`}
+                }`}
               >
                 Custom
               </div>
@@ -1273,7 +1241,7 @@ class Reports extends Component {
                   <button
                     className={`btn btn-sm btn-default ${
                       this.state.isLoading ? "disabled" : ""
-                      }`}
+                    }`}
                     onClick={() => this.downloadReportsCsv()}
                   >
                     {this.state.isLoading ? (
@@ -1290,30 +1258,37 @@ class Reports extends Component {
                   </button>
                 </div>
               </div>
-              {this.state.loadingGif ? <div className="loading1"><VideoLoader /></div> : <>
-                <div className="">
-                  <SummuryReportCharts
-                    priorities={PRIORITIES}
-                    projects={this.state.projects}
-                    state={this.state}
-                    searchUserDetails={this.props.searchUserDetails}
-                    searchProjectIds={this.props.searchProjectIds}
-                    setColumnChartData={this.setColumnChartData}
-                    handleLoading={this.props.handleLoading}
-                  />
+              {this.state.loadingGif ? (
+                <div className="loading1">
+                  <VideoLoader />
                 </div>
+              ) : (
+                <>
+                  <div className="">
+                    <SummuryReportCharts
+                      priorities={PRIORITIES}
+                      projects={this.state.projects}
+                      state={this.state}
+                      searchUserDetails={this.props.searchUserDetails}
+                      searchProjectIds={this.props.searchProjectIds}
+                      setColumnChartData={this.setColumnChartData}
+                      handleLoading={this.props.handleLoading}
+                    />
+                  </div>
 
-                <div className="report-table">
-                  <ReportTable
-                    taskDetails={this.state.taskDetails}
-                    state={this.state}
-                    searchProjectIds={this.props.searchProjectIds}
-                    searchUserDetails={this.props.searchUserDetails}
-                    frequency={this.returnFrequency()}
-                    timeTrackUpdate={this.timeTrackUpdate}
-                  />
-                </div>
-              </>}
+                  <div className="report-table">
+                    <ReportTable
+                      taskDetails={this.state.taskDetails}
+                      state={this.state}
+                      searchProjectIds={this.props.searchProjectIds}
+                      searchUserDetails={this.props.searchUserDetails}
+                      frequency={this.returnFrequency()}
+                      timeTrackUpdate={this.timeTrackUpdate}
+                      isTimetrackMode={this.state.isTimetrackMode}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

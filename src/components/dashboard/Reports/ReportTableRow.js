@@ -6,7 +6,7 @@ import {
   PRIORITIES_MAP,
   DATE_FORMAT1,
   HRMIN,
-  FULL_DATE
+  FULL_DATE,
 } from "./../../../utils/Constants";
 import { put, del } from "./../../../utils/API";
 import DailyPloyToast from "./../../../components/DailyPloyToast";
@@ -29,7 +29,7 @@ class ReportTableRow extends Component {
       fromTime: null,
       toTime: null,
       showConfirm: false,
-      trackTimeError: null
+      trackTimeError: null,
     };
   }
 
@@ -47,7 +47,7 @@ class ReportTableRow extends Component {
         this.setState({ taskloader: true, trackTimeError: null });
         let trackedTime = {
           start_time: startDate,
-          end_time: endDate
+          end_time: endDate,
         };
         const { data } = await put(
           trackedTime,
@@ -60,7 +60,7 @@ class ReportTableRow extends Component {
           fromDateTime: null,
           toDateTime: null,
           fromTime: null,
-          toTime: null
+          toTime: null,
         });
         this.props.timeTrackUpdate();
       } catch (e) {
@@ -70,18 +70,18 @@ class ReportTableRow extends Component {
             {
               autoClose: 2000,
               position: toast.POSITION.TOP_CENTER,
-              className: "text-titlize"
+              className: "text-titlize",
             }
           );
           this.setState({
             trackTimeError: e.response.data.errors,
-            taskloader: false
+            taskloader: false,
           });
         }
       }
     } else {
       this.setState({
-        trackTimeError: "Please Select Valid End DateTime"
+        trackTimeError: "Please Select Valid End DateTime",
       });
     }
   };
@@ -100,7 +100,7 @@ class ReportTableRow extends Component {
     }
   };
 
-  handleEditLog = log => {
+  handleEditLog = (log) => {
     let fromMoment = moment(log.start);
     let toMoment = moment(log.end);
     let timeFrom = fromMoment.format(HRMIN);
@@ -115,14 +115,14 @@ class ReportTableRow extends Component {
       timeFrom: timeFrom,
       timeTo: timeTo,
       fromDateTime: fromDateTime,
-      toDateTime: toDateTime
+      toDateTime: toDateTime,
     });
   };
 
-  handleDeleteLog = log => {
+  handleDeleteLog = (log) => {
     this.setState({
       editableLog: log,
-      showConfirm: true
+      showConfirm: true,
     });
   };
 
@@ -133,11 +133,11 @@ class ReportTableRow extends Component {
       timeFrom: null,
       timeTo: null,
       fromDateTime: null,
-      toDateTime: null
+      toDateTime: null,
     });
   };
 
-  handleTimeFrom = value => {
+  handleTimeFrom = (value) => {
     var value = moment(value);
     this.setState({
       timeFrom: value != null ? value.format("HH:mm") : null,
@@ -145,27 +145,27 @@ class ReportTableRow extends Component {
       timeTo:
         value != null && value.format("HH:mm") > this.state.timeTo
           ? null
-          : this.state.timeTo
+          : this.state.timeTo,
     });
   };
 
-  handleTimeTo = value => {
+  handleTimeTo = (value) => {
     var value = moment(value);
     this.setState({
       timeTo: value != null ? value.format("HH:mm") : null,
-      toDateTime: value
+      toDateTime: value,
     });
   };
 
-  renderLog = task => {
+  renderLog = (task) => {
     let dateTimeTracks = task.date_formatted_time_tracks.find(
-      timeLog => timeLog.date == this.props.date
+      (timeLog) => timeLog.date == this.props.date
     );
     var trackLogs = dateTimeTracks ? dateTimeTracks.time_tracks : [];
     trackLogs = trackLogs
-      .filter(log => log.status !== "running")
+      .filter((log) => log.status !== "running")
       .sort((a, b) => b.id - a.id)
-      .map(time => {
+      .map((time) => {
         return {
           id: time.id,
           name: `${moment(time.start_time).format("HH:mm A")} - ${moment(
@@ -173,7 +173,7 @@ class ReportTableRow extends Component {
           ).format("HH:mm A")}`,
           start: time.start_time,
           end: time.end_time,
-          task_id: time.task_id
+          task_id: time.task_id,
         };
       });
     let first = trackLogs[0];
@@ -186,13 +186,13 @@ class ReportTableRow extends Component {
             action={true}
             handleEditLog={this.handleEditLog}
             handleDeleteLog={this.handleDeleteLog}
-            saveInputEditable={() => { }}
+            saveInputEditable={() => {}}
             state={this.state}
           />
         ) : (
-            // )
-            <span>No tracked Time</span>
-          )}
+          // )
+          <span>No tracked Time</span>
+        )}
       </div>
     );
   };
@@ -241,7 +241,7 @@ class ReportTableRow extends Component {
     return 0;
   };
 
-  dateFormater = totalSeconds => {
+  dateFormater = (totalSeconds) => {
     var h = Math.floor(totalSeconds / 3600);
     var m = Math.floor((totalSeconds % 3600) / 60);
     return (
@@ -253,7 +253,7 @@ class ReportTableRow extends Component {
     );
   };
 
-  getTotalHours = tasks => {
+  getTotalHours = (tasks) => {
     if (tasks !== undefined) {
       var totalSec = 0;
       tasks.map((task, idx) => {
@@ -265,18 +265,18 @@ class ReportTableRow extends Component {
     return "0 H";
   };
 
-  getTaskTotalDuration = timeTracked => {
+  getTaskTotalDuration = (timeTracked) => {
     return this.addTotalDuration(timeTracked);
   };
 
-  addTotalDuration = timeTracked => {
+  addTotalDuration = (timeTracked) => {
     return timeTracked
-      .map(log => log.duration)
+      .map((log) => log.duration)
       .flat()
       .reduce((a, b) => a + b, 0);
   };
 
-  secondsToHours = seconds => {
+  secondsToHours = (seconds) => {
     let totalSeconds = Number(seconds);
     let h = Math.floor(totalSeconds / 3600);
     let m = Math.floor((totalSeconds % 3600) / 60);
@@ -290,7 +290,7 @@ class ReportTableRow extends Component {
     );
   };
 
-  displayDate = date => {
+  displayDate = (date) => {
     if (this.props.frequency !== "daily") {
       return moment(date).format(DATE_FORMAT2);
     }
@@ -312,7 +312,7 @@ class ReportTableRow extends Component {
     );
   };
 
-  showCategory = priority => {
+  showCategory = (priority) => {
     let priorities = PRIORITIES_MAP.get(priority);
     return (
       <>
@@ -325,7 +325,7 @@ class ReportTableRow extends Component {
     );
   };
 
-  getEstimateTimeOfTask = task => {
+  getEstimateTimeOfTask = (task) => {
     let start = moment(convertUTCToLocalDate(task.start_datetime)).format(
       DATE_FORMAT1
     );
@@ -353,12 +353,12 @@ class ReportTableRow extends Component {
             end:
               date +
               " " +
-              `${startTime == "00:00:00" ? "00:00:00" : "23:59:59"}`
+              `${startTime == "00:00:00" ? "00:00:00" : "23:59:59"}`,
           });
         } else if (idx == dates.length - 1 && date == end) {
           datesMap.set(date, {
             start: date + " " + "00:00:00",
-            end: date + " " + `${endTime != "00:00:00" ? endTime : "00:00:00"}`
+            end: date + " " + `${endTime != "00:00:00" ? endTime : "00:00:00"}`,
           });
         } else {
           datesMap.set(date, {
@@ -367,10 +367,10 @@ class ReportTableRow extends Component {
               date +
               " " +
               `${
-              startTime == "00:00:00" && endTime == "00:00:00"
-                ? "00:00:00"
-                : "23:59:59"
-              }`
+                startTime == "00:00:00" && endTime == "00:00:00"
+                  ? "00:00:00"
+                  : "23:59:59"
+              }`,
           });
         }
       });
@@ -396,7 +396,7 @@ class ReportTableRow extends Component {
     return daysArr;
   };
 
-  renderTableRow = tasks => {
+  renderTableRow = (tasks) => {
     return tasks.map((task, index) => {
       return (
         <tr key={index} className="report-table-row">
@@ -405,9 +405,15 @@ class ReportTableRow extends Component {
               <div>{task.status.name}</div>
             ) : null}
           </td>
-          <td className="td-2" style={{ width: "290px" }}>
-            {this.renderLog(task)}
-          </td>
+          {this.props.isTimetrackMode ? (
+            <td className="td-2" style={{ width: "290px" }}>
+              {this.renderLog(task)}
+            </td>
+          ) : (
+            <td className="td-2" style={{ width: "290px" }}>
+              {this.dateFormater(task.duration)}
+            </td>
+          )}
           <td className="td-3 text-titlize">{task.name}</td>
           <td className="td-4 text-titlize">{task.project.name}</td>
           <td className="td-5 text-titlize">
@@ -438,7 +444,7 @@ class ReportTableRow extends Component {
 
   closeConfirmModal = () => {
     this.setState({
-      showConfirm: false
+      showConfirm: false,
     });
   };
 

@@ -49,11 +49,13 @@ class Header extends Component {
           userEmail: data.email,
         });
         localStorage.setItem("logedInId", data.id);
+        localStorage.setItem("logedInName", data.name);
       } catch (e) {
         console.log("err", e);
       }
     } else {
       localStorage.setItem("logedInId", loggedInData.id);
+      localStorage.setItem("logedInName", loggedInData.name);
       this.componentDidMountGetNotifications(loggedInData.id);
       this.setState({
         userId: loggedInData.id,

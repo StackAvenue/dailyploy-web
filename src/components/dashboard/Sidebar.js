@@ -13,31 +13,37 @@ class Sidebar extends Component {
       show: false,
       setShow: false,
       workspaceName: "",
+      timetrack_enabled: false,
       nameError: "",
-      isLoading: false
+      isLoading: false,
     };
   }
+  changeLogType = (val) => {
+    this.setState({
+      timetrack_enabled: val,
+    });
+  };
 
   showTaskModal = () => {
     this.setState({
       setShow: true,
-      show: true
+      show: true,
     });
   };
 
   closeTaskModal = () => {
     this.setState({
       show: false,
-      nameError: ""
+      nameError: "",
     });
   };
 
-  callWorkspace = id => {
+  callWorkspace = (id) => {
     cookie.save("workspaceId", id, { path: "/" });
-    localStorage.setItem('selProject', '');
+    localStorage.setItem("selProject", "");
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value, nameError: value ? "" : "cannot be empty" });
   };
@@ -46,7 +52,8 @@ class Sidebar extends Component {
     if (this.state.workspaceName != "") {
       let workspaceDate = {
         user_id: this.props.userInfo.id,
-        name: this.state.workspaceName
+        name: this.state.workspaceName,
+        timetrack_enabled: this.state.timetrack_enabled,
       };
       this.setState({ isLoading: true });
       try {
@@ -62,14 +69,14 @@ class Sidebar extends Component {
           owner: this.props.userInfo,
           id: data.workspace_id,
           name: data.workspace_name,
-          type: "individual"
+          type: "individual",
         };
         this.props.updateWorkspaces(workspace);
         this.setState({
           show: false,
           setShow: false,
           workspaceName: "",
-          isLoading: false
+          isLoading: false,
         });
       } catch (e) {
         this.setState({ show: false, setShow: false, isLoding: false });
@@ -81,7 +88,7 @@ class Sidebar extends Component {
 
   render() {
     let workspacesArr = this.props.workspaces;
-    let divideArr = workspacesArr.map(item => item);
+    let divideArr = workspacesArr.map((item) => item);
     return (
       <>
         <div className="workspace-list">
@@ -111,6 +118,7 @@ class Sidebar extends Component {
                 state={this.state}
                 onHideModal={this.closeTaskModal}
                 handleInputChange={this.handleInputChange}
+                changeLogType={this.changeLogType}
                 createWorkspace={this.createWorkspace}
               />
             </li>

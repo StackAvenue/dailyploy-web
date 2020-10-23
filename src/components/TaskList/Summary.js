@@ -41,21 +41,21 @@ const Summary = props => {
                 <Spinner animation="grow" variant="success" /> :
                 <>
                 <div className="one-col">
-            <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;
+            <i class="fa fa-list-ul" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Total tasks : {totalTasks}
             <br/>
-            <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i>&nbsp;
+            <i class="fa fa-check-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Completed tasks : {taskCompleted}
             <br/>
-            <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i>&nbsp;
+            <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Tasks left : {tasksleft}
                 </div>
                 <div className="two-col">
             <br/>
-            <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp;
+            <i class="fa fa-hourglass" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Total estimated time (in hours) : {totalTime}
             <br/>
-            <i class="fa fa-hourglass-end" aria-hidden="true"></i>&nbsp;
+            <i class="fa fa-hourglass-end" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Remaining time : {remainTime}
                 </div>&nbsp;&nbsp;&nbsp;
                 <div
@@ -66,7 +66,7 @@ const Summary = props => {
               }}
             >
               <i class="fa fa-times"
-                data-tip data-for="closeTask"
+                data-tip data-for="closeTask" style={{ color: "#6A7074" }}
               ></i>&nbsp;&nbsp;
               <ReactTooltip id="closeTask" effect="solid">
                 Close
