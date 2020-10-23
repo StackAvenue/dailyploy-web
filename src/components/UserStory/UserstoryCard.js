@@ -1,0 +1,194 @@
+import React, { useEffect, useState } from 'react';
+import "../../assets/css/userstory.scss";
+import { Button } from "react-bootstrap";
+import AddTask from "../TaskList/AddTask";
+import userstoryImg from '../../assets/images/userstory.png';
+import Spinner from 'react-bootstrap/Spinner';
+import plusImg from "../../assets/images/plus.svg";
+import minusImg from "../../assets/images/minus-1.svg";
+
+function UserstoryCard(props) {
+    const [userStory, showUserStory] = useState(false)
+    const [addTask, showAddTask] = useState(false)
+    const [taskList, setTaskList] = useState([])
+
+    useEffect(() => {
+        setData()
+    }, [])
+
+    useEffect(() => {
+        if (props.currentUserstoryTask) {
+            setData()
+        }
+    }, [props.currentUserstoryTask])
+
+    const setUserstoryData = () => {
+        setTaskList(props.userstory.task_lists)
+    }
+
+    const setData = () => {
+        setTaskList(props.currentUserstoryTask)
+        props.handleUpdatedTask()
+    }
+
+    const handleUserStory = () => {
+        if (!userStory) {
+            showAddTask(false)
+            props.showUserstoryTasks(true)
+            props.fetchUserstory(props.userstory.id)
+            showUserStory(!userStory)
+        } else {
+            showUserStory(!userStory)
+            props.showUserstoryTasks(true)
+        }
+
+    }
+
+    const handleAddTaskModal = () => {
+        showAddTask(!addTask)
+    }
+
+    const closeAddTask = () => {
+        showAddTask(false)
+    }
+
+    const handleUserstoryTask = (taskDetails) => {
+        if(addTask) {
+            showAddTask(false)
+            props.saveUserstoryTask(taskDetails, props.userstory.id)
+        } else {
+            props.saveUserstoryTask(taskDetails, props.userstory.id)
+        }
+        
+    }
+
+    const moveToDashboardUTask = (taskDetails) => {
+        props.usestoryMoveToDashboard(taskDetails, props.userstory.id)
+    }
+
+    const deleteTask = (task_id) => {
+        props.deleteUserstoryTask(props.userstory.id, task_id)
+    }
+
+    return (
+        <div className={`Userstory ${userStory ? "background-change" : ""}`}>
+            <div className="userstory-drag-icon">
+                {/* <i class="fas fa-bars"></i> */}
+                <div className="story-add-icon"
+                        onClick={handleUserStory}>
+                        {userStory ? 
+                        <div className="minus-icon-tasklist" style={{paddingLeft:"2px", paddingTop:"1px"}}>
+                        {/* <i class="fa fa-minus" /> */}
+                        <img
+                          height="18px"
+                          width="18px"  
+                          src={minusImg}
+                          className="minus-icon"
+                          alt="minus icon"
+                        />
+                      </div>
+               : 
+               <div className="add-icon-tasklistopen" style={{paddingLeft:"2px", paddingTop:"1px"}}>
+               <img
+                 src={plusImg}
+                 height="18px"
+                 width="18px"
+                 className="plus-icon"
+                 alt="open task list task"
+               ></img>
+             </div>}
+                    </div>
+            </div>
+
+            <div className="userstory-icon">
+                {/* <i class="fas fa-archive"></i> */}
+                {/* <img src={userstoryImg} /> */}
+                <i class="fa fa-users" style={{color:"#7686FF"}} aria-hidden="true"></i>
+            </div>
+            <div className="UserstoryCard">
+                <div className="user-story-header">
+
+                    <div className="user-story-name">{props.userstory.name}</div>
+                    <div className="hover-task" >{props.userstory.name}</div>
+                    
+                    <div className="user-story-details">
+                        <div
+                            className="user-story-btn"
+                            onClick={() => props.handleUserstoryModal("user-story", props.userstory.id)}>
+                            <span>Details</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+
+                    </div>
+                </div>
+                <div className="userstory-tasklist">
+                    {props.isUserStoryLoading && props.userstory.id == props.selectedUserStoryId ?
+                    <Spinner animation="grow" variant="success" /> :
+                        userStory
+                            ? taskList.map((task_lists_task) => {
+                                return (<div className="showCardDetails2 userstory-showCardDetails2">
+                                    <AddTask
+                                        state={props.state}
+                                        showTask={
+                                            props.editTltId != task_lists_task.id ? true : false
+                                        }
+                                        taskEdit={props.taskEdit}
+                                        deleteTask={deleteTask}
+                                        // moveToDashBoard={props.moveToDashBoard}
+                                        moveToDashboardUTask={moveToDashboardUTask}
+                                        task_lists_task={task_lists_task}
+                                        // projectTaskList={props.projectTaskList}
+                                        // switchTask={props.switchTask}
+                                        EditTlt={props.EditTlt}
+                                        // handleSaveTask={props.handleSaveTask}
+                                        taskStatus={props.taskStatus}
+                                        categories={props.categories}
+                                        //memeberSelected={props.memeberSelected}
+                                        // isFilterLoading={props.isFilterLoading}
+                                        // handleTaskDetails={handleTaskDetails}
+                                        handleTaskDetails={props.handleTaskDetails}
+                                        modalDetails={props.modalDetails}
+                                        currentTask={task_lists_task}
+                                        projectMembers={props.projectMembers}
+                                        list_id={props.list_id}
+                                        task_lists_task={task_lists_task}
+                                        isUserstory={true}
+                                        handleUserstoryTask={handleUserstoryTask}
+                                         />
+                                </div>)
+                            })
+                            : null
+                    }
+                </div>
+               
+                {addTask
+                    ? <div className="new-userstory">
+                        <div className="showCardDetails userstory-showCardDetails">
+                            <AddTask
+                                projectMembers={props.projectMembers}
+                                list_id={props.list_id}
+                                isUserstory={true}
+                                closeAddTask={closeAddTask}
+                                handleUserstoryTask={handleUserstoryTask}
+                                showTask={false}
+                                state={props.state}
+                                taskStatus={props.taskStatus} />
+                        </div>  
+                        </div> : null}
+              
+                {userStory ? <div className="container2OpenModal1">
+                    <Button
+                        variant="primary"
+                        className="add-task-btn"
+                        onClick={handleAddTaskModal}
+                    >
+                        <i class="fa fa-plus add-icon" /> Add Task{" "}
+                    </Button>
+                </div> : null}
+
+            </div >
+        </div>
+    );
+}
+
+export default UserstoryCard;

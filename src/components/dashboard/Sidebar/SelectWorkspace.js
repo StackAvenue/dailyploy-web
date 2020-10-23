@@ -1,5 +1,6 @@
 import React from "react";
 import { workspaceNameSplit, firstTwoLetter } from "./../../../utils/function";
+import ReactTooltip from "react-tooltip";
 
 const SelectWorkspace = props => {
   if (props.item.id === Number(props.workspaceId)) {
@@ -11,10 +12,12 @@ const SelectWorkspace = props => {
             onClick={() => props.callWorkspace(props.item.id)}
             href={`/workspace/${props.item.id}/dashboard`}
             title={workspaceNameSplit(props.workspaceName)}
+            data-tip data-for="wname"
           >
             {firstTwoLetter(props.workspaceName)}
             
           </a>
+          <ReactTooltip id="wname" place="top" effect="solid" style={{zIndex:"998"}}>{props.workspaceName}</ReactTooltip>
         </div>
         <div className="workspace-text text-titlize">
           {/* {workspaceNameSplit(props.workspaceName)} */}

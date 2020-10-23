@@ -3,15 +3,17 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { GOOGLE_CLIENT_ID } from "./../../utils/Constants";
 import GoogleLogin from "react-google-login";
+import LogType from "../LogType";
 
-const Individual = props => {
+const Individual = (props) => {
   const {
     name,
     email,
     password,
     confirmPassword,
     tokenId,
-    isDisabled
+    isDisabled,
+    timetrack_enabled,
   } = props.state;
   return (
     <>
@@ -172,7 +174,14 @@ const Individual = props => {
               </>
             )}
           </div>
+
           {/* <br /> */}
+          <div className="form-group">
+            <LogType
+              timetrack_enabled={timetrack_enabled}
+              changeLogType={props.changeLogType}
+            />
+          </div>
           <div
             className="col-md-12 no-padding text-center"
             data-toggle="tooltip"

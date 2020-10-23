@@ -28,6 +28,7 @@ class Settings extends Component {
       oldPassword: "",
       newPassword: "",
       confirmPassword: "",
+      timetrack_enabled: false,
       users: [],
       isDisableName: false,
       adminUserArr: [],

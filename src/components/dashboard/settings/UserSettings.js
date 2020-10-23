@@ -200,6 +200,19 @@ const UserSettings = props => {
             />
           </div>
         </div>
+        {/* <div className="col-md-12 inner-box">
+          <div className="col-md-2 d-inline-block no-padding name">
+            Log time type
+            <i className="fa fa-info-circle tooltip-pwd1 d-inline-block">
+              <div class="tooltiptext-pwd1">
+                You can only set log time type during creation of the workspace.
+              </div>
+            </i>
+          </div>
+          <div className="col-md-5 d-inline-block">
+            {props.state.timetrack_enabled ? "tracking time " : "log time"}
+          </div>
+        </div> */}
         {props.state.confirmPasswordError ? (
           <div className="col-md-12">
             <div className="col-md-2 d-inline-block no-padding"></div>

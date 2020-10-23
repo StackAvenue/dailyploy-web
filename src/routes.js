@@ -17,32 +17,32 @@ class Routes extends Component {
         path: "/",
         exact: true,
         component: Landing,
-        title: "landing"
+        title: "landing",
       },
       {
         path: "/login",
         exact: true,
         component: Login,
-        title: "login"
+        title: "login",
       },
       {
         path: "/signup/:tokenId?",
         exact: false,
         component: SignUp,
-        title: "signup"
+        title: "signup",
       },
       {
         path: "/workspace/:workspaceId",
         exact: false,
         component: Workspace,
-        title: "workspace"
+        title: "workspace",
       },
       {
         path: "",
         exact: false,
         component: "",
-        title: ""
-      }
+        title: "",
+      },
     ];
   }
 
@@ -62,7 +62,14 @@ class Routes extends Component {
           />
         );
       }
-      return <Redirect to={`/workspace/${getWorkspaceId()}/dashboard`} />;
+      return (
+        <Redirect
+          to={{
+            pathname: `/workspace/${getWorkspaceId()}/dashboard`,
+            state: { isTimetrack: true },
+          }}
+        />
+      );
     } else {
       if (title === "signup") {
         return <SignUp {...props} />;
@@ -92,7 +99,7 @@ class Routes extends Component {
                   key={i}
                   exact={route.exact}
                   path={route.path}
-                  render={props =>
+                  render={(props) =>
                     this.isAllowed(props, route.component, route.title)
                   }
                 />

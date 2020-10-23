@@ -10,8 +10,8 @@ import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import TaskList from "./components/dashboard/TaskList";
 import TaskProjectList from "./components/TaskList/TaskProjectList";
-import Milestone from './components/Milestone/Milestone';
-import Allocation from './components/ResourceAllocation/Allocation';
+import Milestone from "./components/Milestone/Milestone";
+import Allocation from "./components/ResourceAllocation/Allocation";
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -119,6 +119,7 @@ class Workspace extends Component {
       loggedInUserName: "",
       timeTracked: [],
       event: null,
+      timetrack_enabled: false,
     };
   }
 
@@ -155,6 +156,7 @@ class Workspace extends Component {
 
     this.setState({
       workspaces: workspacesData,
+      timetrack_enabled: workspace[0].timetrack_enabled,
       loggedInUserInfo: userData,
       isLoading: false,
       workspaceId: workspaceId,
@@ -188,7 +190,7 @@ class Workspace extends Component {
       });
   };
 
-  componentWillUnmount() { }
+  componentWillUnmount() {}
 
   logout = async () => {
     await logout();
@@ -277,7 +279,6 @@ class Workspace extends Component {
     }
   };
 
-
   isBottomPopup = () => {
     return (
       this.state.taskTitle != "" &&
@@ -296,7 +297,7 @@ class Workspace extends Component {
       var taskId = this.state.event.id.split("-")[0];
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-      } catch (e) { }
+      } catch (e) {}
       this.setState({
         event: null,
       });

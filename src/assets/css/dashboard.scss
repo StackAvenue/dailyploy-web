@@ -3924,7 +3924,8 @@ table.scheduler-table tr:last-child td {
   border-right: 1px solid $color-borders;
   display: inline-flex;
   position: fixed;
-  z-index: 1;
+  z-index: 999;
+  //z-index: 1;
   top: 0;
   left: 0;
   height: 100%;
@@ -4047,6 +4048,7 @@ table.scheduler-table tr:last-child td {
         .input {
           color: $color-text1 !important;
           padding: 0 !important;
+          margin-bottom: 13px;
         }
         .create-btn {
           width: 93px;
@@ -4565,7 +4567,7 @@ table.scheduler-table tr:last-child td {
   border: 1px solid #ffffff;
 }
 .fa-pause {
-  color: green !important;
+  color: green;
   padding-left: 4.5px;
   padding-right: 6.5px;
 }
