@@ -786,7 +786,7 @@ class TaskInfoModal extends Component {
                         </>
                       ) : (
                         <>
-                          {!this.state.isTimetrackMode && (
+                          {!this.props.isTimetrackMode && (
                             <>
                               <div className="col-md-6 d-inline-block">
                                 <input
@@ -836,7 +836,7 @@ class TaskInfoModal extends Component {
                               </div>
                             </>
                           )}
-                          {this.state.isTimetrackMode && (
+                          {this.props.isTimetrackMode && (
                             <>
                               <div className="col-md-10 d-inline-block">
                                 <span className="col-md-1 no-padding d-inline-block">
@@ -937,7 +937,7 @@ class TaskInfoModal extends Component {
                           )}
                         </>
                       )
-                    ) : this.state.isTimetrackMode ? (
+                    ) : this.props.isTimetrackMode ? (
                       <div className="left-padding-17px">No tracked time</div>
                     ) : (
                       <div className="left-padding-17px">No logged time</div>
