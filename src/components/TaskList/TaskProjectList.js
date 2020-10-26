@@ -109,8 +109,12 @@ class TaskProjectList extends Component {
       selectedUserStoryId: null,
       isChecklistLoading: false,
       progressPercent: 0,
+      progressPercentUTD: 0,
       task_edit: false,
-      isRoadmapCreateLoading: false
+      isRoadmapCreateLoading: false,
+      userStory_checklists: [], 
+      userStoryDetails_checklists: [],
+      userStroyTaskDetails: null
     };
   }
 
@@ -408,11 +412,13 @@ class TaskProjectList extends Component {
 
   addTaskChecklist = async (params, roadMapTask) => {
     try {
+      this.checklistLoading(true)
       const { data } = await post(
         params,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists`)
       //this.displayList(roadMapTask.list_id)
-      this.setState({ checklistItem: data, newChecklist: true })
+      this.setState({ checklistItem: data, newChecklist: true, userStoryDetails_checklists: [...this.state.userStoryDetails_checklists, data] })
+      this.checklistLoading(false)
     } catch (error) {
       console.log("sa", error)
     }
@@ -420,24 +426,47 @@ class TaskProjectList extends Component {
 
   updateTaskChecklist = async (id, params, roadMapTask) => {
     try {
+      this.checklistLoading(true)
       // console.log(id, roadMapTask )
         const { data } = await put(
           params,
           `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists/${id}`)
           //this.displayList(roadMapTask.list_id)
+      let updated_data = this.state.userStoryDetails_checklists.map(x => x.id == data.id ? data : x)
+      console.log(updated_data)
+      this.checklistProgress3(updated_data)
       this.setState({ checklistItem: data, action: "update", newChecklist: true })
+      this.checklistLoading(false)
+      
     } catch (error) {
       
     }
   }
 
+  checklistProgress3 = (checklist_data) => {
+    let progressBar = checklist_data.filter((checklist) => checklist.is_completed == true);
+    let progress_percentage =
+    Math.round((progressBar.length / checklist_data.length) * 100 * 10) / 10;
+    if(progress_percentage == NaN)
+    {
+      this.setState({progressPercentUTD: 0})
+    }
+    else
+    {
+      this.setState({ progressPercentUTD : progress_percentage})
+    }
+    console.log("dataaa progress", progress_percentage)
+  }
+
   deleteTaskChecklist = async (id, roadMapTask) => {
   try {
+    this.checklistLoading(true)
     // console.log(id, roadMapTask )
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists/${id}`)
         //this.displayList(roadMapTask.list_id)
     this.setState({ checklistItem: data, action: "delete", newChecklist: true })
+    this.checklistLoading(false)
   } catch (error) {
     
   }
@@ -663,6 +692,12 @@ class TaskProjectList extends Component {
     })
   }
 
+  setUserStoryDetails = (task) => {
+    this.setState ({
+      userStoryDetails_checklists: task.checklist
+    })
+  }
+
   displayList = async (taskListId, ID, type) => {
     if (this.state.list_id != taskListId || ID != null) {
       let params;
@@ -885,6 +920,38 @@ class TaskProjectList extends Component {
     }
   };
 
+  userTaskDetails = async (tltId) =>{
+    try {
+      const { data } = await get(
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/task_list_tasks/${tltId}`
+      )
+      console.log("getting", data)
+      this.checklistProgress4(data)
+      this.setState({
+        userStroyTaskDetails: data,
+        userStoryDetails_checklists: data.checklist
+      })
+    }
+    catch (e) {
+
+    }
+  }
+
+  checklistProgress4 = (currentUserstory) => {
+    let progressBar = currentUserstory.checklist.filter((checklist) => checklist.is_completed == true);
+    let progress_percentage =
+    Math.round((progressBar.length / currentUserstory.checklist.length) * 100 * 10) / 10;
+    if(progress_percentage == NaN)
+    {
+      this.setState({progressPercentUTD: 0})
+    }
+    else
+    {
+      this.setState({ progressPercentUTD : progress_percentage})
+    }
+    console.log("dataaa progress", progress_percentage)
+  }
+
   moveToDashBoard = async (saveTaskParams) => {
     try {
       const { data } = await post(
@@ -1040,7 +1107,12 @@ class TaskProjectList extends Component {
       const { data } = await post(
         checklist,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists`)
-      this.fetchUserstory(userstory.id);
+        this.setState({
+          userStory_checklists: [...this.state.userStory_checklists, data]
+        })
+        this.checklistLoading(false)
+        console.log("seeeee", this.state.userStory_checklists)
+      //this.fetchUserstory(userstory.id);
     } catch (error) {
       console.log("sa", error)
     }
@@ -1048,21 +1120,57 @@ class TaskProjectList extends Component {
 
   updateUserstoryChecklist = async (id, params, userstory) => {
     try {
+      this.checklistLoading(true)
       const { data } = await put(
         params,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists/${id}`)
-        this.fetchUserstory(userstory.id);
+        // let updated_dataIndex = this.state.userStory_checklists.findIndex(x => x.id == data.id);
+        // let com = this.state.userStory_checklists.splice(updated_dataIndex, 1, data)
+        // console.log("commmm", com)
+        // this.setState({
+        //   userStory_checklists: com
+        // })
+        let updated_data = this.state.userStory_checklists.map(x => x.id == data.id ? data : x)
+        console.log(updated_data)
+        this.checklistProgress2(updated_data)
+        this.setState({
+          userStory_checklists: updated_data
+        })
+        this.checklistLoading(false)
+        //this.fetchUserstory(userstory.id);
     } catch (error) {
       
     }
   }
 
+  checklistProgress2 = (checklist_data) => {
+    let progressBar = checklist_data.filter((checklist) => checklist.is_completed == true);
+    let progress_percentage =
+    Math.round((progressBar.length / checklist_data.length) * 100 * 10) / 10;
+    if(progress_percentage == NaN)
+    {
+      this.setState({progressPercent: 0})
+    }
+    else
+    {
+      this.setState({ progressPercent : progress_percentage})
+    }
+    console.log("dataaa progress", progress_percentage)
+  }
+
   deleteUserstoryChecklist = async (id, userstory) => {
     try {
       // console.log("mjnd", id, userstory.id)
+      this.checklistLoading(true)
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists/${id}`)
-        this.fetchUserstory(userstory.id);
+        let filteredData = this.state.userStory_checklists.filter((checklist) => checklist.id != data.id)
+        console.log(filteredData)
+        this.setState({
+          userStory_checklists: filteredData
+        })
+        this.checklistLoading(false)
+        //this.fetchUserstory(userstory.id);
     } catch (error) {
       
     }
@@ -1103,6 +1211,7 @@ class TaskProjectList extends Component {
       this.checklistProgress(data)
       this.setState({
         currentUserstory: data,
+        userStory_checklists: data.checklist,
         detailsModal: this.state.showUserstoryTasklist ? false : true,
         currentUserstoryTask: data.task_lists,
         updatedData: this.state.detailsModal ? true : false,
@@ -1114,6 +1223,42 @@ class TaskProjectList extends Component {
       console.log(error)
     }
   }
+
+
+  switchTask2 = async (taskId, tltId) => {
+    try {
+      const { data } = await put(
+        { user_stories_id: null },
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskId}/task_list_tasks/${tltId}`
+      );
+      let tasks = this.state.currentUserstoryTask.filter((eachTlt) => {
+        return tltId != eachTlt.id;
+      });
+      this.setState({
+        currentUserstoryTask: tasks,
+      });
+      toast(
+        <DailyPloyToast
+          message="Task is successfully moved"
+          status="success"
+        />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    } catch (e) {
+      if (e.message) {
+        toast(
+          <DailyPloyToast message="Something went wrong" status="error" />,
+          {
+            autoClose: 2000,
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+      }
+    }
+  };
 
   checklistProgress = (currentUserstory) => {
     let progressBar = currentUserstory.checklist.filter((checklist) => checklist.is_completed == true);
@@ -1247,6 +1392,7 @@ class TaskProjectList extends Component {
                           displayAddTask={this.displayAddTask}
                           closeAddTask={this.closeAddTask}
                           displayList={this.displayList}
+                          setUserStoryDetails={this.setUserStoryDetails}
                           isChecklistOpen={this.isChecklistOpen}
                           isFilterOpen={this.isFilterOpen}
                           isSummaryOpen={this.isSummaryOpen}
@@ -1262,6 +1408,8 @@ class TaskProjectList extends Component {
                           deleteTlt={this.deleteTlt}
                           projectTaskList={this.state.project_task_lists}
                           switchTask={this.switchTask}
+                          switchTask2={this.switchTask2}
+                          userTaskDetails={this.userTaskDetails}
                           EditTlt={this.editTlt}
                           editTltId={this.state.editTltId}
                           moveToDashBoard={this.moveToDashBoard}
@@ -1285,6 +1433,7 @@ class TaskProjectList extends Component {
                           selectedUserStoryId={this.state.selectedUserStoryId}
                           showDetailsModal={this.showDetailsModal}
                           currentUserstory={this.state.currentUserstory}
+                          userStory_checklists={this.state.userStory_checklists}
                           detailsModal={this.state.detailsModal}
                           updatedData={this.state.updatedData}
                           userstoryUpdateTask={this.state.userstoryUpdateTask}

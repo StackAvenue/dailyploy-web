@@ -90,12 +90,14 @@
   //   align-items: center;
 
   .user-story-name {
-    width: 30%;
+    width: 86%;
     // border: 1px solid red;
     font-family: "Roboto-Regular", "Roboto";
     font-size: 15px;
     color: #555555;
     padding-top: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .hover-task{
@@ -270,8 +272,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       margin-top: -14px;
-      width: 80%;
+      width: 77%;
       height: 70%;
+      margin-left: -3%;
       font-family: "Roboto-Regular", "Roboto";
       font-size: 20px;
       //font-weight: 600;
