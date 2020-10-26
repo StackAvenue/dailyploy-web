@@ -1234,8 +1234,8 @@ function UserstoryModal(props) {
                 ></i>
               )}
               <i
-                class="fas fa-trash-alt" style={{ color: "red", opacity: "0.6", marginLeft: "23%" }}
-                //onClick={() => deleteChecklistData(checklist.id)}
+                class="fas fa-trash-alt" style={{ color: "red", opacity: "0.6", marginLeft: "23%", cursor: "pointer" }}
+                onClick={() => props.deleteUserStory(props.currentUserstory.id)}
               ></i>
               <button
                 className="btn btn-link float-right"

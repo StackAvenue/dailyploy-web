@@ -508,6 +508,7 @@ const DisplayTaskList = (props) => {
           projectMembers={props.projectMembers}
           handleMemberChange={handleMemberChange}
           list_id={props.list_id}
+          deleteUserStory={props.deleteUserStory}
           taskStatus={props.taskStatus}
           categories={props.categories}
           saveUserstoryTask={props.saveUserstoryTask}
