@@ -11,6 +11,7 @@ const UserSettings = props => {
   // const onChange = imageList => {
   //   console.log(imageList);
   // };
+
   return (
     <>
       <div className="col-md-12 heading" style={{ paddingTop: "40px" }}>
@@ -84,6 +85,7 @@ const UserSettings = props => {
                   className={`btn btn-primary save-button ${props.state.isSaveEnable ? "btn-blue" : "btn-disable"
                     }`}
                   onClick={props.updateUserName}
+                  disabled={!props.state.isSaveEnable}
                 >
                   Save
                 </button>
