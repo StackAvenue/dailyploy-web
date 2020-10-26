@@ -77,6 +77,7 @@ const DisplayTaskList = (props) => {
   const handleTaskDetails = (modalDetails, task) => {
     setModalDetails(modalDetails)
     setCurrentTask(task)
+    //props.setUserStoryDetails(task)
     props.showDetailsModal()
     // props.showUserstoryTasks()
   }
@@ -334,6 +335,8 @@ const DisplayTaskList = (props) => {
                   saveUserstoryTask={props.saveUserstoryTask}
                   showTask={false}
                   taskStatus={props.taskStatus}
+                  projectTaskList={props.projectTaskList}
+                  switchTask2={props.switchTask2}
                   EditTlt={props.EditTlt}
                   editTltId={props.editTltId}
                   deleteTlt={props.deleteTlt}
@@ -341,6 +344,7 @@ const DisplayTaskList = (props) => {
                   handleTaskDetails={handleTaskDetails}
                   modalDetails={modalDetails}
                   currentTask={currentTask}
+                  userTaskDetails={props.userTaskDetails}
                   // moveToDashBoard={props.moveToDashBoard}
                   usestoryMoveToDashboard={props.usestoryMoveToDashboard}
                   fetchUserstory={props.fetchUserstory}
@@ -387,6 +391,7 @@ const DisplayTaskList = (props) => {
                     categories={props.categories}
                     isFilterLoading={props.isFilterLoading}
                     handleTaskDetails={handleTaskDetails}
+                    userTaskDetails={props.userTaskDetails}
                   />
                 );
               })
@@ -457,6 +462,7 @@ const DisplayTaskList = (props) => {
                   displayAddTask={props.displayAddTask}
                   closeAddTask={props.closeAddTask}
                   addTaskLoading={props.addTaskLoading}
+                  userTaskDetails={props.userTaskDetails}
                 />
               </div>
             </>
@@ -483,12 +489,15 @@ const DisplayTaskList = (props) => {
       {props.list_id == props.id && props.detailsModal
         ? <UserstoryModal
           state={props.state}
+          userStory_checklists={props.userStory_checklists}
+          userTaskDetails={props.userTaskDetails}
           taskEdit={props.taskEdit}
           userstoryDetails={userstoryDetails}
           handleDescription={props.handleDescription}
           editUserstory={props.editUserstory}
           editDescription={props.editDescription}
           currentTask={currentTask}
+          setUserStoryDetails={props.setUserStoryDetails}
           handleTaskDetails={handleTaskDetails}
           handleUserstoryModal={handleUserstoryModal}
           addTaskChecklist={props.addTaskChecklist}
