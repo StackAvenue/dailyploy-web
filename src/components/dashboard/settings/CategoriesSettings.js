@@ -181,7 +181,7 @@ class CategoriesSettings extends Component {
   render() {
     return (
       <div className="categories-setting">
-        {this.state.taskCategories.length === 0 ?
+        {this.state && this.state.taskCategories && this.state.taskCategories.length === 0 ?
           <div className="spinnerDive" >
             <Loader
               type="Puff"
