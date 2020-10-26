@@ -111,7 +111,7 @@ function UserstoryCard(props) {
                     <div className="user-story-name">{props.userstory.name}</div>
                     <div className="hover-task" >{props.userstory.name}</div>
                     
-                    <div className="user-story-details">
+                    <div className="user-story-details" style={{ marginTop: "4px" }}>
                         <div
                             className="user-story-btn"
                             onClick={() => props.handleUserstoryModal("user-story", props.userstory.id)}>
@@ -149,6 +149,9 @@ function UserstoryCard(props) {
                                         handleTaskDetails={props.handleTaskDetails}
                                         modalDetails={props.modalDetails}
                                         currentTask={task_lists_task}
+                                        projectTaskList={props.projectTaskList}
+                                        switchTask2={props.switchTask2}
+                                        userTaskDetails={props.userTaskDetails}
                                         projectMembers={props.projectMembers}
                                         list_id={props.list_id}
                                         task_lists_task={task_lists_task}

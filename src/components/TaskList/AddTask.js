@@ -93,10 +93,15 @@ const AddTask = (props) => {
     else {
       moveTaskId = moveToOTherTask;
     }
+    {props.isUserstory ? 
+    props.switchTask2(
+      moveTaskId,
+      props.task_lists_task.id
+    ) :
     props.switchTask(
       moveTaskId,
       props.task_lists_task.id
-    );
+    )}
   }, 250)
 
   const handleInputChange = (e) => {
@@ -542,6 +547,7 @@ const AddTask = (props) => {
                           onClick={(e) => {
                             e.preventDefault();
                             props.handleTaskDetails("task-details", props.task_lists_task)
+                            props.userTaskDetails(props.task_lists_task.id)
                           }}
                         >
                           Details
@@ -654,7 +660,7 @@ const AddTask = (props) => {
                 onClick={props.closeAddTask}
               >
                 <i class="fa fa-times"
-                style={{color: "black"}}
+                style={{color: "black !important"}}
               ></i>
               </button>
               </>

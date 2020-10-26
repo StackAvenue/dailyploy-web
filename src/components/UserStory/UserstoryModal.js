@@ -109,6 +109,10 @@ function UserstoryModal(props) {
     }
   }, [props.updatedData, props.newChecklist, markComplete]);
 
+  useEffect(() => {
+    handleSetUserstory();
+  },[props.userStory_checklists, props.state.userStoryDetails_checklists])
+
   const handleSetUserstory = () => {
     if (props.modalDetails == "user-story") {
       if (props.currentUserstory) {
@@ -121,7 +125,7 @@ function UserstoryModal(props) {
             ? new Date(props.currentUserstory.due_date)
             : null
         );
-        setChecklist(props.currentUserstory.checklist);
+        setChecklist(props.userStory_checklists);
         setCommentList(props.currentUserstory.comments);
         setIsComplete(props.currentUserstory.is_completed);
         setMarkComplete(props.currentUserstory.is_completed)
@@ -160,7 +164,7 @@ function UserstoryModal(props) {
         );
         setIsComplete(props.currentTask.is_complete);
         setCommentList(props.currentTask.comments);
-        setChecklist(props.currentTask.checklist);
+        setChecklist(props.state.userStoryDetails_checklists);
         if (props.currentTask.category_id) {
           const currentCategory = props.categories.filter((cat) => {
             return cat.task_category_id == props.currentTask.category_id;
@@ -546,6 +550,7 @@ function UserstoryModal(props) {
 
   // const progressInstance = <ProgressBar now={progress_percentage} label={`${progress_percentage}%`}/>;
   const progressInstance = <ProgressBar now={props.state.progressPercent ? props.state.progressPercent : 0} />;
+  const progressInstanceUTD = <ProgressBar now={props.state.progressPercentUTD ? props.state.progressPercentUTD : 0} />;
 
   return (
     <div className="UserstoryModal">
@@ -584,19 +589,21 @@ function UserstoryModal(props) {
                  <i class="fas fa-pencil-alt chg-text-icon"
                     style={{ cursor: "pointer",
                     color: "#a2aab8",
-                    fontSize: "17px" }}
+                    fontSize: "17px",
+                    marginLeft: "-36%" }}
                     onClick={handleEdit}
                ></i>
               ) : (
                 <i
                   class="fa fa-check"
-                  style={{ cursor: "pointer", fontSize: "23px" }}
+                  style={{ cursor: "pointer", fontSize: "20px", marginLeft: "-31%" }}
                   onClick={handleEditTaskDetails}
                 ></i>
               )}
               <button
                 className="btn btn-link float-right"
                 onClick={props.handleDetailsClose}
+                style={{ marginTop: "-5%" }}
               >
                 <img src={Close} alt="close" />
               </button>
@@ -883,7 +890,7 @@ function UserstoryModal(props) {
                 {showChecklist ? (
                   <div className="progress-container">
                     <div className="progress-bar">
-                      {progressInstance}
+                      {progressInstanceUTD}
                     </div>
                   </div>
                 ) : null}
@@ -964,6 +971,9 @@ function UserstoryModal(props) {
                     })}  
                     {/* </div> */}
                   </div>
+                  {props.state.isChecklistLoading ? 
+                  <Spinner animation="grow" variant="success" /> :
+                  null}
                   <div className="container2OpenModal1">
                     {addChecklist ? (
                       <div className="add-checklist">
@@ -1212,19 +1222,25 @@ function UserstoryModal(props) {
                 <i class="fas fa-pencil-alt chg-text-icon"
                 style={{ cursor: "pointer",
                 color: "#a2aab8",
-                fontSize: "17px" }}
+                fontSize: "17px",
+                marginLeft: "-36%" }}
                 onClick={handleEdit}
            ></i>
               ) : (
                 <i
                   class="fa fa-check"
-                  style={{ cursor: "pointer", fontSize: "23px" }}
+                  style={{ cursor: "pointer", fontSize: "20px", marginLeft: "-31%" }}
                   onClick={handleEditUserstory}
                 ></i>
               )}
+              <i
+                class="fas fa-trash-alt" style={{ color: "red", opacity: "0.6", marginLeft: "23%" }}
+                //onClick={() => deleteChecklistData(checklist.id)}
+              ></i>
               <button
                 className="btn btn-link float-right"
                 onClick={props.handleDetailsClose}
+                style={{ marginTop: "-5%" }}
               >
                 <img src={Close} alt="close" />
               </button>
@@ -1517,6 +1533,7 @@ function UserstoryModal(props) {
                                         showTask={
                                             props.editTltId != item.id ? true : false
                                         }
+                                        userTaskDetails={props.userTaskDetails}
                                         // showTask={false}
                                         // deleteTask={deleteTask}
                                         // moveToDashBoard={props.moveToDashBoard}
@@ -1559,6 +1576,7 @@ function UserstoryModal(props) {
                         <AddTask
                           projectMembers={props.projectMembers}
                           list_id={props.list_id}
+                          userTaskDetails={props.userTaskDetails}
                           isUserstory={true}
                           handleUserstoryTask={handleUserstoryTask}
                           closeAddTask={closeAddTask}
