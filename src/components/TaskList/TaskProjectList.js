@@ -1022,6 +1022,16 @@ class TaskProjectList extends Component {
     }
   }
 
+  deleteUserStory = async (id) => {
+    try {
+      const { data } = await del(
+        `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
+        this.closeUserStoryModal()
+        this.handleOpenTaskData(this.state.projectId)
+    }
+    catch (e) {}
+  }
+
   editUserstory = async (params, id) => {
     try {
       const { data } = await put(
@@ -1280,6 +1290,10 @@ class TaskProjectList extends Component {
     this.setState({ detailsModal: !this.state.detailsModal })
   }
 
+  closeUserStoryModal = () => {
+    this.setState({ detailsModal: false })
+  }
+
   handleUpdatedTask = () => {
     this.setState({ userstoryUpdateTask: false })
   }
@@ -1399,6 +1413,7 @@ class TaskProjectList extends Component {
                           closeFilter={this.closeFilter}
                           closeSummary={this.closeSummary}
                           addUserStory={this.addUserStory}
+                          deleteUserStory={this.deleteUserStory}
                           saveUserstoryTask={this.saveUserstoryTask}
                           closeChecklist={this.closeChecklist}
                           TaskShow={this.state.TaskShow}
