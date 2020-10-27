@@ -9,6 +9,7 @@ import DailyPloyToast from "../../DailyPloyToast";
 import RemoveAdminModal from "./RemoveAdminModal";
 import EmailConfigModal from "./EmailConfigModal";
 import { async } from "q";
+import cookie from "react-cookies";
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -773,25 +774,14 @@ class GeneralSettings extends Component {
               Workspace Name
             </div>
             <div className="col-md-6 d-inline-block">
-              {this.roleType == "admin" ? (
-                <input
-                  type="text"
-                  placeholder="Workspace Name"
-                  className="form-control input"
-                  name="workspaceName"
-                  value={this.props.state.workspaceName}
-                  onChange={this.props.worskpaceNameHandler}
-                />
-              ) : (
-                <input
-                  type="text"
-                  disabled
-                  placeholder="Workspace Name"
-                  className="form-control input"
-                  name="workspaceName"
-                  value={this.props.state.workspaceName}
-                />
-              )}
+              <input
+                type="text"
+                placeholder="Workspace Name"
+                className="form-control input"
+                name="workspaceName"
+                value={this.props.state.workspaceName}
+                onChange={this.props.worskpaceNameHandler}
+              />
             </div>
             {this.roleType == "admin" ? (
               <div className="d-inline-block box-btn">
@@ -808,12 +798,29 @@ class GeneralSettings extends Component {
               </div>
             ) : null}
           </div>
+          {(this.props.loggedInUser &&
+            this.props.loggedInUser.role === "admin") ? <div className="col-md-12 no-padding currency" >
+              <div className="col-md-12 hr2"></div>
+              <div className="col-md-2 d-inline-block select-currency">Select Currency</div>
+              <div className="col-md-4 d-inline-block ">
+                <select
+                  className="form-control"
+                  onChange={this.props.updateWorkspaceName}>
+                  <option style={{ color: "red" }}>
+                    {cookie.load("currency")}
+                  </option>
+                  < option >INR</option>
+                  <option>USD</option>
+                </select>
+              </div>
+            </div> : null}
+          <div className="col-md-12 hr1">
           {this.state.isTimetrackMode && (
             <div className="col-md-12 hr1 no-padding name ">
               Time tracking enabled for this workspace
             </div>
           )}
-
+          </div>
           <div
             className="col-md-12 workspace-name"
             style={{ marginTop: "0px", paddingTop: "20px" }}
@@ -837,56 +844,56 @@ class GeneralSettings extends Component {
                 {(this.props.loggedInUser &&
                   this.props.loggedInUser.role !== "member" &&
                   this.props.state.adminUserArr.length > 1) ||
-                (this.props.state.adminUserArr.length == 1 &&
-                  this.props.loggedInUser &&
-                  this.props.loggedInUser.id ===
+                  (this.props.state.adminUserArr.length == 1 &&
+                    this.props.loggedInUser &&
+                    this.props.loggedInUser.id ===
                     this.props.workspace.owner.id) ? (
-                  <button
-                    className="btn btn-link triple-dot"
-                    onClick={() =>
-                      this.handleRemoveAdmin(
-                        this.state.isShowRemoveAdmin,
-                        admin.id,
-                        admin.name
-                      )
-                    }
-                  >
-                    <i className="fas fa-ellipsis-v"></i>
-                  </button>
-                ) : null}
+                    <button
+                      className="btn btn-link triple-dot"
+                      onClick={() =>
+                        this.handleRemoveAdmin(
+                          this.state.isShowRemoveAdmin,
+                          admin.id,
+                          admin.name
+                        )
+                      }
+                    >
+                      <i className="fas fa-ellipsis-v"></i>
+                    </button>
+                  ) : null}
                 <div style={{ position: "absolute" }}>
                   {this.state.isShowRemoveAdmin &&
-                  this.state.showRemoveAdminId === admin.id ? (
-                    <>
-                      <button
-                        className="btn btn-primary remove-btn"
-                        onClick={this.handleRemoveShow}
-                      >
-                        Remove
+                    this.state.showRemoveAdminId === admin.id ? (
+                      <>
+                        <button
+                          className="btn btn-primary remove-btn"
+                          onClick={this.handleRemoveShow}
+                        >
+                          Remove
                       </button>
-                      <RemoveAdminModal
-                        state={this.state}
-                        handleClose={this.handleRemoveClose}
-                        removeAdmin={this.removeAdmin}
-                      />
-                    </>
-                  ) : null}
+                        <RemoveAdminModal
+                          state={this.state}
+                          handleClose={this.handleRemoveClose}
+                          removeAdmin={this.removeAdmin}
+                        />
+                      </>
+                    ) : null}
                 </div>
               </div>
             ))}
             {(this.props.loggedInUser &&
               this.props.loggedInUser.role === "admin") ||
-            (this.props.workspace && this.props.loggedInUser
-              ? this.props.loggedInUser.id === this.props.workspace.owner.id
-              : false) ? (
-              <button
-                className="btn btn-primary addnew-button"
-                onClick={this.handleAddAdminShow}
-              >
-                {" "}
+              (this.props.workspace && this.props.loggedInUser
+                ? this.props.loggedInUser.id === this.props.workspace.owner.id
+                : false) ? (
+                <button
+                  className="btn btn-primary addnew-button"
+                  onClick={this.handleAddAdminShow}
+                >
+                  {" "}
                 + Add New
-              </button>
-            ) : null}
+                </button>
+              ) : null}
             <AddAdminModal
               state={this.state}
               handleClose={this.handleAddAdminClose}
@@ -933,13 +940,13 @@ class GeneralSettings extends Component {
                       Suspend
                     </button>
                   ) : (
-                    <button
-                      className="btn btn-primary resume-btn"
-                      onClick={() => this.handleResumeShow("resume")}
-                    >
-                      Resume
-                    </button>
-                  )}
+                      <button
+                        className="btn btn-primary resume-btn"
+                        onClick={() => this.handleResumeShow("resume")}
+                      >
+                        Resume
+                      </button>
+                    )}
                   <EmailConfigurationModal
                     state={this.state}
                     handleClose={this.handleResumeClose}
