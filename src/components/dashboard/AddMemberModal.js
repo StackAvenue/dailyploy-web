@@ -5,6 +5,7 @@ import Select from "react-dropdown-select";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import DailyPloySelect from "./../DailyPloySelect";
+import cookie from "react-cookies";
 
 const RadioOptions = ({ options, selected, onChange }) => {
   return (
@@ -103,7 +104,7 @@ class AddMemberModal extends Component {
                         this.props.state.memberNameError
                           ? "input-error-border"
                           : ""
-                      }`}
+                        }`}
                       name="memberName"
                       type="text"
                       placeholder="Name"
@@ -127,7 +128,7 @@ class AddMemberModal extends Component {
                         this.props.state.memberEmailError
                           ? "input-error-border"
                           : ""
-                      }`}
+                        }`}
                       name="memberEmail"
                       type="text"
                       placeholder="Email ID"
@@ -141,7 +142,7 @@ class AddMemberModal extends Component {
                         this.props.state.memberRoleError
                           ? "input-error-border"
                           : ""
-                      }`}
+                        }`}
                       name="memberRole"
                       value={this.props.state.memberRole}
                       onChange={this.props.handleChangeMemberInput}
@@ -157,7 +158,7 @@ class AddMemberModal extends Component {
                         this.props.state.memberWorkingHoursError
                           ? "input-error-border"
                           : ""
-                      }`}
+                        }`}
                       name="memberWorkingHours"
                       value={this.props.state.memberWorkingHours}
                       onChange={this.props.handleChangeMemberInput}
@@ -183,6 +184,45 @@ class AddMemberModal extends Component {
                 </tr>
               </tbody>
             </table>
+            <div>
+              <table className="table heading">
+                <thead>
+                  <tr>
+                    <th scope="col">Monthly Expense ({cookie.load("currency")})</th>
+                    <th scope="col">Hourly Expense ({cookie.load("currency")})</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input
+                        className={`form-control 
+                          ${this.props.state.memberWorkingHours
+                            ? "expense"
+                            : "disable-input"
+                          }`}
+                        name="monthlyExpense"
+                        min="0"
+                        placeholder="0"
+                        value={this.props.state.monthlyExpense}
+                        onChange={this.props.handleExpense}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className={`form-control 
+                        ${this.props.state.memberWorkingHours
+                            ? "expense"
+                            : "disable-input"
+                          }`}
+                        name="hourlyExpense"
+                        value={this.props.state.hourlyExpense}
+                        onChange={this.props.handleExpense} />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             {this.props.state.error != "" ? (
               <div className="col-md-12 no-padding">
                 <span
@@ -200,13 +240,13 @@ class AddMemberModal extends Component {
                   className="btn col-md-5 button1 btn-primary"
                   disabled={`${
                     this.props.state.memberWorkingHours &&
-                    this.props.state.memberRole &&
-                    this.props.state.memberEmail &&
-                    this.props.state.memberName &&
-                    this.props.state.btnEnable
+                      this.props.state.memberRole &&
+                      this.props.state.memberEmail &&
+                      this.props.state.memberName &&
+                      this.props.state.btnEnable
                       ? ""
                       : "disabled"
-                  }`}
+                    }`}
                   onClick={this.props.addMember}
                 >
                   <span>Add</span>

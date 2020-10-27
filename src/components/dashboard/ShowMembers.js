@@ -36,6 +36,7 @@ class ShowMembers extends Component {
       memberRole: null,
       memberHours: "",
       memberProjects: null,
+      memberExpense: null,
       isDeleteShow: false,
       selectMemberArr: [],
       isAllChecked: false,
@@ -223,6 +224,7 @@ class ShowMembers extends Component {
       memberRole: member.role,
       memberHours: member.working_hours,
       memberProjects: member.projects,
+      memberExpense: member.hourly_expense
     });
   };
 
@@ -238,6 +240,7 @@ class ShowMembers extends Component {
     const editMemberData = {
       role_id: roleId,
       working_hours: Number(this.state.memberHours),
+      hourly_expense: Number(this.state.memberExpense)
     };
     this.setState({ isLoading: true });
     try {
@@ -535,7 +538,10 @@ class ShowMembers extends Component {
                     Date Created{" "}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
+                  <th>Monthly Expense ({cookie.load("currency")})</th>
+                  <th>Hourly Expense ({cookie.load("currency")})</th>
                 </tr>
+
               </thead>
               <tbody className="list-view">
                 {this.state.members.map((member, index) => {
@@ -573,34 +579,36 @@ class ShowMembers extends Component {
                           {this.countProject(member.projects)}
                         </span>
                         {this.state.isProjectListShow &&
-                        this.state.projectShowMemberId === member.id ? (
-                          <div className="project-count-list-show">
-                            <div className="close-div">
-                              <a onClick={this.countProjectViewClose}>
-                                <i
-                                  className="fa fa-times"
-                                  aria-hidden="true"
-                                ></i>
-                              </a>
+                          this.state.projectShowMemberId === member.id ? (
+                            <div className="project-count-list-show">
+                              <div className="close-div">
+                                <a onClick={this.countProjectViewClose}>
+                                  <i
+                                    className="fa fa-times"
+                                    aria-hidden="true"
+                                  ></i>
+                                </a>
+                              </div>
+                              <div className="project-body-box">
+                                {member.projects.map((project) => (
+                                  <div className="project-body-text">
+                                    {project.name}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                            <div className="project-body-box">
-                              {member.projects.map((project) => (
-                                <div className="project-body-text">
-                                  {project.name}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ) : null}
+                          ) : null}
                       </td>
                       <td className={"text-titlize"}>
                         {!member.is_invited ? (
                           <p className="text-green">Accepted</p>
                         ) : (
-                          <p className="text-blue">Invited</p>
-                        )}
+                            <p className="text-blue">Invited</p>
+                          )}
                       </td>
                       <td>{moment(member.created_at).format("DD MMM YY")}</td>
+                      <td>{member.hourly_expense * (member.working_hours * 20)}</td>
+                      <td>{member.hourly_expense}</td>
                       <td className={userRole === "member" ? "d-none" : null}>
                         <button
                           className="btn btn-link edit-btn"
@@ -617,16 +625,17 @@ class ShowMembers extends Component {
                           <i className="fas fa-trash"></i>
                         </button>
                         {this.state.show &&
-                        this.state.projectShowMemberId === member.id ? (
-                          <EditMemberModal
-                            show={this.state.show}
-                            handleClose={this.handleClose}
-                            state={this.state}
-                            editMemberHandleChange={this.editMemberHandleChange}
-                            editMember={this.editMember}
-                          />
-                        ) : null}
+                          this.state.projectShowMemberId === member.id ? (
+                            <EditMemberModal
+                              show={this.state.show}
+                              handleClose={this.handleClose}
+                              state={this.state}
+                              editMemberHandleChange={this.editMemberHandleChange}
+                              editMember={this.editMember}
+                            />
+                          ) : null}
                       </td>
+
                     </tr>
                   );
                 })}
@@ -634,8 +643,8 @@ class ShowMembers extends Component {
             </table>
           </div>
         ) : (
-          this.renderMessage()
-        )}
+            this.renderMessage()
+          )}
         {this.state.showConfirm ? (
           <ConfirmModal
             title="Delete Member"
@@ -643,7 +652,7 @@ class ShowMembers extends Component {
               this.state.selectMemberArr.length == 1
                 ? " this member"
                 : "these members"
-            }?`}
+              }?`}
             onClick={this.deleteMembers}
             closeModal={this.closeModal}
             buttonText="Delete"

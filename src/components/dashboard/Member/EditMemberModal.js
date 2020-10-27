@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
+import cookie from "react-cookies";
 
 const hours = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -10,7 +11,8 @@ const EditMemberModal = props => {
     memberEmail,
     memberRole,
     memberHours,
-    memberProjects
+    memberProjects,
+    memberExpense
   } = props.state;
   return (
     <Modal
@@ -72,6 +74,19 @@ const EditMemberModal = props => {
                   <option key={index} value={value}>{`${value}hr`}</option>
                 ))}
               </select>
+            </div>
+          </div>
+          <div className="col-md-12 no-padding input-row">
+            <div className="col-md-3 d-inline-block no-padding label">
+              Hourly Expense ({cookie.load("currency")})
+            </div>
+            <div className="col-md-3 d-inline-block">
+              <input
+                className={"form-control expense"}
+                name="memberExpense"
+                value={memberExpense}
+                onChange={props.editMemberHandleChange}
+              />
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">

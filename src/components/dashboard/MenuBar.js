@@ -75,6 +75,8 @@ export default class MenuBar extends Component {
       selectedTags: [],
       btnEnable: true,
       error: "",
+      monthlyExpense: null,
+      hourlyExpense: null,
       memberWorkingHoursError: "",
       memberRoleError: "",
       memberEmailError: "",
@@ -332,6 +334,7 @@ export default class MenuBar extends Component {
         workspace_id: Number(this.props.workspaceId),
         role_id: Number(this.state.memberRole),
         working_hours: Number(this.state.memberWorkingHours),
+        hourly_expense: Number(this.state.hourlyExpense)
       },
     };
     if (this.state.memberProject) {
@@ -464,11 +467,22 @@ export default class MenuBar extends Component {
       }
     } else {
       console.log("else", name, value, value != "");
-      this.setState({
-        [name]: value,
-        btnEnable: true,
-        [`${name}Error`]: value != "" ? "" : "please select",
-      });
+      if (this.state.hourlyExpense && this.state.monthlyExpense) {
+        const totalWorkingHours = value * 20;
+        const monthlyExpense = this.state.hourlyExpense * totalWorkingHours
+        this.setState({
+          [name]: value,
+          btnEnable: true,
+          [`${name}Error`]: value != "" ? "" : "please select",
+          monthlyExpense
+        });
+      } else {
+        this.setState({
+          [name]: value,
+          btnEnable: true,
+          [`${name}Error`]: value != "" ? "" : "please select",
+        });
+      }
     }
   };
 
@@ -575,6 +589,19 @@ export default class MenuBar extends Component {
   }
   handleProjectByUser = () => { };
 
+  handleExpense = (e) => {
+    const { name, value } = e.target;
+    if (name === "hourlyExpense") {
+      const totalWorkingHours = this.state.memberWorkingHours * 20;
+      let monthlyExpense = totalWorkingHours * value
+      this.setState({ hourlyExpense: value, monthlyExpense })
+    } else {
+      const totalWorkingHours = this.state.memberWorkingHours * 20;
+      let hourlyExpense = value / totalWorkingHours
+      this.setState({ monthlyExpense: value, hourlyExpense })
+    }
+  }
+
   render() {
     this.handleProjectByUser();
     const { sort, show } = this.state;
@@ -653,6 +680,7 @@ export default class MenuBar extends Component {
                           handleChangeProjectSelect={
                             this.handleChangeProjectSelect
                           }
+                          handleExpense={this.handleExpense}
                         />
                       ) : null}
                     </Dropdown.Menu>

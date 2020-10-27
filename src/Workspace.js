@@ -145,6 +145,7 @@ class Workspace extends Component {
         cookie.save("workspaceName", workspaceNameSplit(workspace[0].name), {
           path: "/",
         });
+        cookie.save("currency", workspace[0].currency, { path: "/" });
       }
       // let notificataionData = await get(
       //   `users/${workspaceId}/notifications`
