@@ -254,13 +254,15 @@ class Header extends Component {
                   </span>
                 ) : null}
               </div>
-              <SearchFilter
-                searchOptions={this.props.searchOptions}
-                state={this.state}
-                isReports={this.isReports()}
-                toggleSearchBy={this.toggleSearchBy}
-                handleSearchFilterResult={this.props.handleSearchFilterResult}
-              />
+              <div className="col-md-7 search-bar-container">
+                <SearchFilter
+                  searchOptions={this.props.searchOptions}
+                  state={this.state}
+                  isReports={this.isReports()}
+                  toggleSearchBy={this.toggleSearchBy}
+                  handleSearchFilterResult={this.props.handleSearchFilterResult}
+                />
+              </div>
               <div
                 className="collapse navbar-collapse"
                 id="navbarTogglerDemo03"
@@ -305,13 +307,13 @@ class Header extends Component {
                           )}
                       </div>
                       {this.state.notifications &&
-                      this.state.notifications.length > 0 ? (
-                        <div className="col-md-12 no-padding dropdown-scroll">
-                          {this.state.notifications.map((eachNotification) => {
-                            return (
-                              <Dropdown.Item className="notification-box">
-                                <div className="row" style={{ width: "100%" }}>
-                                  {/* <div className="col-md-1 no-padding">
+                        this.state.notifications.length > 0 ? (
+                          <div className="col-md-12 no-padding dropdown-scroll">
+                            {this.state.notifications.map((eachNotification) => {
+                              return (
+                                <Dropdown.Item className="notification-box">
+                                  <div className="row" style={{ width: "100%" }}>
+                                    {/* <div className="col-md-1 no-padding">
                                       <div className="notification-img">
                                         <img
                                           alt={"userImg"}
@@ -321,51 +323,50 @@ class Header extends Component {
                                       </div>
                                     </div> */}
 
-                                  <div className="col-md-12 no-padding notification-text wrap-text">
-                                    {eachNotification.data.message}
-                                    {/* <span>
+                                    <div className="col-md-12 no-padding notification-text wrap-text">
+                                      {eachNotification.data.message}
+                                      {/* <span>
                                     Aviabird
                                 <br />
                                     Technologies
                               </span> */}
+                                    </div>
+                                    <div className="col-md-12 no-padding notification-text text-right">
+                                      <span>
+                                        {this.returnDaysAgo(
+                                          eachNotification.inserted_at
+                                        )}
+                                      </span>
+                                      {/* {eachNotification.inserted_at} */}
+                                    </div>
                                   </div>
-                                  <div className="col-md-12 no-padding notification-text text-right">
-                                    <span>
-                                      {this.returnDaysAgo(
-                                        eachNotification.inserted_at
-                                      )}
-                                    </span>
-                                    {/* {eachNotification.inserted_at} */}
-                                  </div>
-                                </div>
-                              </Dropdown.Item>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <Dropdown.Item
-                          className="notification-box"
-                          style={{ height: "91%" }}
-                        >
-                          {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
-                          <div>
-                            <i
-                              class="fa fa-info-circle"
-                              style={{ fontSize: "48px", marginBottom: "8px" }}
-                            ></i>
+                                </Dropdown.Item>
+                              );
+                            })}
                           </div>
-                          <div>There are no notifications for you</div>
-                        </Dropdown.Item>
-                      )}
+                        ) : (
+                          <Dropdown.Item
+                            className="notification-box"
+                            style={{ height: "91%" }}
+                          >
+                            {/* <span>{this.returnDaysAgo("2020-02-03T16:08:44")}</span> */}
+                            <div>
+                              <i
+                                class="fa fa-info-circle"
+                                style={{ fontSize: "48px", marginBottom: "8px" }}
+                              ></i>
+                            </div>
+                            <div>There are no notifications for you</div>
+                          </Dropdown.Item>
+                        )}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown ref={this.clickClose}>
                     <Dropdown.Toggle
-                      className={`header-auth-btn text-titlize ${
-                        this.state.userRole === "admin"
-                          ? "admin-circle"
-                          : "member-circle"
-                      } `}
+                      className={`header-auth-btn text-titlize ${this.state.userRole === "admin"
+                        ? "admin-circle"
+                        : "member-circle"
+                        } `}
                       id="dropdown-basic"
                     >
                       {x}
@@ -373,11 +374,10 @@ class Header extends Component {
                     <Dropdown.Menu className="dropdown-position ">
                       <div className="display-flex">
                         <div
-                          className={`workspace-circle d-inline-block text-titlize ${
-                            this.state.userRole === "admin"
-                              ? "admin-circle"
-                              : "member-circle"
-                          } `}
+                          className={`workspace-circle d-inline-block text-titlize ${this.state.userRole === "admin"
+                            ? "admin-circle"
+                            : "member-circle"
+                            } `}
                         >
                           {x}
                         </div>

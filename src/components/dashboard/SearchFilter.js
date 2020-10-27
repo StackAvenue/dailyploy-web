@@ -16,11 +16,13 @@ class SearchFilter extends Component {
       selectedTags: [],
       selectedMember: null,
       show: false,
-      value: ""
+      value: "",
+      isExpand: false
     };
   }
 
   onClickInput = () => {
+    this.setState({ isExpand: true })
     var memberSuggestions = [];
     if (this.props.state.searchFlag === "Members" && this.props.isReports) {
       let selectedMembers = this.state.selectedTags.filter(
@@ -371,7 +373,8 @@ class SearchFilter extends Component {
       show: false,
       value: "",
       memberSuggestions: [],
-      projectSuggestions: []
+      projectSuggestions: [],
+      isExpand: false
     });
   };
 
@@ -383,7 +386,8 @@ class SearchFilter extends Component {
     );
     return (
       <>
-        <div className="col-md-7 d-inline-block no-padding search-filter-container">
+        <div className={`${this.state.isExpand ? "col-md-12 transition-search-bar" : "col-md-5"} d-inline-block no-padding search-filter-container`}>
+
           {this.props.state.userRole === "admin" && this.props.isReports ? (
             <div className=" no-padding d-inline-block admin-filter">
               <Dropdown>
@@ -409,8 +413,7 @@ class SearchFilter extends Component {
                   </Dropdown.Item>
                   <Dropdown.Item
                     style={{ backgroundColor: "#ffffff" }}
-                    className={`${
-                      this.props.state.searchFlag === "Members" ? "active" : ""
+                    className={`${this.props.state.searchFlag === "Members" ? "active" : ""
                       }`}
                     onClick={() => this.props.toggleSearchBy("Members")}
                   >
@@ -421,8 +424,7 @@ class SearchFilter extends Component {
             </div>
           ) : null}
           <div
-            className={`no-padding d-inline-block ${
-              this.props.isReports ? "report-search-bar" : "search-bar"
+            className={`no-padding d-inline-block ${this.props.isReports ? "report-search-bar" : "search-bar"
               }`}
             onClick={this.onClickInput}
           >
@@ -444,8 +446,7 @@ class SearchFilter extends Component {
                   )}
               </div>
               <div
-                className={`suggestion-holder  ${
-                  this.state.show ? "suggestion-holder-border" : null
+                className={`suggestion-holder  ${this.state.show ? "suggestion-holder-border" : null
                   }`}
               >
                 {this.renderSearchSuggestion()}
