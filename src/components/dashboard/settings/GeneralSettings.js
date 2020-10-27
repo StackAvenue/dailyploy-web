@@ -52,6 +52,7 @@ class GeneralSettings extends Component {
       toError: "",
       emailTextError: "",
       isTimetrackMode: this.props.state.isTimetrackMode,
+      isAddNewAdmin: true,
     };
   }
 
@@ -275,6 +276,7 @@ class GeneralSettings extends Component {
     );
     var searchOptions = memberList.map((user) => user.email);
     if (value.length > 0) {
+      this.setState({ isAddNewAdmin: false });
       const regex = new RegExp(`^${value}`, "i");
       suggestions = searchOptions.sort().filter((v) => regex.test(v));
     }
@@ -584,11 +586,17 @@ class GeneralSettings extends Component {
     const addAdminData = {
       user_id: this.state.addAdminId,
     };
+    this.setState({ isAddNewAdmin: true });
+
     try {
+
       const { data } = await post(
         addAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
       );
+      // if (data) {
+      //   this.setState({ isAddNewAdmin: false })
+      // }
       let filterData = this.props.state.userArr.members.filter(
         (user) => user.id === this.state.addAdminId
       );
@@ -605,6 +613,9 @@ class GeneralSettings extends Component {
     } catch (e) {
       console.log("error", e);
     }
+
+    this.setState({ isAddNewAdmin: false })
+
   };
 
   removeAdmin = async () => {
@@ -783,24 +794,23 @@ class GeneralSettings extends Component {
                   onChange={this.props.worskpaceNameHandler}
                 />
               ) : (
-                <input
-                  type="text"
-                  disabled
-                  placeholder="Workspace Name"
-                  className="form-control input"
-                  name="workspaceName"
-                  value={this.props.state.workspaceName}
-                />
-              )}
+                  <input
+                    type="text"
+                    disabled
+                    placeholder="Workspace Name"
+                    className="form-control input"
+                    name="workspaceName"
+                    value={this.props.state.workspaceName}
+                  />
+                )}
             </div>
             {this.roleType == "admin" ? (
               <div className="d-inline-block box-btn">
                 <button
-                  className={`btn btn-primary save-button ${
-                    this.props.state.isSaveWorkspaceName
-                      ? "btn-blue"
-                      : "btn-disable"
-                  }`}
+                  className={`btn btn-primary save-button ${this.props.state.isSaveWorkspaceName
+                    ? "btn-blue"
+                    : "btn-disable"
+                    }`}
                   onClick={this.props.updateWorkspaceName}
                 >
                   Save
@@ -837,56 +847,56 @@ class GeneralSettings extends Component {
                 {(this.props.loggedInUser &&
                   this.props.loggedInUser.role !== "member" &&
                   this.props.state.adminUserArr.length > 1) ||
-                (this.props.state.adminUserArr.length == 1 &&
-                  this.props.loggedInUser &&
-                  this.props.loggedInUser.id ===
+                  (this.props.state.adminUserArr.length == 1 &&
+                    this.props.loggedInUser &&
+                    this.props.loggedInUser.id ===
                     this.props.workspace.owner.id) ? (
-                  <button
-                    className="btn btn-link triple-dot"
-                    onClick={() =>
-                      this.handleRemoveAdmin(
-                        this.state.isShowRemoveAdmin,
-                        admin.id,
-                        admin.name
-                      )
-                    }
-                  >
-                    <i className="fas fa-ellipsis-v"></i>
-                  </button>
-                ) : null}
+                    <button
+                      className="btn btn-link triple-dot"
+                      onClick={() =>
+                        this.handleRemoveAdmin(
+                          this.state.isShowRemoveAdmin,
+                          admin.id,
+                          admin.name
+                        )
+                      }
+                    >
+                      <i className="fas fa-ellipsis-v"></i>
+                    </button>
+                  ) : null}
                 <div style={{ position: "absolute" }}>
                   {this.state.isShowRemoveAdmin &&
-                  this.state.showRemoveAdminId === admin.id ? (
-                    <>
-                      <button
-                        className="btn btn-primary remove-btn"
-                        onClick={this.handleRemoveShow}
-                      >
-                        Remove
+                    this.state.showRemoveAdminId === admin.id ? (
+                      <>
+                        <button
+                          className="btn btn-primary remove-btn"
+                          onClick={this.handleRemoveShow}
+                        >
+                          Remove
                       </button>
-                      <RemoveAdminModal
-                        state={this.state}
-                        handleClose={this.handleRemoveClose}
-                        removeAdmin={this.removeAdmin}
-                      />
-                    </>
-                  ) : null}
+                        <RemoveAdminModal
+                          state={this.state}
+                          handleClose={this.handleRemoveClose}
+                          removeAdmin={this.removeAdmin}
+                        />
+                      </>
+                    ) : null}
                 </div>
               </div>
             ))}
             {(this.props.loggedInUser &&
               this.props.loggedInUser.role === "admin") ||
-            (this.props.workspace && this.props.loggedInUser
-              ? this.props.loggedInUser.id === this.props.workspace.owner.id
-              : false) ? (
-              <button
-                className="btn btn-primary addnew-button"
-                onClick={this.handleAddAdminShow}
-              >
-                {" "}
+              (this.props.workspace && this.props.loggedInUser
+                ? this.props.loggedInUser.id === this.props.workspace.owner.id
+                : false) ? (
+                <button
+                  className="btn btn-primary addnew-button"
+                  onClick={this.handleAddAdminShow}
+                >
+                  {" "}
                 + Add New
-              </button>
-            ) : null}
+                </button>
+              ) : null}
             <AddAdminModal
               state={this.state}
               handleClose={this.handleAddAdminClose}
@@ -933,13 +943,13 @@ class GeneralSettings extends Component {
                       Suspend
                     </button>
                   ) : (
-                    <button
-                      className="btn btn-primary resume-btn"
-                      onClick={() => this.handleResumeShow("resume")}
-                    >
-                      Resume
-                    </button>
-                  )}
+                      <button
+                        className="btn btn-primary resume-btn"
+                        onClick={() => this.handleResumeShow("resume")}
+                      >
+                        Resume
+                      </button>
+                    )}
                   <EmailConfigurationModal
                     state={this.state}
                     handleClose={this.handleResumeClose}
@@ -955,11 +965,11 @@ class GeneralSettings extends Component {
                   everyday.
                 </div>
               ) : (
-                <div className="col-md-12 time-desc">
-                  Your daily status email has been suspended. Please resume it
-                  to get daily status emails.
-                </div>
-              )}
+                  <div className="col-md-12 time-desc">
+                    Your daily status email has been suspended. Please resume it
+                    to get daily status emails.
+                  </div>
+                )}
               <div className="col-md-12 inner-container">
                 <div className="col-md-1 no-padding time-desc d-inline-block">
                   To
