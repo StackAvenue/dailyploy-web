@@ -785,25 +785,14 @@ class GeneralSettings extends Component {
               Workspace Name
             </div>
             <div className="col-md-6 d-inline-block">
-              {this.roleType == "admin" ? (
-                <input
-                  type="text"
-                  placeholder="Workspace Name"
-                  className="form-control input"
-                  name="workspaceName"
-                  value={this.props.state.workspaceName}
-                  onChange={this.props.worskpaceNameHandler}
-                />
-              ) : (
-                  <input
-                    type="text"
-                    disabled
-                    placeholder="Workspace Name"
-                    className="form-control input"
-                    name="workspaceName"
-                    value={this.props.state.workspaceName}
-                  />
-                )}
+              <input
+                type="text"
+                placeholder="Workspace Name"
+                className="form-control input"
+                name="workspaceName"
+                value={this.props.state.workspaceName}
+                onChange={this.props.worskpaceNameHandler}
+              />
             </div>
             {this.roleType == "admin" ? (
               <div className="d-inline-block box-btn">
