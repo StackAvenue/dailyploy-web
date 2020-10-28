@@ -227,14 +227,14 @@ class CategoriesSettings extends Component {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col" style={{ width: "32%" }}>
+                      <th scope="col" style={{ width: "45%" }}>
                         Category Name{" "}
                         <i className="fa fa-sort" aria-hidden="true"></i>
                       </th>
-                      <th scope="col">
+                      {/* <th scope="col">
                         Number of task{" "}
                         <i className="fa fa-sort" aria-hidden="true"></i>
-                      </th>
+                      </th> */}
                       <th scope="col">
                         Date Created{" "}
                         <i className="fa fa-sort" aria-hidden="true"></i>
@@ -245,7 +245,7 @@ class CategoriesSettings extends Component {
                   <tbody>
                     {this.state.showAddCategoryTr ? (
                       <tr>
-                        <td scope="row">
+                        <td scope="row" className="center-height">
                           <input
                             className={`form-control ${this.state.categoryError ? " input-error-border" : ""
                               }`}
@@ -256,8 +256,8 @@ class CategoriesSettings extends Component {
                             placeholder="Category Name"
                           />
                         </td>
-                        <td>{"0"}</td>
-                        <td>{moment().format("DD MMM YYYY")}</td>
+                        {/* <td>{"0"}</td> */}
+                        <td className="center-height">{moment().format("DD MMM YYYY")}</td>
                         <td>
                           <div>
                             <button
@@ -281,7 +281,7 @@ class CategoriesSettings extends Component {
                     {this.state.taskCategories.map((category, index) => {
                       return (
                         <tr key={category.task_category_id}>
-                          <td scope="row">
+                          <td scope="row" className="center-height">
                             {this.state.isEdit &&
                               this.state.categoryId === category.task_category_id ? (
                                 <input
@@ -299,17 +299,17 @@ class CategoriesSettings extends Component {
                                 <span className="text-titlize">{category.name}</span>
                               )}
                           </td>
-                          <td>{"2"}</td>
-                          <td>{"15 Jun 2019"}</td>
+                          {/* <td>{"2"}</td> */}
+                          <td className="center-height">{"15 Jun 2019"}</td>
                           <td>
                             {this.state.isEdit &&
                               this.state.categoryId === category.task_category_id ? (
                                 <div>
                                   <button
-                                    className="btn btn-link error-warning"
+                                    className="btn btn-link"
                                     onClick={this.toggleEditCategoryRow}
                                   >
-                                    <i class="fa fa-close" aria-hidden="true"></i>
+                                    <i class="fa fa-times" aria-hidden="true"></i>
                                   </button>
                                   <button
                                     className="btn btn-link"

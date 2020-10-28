@@ -3293,6 +3293,7 @@ table.scheduler-table tr:last-child td {
             font-family: $font-family-roboto !important;
             font-size: 13px !important;
             color: #000000 !important;
+            padding: 1.25rem !important;
             input {
               border: 1px solid rgba(155, 155, 155, 1);
               height: 30px;
@@ -3315,9 +3316,14 @@ table.scheduler-table tr:last-child td {
                 }
               }
               .fa-close {
-                color: $red-color !important;
+                // color: $red-color !important;
+                // color:#000000 !important;
               }
             }
+          }
+          .center-height{
+            // padding: 5px 0px;
+            line-height: 2.3 !important;
           }
         }
       }
@@ -5191,8 +5197,8 @@ table.scheduler-table tr:last-child td {
           
           .tabledata{
             
-padding-left: 60px!important;
-width: 446px;
+            padding-left: 60px!important;
+            width: 446px;
           }
         input {
           // height: 26px !important;
@@ -6685,3 +6691,8 @@ font-family: 'Roboto' !important;
 //     transition: width 0.4s ease-in-out; 
 //   }
 // }
+
+.disabled-bar{
+  border-color: dimgray;
+  
+}
