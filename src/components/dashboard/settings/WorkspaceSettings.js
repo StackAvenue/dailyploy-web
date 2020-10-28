@@ -103,10 +103,12 @@ class WorkspaceSettings extends Component {
     this.setState({ userMembers: members });
     return members;
   }
-  updateWorkspaceName = async () => {
+  updateWorkspaceName = async (e) => {
+
     const updateWorkspaceName = {
       user: {
         name: this.state.workspaceName,
+        currency: e.target.value
       },
     };
     try {
@@ -115,6 +117,7 @@ class WorkspaceSettings extends Component {
         `workspaces/${this.props.workspaceObj.id}/workspace_settings/${this.props.workspaceObj.id}`
       );
       cookie.save("workspaceName", data.workspace_role, { path: "/" });
+      cookie.save("currency", data.currency, { path: "/" });
       toast(
         <DailyPloyToast message="Workspace Name Updated" status="success" />,
         {
@@ -159,6 +162,7 @@ class WorkspaceSettings extends Component {
               workspaceId={this.props.state.workspaceId}
               members={this.state.userArr}
               updateWorkspaceName={this.updateWorkspaceName}
+              updateWorkspaceCurrency={this.updateWorkspaceCurrency}
               adminUserArr={this.props.state.adminUserArr}
               handleChangeAdminUsers={this.handleChangeAdminUsers}
               workspace={this.props.workspaceObj}

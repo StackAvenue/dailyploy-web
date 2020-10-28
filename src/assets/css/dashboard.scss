@@ -1783,10 +1783,11 @@ table.scheduler-table tr:last-child td {
 
 .member-modal {
   margin: auto !important;
-  max-width: 1110px !important;
+  // margin: 0 200px 0 200px !important;
+  max-width: 1300px !important;
   top: 12% !important;
   .modal-content {
-    width: 1110px !important;
+    width: 1300px !important;
   }
   .heading {
     border: 0 !important;
@@ -1823,6 +1824,14 @@ table.scheduler-table tr:last-child td {
       }
       .project {
         width: 220px !important;
+      }
+      .expense {
+        width: 200px !important;
+      }
+      .disable-input {
+        pointer-events: none;
+        width: 200px !important;
+        background-color: #e9ecef;
       }
       .select-memeber-project {
         .down-icon {
@@ -3087,6 +3096,17 @@ table.scheduler-table tr:last-child td {
         .btn-disable {
           pointer-events: none;
         }
+      }
+    }
+    .currency{
+      .hr2 {
+        border-bottom: 1px solid $color-borders;
+        margin: 50px 0px 40px 0px;
+      }
+      .select-currency{
+        font-family: "Roboto-Regular", "Roboto" !important;
+        font-size: 15px !important;
+        color: #9b9b9b !important;    
       }
     }
     .admin-add {

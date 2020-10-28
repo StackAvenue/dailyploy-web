@@ -9,6 +9,7 @@ import DailyPloyToast from "../../DailyPloyToast";
 import RemoveAdminModal from "./RemoveAdminModal";
 import EmailConfigModal from "./EmailConfigModal";
 import { async } from "q";
+import cookie from "react-cookies";
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -818,12 +819,29 @@ class GeneralSettings extends Component {
               </div>
             ) : null}
           </div>
-          {this.state.isTimetrackMode && (
-            <div className="col-md-12 hr1 no-padding name ">
-              Time tracking enabled for this workspace
-            </div>
-          )}
-
+          {(this.props.loggedInUser &&
+            this.props.loggedInUser.role === "admin") ? <div className="col-md-12 no-padding currency" >
+              <div className="col-md-12 hr2"></div>
+              <div className="col-md-2 d-inline-block select-currency">Select Currency</div>
+              <div className="col-md-4 d-inline-block ">
+                <select
+                  className="form-control"
+                  onChange={this.props.updateWorkspaceName}>
+                  <option style={{ color: "red" }}>
+                    {cookie.load("currency")}
+                  </option>
+                  < option >INR</option>
+                  <option>USD</option>
+                </select>
+              </div>
+            </div> : null}
+          <div className="col-md-12 hr1">
+            {this.state.isTimetrackMode && (
+              <div className="col-md-12 hr1 no-padding name ">
+                Time tracking enabled for this workspace
+              </div>
+            )}
+          </div>
           <div
             className="col-md-12 workspace-name"
             style={{ marginTop: "0px", paddingTop: "20px" }}
