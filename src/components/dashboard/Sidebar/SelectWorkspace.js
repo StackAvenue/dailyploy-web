@@ -8,19 +8,19 @@ const SelectWorkspace = props => {
       <li key={props.index}>
         <div className="workspace-box text-titlize active" title={workspaceNameSplit(props.workspaceName)}>
           <a
-          //  className="btn btn-default"
+            //  className="btn btn-default"
             onClick={() => props.callWorkspace(props.item.id)}
             href={`/workspace/${props.item.id}/dashboard`}
             title={workspaceNameSplit(props.workspaceName)}
             data-tip data-for="wname"
           >
             {firstTwoLetter(props.workspaceName)}
-            
+
           </a>
-          <ReactTooltip id="wname" place="top" effect="solid" style={{zIndex:"998"}}>{props.workspaceName}</ReactTooltip>
+          <ReactTooltip id="wname" place="top" effect="solid" style={{ zIndex: "998" }}>{props.workspaceName}</ReactTooltip>
         </div>
         <div className="workspace-text text-titlize">
-          {/* {workspaceNameSplit(props.workspaceName)} */}
+          {workspaceNameSplit(props.workspaceName)}
         </div>
       </li>
     );
@@ -29,7 +29,7 @@ const SelectWorkspace = props => {
       <li key={props.index}>
         <div className="workspace-box text-titlize" title={workspaceNameSplit(props.item.name)}>
           <a
-           // className="btn btn-default"
+            // className="btn btn-default"
             onClick={() => props.callWorkspace(props.item.id)}
             href={`/workspace/${props.item.id}/dashboard`}
             title={workspaceNameSplit(props.item.name)}
