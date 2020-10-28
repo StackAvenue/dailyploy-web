@@ -98,7 +98,7 @@ class DashboardEvent extends Component {
       try {
         const { data } = await mockGet("mark-complete");
         var isComplete = data[0].complete;
-      } catch (e) {}
+      } catch (e) { }
       if (isComplete) {
       }
     }
@@ -295,6 +295,8 @@ class DashboardEvent extends Component {
             if (task_items[i].id === event.target.id) {
               task_items[i].parentElement.style.boxShadow =
                 "0px 0px 3px 3px #f1f1f1";
+            } else {
+              task_items[i].parentElement.style.opacity = "0.4";
             }
           }
         });
@@ -303,6 +305,8 @@ class DashboardEvent extends Component {
           for (let i = 0; i < task_items.length; i++) {
             if (task_items[i].id === event.target.id) {
               task_items[i].parentElement.style.boxShadow = "none";
+            } else {
+              task_items[i].parentElement.style.opacity = "1";
             }
           }
         });
@@ -328,81 +332,79 @@ class DashboardEvent extends Component {
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
-                !event.is_complete &&
-                this.props.isTimetrackMode ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStop(event, Date.now())
-                      }
-                    >
-                      {/* <i className="fa fa-pause"></i> */}
-                      <img
-                        src={PauseIcon}
-                        alt=""
-                        title=""
-                        className="clock-img"
-                        height="100%"
-                        width="100%"
-                        data-tip
-                        data-for="registerTip1"
-                        data-background-color="#f0f2f5"
-                        data-text-color="#010101"
-                      />
-                    </span>
+                  !event.is_complete &&
+                  this.props.isTimetrackMode ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStop(event, Date.now())
+                        }
+                      >
+                        {/* <i className="fa fa-pause"></i> */}
+                        <img
+                          src={PauseIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip
+                          data-for="registerTip1"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                        />
+                      </span>
 
-                    <ReactTooltip id="registerTip1" place="top" effect="solid">
-                      Stop the task
+                      <ReactTooltip id="registerTip1" place="top" effect="solid">
+                        Stop the task
                     </ReactTooltip>
-                  </div>
-                ) : null}
+                    </div>
+                  ) : null}
 
                 {event.trackingStatus === "play" &&
-                !event.is_complete &&
-                this.props.isTimetrackMode ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      {/* <i className="fa fa-power-off"></i> */}
-                      <img
-                        src={PlayIcon}
-                        alt=""
-                        title=""
-                        className="clock-img"
-                        height="100%"
-                        width="100%"
-                        data-tip
-                        data-for="registerTip"
-                        data-background-color="#f0f2f5"
-                        data-text-color="#010101"
-                        data-place="bottom"
-                        data-effect="float"
-                      />
-                    </span>
-                    <ReactTooltip id="registerTip" place="top" effect="solid">
-                      Start the task
+                  !event.is_complete &&
+                  this.props.isTimetrackMode ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStart(event, Date.now())
+                        }
+                      >
+                        {/* <i className="fa fa-power-off"></i> */}
+                        <img
+                          src={PlayIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="100%"
+                          width="100%"
+                          data-tip
+                          data-for="registerTip"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                          data-place="bottom"
+                          data-effect="float"
+                        />
+                      </span>
+                      <ReactTooltip id="registerTip" place="top" effect="solid">
+                        Start the task
                     </ReactTooltip>
-                  </div>
-                ) : null}
+                    </div>
+                  ) : null}
 
                 {event && event.is_complete ? (
                   <div className=" no-padding d-inline-block">
@@ -537,7 +539,7 @@ class DashboardEvent extends Component {
                 <div className="row item dashboard-event-box">
                   <div
                     className="col-md-12 no-padding"
-                    // style={{ color: contColor }}
+                  // style={{ color: contColor }}
                   >
                     <div
                       className="col-md-12 no-padding pointer text-wraper "
@@ -586,81 +588,79 @@ class DashboardEvent extends Component {
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
-                !event.is_complete &&
-                this.props.isTimetrackMode ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStop(event, Date.now())
-                      }
-                    >
-                      {/* <i className="fa fa-pause "></i> */}
-                      <img
-                        src={PauseIcon}
-                        alt=""
-                        title=""
-                        className="clock-img"
-                        height="35px"
-                        width="60px"
-                        data-tip
-                        data-for="registerTip1"
-                        data-background-color="#f0f2f5"
-                        data-text-color="#010101"
-                      />
-                    </span>
+                  !event.is_complete &&
+                  this.props.isTimetrackMode ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStop(event, Date.now())
+                        }
+                      >
+                        {/* <i className="fa fa-pause "></i> */}
+                        <img
+                          src={PauseIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="35px"
+                          width="60px"
+                          data-tip
+                          data-for="registerTip1"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                        />
+                      </span>
 
-                    <ReactTooltip id="registerTip1" place="top" effect="solid">
-                      Stop the task
+                      <ReactTooltip id="registerTip1" place="top" effect="solid">
+                        Stop the task
                     </ReactTooltip>
-                  </div>
-                ) : null}
+                    </div>
+                  ) : null}
 
                 {event.trackingStatus === "play" &&
-                !event.is_complete &&
-                this.props.isTimetrackMode ? (
-                  <div className=" no-padding d-inline-block">
-                    <span
-                      style={{
-                        pointerEvents: this.isValidUserDate(event.resourceId)
-                          ? ""
-                          : "none",
-                      }}
-                      className={`task-play-btn pointer ${
-                        state.isPlayPause ? "disabled" : ""
-                      }`}
-                      onClick={() =>
-                        this.props.handleTaskStart(event, Date.now())
-                      }
-                    >
-                      {/* <i className="fa fa-power-off"></i> */}
-                      <img
-                        src={PlayIcon}
-                        alt=""
-                        title=""
-                        className="clock-img"
-                        height="35px"
-                        width="60px"
-                        data-tip
-                        data-for="registerTip"
-                        data-background-color="#f0f2f5"
-                        data-text-color="#010101"
-                        data-place="bottom"
-                        data-effect="float"
-                      />
-                    </span>
-                    <ReactTooltip id="registerTip" place="top" effect="solid">
-                      Start the task
+                  !event.is_complete &&
+                  this.props.isTimetrackMode ? (
+                    <div className=" no-padding d-inline-block">
+                      <span
+                        style={{
+                          pointerEvents: this.isValidUserDate(event.resourceId)
+                            ? ""
+                            : "none",
+                        }}
+                        className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
+                          }`}
+                        onClick={() =>
+                          this.props.handleTaskStart(event, Date.now())
+                        }
+                      >
+                        {/* <i className="fa fa-power-off"></i> */}
+                        <img
+                          src={PlayIcon}
+                          alt=""
+                          title=""
+                          className="clock-img"
+                          height="35px"
+                          width="60px"
+                          data-tip
+                          data-for="registerTip"
+                          data-background-color="#f0f2f5"
+                          data-text-color="#010101"
+                          data-place="bottom"
+                          data-effect="float"
+                        />
+                      </span>
+                      <ReactTooltip id="registerTip" place="top" effect="solid">
+                        Start the task
                     </ReactTooltip>
-                  </div>
-                ) : null}
+                    </div>
+                  ) : null}
 
                 {event && event.is_complete ? (
                   <div className=" no-padding d-inline-block">
@@ -820,7 +820,7 @@ class DashboardEvent extends Component {
                 <div className="row item dashboard-event-box">
                   <div
                     className="col-md-12 no-padding"
-                    // style={{ color: contColor }}
+                  // style={{ color: contColor }}
                   >
                     <div
                       className="col-md-12  pointer  text-wraper"
@@ -843,7 +843,7 @@ class DashboardEvent extends Component {
             </div>
           </div>
         ) : // </div>
-        null}
+          null}
 
         {/* Code for monthly below start logic not needed right now  */}
         {/* {schedulerData.viewType === 2 ? (
@@ -881,13 +881,13 @@ class DashboardEvent extends Component {
         <div className="custom-event-popup">
           {this.state.showPopup
             ? this.props.eventItemPopoverTemplateResolver(
-                schedulerData,
-                event,
-                titleText,
-                start,
-                end,
-                this.props.bgColor
-              )
+              schedulerData,
+              event,
+              titleText,
+              start,
+              end,
+              this.props.bgColor
+            )
             : null}
         </div>
 
