@@ -18,7 +18,7 @@ import UserstoryModal from "../UserStory/UserstoryModal";
 import Spinner from 'react-bootstrap/Spinner'
 import useOnClickOutside from 'use-onclickoutside';
 import userstoryImg from '../../assets/images/userstory.png';
-
+import { ROADMAP_STATUS } from '../../utils/Constants';
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
@@ -56,7 +56,7 @@ const DisplayTaskList = (props) => {
   useOnClickOutside(ref, () => props.isChecklistOpen(props.ProjectTask.id));
 
   const handleInputChange = (e) => {
-    setRoadmapStatus({ ...props.taskStatus[e.target.value] });
+    //setRoadmapStatus({ ...props.taskStatus[e.target.value] });
     props.getRoadmapStatus(e.target.value, props.ProjectTask.id);
   }
 
@@ -191,21 +191,21 @@ const DisplayTaskList = (props) => {
               }}
               className="roadmap-status"
             >
-              <option value={""}>Select status</option>
-              {props.taskStatus &&
-                props.taskStatus.map((roadmapStatus, index) => {
-                  return (
-                    <option
-                      key={index}
-                      selected={
-                        props.ProjectTask &&
-                        props.ProjectTask.roadmap_status &&
-                        roadmapStatus.id == props.ProjectTask.roadmap_status.id
-                      }
-                      value={roadmapStatus.id}
-                    >
-                      {roadmapStatus.statusName}
-                    </option>
+                     <option value={""}>Select status</option>
+                     {ROADMAP_STATUS &&
+                       ROADMAP_STATUS.map((roadmapStatus, index) => {
+                         return (
+                           <option
+                             key={index}
+                             selected={
+                               props.ProjectTask &&
+                               props.ProjectTask.roadmap_status &&
+                               roadmapStatus == props.ProjectTask.roadmap_status
+                             }
+                             value={roadmapStatus}
+                           >
+                             {roadmapStatus}
+                            </option>
                   );
                 })}
             </select>

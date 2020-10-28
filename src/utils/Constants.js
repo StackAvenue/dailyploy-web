@@ -58,6 +58,7 @@ export const PRIORITIES = [
     label: "no priority"
   }
 ];
+export const ROADMAP_STATUS = ["Planned", "Running", "Completed"];
 export const DEFAULT_PRIORITIE = {
   name: "low",
   color_code: "#555555",
