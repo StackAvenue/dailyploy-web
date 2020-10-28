@@ -207,8 +207,8 @@ const StatusList = (props) => {
                                                                             {moment(item.inserted_at).format("DD MMM YYYY")}
                                                                         </td>
                                                                         <td>
-                                                                            <span onClick={() => openeditRow(item)}><i class="md md-lg md-edit"></i></span>
-                                                                            {!item.is_default && <span onClick={() => openDelModal(item.id)}><i class="md md-lg md-delete"></i></span>}
+                                                                            <span onClick={() => openeditRow(item)}><i class="fas fa-pencil-alt edit-icon"></i></span>
+                                                                            {!item.is_default && <span onClick={() => openDelModal(item.id)}><i class="fas fa-trash-alt del-icon"></i></span>}
                                                                         </td>
                                                                     </tr>
                                                                 )
@@ -226,8 +226,8 @@ const StatusList = (props) => {
                                                                         {moment(editStatus.inserted_at).format("DD MMM YYYY")}
                                                                     </td>
                                                                     <td>
-                                                                        <span onClick={editCategory}><i class="md md-lg md-check"></i></span>
-                                                                        <span onClick={cancelEditRow}><i class="md md-lg md-close"></i></span>
+                                                                        <span class="cursor" onClick={editCategory}><i class="fa fa-check check-icon"></i></span>
+                                                                        <span class="cursor" onClick={cancelEditRow}><i class="fa fa-times close-icon"></i></span>
                                                                     </td>
                                                                 </tr>
                                                             )
@@ -244,8 +244,8 @@ const StatusList = (props) => {
                                                         </td>
                                                         <td></td>
                                                         <td>
-                                                            <span onClick={addCategory}><i class="md md-lg md-check cursor"></i></span>
-                                                            <span class="cursor" onClick={toggleAdd}><i class="md md-lg md-close"></i></span>
+                                                            <span class="cursor" onClick={addCategory}><i class="fa fa-check check-icon"></i></span>
+                                                            <span class="cursor" onClick={toggleAdd}><i class="fa fa-times close-icon"></i></span>
                                                         </td>
                                                     </tr>}
                                                 {provided.placeholder}
