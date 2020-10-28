@@ -103,7 +103,7 @@ class CommentUpload extends React.Component {
 
             <div className="uploded-img">
               {this.props.showBox
-                ? this.props.pictures.map((file, idx) => {
+                ? this.props.pictures && this.props.pictures.map((file, idx) => {
                   return (
                     <>
                       {this.isImage(file.name) ? (
