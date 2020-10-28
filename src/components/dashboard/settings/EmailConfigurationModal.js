@@ -20,13 +20,12 @@ const EmailConfigurationModal = props => {
           </button>
         </div>
         <div className="col-md-12 body">
-          {`Are you sure? This will start ${
-            props.state.activeStatus === "suspend" ? "stop sending" : "sending"
-          } email of daily tasks you are
+          {`Are you sure? This will start ${props.state.activeStatus === "suspend" ? "stop sending" : "sending"
+            } email of daily tasks you are
           working on.`}
         </div>
         <div className="col-md-12 btn-box">
-          <div className="col-md-7 no-padding ml-auto">
+          <div className="col-md-7 no-padding ml-auto footer-btns">
             {props.state.activeStatus === "suspend" ? (
               <button
                 className="btn btn-primary ok"
@@ -35,13 +34,13 @@ const EmailConfigurationModal = props => {
                 Ok
               </button>
             ) : (
-              <button
-                className="btn btn-primary ok"
-                onClick={() => props.toggleActiveFlag(true)}
-              >
-                Ok
-              </button>
-            )}
+                <button
+                  className="btn btn-primary ok"
+                  onClick={() => props.toggleActiveFlag(true)}
+                >
+                  Ok
+                </button>
+              )}
             <button
               className="btn btn-primary cancel"
               onClick={props.handleClose}

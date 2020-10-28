@@ -1,3 +1,5 @@
+@import "./colors";
+
 .workspace1-setting .side-tabs {
   position: fixed;
   z-index: 5;
@@ -6,11 +8,16 @@
 }
 
 .workspace1-setting .main-content {
-  margin-left: 15%;
+  margin-left: 16%;
+  // height: 100vh;
+  min-height: 100vh;
+  background-color: $bg-colour-settings;
 }
 
 .workspace1-setting .body-tabs {
   padding-top: 10px !important;
+  // height: 100vh;
+  // min-height: 100vh;
 }
 .tooltip-pwd1 .tooltiptext-pwd1::after {
   // content: "";

@@ -172,9 +172,10 @@ class Settings extends Component {
         }
       };
       try {
+        this.setState({ isSaveEnable: false });
         const { data } = await put(userData, `users/${this.state.userId}`);
         if (data) {
-          this.setState({ isSaveEnable: false });
+          // this.setState({ isSaveEnable: false });
           this.props.workspaceNameUpdate(
             "loggedInUserName",
             data.user ? data.user.name : this.props.state.loggedInUserName

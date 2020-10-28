@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
-
+import Spinner from 'react-bootstrap/Spinner'
 // import ImageUploading from "react-images-uploading";
 
 
@@ -11,6 +11,7 @@ const UserSettings = props => {
   // const onChange = imageList => {
   //   console.log(imageList);
   // };
+
   return (
     <>
       <div className="col-md-12 heading" style={{ paddingTop: "40px" }}>
@@ -73,12 +74,18 @@ const UserSettings = props => {
                   value={props.state.userName}
                   onChange={props.handleChange}
                 />
+                {!props.state.userName ?
+                  <div className="loader-position">
+                    <Spinner animation="grow" variant="success" size="sm" />
+                  </div> :
+                  null}
               </div>
               <div className="d-inline-block box-btn">
                 <button
                   className={`btn btn-primary save-button ${props.state.isSaveEnable ? "btn-blue" : "btn-disable"
                     }`}
                   onClick={props.updateUserName}
+                  disabled={!props.state.isSaveEnable}
                 >
                   Save
                 </button>
