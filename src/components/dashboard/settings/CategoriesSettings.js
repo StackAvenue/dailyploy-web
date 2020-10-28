@@ -18,12 +18,14 @@ class CategoriesSettings extends Component {
       editCategoryError: false,
       categoryError: false,
       showConfirm: false,
-      deleteCategory: ""
+      deleteCategory: "",
+      isLoader: false,
     };
   }
 
   async componentDidMount() {
     // Category Listing
+    this.setState({ isLoader: true })
     try {
       const { data } = await get(
         `workspaces/${this.props.workspaceId}/task_category`
@@ -31,7 +33,8 @@ class CategoriesSettings extends Component {
       var taskCategories = data.task_categories;
     } catch (e) { }
 
-    this.setState({ taskCategories: taskCategories });
+    this.setState({ taskCategories: taskCategories, isLoader: false });
+
   }
 
   handleEditCatogries = category => {
@@ -181,7 +184,7 @@ class CategoriesSettings extends Component {
   render() {
     return (
       <div className="categories-setting">
-        {this.state && this.state.taskCategories && this.state.taskCategories.length === 0 ?
+        {this.state && this.state.taskCategories && this.state.taskCategories.length === 0 && this.state.isLoader ?
           <div className="spinnerDive" >
             <Loader
               type="Puff"
