@@ -556,10 +556,10 @@ class TaskProjectList extends Component {
     }
   };
 
-  getRoadmapStatus = async (statusId, taskListId) => {
+  getRoadmapStatus = async (statusName, taskListId) => {
     try {
       let params = {
-        task_status_id: statusId
+        status: statusName
       };
       const { data } = await put(
         params,
@@ -770,7 +770,7 @@ class TaskProjectList extends Component {
               start_date: data.start_date,
               end_date: data.end_date,
               projectId: data.project_id,
-              roadmap_status: data.task_status,
+              roadmap_status: data.status,
               userStories: data.user_stories
             };
           })
