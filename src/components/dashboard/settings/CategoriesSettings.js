@@ -4,6 +4,7 @@ import { get, post, put, del } from "./../../../utils/API";
 import DailyPloyToast from "./../../../../src/components/DailyPloyToast";
 import { ToastContainer, toast } from "react-toastify";
 import ConfirmModal from "../../ConfirmModal";
+import Loader from 'react-loader-spinner';
 
 class CategoriesSettings extends Component {
   constructor(props) {
@@ -17,20 +18,23 @@ class CategoriesSettings extends Component {
       editCategoryError: false,
       categoryError: false,
       showConfirm: false,
-      deleteCategory: ""
+      deleteCategory: "",
+      isLoader: false,
     };
   }
 
   async componentDidMount() {
     // Category Listing
+    this.setState({ isLoader: true })
     try {
       const { data } = await get(
         `workspaces/${this.props.workspaceId}/task_category`
       );
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
-    this.setState({ taskCategories: taskCategories });
+    this.setState({ taskCategories: taskCategories, isLoader: false });
+
   }
 
   handleEditCatogries = category => {
@@ -113,7 +117,7 @@ class CategoriesSettings extends Component {
             position: toast.POSITION.TOP_CENTER
           }
         );
-      } catch (e) {}
+      } catch (e) { }
       var newTaskCategories = this.state.taskCategories.filter(
         c => c.task_category_id != this.state.categoryId
       );
@@ -146,7 +150,7 @@ class CategoriesSettings extends Component {
           taskCategories: categories,
           showConfirm: false
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -180,161 +184,179 @@ class CategoriesSettings extends Component {
   render() {
     return (
       <div className="categories-setting">
-        <div className="row no-margin category" style={{ marginTop: "50px" }}>
-          <div className="d-inline-block col-md-4 heading-text">
-            Task Categories
+        {this.state && this.state.taskCategories && this.state.taskCategories.length === 0 && this.state.isLoader ?
+          <div className="spinnerDive" >
+            <Loader
+              type="Puff"
+              color="rgb(82 180 89)"
+              height={65}
+              width={65}
+              style={{
+                // marginLeft: "46pc",
+                marginTop: "4pc",
+
+              }}
+            />
+          </div> :
+          <>
+            {/* {this.state.taskCategories.map((data, i) => {
+              return (
+                <> */}
+            <div className="row no-margin category" style={{ marginTop: "50px" }}>
+              <div className="d-inline-block col-md-4 heading-text">
+                Task Categories
             <span className="d-inline-block category-cnt">
-              (
+                  (
               {this.state.taskCategories
-                ? this.state.taskCategories.length
-                : null}
+                    ? this.state.taskCategories.length
+                    : null}
               )
             </span>
-          </div>
-          <div className="col-md-8 text-right">
-            <button
-              className="btn btn-primary btn-add"
-              onClick={this.toggleAddCategoryRow}
-            >
-              <span>+</span> Add
+              </div>
+              <div className="col-md-8 text-right">
+                <button
+                  className="btn btn-primary btn-add"
+                  onClick={this.toggleAddCategoryRow}
+                >
+                  <span>+</span> Add
             </button>
-          </div>
-        </div>
-        <div className="category-box">
-          <div className="col-md-12 no-padding">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col" style={{ width: "32%" }}>
-                    Category Name{" "}
-                    <i className="fa fa-sort" aria-hidden="true"></i>
-                  </th>
-                  <th scope="col">
-                    Number of task{" "}
-                    <i className="fa fa-sort" aria-hidden="true"></i>
-                  </th>
-                  <th scope="col">
-                    Date Created{" "}
-                    <i className="fa fa-sort" aria-hidden="true"></i>
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.showAddCategoryTr ? (
-                  <tr>
-                    <td scope="row">
-                      <input
-                        className={`form-control ${
-                          this.state.categoryError ? " input-error-border" : ""
-                        }`}
-                        type="text"
-                        value={this.state.categoryName}
-                        name="categoryError"
-                        onChange={e => this.handleEnterName(e)}
-                        placeholder="Category Name"
-                      />
-                    </td>
-                    <td>{"0"}</td>
-                    <td>{moment().format("DD MMM YYYY")}</td>
-                    <td>
-                      <div>
-                        <button
-                          className="btn btn-link"
-                          onClick={this.toggleAddCategoryRow}
-                        >
-                          <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                        <button
-                          className="btn btn-link"
-                          onClick={this.addCategory}
-                        >
-                          <span>
-                            <i class="fa fa-check" aria-hidden="true"></i>
-                          </span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ) : null}
-                {this.state.taskCategories.map((category, index) => {
-                  return (
-                    <tr key={category.task_category_id}>
-                      <td scope="row">
-                        {this.state.isEdit &&
-                        this.state.categoryId === category.task_category_id ? (
+              </div>
+            </div>
+            <div className="category-box">
+              <div className="col-md-12 no-padding">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style={{ width: "45%" }}>
+                        Category Name{" "}
+                        <i className="fa fa-sort" aria-hidden="true"></i>
+                      </th>
+                      {/* <th scope="col">
+                        Number of task{" "}
+                        <i className="fa fa-sort" aria-hidden="true"></i>
+                      </th> */}
+                      <th scope="col">
+                        Date Created{" "}
+                        <i className="fa fa-sort" aria-hidden="true"></i>
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.showAddCategoryTr ? (
+                      <tr>
+                        <td scope="row" className="center-height">
                           <input
-                            className={`form-control ${
-                              this.state.editCategoryError
-                                ? " input-error-border"
-                                : ""
-                            }`}
+                            className={`form-control ${this.state.categoryError ? " input-error-border" : ""
+                              }`}
                             type="text"
-                            name="editCategoryError"
-                            value={this.state.editCategoryName}
-                            onChange={this.handleEnterName}
+                            value={this.state.categoryName}
+                            name="categoryError"
+                            onChange={e => this.handleEnterName(e)}
                             placeholder="Category Name"
                           />
-                        ) : (
-                          <span className="text-titlize">{category.name}</span>
-                        )}
-                      </td>
-                      <td>{"2"}</td>
-                      <td>{"15 Jun 2019"}</td>
-                      <td>
-                        {this.state.isEdit &&
-                        this.state.categoryId === category.task_category_id ? (
+                        </td>
+                        {/* <td>{"0"}</td> */}
+                        <td className="center-height">{moment().format("DD MMM YYYY")}</td>
+                        <td>
                           <div>
                             <button
-                              className="btn btn-link error-warning"
-                              onClick={this.toggleEditCategoryRow}
+                              className="btn btn-link"
+                              onClick={this.toggleAddCategoryRow}
                             >
-                              <i class="fa fa-close" aria-hidden="true"></i>
+                              <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                             <button
                               className="btn btn-link"
-                              onClick={this.editCategory}
+                              onClick={this.addCategory}
                             >
                               <span>
                                 <i class="fa fa-check" aria-hidden="true"></i>
                               </span>
                             </button>
                           </div>
-                        ) : (
-                          <div>
-                            <button
-                              className="btn btn-link"
-                              onClick={() =>
-                                this.handleDeleteCategory(category)
-                              }
-                            >
-                              <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
-                            <button
-                              className="btn btn-link"
-                              onClick={() => this.handleEditCatogries(category)}
-                            >
-                              <i className="fas fa-pencil-alt"></i>
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {this.state.showConfirm ? (
-              <ConfirmModal
-                show={this.state.showConfirm}
-                message="Are you sure to Delete The Category?"
-                buttonText="delete"
-                onClick={this.deleteCategory}
-                closeModal={this.closeConfirmModal}
-              />
-            ) : null}
-          </div>
-        </div>
+                        </td>
+                      </tr>
+                    ) : null}
+                    {this.state.taskCategories.map((category, index) => {
+                      return (
+                        <tr key={category.task_category_id}>
+                          <td scope="row" className="center-height">
+                            {this.state.isEdit &&
+                              this.state.categoryId === category.task_category_id ? (
+                                <input
+                                  className={`form-control ${this.state.editCategoryError
+                                    ? " input-error-border"
+                                    : ""
+                                    }`}
+                                  type="text"
+                                  name="editCategoryError"
+                                  value={this.state.editCategoryName}
+                                  onChange={this.handleEnterName}
+                                  placeholder="Category Name"
+                                />
+                              ) : (
+                                <span className="text-titlize">{category.name}</span>
+                              )}
+                          </td>
+                          {/* <td>{"2"}</td> */}
+                          <td className="center-height">{"15 Jun 2019"}</td>
+                          <td>
+                            {this.state.isEdit &&
+                              this.state.categoryId === category.task_category_id ? (
+                                <div>
+                                  <button
+                                    className="btn btn-link"
+                                    onClick={this.toggleEditCategoryRow}
+                                  >
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                  </button>
+                                  <button
+                                    className="btn btn-link"
+                                    onClick={this.editCategory}
+                                  >
+                                    <span>
+                                      <i class="fa fa-check" aria-hidden="true"></i>
+                                    </span>
+                                  </button>
+                                </div>
+                              ) : (
+                                <div>
+                                  <button
+                                    className="btn btn-link"
+                                    onClick={() =>
+                                      this.handleDeleteCategory(category)
+                                    }
+                                  >
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                  </button>
+                                  <button
+                                    className="btn btn-link"
+                                    onClick={() => this.handleEditCatogries(category)}
+                                  >
+                                    <i className="fas fa-pencil-alt"></i>
+                                  </button>
+                                </div>
+                              )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {this.state.showConfirm ? (
+                  <ConfirmModal
+                    show={this.state.showConfirm}
+                    message="Are you sure to Delete The Category?"
+                    buttonText="delete"
+                    onClick={this.deleteCategory}
+                    closeModal={this.closeConfirmModal}
+                  />
+                ) : null}
+              </div>
+            </div>
+            {/* </>) */}
+          </>}
       </div>
     );
   }

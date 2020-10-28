@@ -29,16 +29,15 @@ const AddAdminModal = props => {
             value={props.state.addAdminEmail}
           />
           <div
-            className={`auto-search ${
-              props.state.suggestions.length > 0 ? "border-add" : null
-            }`}
+            className={`auto-search ${props.state.suggestions.length > 0 ? "border-add" : null
+              }`}
           >
             {props.autoSearchSuggestion()}
           </div>
         </div>
         <div className="col-md-12 btn-box">
           <div className="col-md-7 no-padding ml-auto">
-            <button className="btn btn-primary add" onClick={props.addAdmin}>
+            <button className="btn btn-primary add" onClick={props.addAdmin} disabled={props.state.isAddNewAdmin} >
               Add
             </button>
             <button

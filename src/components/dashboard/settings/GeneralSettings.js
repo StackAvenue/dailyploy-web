@@ -53,6 +53,7 @@ class GeneralSettings extends Component {
       toError: "",
       emailTextError: "",
       isTimetrackMode: this.props.state.isTimetrackMode,
+      isAddNewAdmin: true,
     };
   }
 
@@ -276,6 +277,7 @@ class GeneralSettings extends Component {
     );
     var searchOptions = memberList.map((user) => user.email);
     if (value.length > 0) {
+      this.setState({ isAddNewAdmin: false });
       const regex = new RegExp(`^${value}`, "i");
       suggestions = searchOptions.sort().filter((v) => regex.test(v));
     }
@@ -585,11 +587,17 @@ class GeneralSettings extends Component {
     const addAdminData = {
       user_id: this.state.addAdminId,
     };
+    this.setState({ isAddNewAdmin: true });
+
     try {
+
       const { data } = await post(
         addAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/add_admin`
       );
+      // if (data) {
+      //   this.setState({ isAddNewAdmin: false })
+      // }
       let filterData = this.props.state.userArr.members.filter(
         (user) => user.id === this.state.addAdminId
       );
@@ -606,6 +614,9 @@ class GeneralSettings extends Component {
     } catch (e) {
       console.log("error", e);
     }
+
+    this.setState({ isAddNewAdmin: false })
+
   };
 
   removeAdmin = async () => {
@@ -786,11 +797,10 @@ class GeneralSettings extends Component {
             {this.roleType == "admin" ? (
               <div className="d-inline-block box-btn">
                 <button
-                  className={`btn btn-primary save-button ${
-                    this.props.state.isSaveWorkspaceName
-                      ? "btn-blue"
-                      : "btn-disable"
-                  }`}
+                  className={`btn btn-primary save-button ${this.props.state.isSaveWorkspaceName
+                    ? "btn-blue"
+                    : "btn-disable"
+                    }`}
                   onClick={this.props.updateWorkspaceName}
                 >
                   Save
@@ -815,11 +825,11 @@ class GeneralSettings extends Component {
               </div>
             </div> : null}
           <div className="col-md-12 hr1">
-          {this.state.isTimetrackMode && (
-            <div className="col-md-12 hr1 no-padding name ">
-              Time tracking enabled for this workspace
-            </div>
-          )}
+            {this.state.isTimetrackMode && (
+              <div className="col-md-12 hr1 no-padding name ">
+                Time tracking enabled for this workspace
+              </div>
+            )}
           </div>
           <div
             className="col-md-12 workspace-name"
@@ -962,11 +972,11 @@ class GeneralSettings extends Component {
                   everyday.
                 </div>
               ) : (
-                <div className="col-md-12 time-desc">
-                  Your daily status email has been suspended. Please resume it
-                  to get daily status emails.
-                </div>
-              )}
+                  <div className="col-md-12 time-desc">
+                    Your daily status email has been suspended. Please resume it
+                    to get daily status emails.
+                  </div>
+                )}
               <div className="col-md-12 inner-container">
                 <div className="col-md-1 no-padding time-desc d-inline-block">
                   To
