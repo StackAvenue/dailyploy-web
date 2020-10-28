@@ -300,7 +300,7 @@ class CategoriesSettings extends Component {
                               )}
                           </td>
                           {/* <td>{"2"}</td> */}
-                          <td className="center-height">{"15 Jun 2019"}</td>
+                          <td className="center-height">{moment(category.inserted_at).format("DD MMM YYYY")}</td>
                           <td>
                             {this.state.isEdit &&
                               this.state.categoryId === category.task_category_id ? (
