@@ -225,7 +225,7 @@ const DisplayTaskList = (props) => {
                 style={{ color: "#6A7074" }}>
               </i>
               <ReactTooltip id="taskChecklist" effect="solid">
-                Roadmap Checklist
+                Roadmap Goals
               </ReactTooltip>
             </div>
             {props.list_id == props.id ? (
