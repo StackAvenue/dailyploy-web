@@ -191,7 +191,7 @@ class SearchFilter extends Component {
       this.props.state.searchFlag == "Members" &&
       !selectedMember
     ) {
-      return "Search Members or Projects";
+      return "Search Members";
     } else {
       return "Search Members or Projects";
     }
@@ -386,7 +386,7 @@ class SearchFilter extends Component {
     );
     return (
       <>
-        <div className={`${this.state.isExpand ? "col-md-12 transition-search-bar" : "col-md-5"} d-inline-block no-padding search-filter-container`}>
+        <div className={`${this.state.isExpand ? "col-md-12 transition-search-bar" : "col-md-5"} flex-row no-padding search-filter-container`} disabled={this.props.isDisabled}>
 
           {this.props.state.userRole === "admin" && this.props.isReports ? (
             <div className=" no-padding d-inline-block admin-filter">
