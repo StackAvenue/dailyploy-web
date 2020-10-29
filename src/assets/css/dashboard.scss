@@ -5955,6 +5955,7 @@ table.scheduler-table tr:last-child td {
   background-color: $color-white !important;
   height: 36px;
   // max-width: 659px !important;
+  display: flex !important;
   .report-search-bar {
     width: 535px !important;
   }
