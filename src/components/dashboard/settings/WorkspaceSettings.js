@@ -145,7 +145,7 @@ class WorkspaceSettings extends Component {
             {this.roleType =="admin" ? 
             <>
             <Tab>Categories</Tab>
-            <Tab>Configure Statuses</Tab> 
+            <Tab>Configure Workflow</Tab> 
             </>
             : null}
             {/* <Tab>Employee Reports</Tab> */}

@@ -497,10 +497,10 @@ function UserstoryModal(props) {
     // }
   };
   
-  // removeUploadedImage = (index) => {
-  // let pictures = this.state.pictures.filter((f, idx) => idx !== index);
-  // this.setState({ pictures: pictures });
-  // };
+  const removeUploadedImage = (index) => {
+  let picture = pictures ?  pictures.filter((f, idx) => idx !== index) :[];
+  setPictures(picture)
+  };
 
   const displayAddTask = () => {
     setAddTaskList(!addTaskList);
@@ -1040,7 +1040,7 @@ function UserstoryModal(props) {
                       showBox={showBox}
                       // onClickOutside={this.onClickOutsideAddCommnetBox}
                       updateUploadedState={updateUploadedState}
-                      // removeUploadedImage={this.removeUploadedImage}
+                      removeUploadedImage={removeUploadedImage}
 
                       // showCommentBox={this.onClickAddCommnetBox}
                     />
@@ -1640,7 +1640,7 @@ function UserstoryModal(props) {
                       // showBox={this.state.showAddBox}
                       // onClickOutside={this.onClickOutsideAddCommnetBox}
                       updateUploadedState={updateUploadedState}
-                      // removeUploadedImage={this.removeUploadedImage}
+                      removeUploadedImage={removeUploadedImage}
 
                       // showCommentBox={this.onClickAddCommnetBox}
                     />
