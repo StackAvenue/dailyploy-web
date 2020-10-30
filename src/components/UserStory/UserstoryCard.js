@@ -11,6 +11,7 @@ function UserstoryCard(props) {
     const [userStory, showUserStory] = useState(false)
     const [addTask, showAddTask] = useState(false)
     const [taskList, setTaskList] = useState([])
+    const [userStoryId, setUserStoryId] = useState(null)
 
     useEffect(() => {
         setData()
@@ -22,6 +23,13 @@ function UserstoryCard(props) {
         }
     }, [props.currentUserstoryTask])
 
+    useEffect(() => {
+        if(props.userstory)
+        {
+            setTaskList(props.userstory.task_lists)
+        }
+    },[props.userstory])
+
     const setUserstoryData = () => {
         setTaskList(props.userstory.task_lists)
     }
@@ -32,12 +40,13 @@ function UserstoryCard(props) {
     }
 
     const handleUserStory = () => {
-        if (!userStory) {
+        if (!userStory && !props.state.filterWithSummary) {
+            setUserStoryId(props.userstory.id)
             showAddTask(false)
             props.showUserstoryTasks(true)
             props.fetchUserstory(props.userstory.id)
             showUserStory(!userStory)
-        } else {
+         } else {
             showUserStory(!userStory)
             props.showUserstoryTasks(true)
         }
@@ -99,7 +108,11 @@ function UserstoryCard(props) {
              </div>}
                     </div>
             </div>
-
+            
+            {props.state.editedUserStoryloading && props.state.editedUserStoryloadingId == props.userstory.id
+            ? <Spinner animation="grow" variant="success" 
+            style = {{marginTop:"10px", marginLeft:"1%", width:'1rem', height:"1rem"}}/> : null }   
+            
             <div className="userstory-icon">
                 {/* <i class="fas fa-archive"></i> */}
                 {/* <img src={userstoryImg} /> */}
@@ -124,7 +137,7 @@ function UserstoryCard(props) {
                 <div className="userstory-tasklist">
                     {props.isUserStoryLoading && props.userstory.id == props.selectedUserStoryId ?
                     <Spinner animation="grow" variant="success" /> :
-                        userStory
+                        userStory 
                             ? taskList.map((task_lists_task) => {
                                 return (<div className="showCardDetails2 userstory-showCardDetails2">
                                     <AddTask
@@ -134,6 +147,7 @@ function UserstoryCard(props) {
                                         }
                                         taskEdit={props.taskEdit}
                                         deleteTask={deleteTask}
+                                        isFilterLoading={props.isFilterLoading}
                                         // moveToDashBoard={props.moveToDashBoard}
                                         moveToDashboardUTask={moveToDashboardUTask}
                                         task_lists_task={task_lists_task}

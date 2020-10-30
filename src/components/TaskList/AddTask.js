@@ -325,7 +325,7 @@ const AddTask = (props) => {
                   className="form-control"
                 />
                 </div> */}
-                <div className="Estimation" style={{display:"flex", width:"6%"}}>
+                <div className="Estimation" style={{display:"flex", width:"5%"}}>
                   <input
                     type="number"
                     onKeyDown={(e) => handleKeypress(e)}

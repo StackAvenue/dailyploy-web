@@ -184,9 +184,6 @@ class Dashboard extends PureComponent {
           searchData
         );
 
-        this.setState({ allData: data });
-        this.setState({ allData1: data });
-
         var sortedUsers = data.users.sort((x, y) => {
           return x.id === this.state.userId
             ? -1
@@ -227,6 +224,8 @@ class Dashboard extends PureComponent {
           taskId: taskRunningObj.taskId,
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent,
+          allData: data, 
+          allData1: data
         });
         let projects = [];
         this.state.projects.forEach((project) => {
@@ -559,8 +558,8 @@ class Dashboard extends PureComponent {
         searchData
       );
 
-      this.setState({ allData: data });
-      this.setState({ allData1: data });
+      this.setState({ allData: data, allData1: data });
+      //this.setState({ allData1: data });
 
       var userId = loggedInData.id;
       var sortedUsers = data.users.sort((x, y) => {
