@@ -131,6 +131,7 @@ const DisplayTaskList = (props) => {
                 if (props.isTaskListTasksLoading == false && props.list_id != props.id) {
                   props.loadTaskListTaskData(true, props.ProjectTask.id)
                 }
+                props.setConjuction(false, "", 0)
                 props.closeFilter();
                 props.closeSummary();
               }}
@@ -179,7 +180,7 @@ const DisplayTaskList = (props) => {
                 onClick={(e) => {
                   e.preventDefault();
                   props.isSummaryOpen(props.ProjectTask.id);
-                  props.closeFilter();
+                  //props.closeFilter();
                 }}>Summary</Button>
             </div>
           </div>
@@ -234,7 +235,7 @@ const DisplayTaskList = (props) => {
                 onClick={(e) => {
                   e.preventDefault();
                   props.isFilterOpen();
-                  props.closeSummary();
+                  //props.closeSummary();
                 }}
               >
                 <i class="fas fa-filter chg-text-icon" data-tip data-for="filterTask"
@@ -300,6 +301,7 @@ const DisplayTaskList = (props) => {
             id={props.ProjectTask.id}
             state={props.state}
             closeSummary={props.closeSummary}
+            setConjuction={props.setConjuction}
           ></Summary>
         </div>
       ) : null}
@@ -308,9 +310,11 @@ const DisplayTaskList = (props) => {
         <div className="filter-modal">
           <Filter
             state={props.state}
+            setConjuction={props.setConjuction}
             projectMembers={props.projectMembers}
             taskStatus={props.taskStatus}
             displayList={props.displayList}
+            displayFiteredList={props.displayFiteredList}
             list_id={props.list_id}
             closeFilter={props.closeFilter}
             loadFilteredData={props.loadFilteredData}
@@ -340,6 +344,7 @@ const DisplayTaskList = (props) => {
                   EditTlt={props.EditTlt}
                   editTltId={props.editTltId}
                   deleteTlt={props.deleteTlt}
+                  isFilterLoading={props.isFilterLoading}
                   deleteUserstoryTask={props.deleteUserstoryTask}
                   handleTaskDetails={handleTaskDetails}
                   modalDetails={modalDetails}
@@ -357,6 +362,8 @@ const DisplayTaskList = (props) => {
                 />)
             })
             : null}
+            {props.state.loadingNewUserStory ? <Spinner animation="grow" variant="success" style={{marginTop: "1%",
+              marginLeft: "-7%"}}/> : null}
         </div>
         : null}
 

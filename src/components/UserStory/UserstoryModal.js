@@ -18,6 +18,8 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import plusImg from "../../assets/images/plus.svg";
 import minusImg from "../../assets/images/minus-1.svg";
 import Spinner from 'react-bootstrap/Spinner';
+import { debounce } from '../../utils/function';
+import Loader from "react-loader-spinner";
 // import { Button } from "react-bootstrap";
 
 function UserstoryModal(props) {
@@ -936,7 +938,8 @@ function UserstoryModal(props) {
                                     value={checklistItem}
                                     onChange={handleUChecklistInput}
                                   />
-                                  <div className="btn-checklist">
+                                  <div className="btn-checklist" style={{ display: "flex",
+                                    flexDirection: "row"}}>
                                     <i
                                       class="fa fa-check"
                                       onClick={() => updateChecklistData(item.id, "", "name")}
@@ -946,7 +949,7 @@ function UserstoryModal(props) {
                                       class="fas fa-times"
                                       onClick={editChecklistItem}
                                       style={{ cursor: "pointer", marginLeft: "18%",
-                                      fontSize: "19px" }}
+                                      fontSize: "19px", marginTop: "4%" }}
                                     ></i>
                                   </div>
                                 </div>
@@ -983,7 +986,8 @@ function UserstoryModal(props) {
                           placeholder="Add ..."
                           onChange={handleChecklistInput}
                         />
-                        <div className="btn-checklist">
+                        <div className="btn-checklist" style={{ display: "flex",
+                            flexDirection: "row"}}>
                           <i
                             class="fa fa-check"
                             onClick={addTltCheckList}
@@ -993,7 +997,7 @@ function UserstoryModal(props) {
                             class="fas fa-times"
                             onClick={displayAddChecklistBox}
                             style={{ cursor: "pointer", marginLeft: "18%",
-                            fontSize: "19px" }}
+                            fontSize: "19px", marginTop: "4%" }}
                           ></i>
                         </div>
                       </div>
@@ -1049,7 +1053,7 @@ function UserstoryModal(props) {
               </div>
               <div className="comments-box">
                 <div className="col-md-12 no-padding input-row task-comments details-comments">
-                  {commentList.map((item) => {
+                  {commentList && commentList.map((item) => {
                     return editComment && editComment.id == item.id ? (
                       <div
                         className="col-md-12 no-padding"
@@ -1235,7 +1239,7 @@ function UserstoryModal(props) {
               )}
               <i
                 class="fas fa-trash-alt" style={{ color: "red", opacity: "0.6", marginLeft: "23%", cursor: "pointer" }}
-                onClick={() => props.deleteUserStory(props.currentUserstory.id)}
+                onClick={debounce(() => props.deleteUserStory(props.currentUserstory.id), 250)}
               ></i>
               <button
                 className="btn btn-link float-right"
@@ -1274,10 +1278,29 @@ function UserstoryModal(props) {
               </div>
               <div className="mod-5">
                 {isComplete ? (
-                  <div className="mark-completed" onClick={handleMarkIncompelete}>Completed</div>
+                  props.state.markUserStory ? <div className="mark-complete">
+                    <Loader
+                    type="Oval"
+                    color="blue"
+                    height={15}
+                    width={15}
+                    className="d-inline-block login-signup-loader"
+                    style={{marginLeft: "8%",
+                    marginTop: "-1px"}}
+                  />
+                  </div>:<div className="mark-completed" onClick={handleMarkIncompelete}>Completed</div>
                 ) : (
                  <div className="mark-complete">
-                   <div className="mark-complete-btn" onClick={handleMarkCompelete}>Mark complete</div>
+                   {props.state.markUserStory ? <Loader
+                    type="Oval"
+                    color="blue"
+                    height={15}
+                    width={15}
+                    className="d-inline-block login-signup-loader"
+                    style={{marginLeft: "8%",
+                    marginTop: "-1px"}}
+                  />
+                    :<div className="mark-complete-btn" onClick={handleMarkCompelete}>Mark Complete</div>}
                    </div> 
                   // <button >Mark complete</button>
                 )}
@@ -1423,7 +1446,8 @@ function UserstoryModal(props) {
                                     value={checklistItem}
                                     onChange={handleUChecklistInput}
                                   />
-                                  <div className="btn-checklist">
+                                  <div className="btn-checklist" style={{ display: "flex",
+                                    flexDirection: "row"}}>
                                     <i
                                       class="fa fa-check"
                                       onClick={() => updateChecklistData(item.id, "", "name")}
@@ -1433,7 +1457,7 @@ function UserstoryModal(props) {
                                       class="fas fa-times"
                                       onClick={editChecklistItem}
                                       style={{ cursor: "pointer", marginLeft: "18%",
-                                      fontSize: "19px" }}
+                                      fontSize: "19px", marginTop: "4%" }}
                                     ></i>
                                   </div>
                                 </div>
@@ -1469,7 +1493,8 @@ function UserstoryModal(props) {
                           placeholder="Add ..."
                           onChange={handleUChecklistInput}
                         />
-                        <div className="btn-checklist">
+                        <div className="btn-checklist" style={{ display: "flex",
+                          flexDirection: "row"}}>
                           <i
                             class="fa fa-check"
                             onClick={addCheckList}
@@ -1479,7 +1504,7 @@ function UserstoryModal(props) {
                             class="fas fa-times"
                             onClick={displayAddChecklistBox}
                             style={{ cursor: "pointer", marginLeft: "18%",
-                            fontSize: "19px" }}
+                            fontSize: "19px", marginTop: "4%" }}
                           ></i>
                         </div>
                       </div>
@@ -1649,7 +1674,7 @@ function UserstoryModal(props) {
               </div>
               <div className="comments-box">
                 <div className="col-md-12 no-padding input-row task-comments details-comments">
-                  {commentList.map((item) => {
+                  {commentList && commentList.map((item) => {
                     return editComment && editComment.id == item.id ? (
                       <div
                         className="col-md-12 no-padding"

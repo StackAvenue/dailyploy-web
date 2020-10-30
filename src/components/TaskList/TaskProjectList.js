@@ -114,7 +114,15 @@ class TaskProjectList extends Component {
       isRoadmapCreateLoading: false,
       userStory_checklists: [], 
       userStoryDetails_checklists: [],
-      userStroyTaskDetails: null
+      userStroyTaskDetails: null,
+      filterWithSummary: false,
+      filterWithSummaryId : null,
+      filterWithSummaryType: null,
+      filterWithSummarySId: null,
+      loadingNewUserStory: false,
+      editedUserStoryloading: false,
+      editedUserStoryloadingId: null,
+      markUserStory: false
     };
   }
 
@@ -410,6 +418,15 @@ class TaskProjectList extends Component {
     }
   }
 
+  setConjuction = (value, type, id, sId) => {
+    this.setState({
+      filterWithSummary: value,
+      filterWithSummaryId : id,
+      filterWithSummaryType: type,
+      filterWithSummarySId : sId ? sId : null
+    })
+  }
+
   addTaskChecklist = async (params, roadMapTask) => {
     try {
       this.checklistLoading(true)
@@ -427,13 +444,11 @@ class TaskProjectList extends Component {
   updateTaskChecklist = async (id, params, roadMapTask) => {
     try {
       this.checklistLoading(true)
-      // console.log(id, roadMapTask )
         const { data } = await put(
           params,
           `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists/${id}`)
           //this.displayList(roadMapTask.list_id)
       let updated_data = this.state.userStoryDetails_checklists.map(x => x.id == data.id ? data : x)
-      console.log(updated_data)
       this.checklistProgress3(updated_data)
       this.setState({ checklistItem: data, action: "update", newChecklist: true })
       this.checklistLoading(false)
@@ -455,13 +470,11 @@ class TaskProjectList extends Component {
     {
       this.setState({ progressPercentUTD : progress_percentage})
     }
-    console.log("dataaa progress", progress_percentage)
   }
 
   deleteTaskChecklist = async (id, roadMapTask) => {
   try {
     this.checklistLoading(true)
-    // console.log(id, roadMapTask )
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/roadmap_task/${roadMapTask.id}/checklists/${id}`)
         //this.displayList(roadMapTask.list_id)
@@ -618,7 +631,6 @@ class TaskProjectList extends Component {
         tasks[tltIndex].tracked_time = saveTaskParams.tracked_time;
         tasks[tltIndex].category_id = saveTaskParams.category_id;
         tasks[tltIndex].checklist = saveTaskParams.checklist;
-        console.log("sdssss", tasks[tltIndex])
       } else {
         tasks.push({
           name: saveTaskParams.name,
@@ -698,7 +710,7 @@ class TaskProjectList extends Component {
     })
   }
 
-  displayList = async (taskListId, ID, type) => {
+  displayList = async (taskListId, ID, type, idd) => {
     if (this.state.list_id != taskListId || ID != null) {
       let params;
       if (type === this.state.MEMBER) {
@@ -708,19 +720,29 @@ class TaskProjectList extends Component {
         if (type === this.state.STATUS) {
           params = { status_ids: ID }
         }
+        else
+        if (type === "both") {
+          params = { member_ids: ID, status_ids: idd }
+        }
         else {
           params = ""
         }
       let taslListTask = [];
-
+      let stories = [];
       try {
         const { data } = await get(
-          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}/task_list_tasks`,
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}`,
           params
         );
+
+        stories = data.user_stories && data.user_stories.length > 0
+        ? data.user_stories.map((entry) => {
+          return entry
+        }) : [];
+
         taslListTask =
-          data.entries && data.entries.length > 0
-            ? data.entries.map((eachEntry) => {
+          data.task_list_tasks && data.task_list_tasks.length > 0
+            ? data.task_list_tasks.map((eachEntry) => {
               return {
                 name: eachEntry.name,
                 estimation: eachEntry.estimation,
@@ -745,7 +767,73 @@ class TaskProjectList extends Component {
               };
             })
             : [];
-        this.setState({ list_id: taskListId, task_lists: taslListTask, isFilterLoading: false, isTaskListTasksLoading: false });
+        this.setState({ list_id: taskListId, task_lists: taslListTask, isFilterLoading: false, isTaskListTasksLoading: false,
+        userStories: stories });
+      } catch (e) {
+        this.handleErroMsg(e);
+      }
+    } else this.setState({ list_id: -1 });
+  };
+
+
+  displayFiteredList = async (taskListId, ID, type, idd) => {
+    if (this.state.list_id != taskListId || ID != null) {
+      let params;
+      if (type === this.state.MEMBER) {
+        params = { member_ids: ID }
+      }
+      else
+        if (type === this.state.STATUS) {
+          params = { status_ids: ID }
+        }
+        else
+        if (type === "both") {
+          params = { member_ids: ID, status_ids: idd }
+        }
+        else {
+          params = ""
+        }
+      let taslListTask = [];
+      try {
+        const { data } = await get(
+          `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${taskListId}`,
+          params
+        );
+
+        let filteredStories = data.user_stories && data.user_stories.length > 0
+        ? data.user_stories.map((entry) => {
+            return entry
+          }) : [];
+          
+        taslListTask =
+          data && data.task_list_tasks.length > 0
+            ? data.task_list_tasks.map((eachEntry) => {
+              return {
+                name: eachEntry.name,
+                estimation: eachEntry.estimation,
+                list_id: eachEntry.task_lists_id,
+                priority: eachEntry.priority,
+                status: eachEntry.task_status,
+                description: eachEntry.description,
+                checklist: eachEntry.checklist,
+                comments: eachEntry.comments,
+                // category: eachEntry.category,
+                category_id: eachEntry.category_id,
+                tracked_time: eachEntry.tracked_time,
+                assigne_id: eachEntry.owner_id,
+                assigne: eachEntry.owner,
+                start_date: eachEntry.task ? eachEntry.task.start_datetime : null,
+                end_date: eachEntry.task ? eachEntry.task.end_datetime : null,
+                is_complete: eachEntry.task ? eachEntry.task.is_complete : null,
+                id: eachEntry.id,
+                task_id: eachEntry.task_id,
+                owner: eachEntry.owner,
+                owner_id: eachEntry.owner_id
+              };
+            })
+            : [];
+        this.setState({ list_id: taskListId, task_lists: taslListTask, isFilterLoading: false, isTaskListTasksLoading: false,
+          userStories: filteredStories });
       } catch (e) {
         this.handleErroMsg(e);
       }
@@ -821,8 +909,6 @@ class TaskProjectList extends Component {
     let taskStatus = [];
     taskStatus1 = taskStatuses.filter(status => status.isDefault == !true)
     taskStatus2 = taskStatuses.find(status => status.isDefault == true)
-    // console.log("taskStatus2A1", taskStatus1)
-    // console.log("taskStatus2A2", taskStatus2)
     taskStatus = [taskStatus2, ...taskStatus1]
     return taskStatus
   }
@@ -925,7 +1011,6 @@ class TaskProjectList extends Component {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/task_list_tasks/${tltId}`
       )
-      console.log("getting", data)
       this.checklistProgress4(data)
       this.setState({
         userStroyTaskDetails: data,
@@ -949,7 +1034,7 @@ class TaskProjectList extends Component {
     {
       this.setState({ progressPercentUTD : progress_percentage})
     }
-    console.log("dataaa progress", progress_percentage)
+    
   }
 
   moveToDashBoard = async (saveTaskParams) => {
@@ -1010,34 +1095,61 @@ class TaskProjectList extends Component {
     this.setState({ showUserstoryTasklist: value })
   }
 
+  loadingNewUserStoryfunc = (value) => {
+    this.setState({ loadingNewUserStory: value })
+  }
+
+  loadingeditedUserStory = (value, id) => {
+    this.setState({ 
+      editedUserStoryloading : value,
+      editedUserStoryloadingId : id
+     })
+  }
+
   addUserStory = async (params) => {
+    this.loadingNewUserStoryfunc(true)
     try {
       const { data } = await post(
         params,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories`)
-      this.handleOpenTaskData(this.state.projectId)
-      // this.setState({ currentUserstoryTask: [...this.state.currentUserstoryTask, data] })
+      this.setState({ userStories: [...this.state.userStories, data] })
+      this.loadingNewUserStoryfunc(false)
     } catch (error) {
       console.log(error)
     }
   }
 
   deleteUserStory = async (id) => {
+    this.loadingeditedUserStory(true, id)
     try {
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
         this.closeUserStoryModal()
-        this.handleOpenTaskData(this.state.projectId)
+        //this.handleOpenTaskData(this.state.projectId)
+        let filteredData = this.state.userStories.filter((x) => x.id != data.id)
+        this.setState({ userStories: filteredData })
+        this.loadingeditedUserStory(false, id)
     }
     catch (e) {}
   }
 
+  UserStoryMarked = (value) => {
+    this.setState ({
+      markUserStory: value
+    })
+  }
+
   editUserstory = async (params, id) => {
+    //this.loadingeditedUserStory(true, id)
+    this.UserStoryMarked(true)
     try {
       const { data } = await put(
         params,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
+      let updated_data = this.state.userStories.map(x => x.id == data.id ? data : x)
+      this.setState({ userStories: updated_data })
       this.fetchUserstory(id)
+      //this.loadingeditedUserStory(false, id)
     } catch (error) {
       console.log(error)
     }
@@ -1120,8 +1232,8 @@ class TaskProjectList extends Component {
         this.setState({
           userStory_checklists: [...this.state.userStory_checklists, data]
         })
+        this.checklistProgress2([...this.state.userStory_checklists, data])
         this.checklistLoading(false)
-        console.log("seeeee", this.state.userStory_checklists)
       //this.fetchUserstory(userstory.id);
     } catch (error) {
       console.log("sa", error)
@@ -1134,14 +1246,7 @@ class TaskProjectList extends Component {
       const { data } = await put(
         params,
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists/${id}`)
-        // let updated_dataIndex = this.state.userStory_checklists.findIndex(x => x.id == data.id);
-        // let com = this.state.userStory_checklists.splice(updated_dataIndex, 1, data)
-        // console.log("commmm", com)
-        // this.setState({
-        //   userStory_checklists: com
-        // })
         let updated_data = this.state.userStory_checklists.map(x => x.id == data.id ? data : x)
-        console.log(updated_data)
         this.checklistProgress2(updated_data)
         this.setState({
           userStory_checklists: updated_data
@@ -1165,17 +1270,16 @@ class TaskProjectList extends Component {
     {
       this.setState({ progressPercent : progress_percentage})
     }
-    console.log("dataaa progress", progress_percentage)
   }
 
   deleteUserstoryChecklist = async (id, userstory) => {
     try {
-      // console.log("mjnd", id, userstory.id)
+      
       this.checklistLoading(true)
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstory.id}/checklists/${id}`)
         let filteredData = this.state.userStory_checklists.filter((checklist) => checklist.id != data.id)
-        console.log(filteredData)
+        
         this.setState({
           userStory_checklists: filteredData
         })
@@ -1228,6 +1332,7 @@ class TaskProjectList extends Component {
       })
       this.userStoryLoading(false, id)
       this.checklistLoading(false)
+      this.UserStoryMarked(false)
      
     } catch (error) {
       console.log(error)
@@ -1282,7 +1387,6 @@ class TaskProjectList extends Component {
     {
       this.setState({ progressPercent : progress_percentage})
     }
-    console.log("dataaa progress", progress_percentage)
   }
 
   showDetailsModal = () => {
@@ -1397,7 +1501,8 @@ class TaskProjectList extends Component {
                           state={this.state}
                           projectMembers={this.state.projectMembers}
                           ProjectTask={project}
-                          Userstories={project.userStories}
+                          //Userstories={project.userStories}
+                          Userstories={this.state.userStories}
                           projects={this.state.projects}
                           task_lists={this.state.task_lists}
                           taskEdit={this.taskEdit}
@@ -1406,6 +1511,7 @@ class TaskProjectList extends Component {
                           displayAddTask={this.displayAddTask}
                           closeAddTask={this.closeAddTask}
                           displayList={this.displayList}
+                          displayFiteredList={this.displayFiteredList}
                           setUserStoryDetails={this.setUserStoryDetails}
                           isChecklistOpen={this.isChecklistOpen}
                           isFilterOpen={this.isFilterOpen}
@@ -1438,6 +1544,7 @@ class TaskProjectList extends Component {
                           memeberSelected={this.memeberSelected}
                           handleDescription={this.handleDescription}
                           editUserstory={this.editUserstory}
+                          setConjuction={this.setConjuction}
                           editDescription={this.editDescription}
                           addTaskChecklist={this.addTaskChecklist}
                           updateTaskChecklist={this.updateTaskChecklist}
