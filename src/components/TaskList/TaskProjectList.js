@@ -122,7 +122,8 @@ class TaskProjectList extends Component {
       loadingNewUserStory: false,
       editedUserStoryloading: false,
       editedUserStoryloadingId: null,
-      markUserStory: false
+      markUserStory: false,
+      filterParams: {}
     };
   }
 
@@ -833,7 +834,7 @@ class TaskProjectList extends Component {
             })
             : [];
         this.setState({ list_id: taskListId, task_lists: taslListTask, isFilterLoading: false, isTaskListTasksLoading: false,
-          userStories: filteredStories });
+          userStories: filteredStories, filterParams: params });
       } catch (e) {
         this.handleErroMsg(e);
       }

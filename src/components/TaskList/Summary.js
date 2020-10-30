@@ -63,8 +63,11 @@ const Summary = props => {
     }
 
     useEffect(() => {
-        getSummary()
-    }, [])
+        if(props.state.showSummary)
+        {
+            getSummary()
+        }
+    }, [props.state.filterParams])
 
     return (
         <div>
