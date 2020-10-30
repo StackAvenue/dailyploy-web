@@ -121,7 +121,7 @@ class DailyPloyProjectSelect extends Component {
       this.props.state.searchFlag == "Members" &&
       !selectedMember
     ) {
-      return "Search Members or Projects";
+      return "Search Members";
     } else {
       return "Search Members or Projects";
     }
@@ -289,8 +289,7 @@ class DailyPloyProjectSelect extends Component {
       <>
         <div className="col-md-7 d-inline-block no-padding search-filter-container">
           <div
-            className={`no-padding d-inline-block ${
-              this.props.isReports ? "report-search-bar" : "search-bar"
+            className={`no-padding d-inline-block ${this.props.isReports ? "report-search-bar" : "search-bar"
               }`}
             onClick={() => this.onClickInput()}
           >
@@ -319,8 +318,7 @@ class DailyPloyProjectSelect extends Component {
                 </div>
               ) : null}
               <div
-                className={`suggestion-holder  ${
-                  this.state.show ? "suggestion-holder-border" : null
+                className={`suggestion-holder  ${this.state.show ? "suggestion-holder-border" : null
                   }`}
               >
                 {this.renderSearchSuggestion()}
