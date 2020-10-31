@@ -10,30 +10,35 @@ const RemoveAdminModal = props => {
       show={props.state.removeShow}
       onHide={props.handleClose}
     >
-      <div className="row no-margin ">
-        <div className="col-md-12 heading">
-          <span className="heading">Remove Admin</span>
+      <div className="row no-margin " style={{padding: "3%"}}>
+        <div className="col-md-12 heading" style={{padding: "1%"}}>
+          <span className="heading"><h3>Remove Admin</h3></span>
           <button
             className="btn btn-link float-right"
             onClick={props.handleClose}
+            style={{marginTop: "-12%",
+              position: "absolute",
+              right: "-9px"}}
           >
             <img src={Close} alt="close" />
           </button>
         </div>
-        <div className="col-md-12 body">
+        <div className="col-md-12 body" style={{paddingTop: "2%",
+          paddingBottom: "2%"}}>
           {`Are you sure you want to remove ${textTitlize(
             props.state.adminUserName
           )} from workspace Admin users?`}
         </div>
 
-        <div className="col-md-12 btn-box">
+        <div className="col-md-12 btn-box" style={{ marginTop: "4%" }}>
           <div className="col-md-7 no-padding ml-auto">
-            <button className="btn btn-primary ok" onClick={props.removeAdmin}>
+            <button className="btn btn-primary ok" onClick={props.removeAdmin} disabled={props.state.isRemovingAdmin} style={{ marginLeft: "-36%" }}>
               Confirm
             </button>
             <button
               className="btn btn-primary cancel"
               onClick={props.handleClose}
+              style={{ marginLeft: "18%" }}
             >
               Cancel
             </button>

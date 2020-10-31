@@ -8,6 +8,7 @@ const AddAdminModal = props => {
       className="add-admin-modal"
       show={props.state.addAdminShow}
       onHide={props.handleClose}
+      style={{ marginTop: "-10%" }}
     >
       <div className="row no-margin box">
         <div className="col-md-12 box-top">

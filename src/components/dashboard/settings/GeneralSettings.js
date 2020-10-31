@@ -54,6 +54,7 @@ class GeneralSettings extends Component {
       emailTextError: "",
       isTimetrackMode: this.props.state.isTimetrackMode,
       isAddNewAdmin: true,
+      isRemovingAdmin: false
     };
   }
 
@@ -619,12 +620,19 @@ class GeneralSettings extends Component {
 
   };
 
+  removingAdminState = (value) => {
+    this.setState({
+      isRemovingAdmin: value
+    })
+  }
+
   removeAdmin = async () => {
     const removeAdminData = {
       user_id: this.state.showRemoveAdminId,
     };
 
     try {
+      this.removingAdminState(true)
       const { data } = await post(
         removeAdminData,
         `workspaces/${this.props.state.workspaceId}/workspace_settings/adminship_removal/`
@@ -650,8 +658,10 @@ class GeneralSettings extends Component {
         isShowRemoveAdmin: false,
         allUserArr: removeData,
       });
+      this.removingAdminState(false)
     } catch (e) {
       console.log("error", e);
+      this.removingAdminState(false)
     }
   };
 
