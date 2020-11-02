@@ -29,7 +29,7 @@ const StatusList = (props) => {
             //console.log('ID' + result.draggableId + ' : ' + result.source.index + ': >' + result.destination.index)
             setdragLoader(true);
             const { data } = await put(
-                { update_sequence_no: result.destination.index + 1 },
+                { update_sequence_no: result.destination.index },
                 `workspaces/${props.workspaceId}/projects/${props.projectId}/task_status/${result.draggableId}/update_sequence`
             );
             if (data && data.task_status) {

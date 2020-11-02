@@ -538,8 +538,9 @@ class ShowMembers extends Component {
                     Date Created{" "}
                     <i className="fa fa-sort" aria-hidden="true"></i>
                   </th>
-                  <th>Monthly Expense ({cookie.load("currency")})</th>
-                  <th>Hourly Expense ({cookie.load("currency")})</th>
+                  {(userRole == "admin") && <><th>Monthly Expense ({cookie.load("currency")})</th>
+                  <th>Hourly Expense ({cookie.load("currency")})</th></>
+                  }
                 </tr>
 
               </thead>
@@ -551,14 +552,6 @@ class ShowMembers extends Component {
                         className="text-titlize"
                         style={{ paddingLeft: "60px" }}
                       >
-                        {/* <input
-                          className="styled-checkbox"
-                          id={`styled-checkbox-${index}`}
-                          type="checkbox"
-                          name="isChecked"
-                          onChange={(e) => this.handleCheck(e, member)}
-                        />
-                        <label htmlFor={`styled-checkbox-${index}`}></label> */}
                         {member.name}
                       </td>
                       <td>{member.email}</td>
@@ -607,8 +600,11 @@ class ShowMembers extends Component {
                           )}
                       </td>
                       <td>{moment(member.created_at).format("DD MMM YY")}</td>
-                      <td>{member.hourly_expense * (member.working_hours * 20)}</td>
-                      <td>{member.hourly_expense}</td>
+                      {(userRole == "admin") &&
+                       <><td>{member.hourly_expense * (member.working_hours * 20)}</td>
+                      <td>{member.hourly_expense}</td></>
+                      }
+                      
                       <td className={userRole === "member" ? "d-none" : null}>
                         <button
                           className="btn btn-link edit-btn"

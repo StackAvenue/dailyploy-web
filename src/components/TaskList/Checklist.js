@@ -155,7 +155,7 @@ const Checklist = (props) => {
   return (
     <div className="checklist-div">
       <i class="fa fa-check-square-o" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;&nbsp;
-      <strong>Checklist</strong>
+      <strong>Roadmap Goals</strong>
       <br />
       <div
               className="close-icon"
@@ -198,7 +198,7 @@ const Checklist = (props) => {
                   <input
                     type={Text}
                     value={editTaskData}
-                    placeholder="Task Name"
+                    placeholder="Enter Goal"
                     onChange={(e) => handleInputChanges(e)}
                     name="taskName"
                     className="checklist-input"

@@ -16,8 +16,8 @@ class Timer extends Component {
 
 	componentDidUpdate = (prevProps, prevState) => {
 		if (prevProps.startOn !== this.props.startOn) {
-			// this.handleReset();
-			// this.handleClick();
+			//this.handleReset();
+			this.handleClick();
 		}
 	};
 
@@ -28,7 +28,7 @@ class Timer extends Component {
 	handleClick = () => {
 		if (this.props.isStart && this.props.startOn !== '') {
 			var startOn = this.props.startOn;
-			const startTime = startOn - this.state.runningTime;
+			const startTime = startOn;
 			this.timer = setInterval(() => {
 				this.setState({ runningTime: Date.now() - startTime });
 			});
@@ -39,7 +39,7 @@ class Timer extends Component {
 
 	handleReset = () => {
 		clearInterval(this.timer);
-		this.setState({ runningTime: 0 });
+		this.setState({ runningTime: this.state.runningTime });
 	};
 
 	formattedSeconds = (ms, totalDuration) => {
