@@ -29,35 +29,26 @@ const Summary = props => {
                 }
                 //?member_ids=${props.state.filterWithSummaryId}
                 //id = props.state.filterWithSummaryId
-                const { data } = await get(
+                let { data } = await get(
                     `workspaces/${props.state.workspaceId}/projects/${props.state.projectId}/task_lists/${props.id}/summary`,
                     params
                   );
-                  var save = data.summary;
-                  setSummaryData(save)
-              setTotalTasks(save.total_tasks)
-              setTaskCompleted(save.completed_task)
-              var taskleft= save.total_tasks - save.completed_task
-              setTasksleft(taskleft)
-              setTotaltime(save.total_estimate_hours)
-              setRemaintime(Math.round(save.remaining_hours * 10) / 10)
-              setIsLoading(false)
-              console.log(data)
+                var save = data.summary;
+
             } else {
-                const { data } = await get(
+                let { data } = await get(
                     `workspaces/${props.state.workspaceId}/projects/${props.state.projectId}/task_lists/${props.id}/summary`
-                  );
-                  var save = data.summary;
-                  setSummaryData(save)
+                  );  
+                  var save = data.summary;            
+            }
+              setSummaryData(save)
               setTotalTasks(save.total_tasks)
               setTaskCompleted(save.completed_task)
               var taskleft= save.total_tasks - save.completed_task
               setTasksleft(taskleft)
               setTotaltime(save.total_estimate_hours)
-              setRemaintime(Math.round(save.remaining_hours * 10) / 10)
+              setRemaintime( Math.round((save.total_estimate_hours - save.remaining_hours) * 10) / 10)
               setIsLoading(false)
-              console.log(data)
-            }
             //props.setConjuction(false, "", 0)
         } catch (e) { }
     }
@@ -85,24 +76,24 @@ const Summary = props => {
             <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Tasks left : {tasksleft}
                 </div>
-                <div className="two-col">
-            <br/>
-            <i class="fa fa-users" style={{ color:"#6A7074" }} aria-hidden="true"></i>&nbsp;
-                Total User Stories : {summaryData.total_user_stories}
-            <br/>
-            <i class="fa fa-check-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
-                Completed User Stories : {summaryData.completed_user_stories}
-            <br/>
-            <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
-                User Stories Left : {summaryData.user_stories_left}
-                </div>
+                {/* <div className="two-col">
+                <br/>
+                <i class="fa fa-users" style={{ color:"#6A7074" }} aria-hidden="true"></i>&nbsp;
+                    Total User Stories : {summaryData.total_user_stories}
+                <br/>
+                <i class="fa fa-check-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
+                    Completed User Stories : {summaryData.completed_user_stories}
+                <br/>
+                <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
+                    User Stories Left : {summaryData.user_stories_left}
+                </div> */}
                 <div className="three-col">
             <br/>
             <i class="fa fa-hourglass" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
                 Total estimated time (in hours) : {totalTime}
             <br/>
             <i class="fa fa-hourglass-end" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;
-                Remaining time : {remainTime}
+                Total time spent (in hours) : {remainTime}
                 </div>
                 &nbsp;&nbsp;&nbsp;
                 <div

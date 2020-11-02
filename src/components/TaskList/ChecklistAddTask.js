@@ -7,7 +7,7 @@ const ChecklistAddTask = (props) => {
           <input
                 type={Text}
                 value={props.inputTaskData}
-                placeholder="Task Name"
+                placeholder="Enter Goal"
                 onChange={(e) => props.handleInputChange(e)}
                 name="taskName"
                 className="checklist-input"
