@@ -427,7 +427,8 @@
       padding-left: 19px;
       padding-top: 9px;
       padding-bottom: 8px;
-      width: 59%;
+      //width: 59%; //with user story data column
+      width: 43%;
       padding-right: 19px;
       border-radius: 4px;
       font-family: 'Roboto';
@@ -444,15 +445,16 @@
         margin-top: -22px;
       }
       .three-col {
-        margin-left: 58%;
+        //margin-left: 58%; //with user story data column
+        margin-left: 40%;
         position: absolute;
         margin-top: -22px;
       }
       .close-icon{
         margin-left: 0px;
-        margin-top: -11px;
+        margin-top: -15px;
         position: absolute;
-        right: -4px;
+        right: -3px;
         .fa{
           cursor: pointer;
         }
@@ -1343,7 +1345,7 @@
                   font-size: 12px !important;
                   padding-top: 3px;
                   padding-bottom: 3px;
-                  height: 28px;
+                  height: 30px !important;
                 }
                 .form-group{
                   margin-bottom: 0 !important; 
@@ -1443,8 +1445,15 @@
               }
               .input-filter{
                 vertical-align: middle;
-                width: 35%;
+                width: 30%;
                 margin-right: 27px;
+                .dropdown-menu{
+                  font-size: 14px !important;
+                  font-family: 'Roboto' !important;
+                }
+              }
+              .member-search-filter {
+                width: 30%;
                 .dropdown-menu{
                   font-size: 14px !important;
                   font-family: 'Roboto' !important;

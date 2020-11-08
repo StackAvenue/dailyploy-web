@@ -123,7 +123,8 @@ class TaskProjectList extends Component {
       editedUserStoryloading: false,
       editedUserStoryloadingId: null,
       markUserStory: false,
-      filterParams: {}
+      filterParams: {},
+      isDeleteDisabled: false
     };
   }
 
@@ -945,10 +946,17 @@ class TaskProjectList extends Component {
     });
   };
 
+  disableDeletebutton = (value) => {
+    this.setState({
+      isDeleteDisabled : value
+    })
+  }
+
   deleteTlt = async (tltId) => {
 
     // localStorage.setItem("isTLTDelete", true);
     try {
+      this.disableDeletebutton(true)
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/task_list_tasks/${tltId}`
       );
@@ -959,6 +967,7 @@ class TaskProjectList extends Component {
       this.setState({
         task_lists: task_lists,
       });
+      this.disableDeletebutton(false)
     } catch (e) {
       if (e.message) {
         toast(
@@ -1205,6 +1214,7 @@ class TaskProjectList extends Component {
 
   deleteUserstoryTask = async (userstoryId, tltId) => {
     try {
+      this.disableDeletebutton(true)
       const { data } = await del(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstoryId}/task_list_tasks/${tltId}`);
       // this.setState({ userstoryUpdateTask: true })
@@ -1212,6 +1222,7 @@ class TaskProjectList extends Component {
         return task.id !== data.id
       })
       this.setState({ currentUserstoryTask: newTaskList })
+      this.disableDeletebutton(false)
       // this.fetchUserstory(userstoryId);
     } catch (error) {
       console.log("error", error)
@@ -1322,13 +1333,29 @@ class TaskProjectList extends Component {
   fetchUserstory = async (id) => {
     this.userStoryLoading(true, id)
     try {
-      const { data } = await get(`workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
-      this.checklistProgress(data)
+      var datafetched;
+      if (this.state.filterWithSummary) {
+        let params;
+        if (this.state.filterWithSummaryType === "member") {
+          params = { member_ids: this.state.filterWithSummaryId }
+        } else if (this.state.filterWithSummaryType === "both") {
+          params = { member_ids: this.state.filterWithSummaryId, status_ids: this.state.filterWithSummarySId }
+        } else {
+          params = { status_ids: this.state.filterWithSummaryId }
+        }
+        const { data } = await get(`workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`,
+        params );
+        datafetched = data;
+      } else {
+        const { data } = await get(`workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/user_stories/${id}`)
+        datafetched = data;
+      }
+      this.checklistProgress(datafetched)
       this.setState({
-        currentUserstory: data,
-        userStory_checklists: data.checklist,
+        currentUserstory: datafetched,
+        userStory_checklists: datafetched.checklist,
         detailsModal: this.state.showUserstoryTasklist ? false : true,
-        currentUserstoryTask: data.task_lists,
+        currentUserstoryTask: datafetched.task_lists,
         updatedData: this.state.detailsModal ? true : false,
       })
       this.userStoryLoading(false, id)
@@ -1337,9 +1364,9 @@ class TaskProjectList extends Component {
      
     } catch (error) {
       console.log(error)
+      this.userStoryLoading(false, id)
     }
   }
-
 
   switchTask2 = async (taskId, tltId) => {
     try {
