@@ -1343,7 +1343,7 @@
                   font-size: 12px !important;
                   padding-top: 3px;
                   padding-bottom: 3px;
-                  height: 28px;
+                  height: 30px !important;
                 }
                 .form-group{
                   margin-bottom: 0 !important; 
@@ -1443,8 +1443,15 @@
               }
               .input-filter{
                 vertical-align: middle;
-                width: 35%;
+                width: 30%;
                 margin-right: 27px;
+                .dropdown-menu{
+                  font-size: 14px !important;
+                  font-family: 'Roboto' !important;
+                }
+              }
+              .member-search-filter {
+                width: 30%;
                 .dropdown-menu{
                   font-size: 14px !important;
                   font-family: 'Roboto' !important;
