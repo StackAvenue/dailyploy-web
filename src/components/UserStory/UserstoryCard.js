@@ -40,7 +40,7 @@ function UserstoryCard(props) {
     }
 
     const handleUserStory = () => {
-        if (!userStory && !props.state.filterWithSummary) {
+        if (!userStory) {
             setUserStoryId(props.userstory.id)
             showAddTask(false)
             props.showUserstoryTasks(true)
@@ -52,6 +52,13 @@ function UserstoryCard(props) {
         }
 
     }
+
+    useEffect(() => {
+        if(userStory)
+        {
+            props.fetchUserstory(props.userstory.id)
+        }
+    },[props.state.filterParams])
 
     const handleAddTaskModal = () => {
         showAddTask(!addTask)

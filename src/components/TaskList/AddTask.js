@@ -857,10 +857,11 @@ const AddTask = (props) => {
 
         <div className="button-delcancel">
           <button className="del-button"
-            onClick={debounce((e) => {
+            onClick={(e) => {
               e.preventDefault();
               { props.isUserstory ? props.deleteTask(props.task_lists_task.id) : props.deleteTlt(props.task_lists_task.id); }
-            }, 250)}
+            }}
+            disabled={props.state.isDeleteDisabled}
           >Delete</button>
           <button
             className="cancel-button"
