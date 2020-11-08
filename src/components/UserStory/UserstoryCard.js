@@ -184,7 +184,9 @@ function UserstoryCard(props) {
                             : null
                     }
                 </div>
-               
+                {props.state.addUserStoryTaskLoading && props.state.addUserStoryTaskLoadingId == props.userstory.id
+                ? <Spinner animation="grow" variant="success" 
+            style = {{marginTop:"11px", marginLeft:"43%"}}/> : null }
                 {addTask
                     ? <div className="new-userstory">
                         <div className="showCardDetails userstory-showCardDetails">
@@ -199,7 +201,7 @@ function UserstoryCard(props) {
                                 taskStatus={props.taskStatus} />
                         </div>  
                         </div> : null}
-              
+                                 
                 {userStory ? <div className="container2OpenModal1">
                     <Button
                         variant="primary"

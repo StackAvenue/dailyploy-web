@@ -231,7 +231,7 @@ class SearchFilter extends Component {
         {this.state.show ? (
           <>
             {(this.props.isReports && this.state.selectedTags.length > 3) ||
-              this.state.selectedTags.length > 4 ? (
+              this.state.selectedTags.length > 1 ? (
                 <div className="extra-selected-tags">
                   {this.renderSelectedTags(this.state.selectedTags, false)}
                 </div>
@@ -436,12 +436,12 @@ class SearchFilter extends Component {
               ) : null}
               <div className="selected-tags">
                 {this.props.isReports
-                  ? this.renderSelectedTags(
-                    this.state.selectedTags.slice(-3).reverse(),
-                    true
-                  )
+                  ? (this.props.state.userRole === "admin" ? 
+                    this.renderSelectedTags(this.state.selectedTags.slice(-1).reverse(),
+                    true) : this.renderSelectedTags(this.state.selectedTags.slice(-2).reverse(),
+                    true))
                   : this.renderSelectedTags(
-                    this.state.selectedTags.slice(-4).reverse(),
+                    this.state.selectedTags.slice(-2).reverse(),
                     true
                   )}
               </div>

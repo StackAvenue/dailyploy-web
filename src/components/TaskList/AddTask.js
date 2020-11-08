@@ -539,7 +539,7 @@ const AddTask = (props) => {
                               changeCalenderModal(true);
                             }}
                           >
-                            Move to Dashboard
+                            Start Task
                           </Dropdown.Item>
                         )}
                         <Dropdown.Item
@@ -547,7 +547,7 @@ const AddTask = (props) => {
                           onClick={(e) => {
                             e.preventDefault();
                             props.handleTaskDetails("task-details", props.task_lists_task)
-                            props.userTaskDetails(props.task_lists_task.id)
+                            //props.userTaskDetails(props.task_lists_task.id)
                           }}
                         >
                           Details
@@ -722,7 +722,7 @@ const AddTask = (props) => {
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Move to dashboard</Modal.Title>
+          <Modal.Title>Start Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <i class="fas fa-asterisk"
@@ -748,6 +748,7 @@ const AddTask = (props) => {
               </select>
 
               {props.taskStatus && props.taskStatus.length > 0 && (
+                props.isUserstory ? 
                 <select
                   name="status"
                   onChange={(e) => {
@@ -760,12 +761,44 @@ const AddTask = (props) => {
                   {props.taskStatus.map((status, index) => {
                     // console.log("status", status);
                     return (
-                      <option key={index} value={index}>
+                      <option key={index} 
+                      selected={
+                        props.task_lists_task &&
+                        props.task_lists_task.task_status &&
+                        props.task_lists_task.task_status.id &&
+                        status.id == props.task_lists_task.task_status.id
+                      }
+                      value={index}>
                         {status.statusName}
                       </option>
                     );
                   })}
-                </select>
+                </select> : 
+                <select
+                name="status"
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
+                className="form-control work-status"
+              // value={status}
+              >
+                <option value={""}>Status</option>
+                {props.taskStatus.map((status, index) => {
+                  // console.log("status", status);
+                  return (
+                    <option key={index} 
+                    selected={
+                          props.task_lists_task &&
+                          props.task_lists_task.status &&
+                          props.task_lists_task.status.id &&
+                          status.id == props.task_lists_task.status.id
+                        }
+                    value={index}>
+                      {status.statusName}
+                    </option>
+                  );
+                })}
+              </select>
               )}
 
               {props.categories && props.categories.length > 0 && (

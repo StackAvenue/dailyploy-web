@@ -203,7 +203,7 @@ class AddMemberModal extends Component {
                           }`}
                         name="monthlyExpense"
                         min="0"
-                        placeholder="0"
+                        //placeholder="0"
                         value={this.props.state.monthlyExpense}
                         onChange={this.props.handleExpense}
                       />

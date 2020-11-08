@@ -18,6 +18,7 @@ import UserstoryModal from "../UserStory/UserstoryModal";
 import Spinner from 'react-bootstrap/Spinner'
 import useOnClickOutside from 'use-onclickoutside';
 import userstoryImg from '../../assets/images/userstory.png';
+import roadmapGoals from '../../assets/images/roadmapGoals.png';
 import { ROADMAP_STATUS } from '../../utils/Constants';
 
 const DisplayTaskList = (props) => {
@@ -76,7 +77,8 @@ const DisplayTaskList = (props) => {
   //open task details modal
   const handleTaskDetails = (modalDetails, task) => {
     setModalDetails(modalDetails)
-    setCurrentTask(task)
+    //setCurrentTask(task)
+    props.userTaskDetails(task.id)
     //props.setUserStoryDetails(task)
     props.showDetailsModal()
     // props.showUserstoryTasks()
@@ -220,11 +222,22 @@ const DisplayTaskList = (props) => {
                 //setIsOpen(true)
               }}
             >
-              <i class="fa fa-check-square-o"
+              <img
+                  src={roadmapGoals}
+                  data-tip data-for="taskChecklist"
+                  style={{
+                    height:"16px",
+                  width:"16px",
+                  marginTop: "-4px",
+                  marginRight: "4px", 
+                  cursor:"Pointer"
+                  }}
+                />
+              {/* <i class="fa fa-check-square-o"
                 aria-hidden="true"
                 data-tip data-for="taskChecklist"
                 style={{ color: "#6A7074" }}>
-              </i>
+              </i> */}
               <ReactTooltip id="taskChecklist" effect="solid">
                 Roadmap Goals
               </ReactTooltip>
@@ -348,7 +361,7 @@ const DisplayTaskList = (props) => {
                   deleteUserstoryTask={props.deleteUserstoryTask}
                   handleTaskDetails={handleTaskDetails}
                   modalDetails={modalDetails}
-                  currentTask={currentTask}
+                  currentTask={props.state.userStroyTaskDetails}
                   userTaskDetails={props.userTaskDetails}
                   // moveToDashBoard={props.moveToDashBoard}
                   usestoryMoveToDashboard={props.usestoryMoveToDashboard}
@@ -503,7 +516,7 @@ const DisplayTaskList = (props) => {
           handleDescription={props.handleDescription}
           editUserstory={props.editUserstory}
           editDescription={props.editDescription}
-          currentTask={currentTask}
+          currentTask={props.state.userStroyTaskDetails}
           setUserStoryDetails={props.setUserStoryDetails}
           handleTaskDetails={handleTaskDetails}
           handleUserstoryModal={handleUserstoryModal}
