@@ -1,272 +1,217 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import { firstTwoLetter, textTitlize } from "../../utils/function";
 import ReactTooltip from "react-tooltip";
 
 const Filter = (props) => {
-  const [statusSelections, setStatusSelections] = useState("");
   const [multiSelections, setMultiSelections] = useState([]);
-  const [selection, setSelection] = useState([]);
-  const [isSelected, setIsSelected] = useState(false)
-  const [isDropdownMemberSelected, setIsDropdownMemberSelected] = useState(false)
-  const [isBothSelected, setIsBothSelected] = useState(false)
-  const [isMemberSelected, setIsMemberSelected] = useState(false)
-  const [isStatusSelected, setIsStatusSelected] = useState(false)
-  const [statusId, setStatusId] = useState(null)
-  const [memberId, setMemberId] = useState(null)
-  const multiSelect = false;
-
-  function handleOnClick(member, type) {
-    if(!isMemberSelected && !isStatusSelected) {
-      props.loadFilteredData(true)
-      setMemberId(member.id)
-    if (!selection.some((user) => user.id === member.id)) {
-      props.displayFiteredList(props.list_id, member.id, type);
-      //props.displayList(props.list_id, member.id, type);
-      props.setConjuction(true, type, member.id);
-      setIsBothSelected(true)
-      setIsMemberSelected(true)
-      if (!multiSelect) {
-        setSelection([member]);
-        setIsSelected(true)
-      } else if (multiSelect) {
-        setSelection([...selection, member]);
-      }
-    } else {
-      let selectionAfterRemoval = selection;
-      selectionAfterRemoval = selectionAfterRemoval.filter(
-        (user) => user.id !== member.id
-      );
-      setSelection([...selectionAfterRemoval]);
-      props.displayFiteredList(props.list_id, 0, "all");
-      //props.displayList(props.list_id, 0, "all");
-      setIsBothSelected(true)
-      setIsMemberSelected(false)
-      //props.setConjuction(true, "filter", member.id);
-      props.setConjuction(false, "", 0)
-      setIsSelected(false)
-    }
-    } else if (isMemberSelected && !isStatusSelected) {
-      props.loadFilteredData(true)
-      setMemberId(member.id)
-    if (!selection.some((user) => user.id === member.id)) {
-      props.displayFiteredList(props.list_id, member.id, type);
-      //props.displayList(props.list_id, member.id, type);
-      props.setConjuction(true, type, member.id);
-      setIsBothSelected(true)
-      setIsMemberSelected(true)
-      if (!multiSelect) {
-        setSelection([member]);
-        setIsSelected(true)
-      } else if (multiSelect) {
-        setSelection([...selection, member]);
-      }
-    } else {
-      let selectionAfterRemoval = selection;
-      selectionAfterRemoval = selectionAfterRemoval.filter(
-        (user) => user.id !== member.id
-      );
-      setSelection([...selectionAfterRemoval]);
-      props.displayFiteredList(props.list_id, 0, "all");
-      //props.displayList(props.list_id, 0, "all");
-      setIsBothSelected(true)
-      setIsMemberSelected(false)
-      //props.setConjuction(true, "filter", member.id);
-      props.setConjuction(false, "", 0)
-      setIsSelected(false)
-    }
-    }
-    else {
-      setMemberId(member.id)
-      props.loadFilteredData(true)
-      if (!selection.some((user) => user.id === member.id)) {
-        props.displayFiteredList(props.list_id, member.id, "both", statusId);
-        //props.displayList(props.list_id, member.id, "both", statusId);
-        props.setConjuction(true, "both", member.id, statusId);
-        setIsBothSelected(true)
-        setIsMemberSelected(true)
-        if (!multiSelect) {
-          setSelection([member]);
-          setIsSelected(true)
-        } else if (multiSelect) {
-          setSelection([...selection, member]);
-        }
-      } else {
-        let selectionAfterRemoval = selection;
-        selectionAfterRemoval = selectionAfterRemoval.filter(
-          (user) => user.id !== member.id
-        );
-        setSelection([...selectionAfterRemoval]);
-        props.displayFiteredList(props.list_id, statusId, "status");
-        //props.displayList(props.list_id, statusId, "status");
-        props.setConjuction(true, "status", statusId);
-        setIsBothSelected(true)
-        setIsMemberSelected(false)
-        //props.setConjuction(true, "filter", member.id);
-        //props.setConjuction(false, "", 0)
-        setIsSelected(false)
-      }
-    }
-  }
-
-  function isItemInSelection(item) {
-    if (selection.some((current) => current.id === item.id)) {
-      return true;
-      //setIsSelected(true)
-    }
-    return false;
-  }
-
-  const countIncrese = (projectUser) => {
-    let arr = projectUser;
-    let count;
-    if (arr.length >= 4) {
-      count = arr.length - 4;
-    }
-    let showCount = count ? (
-      <div className="user-block2">
-        <span>
-          <Dropdown>
-            <Dropdown.Toggle
-              className="dropdown-block"
-              variant="success"
-              id="dropdown-basic"
-            >
-              +{count}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {props.projectMembers.slice(4).map((member) => (
-                <Dropdown.Item
-                  onClick={() => {
-                    handleOnClick(member, props.state.MEMBER);
-                    //setIsDropdownMemberSelected(!isDropdownMemberSelected)
-                  }}
-                >
-                  {member.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <span>
-                    {isItemInSelection(member) && <i class="fa fa-check" />}
-                  </span>
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </span>
-      </div>
-    ) : null;
-    return showCount;
-  };
+  const [multipleMemberSelections, setMultipleMemberSelections] = useState([]);
+  const [isMemberSelected, setIsMemberSelected] = useState(false);
+  const [isStatusSelected, setIsStatusSelected] = useState(false);
+  const [statusId, setStatusId] = useState(null);
+  const [memberId, setMemberId] = useState(null);
+  const [isStatusChanged, setIsStatusChanged] = useState(false);
+  const [isMemberChanged, setIsMemberChanged] = useState(false);
 
   const statuses = props.taskStatus.map((status) => {
     return status.statusName;
   });
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      const selectedStatus = props.taskStatus.find(
-        (taskStatus) => taskStatus.statusName == statusSelections
-      );
-      if (selectedStatus != null) {
-        console.log(selectedStatus.id);
-        setStatusId(selectedStatus.id)
-        //setIsBothSelected(true)
-        props.loadFilteredData(true)
-        // props.setConjuction(true, "status", selectedStatus.id)
-        if (isMemberSelected && !isStatusSelected) {
-          props.displayFiteredList(props.list_id, memberId, "both", selectedStatus.id);
-          //props.displayList(props.list_id, memberId, "both", selectedStatus.id);
-          props.setConjuction(true, "both", memberId, selectedStatus.id);
-          setIsStatusSelected(true)
-          setIsMemberSelected(true)
-        }
-        else {
-          props.displayFiteredList(props.list_id, selectedStatus.id, props.state.STATUS);
-          //props.displayList(props.list_id, selectedStatus.id, props.state.STATUS);
-          props.setConjuction(true, "status", selectedStatus.id);
-          setIsStatusSelected(true)
-          setIsBothSelected(true)
-        }
-      } else {
-        console.log("undefined");
-      }
-    } else if (event.keyCode === 8 && statusSelections.length > 0) {
-      var flag = false;
-      if (!flag) {
-        //setIsStatusSelected(false)
-        props.loadFilteredData(true)
-        if (isMemberSelected && isStatusSelected) {
-          props.displayFiteredList(props.list_id, memberId, props.state.MEMBER);
-          //props.displayList(props.list_id, memberId, props.state.MEMBER);
-          //setIsBothSelected(false)
-          props.setConjuction(true, "member", memberId)
-          setIsStatusSelected(false)
-          
-        } else {
-          props.displayFiteredList(props.list_id, 0, "all");
-          //props.displayList(props.list_id, 0, "all");
-          setIsStatusSelected(false);
-          props.setConjuction(false, "", 0)
-        }
-        //props.displayList(props.list_id, 0, "all");
-        // props.setConjuction(false, "", 0)
-        flag = true;
-      }
-      console.log("delete");
+  const roadmapMembers = props.projectMembers.map((member) => {
+    return member.name;
+  });
+
+  useEffect(() => {
+    if (isStatusChanged) {
+      filterStatuses();
     }
+  }, [multiSelections, isStatusChanged]);
+
+  useEffect(() => {
+    if (isMemberChanged) {
+      filterMembers();
+    }
+  }, [multipleMemberSelections, isMemberChanged]);
+
+  const filterMembers = () => {
+    if (multipleMemberSelections.length > 0) {
+      let filterMemberIds = [];
+      props.loadFilteredData(true);
+      for (var i = 0; i < multipleMemberSelections.length; i++) {
+        for (var j = 0; j < props.projectMembers.length; j++) {
+          if (multipleMemberSelections[i] == props.projectMembers[j].name) {
+            filterMemberIds.push(props.projectMembers[j].id);
+          }
+        }
+      }
+      setMemberId(filterMemberIds.toString());
+      if (!isMemberSelected && !isStatusSelected) {
+        props.displayFiteredList(
+          props.list_id,
+          filterMemberIds.toString(),
+          props.state.MEMBER
+        );
+        props.setConjuction(true, "member", filterMemberIds.toString());
+        setIsMemberSelected(true);
+      } else if (isMemberSelected && !isStatusSelected) {
+        props.displayFiteredList(
+          props.list_id,
+          filterMemberIds.toString(),
+          props.state.MEMBER
+        );
+        props.setConjuction(true, "member", filterMemberIds.toString());
+        setIsMemberSelected(true);
+      } else {
+        props.displayFiteredList(
+          props.list_id,
+          filterMemberIds.toString(),
+          "both",
+          statusId
+        );
+
+        props.setConjuction(true, "both", filterMemberIds.toString(), statusId);
+        setIsMemberSelected(true);
+      }
+    } else {
+      if (multipleMemberSelections.length == 0 && multiSelections.length > 0) {
+        props.displayFiteredList(props.list_id, statusId, props.state.STATUS);
+        props.setConjuction(true, "status", statusId);
+        setIsMemberSelected(false);
+        setIsStatusSelected(true);
+      } else if (
+        multiSelections.length == 0 &&
+        multipleMemberSelections.length == 0
+      ) {
+        props.displayFiteredList(props.list_id, 0, "all");
+        props.setConjuction(false, "", 0);
+        setIsMemberSelected(false);
+        setIsStatusSelected(false);
+      } else {
+        props.displayFiteredList(props.list_id, 0, "all");
+      }
+    }
+  };
+
+  const filterStatuses = () => {
+    if (multiSelections.length > 0) {
+      let filterStatusIds = [];
+      props.loadFilteredData(true);
+      for (var i = 0; i < multiSelections.length; i++) {
+        for (var j = 0; j < props.taskStatus.length; j++) {
+          if (multiSelections[i] == props.taskStatus[j].statusName) {
+            filterStatusIds.push(props.taskStatus[j].id);
+          }
+        }
+      }
+      setStatusId(filterStatusIds.toString());
+      if (isMemberSelected && !isStatusSelected) {
+        props.displayFiteredList(
+          props.list_id,
+          memberId,
+          "both",
+          filterStatusIds.toString()
+        );
+
+        props.setConjuction(true, "both", memberId, filterStatusIds.toString());
+        setIsStatusSelected(true);
+        setIsMemberSelected(true);
+      } else if (isMemberSelected && isStatusSelected) {
+        props.displayFiteredList(
+          props.list_id,
+          memberId,
+          "both",
+          filterStatusIds.toString()
+        );
+        props.setConjuction(true, "both", memberId, filterStatusIds.toString());
+        setIsStatusSelected(true);
+        setIsMemberSelected(true);
+      } else {
+        props.displayFiteredList(
+          props.list_id,
+          filterStatusIds.toString(),
+          props.state.STATUS
+        );
+        props.setConjuction(true, "status", filterStatusIds.toString());
+        setIsStatusSelected(true);
+      }
+    } else {
+      if (multiSelections.length == 0 && multipleMemberSelections.length > 0) {
+        props.displayFiteredList(props.list_id, memberId, props.state.MEMBER);
+        props.setConjuction(true, "member", memberId);
+        setIsMemberSelected(true);
+        setIsStatusSelected(false);
+      } else if (
+        multiSelections.length == 0 &&
+        multipleMemberSelections.length == 0
+      ) {
+        props.displayFiteredList(props.list_id, 0, "all");
+        props.setConjuction(false, "", 0);
+        setIsMemberSelected(false);
+        setIsStatusSelected(false);
+      } else {
+        props.displayFiteredList(props.list_id, 0, "all");
+      }
+    }
+  };
+
+  const filteredStatusValues = (selected) => {
+    setMultiSelections(selected);
+    setIsStatusChanged(true);
+  };
+
+  const filteredMemberValues = (selected) => {
+    setMultipleMemberSelections(selected);
+    setIsMemberChanged(true);
   };
 
   return (
     <div className="filter-div">
       <div className="input-filter">
         <Typeahead
-          //clearButton
-          id="basic-typeahead-single"
+          id="basic-typeahead-multiple"
           labelKey="name"
-          onChange={setStatusSelections}
-          onKeyDown={handleKeyDown}
+          multiple
+          clearButton
+          onChange={(selected) => {
+            filteredStatusValues(selected);
+          }}
+          //onKeyDown={handleStatusKeyDown}
+          //labelKey="statusName"
           options={statuses}
-          placeholder="Filter Status"
-          selected={statusSelections}
+          placeholder="Filter Statuses"
+          selected={multiSelections}
         />
       </div>
-      <div className="member-filter">
-        {isSelected && props.projectMembers.length>4 && isDropdownMemberSelected ? <span class="member-selected">Member selected : 1</span> : null}
-        <span>
-          {props.projectMembers.slice(0, 4).map((member, index) => {
-            return (
-              <div
-                key={index}
-                className="user-block"
-                title={textTitlize(member.name)}
-              >
-                <span
-                  key={index}
-                  onClick={() => {
-                    handleOnClick(member, props.state.MEMBER);
-                  }}
-                >
-                  {firstTwoLetter(member.name)}
-                  <span>
-                    {isItemInSelection(member) && <i class="fa fa-check" />}
-                  </span>
-                </span>
-              </div>
-            );
-          })}
-        </span>
-        {countIncrese(props.projectMembers.map((member) => member.name))}
+      <div className="member-search-filter">
+        <Typeahead
+          id="basic-typeahead-multiple"
+          labelKey="name"
+          multiple
+          clearButton
+          onChange={(selected) => {
+            filteredMemberValues(selected);
+          }}
+          //onKeyDown={handleMemberKeyDown}
+          options={roadmapMembers}
+          placeholder="Filter Members"
+          selected={multipleMemberSelections}
+        />
       </div>
       <div
         className="close-filter"
         onClick={(e) => {
           e.preventDefault();
           props.closeFilter();
-          props.loadFilteredData(true)
+          props.loadFilteredData(true);
           props.displayFiteredList(props.list_id, 0, "all");
-          //props.displayList(props.list_id, 0, "all");
         }}
       >
-        <i class="fa fa-times" data-tip data-for="closeTask" onClick={(e) => props.setConjuction(false, "", 0)}></i>&nbsp;&nbsp;
+        <i
+          class="fa fa-times"
+          data-tip
+          data-for="closeTask"
+          onClick={(e) => props.setConjuction(false, "", 0)}
+        ></i>
+        &nbsp;&nbsp;
         <ReactTooltip id="closeTask" effect="solid">
           Close
         </ReactTooltip>
