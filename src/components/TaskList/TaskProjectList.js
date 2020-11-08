@@ -124,6 +124,9 @@ class TaskProjectList extends Component {
       editedUserStoryloadingId: null,
       markUserStory: false,
       filterParams: {},
+      taskDetailsLoading: false,
+      addUserStoryTaskLoading: false,
+      addUserStoryTaskLoadingId: null
       isDeleteDisabled: false
     };
   }
@@ -203,7 +206,7 @@ class TaskProjectList extends Component {
       categories: taskCategories,
     });
     if (projectsData && projectsData.length > 0) {
-      this.handleOpenTaskData(projectId != '' ? projectId : projectsData[0].id);
+      this.handleOpenTaskData(Number.isNaN(projectId) || projectId == '' ? projectsData[0].id : projectId);
     }
     this.createUserProjectList();
   }
@@ -1016,7 +1019,14 @@ class TaskProjectList extends Component {
     }
   };
 
+  taskDetailsLoadingfunc = (value) => {
+    this.setState ({
+      taskDetailsLoading: value
+    })
+  }
+
   userTaskDetails = async (tltId) =>{
+    this.taskDetailsLoadingfunc(true)
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/task_lists/${this.state.list_id}/task_list_tasks/${tltId}`
@@ -1026,9 +1036,10 @@ class TaskProjectList extends Component {
         userStroyTaskDetails: data,
         userStoryDetails_checklists: data.checklist
       })
+      this.taskDetailsLoadingfunc(false)
     }
     catch (e) {
-
+      this.taskDetailsLoadingfunc(false)
     }
   }
 
@@ -1073,14 +1084,13 @@ class TaskProjectList extends Component {
         tasks[tltIndex].task_id = data.task_id ? data.task_id : 1;
         tasks[tltIndex].status = saveTaskParams.status.statusName;
       }
-      console.log("tasks", tasks);
       this.setState({
         task_lists: tasks,
       });
 
       toast(
         <DailyPloyToast
-          message="Task is successfully moved to dashboard"
+          message="Please visit Dashboard to Start Tracking"
           status="success"
         />,
         {
@@ -1165,8 +1175,19 @@ class TaskProjectList extends Component {
     }
   }
 
+  addUserStoryTaskLoadingfunc = (value, id) => {
+    this.setState({
+      addUserStoryTaskLoading: value,
+      addUserStoryTaskLoadingId: id
+    })
+  }
+
   saveUserstoryTask = async (saveTaskParams, id) => {
-    this.addTaskLoading(true)
+    if(this.state.editTltId != -1) {
+      this.addTaskLoading(true)
+    } else {
+      this.addUserStoryTaskLoadingfunc(true, id)
+    }
     try {
       let params = {
         name: saveTaskParams.name,
@@ -1187,15 +1208,16 @@ class TaskProjectList extends Component {
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${id}/task_list_tasks/${this.state.editTltId}`
       )
       if(this.state.editTltId != -1){ 
-        const updatedTask =  this.state.currentUserstoryTask.filter(task => {
-          return task.id !== data.id
-        })
+        const updatedTask =  this.state.currentUserstoryTask.map(x => x.id == data.id ? data : x)
+        // const updatedTask =  this.state.currentUserstoryTask.filter(task => {
+        //   return task.id !== data.id
+        // })
         this.setState({ 
-          currentUserstoryTask: [...updatedTask, data],
+          currentUserstoryTask: updatedTask,
           show: false,
           editTltId: -1,
           TaskShow: false, })
-        this.fetchUserstory(id); 
+        //this.fetchUserstory(id); 
         this.addTaskLoading(false) 
       } else {
         this.setState({ 
@@ -1203,12 +1225,15 @@ class TaskProjectList extends Component {
           show: false,
           editTltId: -1,
           TaskShow: false, })
-        this.fetchUserstory(id);  
+        //this.fetchUserstory(id);
+        this.addUserStoryTaskLoadingfunc(false)  
         this.addTaskLoading(false)
       }
      
     } catch (error) {
       console.log(error)
+      this.addTaskLoading(false) 
+      this.addUserStoryTaskLoadingfunc(false)
     }
   }
 
@@ -1305,7 +1330,6 @@ class TaskProjectList extends Component {
 
 
   usestoryMoveToDashboard = async (saveTaskParams, userstoryId) => {
-    console.log("dnjsd", saveTaskParams)
     try {
       const { data } = await post(
         {
@@ -1318,8 +1342,26 @@ class TaskProjectList extends Component {
         `workspaces/${this.state.workspaceId}/projects/${this.state.projectId}/user_stories/${userstoryId}/move/${saveTaskParams.tltId}`
       );
       this.fetchUserstory(userstoryId)
+      toast(
+        <DailyPloyToast
+          message="Please visit Dashboard to Start Tracking"
+          status="success"
+        />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
     } catch (error) {
-      console.log("djsndjns")
+      if (error.message) {
+        toast(
+          <DailyPloyToast message="Please select a member" status="error" />,
+          {
+            autoClose: 2000,
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+      }
     }
   }
 
@@ -1363,6 +1405,7 @@ class TaskProjectList extends Component {
       this.UserStoryMarked(false)
      
     } catch (error) {
+      this.userStoryLoading(false, id)
       console.log(error)
       this.userStoryLoading(false, id)
     }

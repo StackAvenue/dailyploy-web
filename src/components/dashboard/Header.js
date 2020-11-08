@@ -70,7 +70,7 @@ class Header extends Component {
       `users/${useId}/notifications?workspace_id=${getWorkspaceId()}`
     );
     this.setState({
-      tempSize: notificataionData.data.notifications.length,
+      tempSize: notificataionData && notificataionData.data ? notificataionData.data.notifications.length : 0,
       notifications:
         notificataionData && notificataionData.data
           ? notificataionData.data.notifications

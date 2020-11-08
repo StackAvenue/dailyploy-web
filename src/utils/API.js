@@ -40,6 +40,7 @@ export const logout = async () => {
   await cookie.remove("currency", { path: "/" });
   localStorage.removeItem('projectName')
   localStorage.removeItem('projectId')
+  localStorage.clear()
 };
 
 export const post = async (data, basePath) => {

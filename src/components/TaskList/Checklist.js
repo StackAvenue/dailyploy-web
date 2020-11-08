@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { get, post, put, del } from "../../utils/API";
 import Spinner from 'react-bootstrap/Spinner';
 import ReactTooltip from "react-tooltip";
+import roadmapGoals from '../../assets/images/roadmapGoals.png';
 
 const Checklist = (props) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false)
@@ -154,7 +155,19 @@ const Checklist = (props) => {
 
   return (
     <div className="checklist-div">
-      <i class="fa fa-check-square-o" aria-hidden="true" style={{ color: "#6A7074" }}></i>&nbsp;&nbsp;
+      {/* <i class="fa fa-check-square-o" aria-hidden="true" style={{ color: "#6A7074" }}></i> */}
+      <img
+                  src={roadmapGoals}
+                  data-tip data-for="taskChecklist"
+                  style={{
+                    height:"16px",
+                    width:"16px",
+                    marginTop: "-4px",
+                    marginRight: "4px", 
+                    cursor:"Pointer"
+                  }}
+                />
+      &nbsp;&nbsp;
       <strong>Roadmap Goals</strong>
       <br />
       <div

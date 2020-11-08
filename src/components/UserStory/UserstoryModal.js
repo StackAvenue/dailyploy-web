@@ -77,6 +77,9 @@ function UserstoryModal(props) {
   const [loggedInUser, setLoggedInUser] = useState("");
   const [isUserDetailOpen, setIsUserDetailOpen] = useState(true)
   const [isCompleted, setIsCompleted] = useState(false)
+  
+  const [viewerIsOpen, setViewerIsOpen] = useState(false);
+  const [imge_url, setImge_url] = useState(null);
 
   useEffect(() => {
     loggedInUserName();
@@ -113,7 +116,7 @@ function UserstoryModal(props) {
 
   useEffect(() => {
     handleSetUserstory();
-  },[props.userStory_checklists, props.state.userStoryDetails_checklists])
+  },[props.userStory_checklists, props.state.userStoryDetails_checklists, props.state.userStoryDetails])
 
   const handleSetUserstory = () => {
     if (props.modalDetails == "user-story") {
@@ -153,15 +156,15 @@ function UserstoryModal(props) {
         setUDescription(props.currentTask.description);
         setEstimation(props.currentTask.estimation);
         setTrackedTime(props.currentTask.tracked_time);
-        setStatus(props.currentTask.status);
+        setStatus(props.currentTask.task_status);
         setStartDate(
-          props.currentTask.start_date
-            ? new Date(props.currentTask.start_date)
+          props.currentTask.task && props.currentTask.task.start_datetime
+            ? new Date(props.currentTask.task.start_datetime)
             : null
         );
         setEndDate(
-          props.currentTask.end_date
-            ? new Date(props.currentTask.end_date)
+          props.currentTask.task && props.currentTask.task.end_datetime
+            ? new Date(props.currentTask.task.end_datetime)
             : null
         );
         setIsComplete(props.currentTask.is_complete);
@@ -345,7 +348,7 @@ function UserstoryModal(props) {
         setComment("");
         setA(true);
         setPictures([]);
-        setCommentList([...commentList, comment]);
+        setCommentList([comment, ...commentList]);
         console.log(comment, "aa");
         // var taskComments = [comment, ...this.props.state.taskComments];
         // this.props.updateTaskComments(taskComments);
@@ -380,12 +383,14 @@ function UserstoryModal(props) {
 
         fd.append("comments", editCommentValue);
         const { data } = await put(fd, `comment/${commentId}`);
-        var taskComments = commentList;
-        var comment = taskComments.find((c) => c.id == commentId);
-        comment["comments"] = data.comments;
-        comment["user"] = data.user;
-        comment["attachments"] = data.attachments;
-        setCommentList([...commentList, comment]);
+        //var taskComments = commentList;
+        var comment = commentList.map((c) => c.id == commentId ? data : c);
+        setCommentList(comment);
+        // var comment = taskComments.find((c) => c.id == commentId);
+        // comment["comments"] = data.comments;
+        // comment["user"] = data.user;
+        // comment["attachments"] = data.attachments;
+        // setCommentList([...commentList, comment]);
         setEditComment("");
         setEditCommentValue("");
         setPictures([]);
@@ -491,12 +496,14 @@ function UserstoryModal(props) {
   };
 
   const openViewImage = (imge_url) => {
-    // if (imge_url) {
-    //   this.setState({
-    //     viewerIsOpen: true,
-    //     imge_url: imge_url,
-    //   });
-    // }
+    if (imge_url) {
+      setViewerIsOpen(true);
+      setImge_url(imge_url)
+    }
+  };
+
+  const closeViewer = () => {
+    setViewerIsOpen(false);
   };
   
   const removeUploadedImage = (index) => {
@@ -557,7 +564,18 @@ function UserstoryModal(props) {
   return (
     <div className="UserstoryModal">
       {props.modalDetails == "task-details" ? (
-        <>
+        props.state.taskDetailsLoading ? <><button
+        className="btn btn-link float-right"
+        onClick={props.handleDetailsClose}
+        style={{ marginTop: "-2%" }}
+      >
+        <img src={Close} alt="close" />
+      </button><Spinner animation="grow" variant="success" 
+        style={{
+          position: "absolute",
+          left: "47%",
+          top: "44%"}} /> </>:
+          <>
           <div className="modal-details">
           <i class="fa fa-file-text-o" aria-hidden="true" style={{color:"#7686FF",
           fontSize: "19px",
@@ -667,7 +685,7 @@ function UserstoryModal(props) {
               <div className="modal-container-2">
                 <div className="box-1">End date:</div>
                 <div className="box-2">
-                  <div className="details-modal-datepicker">
+                  <div className="details-modal-datepicker" style={{ marginLeft:"5%" }}>
                     {!edit ? (
                       endDate ? (
                         moment(endDate).format(DATE_FORMAT2)
@@ -716,9 +734,9 @@ function UserstoryModal(props) {
                 <div className="box-2">
                   <div className="modalMember" style={{ marginLeft:"5%" }}>
                     {!edit ? (
-                      trackedTime ? (
+                      trackedTime ? 
                         trackedTime
-                      ) : (
+                       : (
                         " Task not started"
                       )
                     ) : (
@@ -771,7 +789,7 @@ function UserstoryModal(props) {
               <div className="modal-container-2">
                 <div className="box-1">Priority:</div>
                 <div className="box-2">
-                  <div className="modalMember">
+                  <div className="modalMember" style={{ marginLeft:"5%" }}>
                     {!edit ? (
                       priority.name
                     ) : (
@@ -788,7 +806,7 @@ function UserstoryModal(props) {
                           onChange={(e) => {
                             handleDetailsEdit(e);
                           }}
-                          className="form-control"
+                          className="form-control details-modal"
                           placeholder="Priorities"
                           // value={priority}
                         >
@@ -832,6 +850,11 @@ function UserstoryModal(props) {
                           handleDetailsEdit(e);
                         }}
                         className="form-control work-status details-modal"
+                        style = {{
+                          height: "30px",
+                          width: "63%",
+                          fontSize: "13px"
+                        }}
                       >
                         {props.categories.map((cate, index) => {
                           return (
@@ -1123,14 +1146,14 @@ function UserstoryModal(props) {
                               {item.attachments.map((attachment) => {
                                 return (
                                   <>
-                                    {isImage(attachment.imge_url) ? (
+                                    {isImage(attachment.url) ? (
                                       <div style={{ display: "grid" }}>
                                         <img
-                                          src={`${attachment.imge_url}`}
+                                          src={`${attachment.url}`}
                                           onClick={() =>
-                                            openViewImage(attachment.imge_url)
+                                            openViewImage(attachment.url)
                                           }
-                                          alt={returnAlt(attachment.imge_url)}
+                                          alt={returnAlt(attachment.url)}
                                           height="42"
                                           width="42"
                                           style={{
@@ -1139,29 +1162,36 @@ function UserstoryModal(props) {
                                           }}
                                         ></img>
                                         <a
-                                          href={`${attachment.imge_url}`}
+                                          href={`${attachment.url}`}
                                           download
                                           style={{
                                             fontSize: "12px",
                                             padding: "5px",
                                           }}
                                         >
-                                          {returnAlt(attachment.imge_url)}
+                                          {returnAlt(attachment.url)}
                                         </a>
                                       </div>
                                     ) : (
                                       <a
-                                        href={`${attachment.imge_url}`}
+                                        href={`${attachment.url}`}
                                         download
                                         style={{ fontSize: "12px" }}
                                       >
-                                        {returnAlt(attachment.imge_url)}
+                                        {returnAlt(attachment.url)}
                                       </a>
                                     )}
                                   </>
                                 );
                               })}
                             </div>
+                            {viewerIsOpen ? (
+                                <ImgsViewer
+                                  imgs={[{ src: `${imge_url}` }]}
+                                  isOpen={viewerIsOpen}
+                                  onClose={closeViewer}
+                                />
+                              ) : null}
                             <div
                               className="col-md-12"
                               style={{ paddingLeft: "20px" }}
@@ -1326,7 +1356,7 @@ function UserstoryModal(props) {
                           onChange={(e) => {
                             handleDetailsEdit(e);
                           }}
-                          className="form-control"
+                          className="form-control details-modal"
                           placeholder="Priorities"
                         >
                           {PRIORITIES.slice(0, 3).map((Priority, index) => (
@@ -1785,6 +1815,13 @@ function UserstoryModal(props) {
                                 );
                               })}
                             </div>
+                            {viewerIsOpen ? (
+                                <ImgsViewer
+                                  imgs={[{ src: `${imge_url}` }]}
+                                  isOpen={viewerIsOpen}
+                                  onClose={closeViewer}
+                                />
+                              ) : null}
                             <div
                               className="col-md-12"
                               style={{ paddingLeft: "20px" }}
