@@ -72,6 +72,7 @@ const Filter = (props) => {
         setIsMemberSelected(true);
       }
     } else {
+      props.loadFilteredData(true);
       if (multipleMemberSelections.length == 0 && multiSelections.length > 0) {
         props.displayFiteredList(props.list_id, statusId, props.state.STATUS);
         props.setConjuction(true, "status", statusId);
@@ -134,6 +135,7 @@ const Filter = (props) => {
         setIsStatusSelected(true);
       }
     } else {
+      props.loadFilteredData(true);
       if (multiSelections.length == 0 && multipleMemberSelections.length > 0) {
         props.displayFiteredList(props.list_id, memberId, props.state.MEMBER);
         props.setConjuction(true, "member", memberId);
