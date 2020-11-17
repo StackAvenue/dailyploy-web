@@ -85,3 +85,10 @@ PRIORITIES_MAP.set("no_priority", {
   color_code: "#9B9B9B",
   label: "no priority"
 });
+const COLOR = {
+  ORANGE: "orange",
+  YELLOW: "yellow",
+  GREEN: "green",
+  RED: "red"
+}
+export const PIE_CHART_COLOR = Object.freeze(COLOR);

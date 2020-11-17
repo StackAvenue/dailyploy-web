@@ -4,14 +4,15 @@ import Dashboard from "./containers/Dashboard";
 import NotFound from "./components/NoMatch";
 import Settings from "./components/dashboard/Settings";
 import cookie from "react-cookies";
-import Analysis from "./components/dashboard/Analysis";
+// import Analysis from "./components/dashboard/Analysis";
 import Reports from "./components/dashboard/Reports";
 import ShowProjects from "./components/dashboard/ShowProjects";
 import ShowMembers from "./components/dashboard/ShowMembers";
 import TaskList from "./components/dashboard/TaskList";
 import TaskProjectList from "./components/TaskList/TaskProjectList";
-import Milestone from "./components/Milestone/Milestone";
-import Allocation from "./components/ResourceAllocation/Allocation";
+import Milestone from './components/Milestone/Milestone';
+import Allocation from './components/ResourceAllocation/Allocation';
+import Analysis from './components/AnalysisTab/Analysis';
 import { get, put, logout } from "./utils/API";
 import Sidebar from "./components/dashboard/Sidebar";
 import MenuBar from "./components/dashboard/MenuBar";
@@ -90,6 +91,13 @@ class Workspace extends Component {
         exact: true,
         component: Allocation,
         title: "allocation",
+      },
+      {
+        path: "/analysis",
+        exact: true,
+        component: Analysis,
+        title: "analysis",
+
       },
       {
         component: NotFound,
@@ -191,7 +199,7 @@ class Workspace extends Component {
       });
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   logout = async () => {
     await logout();
@@ -298,7 +306,7 @@ class Workspace extends Component {
       var taskId = this.state.event.id.split("-")[0];
       try {
         const { data } = await put(taskDate, `tasks/${taskId}/stop-tracking`);
-      } catch (e) {}
+      } catch (e) { }
       this.setState({
         event: null,
       });

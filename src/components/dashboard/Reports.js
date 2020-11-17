@@ -452,7 +452,7 @@ class Reports extends Component {
       var details = this.makeDatesHash(data.reports);
       var taskDetails = details.taskReports;
       var totalTime = details.totalTime;
-    } catch (e) {}
+    } catch (e) { }
 
     // Category Listing
     try {
@@ -460,7 +460,7 @@ class Reports extends Component {
         `workspaces/${this.state.workspaceId}/task_category`
       );
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Projects
     try {
@@ -471,12 +471,12 @@ class Reports extends Component {
       var projectReportData =
         data.report_data.length > 0
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-              capacity: data.capacity,
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+            capacity: data.capacity,
+          }
           : "";
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Category
     try {
@@ -486,11 +486,11 @@ class Reports extends Component {
       );
       var categoryReportData = data.report_data
         ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time,
-          }
+          data: data.report_data,
+          estimateTime: data.total_estimated_time,
+        }
         : "";
-    } catch (e) {}
+    } catch (e) { }
 
     // Summury reports Priority
     try {
@@ -500,11 +500,11 @@ class Reports extends Component {
       );
       var priorityReportData = data.report_data
         ? {
-            data: data.report_data,
-            estimateTime: data.total_estimated_time,
-          }
+          data: data.report_data,
+          estimateTime: data.total_estimated_time,
+        }
         : "";
-    } catch (e) {}
+    } catch (e) { }
 
     this.props.handleLoading(false);
     this.setState({
@@ -600,7 +600,7 @@ class Reports extends Component {
         var details = this.makeDatesHash(data.reports);
         var taskDetails = details.taskReports;
         var totalTime = details.totalTime;
-      } catch (e) {}
+      } catch (e) { }
 
       // Summury reports Projects
       try {
@@ -610,12 +610,12 @@ class Reports extends Component {
         );
         var projectReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-              capacity: data.capacity,
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+            capacity: data.capacity,
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       var message = this.displayMessage();
       try {
@@ -625,11 +625,11 @@ class Reports extends Component {
         );
         var categoryReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         const { data } = await get(
@@ -638,11 +638,11 @@ class Reports extends Component {
         );
         var priorityReportData = data.report_data
           ? {
-              data: data.report_data,
-              estimateTime: data.total_estimated_time,
-            }
+            data: data.report_data,
+            estimateTime: data.total_estimated_time,
+          }
           : "";
-      } catch (e) {}
+      } catch (e) { }
 
       let filterUserIds =
         this.props.searchUserDetails.length > 0
@@ -925,7 +925,7 @@ class Reports extends Component {
             });
           }
         );
-        await Promise.all(finalArray).then((response) => {});
+        await Promise.all(finalArray).then((response) => { });
         resolve(results);
       } catch (err) {
         reject(err);
@@ -956,8 +956,8 @@ class Reports extends Component {
       user_ids:
         this.props.searchUserDetails.length > 0
           ? this.props.searchUserDetails
-              .map((member) => member.member_id)
-              .join(",")
+            .map((member) => member.member_id)
+            .join(",")
           : this.state.userId,
       // frequency: this.returnFrequency()
     };
@@ -1159,7 +1159,7 @@ class Reports extends Component {
           workspaceId={this.state.workspaceId}
           classNameRoute={this.classNameRoute}
           state={this.state}
-          manageProjectListing={() => {}}
+          manageProjectListing={() => { }}
         />
 
         <div className="analysis-box row no-margin padding-top-60px">
@@ -1175,27 +1175,24 @@ class Reports extends Component {
               <div
                 onClick={() => this.calenderButtonHandle("weekly")}
                 name="weekly"
-                className={`d-inline-block ${
-                  this.state.weekly ? "active" : ""
-                }`}
+                className={`d-inline-block ${this.state.weekly ? "active" : ""
+                  }`}
               >
                 Weekly
               </div>
               <div
                 onClick={() => this.calenderButtonHandle("monthly")}
                 name="monthly"
-                className={`d-inline-block ${
-                  this.state.monthly ? "active" : ""
-                }`}
+                className={`d-inline-block ${this.state.monthly ? "active" : ""
+                  }`}
               >
                 Monthly
               </div>
               <div
                 onClick={() => this.calenderButtonHandle("custom")}
                 name="custom"
-                className={`d-inline-block ${
-                  this.state.custom ? "active" : ""
-                }`}
+                className={`d-inline-block ${this.state.custom ? "active" : ""
+                  }`}
               >
                 Custom
               </div>
@@ -1239,9 +1236,8 @@ class Reports extends Component {
                 </div>
                 <div className="report-download">
                   <button
-                    className={`btn btn-sm btn-default ${
-                      this.state.isLoading ? "disabled" : ""
-                    }`}
+                    className={`btn btn-sm btn-default ${this.state.isLoading ? "disabled" : ""
+                      }`}
                     onClick={() => this.downloadReportsCsv()}
                   >
                     {this.state.isLoading ? (
@@ -1263,32 +1259,32 @@ class Reports extends Component {
                   <VideoLoader />
                 </div>
               ) : (
-                <>
-                  <div className="">
-                    <SummuryReportCharts
-                      priorities={PRIORITIES}
-                      projects={this.state.projects}
-                      state={this.state}
-                      searchUserDetails={this.props.searchUserDetails}
-                      searchProjectIds={this.props.searchProjectIds}
-                      setColumnChartData={this.setColumnChartData}
-                      handleLoading={this.props.handleLoading}
-                    />
-                  </div>
+                  <>
+                    <div className="">
+                      <SummuryReportCharts
+                        priorities={PRIORITIES}
+                        projects={this.state.projects}
+                        state={this.state}
+                        searchUserDetails={this.props.searchUserDetails}
+                        searchProjectIds={this.props.searchProjectIds}
+                        setColumnChartData={this.setColumnChartData}
+                        handleLoading={this.props.handleLoading}
+                      />
+                    </div>
 
-                  <div className="report-table">
-                    <ReportTable
-                      taskDetails={this.state.taskDetails}
-                      state={this.state}
-                      searchProjectIds={this.props.searchProjectIds}
-                      searchUserDetails={this.props.searchUserDetails}
-                      frequency={this.returnFrequency()}
-                      timeTrackUpdate={this.timeTrackUpdate}
-                      isTimetrackMode={this.state.isTimetrackMode}
-                    />
-                  </div>
-                </>
-              )}
+                    <div className="report-table">
+                      <ReportTable
+                        taskDetails={this.state.taskDetails}
+                        state={this.state}
+                        searchProjectIds={this.props.searchProjectIds}
+                        searchUserDetails={this.props.searchUserDetails}
+                        frequency={this.returnFrequency()}
+                        timeTrackUpdate={this.timeTrackUpdate}
+                        isTimetrackMode={this.state.isTimetrackMode}
+                      />
+                    </div>
+                  </>
+                )}
             </div>
           </div>
         </div>

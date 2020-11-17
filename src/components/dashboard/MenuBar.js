@@ -616,7 +616,7 @@ export default class MenuBar extends Component {
                 userRole={userRole}
                 workspaceId={this.props.workspaceId}
               />
-              <div className="col-md-6 text-right">
+              <div className="col-md-5 text-right">
                 <ConditionalElements
                   classNameRoute={this.props.classNameRoute}
                   isDeleteShow={this.props.state.isDeleteShow}
