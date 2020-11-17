@@ -21,6 +21,7 @@ class VideoLoader extends Component {
           color="rgb(82 180 89)"
           height={65}
           width={65}
+          style = {{marginLeft: "19%"}}
           />
 
       </div>

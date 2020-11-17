@@ -334,6 +334,9 @@ const DisplayTaskList = (props) => {
           />
         </div>) : null}
 
+        {props.isFilterLoading && props.list_id == props.id ? 
+        <Spinner animation="grow" variant="success" style = {{marginLeft: "46%",marginTop: "1%"}}/> : null}
+
       {props.list_id == props.id
         ? <div className="userstory-container">
           {props.Userstories

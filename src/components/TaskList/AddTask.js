@@ -288,7 +288,7 @@ const AddTask = (props) => {
     <>
       {/* <div className="InnershowCardDetails"> */}
       <div className={`${props.isUserstory && props.isUserDetailOpen ? "addtask-UserStory" : "InnershowCardDetails"}`}>
-        {props.isFilterLoading ? <VideoLoader /> :
+        
           <>
             <div className="drag-icon">
               {/* <i class="fas fa-bars"></i> */}
@@ -709,7 +709,7 @@ const AddTask = (props) => {
           )}
           {/* {openCalenderModal && selectMoveToDashboardDate()} */}
 
-            </div> </>}
+            </div> </>
       </div>
 
       {/* --------move to Dashboard modal start--------- */}

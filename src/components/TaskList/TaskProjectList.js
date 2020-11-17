@@ -126,7 +126,7 @@ class TaskProjectList extends Component {
       filterParams: {},
       taskDetailsLoading: false,
       addUserStoryTaskLoading: false,
-      addUserStoryTaskLoadingId: null
+      addUserStoryTaskLoadingId: null,
       isDeleteDisabled: false
     };
   }
@@ -1407,7 +1407,13 @@ class TaskProjectList extends Component {
     } catch (error) {
       this.userStoryLoading(false, id)
       console.log(error)
-      this.userStoryLoading(false, id)
+      toast(
+        <DailyPloyToast message="Something went wrong" status="error" />,
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
     }
   }
 
