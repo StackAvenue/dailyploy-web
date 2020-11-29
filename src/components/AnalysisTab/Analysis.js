@@ -196,7 +196,7 @@ const Analysis = (props) => {
                                                 ref={calendarMonthRef}
                                                 selected={currentMonth}
                                                 onChange={date => handleMonthlyDateFrom(date)}
-                                                dateFormat="MM/yyyy"
+                                                dateFormat="MMMM  yyyy"
                                                 showMonthYearPicker
                                                 className="form-control"
                                             />
@@ -217,7 +217,7 @@ const Analysis = (props) => {
                                 <div className="margin-card-box">
                                     <div className="left-side">
                                         <div className="imgs bg-violet ">
-                                            <i class="far fa-heart color-violet"></i>
+                                            <i class="fa fa-file-text-o color-violet"></i>
                                         </div>
 
                                     </div>
@@ -241,7 +241,7 @@ const Analysis = (props) => {
                                 <div className="margin-card-box">
                                     <div className="left-side">
                                         <div className="imgs bg-green">
-                                            <i class="fas fa-shopping-cart color-green"></i>
+                                            <i class="fas fa-check color-green"></i>
                                         </div>
 
                                     </div>
@@ -265,7 +265,7 @@ const Analysis = (props) => {
                                 <div className="margin-card-box">
                                     <div className="left-side">
                                         <div className="imgs bg-chart">
-                                            <i class="fas fa-signal color-chart"></i>
+                                            <i class="fa fa-users color-chart fa-lg"></i>
                                         </div>
 
                                     </div>
@@ -289,7 +289,7 @@ const Analysis = (props) => {
                                 <div className="margin-card-box">
                                     <div className="left-side">
                                         <div className="imgs bg-eye">
-                                            <i class="fas fa-eye color-eye"></i>
+                                            <i class="fa fa-hourglass color-eye fa-lg"></i>
                                         </div>
 
                                     </div>
@@ -302,6 +302,7 @@ const Analysis = (props) => {
                                                 delay={0}
                                                 duration={1}
                                             />
+                                            {" "}{totalTimeSpent > 1 ? "Hours" : "Hour"}
                                         </div>
                                         <div className="box-main-text">
                                             <div className="">Total time</div>
@@ -325,13 +326,13 @@ const Analysis = (props) => {
                                         <Piechardata
                                             id="analysisPieChart"
                                             type="Categories"
-                                            financialHealth={financialHealth}
+                                            financialHealth={financialHealth > 0 ? financialHealth : []}
                                             pieChartColor={pieChartColor}
                                         />
 
                                         <div className="total-stats">
                                             <h5 className="text-muted mt-0 align font-small">Financial Health</h5>
-                                            <h2 className="align">{financialHealth}%</h2>
+                                            <h2 className="align">{financialHealth > 0 ? `${financialHealth}%` : "No data"}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -380,7 +381,7 @@ const Analysis = (props) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {topMembers && topMembers.length > 0 && topMembers.map((member) => {
+                                            {topMembers && topMembers.length > 0 ? topMembers.map((member) => {
                                                 return (
                                                     <tr>
                                                         <td style={{ width: "36px", }}>
@@ -395,9 +396,17 @@ const Analysis = (props) => {
                                                         </td>
                                                         <td>{member.expense}</td>
                                                         <td>{member.task_count ? member.task_count : member.velocity}</td>
-                                                        <td>{member.total_time}</td>
+                                                        <td>{member.total_time > 1
+                                                            ? `${member.total_time} Hours`
+                                                            : `${member.total_time} Hour`}</td>
                                                     </tr>)
-                                            })}
+                                            })
+                                                : <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>No data</td>
+                                                </tr>}
                                         </tbody>
                                     </table>
                                 </div>
@@ -406,7 +415,7 @@ const Analysis = (props) => {
                         <div className="earned-history col-lg-12">
                             <div className="margin-card-box">
                                 <div className="card-heading-row">
-                                    <div className="heading-card">Completed</div>
+                                    <div className="heading-card">Roadmap Progress</div>
                                     <div className="dropdown ecllipsis">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </div>
@@ -419,99 +428,89 @@ const Analysis = (props) => {
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
                                                 <th>Progess</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colSpan="2" className="marketplaces">
-                                                    {completedRoadmap
-                                                        ? completedRoadmap.name
-                                                            ? completedRoadmap.name
-                                                            : "No data"
-                                                        : null
-                                                    }
-                                                </td>
-                                                <td>{completedRoadmap && completedRoadmap.start_date
-                                                    ? formatDate(completedRoadmap.start_date) : "No date"}</td>
-                                                <td>{completedRoadmap && completedRoadmap.end_date
-                                                    ? formatDate(completedRoadmap.end_date) : "No date"}</td>
-                                                <td><span className="badge bg-soft-success text-success">
-                                                    {completedRoadmap && completedRoadmap.progress
-                                                        ? completedRoadmap.progress
-                                                        : null}</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div className="margin-card-box">
-                                <div className="card-heading-row">
-                                    <div className="heading-card">Running</div>
-                                    <div className="dropdown ecllipsis">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </div>
-                                </div>
-                                <div className="revenue-table">
-                                    <table>
-                                        <thead className="thead-light">
-                                            <tr>
-                                                <th colSpan="2">Name</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Progess</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                runningRoadmaps && runningRoadmaps.map((running) => {
-                                                    return (<tr>
-                                                        <td colSpan="2" className="marketplaces">{running.name}</td>
-                                                        <td>{running.start_date
-                                                            ? formatDate(running.start_date) : "No date"}</td>
-                                                        <td>{running.end_date
-                                                            ? formatDate(running.end_date) : "No date"}</td>
-                                                        <td><span className="badge bg-soft-warning text-warning">{running.progress}</span></td>
-                                                    </tr>)
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div className="margin-card-box">
-                                <div className="card-heading-row">
-                                    <div className="heading-card">Planned</div>
-                                    <div className="dropdown ecllipsis">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </div>
-                                </div>
-                                <div className="revenue-table">
-                                    <table>
-                                        <thead className="thead-light">
-                                            <tr>
-                                                <th colSpan="2">Name</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Progess</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colSpan="2" className="marketplaces">
-                                                    {plannedRoadmap
-                                                        ? plannedRoadmap.name
-                                                            ? plannedRoadmap.name
-                                                            : "No data"
-                                                        : null
-                                                    }
-                                                </td>
-                                                <td>{plannedRoadmap && plannedRoadmap.start_date
-                                                    ? formatDate(plannedRoadmap.start_date) : "No date"}</td>
-                                                <td>{plannedRoadmap && plannedRoadmap.end_date
-                                                    ? formatDate(plannedRoadmap.end_date) : "No date"}</td>
-                                                <td><span className="badge bg-soft-planned text-primary">planned</span></td>
-                                            </tr>
-                                        </tbody>
+                                        {completedRoadmap
+                                            && plannedRoadmap
+                                            && completedRoadmap === "No Roadmap Completed"
+                                            && plannedRoadmap === "No Roadmap Planned"
+                                            && runningRoadmaps.length === 0
+                                            ? <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>No data</td>
+                                                </tr>
+                                            </tbody>
+                                            : < tbody >
+                                                {completedRoadmap && completedRoadmap !== "No Roadmap Completed"
+                                                    ? < tr >
+                                                        <td colSpan="2" className="marketplaces">
+                                                            {completedRoadmap.name
+                                                                ? completedRoadmap.name
+                                                                : null
+                                                            }
+                                                        </td>
+                                                        <td>{completedRoadmap.start_date
+                                                            ? formatDate(completedRoadmap.start_date) : "-"}</td>
+                                                        <td>{completedRoadmap.end_date
+                                                            ? formatDate(completedRoadmap.end_date) : "-"}</td>
+                                                        <td><span className="badge bg-soft-success text-success">
+                                                            {completedRoadmap.progress
+                                                                ? `${completedRoadmap.progress}%`
+                                                                : "-"}</span></td>
+                                                        <td>
+                                                            <span className="badge bg-soft-success text-success">
+                                                                Completed
+                                                    </span>
+                                                        </td>
+                                                    </tr> :
+                                                    null
+                                                }
+                                                {
+                                                    runningRoadmaps && runningRoadmaps.map((running) => {
+                                                        return (<tr>
+                                                            <td colSpan="2" className="marketplaces">{running.name}</td>
+                                                            <td>{running.start_date
+                                                                ? formatDate(running.start_date) : "-"}</td>
+                                                            <td>{running.end_date
+                                                                ? formatDate(running.end_date) : "-"}</td>
+                                                            <td><span className="badge bg-soft-warning text-warning">{running.progress}%</span></td>
+                                                            <td>
+                                                                <span className="badge bg-soft-warning text-warning">
+                                                                    Running
+                                                    </span>
+                                                            </td>
+                                                        </tr>)
+                                                    })
+                                                }
+                                                {plannedRoadmap && plannedRoadmap !== "No Roadmap Planned"
+                                                    ? <tr>
+                                                        <td colSpan="2" className="marketplaces">
+                                                            {plannedRoadmap
+                                                                ? plannedRoadmap.name
+                                                                    ? plannedRoadmap.name
+                                                                    : null
+                                                                : null
+                                                            }
+                                                        </td>
+                                                        <td>{plannedRoadmap && plannedRoadmap.start_date
+                                                            ? formatDate(plannedRoadmap.start_date) : "-"}</td>
+                                                        <td>{plannedRoadmap && plannedRoadmap.end_date
+                                                            ? formatDate(plannedRoadmap.end_date) : "-"}</td>
+                                                        <td><span className="badge bg-soft-planned text-primary">
+                                                            {plannedRoadmap && plannedRoadmap.name ? "Planned" : null}</span></td>
+                                                        <td>
+                                                            <span className="badge bg-soft-planned text-primary">
+                                                                {plannedRoadmap && plannedRoadmap.name ? "Planned" : null}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    : null}
+                                            </tbody>
+                                        }
                                     </table>
                                 </div>
                             </div>

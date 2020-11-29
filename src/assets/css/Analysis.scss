@@ -1,10 +1,10 @@
 .analysis-container{
-    overflow-x: hidden;
+    // overflow-x: hidden;
     width: 100%;
     display: flex;
     /* margin-top: 60px!important; */
     position: relative;
-    height: 100vh;
+    height: 1550px;
     padding-top: 60px;
     background: #f1f2f4;
     .content{
@@ -296,20 +296,14 @@
                         margin-bottom: 1.5rem;
                         
                         .heading-card{
-                            width: 20%;
+                            width: 28%;
                             color: #343a40;
                             font-size: 1rem;
                             font-weight: 600;
                             display: flex;
                             justify-content: space-around;
-                            // border: 1px solid red;
                             .filter-container{ 
                                 width: 50%;
-                                // border: 1px solid red;
-                                .filter-dropdown {
-
-                                    // border: 1px solid red;
-                                  }
                             }     
                         }
                         .ecllipsis{
@@ -531,6 +525,12 @@ table td{
 }
 .bg-soft-warning{
     background-color: rgba(247,184,75,.25);
+}
+.bg-soft-success{
+    background-color: rgba(26,188,156,.25);
+}
+.bg-soft-planned{
+    background-color: rgba(2, 117, 216, .25);
 }
 .text-warning{
     color: #f7b84b;

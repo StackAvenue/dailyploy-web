@@ -12,17 +12,22 @@ const Barchartdata = (props) => {
   })
 
   const handleData = (barChartData) => {
-    const week1 = barChartData.weekly_task[0] ? barChartData.weekly_task[0][1] : 0
-    const week2 = barChartData.weekly_task[1] ? barChartData.weekly_task[1][1] : 0
-    const week3 = barChartData.weekly_task[2] ? barChartData.weekly_task[2][1] : 0
-    const week4 = barChartData.weekly_task[3] ? barChartData.weekly_task[3][1] : 0
-    const week5 = barChartData.weekly_task[4] ? barChartData.weekly_task[4][1] : 0
+    const week1 = barChartData.weekly_completed_tasks[0] ? barChartData.weekly_completed_tasks[0][1] : 0
+    const week2 = barChartData.weekly_completed_tasks[1] ? barChartData.weekly_completed_tasks[1][1] : 0
+    const week3 = barChartData.weekly_completed_tasks[2] ? barChartData.weekly_completed_tasks[2][1] : 0
+    const week4 = barChartData.weekly_completed_tasks[3] ? barChartData.weekly_completed_tasks[3][1] : 0
+    const week5 = barChartData.weekly_completed_tasks[4] ? barChartData.weekly_completed_tasks[4][1] : 0
+    const total_week1 = barChartData.total_weekly_tasks[0] ? barChartData.total_weekly_tasks[0][1] : 0
+    const total_week2 = barChartData.total_weekly_tasks[1] ? barChartData.total_weekly_tasks[1][1] : 0
+    const total_week3 = barChartData.total_weekly_tasks[2] ? barChartData.total_weekly_tasks[2][1] : 0
+    const total_week4 = barChartData.total_weekly_tasks[3] ? barChartData.total_weekly_tasks[3][1] : 0
+    const total_week5 = barChartData.total_weekly_tasks[4] ? barChartData.total_weekly_tasks[4][1] : 0
     const weeklyTasks = [week1, week2, week3, week4, week5]
-    const total = [6, 6, 6, 6, 6]
+    const totalWeeklyTasks = [total_week1, total_week2, total_week3, total_week4, total_week5]
     return [
       {
         name: "Total tasks",
-        data: total,
+        data: totalWeeklyTasks,
         color: CHART_COLOR.scheduled
       },
       {
