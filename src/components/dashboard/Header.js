@@ -4,6 +4,7 @@ import "../../assets/css/dashboard.css";
 import { Dropdown } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import setting from "../../assets/images/setting.png";
+import support from "../../assets/images/support-1.png";
 import "../../assets/css/dashboard.scss";
 import { get, put } from "../../utils/API";
 import { firstTwoLetter } from "../../utils/function";
@@ -422,9 +423,19 @@ class Header extends Component {
                         />
                         &nbsp;&nbsp;Settings
                       </Dropdown.Item>
+                      <Dropdown.Item
+                        className="workspace-setting"
+                        href="https://dailyploy.com/contact"
+                      >
+                        <img
+                          alt={"support"}
+                          src={support}
+                          className="img-responsive support-height"
+                        />
+                        &nbsp;&nbsp;Contact Support
+                      </Dropdown.Item>
                       <div className="col-md-12 logout-user">
                         <span className="text-titlize">
-                          {/* Not {this.state.userName} ?{" "} */}
                           Not {this.props.loggedInUserName} ?{" "}
                           <button
                             className="btn btn-link"

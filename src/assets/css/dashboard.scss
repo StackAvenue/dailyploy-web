@@ -55,7 +55,7 @@
   .dropdown-position {
     left: -110px !important;
     width: 300px !important;
-    height: 187px !important;
+    height: 220px !important;
     border-radius: 5px !important;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17) !important;
     border: solid 1px rgba(155, 155, 155, 1) !important;
@@ -101,6 +101,9 @@
       font-family: $font-family-roboto !important;
       // color: $color-workspace !important;
       color: #010101 !important;
+    }
+    .support-height{
+      height: 25px;
     }
     .invite {
       font-size: 15px !important;
