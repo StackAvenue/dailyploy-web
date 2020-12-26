@@ -134,6 +134,7 @@ class Dashboard extends PureComponent {
       showStatus: false,
       hoverID: 0,
       isTimetrackMode: this.props.state.timetrack_enabled,
+      isDisable: false
     };
   }
 
@@ -1895,6 +1896,7 @@ class Dashboard extends PureComponent {
   };
 
   editAddTaskDetails = async (taskId, event) => {
+    this.setState({isDisable: true})
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/task_status?page_number=1&page_size=5`
@@ -1905,6 +1907,7 @@ class Dashboard extends PureComponent {
         taskStatuss: taskStatu,
         showStatus: true,
         defaultStatus: defaultStatus,
+        isDisable: false
       });
     } catch (e) {}
     let members = this.memberSearchOptions(event.resourceId, event.projectId);

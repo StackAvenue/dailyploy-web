@@ -47,7 +47,7 @@ class DashboardEvent extends Component {
       middelText: "",
       event: [],
       lSide: false,
-      rSide: false,
+      rSide: false
     };
   }
 
@@ -72,7 +72,7 @@ class DashboardEvent extends Component {
     this.setState({
       clickEventId: id,
       showAction: !this.state.showAction,
-      showPopup: false,
+      showPopup: false
     });
   };
 
@@ -872,6 +872,8 @@ class DashboardEvent extends Component {
         {this.state.showAction && this.state.clickEventId === event.id ? (
           <TaskAction
             event={event}
+            parentState={state}
+            activeUserId={event.resourceId}
             actionOnClickOutside={this.actionOnClickOutside}
             taskEventResumeConfirm={this.props.taskEventResumeConfirm}
             isTimetrackMode={this.props.isTimetrackMode}

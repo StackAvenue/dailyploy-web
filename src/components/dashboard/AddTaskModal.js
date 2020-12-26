@@ -294,7 +294,7 @@ class AddTaskModal extends React.Component {
                         </div>
                       </div>
                     ) : null} */}
-                  </div>
+                  </div> 
                   {this.props.state.showStatus ?
                     <div className="col-md-12 no-padding input-row">
                       <div className="col-md-2 d-inline-block no-padding label">
@@ -572,6 +572,7 @@ class AddTaskModal extends React.Component {
                             ? props.addTask()
                             : props.editTask()
                         }
+                        disabled={this.props.state.isDisable}
                       >
                         {props.state.taskButton}
                         {this.props.state.taskloader ? (
