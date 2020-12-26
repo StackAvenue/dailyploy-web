@@ -36,7 +36,7 @@ class TaskAction extends Component {
       >
         {!props.event.is_complete ? (
           <>
-            {!this.props.isTimetrackMode && (
+            {!this.props.isTimetrackMode && props.parentState.userId === props.activeUserId && (
               <div
                 className="border-bottom pointer"
                 style={{ padding: "5px 0px 0px 0px" }}
