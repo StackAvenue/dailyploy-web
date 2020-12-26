@@ -24,19 +24,17 @@ const Analysis = (props) => {
     const [totalTimeSpent, setTotalTimeSpent] = useState(null)
     const [financialHealth, setFinancialHealth] = useState(null)
     const [pieChartColor, setPieChartColor] = useState(null)
-    const [projects, setProjects] = useState([])
     const [projectId, setProjectId] = useState(null)
     const [projectName, setProjectName] = useState(null)
-    const [isDeleteShow, setIsDeleteShow] = useState(false)
     const [barChartData, setBarChartData] = useState(null)
+    const [endDate, setEndDate] = useState(null)
+    const [filter, setFilter] = useState("Task Completed")
+    const [isDeleteShow, setIsDeleteShow] = useState(false)
+    const [projects, setProjects] = useState([])
     const [topMembers, setTopMembers] = useState([])
     const [membersList, setMembersList] = useState([])
-    const [filter, setFilter] = useState("Task Completed")
-    const [runningRoadmaps, setRunningRoadmaps] = useState([])
-    const [plannedRoadmap, setPlannedRoadmap] = useState(null)
-    const [completedRoadmap, setCompletedRoadmap] = useState(null)
+    const [roadmapProgress, setRoadmapProgress] = useState([])
     const [startDate, setstartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(null)
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const calendarMonthRef = useRef(null);
 
@@ -113,9 +111,7 @@ const Analysis = (props) => {
             setTotalTimeSpent(taskDetails.total_time_spent)
             setFinancialHealth(data.financial_health)
             setBarChartData(data.bar_chart)
-            setRunningRoadmaps(data.roadmap_status.running)
-            setPlannedRoadmap(data.roadmap_status.planned)
-            setCompletedRoadmap(data.roadmap_status.completed)
+            setRoadmapProgress(data.roadmap_status)
 
         } catch (error) {
             console.log(error)
@@ -161,6 +157,16 @@ const Analysis = (props) => {
 
     }
 
+    const setRoadmapColors = (status) => {
+        if (status === "Running") {
+            return "badge bg-soft-warning text-warning";
+        } else if (status === "Planned") {
+            return "badge bg-soft-planned text-primary";
+        } else {
+            return "badge bg-soft-success text-success";
+        }
+    }
+
     return (
         <>
             <MenuBar
@@ -199,6 +205,18 @@ const Analysis = (props) => {
                                                 dateFormat="MMMM  yyyy"
                                                 showMonthYearPicker
                                                 className="form-control"
+                                                popperPlacement="bottom"
+                                                popperModifiers={{
+                                                    flip: {
+                                                        behavior: ["bottom"]
+                                                    },
+                                                    preventOverflow: {
+                                                        enabled: false
+                                                    },
+                                                    hide: {
+                                                        enabled: false
+                                                    }
+                                                }}
                                             />
                                             <span style={{ position: "absolute", right: "9px", bottom: "0px" }}>
                                                 <i
@@ -310,19 +328,14 @@ const Analysis = (props) => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div className="chart-row row">
                             <div className="pie-chart-card-box col-lg-4 ">
                                 <div className="margin-card-box">
                                     <div className="top-card-row">
                                         <div className="card-heading">Financial Health</div>
-                                        <div className="ecllipsis dropdown">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </div>
                                     </div>
                                     <div className="widget-chart-details">
-
                                         <Piechardata
                                             id="analysisPieChart"
                                             type="Categories"
@@ -355,19 +368,17 @@ const Analysis = (props) => {
                                 <div className="card-heading-row">
                                     <div className="heading-card">
                                         <span>Top 5 Members</span>
-                                        <div className="filter-container">
-                                            <span>Filter</span>
-                                            <div className="filter-dropdown">
-                                                <select className="form-control" onChange={handleFilter}>
-                                                    <option>Task completed</option>
-                                                    <option>Priority</option>
-                                                </select>
-                                            </div>
+                                    </div>
+                                    <div className="filter-container">
+                                        <span>Filter</span>
+                                        <div className="filter-dropdown">
+                                            <select className="form-control" onChange={handleFilter}>
+                                                <option>Task completed</option>
+                                                <option>Priority</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div className="dropdown ecllipsis">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </div>
+
                                 </div>
                                 <div className="users-headers">
                                     <table>
@@ -400,8 +411,7 @@ const Analysis = (props) => {
                                                             ? `${member.total_time} Hours`
                                                             : `${member.total_time} Hour`}</td>
                                                     </tr>)
-                                            })
-                                                : <tr>
+                                            }) : <tr>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -416,9 +426,6 @@ const Analysis = (props) => {
                             <div className="margin-card-box">
                                 <div className="card-heading-row">
                                     <div className="heading-card">Roadmap Progress</div>
-                                    <div className="dropdown ecllipsis">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </div>
                                 </div>
                                 <div className="revenue-table">
                                     <table>
@@ -431,11 +438,7 @@ const Analysis = (props) => {
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
-                                        {completedRoadmap
-                                            && plannedRoadmap
-                                            && completedRoadmap === "No Roadmap Completed"
-                                            && plannedRoadmap === "No Roadmap Planned"
-                                            && runningRoadmaps.length === 0
+                                        {roadmapProgress.length === 0
                                             ? <tbody>
                                                 <tr>
                                                     <td></td>
@@ -445,70 +448,27 @@ const Analysis = (props) => {
                                                 </tr>
                                             </tbody>
                                             : < tbody >
-                                                {completedRoadmap && completedRoadmap !== "No Roadmap Completed"
-                                                    ? < tr >
-                                                        <td colSpan="2" className="marketplaces">
-                                                            {completedRoadmap.name
-                                                                ? completedRoadmap.name
-                                                                : null
-                                                            }
-                                                        </td>
-                                                        <td>{completedRoadmap.start_date
-                                                            ? formatDate(completedRoadmap.start_date) : "-"}</td>
-                                                        <td>{completedRoadmap.end_date
-                                                            ? formatDate(completedRoadmap.end_date) : "-"}</td>
-                                                        <td><span className="badge bg-soft-success text-success">
-                                                            {completedRoadmap.progress
-                                                                ? `${completedRoadmap.progress}%`
-                                                                : "-"}</span></td>
-                                                        <td>
-                                                            <span className="badge bg-soft-success text-success">
-                                                                Completed
-                                                    </span>
-                                                        </td>
-                                                    </tr> :
-                                                    null
-                                                }
                                                 {
-                                                    runningRoadmaps && runningRoadmaps.map((running) => {
+                                                    roadmapProgress && roadmapProgress.map((roadmap) => {
                                                         return (<tr>
-                                                            <td colSpan="2" className="marketplaces">{running.name}</td>
-                                                            <td>{running.start_date
-                                                                ? formatDate(running.start_date) : "-"}</td>
-                                                            <td>{running.end_date
-                                                                ? formatDate(running.end_date) : "-"}</td>
-                                                            <td><span className="badge bg-soft-warning text-warning">{running.progress}%</span></td>
+                                                            <td colSpan="2" className="marketplaces">{roadmap.name}</td>
+                                                            <td>{roadmap.start_date
+                                                                ? formatDate(roadmap.start_date) : "-"}</td>
+                                                            <td>{roadmap.end_date
+                                                                ? formatDate(roadmap.end_date) : "-"}</td>
                                                             <td>
-                                                                <span className="badge bg-soft-warning text-warning">
-                                                                    Running
-                                                    </span>
+                                                                <span className={setRoadmapColors(roadmap.status)}>
+                                                                    {roadmap.progress}%
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <span className={setRoadmapColors(roadmap.status)}>
+                                                                    {roadmap.status}
+                                                                </span>
                                                             </td>
                                                         </tr>)
                                                     })
                                                 }
-                                                {plannedRoadmap && plannedRoadmap !== "No Roadmap Planned"
-                                                    ? <tr>
-                                                        <td colSpan="2" className="marketplaces">
-                                                            {plannedRoadmap
-                                                                ? plannedRoadmap.name
-                                                                    ? plannedRoadmap.name
-                                                                    : null
-                                                                : null
-                                                            }
-                                                        </td>
-                                                        <td>{plannedRoadmap && plannedRoadmap.start_date
-                                                            ? formatDate(plannedRoadmap.start_date) : "-"}</td>
-                                                        <td>{plannedRoadmap && plannedRoadmap.end_date
-                                                            ? formatDate(plannedRoadmap.end_date) : "-"}</td>
-                                                        <td><span className="badge bg-soft-planned text-primary">
-                                                            {plannedRoadmap && plannedRoadmap.name ? "Planned" : null}</span></td>
-                                                        <td>
-                                                            <span className="badge bg-soft-planned text-primary">
-                                                                {plannedRoadmap && plannedRoadmap.name ? "Planned" : null}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                    : null}
                                             </tbody>
                                         }
                                     </table>
