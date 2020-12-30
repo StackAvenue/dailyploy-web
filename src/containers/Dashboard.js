@@ -1075,7 +1075,7 @@ class Dashboard extends PureComponent {
   };
 
   addTask = async () => {
-    if (this.validateTaskModal()) {
+    if (this.validateTaskModal() && !this.state.loadStatus) {
       this.setState({ taskloader: true });
       const taskData = this.taskDetails();
       try {
@@ -2997,11 +2997,7 @@ class Dashboard extends PureComponent {
             >
               <i className="fas fa-plus" />
             </button>
-            {this.state.loadStatus
-              ? <div className="loading1">
-                <VideoLoader />
-              </div>
-              : <AddTaskModal
+              <AddTaskModal
                 show={this.state.show}
                 state={this.state}
                 closeTaskModal={this.closeOnlyTaskModal}
@@ -3028,7 +3024,7 @@ class Dashboard extends PureComponent {
                 handleaddStatusChange={this.handleaddStatusChange}
                 addStatus={this.addStatus}
                 loadStatus={this.state.loadStatus}
-              />}
+              />
             <NotificationContainer />
             {this.state.showInfo && this.state.backFromTaskEvent && (
               <TaskInfoModal
