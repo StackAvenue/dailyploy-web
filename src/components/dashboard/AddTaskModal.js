@@ -564,8 +564,9 @@ class AddTaskModal extends React.Component {
                       </button>
                       <button
                         type="button"
+                        disabled={this.props.loadStatus}
                         className={`button1 btn-primary pull-right ${
-                          props.state.taskloader ? "disabled" : ""
+                          props.state.taskloader && this.props.loadStatus ? "disabled" : ""
                           }`}
                         onClick={() =>
                           props.state.taskButton === "Add"
@@ -575,7 +576,7 @@ class AddTaskModal extends React.Component {
                         disabled={this.props.state.isDisable}
                       >
                         {props.state.taskButton}
-                        {this.props.state.taskloader ? (
+                        {this.props.state.taskloader? (
                           <Loader
                             type="Oval"
                             color="#FFFFFF"
