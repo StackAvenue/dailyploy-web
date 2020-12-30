@@ -624,43 +624,46 @@ class DashboardEvent extends Component {
                     </div>
                   ) : null}
 
-                {event.trackingStatus === "play" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
-                    <div className=" no-padding d-inline-block">
-                      <span
-                        style={{
-                          pointerEvents: this.isValidUserDate(event.resourceId)
-                            ? ""
-                            : "none",
-                        }}
-                        className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
-                          }`}
-                        onClick={() =>
-                          this.props.handleTaskStart(event, Date.now())
-                        }
-                      >
-                        {/* <i className="fa fa-power-off"></i> */}
-                        <img
-                          src={PlayIcon}
-                          alt=""
-                          title=""
-                          className="clock-img"
-                          height="35px"
-                          width="60px"
-                          data-tip
-                          data-for="registerTip"
-                          data-background-color="#f0f2f5"
-                          data-text-color="#010101"
-                          data-place="bottom"
-                          data-effect="float"
-                        />
-                      </span>
-                      <ReactTooltip id="registerTip" place="top" effect="solid">
-                        Start the task
+                {event.resourceId == this.props.userId
+                  ? <>
+                    {event.trackingStatus === "play" &&
+                      !event.is_complete &&
+                      this.props.isTimetrackMode ? (
+                        <div className=" no-padding d-inline-block">
+                          <span
+                            style={{
+                              pointerEvents: this.isValidUserDate(event.resourceId)
+                                ? ""
+                                : "none",
+                            }}
+                            className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
+                              }`}
+                            onClick={() =>
+                              this.props.handleTaskStart(event, Date.now())
+                            }
+                          >
+                            {/* <i className="fa fa-power-off"></i> */}
+                            <img
+                              src={PlayIcon}
+                              alt=""
+                              title=""
+                              className="clock-img"
+                              height="35px"
+                              width="60px"
+                              data-tip
+                              data-for="registerTip"
+                              data-background-color="#f0f2f5"
+                              data-text-color="#010101"
+                              data-place="bottom"
+                              data-effect="float"
+                            />
+                          </span>
+                          <ReactTooltip id="registerTip" place="top" effect="solid">
+                            Start the task
                     </ReactTooltip>
-                    </div>
-                  ) : null}
+                        </div>
+                      ) : null}
+                  </> : null}
 
                 {event && event.is_complete ? (
                   <div className=" no-padding d-inline-block">
