@@ -34,56 +34,56 @@ export const CHART_COLOR = {
   ext_worked_1: "#ebebeb",
   curr_ext_worked_0: "#270600",
   curr_ext_worked_1: "#ebebeb",
-  active_color: "#0075d9"
+  active_color: "#0075d9",
 };
 export const PRIORITIES = [
   {
     name: "high",
-    color_code: "#00A031",
-    label: "high"
+    color_code: "#FF0000",
+    label: "high",
   },
   {
     name: "medium",
-    color_code: "#FF7F00",
-    label: "medium"
+    color_code: "#FFFF00",
+    label: "medium",
   },
   {
     name: "low",
-    color_code: "#555555",
-    label: "low"
+    color_code: "#00A031",
+    label: "low",
   },
   {
     name: "no_priority",
     color_code: "#9B9B9B",
-    label: "no priority"
-  }
+    label: "no priority",
+  },
 ];
 export const ROADMAP_STATUS = ["Planned", "Running", "Completed"];
 export const DEFAULT_PRIORITIE = {
   name: "low",
-  color_code: "#555555",
+  color_code: "#00A031",
   label: "low"
 };
 export const PRIORITIES_MAP = new Map();
 PRIORITIES_MAP.set("high", {
   name: "high",
-  color_code: "#00A031",
-  label: "high"
+  color_code: "#FF0000",
+  label: "high",
 });
 PRIORITIES_MAP.set("medium", {
   name: "medium",
-  color_code: "#FF7F00",
-  label: "medium"
+  color_code: "#FFFF00",
+  label: "medium",
 });
 PRIORITIES_MAP.set("low", {
   name: "low",
-  color_code: "#555555",
-  label: "low"
+  color_code: "#00A031",
+  label: "low",
 });
 PRIORITIES_MAP.set("no_priority", {
   name: "no_priority",
   color_code: "#9B9B9B",
-  label: "no priority"
+  label: "no priority",
 });
 const COLOR = {
   ORANGE: "orange",

@@ -49,7 +49,7 @@ function UserstoryModal(props) {
   const [categoryId, setCategoryId] = useState(null);
   const [priority, setPriority] = useState({
     name: "low",
-    color_code: "#555555",
+    color_code: "#00A031",
     label: "low",
   });
   const [startDate, setStartDate] = useState(null);

@@ -116,7 +116,7 @@ class Dashboard extends PureComponent {
       },
       taskPrioritie: {
         name: "low",
-        color_code: "#555555",
+        color_code: "#00A031",
         label: "low",
       },
       showEventAlertId: "",
