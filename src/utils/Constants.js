@@ -61,7 +61,7 @@ export const PRIORITIES = [
 export const ROADMAP_STATUS = ["Planned", "Running", "Completed"];
 export const DEFAULT_PRIORITIE = {
   name: "low",
-  color_code: "#555555",
+  color_code: "#00A031",
   label: "low"
 };
 export const PRIORITIES_MAP = new Map();
