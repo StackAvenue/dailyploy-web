@@ -439,7 +439,7 @@ class DashboardEvent extends Component {
                   this.props.bgColor
                 )}
               >
-                <div className="col-md-9 no-padding flex-center">
+                <div className="col-md-12 no-padding flex-center">
                   <div className="col-md-2 no-padding flex-center">
                     {/* <div className={`${this.props.event.priority}`}></div> */}
                     <div className="clock-img-div1">
@@ -520,7 +520,13 @@ class DashboardEvent extends Component {
                       {/* {this.state.middelText} {this.calculateTime(event)} */}
                     </span>
                   </div>
+                  <div className="col-md-3 no-padding d-inline-block">
+                    <span className="task-identifier">
+                      {event && event.identifier}
+                    </span> 
+                  </div>
                 </div>
+               
               </OverlayTrigger>
             </div>
             <div className="row item dashboard-event-box">
@@ -803,6 +809,11 @@ class DashboardEvent extends Component {
                       </span>
                     </div>
                   )}
+                  <div className="col-md-3 no-padding d-inline-block">
+                    <span className="task-identifier">
+                      [{event && event.identifier}]
+                    </span> 
+                  </div>
                 </div>
               </OverlayTrigger>
             </div>

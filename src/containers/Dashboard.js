@@ -706,6 +706,7 @@ class Dashboard extends PureComponent {
       trackingStatus: task.status == "completed" ? "completed" : "play",
       startOn: null,
       is_complete: task.is_complete,
+      identifier: task.identifier
     };
   };
 
