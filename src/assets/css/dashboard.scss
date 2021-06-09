@@ -4684,6 +4684,19 @@ table.scheduler-table tr:last-child td {
     }
   }
 }
+.task-identifier {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-size: 11px;
+  color: #424242;
+  text-align: right;
+  line-height: 9px;
+  font-stretch: condensed;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  font-weight: 600;
+}
 
 .timeline-event {
   left: 1 px !important;
@@ -6581,6 +6594,9 @@ font-family: 'Roboto' !important;
   .task-timer {
     font-size: 11px !important;
    
+  }
+  .task-identifier {
+    font-size: 11px !important;
   }
 
   

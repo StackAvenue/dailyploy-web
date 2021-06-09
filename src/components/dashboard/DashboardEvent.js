@@ -520,7 +520,15 @@ class DashboardEvent extends Component {
                       {/* {this.state.middelText} {this.calculateTime(event)} */}
                     </span>
                   </div>
+                  {event && event.identifier
+                    ? <div className="col-md-3 no-padding d-inline-block">
+                        <span className="task-identifier">
+                        [{event.identifier}]
+                        </span> 
+                      </div> 
+                    : null}
                 </div>
+               
               </OverlayTrigger>
             </div>
             <div className="row item dashboard-event-box">
@@ -803,6 +811,13 @@ class DashboardEvent extends Component {
                       </span>
                     </div>
                   )}
+                  {event && event.identifier
+                    ? <div className="col-md-3 no-padding d-inline-block">
+                        <span className="task-identifier">
+                        [{event.identifier}]
+                        </span> 
+                      </div> 
+                    : null}
                 </div>
               </OverlayTrigger>
             </div>
