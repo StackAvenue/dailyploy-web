@@ -521,7 +521,7 @@ class DashboardEvent extends Component {
                     </span>
                   </div>
                   {event && event.identifier
-                    ? <div className="col-md-3 no-padding d-inline-block">
+                    ? <div className="col-md-3 no-padding d-inline-block ml-4">
                         <span className="task-identifier">
                         [{event.identifier}]
                         </span> 
@@ -812,7 +812,7 @@ class DashboardEvent extends Component {
                     </div>
                   )}
                   {event && event.identifier
-                    ? <div className="col-md-3 no-padding d-inline-block">
+                    ? <div className="col-md-3 no-padding d-inline-block ml-4">
                         <span className="task-identifier">
                         [{event.identifier}]
                         </span> 
