@@ -439,7 +439,7 @@ class DashboardEvent extends Component {
                   this.props.bgColor
                 )}
               >
-                <div className="col-md-12 no-padding flex-center">
+                <div className="col-md-9 no-padding flex-center">
                   <div className="col-md-2 no-padding flex-center">
                     {/* <div className={`${this.props.event.priority}`}></div> */}
                     <div className="clock-img-div1">
