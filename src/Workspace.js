@@ -28,6 +28,9 @@ import moment from "moment";
 import { base } from "./../src/base";
 import "../src/assets/css/loader.scss";
 import VideoLoader from "./components/dashboard/VideoLoader";
+import PropTypes from 'prop-types';
+// import { propTypes } from "react-bootstrap/esm/Image";
+
 class Workspace extends Component {
   constructor(props) {
     super(props);
@@ -412,6 +415,32 @@ class Workspace extends Component {
       </div>
     );
   }
+}
+
+Workspace.propTypes = {
+  notification: PropTypes.array,
+  workspaces: PropTypes.array,
+  workspaceId: PropTypes.number,
+  workspaceName: PropTypes.string,
+  callWorkspace:PropTypes.func,
+  userInfo: PropTypes.object,
+  updateWorkspaces: PropTypes.func,
+  notification: PropTypes.number,
+  logout: PropTypes.func,
+  userData: PropTypes.object,
+  searchOptions: PropTypes.array,
+  pathname: PropTypes.func,
+  readAllNotification:PropTypes.func,
+  loggedInUserName: PropTypes.string,
+  handleSearchFilterResult: PropTypes.func,
+  path: PropTypes.string,
+  exact: PropTypes.bool,
+  event: PropTypes.number,
+  stopOnGoingTask: PropTypes.func,
+
+
+
+
 }
 
 export default withRouter(Workspace);
