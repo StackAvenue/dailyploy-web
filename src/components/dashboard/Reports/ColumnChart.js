@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Highcharts, { Color } from "highcharts/highstock";
 import moment from "moment";
 import { CHART_COLOR } from "./../../../utils/Constants";
+import PropTypes from 'prop-types';
+
 window.Highcharts = Highcharts;
 
 
@@ -10,6 +12,7 @@ class ColumnChart extends Component {
     super(props);
     this.state = {};
   }
+ 
 
   // componentDidMount = () => {
   //   let data = this.props.data;
@@ -609,6 +612,15 @@ class ColumnChart extends Component {
   render() {
     return <div id="columnChartContainer"></div>;
   }
+}
+
+ColumnChart.propTypes = {
+  data: PropTypes.array.isRequired,
+  barWidth: PropTypes.number,
+  activeBar: PropTypes.string.isRequired,
+  state: PropTypes.object.isRequired,
+  columnChartData: PropTypes.array.isRequired,
+  handleLoading: PropTypes.func.isRequired
 }
 
 export default ColumnChart;

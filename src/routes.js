@@ -133,9 +133,6 @@ Routes.propTypes = {
   search: PropTypes.string,
   isExact: PropTypes.bool,
   WorkspaceId: PropTypes.string,
-  path: PropTypes.string,
-  url: PropTypes.string,
-
 }
 
 export default Routes;

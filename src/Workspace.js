@@ -125,7 +125,6 @@ class Workspace extends Component {
       runningTime: 0,
       isStart: false,
       onGoingTask: false,
-      isLoading: false,
       workspaceName: "",
       loggedInUserName: "",
       timeTracked: [],
@@ -151,7 +150,7 @@ class Workspace extends Component {
       const { data } = await get("workspaces");
       var workspacesData = data.workspaces;
       this.setState({ isLoading: true });
-      var workspace = workspacesData.filter((ws) => ws.id == workspaceId);
+      var workspace = workspacesData.filter((ws) => ws.id === workspaceId);
       if (workspace.length > 0 && workspace[0]) {
         cookie.save("workspaceName", workspaceNameSplit(workspace[0].name), {
           path: "/",
@@ -168,7 +167,7 @@ class Workspace extends Component {
 
     this.setState({
       workspaces: workspacesData,
-      timetrack_enabled: workspace[0].timetrack_enabled,
+      // timetrack_enabled: workspace[0].timetrack_enabled,
       loggedInUserInfo: userData,
       isLoading: false,
       workspaceId: workspaceId,
@@ -187,7 +186,7 @@ class Workspace extends Component {
       .database()
       .ref(`task_stopped/${workspaceId}`)
       .on("child_added", (snap) => {
-        if (this.state.event && this.state.event.taskId == snap.key) {
+        if (this.state.event && this.state.event.taskId === snap.key) {
           this.setState({ event: null });
         }
       });
@@ -196,7 +195,7 @@ class Workspace extends Component {
       .database()
       .ref(`task_stopped/${workspaceId}`)
       .on("child_changed", (snap) => {
-        if (this.state.event && this.state.event.taskId == snap.key) {
+        if (this.state.event && this.state.event.taskId === snap.key) {
           this.setState({ event: null });
         }
       });
@@ -293,10 +292,10 @@ class Workspace extends Component {
 
   isBottomPopup = () => {
     return (
-      this.state.taskTitle != "" &&
-      this.state.startOn != "" &&
-      this.state.taskId != "" &&
-      this.state.colorCode != ""
+      this.state.taskTitle !== "" &&
+      this.state.startOn !== "" &&
+      this.state.taskId !== "" &&
+      this.state.colorCode !== ""
     );
   };
 
@@ -425,7 +424,6 @@ Workspace.propTypes = {
   callWorkspace:PropTypes.func,
   userInfo: PropTypes.object,
   updateWorkspaces: PropTypes.func,
-  notification: PropTypes.number,
   logout: PropTypes.func,
   userData: PropTypes.object,
   searchOptions: PropTypes.array,

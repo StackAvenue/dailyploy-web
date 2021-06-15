@@ -5,6 +5,7 @@ import DailyPloyToast from "./../../../../src/components/DailyPloyToast";
 import { ToastContainer, toast } from "react-toastify";
 import ConfirmModal from "../../ConfirmModal";
 import Loader from 'react-loader-spinner';
+import PropTypes from 'prop-types';
 
 class CategoriesSettings extends Component {
   constructor(props) {
@@ -360,6 +361,10 @@ class CategoriesSettings extends Component {
       </div>
     );
   }
+}
+
+CategoriesSettings.propTypes = {
+  workspaceId: PropTypes.string.isRequired
 }
 
 export default CategoriesSettings;

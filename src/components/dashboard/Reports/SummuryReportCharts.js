@@ -5,6 +5,7 @@ import { get } from "../../../utils/API";
 import { MONTH_FORMAT2 } from "../../../utils/Constants";
 import moment from "moment";
 import axios from "axios";
+import PropTypes from 'prop-types';
 
 class SummuryReportCharts extends Component {
   constructor(props) {
@@ -233,6 +234,12 @@ class SummuryReportCharts extends Component {
       </div>
     );
   }
+}
+
+SummuryReportCharts.propTypes = {
+  searchUserDetails: PropTypes.array.isRequired,
+  searchProjectIds: PropTypes.array.isRequired,
+  handleLoading: PropTypes.func.isRequired
 }
 
 export default SummuryReportCharts;

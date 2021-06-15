@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Highcharts from "highcharts/highstock";
 import { PRIORITIES, CHART_COLOR } from "../../../utils/Constants";
 import { textTitlize } from "../../../utils/function";
+
+
 window.Highcharts = Highcharts;
 
 
@@ -433,5 +435,7 @@ class PieChart extends Component {
     return <div id={this.props.id}></div>;
   }
 }
+
+
 
 export default PieChart;
