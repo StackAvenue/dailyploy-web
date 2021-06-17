@@ -6,6 +6,7 @@ import { get, post, put, del } from "../../utils/API";
 import Spinner from 'react-bootstrap/Spinner';
 import ReactTooltip from "react-tooltip";
 import roadmapGoals from '../../assets/images/roadmapGoals.png';
+import PropTypes from 'prop-types';
 
 const Checklist = (props) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false)
@@ -259,5 +260,11 @@ const Checklist = (props) => {
     </div>
   );
 };
+
+Checklist.propTypes = {
+  state: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
+  closeChecklist: PropTypes.func.isRequired,
+}
 
 export default Checklist;

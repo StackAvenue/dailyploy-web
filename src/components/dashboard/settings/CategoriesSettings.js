@@ -22,6 +22,7 @@ class CategoriesSettings extends Component {
       deleteCategory: "",
       isLoader: false,
     };
+
   }
 
   async componentDidMount() {

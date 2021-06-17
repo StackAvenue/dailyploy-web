@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
+import PropTypes from 'prop-types';
 
 const EmailConfigurationModal = props => {
   return (
@@ -53,5 +54,11 @@ const EmailConfigurationModal = props => {
     </Modal>
   );
 };
+
+EmailConfigurationModal.propTypes = {
+  state: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  toggleActiveFlag: PropTypes.func.isRequired
+}
 
 export default EmailConfigurationModal;

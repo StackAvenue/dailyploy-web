@@ -5,6 +5,7 @@ import { firstTwoLetter } from "../../utils/function";
 import SearchImg from "../../assets/images/search.png";
 import onClickOutside from "react-onclickoutside";
 import { Dropdown } from "react-bootstrap";
+import PropTypes from 'prop-types';
 
 class SearchFilter extends Component {
   constructor(props) {
@@ -460,6 +461,14 @@ class SearchFilter extends Component {
       </>
     );
   }
+}
+
+SearchFilter.propTypes = {
+  searchOptions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  state: PropTypes.object.isRequired,
+  isReports: PropTypes.bool.isRequired,
+  toggleSearchBy: PropTypes.func.isRequired, 
+  handleSearchFilterResult: PropTypes.func.isRequired
 }
 
 export default onClickOutside(SearchFilter);

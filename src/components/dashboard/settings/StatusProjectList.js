@@ -4,6 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 // import VideoLoader from "../VideoLoader";
 import Loader from 'react-loader-spinner';
 import { get, post, put, del } from "./../../../utils/API";
+import PropTypes from 'prop-types';
 
 import StatusList from "./StatusList";
 class StatusProjectList extends Component {
@@ -150,5 +151,11 @@ class StatusProjectList extends Component {
     );
   }
 
+}
+
+StatusProjectList.propTypes = {
+workspaceId: PropTypes.string.isRequired,
+searchUserDetails: PropTypes.array.isRequired,
+searchProjectIds: PropTypes.array.isRequired,
 }
 export default withRouter(StatusProjectList);

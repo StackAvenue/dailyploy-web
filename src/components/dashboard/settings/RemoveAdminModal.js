@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
 import { textTitlize } from "./../../../utils/function";
+import PropTypes from 'prop-types';
 
 const RemoveAdminModal = props => {
   return (
@@ -48,5 +49,11 @@ const RemoveAdminModal = props => {
     </Modal>
   );
 };
+
+RemoveAdminModal.propTypes = {
+  state: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  removeAdmin: PropTypes.func.isRequired,
+}
 
 export default RemoveAdminModal;

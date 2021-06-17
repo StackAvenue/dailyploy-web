@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Timer from "./../dashboard/Timer";
 import moment from "moment";
+import PropTypes from 'prop-types';
 
 class TaskBottomPopup extends Component {
   constructor(props) {
@@ -99,6 +100,11 @@ class TaskBottomPopup extends Component {
       </>
     );
   }
+}
+
+TaskBottomPopup.propTypes = {
+  event: PropTypes.number.isRequired,
+  stopOnGoingTask: PropTypes.func.isRequired
 }
 
 export default withRouter(TaskBottomPopup);

@@ -20,6 +20,7 @@ import minusImg from "../../assets/images/minus-1.svg";
 import Spinner from 'react-bootstrap/Spinner';
 import { debounce } from '../../utils/function';
 import Loader from "react-loader-spinner";
+import PropTypes from 'prop-types';
 // import { Button } from "react-bootstrap";
 
 function UserstoryModal(props) {
@@ -1860,6 +1861,44 @@ function UserstoryModal(props) {
       )}
     </div>
   );
+}
+UserstoryModal.propTypes = {
+  state: PropTypes.object.isRequired,
+  userStory_checklists: PropTypes.array.isRequired,
+  userTaskDetails: PropTypes.func.isRequired,
+  taskEdit: PropTypes.func.isRequired,
+  handleDescription: PropTypes.func.isRequired,
+  editUserstory: PropTypes.func.isRequired,
+  editDescription: PropTypes.func.isRequired,
+  currentTask: PropTypes.object,
+  setUserStoryDetails: PropTypes.func.isRequired,
+  handleTaskDetails: PropTypes.func.isRequired,
+  handleUserstoryModal: PropTypes.func.isRequired,
+  addTaskChecklist: PropTypes.func.isRequired,
+  updateTaskChecklist: PropTypes.func.isRequired,
+  deleteTaskChecklist: PropTypes.func.isRequired,
+  modalDetails: PropTypes.string.isRequired,
+  currentUserstory: PropTypes.object,
+  projectMembers: PropTypes.array.isRequired,
+  handleMemberChange: PropTypes.func.isRequired,
+  list_id: PropTypes.number.isRequired,
+  deleteUserStory: PropTypes.func.isRequired,
+  taskStatus: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
+  saveUserstoryTask: PropTypes.func.isRequired,
+  handleDetailsClose: PropTypes.func.isRequired,
+  addUserstoryChecklist: PropTypes.func.isRequired,
+  updateUserstoryChecklist: PropTypes.func.isRequired,
+  deleteUserstoryChecklist: PropTypes.func.isRequired,
+  editTltId: PropTypes.number,
+  updatedData: PropTypes.bool.isRequired,
+  handleSaveTask: PropTypes.func.isRequired,
+  EditTlt: PropTypes.func.isRequired,
+  handleUpdatedData: PropTypes.func.isRequired,
+  checklistItem: PropTypes.bool,
+  newChecklist: PropTypes.bool.isRequired,
+  handleTaskC: PropTypes.func.isRequired,
+  action: PropTypes.number
 }
 
 export default UserstoryModal;

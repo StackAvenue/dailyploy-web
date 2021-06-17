@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 class DailyPloyToast extends Component {
   constructor(props) {
@@ -31,6 +32,10 @@ class DailyPloyToast extends Component {
       </>
     )
   }
+}
+DailyPloyToast.propTypes = {
+  message: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired
 }
 export default DailyPloyToast;
 

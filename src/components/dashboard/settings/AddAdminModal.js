@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
+import PropTypes from 'prop-types';
 
 const AddAdminModal = props => {
   return (
@@ -53,6 +54,14 @@ const AddAdminModal = props => {
     </Modal>
   );
 };
+
+AddAdminModal.propTypes = {
+  state: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  addAdmin: PropTypes.func.isRequired,
+  autoSearchSuggestion: PropTypes.func.isRequired,
+}
 
 
 

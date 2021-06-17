@@ -454,18 +454,7 @@ class Signup extends Component {
 
 
 Signup.propTypes = {
-  state: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
-  enable: PropTypes.string,
-  changeHandler: PropTypes.func,
-  signup: PropTypes.func,
-  responseGoogle: PropTypes.func,
-  errorGoogle: PropTypes.func,
-  handlePasswordShow: PropTypes.func,
-  changeLogType: PropTypes.func,
-  disabled: PropTypes.func,
-
-
-
+  props: PropTypes.object
 }
 
 export default withRouter(Signup);

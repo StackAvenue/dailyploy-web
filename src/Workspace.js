@@ -417,28 +417,9 @@ class Workspace extends Component {
 }
 
 Workspace.propTypes = {
-  notification: PropTypes.array,
-  workspaces: PropTypes.array,
-  workspaceId: PropTypes.number,
-  workspaceName: PropTypes.string,
-  callWorkspace:PropTypes.func,
-  userInfo: PropTypes.object,
-  updateWorkspaces: PropTypes.func,
-  logout: PropTypes.func,
-  userData: PropTypes.object,
-  searchOptions: PropTypes.array,
-  pathname: PropTypes.func,
-  readAllNotification:PropTypes.func,
-  loggedInUserName: PropTypes.string,
-  handleSearchFilterResult: PropTypes.func,
-  path: PropTypes.string,
-  exact: PropTypes.bool,
-  event: PropTypes.number,
-  stopOnGoingTask: PropTypes.func,
-
-
-
-
+props: PropTypes.object.isRequired,
+RouteComponent: PropTypes.func.isRequired,
+title: PropTypes.string.isRequired,
 }
 
 export default withRouter(Workspace);

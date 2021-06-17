@@ -10,6 +10,7 @@ class Select extends Component {
       border: "solid 1px #d1d1d1",
       color: "#d1d1d1"
     };
+    console.log("select.js", props);
   }
 
   onClickInput = () => {
@@ -63,5 +64,4 @@ class Select extends Component {
     );
   }
 }
-
 export default onClickOutside(Select);

@@ -28,6 +28,7 @@ import {
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 import ConfirmModal from "./../ConfirmModal";
 import Loader from "react-loader-spinner";
+import PropTypes from 'prop-types';
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -1172,6 +1173,27 @@ class TaskInfoModal extends Component {
       </>
     );
   }
+}
+
+TaskInfoModal.propTypes = {
+  showInfo: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleTaskBottomPopup: PropTypes.func.isRequired,
+  onGoingTask: PropTypes.bool.isRequired,
+  taskInfoEdit: PropTypes.func.isRequired,
+  confirmModal: PropTypes.func.isRequired,
+  resumeOrDeleteTask: PropTypes.func,
+  handleTaskPlay: PropTypes.func.isRequired,
+  icon: PropTypes.string.isRequired,
+  handleTaskStartTop: PropTypes.func,
+  handleTaskStart: PropTypes.func.isRequired,
+  handleTaskStop: PropTypes.func.isRequired,
+  updateTaskComments: PropTypes.func.isRequired,
+  deleteComments: PropTypes.func.isRequired,
+  updateComments: PropTypes.func,
+  timeTrackUpdate: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired,
 }
 
 export default TaskInfoModal;

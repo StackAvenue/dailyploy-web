@@ -7,6 +7,7 @@ import { TwitterPicker, Twitter } from "react-color";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { get } from "../../utils/API";
+import PropTypes from 'prop-types';
 
 class UpdateProjectModal extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class UpdateProjectModal extends Component {
       background: "#000",
       displayColorPicker: false,
     };
+    console.log("updatemodal",props);
   }
 
   async componentDidMount() {
@@ -196,6 +198,13 @@ class UpdateProjectModal extends Component {
       </>
     );
   }
+}
+
+UpdateProjectModal.propTypes = {
+  state: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  projectId: PropTypes.string.isRequired,
+  workspaceId: PropTypes.string.isRequired
 }
 
 export default UpdateProjectModal;

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { get, post, logout, put, del } from "../../utils/API";
 import ProjectReportsSettings from "../dashboard/settings/ProjectReportsSettings";
 import ReactTooltip from "react-tooltip";
-import Spinner from 'react-bootstrap/Spinner'
+import Spinner from 'react-bootstrap/Spinner';
+import PropTypes from 'prop-types';
 
 const Summary = props => {
+    console.log("summary", props);
     const[totalTasks, setTotalTasks]=useState(null)
     const[taskCompleted, setTaskCompleted]=useState(null)
     const[estTime, setEst]=useState(null)
@@ -114,6 +116,12 @@ const Summary = props => {
             </div>
         </div>
     )
+}
+Summary.propTypes = {
+    id: PropTypes.number.isRequired,
+    state: PropTypes.object.isRequired,
+    closeSummary: PropTypes.func.isRequired,
+    setConjuction: PropTypes.func.isRequired,
 }
 
 export default Summary;

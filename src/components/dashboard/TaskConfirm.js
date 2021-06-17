@@ -20,6 +20,7 @@ import TimePicker from "rc-time-picker";
 import DatePicker from "react-datepicker";
 import EditableSelect from "./../EditableSelect";
 import { debounce } from "../../utils/function";
+import PropTypes from 'prop-types';
 
 const HOURS_IN_SEC = 3600;
 class TaskConfirm extends Component {
@@ -36,7 +37,6 @@ class TaskConfirm extends Component {
       icon: "play",
       startOn: "",
       status: false,
-      color: "#ffffff",
       selected: "",
       trackSaved: false,
       showContacts: false,
@@ -936,5 +936,25 @@ class TaskConfirm extends Component {
     );
   }
 }
+
+TaskConfirm.propTypes = {
+  taskConfirmModal: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleTaskBottomPopup: PropTypes.func.isRequired,
+  onGoingTask: PropTypes.bool.isRequired,
+  taskInfoEdit: PropTypes.func.isRequired,
+  backToTaskInfoModal: PropTypes.func.isRequired,
+  taskMarkComplete: PropTypes.func.isRequired,
+  taskResume: PropTypes.func.isRequired,
+  taskDelete: PropTypes.func.isRequired,
+  logTaskTime: PropTypes.func.isRequired,
+  handleLogTimeFrom: PropTypes.func.isRequired,
+  handleLogTimeTo: PropTypes.func.isRequired,
+  updateTaskEventLogTime: PropTypes.func.isRequired,
+  timeTrackUpdate: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired
+}
+
 
 export default TaskConfirm;

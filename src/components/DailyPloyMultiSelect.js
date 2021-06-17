@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { firstTwoLetter, textTitlize } from "./../utils/function";
+import PropTypes from 'prop-types';
 
 class DailyPloyMultiSelect extends Component {
   constructor(props) {
@@ -177,6 +178,14 @@ class DailyPloyMultiSelect extends Component {
       </>
     );
   }
+}
+DailyPloyMultiSelect.propTypes = {
+  options: PropTypes.array.isRequired,
+  searchBy: PropTypes.string.isRequired,
+  // reset={this.props.state.reset}
+  // defaultSelected={this.props.state.selectedTags}
+  selectedIcon: PropTypes.string.isRequired,
+  // onChange={this.props.handleChangeMember}
 }
 
 export default DailyPloyMultiSelect;

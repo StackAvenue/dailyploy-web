@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import Loader from 'react-loader-spinner'
 import "../../../assets/css/TaskProjectList.scss";
+import PropTypes from 'prop-types';
 
 
 const StatusList = (props) => {
@@ -311,5 +312,14 @@ const StatusList = (props) => {
             </div>
     );
 
+}
+
+StatusList.propTypes = {
+    workspaceId: PropTypes.number.isRequired,
+    projectId: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    // searchUserDetails: PropTypes.string.isRequired,
+    // searchProjectIds: PropTypes.number.isRequired,
+    // projectName: PropTypes.string.isRequired
 }
 export default StatusList;

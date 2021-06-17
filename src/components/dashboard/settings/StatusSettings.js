@@ -16,7 +16,6 @@ class StatusSettings extends Component {
       rowId: null,
       taskCategories: [],
       categoryName: "",
-
       editCategoryError: false,
       categoryError: false,
       showConfirm: false,

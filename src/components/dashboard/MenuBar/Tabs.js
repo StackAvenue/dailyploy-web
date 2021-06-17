@@ -457,7 +457,7 @@ const Tabs = (props) => {
 
 Tabs.propTypes = {
   classNameRoute: PropTypes.func.isRequired,
-  workspaceId: PropTypes.string.isRequired
+  workspaceId: PropTypes.string
 }
 
 

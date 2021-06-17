@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Highcharts from "highcharts/highstock";
 import { PRIORITIES, CHART_COLOR } from "../../../utils/Constants";
 import { textTitlize } from "../../../utils/function";
+import PropTypes from 'prop-types';
 
 
 window.Highcharts = Highcharts;
@@ -434,6 +435,13 @@ class PieChart extends Component {
   render() {
     return <div id={this.props.id}></div>;
   }
+}
+
+PieChart.propTypes = {
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  data: PropTypes.array,
+  estimateTime: PropTypes.array
 }
 
 

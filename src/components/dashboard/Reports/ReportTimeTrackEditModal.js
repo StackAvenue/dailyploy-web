@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
+import PropTypes from 'prop-types';
+
 class ReportTimeTrackEditModal extends Component {
   constructor(props) {
     super(props);
@@ -100,6 +102,13 @@ class ReportTimeTrackEditModal extends Component {
       </>
     );
   }
+}
+ReportTimeTrackEditModal.propTypes = {
+  state: PropTypes.object.isRequired,
+  editTimeTrack: PropTypes.func.isRequired,
+  handleTimeFrom: PropTypes.func.isRequired,
+  handleTimeTo: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
 }
 
 export default ReportTimeTrackEditModal;

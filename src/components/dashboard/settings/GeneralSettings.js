@@ -1236,6 +1236,17 @@ GeneralSettings.propTypes = {
   workspaceName: PropTypes.string.isRequired,
   workspaceId: PropTypes.string.isRequired,
   adminUserArr: PropTypes.array.isRequired,
+  UserNameHandler: PropTypes.func.isRequired,
+  UserNameAddHandler: PropTypes.func.isRequired,
+  worskpaceNameHandler: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
+  // members: PropTypes.array,
+  updateWorkspaceName: PropTypes.func.isRequired,
+  updateWorkspaceCurrency: PropTypes.func,
+  handleChangeAdminUsers: PropTypes.func.isRequired,
+  workspace: PropTypes.object,
+  // loggedInUser: PropTypes.string,
+  UserNameHandler2: PropTypes.func.isRequired
 }
 
 export default GeneralSettings;

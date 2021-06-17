@@ -1,5 +1,6 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types';
 
 const ChecklistAddTask = (props) => {
     return (
@@ -18,5 +19,11 @@ const ChecklistAddTask = (props) => {
         </div>
     )
 };
+ChecklistAddTask.propTypes = {
+    closeAddTask: PropTypes.func.isRequired,
+    handleSave: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    inputTaskData: PropTypes.string.isRequired,
+}
 
 export default ChecklistAddTask;

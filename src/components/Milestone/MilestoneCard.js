@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MONTH_FORMAT } from "../../utils/Constants";
 import moment from "moment";
+import PropTypes from 'prop-types';
 
 function MilestoneCard(props) {
     const [nameHover, setNameHover] = useState(false);
@@ -18,6 +19,7 @@ function MilestoneCard(props) {
     }
 
     const statusTags = () => {
+       
         if (props.milestone.status == PLANNED) {
             return (
                 <> <div className={`cd-timeline-img 
@@ -218,5 +220,31 @@ function MilestoneCard(props) {
         </div >
     );
 }
+
+MilestoneCard.propTypes = {
+    milestone: PropTypes.object.isRequired,
+    edit: PropTypes.bool.isRequired,
+    errorDueDate: PropTypes.bool.isRequired,
+    errorName: PropTypes.bool.isRequired,
+    setDate: PropTypes.func.isRequired,
+    dueDate: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    deleteMilestone: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    handleDescription: PropTypes.func.isRequired,
+    handleName: PropTypes.func.isRequired,
+    editMilestone: PropTypes.func.isRequired,
+    handleStatus: PropTypes.func.isRequired,
+    removeHover: PropTypes.func.isRequired,
+    addHover: PropTypes.func.isRequired,
+    hover: PropTypes.bool.isRequired,
+    updateMilestone: PropTypes.func.isRequired,
+    removeMilestoneModal: PropTypes.func.isRequired,
+    changeDeleteModal: PropTypes.func.isRequired,
+    currentDate: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+}
+
 
 export default MilestoneCard;

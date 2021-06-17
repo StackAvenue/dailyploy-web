@@ -239,7 +239,11 @@ class SummuryReportCharts extends Component {
 SummuryReportCharts.propTypes = {
   searchUserDetails: PropTypes.array.isRequired,
   searchProjectIds: PropTypes.array.isRequired,
-  handleLoading: PropTypes.func.isRequired
+  handleLoading: PropTypes.func.isRequired,
+  priorities: PropTypes.array.isRequired,
+  projects: PropTypes.array.isRequired,
+  state: PropTypes.object.isRequired,
+  setColumnChartData: PropTypes.func.isRequired
 }
 
 export default SummuryReportCharts;
