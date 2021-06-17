@@ -13,6 +13,7 @@ import DailyPloyToast from "../../DailyPloyToast";
 import { put } from "../../../utils/API";
 import cookie from "react-cookies";
 import "../../../assets/css/workspaceSettings.scss";
+import PropTypes from 'prop-types';
 
 class WorkspaceSettings extends Component {
   constructor(props) {
@@ -191,6 +192,15 @@ class WorkspaceSettings extends Component {
       </div>
     );
   }
+}
+
+WorkspaceSettings.propTypes = {
+searchUserDetails: PropTypes.array.isRequired,
+searchProjectIds: PropTypes.array.isRequired,
+workspaceObj: PropTypes.object,
+state: PropTypes.object.isRequired,
+workspaceName: PropTypes.string.isRequired,
+workspaceNameUpdate: PropTypes.func.isRequired
 }
 
 export default WorkspaceSettings;

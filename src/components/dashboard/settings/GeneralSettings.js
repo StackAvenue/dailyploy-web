@@ -10,6 +10,7 @@ import RemoveAdminModal from "./RemoveAdminModal";
 import EmailConfigModal from "./EmailConfigModal";
 import { async } from "q";
 import cookie from "react-cookies";
+import PropTypes from 'prop-types';
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -1229,6 +1230,23 @@ class GeneralSettings extends Component {
       </>
     );
   }
+}
+
+GeneralSettings.propTypes = {
+  workspaceName: PropTypes.string.isRequired,
+  workspaceId: PropTypes.string.isRequired,
+  adminUserArr: PropTypes.array.isRequired,
+  UserNameHandler: PropTypes.func.isRequired,
+  UserNameAddHandler: PropTypes.func.isRequired,
+  worskpaceNameHandler: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
+  // members: PropTypes.array,
+  updateWorkspaceName: PropTypes.func.isRequired,
+  updateWorkspaceCurrency: PropTypes.func,
+  handleChangeAdminUsers: PropTypes.func.isRequired,
+  workspace: PropTypes.object,
+  // loggedInUser: PropTypes.string,
+  UserNameHandler2: PropTypes.func.isRequired
 }
 
 export default GeneralSettings;

@@ -28,6 +28,7 @@ import {
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 import ConfirmModal from "./../ConfirmModal";
 import Loader from "react-loader-spinner";
+import PropTypes from 'prop-types';
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -70,7 +71,7 @@ class TaskInfoModal extends Component {
 
   isToday = () => {
     return this.props.state.dateTo
-      ? moment(this.props.state.dateTo).format(DATE_FORMAT1) ==
+      ? moment(this.props.state.dateTo).format(DATE_FORMAT1) ===
           moment(new Date()).format(DATE_FORMAT1)
       : false;
   };
@@ -123,7 +124,7 @@ class TaskInfoModal extends Component {
   renderTaskInfo = (option, type, name) => {
     if (option) {
       const klass =
-        type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
+        type === "block" ? "color-block" : type === "circle" ? "color-dot" : "";
       return (
         <div className="left-padding-20px">
           <div
@@ -250,7 +251,7 @@ class TaskInfoModal extends Component {
         fd.append("comments", this.state.editedComments);
         const { data } = await put(fd, `comment/${commnetId}`);
         var taskComments = this.props.state.taskComments;
-        var comment = taskComments.find((c) => c.id == commnetId);
+        var comment = taskComments.find((c) => c.id === commnetId);
         comment["comments"] = data.comments;
         comment["user"] = data.user;
         comment["attachments"] = data.attachments;
@@ -293,7 +294,7 @@ class TaskInfoModal extends Component {
             editLog: false,
           });
         } catch (e) {
-          if (e.response.status == 400) {
+          if (e.response.status === 400) {
             this.setState({
               trackTimeError: "End datetime is wrong",
               timeTrackEditLoader: false,
@@ -345,9 +346,9 @@ class TaskInfoModal extends Component {
     var s = Math.floor((totalSeconds % 3600) % 60);
     return h > 0
       ? `${h} hours ago`
-      : m > 0 && h == 0
+      : m > 0 && h === 0
       ? `${m} minutes ago`
-      : s > 30 && h == 0 && m == 0
+      : s > 30 && h === 0 && m === 0
       ? "few seconds ago"
       : "just now";
   };
@@ -358,7 +359,7 @@ class TaskInfoModal extends Component {
     );
     let commentDate = moment(date);
     let isToday =
-      commentDate.format(DATE_FORMAT1) == moment().format(DATE_FORMAT1);
+      commentDate.format(DATE_FORMAT1) === moment().format(DATE_FORMAT1);
     if (isToday) {
       let time = Date.now() - date.getTime();
       return this.formattedSeconds(time);
@@ -441,7 +442,7 @@ class TaskInfoModal extends Component {
   makeLogEditable = (e) => {
     if (e.target.value) {
       let log = this.props.state.taskEvent.allTimeTracked.find(
-        (tt) => tt.id == e.target.value
+        (tt) => tt.id === e.target.value
       );
       let fromMoment = moment(log.start_time);
       let toMoment = moment(log.end_time);
@@ -544,7 +545,7 @@ class TaskInfoModal extends Component {
     this.setState({
       timeDiff: parseInt(event.currentTarget.value),
     });
-    if (event && event.currentTarget.value && event.currentTarget.value != "") {
+    if (event && event.currentTarget.value && event.currentTarget.value !== "") {
       this.handleTimeFrom(this.state.fromDateTime);
       this.handleTimeTo(
         this.state.fromDateTime
@@ -1172,6 +1173,27 @@ class TaskInfoModal extends Component {
       </>
     );
   }
+}
+
+TaskInfoModal.propTypes = {
+  showInfo: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleTaskBottomPopup: PropTypes.func.isRequired,
+  onGoingTask: PropTypes.bool.isRequired,
+  taskInfoEdit: PropTypes.func.isRequired,
+  confirmModal: PropTypes.func.isRequired,
+  resumeOrDeleteTask: PropTypes.func,
+  handleTaskPlay: PropTypes.func.isRequired,
+  icon: PropTypes.string.isRequired,
+  handleTaskStartTop: PropTypes.func,
+  handleTaskStart: PropTypes.func.isRequired,
+  handleTaskStop: PropTypes.func.isRequired,
+  updateTaskComments: PropTypes.func.isRequired,
+  deleteComments: PropTypes.func.isRequired,
+  updateComments: PropTypes.func,
+  timeTrackUpdate: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired,
 }
 
 export default TaskInfoModal;

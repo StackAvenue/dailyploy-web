@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import Close from "./../assets/images/close.svg";
+import PropTypes from 'prop-types';
 
 class ConfirmModal extends Component {
   constructor(props) {
@@ -61,6 +62,16 @@ class ConfirmModal extends Component {
       </>
     );
   }
+}
+
+ConfirmModal.propTypes = {
+  title: PropTypes.string,
+  message: PropTypes.string,
+  onClick: PropTypes.func,
+  closeModal: PropTypes.func,
+  buttonText: PropTypes.string,
+  show: PropTypes.bool,
+  style: PropTypes.object,
 }
 
 export default ConfirmModal;

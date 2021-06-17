@@ -3,6 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "../../assets/css/TaskProjectList.scss";
 import "../../assets/css/AddProjectTaskModel.scss";
+import PropTypes from 'prop-types';
 
 const AddProjectTaskModel = (props) => {
   const calendarFromRef = useRef(null);
@@ -98,5 +99,16 @@ const AddProjectTaskModel = (props) => {
     </div>
   );
 };
+
+AddProjectTaskModel.propTypes = {
+  show: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleDateFrom: PropTypes.func.isRequired,
+  handleDateTo: PropTypes.func.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  handleTaskNameChange: PropTypes.func.isRequired,
+  handleSaveTaskData: PropTypes.func.isRequired,
+}
 
 export default AddProjectTaskModel;

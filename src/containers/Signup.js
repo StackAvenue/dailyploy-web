@@ -22,6 +22,7 @@ import googleIcon from "../assets/images/google.png";
 import cookie from "react-cookies";
 import axios from "axios";
 import "../assets/css/login.scss";
+import PropTypes from 'prop-types';
 
 class Signup extends Component {
   constructor(props) {
@@ -449,6 +450,11 @@ class Signup extends Component {
       </>
     );
   }
+}
+
+
+Signup.propTypes = {
+  props: PropTypes.object
 }
 
 export default withRouter(Signup);

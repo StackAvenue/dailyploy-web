@@ -15,6 +15,7 @@ import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 import { convertUTCToLocalDate, getContrastColor } from "../../utils/function";
 import { DATE_FORMAT1, FULL_DATE_FORMAT3 } from "../../utils/Constants";
 import cookie from "react-cookies";
+import PropTypes from 'prop-types';
 
 class Calendar extends Component {
   _isMounted = false;
@@ -767,4 +768,32 @@ class Calendar extends Component {
     });
   };
 }
+
+Calendar.propTypes = {
+  state: PropTypes.object.isRequired,
+  sortUnit: PropTypes.string.isRequired,
+  workspaceId: PropTypes.string.isRequired,
+  resources: PropTypes.array.isRequired,
+  events: PropTypes.array.isRequired,
+  updateTaskDateView: PropTypes.func.isRequired,
+  setAddTaskDetails: PropTypes.func.isRequired,
+  editAddTaskDetails: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleProjectSelect: PropTypes.func.isRequired,
+  handleTaskBottomPopup: PropTypes.func.isRequired,
+  onGoingTask: PropTypes.bool.isRequired,
+  taskEventResumeConfirm: PropTypes.func.isRequired,
+  handleTaskTracking: PropTypes.func.isRequired,
+  updateTaskEvent: PropTypes.func.isRequired,
+  handleTaskStartTop: PropTypes.func,
+  handleTaskStart: PropTypes.func.isRequired,
+  handleTaskStop: PropTypes.func.isRequired,
+  handleLoading: PropTypes.func.isRequired,
+  validCrossMove: PropTypes.func.isRequired,
+  hoverId: PropTypes.number.isRequired,
+  handleHoverId: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired,
+}
+
 export default withDragDropContext(Calendar);

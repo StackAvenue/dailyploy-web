@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import ReactTooltip from "react-tooltip";
+import PropTypes from 'prop-types';
 
 const Filter = (props) => {
+  console.log("filter",props);
   const [multiSelections, setMultiSelections] = useState([]);
   const [multipleMemberSelections, setMultipleMemberSelections] = useState([]);
   const [isMemberSelected, setIsMemberSelected] = useState(false);
@@ -221,5 +223,16 @@ const Filter = (props) => {
     </div>
   );
 };
+Filter.propTypes = {
+  state: PropTypes.object.isRequired,
+  setConjuction: PropTypes.func.isRequired,
+  projectMembers: PropTypes.array.isRequired,
+  taskStatus: PropTypes.array.isRequired,
+  displayList: PropTypes.func.isRequired,
+  displayFiteredList: PropTypes.func.isRequired,
+  list_id: PropTypes.number.isRequired,
+  closeFilter: PropTypes.func.isRequired,
+  loadFilteredData: PropTypes.func.isRequired,
+}
 
 export default Filter;

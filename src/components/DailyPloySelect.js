@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import onClickOutside from "react-onclickoutside";
+import PropTypes from 'prop-types';
 
 class DailyPloySelect extends Component {
   constructor(props) {
@@ -294,6 +295,15 @@ class DailyPloySelect extends Component {
       </>
     );
   }
+}
+DailyPloySelect.propTypes = {
+  placeholder: PropTypes.string,
+  options: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  suggesionBy: PropTypes.string,
+  iconType: PropTypes.string,
+  optionPlaceholder: PropTypes.bool,
 }
 
 export default onClickOutside(DailyPloySelect);

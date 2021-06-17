@@ -3,6 +3,8 @@ import ImageUploader from "react-images-upload";
 import onClickOutside from "react-onclickoutside";
 import Loader from "react-loader-spinner";
 import ReactTooltip from "react-tooltip";
+import PropTypes from 'prop-types';
+import { propTypes } from "react-bootstrap/esm/Image";
 
 
 class CommentUpload extends React.Component {
@@ -244,5 +246,20 @@ class CommentUpload extends React.Component {
     );
   }
 }
+
+CommentUpload.propTypes = {
+  state: PropTypes.object.isRequired,
+  showSave: PropTypes.bool.isRequired,
+  showAttachIcon: PropTypes.bool.isRequired,
+  comments: PropTypes.string,
+  commentName: PropTypes.string.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  save: PropTypes.func,
+  pictures: PropTypes.array,
+  showBox: PropTypes.bool,
+  updateUploadedState: PropTypes.func,
+  removeUploadedImage: PropTypes.func,
+}
+
 
 export default onClickOutside(CommentUpload);

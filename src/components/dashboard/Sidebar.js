@@ -5,6 +5,7 @@ import cookie from "react-cookies";
 import DailyPloyToast from "./../../components/DailyPloyToast";
 import { toast } from "react-toastify";
 import { post } from "./../../utils/API";
+import PropTypes from 'prop-types';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -127,6 +128,15 @@ class Sidebar extends Component {
       </>
     );
   }
+}
+
+Sidebar.propTypes = {
+workspaces: PropTypes.array.isRequired,
+workspaceId: PropTypes.string,
+workspaceName: PropTypes.string.isRequired,
+callWorkspace: PropTypes.func,
+userInfo: PropTypes.object.isRequired,
+updateWorkspaces: PropTypes.func.isRequired
 }
 
 export default Sidebar;

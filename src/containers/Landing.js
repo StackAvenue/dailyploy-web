@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import Header from "../components/Landing/Header";
 import "../assets/css/landing.scss";
 import landing from "../assets/images/landing.jpg";
+import PropTypes from 'prop-types';
 
 class Landing extends Component {
   render() {
@@ -71,6 +72,9 @@ class Landing extends Component {
       </>
     );
   }
+}
+Landing.propTypes = {
+  props: PropTypes.object
 }
 
 export default withRouter(Landing);

@@ -21,6 +21,7 @@ import "../assets/css/login.scss";
 import { GOOGLE_CLIENT_ID } from "../utils/Constants";
 import GoogleLogin from "react-google-login";
 import DailyPloyToast from "./../../src/components/DailyPloyToast";
+import PropTypes from 'prop-types';
 
 class Signin extends Component {
   constructor(props) {
@@ -497,6 +498,9 @@ class Signin extends Component {
       </>
     );
   }
+}
+Signin.propTypes = {
+  props: PropTypes.object
 }
 
 export default withRouter(Signin);

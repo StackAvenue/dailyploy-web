@@ -10,6 +10,7 @@ import {
   MONTH_FORMAT
 } from "./../utils/Constants";
 import moment from "moment";
+import PropTypes from 'prop-types';
 
 class DailyPloyDatePicker extends Component {
   constructor(props) {
@@ -349,6 +350,13 @@ class DailyPloyDatePicker extends Component {
       return "";
     }
   }
+}
+DailyPloyDatePicker.propTypes = {
+  onSelectDate: PropTypes.func.isRequired,
+  pickerType: PropTypes.number.isRequired,
+  schedulerData: PropTypes.object.isRequired,
+  prev: PropTypes.bool.isRequired,
+  next: PropTypes.bool.isRequired,
 }
 
 export default DailyPloyDatePicker;

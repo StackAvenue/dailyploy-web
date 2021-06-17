@@ -17,6 +17,7 @@ import DailyPloyToast from "./../DailyPloyToast";
 import cookie from "react-cookies";
 import { USER_ROLE } from "../../utils/Constants";
 import AOS from "aos";
+import PropTypes from 'prop-types';
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -693,4 +694,13 @@ export default class MenuBar extends Component {
       </>
     );
   }
+}
+
+MenuBar.propTypes = {
+  workspaceId: PropTypes.string,
+  classNameRoute: PropTypes.func,
+  state: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
+  onSelectSort: PropTypes.func,
+  manageProjectListing: PropTypes.func,
+  handleLoad: PropTypes.func,
 }

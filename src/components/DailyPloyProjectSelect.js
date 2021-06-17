@@ -3,6 +3,7 @@ import "./../assets/css/dashboard.css";
 import "./../assets/css/dashboard.scss";
 import SearchImg from "./../assets/images/search.png";
 import onClickOutside from "react-onclickoutside";
+import PropTypes from 'prop-types';
 
 class DailyPloyProjectSelect extends Component {
   constructor(props) {
@@ -339,6 +340,14 @@ class DailyPloyProjectSelect extends Component {
       </>
     );
   }
+}
+DailyPloyProjectSelect.propTypes = {
+  options: PropTypes.array.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  iconType: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default onClickOutside(DailyPloyProjectSelect);

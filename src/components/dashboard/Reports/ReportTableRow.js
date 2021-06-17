@@ -17,6 +17,7 @@ import EditableTimeTrack from "./../../EditableTimeTrack";
 import TimePicker from "rc-time-picker";
 import ConfirmModal from "./../../ConfirmModal";
 import ReportTimeTrackEditModal from "./ReportTimeTrackEditModal";
+import PropTypes from 'prop-types';
 
 class ReportTableRow extends Component {
   constructor(props) {
@@ -486,6 +487,13 @@ class ReportTableRow extends Component {
       </>
     );
   }
+}
+
+
+ReportTableRow.propTypes = {
+  frequency: PropTypes.string.isRequired,
+  timeTrackUpdate: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired
 }
 
 export default withRouter(ReportTableRow);

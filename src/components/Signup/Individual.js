@@ -4,6 +4,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { GOOGLE_CLIENT_ID } from "./../../utils/Constants";
 import GoogleLogin from "react-google-login";
 import LogType from "../LogType";
+import PropTypes from 'prop-types';
 
 const Individual = (props) => {
   const {
@@ -219,5 +220,16 @@ const Individual = (props) => {
     </>
   );
 };
+
+Individual.propTypes = {
+  state: PropTypes.object.isRequired,
+  enable: PropTypes.string.isRequired,
+  changeHandler: PropTypes.func.isRequired,
+  signup: PropTypes.func.isRequired,
+  responseGoogle: PropTypes.func.isRequired,
+  errorGoogle: PropTypes.func.isRequired,
+  handlePasswordShow: PropTypes.func.isRequired,
+  changeLogType: PropTypes.func.isRequired,
+}
 
 export default Individual;

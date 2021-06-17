@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class Timer extends Component {
 	constructor(props) {
@@ -7,6 +8,7 @@ class Timer extends Component {
 		this.state = {
 			runningTime: 0
 		};
+		console.log("time", props);
 	}
 
 	componentDidMount = () => {
@@ -58,6 +60,12 @@ class Timer extends Component {
 			</>
 		)
 	}
+}
+
+Timer.propTypes = {
+	startOn: PropTypes.number,
+	isStart: PropTypes.bool.isRequired,
+	totalDuration: PropTypes.number
 }
 
 export default withRouter(Timer);

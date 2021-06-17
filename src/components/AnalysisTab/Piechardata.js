@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Highcharts from "highcharts/highstock";
 
+
 const Piechardata = (props) => {
   useEffect(() => {
     if (props.financialHealth) {
@@ -93,5 +94,7 @@ const Piechardata = (props) => {
     </>
   )
 }
+
+
 
 export default Piechardata;

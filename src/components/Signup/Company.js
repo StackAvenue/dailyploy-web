@@ -2,6 +2,7 @@ import React from "react";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import LogType from '../LogType';
+import PropTypes from 'prop-types';
 
 
 const Company = props => {
@@ -214,5 +215,13 @@ const Company = props => {
     </>
   );
 };
+Company.propTypes = {
+  state: PropTypes.object.isRequired,
+  enable: PropTypes.string.isRequired,
+  changeHandler: PropTypes.func.isRequired,
+  signup: PropTypes.func.isRequired,
+  handlePasswordShow: PropTypes.func.isRequired,
+  changeLogType: PropTypes.func.isRequired,
+}
 
 export default Company;
