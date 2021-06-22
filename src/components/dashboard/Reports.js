@@ -25,6 +25,7 @@ import DailyPloyToast from "./../DailyPloyToast";
 import SummuryReportCharts from "./Reports/SummuryReportCharts";
 import Loader from "react-loader-spinner";
 import VideoLoader from "./VideoLoader";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class Reports extends Component {
   constructor(props) {
@@ -1039,13 +1040,15 @@ class Reports extends Component {
       return (
         <>
           <div className="position-relative d-inline-block  AB">
-            <DatePicker
-              ref={this.calendarDayRef}
-              selected={this.state.dateFrom}
-              onChange={this.handleDateFrom}
-              startDate={this.state.dateFrom}
-              dateFormat="dd MMMM, yyyy"
-            />
+            <ErrorBoundary>
+              <DatePicker
+                ref={this.calendarDayRef}
+                selected={this.state.dateFrom}
+                onChange={this.handleDateFrom}
+                startDate={this.state.dateFrom}
+                dateFormat="dd MMMM, yyyy"
+              />
+            </ErrorBoundary>
             <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
               <i
                 onClick={this.openDayCalender}
@@ -1062,13 +1065,15 @@ class Reports extends Component {
       return (
         <>
           <div className="position-relative d-inline-block  AB">
-            <DatePicker
-              ref={this.calendarMonthRef}
-              selected={this.state.dateFrom}
-              onChange={this.handleMonthlyDateFrom}
-              dateFormat="MMMM yyyy"
-              showMonthYearPicker
-            />
+            <ErrorBoundary>
+              <DatePicker
+                ref={this.calendarMonthRef}
+                selected={this.state.dateFrom}
+                onChange={this.handleMonthlyDateFrom}
+                dateFormat="MMMM yyyy"
+                showMonthYearPicker
+              />
+            </ErrorBoundary>
             <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
               <i
                 onClick={this.openMonthCalender}
@@ -1085,17 +1090,18 @@ class Reports extends Component {
       return (
         <>
           <div className="position-relative week-hover-bg d-inline-block  AB">
-            <DatePicker
-              ref={this.calendarWeekRef}
-              showWeekNumbers
-              selected={this.state.dateFrom}
-              onChange={this.handleDayChange}
-              startDate={this.state.selectedDays[0]}
-              endDate={this.state.selectedDays[6]}
-              onWeekSelect={this.handleWeekClick}
-              value={this.state.displayWeek}
-              showWeekNumbers
-            />
+            <ErrorBoundary>
+              <DatePicker
+                ref={this.calendarWeekRef}
+                showWeekNumbers
+                selected={this.state.dateFrom}
+                onChange={this.handleDayChange}
+                startDate={this.state.selectedDays[0]}
+                endDate={this.state.selectedDays[6]}
+                onWeekSelect={this.handleWeekClick}
+                value={this.state.displayWeek}
+              />
+            </ErrorBoundary>
             <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
               <i
                 onClick={this.openWeekCalender}
@@ -1112,15 +1118,17 @@ class Reports extends Component {
       return (
         <>
           <div className="position-relative d-inline-block  AB">
-            <DatePicker
-              ref={this.calendarDate1Ref}
-              selectsStart
-              selected={this.state.dateFrom}
-              onChange={this.onclickStartDate}
-              startDate={this.state.dateFrom}
-              endDate={this.state.dateTo}
-              dateFormat="dd MMMM, yyyy"
-            />
+            <ErrorBoundary>
+              <DatePicker
+                ref={this.calendarDate1Ref}
+                selectsStart
+                selected={this.state.dateFrom}
+                onChange={this.onclickStartDate}
+                startDate={this.state.dateFrom}
+                endDate={this.state.dateTo}
+                dateFormat="dd MMMM, yyyy"
+              />
+            </ErrorBoundary>
             <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
               <i
                 onClick={this.openDateRangeCalender(true)}
@@ -1130,16 +1138,18 @@ class Reports extends Component {
             </span>
           </div>
           <div className="position-relative  d-inline-block  AB">
-            <DatePicker
-              ref={this.calendarDate2Ref}
-              selectsEnd
-              selected={this.state.dateTo}
-              onChange={this.onclickEndDate}
-              startDate={this.state.dateFrom}
-              endDate={this.state.dateTo}
-              minDate={this.state.dateFrom}
-              dateFormat="dd MMMM, yyyy"
-            />
+            <ErrorBoundary>
+              <DatePicker
+                ref={this.calendarDate2Ref}
+                selectsEnd
+                selected={this.state.dateTo}
+                onChange={this.onclickEndDate}
+                startDate={this.state.dateFrom}
+                endDate={this.state.dateTo}
+                minDate={this.state.dateFrom}
+                dateFormat="dd MMMM, yyyy"
+              />
+            </ErrorBoundary>
             <span style={{ position: "absolute", right: "9px", bottom: "8px" }}>
               <i
                 onClick={this.openDateRangeCalender(false)}
@@ -1154,13 +1164,15 @@ class Reports extends Component {
 
     return (
       <>
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-          classNameRoute={this.classNameRoute}
-          state={this.state}
-          manageProjectListing={() => { }}
-        />
+        <ErrorBoundary>
+          <MenuBar
+            onSelectSort={this.onSelectSort}
+            workspaceId={this.state.workspaceId}
+            classNameRoute={this.classNameRoute}
+            state={this.state}
+            manageProjectListing={() => { }}
+          />
+        </ErrorBoundary>
 
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding ">
@@ -1216,22 +1228,26 @@ class Reports extends Component {
                 </div>
                 <div className="report-caleneder-btn">
                   <div className="d-inline-block report-category">
-                    <DailyPloySelect
-                      placeholder="Search for Category"
-                      options={this.state.taskCategories}
-                      onChange={this.handleCategoryChange}
-                    />
+                    <ErrorBoundary>
+                      <DailyPloySelect
+                        placeholder="Search for Category"
+                        options={this.state.taskCategories}
+                        onChange={this.handleCategoryChange}
+                      />
+                    </ErrorBoundary>
                   </div>
                   <div className="d-inline-block report-priority">
-                    <DailyPloySelect
-                      placeholder="Select Priority"
-                      onChange={this.handlePriorityChange}
-                      label="label"
-                      suggesionBy="label"
-                      iconType="circle"
-                      optionPlaceholder={false}
-                      options={PRIORITIES}
-                    />
+                    <ErrorBoundary>
+                      <DailyPloySelect
+                        placeholder="Select Priority"
+                        onChange={this.handlePriorityChange}
+                        label="label"
+                        suggesionBy="label"
+                        iconType="circle"
+                        optionPlaceholder={false}
+                        options={PRIORITIES}
+                      />
+                    </ErrorBoundary>
                   </div>
                 </div>
                 <div className="report-download">
@@ -1256,32 +1272,38 @@ class Reports extends Component {
               </div>
               {this.state.loadingGif ? (
                 <div className="loading1">
-                  <VideoLoader />
+                  <ErrorBoundary>
+                    <VideoLoader />
+                  </ErrorBoundary>
                 </div>
               ) : (
                   <>
                     <div className="">
-                      <SummuryReportCharts
-                        priorities={PRIORITIES}
-                        projects={this.state.projects}
-                        state={this.state}
-                        searchUserDetails={this.props.searchUserDetails}
-                        searchProjectIds={this.props.searchProjectIds}
-                        setColumnChartData={this.setColumnChartData}
-                        handleLoading={this.props.handleLoading}
-                      />
+                      <ErrorBoundary>
+                        <SummuryReportCharts
+                          priorities={PRIORITIES}
+                          projects={this.state.projects}
+                          state={this.state}
+                          searchUserDetails={this.props.searchUserDetails}
+                          searchProjectIds={this.props.searchProjectIds}
+                          setColumnChartData={this.setColumnChartData}
+                          handleLoading={this.props.handleLoading}
+                        />
+                      </ErrorBoundary>
                     </div>
 
                     <div className="report-table">
-                      <ReportTable
-                        taskDetails={this.state.taskDetails}
-                        state={this.state}
-                        searchProjectIds={this.props.searchProjectIds}
-                        searchUserDetails={this.props.searchUserDetails}
-                        frequency={this.returnFrequency()}
-                        timeTrackUpdate={this.timeTrackUpdate}
-                        isTimetrackMode={this.state.isTimetrackMode}
-                      />
+                      <ErrorBoundary>
+                        <ReportTable
+                          taskDetails={this.state.taskDetails}
+                          state={this.state}
+                          searchProjectIds={this.props.searchProjectIds}
+                          searchUserDetails={this.props.searchUserDetails}
+                          frequency={this.returnFrequency()}
+                          timeTrackUpdate={this.timeTrackUpdate}
+                          isTimetrackMode={this.state.isTimetrackMode}
+                        />
+                      </ErrorBoundary>
                     </div>
                   </>
                 )}

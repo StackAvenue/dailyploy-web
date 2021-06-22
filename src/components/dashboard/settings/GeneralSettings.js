@@ -10,6 +10,8 @@ import RemoveAdminModal from "./RemoveAdminModal";
 import EmailConfigModal from "./EmailConfigModal";
 import { async } from "q";
 import cookie from "react-cookies";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class GeneralSettings extends Component {
   constructor(props) {
@@ -605,10 +607,12 @@ class GeneralSettings extends Component {
       let addData = [...this.props.state.adminUserArr, ...filterData];
       this.props.handleChangeAdminUsers(addData);
       toast(
-        <DailyPloyToast
-          message={`${textTitlize(this.state.addAdminName)} added as a Admin`}
-          status="success"
-        />,
+        <ErrorBoundary>
+          <DailyPloyToast
+            message={`${textTitlize(this.state.addAdminName)} added as a Admin`}
+            status="success"
+          />
+        </ErrorBoundary>,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.setState({ addAdminShow: false, allUserArr: addData });
@@ -642,12 +646,14 @@ class GeneralSettings extends Component {
       );
       this.props.handleChangeAdminUsers(removeData);
       toast(
-        <DailyPloyToast
-          message={`Removed ${textTitlize(
-            this.state.adminUserName
-          )} As Admin User`}
-          status="success"
-        />,
+        <ErrorBoundary>
+          <DailyPloyToast
+            message={`Removed ${textTitlize(
+              this.state.adminUserName
+            )} As Admin User`}
+            status="success"
+          />
+        </ErrorBoundary>,
         {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER,
@@ -891,11 +897,13 @@ class GeneralSettings extends Component {
                         >
                           Remove
                       </button>
-                        <RemoveAdminModal
-                          state={this.state}
-                          handleClose={this.handleRemoveClose}
-                          removeAdmin={this.removeAdmin}
-                        />
+                        <ErrorBoundary>
+                          <RemoveAdminModal
+                            state={this.state}
+                            handleClose={this.handleRemoveClose}
+                            removeAdmin={this.removeAdmin}
+                          />
+                        </ErrorBoundary>
                       </>
                     ) : null}
                 </div>
@@ -914,33 +922,37 @@ class GeneralSettings extends Component {
                 + Add New
                 </button>
               ) : null}
-            <AddAdminModal
-              state={this.state}
-              handleClose={this.handleAddAdminClose}
-              onChange={this.adminEmailHandleChange}
-              addAdmin={this.addAdmin}
-              autoSearchSuggestion={this.autoSearchSuggestion}
-            />
+            <ErrorBoundary>
+              <AddAdminModal
+                state={this.state}
+                handleClose={this.handleAddAdminClose}
+                onChange={this.adminEmailHandleChange}
+                addAdmin={this.addAdmin}
+                autoSearchSuggestion={this.autoSearchSuggestion}
+              />
+            </ErrorBoundary>
           </div>
           <div className="col-md-12 hr1"></div>
           <div className="col-md-12 config-heading">Email Configuration</div>
           <div className="config-email-box">
             <div className="col-md-12 heading">
-              <EmailConfigModal
-                state={this.state}
-                handleClose={this.handleEditClose}
-                handleToChange={this.handleToChange}
-                renderToSuggestions={this.renderToSuggestions}
-                renderSelectedToMembers={this.renderSelectedToMembers}
-                handleCcChange={this.handleCcChange}
-                renderCcSuggestions={this.renderCcSuggestions}
-                renderSelectedCcMembers={this.renderSelectedCcMembers}
-                handleBccChange={this.handleBccChange}
-                renderBccSuggestions={this.renderBccSuggestions}
-                renderSelectedBccMembers={this.renderSelectedBccMembers}
-                handleEmailText={this.handleEmailText}
-                configEmailStatus={this.configEmailStatus}
-              />
+              <ErrorBoundary>
+                <EmailConfigModal
+                  state={this.state}
+                  handleClose={this.handleEditClose}
+                  handleToChange={this.handleToChange}
+                  renderToSuggestions={this.renderToSuggestions}
+                  renderSelectedToMembers={this.renderSelectedToMembers}
+                  handleCcChange={this.handleCcChange}
+                  renderCcSuggestions={this.renderCcSuggestions}
+                  renderSelectedCcMembers={this.renderSelectedCcMembers}
+                  handleBccChange={this.handleBccChange}
+                  renderBccSuggestions={this.renderBccSuggestions}
+                  renderSelectedBccMembers={this.renderSelectedBccMembers}
+                  handleEmailText={this.handleEmailText}
+                  configEmailStatus={this.configEmailStatus}
+                />
+              </ErrorBoundary>
               <div className="col-md-6 no-padding d-inline-block">
                 Daily Status Mail
               </div>
@@ -967,11 +979,13 @@ class GeneralSettings extends Component {
                         Resume
                       </button>
                     )}
-                  <EmailConfigurationModal
-                    state={this.state}
-                    handleClose={this.handleResumeClose}
-                    toggleActiveFlag={this.toggleActiveFlag}
-                  />
+                  <ErrorBoundary>
+                    <EmailConfigurationModal
+                      state={this.state}
+                      handleClose={this.handleResumeClose}
+                      toggleActiveFlag={this.toggleActiveFlag}
+                    />
+                  </ErrorBoundary>
                 </div>
               </div>
             </div>
@@ -1229,6 +1243,23 @@ class GeneralSettings extends Component {
       </>
     );
   }
+}
+
+GeneralSettings.propTypes = {
+  workspaceName: PropTypes.string.isRequired,
+  workspaceId: PropTypes.string.isRequired,
+  adminUserArr: PropTypes.array.isRequired,
+  UserNameHandler: PropTypes.func.isRequired,
+  UserNameAddHandler: PropTypes.func.isRequired,
+  worskpaceNameHandler: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
+  // members: PropTypes.array,
+  updateWorkspaceName: PropTypes.func.isRequired,
+  updateWorkspaceCurrency: PropTypes.func,
+  handleChangeAdminUsers: PropTypes.func.isRequired,
+  workspace: PropTypes.object,
+  // loggedInUser: PropTypes.string,
+  UserNameHandler2: PropTypes.func.isRequired
 }
 
 export default GeneralSettings;

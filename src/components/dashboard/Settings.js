@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import DailyPloyToast from "../../../src/components/DailyPloyToast";
 import "../../assets/css/settings.scss";
 import "../../assets/css/icons.css";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class Settings extends Component {
   constructor(props) {
@@ -188,7 +189,7 @@ class Settings extends Component {
       } catch (e) {
         if (e.response.status) {
           toast(
-            <DailyPloyToast message={"Internal Server Error"} status="error" />,
+              <DailyPloyToast message={"Internal Server Error"} status="error" />,
             { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
           );
         }
@@ -213,14 +214,15 @@ class Settings extends Component {
         if (data) {
           this.setState({ isSaveConfirmEnable: false });
         }
-        toast(<DailyPloyToast message="Password Updated" status="success" />, {
+        toast(
+            <DailyPloyToast message="Password Updated" status="success" />, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
       } catch (e) {
         if (e.response.status === 500) {
           toast(
-            <DailyPloyToast message={"Internal Server Error"} status="error" />,
+              <DailyPloyToast message={"Internal Server Error"} status="error" />,
             { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
           );
         } else if (e.response.status === 403) {
@@ -281,12 +283,14 @@ class Settings extends Component {
     );
     return (
       <>
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-          classNameRoute={this.classNameRoute}
-          state={this.state}
-        />
+        <ErrorBoundary>
+          <MenuBar
+            onSelectSort={this.onSelectSort}
+            workspaceId={this.state.workspaceId}
+            classNameRoute={this.classNameRoute}
+            state={this.state}
+          />
+        </ErrorBoundary>
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
           <div className="row no-margin workspace1-setting">
             <div className="col-md-2 side-tabs">
@@ -306,25 +310,29 @@ class Settings extends Component {
               <div className="col-md-12 body-tabs">
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <UserSettings
-                      handleChange={this.handleUserChange}
-                      state={this.state}
-                      role={localStorage.getItem("userRole")}
-                      updateUserName={this.updateUserName}
-                      updatePassword={this.updatePassword}
-                      handleConfirmPassChange={this.handleConfirmPassChange}
-                      handlePasswordChange={this.handlePasswordChange}
-                    />
+                    <ErrorBoundary>
+                      <UserSettings
+                        handleChange={this.handleUserChange}
+                        state={this.state}
+                        role={localStorage.getItem("userRole")}
+                        updateUserName={this.updateUserName}
+                        updatePassword={this.updatePassword}
+                        handleConfirmPassChange={this.handleConfirmPassChange}
+                        handlePasswordChange={this.handlePasswordChange}
+                      />
+                    </ErrorBoundary>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <WorkspaceSettings
-                      searchUserDetails={this.props.searchUserDetails}
-                      searchProjectIds={this.props.searchProjectIds}
-                      workspaceObj={filterArr[0]}
-                      state={this.state}
-                      workspaceName={this.props.state.workspaceName}
-                      workspaceNameUpdate={this.props.workspaceNameUpdate}
-                    />
+                    <ErrorBoundary>
+                      <WorkspaceSettings
+                        searchUserDetails={this.props.searchUserDetails}
+                        searchProjectIds={this.props.searchProjectIds}
+                        workspaceObj={filterArr[0]}
+                        state={this.state}
+                        workspaceName={this.props.state.workspaceName}
+                        workspaceNameUpdate={this.props.workspaceNameUpdate}
+                      />
+                    </ErrorBoundary>
                   </Tab.Pane>
                   {/* <Tab.Pane eventKey="third">Prefrences</Tab.Pane> */}
                 </Tab.Content>

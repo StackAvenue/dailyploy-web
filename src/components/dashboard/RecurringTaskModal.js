@@ -13,6 +13,7 @@ import moment from "moment";
 import DailyPloyToast from "./../../components/DailyPloyToast";
 import ConfirmModal from "./../ConfirmModal";
 import { toast } from "react-toastify";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class RecurringTaskModal extends React.Component {
   constructor(props) {
@@ -555,8 +556,7 @@ class RecurringTaskModal extends React.Component {
         `workspaces/${this.props.state.workspaceId}/recurring_task`
       );
       var task = data.task;
-      toast(
-        <DailyPloyToast message="Recurring Task Created!" status="success" />,
+      toast(<DailyPloyToast message="Recurring Task Created!" status="success" />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
 
@@ -580,8 +580,7 @@ class RecurringTaskModal extends React.Component {
         `workspaces/${this.props.state.workspaceId}/recurring_task/${this.props.state.editableTask.id}`
       );
       var task = data.task;
-      toast(
-        <DailyPloyToast message="Recurring Task updated!" status="success" />,
+      toast(<DailyPloyToast message="Recurring Task updated!" status="success" />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.setState({
@@ -650,15 +649,17 @@ class RecurringTaskModal extends React.Component {
                 // props.state.taskButton !== "Add" ? "disable-project-select" : ""
                 }`}
             >
-              <DailyPloyProjectSelect
-                options={this.props.state.memberProjects}
-                placeholder="Select Project"
-                label="name"
-                className="suggestion-z-index-100"
-                default={this.props.state.selectedProjects}
-                iconType="block"
-                onChange={this.handleProjectSelect}
-              />
+              <ErrorBoundary>
+                <DailyPloyProjectSelect
+                  options={this.props.state.memberProjects}
+                  placeholder="Select Project"
+                  label="name"
+                  className="suggestion-z-index-100"
+                  default={this.props.state.selectedProjects}
+                  iconType="block"
+                  onChange={this.handleProjectSelect}
+                />
+              </ErrorBoundary>
             </div>
             {this.state.errors.projectError ? (
               <div className="col-md-12">
@@ -677,15 +678,17 @@ class RecurringTaskModal extends React.Component {
               Category
             </div>
             <div className="col-md-10 d-inline-block">
-              <DailyPloySelect
-                options={this.props.state.taskCategories}
-                placeholder="Select Category"
-                className="suggestion-z-index-50"
-                default={this.props.state.taskCategorie}
-                onChange={this.props.handleCategoryChange}
-                canAdd={true}
-                addNew={this.props.addCategory}
-              />
+              <ErrorBoundary>
+                <DailyPloySelect
+                  options={this.props.state.taskCategories}
+                  placeholder="Select Category"
+                  className="suggestion-z-index-50"
+                  default={this.props.state.taskCategorie}
+                  onChange={this.props.handleCategoryChange}
+                  canAdd={true}
+                  addNew={this.props.addCategory}
+                />
+              </ErrorBoundary>
             </div>
             {this.state.errors.categoryError ? (
               <div className="col-md-12">
@@ -704,16 +707,18 @@ class RecurringTaskModal extends React.Component {
               Priority
             </div>
             <div className="col-md-10 d-inline-block">
-              <DailyPloySelect
-                options={PRIORITIES}
-                placeholder="Select priority"
-                iconType="circle"
-                default={this.props.state.taskPrioritie}
-                name="priorityName"
-                label="label"
-                suggesionBy="label"
-                onChange={this.props.handlePrioritiesChange}
-              />
+              <ErrorBoundary>
+                <DailyPloySelect
+                  options={PRIORITIES}
+                  placeholder="Select priority"
+                  iconType="circle"
+                  default={this.props.state.taskPrioritie}
+                  name="priorityName"
+                  label="label"
+                  suggesionBy="label"
+                  onChange={this.props.handlePrioritiesChange}
+                />
+              </ErrorBoundary>
             </div>
           </div>
 
@@ -722,15 +727,17 @@ class RecurringTaskModal extends React.Component {
               Member
             </div>
             <div className="col-md-10 d-inline-block">
-              <DailyPloySelect
-                // options={this.props.modalMemberSearchOptions}
-                options={this.state.members}
-                placeholder="Select Member"
-                noOptionMessage="please select project first"
-                default={this.props.state.selectedMembers[0]}
-                icon="fa fa-user"
-                onChange={this.props.handleMemberSelect}
-              />
+              <ErrorBoundary>
+                <DailyPloySelect
+                  // options={this.props.modalMemberSearchOptions}
+                  options={this.state.members}
+                  placeholder="Select Member"
+                  noOptionMessage="please select project first"
+                  default={this.props.state.selectedMembers[0]}
+                  icon="fa fa-user"
+                  onChange={this.props.handleMemberSelect}
+                />
+              </ErrorBoundary>
             </div>
             {this.state.errors.memberError ? (
               <div className="col-md-12">
@@ -763,12 +770,14 @@ class RecurringTaskModal extends React.Component {
               />
             </div>
             <div className="col-md-7 d-inline-block">
-              <DailyPloySelect
-                options={this.repeatOptions}
-                placeholder="select frequency"
-                default={this.state.repeatOn}
-                onChange={this.handleRepeatOnChange}
-              />
+              <ErrorBoundary>
+                <DailyPloySelect
+                  options={this.repeatOptions}
+                  placeholder="select frequency"
+                  default={this.state.repeatOn}
+                  onChange={this.handleRepeatOnChange}
+                />
+              </ErrorBoundary>
             </div>
             {this.state.errors.repeatOnError ||
               this.state.errors.numberError ? (
@@ -825,15 +834,17 @@ class RecurringTaskModal extends React.Component {
             <div className="col-md-12 no-padding input-row">
               <div className="col-md-2 d-inline-block no-padding label"></div>
               <div className="col-md-10 d-inline-block">
-                <DailyPloySelect
-                  options={this.monthlyDays}
-                  placeholder="select day"
-                  // label="value"
-                  // name="value"
-                  // suggesionBy="value"
-                  default={this.state.selectedMonth}
-                  onChange={this.handleMonthlyDayChange}
-                />
+                <ErrorBoundary>
+                  <DailyPloySelect
+                    options={this.monthlyDays}
+                    placeholder="select day"
+                    // label="value"
+                    // name="value"
+                    // suggesionBy="value"
+                    default={this.state.selectedMonth}
+                    onChange={this.handleMonthlyDayChange}
+                  />
+                </ErrorBoundary>
                 {/* <div
                   className="d-inline-block task-datepicker no-padding"
                   style={{ width: "125px" }}
@@ -887,14 +898,16 @@ class RecurringTaskModal extends React.Component {
                     <span>From:</span>
                   </div>
                   <div className="d-inline-block picker">
-                    <DatePicker
-                      ref={this.calendarFromRef}
-                      selected={this.state.dateFrom}
-                      onChange={this.handleDateFrom}
-                      maxDate={this.state.dateTo}
-                      placeholderText="Select Date"
-                      onChangeRaw={this.handleDateChangeRaw}
-                    />
+                    <ErrorBoundary>
+                      <DatePicker
+                        ref={this.calendarFromRef}
+                        selected={this.state.dateFrom}
+                        onChange={this.handleDateFrom}
+                        maxDate={this.state.dateTo}
+                        placeholderText="Select Date"
+                        onChangeRaw={this.handleDateChangeRaw}
+                      />
+                    </ErrorBoundary>
                     <span className="task-date-picker-icon">
                       <i
                         onClick={this.openFromCalender}
@@ -909,17 +922,19 @@ class RecurringTaskModal extends React.Component {
                     <span className="width-to">To:</span>
                   </div>
                   <div className="d-inline-block picker">
-                    <DatePicker
-                      className="width-to"
-                      ref={this.calendarToRef}
-                      minDate={this.state.dateFrom}
-                      selected={this.state.dateTo}
-                      onChange={this.handleDateTo}
-                      placeholderText="Select Date"
-                      readOnly={false}
-                      // disabled={this.state.disabledDateTo}
-                      onChangeRaw={this.handleDateChangeRaw}
-                    />
+                    <ErrorBoundary>
+                      <DatePicker
+                        className="width-to"
+                        ref={this.calendarToRef}
+                        minDate={this.state.dateFrom}
+                        selected={this.state.dateTo}
+                        onChange={this.handleDateTo}
+                        placeholderText="Select Date"
+                        readOnly={false}
+                        // disabled={this.state.disabledDateTo}
+                        onChangeRaw={this.handleDateChangeRaw}
+                      />
+                    </ErrorBoundary>
                     <span
                       className="task-date-picker-icon"
                       style={{ right: "51px" }}
@@ -955,16 +970,18 @@ class RecurringTaskModal extends React.Component {
           <div className="col-md-12 row no-margin no-padding input-row">
             <div className="col-md-2 no-padding label">Comments</div>
             <div className="col-md-10">
-              <CommentUpload
-                state={this.state}
-                showSave={props.state.taskButton === "Add" ? false : true}
-                showAttachIcon={props.state.taskButton === "Add" ? false : true}
-                comments={props.state.comments}
-                commentName="comments"
-                handleInputChange={this.props.handleInputChange}
-                showSave={false}
-                showAttachIcon={false}
-              />
+              <ErrorBoundary>
+                <CommentUpload
+                  state={this.state}
+                  showSave={props.state.taskButton === "Add" ? false : true}
+                  showAttachIcon={props.state.taskButton === "Add" ? false : true}
+                  comments={props.state.comments}
+                  commentName="comments"
+                  handleInputChange={this.props.handleInputChange}
+                  showSave={false}
+                  showAttachIcon={false}
+                />
+              </ErrorBoundary>
             </div>
           </div>
 
@@ -1013,17 +1030,19 @@ class RecurringTaskModal extends React.Component {
           </div>
         </div>
         {this.state.showConfirm ? (
-          <ConfirmModal
-            title="Update Recurring Task"
-            message={`These changes will be reflected from next Month`}
-            onClick={() => this.updateTask()}
-            closeModal={this.closeConfirmModal}
-            buttonText="Edit"
-            show={this.state.showConfirm}
-            style={{
-              padding: "6% 0 0 35px"
-            }}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              title="Update Recurring Task"
+              message={`These changes will be reflected from next Month`}
+              onClick={() => this.updateTask()}
+              closeModal={this.closeConfirmModal}
+              buttonText="Edit"
+              show={this.state.showConfirm}
+              style={{
+                padding: "6% 0 0 35px"
+              }}
+            />
+          </ErrorBoundary>
         ) : null}
       </>
     );

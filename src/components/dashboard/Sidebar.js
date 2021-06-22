@@ -5,6 +5,8 @@ import cookie from "react-cookies";
 import DailyPloyToast from "./../../components/DailyPloyToast";
 import { toast } from "react-toastify";
 import { post } from "./../../utils/API";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -94,14 +96,16 @@ class Sidebar extends Component {
         <div className="workspace-list">
           <ul>
             {divideArr.map((item, index) => (
-              <SelectWorkspace
-                item={item}
-                index={index}
-                key={index}
-                workspaceId={this.props.workspaceId}
-                workspaceName={this.props.workspaceName}
-                callWorkspace={this.callWorkspace}
-              />
+              <ErrorBoundary>
+                <SelectWorkspace
+                  item={item}
+                  index={index}
+                  key={index}
+                  workspaceId={this.props.workspaceId}
+                  workspaceName={this.props.workspaceName}
+                  callWorkspace={this.callWorkspace}
+                />
+              </ErrorBoundary>
             ))}
             <li>
               <div className="workspace-box" style={{ paddingTop: "8px" }}>
@@ -114,19 +118,30 @@ class Sidebar extends Component {
                 state={this.state}
                 onHideModal={this.closeTaskModal}
               /> */}
-              <AddWorkspace
-                state={this.state}
-                onHideModal={this.closeTaskModal}
-                handleInputChange={this.handleInputChange}
-                changeLogType={this.changeLogType}
-                createWorkspace={this.createWorkspace}
-              />
+              <ErrorBoundary>
+                <AddWorkspace
+                  state={this.state}
+                  onHideModal={this.closeTaskModal}
+                  handleInputChange={this.handleInputChange}
+                  changeLogType={this.changeLogType}
+                  createWorkspace={this.createWorkspace}
+                />
+              </ErrorBoundary>
             </li>
           </ul>
         </div>
       </>
     );
   }
+}
+
+Sidebar.propTypes = {
+workspaces: PropTypes.array.isRequired,
+workspaceId: PropTypes.string,
+workspaceName: PropTypes.string.isRequired,
+callWorkspace: PropTypes.func,
+userInfo: PropTypes.object.isRequired,
+updateWorkspaces: PropTypes.func.isRequired
 }
 
 export default Sidebar;

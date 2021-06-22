@@ -22,6 +22,8 @@ import googleIcon from "../assets/images/google.png";
 import cookie from "react-cookies";
 import axios from "axios";
 import "../assets/css/login.scss";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../ErrorBoundary';
 
 class Signup extends Component {
   constructor(props) {
@@ -376,7 +378,9 @@ class Signup extends Component {
         </div>
         <div className="container-fluid">
           <div className="main-container">
-            <Header />
+            <ErrorBoundary>
+              <Header />
+            </ErrorBoundary>
             <div className="row no-margin signup signup-container">
               <div className="col-md-6 no-padding width">
                 <img
@@ -407,16 +411,18 @@ class Signup extends Component {
                     onSelect={(key) => this.companyFlag(key)}
                   >
                     <Tab eventKey="individual" title="Individual">
-                      <Individual
-                        state={this.state}
-                        enable={isEnabled}
-                        changeHandler={this.changeHandler}
-                        signup={this.signupForm}
-                        responseGoogle={this.responseGoogle}
-                        errorGoogle={this.errorGoogle}
-                        handlePasswordShow={this.handlePasswordShow}
-                        changeLogType={this.changeLogType}
-                      />
+                      <ErrorBoundary>
+                        <Individual
+                          state={this.state}
+                          enable={isEnabled}
+                          changeHandler={this.changeHandler}
+                          signup={this.signupForm}
+                          responseGoogle={this.responseGoogle}
+                          errorGoogle={this.errorGoogle}
+                          handlePasswordShow={this.handlePasswordShow}
+                          changeLogType={this.changeLogType}
+                        />
+                      </ErrorBoundary>
                     </Tab>
                     <Tab
                       eventKey="company"
@@ -424,14 +430,16 @@ class Signup extends Component {
                       style={{ border: "0" }}
                       disabled={this.state.isDisabled}
                     >
-                      <Company
-                        state={this.state}
-                        enable={isEnabled}
-                        changeHandler={this.changeHandler}
-                        signup={this.signupForm}
-                        handlePasswordShow={this.handlePasswordShow}
-                        changeLogType={this.changeLogType}
-                      />
+                      <ErrorBoundary>
+                        <Company
+                          state={this.state}
+                          enable={isEnabled}
+                          changeHandler={this.changeHandler}
+                          signup={this.signupForm}
+                          handlePasswordShow={this.handlePasswordShow}
+                          changeLogType={this.changeLogType}
+                        />
+                      </ErrorBoundary>
                     </Tab>
                   </Tabs>
                   <br />
@@ -449,6 +457,11 @@ class Signup extends Component {
       </>
     );
   }
+}
+
+
+Signup.propTypes = {
+  props: PropTypes.object
 }
 
 export default withRouter(Signup);

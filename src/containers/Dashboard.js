@@ -32,6 +32,7 @@ import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
+import ErrorBoundary from '../ErrorBoundary';
 
 class Dashboard extends PureComponent {
   constructor(props) {
@@ -2954,41 +2955,45 @@ class Dashboard extends PureComponent {
           className="row no-margin"
           style={this.state.isLoading ? { pointerEvents: "none" } : {}}
         >
-          <MenuBar
-            onSelectSort={this.onSelectSort}
-            workspaceId={this.state.workspaceId}
-            classNameRoute={this.classNameRoute}
-            handleLoad={this.handleLoad}
-            state={this.state}
-            manageProjectListing={this.manageProjectListing}
-          />
-          <div className="padding-top-60px">
-            <Calendar
-              state={this.state}
-              sortUnit={this.state.sort}
+          <ErrorBoundary>
+            <MenuBar
+              onSelectSort={this.onSelectSort}
               workspaceId={this.state.workspaceId}
-              resources={this.state.resources}
-              events={this.state.events}
-              updateTaskDateView={this.updateTaskDateView}
-              setAddTaskDetails={this.setAddTaskDetails}
-              editAddTaskDetails={this.editAddTaskDetails}
-              show={this.state.calenderTaskModal}
-              closeTaskModal={this.closeTaskModal}
-              handleProjectSelect={this.handleProjectSelect}
-              handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-              onGoingTask={this.props.state.isStart}
-              taskEventResumeConfirm={this.taskEventResumeConfirm}
-              handleTaskTracking={this.handleTaskTracking}
-              updateTaskEvent={this.updateTaskEvent}
-              handleTaskStartTop={this.handleTaskStartTop}
-              handleTaskStart={this.handleTaskStart}
-              handleTaskStop={this.handleTaskStop}
-              handleLoading={this.props.handleLoading}
-              validCrossMove={this.validCrossMove}
-              hoverId={this.state.hoverID}
-              handleHoverId={this.handleHoverId}
-              isTimetrackMode={this.state.isTimetrackMode}
+              classNameRoute={this.classNameRoute}
+              handleLoad={this.handleLoad}
+              state={this.state}
+              manageProjectListing={this.manageProjectListing}
             />
+          </ErrorBoundary>
+          <div className="padding-top-60px">
+            <ErrorBoundary>
+              <Calendar
+                state={this.state}
+                sortUnit={this.state.sort}
+                workspaceId={this.state.workspaceId}
+                resources={this.state.resources}
+                events={this.state.events}
+                updateTaskDateView={this.updateTaskDateView}
+                setAddTaskDetails={this.setAddTaskDetails}
+                editAddTaskDetails={this.editAddTaskDetails}
+                show={this.state.calenderTaskModal}
+                closeTaskModal={this.closeTaskModal}
+                handleProjectSelect={this.handleProjectSelect}
+                handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+                onGoingTask={this.props.state.isStart}
+                taskEventResumeConfirm={this.taskEventResumeConfirm}
+                handleTaskTracking={this.handleTaskTracking}
+                updateTaskEvent={this.updateTaskEvent}
+                handleTaskStartTop={this.handleTaskStartTop}
+                handleTaskStart={this.handleTaskStart}
+                handleTaskStop={this.handleTaskStop}
+                handleLoading={this.props.handleLoading}
+                validCrossMove={this.validCrossMove}
+                hoverId={this.state.hoverID}
+                handleHoverId={this.handleHoverId}
+                isTimetrackMode={this.state.isTimetrackMode}
+              />
+            </ErrorBoundary>
           </div>
 
           <div>
@@ -2998,76 +3003,85 @@ class Dashboard extends PureComponent {
             >
               <i className="fas fa-plus" />
             </button>
-              <AddTaskModal
-                show={this.state.show}
-                state={this.state}
-                closeTaskModal={this.closeOnlyTaskModal}
-                handleInputChange={this.handleInputChange}
-                projects={this.state.memberProjects}
-                handleDateFrom={this.handleDateFrom}
-                handleDateTo={this.handleDateTo}
-                handleTimeFrom={this.handleTimeFrom}
-                handleTimeTo={this.handleTimeTo}
-                users={this.state.users}
-                addTask={this.addTask}
-                editTask={this.editTask}
-                handleMemberSelect={this.handleMemberSelect}
-                handleProjectSelect={this.handleProjectSelect}
-                modalMemberSearchOptions={this.state.modalMemberSearchOptions}
-                backToTaskInfoModal={this.backToTaskInfoModal}
-                confirmModal={this.confirmModal}
-                handleCategoryChange={this.handleCategoryChange}
-                handlePrioritiesChange={this.handlePrioritiesChange}
-                addCategory={this.addCategory}
-                handleTaskNameChange={this.handleTaskNameChange}
-                saveComments={this.saveComments}
-                toggleTaskStartState={this.toggleTaskStartState}
-                handleaddStatusChange={this.handleaddStatusChange}
-                addStatus={this.addStatus}
-                loadStatus={this.state.loadStatus}
-              />
-            <NotificationContainer />
+              <ErrorBoundary>
+                <AddTaskModal
+                  show={this.state.show}
+                  state={this.state}
+                  closeTaskModal={this.closeOnlyTaskModal}
+                  handleInputChange={this.handleInputChange}
+                  projects={this.state.memberProjects}
+                  handleDateFrom={this.handleDateFrom}
+                  handleDateTo={this.handleDateTo}
+                  handleTimeFrom={this.handleTimeFrom}
+                  handleTimeTo={this.handleTimeTo}
+                  users={this.state.users}
+                  addTask={this.addTask}
+                  editTask={this.editTask}
+                  handleMemberSelect={this.handleMemberSelect}
+                  handleProjectSelect={this.handleProjectSelect}
+                  modalMemberSearchOptions={this.state.modalMemberSearchOptions}
+                  backToTaskInfoModal={this.backToTaskInfoModal}
+                  confirmModal={this.confirmModal}
+                  handleCategoryChange={this.handleCategoryChange}
+                  handlePrioritiesChange={this.handlePrioritiesChange}
+                  addCategory={this.addCategory}
+                  handleTaskNameChange={this.handleTaskNameChange}
+                  saveComments={this.saveComments}
+                  toggleTaskStartState={this.toggleTaskStartState}
+                  handleaddStatusChange={this.handleaddStatusChange}
+                  addStatus={this.addStatus}
+                  loadStatus={this.state.loadStatus}
+                />
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <NotificationContainer />
+              </ErrorBoundary>
             {this.state.showInfo && this.state.backFromTaskEvent && (
-              <TaskInfoModal
-                showInfo={this.state.showInfo && this.state.backFromTaskEvent}
-                state={this.state}
-                closeTaskModal={this.closeTaskModal}
-                handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-                onGoingTask={this.props.state.isStart}
-                taskInfoEdit={this.taskInfoEdit}
-                confirmModal={this.confirmModal}
-                resumeOrDeleteTask={this.resumeOrDeleteTask}
-                handleTaskPlay={this.handleTaskPlay}
-                icon={this.state.icon}
-                handleTaskStartTop={this.handleTaskStartTop}
-                handleTaskStart={this.handleTaskStart}
-                handleTaskStop={this.handleTaskStop}
-                updateTaskComments={this.updateTaskComments}
-                deleteComments={this.deleteComments}
-                updateComments={this.updateComments}
-                timeTrackUpdate={this.timeTrackUpdate}
-                isTimetrackMode={this.state.isTimetrackMode}
-              />
+              <ErrorBoundary>
+                <TaskInfoModal
+                  showInfo={this.state.showInfo && this.state.backFromTaskEvent}
+                  state={this.state}
+                  closeTaskModal={this.closeTaskModal}
+                  handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+                  onGoingTask={this.props.state.isStart}
+                  taskInfoEdit={this.taskInfoEdit}
+                  confirmModal={this.confirmModal}
+                  resumeOrDeleteTask={this.resumeOrDeleteTask}
+                  handleTaskPlay={this.handleTaskPlay}
+                  icon={this.state.icon}
+                  handleTaskStartTop={this.handleTaskStartTop}
+                  handleTaskStart={this.handleTaskStart}
+                  handleTaskStop={this.handleTaskStop}
+                  updateTaskComments={this.updateTaskComments}
+                  deleteComments={this.deleteComments}
+                  updateComments={this.updateComments}
+                  timeTrackUpdate={this.timeTrackUpdate}
+                  isTimetrackMode={this.state.isTimetrackMode}
+                />
+              </ErrorBoundary>
             )}
             {this.state.taskConfirmModal ? (
-              <TaskConfirm
-                taskConfirmModal={this.state.taskConfirmModal}
-                state={this.state}
-                closeTaskModal={this.closeTaskModal}
-                handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-                onGoingTask={this.props.state.isStart}
-                taskInfoEdit={this.taskInfoEdit}
-                backToTaskInfoModal={this.backToTaskInfoModal}
-                taskMarkComplete={this.taskMarkComplete}
-                taskResume={this.taskResume}
-                taskDelete={this.taskDelete}
-                logTaskTime={this.logTaskTime}
-                handleLogTimeFrom={this.handleLogTimeFrom}
-                handleLogTimeTo={this.handleLogTimeTo}
-                updateTaskEventLogTime={this.updateTaskEventLogTime}
-                timeTrackUpdate={this.timeTrackUpdate}
-                isTimetrackMode={this.state.isTimetrackMode}
-              />
+              <ErrorBoundary>
+                <TaskConfirm
+                  taskConfirmModal={this.state.taskConfirmModal}
+                  state={this.state}
+                  closeTaskModal={this.closeTaskModal}
+                  handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+                  onGoingTask={this.props.state.isStart}
+                  taskInfoEdit={this.taskInfoEdit}
+                  backToTaskInfoModal={this.backToTaskInfoModal}
+                  taskMarkComplete={this.taskMarkComplete}
+                  taskResume={this.taskResume}
+                  taskDelete={this.taskDelete}
+                  logTaskTime={this.logTaskTime}
+                  handleLogTimeFrom={this.handleLogTimeFrom}
+                  handleLogTimeTo={this.handleLogTimeTo}
+                  updateTaskEventLogTime={this.updateTaskEventLogTime}
+                  timeTrackUpdate={this.timeTrackUpdate}
+                  isTimetrackMode={this.state.isTimetrackMode}
+                />
+              </ErrorBoundary>
+
             ) : null}
           </div>
         </div>

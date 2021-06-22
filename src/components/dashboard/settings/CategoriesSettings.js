@@ -5,6 +5,8 @@ import DailyPloyToast from "./../../../../src/components/DailyPloyToast";
 import { ToastContainer, toast } from "react-toastify";
 import ConfirmModal from "../../ConfirmModal";
 import Loader from 'react-loader-spinner';
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class CategoriesSettings extends Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class CategoriesSettings extends Component {
       deleteCategory: "",
       isLoader: false,
     };
+
   }
 
   async componentDidMount() {
@@ -65,7 +68,10 @@ class CategoriesSettings extends Component {
           `workspaces/${this.props.workspaceId}/task_category`
         );
         var taskCategory = data;
-        toast(<DailyPloyToast message="Category Added" status="success" />, {
+        toast(
+          <ErrorBoundary>
+            <DailyPloyToast message="Category Added" status="success" />
+          </ErrorBoundary>, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
@@ -83,12 +89,14 @@ class CategoriesSettings extends Component {
             e.response.data.errors.workspace_task_category_uniqueness
           ) {
             toast(
-              <DailyPloyToast
-                message={
-                  e.response.data.errors.workspace_task_category_uniqueness
-                }
-                status="error"
-              />,
+              <ErrorBoundary>
+                <DailyPloyToast
+                  message={
+                    e.response.data.errors.workspace_task_category_uniqueness
+                  }
+                  status="error"
+                />
+              </ErrorBoundary>,
               {
                 autoClose: 2000,
                 position: toast.POSITION.TOP_CENTER
@@ -111,7 +119,9 @@ class CategoriesSettings extends Component {
         );
         var taskCategory = data;
         toast(
-          <DailyPloyToast message="Category Name Updated" status="success" />,
+          <ErrorBoundary>
+            <DailyPloyToast message="Category Name Updated" status="success" />
+          </ErrorBoundary>,
           {
             autoClose: 2000,
             position: toast.POSITION.TOP_CENTER
@@ -139,7 +149,10 @@ class CategoriesSettings extends Component {
         const { data } = await del(
           `workspaces/${this.props.workspaceId}/task_category/${this.state.deleteCategory.task_category_id}`
         );
-        toast(<DailyPloyToast message="Category deleted" status="success" />, {
+        toast(
+          <ErrorBoundary>
+            <DailyPloyToast message="Category deleted" status="success" />
+          </ErrorBoundary>, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
@@ -186,17 +199,19 @@ class CategoriesSettings extends Component {
       <div className="categories-setting">
         {this.state && this.state.taskCategories && this.state.taskCategories.length === 0 && this.state.isLoader ?
           <div className="spinnerDive" >
-            <Loader
-              type="Puff"
-              color="rgb(82 180 89)"
-              height={65}
-              width={65}
-              style={{
-                // marginLeft: "46pc",
-                marginTop: "4pc",
+            <ErrorBoundary>
+              <Loader
+                type="Puff"
+                color="rgb(82 180 89)"
+                height={65}
+                width={65}
+                style={{
+                  // marginLeft: "46pc",
+                  marginTop: "4pc",
 
-              }}
-            />
+                }}
+              />
+            </ErrorBoundary>
           </div> :
           <>
             {/* {this.state.taskCategories.map((data, i) => {
@@ -345,13 +360,15 @@ class CategoriesSettings extends Component {
                   </tbody>
                 </table>
                 {this.state.showConfirm ? (
-                  <ConfirmModal
-                    show={this.state.showConfirm}
-                    message="Are you sure to Delete The Category?"
-                    buttonText="delete"
-                    onClick={this.deleteCategory}
-                    closeModal={this.closeConfirmModal}
-                  />
+                  <ErrorBoundary>
+                    <ConfirmModal
+                      show={this.state.showConfirm}
+                      message="Are you sure to Delete The Category?"
+                      buttonText="delete"
+                      onClick={this.deleteCategory}
+                      closeModal={this.closeConfirmModal}
+                    />
+                  </ErrorBoundary>
                 ) : null}
               </div>
             </div>
@@ -360,6 +377,10 @@ class CategoriesSettings extends Component {
       </div>
     );
   }
+}
+
+CategoriesSettings.propTypes = {
+  workspaceId: PropTypes.string.isRequired
 }
 
 export default CategoriesSettings;

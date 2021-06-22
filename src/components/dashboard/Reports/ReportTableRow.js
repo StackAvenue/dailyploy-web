@@ -17,6 +17,8 @@ import EditableTimeTrack from "./../../EditableTimeTrack";
 import TimePicker from "rc-time-picker";
 import ConfirmModal from "./../../ConfirmModal";
 import ReportTimeTrackEditModal from "./ReportTimeTrackEditModal";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class ReportTableRow extends Component {
   constructor(props) {
@@ -465,27 +467,38 @@ class ReportTableRow extends Component {
           ? this.renderTableRow(this.props.tasks)
           : this.taskNotFound()}
         {this.state.showConfirm ? (
-          <ConfirmModal
-            show={this.state.showConfirm}
-            message="Do you want to delete the Tracked Time?"
-            buttonText="delete"
-            onClick={this.deleteTimeTrack}
-            closeModal={this.closeConfirmModal}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              show={this.state.showConfirm}
+              message="Do you want to delete the Tracked Time?"
+              buttonText="delete"
+              onClick={this.deleteTimeTrack}
+              closeModal={this.closeConfirmModal}
+            />
+          </ErrorBoundary>
         ) : null}
 
         {this.state.editable ? (
-          <ReportTimeTrackEditModal
-            state={this.state}
-            editTimeTrack={this.editTimeTrack}
-            handleTimeFrom={this.handleTimeFrom}
-            handleTimeTo={this.handleTimeTo}
-            closeModal={this.toggleEditableBox}
-          />
+          <ErrorBoundary>
+            <ReportTimeTrackEditModal
+              state={this.state}
+              editTimeTrack={this.editTimeTrack}
+              handleTimeFrom={this.handleTimeFrom}
+              handleTimeTo={this.handleTimeTo}
+              closeModal={this.toggleEditableBox}
+            />
+          </ErrorBoundary>
         ) : null}
       </>
     );
   }
+}
+
+
+ReportTableRow.propTypes = {
+  frequency: PropTypes.string.isRequired,
+  timeTrackUpdate: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired
 }
 
 export default withRouter(ReportTableRow);

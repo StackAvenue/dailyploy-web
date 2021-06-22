@@ -16,10 +16,13 @@ import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import { base } from "../../../src/base";
+import PropTypes from 'prop-types';
 import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
+import ErrorBoundary from '../../ErrorBoundary';
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +41,7 @@ class Header extends Component {
     };
   }
 
-  async componentDidMount() {
+  async componentDidMount() {  
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -256,13 +259,15 @@ class Header extends Component {
                 ) : null}
               </div>
               <div className="col-md-7 search-bar-container">
-                <SearchFilter
-                  searchOptions={this.props.searchOptions}
-                  state={this.state}
-                  isReports={this.isReports()}
-                  toggleSearchBy={this.toggleSearchBy}
-                  handleSearchFilterResult={this.props.handleSearchFilterResult}
-                />
+                <ErrorBoundary>
+                  <SearchFilter
+                    searchOptions={this.props.searchOptions}
+                    state={this.state}
+                    isReports={this.isReports()}
+                    toggleSearchBy={this.toggleSearchBy}
+                    handleSearchFilterResult={this.props.handleSearchFilterResult}
+                  />
+                </ErrorBoundary>
               </div>
               <div
                 className="collapse navbar-collapse"
@@ -455,6 +460,20 @@ class Header extends Component {
       </>
     );
   }
+}
+
+Header.propTypes = {
+notification: PropTypes.string,
+logout: PropTypes.func,
+workspaces: PropTypes.array,
+workspaceId: PropTypes.string,
+userData: PropTypes.object,
+searchOptions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+pathname: PropTypes.string,
+readAllNotification: PropTypes.func,
+workspaceName: PropTypes.string,
+loggedInUserName: PropTypes.string,
+handleSearchFilterResult: PropTypes.func
 }
 
 export default Header;

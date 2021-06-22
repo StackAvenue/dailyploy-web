@@ -8,6 +8,8 @@ import ConfirmModal from "../../ConfirmModal";
 import pencil from "../../../assets/images/pencil.png";
 import delete1 from "../../../assets/images/delete.png";
 import UpdateStatusModal from "./UpdateStatusModal";
+import ErrorBoundary from '../../../ErrorBoundary';
+
 class StatusSettings extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +18,6 @@ class StatusSettings extends Component {
       rowId: null,
       taskCategories: [],
       categoryName: "",
-
       editCategoryError: false,
       categoryError: false,
       showConfirm: false,
@@ -156,7 +157,7 @@ class StatusSettings extends Component {
 
 
 
-        toast(<DailyPloyToast message="Status Added" status="success" />, {
+        toast(<ErrorBoundary><DailyPloyToast message="Status Added" status="success" /></ErrorBoundary>, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
@@ -174,8 +175,10 @@ class StatusSettings extends Component {
 
 
           toast(
-            <DailyPloyToast message="Already Taken! "
-              status="error" />,
+            <ErrorBoundary>
+              <DailyPloyToast message="Already Taken! "
+              status="error" />
+            </ErrorBoundary>,
             { autoClose: 2000, position: toast.POSITION.TOP_CENTER });
           this.setState({ statusError: true, showAddCategoryTr: true });
           if (
@@ -235,8 +238,8 @@ class StatusSettings extends Component {
           taskStatus: newTaskStatu,
           showAddCategoryTr: false,
         });
-        toast(
-          <DailyPloyToast message="Status Updated" status="success" />,
+        toast(<ErrorBoundary>
+          <DailyPloyToast message="Status Updated" status="success" /></ErrorBoundary>,
           {
             autoClose: 2000,
             position: toast.POSITION.TOP_CENTER
@@ -255,9 +258,9 @@ class StatusSettings extends Component {
             e.response.data.errors
 
           ) {
-            toast(
+            toast(<ErrorBoundary>
               <DailyPloyToast message="Already Taken! "
-                status="error" />,
+                status="error" /></ErrorBoundary>,
               { autoClose: 2000, position: toast.POSITION.TOP_CENTER });
             this.setState({ statusError: true, showAddCategoryTr: true });
 
@@ -286,7 +289,7 @@ class StatusSettings extends Component {
         const { data } = await del(
           `workspaces/${this.props.workspaceId}/projects/${this.props.projectId}/task_status/${this.state.statusId}`
         );
-        toast(<DailyPloyToast message="Status deleted" status="success" />, {
+        toast(<ErrorBoundary><DailyPloyToast message="Status deleted" status="success" /></ErrorBoundary>, {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER
         });
@@ -369,8 +372,11 @@ class StatusSettings extends Component {
     return (
       <div className="statusDiv">
         {this.state.loading ? <div className="spinnerDive" >
-          <Spinner animation="border" role="status" aria-hidden="true" variant="success">
-          </Spinner></div> : <>
+            <ErrorBoundary>
+              <Spinner animation="border" role="status" aria-hidden="true" variant="success">
+              </Spinner>
+            </ErrorBoundary>
+            </div> : <>
             {this.state.taskStatus ?
               <div className="row no-margin category" >
 
@@ -601,13 +607,15 @@ class StatusSettings extends Component {
                   </div>) : null}
               </>}
             {this.state.showConfirm ? (
-              <ConfirmModal
-                show={this.state.showConfirm}
-                message="Are you sure to Delete The Status?"
-                buttonText="delete"
-                onClick={this.deleteCategory}
-                closeModal={this.handleCloseDeleteStatus}
-              />
+              <ErrorBoundary>
+                <ConfirmModal
+                  show={this.state.showConfirm}
+                  message="Are you sure to Delete The Status?"
+                  buttonText="delete"
+                  onClick={this.deleteCategory}
+                  closeModal={this.handleCloseDeleteStatus}
+                />
+              </ErrorBoundary>
             ) : null}
             {/* {this.state.isEdit ? (
               // <UpdateStatusModal

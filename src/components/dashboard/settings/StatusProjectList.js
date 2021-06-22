@@ -4,6 +4,8 @@ import Spinner from 'react-bootstrap/Spinner';
 // import VideoLoader from "../VideoLoader";
 import Loader from 'react-loader-spinner';
 import { get, post, put, del } from "./../../../utils/API";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 import StatusList from "./StatusList";
 class StatusProjectList extends Component {
@@ -102,16 +104,18 @@ class StatusProjectList extends Component {
         {this.state.project.length === 0 ? <div className="spinnerDive" >
           {/* <Spinner animation="border" role="status" aria-hidden="true" variant="success">
           </Spinner> */}
-          <Loader
-            type="Puff"
-            color="rgb(82 180 89)"
-            height={65}
-            width={65}
-            style={{
-              // marginLeft: "46pc",
-              // marginTop: "13pc"
-            }}
-          />
+          <ErrorBoundary>
+            <Loader
+              type="Puff"
+              color="rgb(82 180 89)"
+              height={65}
+              width={65}
+              style={{
+                // marginLeft: "46pc",
+                // marginTop: "13pc"
+              }}
+            />
+          </ErrorBoundary>
         </div> : <>
             {this.state.project.map((data, i) => {
               return (
@@ -135,12 +139,14 @@ class StatusProjectList extends Component {
                       projectId={data.id}
                       color={data.color_code}
                       projectName={data.name} /> */}
-                    <StatusList workspaceId={this.state.workspaceId}
-                      searchUserDetails={this.props.searchUserDetails}
-                      searchProjectIds={this.props.searchProjectIds}
-                      projectId={data.id}
-                      color={data.color_code}
-                      projectName={data.name} />
+                    <ErrorBoundary>
+                      <StatusList workspaceId={this.state.workspaceId}
+                        searchUserDetails={this.props.searchUserDetails}
+                        searchProjectIds={this.props.searchProjectIds}
+                        projectId={data.id}
+                        color={data.color_code}
+                        projectName={data.name} />
+                    </ErrorBoundary>
                   </>
                     : null}
                 </div>)
@@ -150,5 +156,11 @@ class StatusProjectList extends Component {
     );
   }
 
+}
+
+StatusProjectList.propTypes = {
+workspaceId: PropTypes.string.isRequired,
+searchUserDetails: PropTypes.array.isRequired,
+searchProjectIds: PropTypes.array.isRequired,
 }
 export default withRouter(StatusProjectList);

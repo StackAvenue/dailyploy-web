@@ -13,6 +13,8 @@ import DailyPloyToast from "../../DailyPloyToast";
 import { put } from "../../../utils/API";
 import cookie from "react-cookies";
 import "../../../assets/css/workspaceSettings.scss";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class WorkspaceSettings extends Component {
   constructor(props) {
@@ -119,7 +121,9 @@ class WorkspaceSettings extends Component {
       cookie.save("workspaceName", data.workspace_role, { path: "/" });
       cookie.save("currency", data.currency, { path: "/" });
       toast(
-        <DailyPloyToast message="Workspace Name Updated" status="success" />,
+        <ErrorBoundary>
+          <DailyPloyToast message="Workspace Name Updated" status="success" />
+        </ErrorBoundary>,
         {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER,
@@ -130,7 +134,9 @@ class WorkspaceSettings extends Component {
     } catch (e) {
       console.log("error", e);
       toast(
-        <DailyPloyToast message={"Only Admin can change the Workspace Name"} status="error" />,
+        <ErrorBoundary>
+          <DailyPloyToast message={"Only Admin can change the Workspace Name"} status="error" />
+        </ErrorBoundary>,
         { autoClose: 2500, position: toast.POSITION.TOP_CENTER }
       );
     }
@@ -153,25 +159,29 @@ class WorkspaceSettings extends Component {
           </TabList>
 
           <TabPanel>
-            <GeneralSettings
-              UserNameHandler={this.UserNameHandler}
-              UserNameAddHandler={this.UserNameAddHandler}
-              worskpaceNameHandler={this.worskpaceNameHandler}
-              state={this.state}
-              workspaceName={this.props.workspaceName}
-              workspaceId={this.props.state.workspaceId}
-              members={this.state.userArr}
-              updateWorkspaceName={this.updateWorkspaceName}
-              updateWorkspaceCurrency={this.updateWorkspaceCurrency}
-              adminUserArr={this.props.state.adminUserArr}
-              handleChangeAdminUsers={this.handleChangeAdminUsers}
-              workspace={this.props.workspaceObj}
-              loggedInUser={this.props.state.loggedInUser}
-              UserNameHandler2={this.UserNameHandler2}
-            />
+            <ErrorBoundary>
+              <GeneralSettings
+                UserNameHandler={this.UserNameHandler}
+                UserNameAddHandler={this.UserNameAddHandler}
+                worskpaceNameHandler={this.worskpaceNameHandler}
+                state={this.state}
+                workspaceName={this.props.workspaceName}
+                workspaceId={this.props.state.workspaceId}
+                members={this.state.userArr}
+                updateWorkspaceName={this.updateWorkspaceName}
+                updateWorkspaceCurrency={this.updateWorkspaceCurrency}
+                adminUserArr={this.props.state.adminUserArr}
+                handleChangeAdminUsers={this.handleChangeAdminUsers}
+                workspace={this.props.workspaceObj}
+                loggedInUser={this.props.state.loggedInUser}
+                UserNameHandler2={this.UserNameHandler2}
+              />
+            </ErrorBoundary>
           </TabPanel>
           <TabPanel>
-            <CategoriesSettings workspaceId={this.props.state.workspaceId} />
+            <ErrorBoundary>
+              <CategoriesSettings workspaceId={this.props.state.workspaceId} />
+            </ErrorBoundary>
           </TabPanel>
           <TabPanel>
             {/* <StatusSettings workspaceId={this.props.state.workspaceId}
@@ -191,6 +201,15 @@ class WorkspaceSettings extends Component {
       </div>
     );
   }
+}
+
+WorkspaceSettings.propTypes = {
+searchUserDetails: PropTypes.array.isRequired,
+searchProjectIds: PropTypes.array.isRequired,
+workspaceObj: PropTypes.object,
+state: PropTypes.object.isRequired,
+workspaceName: PropTypes.string.isRequired,
+workspaceNameUpdate: PropTypes.func.isRequired
 }
 
 export default WorkspaceSettings;

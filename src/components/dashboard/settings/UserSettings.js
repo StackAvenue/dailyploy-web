@@ -3,6 +3,8 @@ import Profile from "../../../assets/images/profile.png";
 import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
 import Spinner from 'react-bootstrap/Spinner'
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary'
 // import ImageUploading from "react-images-uploading";
 
 
@@ -76,7 +78,9 @@ const UserSettings = props => {
                 />
                 {!props.state.userName ?
                   <div className="loader-position">
-                    <Spinner animation="grow" variant="success" size="sm" />
+                    <ErrorBoundary>
+                      <Spinner animation="grow" variant="success" size="sm" />
+                    </ErrorBoundary>
                   </div> :
                   null}
               </div>
@@ -241,5 +245,15 @@ const UserSettings = props => {
     </>
   );
 };
+
+UserSettings.propTypes = {
+  handleChange: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
+  role: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  updateUserName: PropTypes.func.isRequired,
+  updatePassword: PropTypes.func.isRequired,
+  handleConfirmPassChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+}
 
 export default UserSettings;

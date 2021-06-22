@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Timer from "./../dashboard/Timer";
 import moment from "moment";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class TaskBottomPopup extends Component {
   constructor(props) {
@@ -38,12 +40,14 @@ class TaskBottomPopup extends Component {
             <i className="fa fa-pause "></i>
           </span>
           <div className="d-inline-block task-title">
-            <Timer
-              startOn={this.props.event.startOn}
-              isStart={this.props.event ? true : false}
-              //isStart={this.props.event && this.props.event !="STOP" ? true : false}
-              totalDuration={0}
-            />
+            <ErrorBoundary>
+              <Timer
+                startOn={this.props.event.startOn}
+                isStart={this.props.event ? true : false}
+                //isStart={this.props.event && this.props.event !="STOP" ? true : false}
+                totalDuration={0}
+              />
+            </ErrorBoundary>
           </div>
           <div
             style={{ width: "122px" }}
@@ -99,6 +103,11 @@ class TaskBottomPopup extends Component {
       </>
     );
   }
+}
+
+TaskBottomPopup.propTypes = {
+  event: PropTypes.number.isRequired,
+  stopOnGoingTask: PropTypes.func.isRequired
 }
 
 export default withRouter(TaskBottomPopup);

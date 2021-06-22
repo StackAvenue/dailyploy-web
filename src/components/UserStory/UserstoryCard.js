@@ -6,6 +6,7 @@ import userstoryImg from '../../assets/images/userstory.png';
 import Spinner from 'react-bootstrap/Spinner';
 import plusImg from "../../assets/images/plus.svg";
 import minusImg from "../../assets/images/minus-1.svg";
+import ErrorBoundary from '../../ErrorBoundary';
 
 function UserstoryCard(props) {
     const [userStory, showUserStory] = useState(false)
@@ -147,38 +148,40 @@ function UserstoryCard(props) {
                         userStory 
                             ? taskList.map((task_lists_task) => {
                                 return (<div className="showCardDetails2 userstory-showCardDetails2">
-                                    <AddTask
-                                        state={props.state}
-                                        showTask={
-                                            props.editTltId != task_lists_task.id ? true : false
-                                        }
-                                        taskEdit={props.taskEdit}
-                                        deleteTask={deleteTask}
-                                        isFilterLoading={props.isFilterLoading}
-                                        // moveToDashBoard={props.moveToDashBoard}
-                                        moveToDashboardUTask={moveToDashboardUTask}
-                                        task_lists_task={task_lists_task}
-                                        // projectTaskList={props.projectTaskList}
-                                        // switchTask={props.switchTask}
-                                        EditTlt={props.EditTlt}
-                                        // handleSaveTask={props.handleSaveTask}
-                                        taskStatus={props.taskStatus}
-                                        categories={props.categories}
-                                        //memeberSelected={props.memeberSelected}
-                                        // isFilterLoading={props.isFilterLoading}
-                                        // handleTaskDetails={handleTaskDetails}
-                                        handleTaskDetails={props.handleTaskDetails}
-                                        modalDetails={props.modalDetails}
-                                        currentTask={task_lists_task}
-                                        projectTaskList={props.projectTaskList}
-                                        switchTask2={props.switchTask2}
-                                        userTaskDetails={props.userTaskDetails}
-                                        projectMembers={props.projectMembers}
-                                        list_id={props.list_id}
-                                        task_lists_task={task_lists_task}
-                                        isUserstory={true}
-                                        handleUserstoryTask={handleUserstoryTask}
-                                         />
+                                    <ErrorBoundary>
+                                        <AddTask
+                                            state={props.state}
+                                            showTask={
+                                                props.editTltId != task_lists_task.id ? true : false
+                                            }
+                                            taskEdit={props.taskEdit}
+                                            deleteTask={deleteTask}
+                                            isFilterLoading={props.isFilterLoading}
+                                            // moveToDashBoard={props.moveToDashBoard}
+                                            moveToDashboardUTask={moveToDashboardUTask}
+                                            task_lists_task={task_lists_task}
+                                            // projectTaskList={props.projectTaskList}
+                                            // switchTask={props.switchTask}
+                                            EditTlt={props.EditTlt}
+                                            // handleSaveTask={props.handleSaveTask}
+                                            taskStatus={props.taskStatus}
+                                            categories={props.categories}
+                                            //memeberSelected={props.memeberSelected}
+                                            // isFilterLoading={props.isFilterLoading}
+                                            // handleTaskDetails={handleTaskDetails}
+                                            handleTaskDetails={props.handleTaskDetails}
+                                            modalDetails={props.modalDetails}
+                                            currentTask={task_lists_task}
+                                            projectTaskList={props.projectTaskList}
+                                            switchTask2={props.switchTask2}
+                                            userTaskDetails={props.userTaskDetails}
+                                            projectMembers={props.projectMembers}
+                                            list_id={props.list_id}
+                                            task_lists_task={task_lists_task}
+                                            isUserstory={true}
+                                            handleUserstoryTask={handleUserstoryTask}
+                                        />
+                                    </ErrorBoundary>
                                 </div>)
                             })
                             : null
@@ -190,15 +193,17 @@ function UserstoryCard(props) {
                 {addTask
                     ? <div className="new-userstory">
                         <div className="showCardDetails userstory-showCardDetails">
-                            <AddTask
-                                projectMembers={props.projectMembers}
-                                list_id={props.list_id}
-                                isUserstory={true}
-                                closeAddTask={closeAddTask}
-                                handleUserstoryTask={handleUserstoryTask}
-                                showTask={false}
-                                state={props.state}
-                                taskStatus={props.taskStatus} />
+                            <ErrorBoundary>
+                                <AddTask
+                                    projectMembers={props.projectMembers}
+                                    list_id={props.list_id}
+                                    isUserstory={true}
+                                    closeAddTask={closeAddTask}
+                                    handleUserstoryTask={handleUserstoryTask}
+                                    showTask={false}
+                                    state={props.state}
+                                    taskStatus={props.taskStatus} />
+                            </ErrorBoundary>
                         </div>  
                         </div> : null}
                                  

@@ -15,6 +15,8 @@ import MonthlyTaskOverPopup from "./../dashboard/MonthlyTaskOverPopup";
 import { convertUTCToLocalDate, getContrastColor } from "../../utils/function";
 import { DATE_FORMAT1, FULL_DATE_FORMAT3 } from "../../utils/Constants";
 import cookie from "react-cookies";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class Calendar extends Component {
   _isMounted = false;
@@ -289,34 +291,36 @@ class Calendar extends Component {
         <div className="viewtype-btns">{this.renderButtons()}</div>
         <div>
           <div className={`${viewModel.viewType === 0 ? "daily-agenda" : ""}`}>
-            <Scheduler
-              schedulerData={viewModel}
-              prevClick={this.prevClick}
-              nextClick={this.nextClick}
-              onSelectDate={this.onSelectDate}
-              onViewChange={this.onViewChange}
-              eventItemClick={this.eventClicked}
-              updateEventStart={this.updateEventStart}
-              updateEventEnd={this.updateEventEnd}
-              moveEvent={this.moveEvent}
-              newEvent={this.newEvent}
-              onScrollLeft={this.onScrollLeft}
-              onScrollRight={this.onScrollRight}
-              onScrollTop={this.onScrollTop}
-              onScrollBottom={this.onScrollBottom}
-              nonAgendaCellHeaderTemplateResolver={
-                this.nonAgendaCellHeaderTemplateResolver
-              }
-              toggleExpandFunc={this.toggleExpandFunc}
-              leftCustomHeader={leftCustomHeader}
-              eventItemTemplateResolver={this.eventItemTemplateResolver}
-              eventItemPopoverTemplateResolver={
-                this.eventItemPopoverTemplateResolver
-              }
-              customeVeiwTypeButtons={this.viewTypeButtons}
-              customeDatePicker={() => null}
-              // customeDatePicker={this.customeDatePicker}
-            />
+            <ErrorBoundary>
+              <Scheduler
+                schedulerData={viewModel}
+                prevClick={this.prevClick}
+                nextClick={this.nextClick}
+                onSelectDate={this.onSelectDate}
+                onViewChange={this.onViewChange}
+                eventItemClick={this.eventClicked}
+                updateEventStart={this.updateEventStart}
+                updateEventEnd={this.updateEventEnd}
+                moveEvent={this.moveEvent}
+                newEvent={this.newEvent}
+                onScrollLeft={this.onScrollLeft}
+                onScrollRight={this.onScrollRight}
+                onScrollTop={this.onScrollTop}
+                onScrollBottom={this.onScrollBottom}
+                nonAgendaCellHeaderTemplateResolver={
+                  this.nonAgendaCellHeaderTemplateResolver
+                }
+                toggleExpandFunc={this.toggleExpandFunc}
+                leftCustomHeader={leftCustomHeader}
+                eventItemTemplateResolver={this.eventItemTemplateResolver}
+                eventItemPopoverTemplateResolver={
+                  this.eventItemPopoverTemplateResolver
+                }
+                customeVeiwTypeButtons={this.viewTypeButtons}
+                customeDatePicker={() => null}
+                // customeDatePicker={this.customeDatePicker}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </>
@@ -662,40 +666,42 @@ class Calendar extends Component {
     return (
       <>
         <div className="text" style={divStyle1}>
-          <DashboardEvent
-            countData={this.state.countData}
-            eventItemClick={eventItemClick}
-            schedulerData={schedulerData}
-            event={event}
-            bgColor={bgColor}
-            isStart={isStart}
-            isEnd={isEnd}
-            mustAddCssClass={mustAddCssClass}
-            agendaMaxEventWidth={agendaMaxEventWidth}
-            // marginOf={marginOf}
-            titleText={titleText}
-            start={start}
-            end={end}
-            divStyle={divStyle}
-            scheduler={this.schedulerData}
-            hideOverPopup={this.hideOverPopup}
-            workspaceId={this.props.workspaceId}
-            handleTaskBottomPopup={this.props.handleTaskBottomPopup}
-            onGoingTask={this.props.onGoingTask}
-            eventItemPopoverTemplateResolver={
-              this.eventItemPopoverTemplateResolver
-            }
-            handleHoverId={this.props.handleHoverId}
-            hoverId={this.props.hoverId}
-            userId={this.props.state.userId}
-            taskEventResumeConfirm={this.props.taskEventResumeConfirm}
-            handleTaskTracking={this.props.handleTaskTracking}
-            state={this.props.state}
-            handleTaskStartTop={this.props.handleTaskStartTop}
-            handleTaskStart={this.props.handleTaskStart}
-            handleTaskStop={this.props.handleTaskStop}
-            isTimetrackMode={this.props.isTimetrackMode}
-          />
+          <ErrorBoundary>
+            <DashboardEvent
+              countData={this.state.countData}
+              eventItemClick={eventItemClick}
+              schedulerData={schedulerData}
+              event={event}
+              bgColor={bgColor}
+              isStart={isStart}
+              isEnd={isEnd}
+              mustAddCssClass={mustAddCssClass}
+              agendaMaxEventWidth={agendaMaxEventWidth}
+              // marginOf={marginOf}
+              titleText={titleText}
+              start={start}
+              end={end}
+              divStyle={divStyle}
+              scheduler={this.schedulerData}
+              hideOverPopup={this.hideOverPopup}
+              workspaceId={this.props.workspaceId}
+              handleTaskBottomPopup={this.props.handleTaskBottomPopup}
+              onGoingTask={this.props.onGoingTask}
+              eventItemPopoverTemplateResolver={
+                this.eventItemPopoverTemplateResolver
+              }
+              handleHoverId={this.props.handleHoverId}
+              hoverId={this.props.hoverId}
+              userId={this.props.state.userId}
+              taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+              handleTaskTracking={this.props.handleTaskTracking}
+              state={this.props.state}
+              handleTaskStartTop={this.props.handleTaskStartTop}
+              handleTaskStart={this.props.handleTaskStart}
+              handleTaskStop={this.props.handleTaskStop}
+              isTimetrackMode={this.props.isTimetrackMode}
+            />
+          </ErrorBoundary>
         </div>
       </>
     );
@@ -740,13 +746,15 @@ class Calendar extends Component {
           viewType == "1" ? "week-format-width" : "day-format-width"
         }`}
       >
-        <DailyPloyDatePicker
-          onSelectDate={this.onSelectDate}
-          pickerType={viewType}
-          schedulerData={this.schedulerData}
-          prev={true}
-          next={true}
-        />
+        <ErrorBoundary>
+          <DailyPloyDatePicker
+            onSelectDate={this.onSelectDate}
+            pickerType={viewType}
+            schedulerData={this.schedulerData}
+            prev={true}
+            next={true}
+          />
+        </ErrorBoundary>
       </div>
     );
   };
@@ -767,4 +775,32 @@ class Calendar extends Component {
     });
   };
 }
+
+Calendar.propTypes = {
+  state: PropTypes.object.isRequired,
+  sortUnit: PropTypes.string.isRequired,
+  workspaceId: PropTypes.string.isRequired,
+  resources: PropTypes.array.isRequired,
+  events: PropTypes.array.isRequired,
+  updateTaskDateView: PropTypes.func.isRequired,
+  setAddTaskDetails: PropTypes.func.isRequired,
+  editAddTaskDetails: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleProjectSelect: PropTypes.func.isRequired,
+  handleTaskBottomPopup: PropTypes.func.isRequired,
+  onGoingTask: PropTypes.bool.isRequired,
+  taskEventResumeConfirm: PropTypes.func.isRequired,
+  handleTaskTracking: PropTypes.func.isRequired,
+  updateTaskEvent: PropTypes.func.isRequired,
+  handleTaskStartTop: PropTypes.func,
+  handleTaskStart: PropTypes.func.isRequired,
+  handleTaskStop: PropTypes.func.isRequired,
+  handleLoading: PropTypes.func.isRequired,
+  validCrossMove: PropTypes.func.isRequired,
+  hoverId: PropTypes.number.isRequired,
+  handleHoverId: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired,
+}
+
 export default withDragDropContext(Calendar);

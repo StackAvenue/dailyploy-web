@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class EmployeeReportsSettings extends Component {
   constructor(props) {
@@ -64,15 +65,17 @@ class EmployeeReportsSettings extends Component {
           <div className="col-md-4 report-box">
             <div className="col-md-12 no-padding day-text">Monthly Reports</div>
             <div className="col-md-8 no-padding month-select">
-              <DatePicker
-                className="form-control"
-                selected={this.state.selectDate}
-                onChange={this.handleSelectDate}
-                placeholderText="Select Date"
-                value={moment(this.state.selectDate).format(
-                  'ddd | YYYY, MMM DD'
-                )}
-              />
+              <ErrorBoundary>
+                <DatePicker
+                  className="form-control"
+                  selected={this.state.selectDate}
+                  onChange={this.handleSelectDate}
+                  placeholderText="Select Date"
+                  value={moment(this.state.selectDate).format(
+                    'ddd | YYYY, MMM DD'
+                  )}
+                />
+              </ErrorBoundary>
             </div>
             <div className="col-md-12 no-padding day-desc">
               Report for employees below will be mailed monthly on date above.

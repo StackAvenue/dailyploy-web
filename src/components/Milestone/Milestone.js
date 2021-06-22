@@ -14,6 +14,7 @@ import DailyPloyToast from "./../DailyPloyToast";
 import { debounce } from "../../utils/function";
 import VideoLoader from "../dashboard/VideoLoader";
 import { MONTH_FORMAT, FULL_DATE } from "../../utils/Constants";
+import ErrorBoundary from '../../ErrorBoundary';
 
 function Milestone(props) {
     const [workspaceId, setWorkspaceId] = useState(null)
@@ -326,11 +327,13 @@ function Milestone(props) {
 
     return (
         <div className="container-milestone">
-            <MenuBar
-                workspaceId={workspaceId}
-                classNameRoute={classNameRoute}
-                state={isDeleteShow}
-            />
+            <ErrorBoundary>
+                <MenuBar
+                    workspaceId={workspaceId}
+                    classNameRoute={classNameRoute}
+                    state={isDeleteShow}
+                />
+            </ErrorBoundary>
             {
                 !isLoading ?
                     < div className={`${milestones && milestones.length > 0 || modal
@@ -435,12 +438,14 @@ function Milestone(props) {
                                             </p>
                                             <div>
                                                 <div>
-                                                    <DatePicker
-                                                        onSelect={setDate}
-                                                        placeholderText="Select Due Date"
-                                                        selected={dueDate}
-                                                        className={`form-control ${errorDueDate ? "show-error" : ""}`}
-                                                    />
+                                                    <ErrorBoundary>
+                                                        <DatePicker
+                                                            onSelect={setDate}
+                                                            placeholderText="Select Due Date"
+                                                            selected={dueDate}
+                                                            className={`form-control ${errorDueDate ? "show-error" : ""}`}
+                                                        />
+                                                    </ErrorBoundary>
                                                 </div>
                                             </div>
                                         </div>
@@ -448,30 +453,32 @@ function Milestone(props) {
                                     : null}
                                 {milestones && milestones.length > 0 && milestones.map((milestone) => {
                                     return (
-                                        <MilestoneCard
-                                            key={milestone.id}
-                                            milestone={milestone}
-                                            edit={edit}
-                                            errorDueDate={errorDueDate}
-                                            errorName={errorName}
-                                            setDate={setDate}
-                                            dueDate={dueDate}
-                                            id={id}
-                                            deleteMilestone={deleteMilestone}
-                                            name={name}
-                                            description={description}
-                                            handleDescription={handleDescription}
-                                            handleName={handleName}
-                                            editMilestone={editMilestone}
-                                            handleStatus={handleStatus}
-                                            removeHover={removeHover}
-                                            addHover={addHover}
-                                            hover={hover}
-                                            updateMilestone={updateMilestone}
-                                            removeMilestoneModal={removeMilestoneModal}
-                                            changeDeleteModal={changeDeleteModal}
-                                            currentDate={currentDate}
-                                            status={status} />
+                                        <ErrorBoundary>
+                                            <MilestoneCard
+                                                key={milestone.id}
+                                                milestone={milestone}
+                                                edit={edit}
+                                                errorDueDate={errorDueDate}
+                                                errorName={errorName}
+                                                setDate={setDate}
+                                                dueDate={dueDate}
+                                                id={id}
+                                                deleteMilestone={deleteMilestone}
+                                                name={name}
+                                                description={description}
+                                                handleDescription={handleDescription}
+                                                handleName={handleName}
+                                                editMilestone={editMilestone}
+                                                handleStatus={handleStatus}
+                                                removeHover={removeHover}
+                                                addHover={addHover}
+                                                hover={hover}
+                                                updateMilestone={updateMilestone}
+                                                removeMilestoneModal={removeMilestoneModal}
+                                                changeDeleteModal={changeDeleteModal}
+                                                currentDate={currentDate}
+                                                status={status} />
+                                            </ErrorBoundary>
                                     )
                                 })}
                             </section>
@@ -481,31 +488,33 @@ function Milestone(props) {
                         <VideoLoader />
                     </div>
             }
-            <Modal
-                className="task-delete-confirm-modal "
-                show={deleteModal}
-                onHide={(e) => {
-                    setDeleteModal(false)
-                }}
-                style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
-            >
-                <div className="delete-tag">Are you sure you want to delete ?</div>
-                <div className="button-delcancel">
-                    <button className="del-button"
-                        onClick={deleteMilestone}>
-                        Delete
-                    </button>
-                    <button
-                        className="cancel-button"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setDeleteModal(false)
-                        }}
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </Modal>
+            <ErrorBoundary>
+                <Modal
+                    className="task-delete-confirm-modal "
+                    show={deleteModal}
+                    onHide={(e) => {
+                        setDeleteModal(false)
+                    }}
+                    style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
+                >
+                    <div className="delete-tag">Are you sure you want to delete ?</div>
+                    <div className="button-delcancel">
+                        <button className="del-button"
+                            onClick={deleteMilestone}>
+                            Delete
+                        </button>
+                        <button
+                            className="cancel-button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setDeleteModal(false)
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </Modal>
+            </ErrorBoundary>
         </div >
     );
 }

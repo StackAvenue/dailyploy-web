@@ -8,6 +8,7 @@ import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../DailyPloyToast";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -371,10 +372,10 @@ class ShowMembers extends Component {
           (m) => !this.state.selectMemberArr.includes(m)
         );
         toast(
-          <DailyPloyToast
-            message="member Deleted Succesfully"
-            status="success"
-          />,
+            <DailyPloyToast
+              message="member Deleted Succesfully"
+              status="success"
+            />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
         this.setState({
@@ -384,7 +385,7 @@ class ShowMembers extends Component {
         });
       } catch (e) {
         toast(
-          <DailyPloyToast message="Something went wrong" status="error" />,
+            <DailyPloyToast message="Something went wrong" status="error" />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       }
@@ -423,10 +424,10 @@ class ShowMembers extends Component {
         );
         let members = this.state.members.filter((m) => m.id != memberId);
         toast(
-          <DailyPloyToast
-            message="member Deleted Succesfully"
-            status="success"
-          />,
+            <DailyPloyToast
+              message="member Deleted Succesfully"
+              status="success"
+            />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
         this.setState({
@@ -435,7 +436,7 @@ class ShowMembers extends Component {
         });
       } catch (e) {
         toast(
-          <DailyPloyToast message="Something went wrong" status="error" />,
+            <DailyPloyToast message="Something went wrong" status="error" />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
         );
       }
@@ -461,6 +462,7 @@ class ShowMembers extends Component {
     var isShowMember = this.state.members.length > 0;
     return (
       <>
+        <ErrorBoundary>
         <MenuBar
           onSelectSort={this.onSelectSort}
           workspaceId={this.state.workspaceId}
@@ -468,6 +470,7 @@ class ShowMembers extends Component {
           handleLoad={this.handleLoad}
           state={this.state}
         />
+        </ErrorBoundary>
         {isShowMember ? (
           <div className="show-projects padding-top-60px">
             {/* <div className={`${userRole == "admin" ? "members" : ""}`}>
@@ -642,28 +645,32 @@ class ShowMembers extends Component {
             this.renderMessage()
           )}
         {this.state.showConfirm ? (
-          <ConfirmModal
-            title="Delete Member"
-            message={`Are you sure you want to Delete ${
-              this.state.selectMemberArr.length == 1
-                ? " this member"
-                : "these members"
-              }?`}
-            onClick={this.deleteMembers}
-            closeModal={this.closeModal}
-            buttonText="Delete"
-            show={this.state.showConfirm}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              title="Delete Member"
+              message={`Are you sure you want to Delete ${
+                this.state.selectMemberArr.length == 1
+                  ? " this member"
+                  : "these members"
+                }?`}
+              onClick={this.deleteMembers}
+              closeModal={this.closeModal}
+              buttonText="Delete"
+              show={this.state.showConfirm}
+            />
+          </ErrorBoundary>
         ) : null}
         {this.state.showDeleteConfirm ? (
-          <ConfirmModal
-            title="Delete Member"
-            message={`Are you sure you want to Delete this member ?`}
-            onClick={this.deleteMember}
-            closeModal={this.closeDeleteConfirmModal}
-            buttonText="Delete"
-            show={this.state.showDeleteConfirm}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              title="Delete Member"
+              message={`Are you sure you want to Delete this member ?`}
+              onClick={this.deleteMember}
+              closeModal={this.closeDeleteConfirmModal}
+              buttonText="Delete"
+              show={this.state.showDeleteConfirm}
+            />
+          </ErrorBoundary>
         ) : null}
       </>
     );

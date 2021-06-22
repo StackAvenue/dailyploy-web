@@ -9,8 +9,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import VideoLoader from "../dashboard/VideoLoader";
 import taskImg from '../../assets/images/tasklist.png';
 import Spinner from 'react-bootstrap/Spinner';
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 const AddTask = (props) => {
+  console.log("task", props);
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [estimation, setEstimation] = useState(0);
@@ -713,43 +716,68 @@ const AddTask = (props) => {
       </div>
 
       {/* --------move to Dashboard modal start--------- */}
-
-      <Modal
-        className="move-to-dashboard-modal"
-        show={openCalenderModal}
-        onHide={() => {
-          changeCalenderModal(false);
-        }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Start Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <i class="fas fa-asterisk"
-        style={{
-          color: "Red",
-          fontSize: "9px",
-          paddingLeft: "2px"
-        }}></i>
-          <div className="member">
-            <div className="navDiv">
-              <select
-                name="member"
-                onChange={(e) => handleInputChange(e)}
-                className="form-control person-name"
-                value={member}
-              >
-                <option value={""}>Member</option>
-                {props.projectMembers.map((member, inde) => {
-                  return (
-                    <option value={member.id}>&nbsp;&nbsp;{member.name}</option>
-                  );
-                })}
-              </select>
-
-              {props.taskStatus && props.taskStatus.length > 0 && (
-                props.isUserstory ? 
+      <ErrorBoundary>
+        <Modal
+          className="move-to-dashboard-modal"
+          show={openCalenderModal}
+          onHide={() => {
+            changeCalenderModal(false);
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Start Task</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <i class="fas fa-asterisk"
+          style={{
+            color: "Red",
+            fontSize: "9px",
+            paddingLeft: "2px"
+          }}></i>
+            <div className="member">
+              <div className="navDiv">
                 <select
+                  name="member"
+                  onChange={(e) => handleInputChange(e)}
+                  className="form-control person-name"
+                  value={member}
+                >
+                  <option value={""}>Member</option>
+                  {props.projectMembers.map((member, inde) => {
+                    return (
+                      <option value={member.id}>&nbsp;&nbsp;{member.name}</option>
+                    );
+                  })}
+                </select>
+
+                {props.taskStatus && props.taskStatus.length > 0 && (
+                  props.isUserstory ? 
+                  <select
+                    name="status"
+                    onChange={(e) => {
+                      handleInputChange(e);
+                    }}
+                    className="form-control work-status"
+                  // value={status}
+                  >
+                    <option value={""}>Status</option>
+                    {props.taskStatus.map((status, index) => {
+                      // console.log("status", status);
+                      return (
+                        <option key={index} 
+                        selected={
+                          props.task_lists_task &&
+                          props.task_lists_task.task_status &&
+                          props.task_lists_task.task_status.id &&
+                          status.id == props.task_lists_task.task_status.id
+                        }
+                        value={index}>
+                          {status.statusName}
+                        </option>
+                      );
+                    })}
+                  </select> : 
+                  <select
                   name="status"
                   onChange={(e) => {
                     handleInputChange(e);
@@ -763,149 +791,156 @@ const AddTask = (props) => {
                     return (
                       <option key={index} 
                       selected={
-                        props.task_lists_task &&
-                        props.task_lists_task.task_status &&
-                        props.task_lists_task.task_status.id &&
-                        status.id == props.task_lists_task.task_status.id
-                      }
+                            props.task_lists_task &&
+                            props.task_lists_task.status &&
+                            props.task_lists_task.status.id &&
+                            status.id == props.task_lists_task.status.id
+                          }
                       value={index}>
                         {status.statusName}
                       </option>
                     );
                   })}
-                </select> : 
-                <select
-                name="status"
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                className="form-control work-status"
-              // value={status}
-              >
-                <option value={""}>Status</option>
-                {props.taskStatus.map((status, index) => {
-                  // console.log("status", status);
-                  return (
-                    <option key={index} 
-                    selected={
-                          props.task_lists_task &&
-                          props.task_lists_task.status &&
-                          props.task_lists_task.status.id &&
-                          status.id == props.task_lists_task.status.id
-                        }
-                    value={index}>
-                      {status.statusName}
-                    </option>
-                  );
-                })}
-              </select>
-              )}
-
-              {props.categories && props.categories.length > 0 && (
-                <select
-                  name="category"
-                  onChange={(e) => {
-                    handleInputChange(e);
-                  }}
-                  className="form-control work-status"
-                >
-                  <option value={""}>Category</option>
-                  {props.categories.map((cate, index) => {
-                    return (
-                      <option key={cate.id} value={index}>
-                        {cate.name}
-                      </option>
-                    );
-                  })}
                 </select>
-              )}
+                )}
 
-            </div>
-          </div>
-          <div className="AddDatePicker task-date">
-            <div className="divInline-from">
-              <div className="datefromto">From</div>
-              <div className="dateDiv">
-                <DatePicker
-                  className=""
-                  ref={calendarFromRef}
-                  selected={selectedFromDate}
-                  onChange={changeFromDate}
-                  placeholderText="Select Date"
-                />
-                <i
-                  onClick={openFromCalender}
-                  className="fa fa-calendar"
-                  aria-hidden="true"
-                ></i>
+                {props.categories && props.categories.length > 0 && (
+                  <select
+                    name="category"
+                    onChange={(e) => {
+                      handleInputChange(e);
+                    }}
+                    className="form-control work-status"
+                  >
+                    <option value={""}>Category</option>
+                    {props.categories.map((cate, index) => {
+                      return (
+                        <option key={cate.id} value={index}>
+                          {cate.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
+
               </div>
             </div>
-            <div className="divInline-to">
-              <div className="datefromto">&nbsp;To&nbsp;</div>
-              {/* &nbsp;&nbsp; */}
-              <div className="dateDiv">
-                <DatePicker
-                  className=""
-                  ref={calendarToRef}
-                  selected={selectedToDate}
-                  onChange={changeToDate}
-                  placeholderText="Select Date"
-                />
-                <i
-                  onClick={openToCalender}
-                  className="fa fa-calendar"
-                  aria-hidden="true"
-                ></i>
+            <div className="AddDatePicker task-date">
+              <div className="divInline-from">
+                <div className="datefromto">From</div>
+                <div className="dateDiv">
+                  <ErrorBoundary>
+                    <DatePicker
+                      className=""
+                      ref={calendarFromRef}
+                      selected={selectedFromDate}
+                      onChange={changeFromDate}
+                      placeholderText="Select Date"
+                    />
+                  </ErrorBoundary>
+                  <i
+                    onClick={openFromCalender}
+                    className="fa fa-calendar"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+              </div>
+              <div className="divInline-to">
+                <div className="datefromto">&nbsp;To&nbsp;</div>
+                {/* &nbsp;&nbsp; */}
+                <div className="dateDiv">
+                  <ErrorBoundary>
+                    <DatePicker
+                      className=""
+                      ref={calendarToRef}
+                      selected={selectedToDate}
+                      onChange={changeToDate}
+                      placeholderText="Select Date"
+                    />
+                  </ErrorBoundary>
+                  <i
+                    onClick={openToCalender}
+                    className="fa fa-calendar"
+                    aria-hidden="true"
+                  ></i>
+                </div>
               </div>
             </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="primary"
+              // disabled={!member ? true : false}
+              onClick={(e) => {
+                e.preventDefault();
+                changeToDashboard();
+              }}
+            >
+              Save
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        </ErrorBoundary>
+
+
+        {/* --------move to Dashboard modal end--------- */}
+
+        {/*---------- Delete task list task modal start ---------- */}
+        <ErrorBoundary>
+          <Modal
+            className="tlt-delete-confirm-modal "
+            show={isDeleteModal}
+            onHide={hideDeleteModal}
+            style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
+          >
+          <div className="content-deldesc">
+            {/* All the tasks related to this task will also be deleted from dashboard. Please confirm. */}
+            Are you sure you want to delete this task list in the Roadmap. Please confirm
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="primary"
-            // disabled={!member ? true : false}
-            onClick={(e) => {
-              e.preventDefault();
-              changeToDashboard();
-            }}
-          >
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
 
-      {/* --------move to Dashboard modal end--------- */}
-
-      {/*---------- Delete task list task modal start ---------- */}
-      <Modal
-        className="tlt-delete-confirm-modal "
-        show={isDeleteModal}
-        onHide={hideDeleteModal}
-        style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
-      >
-        <div className="content-deldesc">
-          {/* All the tasks related to this task will also be deleted from dashboard. Please confirm. */}
-          Are you sure you want to delete this task list in the Roadmap. Please confirm
-        </div>
-
-        <div className="button-delcancel">
-          <button className="del-button"
-            onClick={(e) => {
-              e.preventDefault();
-              { props.isUserstory ? props.deleteTask(props.task_lists_task.id) : props.deleteTlt(props.task_lists_task.id); }
-            }}
-            disabled={props.state.isDeleteDisabled}
-          >Delete</button>
-          <button
-            className="cancel-button"
-            onClick={hideDeleteModal}
-          >
-            Cancel
-          </button>
-        </div>
-      </Modal>
+          <div className="button-delcancel">
+            <button className="del-button"
+              onClick={(e) => {
+                e.preventDefault();
+                { props.isUserstory ? props.deleteTask(props.task_lists_task.id) : props.deleteTlt(props.task_lists_task.id); }
+              }}
+              disabled={props.state.isDeleteDisabled}
+            >Delete</button>
+            <button
+              className="cancel-button"
+              onClick={hideDeleteModal}
+            >
+              Cancel
+            </button>
+          </div>
+        </Modal>
+      </ErrorBoundary>
       {/* ----------- Delete task list task modal end ------------ */}
     </>
   );
 };
+
+AddTask.propTypes = {
+  state: PropTypes.object.isRequired,
+  showTask: PropTypes.bool.isRequired,
+  taskEdit: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func,
+  isFilterLoading: PropTypes.bool,
+  moveToDashboardUTask: PropTypes.func,
+  task_lists_task: PropTypes.object,
+  EditTlt: PropTypes.func,
+  taskStatus: PropTypes.array.isRequired,
+  categories: PropTypes.array,
+  handleTaskDetails: PropTypes.func,
+  // currentTask={task_lists_task},
+  projectTaskList: PropTypes.array,
+  // switchTask2={props.switchTask2}
+  userTaskDetails: PropTypes.func,
+  projectMembers: PropTypes.array.isRequired,
+  list_id: PropTypes.number.isRequired,
+  // task_lists_task={task_lists_task}
+  isUserstory: PropTypes.bool,
+  handleUserstoryTask: PropTypes.func, 
+  closeAddTask: PropTypes.func,  
+}
 export default AddTask;

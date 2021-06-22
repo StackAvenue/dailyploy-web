@@ -10,7 +10,8 @@ import { Button } from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import Loader from 'react-loader-spinner'
 import "../../../assets/css/TaskProjectList.scss";
-
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 const StatusList = (props) => {
     const [statusList, setStatusList] = useState([]);
@@ -85,8 +86,10 @@ const StatusList = (props) => {
             } catch (error) {
                 if (error && error.response.status === 400) {
                     toast(
-                        <DailyPloyToast message="Status already exists, Please try again"
-                            status="error" />,
+                        <ErrorBoundary>
+                            <DailyPloyToast message="Status already exists, Please try again"
+                            status="error" />
+                        </ErrorBoundary>,
                         { autoClose: 2000, position: toast.POSITION.TOP_CENTER });
                 }
             }
@@ -126,7 +129,9 @@ const StatusList = (props) => {
             const deletedStatuses = statusList.filter((item) => item.id != delStatus);
             setStatusList(deletedStatuses);
             setToggleDel(false);
-            toast(<DailyPloyToast message="Status deleted" status="success" />, {
+            toast(<ErrorBoundary>
+                    <DailyPloyToast message="Status deleted" status="success" />
+                  </ErrorBoundary>, {
                 autoClose: 2000,
                 position: toast.POSITION.TOP_CENTER
             });
@@ -163,7 +168,8 @@ const StatusList = (props) => {
         (statusList && statusList.length > 0)
             ? <div className="statusDiv">
                 <div className="category-box" style={{ borderTop: `2px solid ${props.color}` }}>
-                    <DragDropContext onDragEnd={onDragEnd}>
+                        <ErrorBoundary>
+                            <DragDropContext onDragEnd={onDragEnd}>
                         <table className="table">
                             <thead>
                                 <th scope="col">
@@ -181,13 +187,13 @@ const StatusList = (props) => {
                             </thead>
                             {
                                 (!dragloader) ?
-                                    (<Droppable droppableId={"table"}>
+                                    (<ErrorBoundary><Droppable droppableId={"table"}>
                                         {provided => (
                                             <tbody ref={provided.innerRef} {...provided.droppableProps}>
                                                 {statusList && statusList.length > 0 ?
                                                     statusList.map((item, index) => {
                                                         if (item.id != editStatus.id) {
-                                                            return <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
+                                                            return <ErrorBoundary><Draggable key={item.id} draggableId={item.id.toString()} index={index}>
                                                                 {(provided, snapshot) => (
                                                                     <tr
                                                                         {...provided.draggableProps}
@@ -214,6 +220,7 @@ const StatusList = (props) => {
                                                                 )
                                                                 }
                                                             </Draggable>
+                                                            </ErrorBoundary>
                                                         }
                                                         else {
                                                             return (
@@ -253,6 +260,7 @@ const StatusList = (props) => {
                                         )
                                         }
                                     </Droppable>
+                                    </ErrorBoundary>
                                     )
                                     :
                                     <div className="spinnerDive" >
@@ -282,16 +290,19 @@ const StatusList = (props) => {
                             </tr>
                         </table>
                     </DragDropContext>
+                </ErrorBoundary>
                 </div >
                 {
                     toggleDel ? (
-                        <ConfirmModal
-                            show={toggleDel}
-                            message="Are you sure to Delete The Status?"
-                            buttonText="delete"
-                            onClick={deleteCategory}
-                            closeModal={handleCloseDeleteStatus}
-                        />
+                        <ErrorBoundary>
+                            <ConfirmModal
+                                show={toggleDel}
+                                message="Are you sure to Delete The Status?"
+                                buttonText="delete"
+                                onClick={deleteCategory}
+                                closeModal={handleCloseDeleteStatus}
+                            />
+                        </ErrorBoundary>
                     ) : null
                 }
             </div > :
@@ -311,5 +322,14 @@ const StatusList = (props) => {
             </div>
     );
 
+}
+
+StatusList.propTypes = {
+    workspaceId: PropTypes.number.isRequired,
+    projectId: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    // searchUserDetails: PropTypes.string.isRequired,
+    // searchProjectIds: PropTypes.number.isRequired,
+    // projectName: PropTypes.string.isRequired
 }
 export default StatusList;

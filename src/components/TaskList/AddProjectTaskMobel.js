@@ -12,6 +12,7 @@ import {
 } from "./../../utils/Constants";
 //import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import ErrorBoundary from '../../ErrorBoundary';
 
 
 class AddProjectTaskMobel extends React.Component {
@@ -66,96 +67,102 @@ class AddProjectTaskMobel extends React.Component {
     const { props } = this;
     return (
       <div class="addProjectDiv">
-        <Modal show={this.props.show} onHide={this.props.closeTaskModal} animation={false}>
+        <ErrorBoundary>
+          <Modal show={this.props.show} onHide={this.props.closeTaskModal} animation={false}>
 
 
-          <Modal.Header closeButton>
-            <Modal.Title>Add Task</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <form>
-              <div class="form-group">
-                <label for="">
-                  <span>Task</span>
-                </label>
-                <input
-                  type="text"
-                  name="taskName"
-                  value={this.props.state.taskName}
-                  onChange={props.handleInputChange}
-                  //  value={this.state.taskName}
-                  onChange={e => this.handleInputChange(e)}
-                  onBlur={this.onBlurInput}
-                  placeholder="Task Name"
-                  className="form-control"
-                  ref={input => {
-                    this.nameInput = input;
-                  }}
-                  defaultValue=""
-                  ref={input => input && input.focus()}
-                />
-              </div>
+            <Modal.Header closeButton>
+              <Modal.Title>Add Task</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <form>
+                <div class="form-group">
+                  <label for="">
+                    <span>Task</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="taskName"
+                    value={this.props.state.taskName}
+                    onChange={props.handleInputChange}
+                    //  value={this.state.taskName}
+                    onChange={e => this.handleInputChange(e)}
+                    onBlur={this.onBlurInput}
+                    placeholder="Task Name"
+                    className="form-control"
+                    ref={input => {
+                      this.nameInput = input;
+                    }}
+                    defaultValue=""
+                    ref={input => input && input.focus()}
+                  />
+                </div>
 
-              <div class="form-group">
-                <label for="">
-                  Date From
-                            </label>
-                <br />
-                <DatePicker
-                  className="form-control addProjectDiv"
-                  ref={this.calendarFromRef}
-                  selected={props.state.dateFrom}
-                  onChange={this.props.handleDateFrom}
-                  maxDate={props.state.dateTo}
-                  placeholderText="Select Date"
-                  onChangeRaw={this.handleDateChangeRaw}
-                />
-                <span className="task-date-picker-icon">
-                  <i
-                    onClick={this.openFromCalender}
-                    //className="fa fa-calendar"
-                    aria-hidden="true"
-                  ></i>
-                </span>
+                <div class="form-group">
+                  <label for="">
+                    Date From
+                              </label>
+                  <br />
+                  <ErrorBoundary>
+                    <DatePicker
+                      className="form-control addProjectDiv"
+                      ref={this.calendarFromRef}
+                      selected={props.state.dateFrom}
+                      onChange={this.props.handleDateFrom}
+                      maxDate={props.state.dateTo}
+                      placeholderText="Select Date"
+                      onChangeRaw={this.handleDateChangeRaw}
+                    />
+                  </ErrorBoundary>
+                  <span className="task-date-picker-icon">
+                    <i
+                      onClick={this.openFromCalender}
+                      //className="fa fa-calendar"
+                      aria-hidden="true"
+                    ></i>
+                  </span>
 
-              </div>
+                </div>
 
-              <div class="form-group">
-                <label for="">
-                  <span> Date To</span>
-                </label>
-                <br />
-                <DatePicker
-                  className="form-control addProjectDiv"
-                  ref={this.calendarToRef}
-                  minDate={props.state.dateFrom}
-                  selected={props.state.dateTo}
-                  onChange={props.handleDateTo}
-                  placeholderText="Select Date"
-                  //disabled={props.state.disabledDateTo}
-                  onChangeRaw={this.handleDateChangeRaw}
-                />
-                <span
-                  className="task-date-picker-icon"
-                >
-                  <i
-                    onClick={this.openToCalender}
-                    //className="fa fa-calendar"
-                    aria-hidden="true"
-                  ></i>
-                </span>
+                <div class="form-group">
+                  <label for="">
+                    <span> Date To</span>
+                  </label>
+                  <br />
+                  <ErrorBoundary>
+                    <DatePicker
+                      className="form-control addProjectDiv"
+                      ref={this.calendarToRef}
+                      minDate={props.state.dateFrom}
+                      selected={props.state.dateTo}
+                      onChange={props.handleDateTo}
+                      placeholderText="Select Date"
+                      //disabled={props.state.disabledDateTo}
+                      onChangeRaw={this.handleDateChangeRaw}
+                    />
+                  </ErrorBoundary>
+                  <span
+                    className="task-date-picker-icon"
+                  >
+                    <i
+                      onClick={this.openToCalender}
+                      //className="fa fa-calendar"
+                      aria-hidden="true"
+                    ></i>
+                  </span>
 
-              </div>
+                </div>
 
-            </form>
-          </Modal.Body>
-          <Modal.Footer>
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
 
-            <Button variant="primary" onClick={this.props.handleSaveTaskData}>Save</Button>
-            {/* <Button variant="secondary" onClick={this.props.closeTaskModal}>Close</Button> */}
-          </Modal.Footer>
+              <Button variant="primary" onClick={this.props.handleSaveTaskData}>Save</Button>
+              {/* <Button variant="secondary" onClick={this.props.closeTaskModal}>Close</Button> */}
+            </Modal.Footer>
 
-        </Modal>
+          </Modal>
+        </ErrorBoundary>
 
       </div>
     );

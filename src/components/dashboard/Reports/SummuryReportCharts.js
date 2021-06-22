@@ -5,6 +5,8 @@ import { get } from "../../../utils/API";
 import { MONTH_FORMAT2 } from "../../../utils/Constants";
 import moment from "moment";
 import axios from "axios";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class SummuryReportCharts extends Component {
   constructor(props) {
@@ -158,65 +160,73 @@ class SummuryReportCharts extends Component {
           style={{ verticalAlign: "top" }}
         >
           <div className="chart d-inline-block">
-            <PieChart
-              id="projectPieChart"
-              type="Projects"
-              data={
-                this.props.state.projectReports
-                  ? this.props.state.projectReports.data
-                  : []
-              }
-              estimateTime={
-                this.props.state.projectReports
-                  ? this.props.state.projectReports.estimateTime
-                  : []
-              }
-            />
+            <ErrorBoundary>
+              <PieChart
+                id="projectPieChart"
+                type="Projects"
+                data={
+                  this.props.state.projectReports
+                    ? this.props.state.projectReports.data
+                    : []
+                }
+                estimateTime={
+                  this.props.state.projectReports
+                    ? this.props.state.projectReports.estimateTime
+                    : []
+                }
+              />
+            </ErrorBoundary>
           </div>
           <div className="chart d-inline-block">
-            <PieChart
-              id="categoryPieChart"
-              type="Categories"
-              data={
-                this.props.state.categoryReports
-                  ? this.props.state.categoryReports.data
-                  : []
-              }
-              estimateTime={
-                this.props.state.categoryReports
-                  ? this.props.state.categoryReports.estimateTime
-                  : []
-              }
-              handleLoading={this.props.handleLoading}
-            />
+            <ErrorBoundary>
+              <PieChart
+                id="categoryPieChart"
+                type="Categories"
+                data={
+                  this.props.state.categoryReports
+                    ? this.props.state.categoryReports.data
+                    : []
+                }
+                estimateTime={
+                  this.props.state.categoryReports
+                    ? this.props.state.categoryReports.estimateTime
+                    : []
+                }
+                handleLoading={this.props.handleLoading}
+              />
+            </ErrorBoundary>
           </div>
           <div className="chart d-inline-block">
-            <PieChart
-              id="priorityPieChart"
-              type="Priorities"
-              data={
-                this.props.state.priorityReports
-                  ? this.props.state.priorityReports.data
-                  : []
-              }
-              estimateTime={
-                this.props.state.priorityReports
-                  ? this.props.state.priorityReports.estimateTime
-                  : []
-              }
-              handleLoading={this.props.handleLoading}
-            />
+            <ErrorBoundary>
+              <PieChart
+                id="priorityPieChart"
+                type="Priorities"
+                data={
+                  this.props.state.priorityReports
+                    ? this.props.state.priorityReports.data
+                    : []
+                }
+                estimateTime={
+                  this.props.state.priorityReports
+                    ? this.props.state.priorityReports.estimateTime
+                    : []
+                }
+                handleLoading={this.props.handleLoading}
+              />
+            </ErrorBoundary>
           </div>
         </div>
         <div className="column-chart d-inline-block">
-          <ColumnChart
-            data={this.props.state.barChartArray.data}
-            barWidth={this.props.state.barChartArray.width}
-            activeBar={this.props.state.barChartArray.activeBar}
-            state={this.props.state}
-            columnChartData={this.props.state.columnChartData}
-            handleLoading={this.props.handleLoading}
-          />
+          <ErrorBoundary>
+            <ColumnChart
+              data={this.props.state.barChartArray.data}
+              barWidth={this.props.state.barChartArray.width}
+              activeBar={this.props.state.barChartArray.activeBar}
+              state={this.props.state}
+              columnChartData={this.props.state.columnChartData}
+              handleLoading={this.props.handleLoading}
+            />
+          </ErrorBoundary>
         </div>
         <div className="legend d-inline-block">
           <div className="d-inline-block">
@@ -233,6 +243,16 @@ class SummuryReportCharts extends Component {
       </div>
     );
   }
+}
+
+SummuryReportCharts.propTypes = {
+  searchUserDetails: PropTypes.array.isRequired,
+  searchProjectIds: PropTypes.array.isRequired,
+  handleLoading: PropTypes.func.isRequired,
+  priorities: PropTypes.array.isRequired,
+  projects: PropTypes.array.isRequired,
+  state: PropTypes.object.isRequired,
+  setColumnChartData: PropTypes.func.isRequired
 }
 
 export default SummuryReportCharts;

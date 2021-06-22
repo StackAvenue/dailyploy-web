@@ -8,6 +8,7 @@ import Workspace from "./Workspace";
 import { WORKSPACE_ID, WEBSITE_URL } from "./utils/Constants";
 import { getWorkspaceId } from "./utils/function";
 import { isMobile } from "react-device-detect";
+import PropTypes from 'prop-types';
 
 class Routes extends Component {
   constructor(props) {
@@ -100,7 +101,9 @@ class Routes extends Component {
                   exact={route.exact}
                   path={route.path}
                   render={(props) =>
+                    
                     this.isAllowed(props, route.component, route.title)
+                    
                   }
                 />
               ))}
@@ -111,6 +114,25 @@ class Routes extends Component {
       );
     }
   }
+}
+
+Routes.propTypes = {
+  path: PropTypes.string,
+  exact : PropTypes.bool,
+  title: PropTypes.string,
+  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  signup: PropTypes.func,
+  responseGoogle: PropTypes.func,
+  errorGoogle: PropTypes.func,
+  handlePasswordShow: PropTypes.func,
+  changeLogType: PropTypes.func,
+  disabled: PropTypes.func,
+  hash: PropTypes.string,
+  key: PropTypes.string,
+  pathname: PropTypes.string,
+  search: PropTypes.string,
+  isExact: PropTypes.bool,
+  WorkspaceId: PropTypes.string,
 }
 
 export default Routes;

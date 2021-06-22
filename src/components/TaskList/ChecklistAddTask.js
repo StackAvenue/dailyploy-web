@@ -1,5 +1,7 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 const ChecklistAddTask = (props) => {
     return (
@@ -13,10 +15,16 @@ const ChecklistAddTask = (props) => {
                 className="checklist-input"
             />
             &nbsp;&nbsp;&nbsp;
-            <Button variant="success" onClick={props.handleSave}>Add</Button>&nbsp;&nbsp;&nbsp;
-            <Button variant="light" onClick={props.closeAddTask}>X</Button> 
+            <ErrorBoundary><Button variant="success" onClick={props.handleSave}>Add</Button></ErrorBoundary>&nbsp;&nbsp;&nbsp;
+            <ErrorBoundary><Button variant="light" onClick={props.closeAddTask}>X</Button></ErrorBoundary> 
         </div>
     )
 };
+ChecklistAddTask.propTypes = {
+    closeAddTask: PropTypes.func.isRequired,
+    handleSave: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    inputTaskData: PropTypes.string.isRequired,
+}
 
 export default ChecklistAddTask;

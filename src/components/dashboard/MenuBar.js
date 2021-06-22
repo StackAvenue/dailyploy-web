@@ -17,6 +17,8 @@ import DailyPloyToast from "./../DailyPloyToast";
 import cookie from "react-cookies";
 import { USER_ROLE } from "../../utils/Constants";
 import AOS from "aos";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -277,10 +279,10 @@ export default class MenuBar extends Component {
             var errors = e.response.data.errors;
             if (errors && errors.project_name_workspace_uniqueness) {
               toast(
-                <DailyPloyToast
-                  message={`Project Name ${errors.project_name_workspace_uniqueness}`}
-                  status="error"
-                />,
+                  <DailyPloyToast
+                    message={`Project Name ${errors.project_name_workspace_uniqueness}`}
+                    status="error"
+                  />,
                 { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
               );
               this.props.manageProjectListing(preProjectData.project, 2);
@@ -290,10 +292,10 @@ export default class MenuBar extends Component {
               }, 2000);
             } else if (errors && errors.name) {
               toast(
-                <DailyPloyToast
-                  message={`Project name ${errors.name}`}
-                  status="error"
-                />,
+                  <DailyPloyToast
+                    message={`Project name ${errors.name}`}
+                    status="error"
+                  />,
                 { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
               );
               setTimeout(function () {
@@ -311,10 +313,10 @@ export default class MenuBar extends Component {
       }
     } else {
       toast(
-        <DailyPloyToast
-          message={`Project Name can't be blank`}
-          status="error"
-        />,
+          <DailyPloyToast
+            message={`Project Name can't be blank`}
+            status="error"
+          />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
       this.props.manageProjectListing(preProjectData.project, 2);
@@ -346,10 +348,10 @@ export default class MenuBar extends Component {
       this.setState({ isLoading: true, btnEnable: false });
       const { data } = await post(memberData, "invitations");
       toast(
-        <DailyPloyToast
-          message="Member Invited successfully!"
-          status="success"
-        />,
+          <DailyPloyToast
+            message="Member Invited successfully!"
+            status="success"
+          />,
         { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
       );
 
@@ -381,9 +383,9 @@ export default class MenuBar extends Component {
           error: "User already exists in workspace.",
         });
         toast(<DailyPloyToast
-          message="User already exists in workspace!"
-          status="error"
-        />,
+            message="User already exists in workspace!"
+            status="error"
+            />,
           { autoClose: 2000, position: toast.POSITION.TOP_CENTER }
 
         );
@@ -617,10 +619,12 @@ export default class MenuBar extends Component {
                 workspaceId={this.props.workspaceId}
               />
               <div className="col-md-5 text-right">
-                <ConditionalElements
-                  classNameRoute={this.props.classNameRoute}
-                  isDeleteShow={this.props.state.isDeleteShow}
-                />
+                <ErrorBoundary>
+                  <ConditionalElements
+                    classNameRoute={this.props.classNameRoute}
+                    isDeleteShow={this.props.state.isDeleteShow}
+                  />
+                </ErrorBoundary>
                 <div className="col-md-2 d-inline-block">
                   <Dropdown className={userRole === "member" ? "d-none" : null}>
                     <Dropdown.Toggle
@@ -643,45 +647,49 @@ export default class MenuBar extends Component {
                       >
                         Project
                       </Dropdown.Item>
-                      <AddProjectModal
-                        state={this.state}
-                        handleClose={this.handleClose}
-                        handleChangeInput={this.handleChangeInput}
-                        handleDateFrom={this.handleDateFrom}
-                        handleDateTo={this.handleDateTo}
-                        handleChangeMember={this.handleChangeMember}
-                        handleChangeColor={this.handleChangeColor}
-                        handleChangeComplete={this.handleChangeComplete}
-                        handleBudget={this.handleBudget}
-                        colors={this.colors}
-                        addProject={this.addProject}
-                        handleContactChangeInput={this.handleContactChangeInput}
-                        addContactsRow={this.addContactsRow}
-                        removeContactsRow={this.removeContactsRow}
-                        btnText={"Add"}
-                        headText={"Add New Project"}
-                        emailOptions={this.props.state.isLogedInUserEmailArr}
-                        handleUndefinedToDate={this.handleUndefinedToDate}
-                        workspaceId={this.props.workspaceId}
-                        ownerClassName={"d-none"}
-                      />
+                      <ErrorBoundary>
+                        <AddProjectModal
+                          state={this.state}
+                          handleClose={this.handleClose}
+                          handleChangeInput={this.handleChangeInput}
+                          handleDateFrom={this.handleDateFrom}
+                          handleDateTo={this.handleDateTo}
+                          handleChangeMember={this.handleChangeMember}
+                          handleChangeColor={this.handleChangeColor}
+                          handleChangeComplete={this.handleChangeComplete}
+                          handleBudget={this.handleBudget}
+                          colors={this.colors}
+                          addProject={this.addProject}
+                          handleContactChangeInput={this.handleContactChangeInput}
+                          addContactsRow={this.addContactsRow}
+                          removeContactsRow={this.removeContactsRow}
+                          btnText={"Add"}
+                          headText={"Add New Project"}
+                          emailOptions={this.props.state.isLogedInUserEmailArr}
+                          handleUndefinedToDate={this.handleUndefinedToDate}
+                          workspaceId={this.props.workspaceId}
+                          ownerClassName={"d-none"}
+                        />
+                      </ErrorBoundary>
                       <Dropdown.Item className="cool-link" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500" onClick={this.handleMemberShow} >
                         People
                       </Dropdown.Item>
                       {this.state.memberShow ? (
-                        <AddMemberModal
-                          state={this.state}
-                          handleClose={this.handleMemberClose}
-                          handleChangeMemberInput={this.handleChangeMemberInput}
-                          handleChangeMemberRadio={this.handleChangeMemberRadio}
-                          addMember={this.addMember}
-                          projects={this.state.projectsListing}
-                          selectAutoSuggestion={this.selectAutoSuggestion}
-                          handleChangeProjectSelect={
-                            this.handleChangeProjectSelect
-                          }
-                          handleExpense={this.handleExpense}
-                        />
+                        <ErrorBoundary>
+                          <AddMemberModal
+                            state={this.state}
+                            handleClose={this.handleMemberClose}
+                            handleChangeMemberInput={this.handleChangeMemberInput}
+                            handleChangeMemberRadio={this.handleChangeMemberRadio}
+                            addMember={this.addMember}
+                            projects={this.state.projectsListing}
+                            selectAutoSuggestion={this.selectAutoSuggestion}
+                            handleChangeProjectSelect={
+                              this.handleChangeProjectSelect
+                            }
+                            handleExpense={this.handleExpense}
+                          />
+                        </ErrorBoundary>
                       ) : null}
                     </Dropdown.Menu>
                   </Dropdown>
@@ -693,4 +701,13 @@ export default class MenuBar extends Component {
       </>
     );
   }
+}
+
+MenuBar.propTypes = {
+  workspaceId: PropTypes.string,
+  classNameRoute: PropTypes.func,
+  state: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
+  onSelectSort: PropTypes.func,
+  manageProjectListing: PropTypes.func,
+  handleLoad: PropTypes.func,
 }

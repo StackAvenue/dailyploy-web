@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import ReactTooltip from "react-tooltip";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 const Filter = (props) => {
+  console.log("filter",props);
   const [multiSelections, setMultiSelections] = useState([]);
   const [multipleMemberSelections, setMultipleMemberSelections] = useState([]);
   const [isMemberSelected, setIsMemberSelected] = useState(false);
@@ -168,35 +171,39 @@ const Filter = (props) => {
   return (
     <div className="filter-div">
       <div className="input-filter">
-        <Typeahead
-          id="basic-typeahead-multiple"
-          labelKey="name"
-          multiple
-          clearButton
-          onChange={(selected) => {
-            filteredStatusValues(selected);
-          }}
-          //onKeyDown={handleStatusKeyDown}
-          //labelKey="statusName"
-          options={statuses}
-          placeholder="Filter Statuses"
-          selected={multiSelections}
-        />
+        <ErrorBoundary>
+          <Typeahead
+            id="basic-typeahead-multiple"
+            labelKey="name"
+            multiple
+            clearButton
+            onChange={(selected) => {
+              filteredStatusValues(selected);
+            }}
+            //onKeyDown={handleStatusKeyDown}
+            //labelKey="statusName"
+            options={statuses}
+            placeholder="Filter Statuses"
+            selected={multiSelections}
+          />
+        </ErrorBoundary>
       </div>
       <div className="member-search-filter">
-        <Typeahead
-          id="basic-typeahead-multiple"
-          labelKey="name"
-          multiple
-          clearButton
-          onChange={(selected) => {
-            filteredMemberValues(selected);
-          }}
-          //onKeyDown={handleMemberKeyDown}
-          options={roadmapMembers}
-          placeholder="Filter Members"
-          selected={multipleMemberSelections}
-        />
+        <ErrorBoundary>
+          <Typeahead
+            id="basic-typeahead-multiple"
+            labelKey="name"
+            multiple
+            clearButton
+            onChange={(selected) => {
+              filteredMemberValues(selected);
+            }}
+            //onKeyDown={handleMemberKeyDown}
+            options={roadmapMembers}
+            placeholder="Filter Members"
+            selected={multipleMemberSelections}
+          />
+        </ErrorBoundary>
       </div>
       <div
         className="close-filter"
@@ -221,5 +228,16 @@ const Filter = (props) => {
     </div>
   );
 };
+Filter.propTypes = {
+  state: PropTypes.object.isRequired,
+  setConjuction: PropTypes.func.isRequired,
+  projectMembers: PropTypes.array.isRequired,
+  taskStatus: PropTypes.array.isRequired,
+  displayList: PropTypes.func.isRequired,
+  displayFiteredList: PropTypes.func.isRequired,
+  list_id: PropTypes.number.isRequired,
+  closeFilter: PropTypes.func.isRequired,
+  loadFilteredData: PropTypes.func.isRequired,
+}
 
 export default Filter;

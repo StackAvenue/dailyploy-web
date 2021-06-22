@@ -2,6 +2,8 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
 import cookie from "react-cookies";
+import ErrorBoundary from '../../../ErrorBoundary';
+
 
 const hours = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -15,11 +17,12 @@ const EditMemberModal = props => {
     memberExpense
   } = props.state;
   return (
-    <Modal
-      className="edit-member-modal"
-      show={props.show}
-      onHide={props.handleClose}
-    >
+    <ErrorBoundary>
+      <Modal
+        className="edit-member-modal"
+        show={props.show}
+        onHide={props.handleClose}
+      >
       <div className="row no-margin">
         <div className="col-md-12 header">
           <span>Edit Member</span>
@@ -97,7 +100,9 @@ const EditMemberModal = props => {
               Projects
             </div>
             <div className="col-md-7 d-inline-block text-titlize">
-              <MemberProject projects={memberProjects} />
+              <ErrorBoundary>
+                <MemberProject projects={memberProjects} />
+              </ErrorBoundary>
             </div>
           </div>
           <div className="col-md-12 no-padding input-row">
@@ -121,11 +126,14 @@ const EditMemberModal = props => {
         </div>
       </div>
     </Modal>
+    </ErrorBoundary>
   );
 };
 
 const MemberProject = props => {
   return props.projects.map(project => project.name).join(", ");
 };
+
+
 
 export default EditMemberModal;

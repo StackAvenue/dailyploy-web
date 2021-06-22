@@ -4,6 +4,8 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { GOOGLE_CLIENT_ID } from "./../../utils/Constants";
 import GoogleLogin from "react-google-login";
 import LogType from "../LogType";
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 const Individual = (props) => {
   const {
@@ -177,10 +179,12 @@ const Individual = (props) => {
 
           {/* <br /> */}
           <div className="form-group">
-            <LogType
-              timetrack_enabled={timetrack_enabled}
-              changeLogType={props.changeLogType}
-            />
+            <ErrorBoundary>
+              <LogType
+                timetrack_enabled={timetrack_enabled}
+                changeLogType={props.changeLogType}
+              />
+            </ErrorBoundary>
           </div>
           <div
             className="col-md-12 no-padding text-center"
@@ -207,17 +211,30 @@ const Individual = (props) => {
         </div>
         <br />
         <div className="col-md-10 offset-1 no-padding text-center googleIcon">
-          <GoogleLogin
-            clientId={GOOGLE_CLIENT_ID}
-            buttonText="Sign up with your Google account"
-            className="google-auth signup"
-            onSuccess={props.responseGoogle}
-            onFailure={props.errorGoogle}
-          />
+          <ErrorBoundary>
+            <GoogleLogin
+              clientId={GOOGLE_CLIENT_ID}
+              buttonText="Sign up with your Google account"
+              className="google-auth signup"
+              onSuccess={props.responseGoogle}
+              onFailure={props.errorGoogle}
+            />
+          </ErrorBoundary>
         </div>
       </form>
     </>
   );
 };
+
+Individual.propTypes = {
+  state: PropTypes.object.isRequired,
+  enable: PropTypes.string.isRequired,
+  changeHandler: PropTypes.func.isRequired,
+  signup: PropTypes.func.isRequired,
+  responseGoogle: PropTypes.func.isRequired,
+  errorGoogle: PropTypes.func.isRequired,
+  handlePasswordShow: PropTypes.func.isRequired,
+  changeLogType: PropTypes.func.isRequired,
+}
 
 export default Individual;

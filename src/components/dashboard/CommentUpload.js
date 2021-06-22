@@ -3,7 +3,9 @@ import ImageUploader from "react-images-upload";
 import onClickOutside from "react-onclickoutside";
 import Loader from "react-loader-spinner";
 import ReactTooltip from "react-tooltip";
-
+import PropTypes from 'prop-types';
+import { propTypes } from "react-bootstrap/esm/Image";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class CommentUpload extends React.Component {
   constructor(props) {
@@ -93,10 +95,11 @@ class CommentUpload extends React.Component {
                       (suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx)
                 </span> */}
                   </i>
-
-                  <ReactTooltip id="registerTip7" place="top" effect="solid">
+                  <ErrorBoundary>
+                    <ReactTooltip id="registerTip7" place="top" effect="solid">
                     suport: .csv, .jpg, .png, .jpeg, .pdf, .doc, .docx
-                      </ReactTooltip>
+                    </ReactTooltip>
+                  </ErrorBoundary>
                 </span>
               </div>
             </div>
@@ -244,5 +247,20 @@ class CommentUpload extends React.Component {
     );
   }
 }
+
+CommentUpload.propTypes = {
+  state: PropTypes.object.isRequired,
+  showSave: PropTypes.bool.isRequired,
+  showAttachIcon: PropTypes.bool.isRequired,
+  comments: PropTypes.string,
+  commentName: PropTypes.string.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  save: PropTypes.func,
+  pictures: PropTypes.array,
+  showBox: PropTypes.bool,
+  updateUploadedState: PropTypes.func,
+  removeUploadedImage: PropTypes.func,
+}
+
 
 export default onClickOutside(CommentUpload);
