@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import rd3 from "react-d3-library";
 import node from "./data";
+import ErrorBoundary from '../../../ErrorBoundary';
 const BarChart = rd3.BarChart;
 
 class MemberAnalysis extends Component {
@@ -52,23 +53,29 @@ class MemberAnalysis extends Component {
         <div className="col-md-9 head-date">
           <div className="col-md-1 d-inline-block no-padding text">Custom</div>
           <div className="col-md-3 d-inline-block">
-            <DatePicker
-              className="form-control"
-              selected={this.props.state.dateFrom}
-              onChange={this.props.handleDateFrom}
-            />
+            <ErrorBoundary>
+              <DatePicker
+                className="form-control"
+                selected={this.props.state.dateFrom}
+                onChange={this.props.handleDateFrom}
+              />
+            </ErrorBoundary>
           </div>
           <div className="col-md-3 d-inline-block">
-            <DatePicker
-              className="form-control"
-              selected={this.props.state.dateTo}
-              onChange={this.props.handleDateTo}
-            />
+          <ErrorBoundary>
+              <DatePicker
+                className="form-control"
+                selected={this.props.state.dateTo}
+                onChange={this.props.handleDateTo}
+              />
+          </ErrorBoundary>
           </div>
         </div>
 
         <div>
-          <BarChart data={this.state.d3} />
+          <ErrorBoundary>
+            <BarChart data={this.state.d3} />
+          </ErrorBoundary>
         </div>
       </>
     );

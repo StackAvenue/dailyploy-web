@@ -4,7 +4,6 @@ import { CHART_COLOR } from "../../utils/Constants";
 import PropTypes from 'prop-types';
 window.Highcharts = Highcharts;
 
-
 const Barchartdata = (props) => {
   useEffect(() => {
     if (props.barChartData) {
@@ -124,7 +123,7 @@ const Barchartdata = (props) => {
   )
 }
 Barchartdata.propTypes = {
-  barChartData: PropTypes.number
+  barChartData: PropTypes.object
 }
 
 export default Barchartdata;

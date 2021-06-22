@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class UpdateStatusModal extends Component {
   constructor(props) {
@@ -21,15 +22,18 @@ class UpdateStatusModal extends Component {
 
     return (
       <>
+      <ErrorBoundary>
         <Modal show={this.props.isEdit}
           dialogClassName="modal-90w status-modal"
           aria-labelledby="example-custom-modal-styling-title"
 
           onHide={this.props.handleCloseEditStatus}>
-          <Modal.Header closeButton>
-            <Modal.Title> Edit Task Status</Modal.Title>
+          <ErrorBoundary>
+            <Modal.Header closeButton>
+              <ErrorBoundary><Modal.Title> Edit Task Status</Modal.Title></ErrorBoundary>
           </Modal.Header>
-
+          </ErrorBoundary>
+          <ErrorBoundary>
           <Modal.Body>
             <div className="status-setting">
               <div className="row no-margin category">
@@ -118,7 +122,9 @@ class UpdateStatusModal extends Component {
               </div>
             </div>
           </Modal.Body>
+          </ErrorBoundary>
         </Modal>
+      </ErrorBoundary>
       </>
     );
   }

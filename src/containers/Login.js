@@ -22,6 +22,7 @@ import { GOOGLE_CLIENT_ID } from "../utils/Constants";
 import GoogleLogin from "react-google-login";
 import DailyPloyToast from "./../../src/components/DailyPloyToast";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../ErrorBoundary';
 
 class Signin extends Component {
   constructor(props) {
@@ -299,7 +300,9 @@ class Signin extends Component {
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         <div className="container-fluid">
           <div className="main-container">
-            <Header />
+            <ErrorBoundary>
+              <Header />
+            </ErrorBoundary>
             <div className="row no-margin signup signup-container">
               <div className="col-md-6 no-padding width">
                 <img
@@ -407,13 +410,15 @@ class Signin extends Component {
                       style={{ margin: "0" }}
                       className="col-md-10 offset-1 no-padding googleIcon"
                     >
-                      <GoogleLogin
-                        clientId={GOOGLE_CLIENT_ID}
-                        buttonText="Sign In with Google"
-                        className="google-auth login"
-                        onSuccess={this.responseGoogle}
-                        onFailure={this.errorGoogle}
-                      />
+                      <ErrorBoundary>
+                        <GoogleLogin
+                          clientId={GOOGLE_CLIENT_ID}
+                          buttonText="Sign In with Google"
+                          className="google-auth login"
+                          onSuccess={this.responseGoogle}
+                          onFailure={this.errorGoogle}
+                        />
+                      </ErrorBoundary>
                     </div>
                     <br />
                     <div

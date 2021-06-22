@@ -4,6 +4,7 @@ import Admin from "../../../assets/images/admin.png";
 import Member from "../../../assets/images/member.png";
 import Spinner from 'react-bootstrap/Spinner'
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary'
 // import ImageUploading from "react-images-uploading";
 
 
@@ -77,7 +78,9 @@ const UserSettings = props => {
                 />
                 {!props.state.userName ?
                   <div className="loader-position">
-                    <Spinner animation="grow" variant="success" size="sm" />
+                    <ErrorBoundary>
+                      <Spinner animation="grow" variant="success" size="sm" />
+                    </ErrorBoundary>
                   </div> :
                   null}
               </div>

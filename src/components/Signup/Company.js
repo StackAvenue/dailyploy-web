@@ -3,6 +3,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import LogType from '../LogType';
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 
 const Company = props => {
@@ -190,7 +191,9 @@ const Company = props => {
               )}
           </div>
           <div className="form-group">
-            <LogType timetrack_enabled={timetrack_enabled} changeLogType={props.changeLogType} />
+            <ErrorBoundary>
+              <LogType timetrack_enabled={timetrack_enabled} changeLogType={props.changeLogType} />
+            </ErrorBoundary>
           </div>
           <div className="col-md-12 no-padding text-center">
             <button

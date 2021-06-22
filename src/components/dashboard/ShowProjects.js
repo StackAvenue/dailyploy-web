@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import cookie from "react-cookies";
 import "react-tabs/style/react-tabs.css";
 import { connect } from "react-redux";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class ShowProjects extends Component {
   constructor(props) {
@@ -764,15 +765,17 @@ class ShowProjects extends Component {
     var userRole = localStorage.getItem("userRole");
 
     return (
-      <>
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-          classNameRoute={this.classNameRoute}
-          handleLoad={this.handleLoad}
-          manageProjectListing={this.manageProjectListing}
-          state={this.state}
-        />
+        <>
+          <ErrorBoundary>
+            <MenuBar
+              onSelectSort={this.onSelectSort}
+              workspaceId={this.state.workspaceId}
+              classNameRoute={this.classNameRoute}
+              handleLoad={this.handleLoad}
+              manageProjectListing={this.manageProjectListing}
+              state={this.state}
+            />
+          </ErrorBoundary>
         {this.state.projects.length > 0 ? (
           <div className="show-projects padding-top-60px">
             <div className="views">
@@ -1015,47 +1018,51 @@ class ShowProjects extends Component {
             this.renderMessage()
           )}
         {this.state.showConfirm ? (
-          <ConfirmModal
-            title="Delete Project"
-            message={`Are you sure you want to Delete ${
-              this.state.selectProjectArr.length == 1
-                ? " this project"
-                : "these projects"
-              }?`}
-            onClick={this.deleteProjects}
-            closeModal={this.closeModal}
-            buttonText="Delete"
-            show={this.state.showConfirm}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              title="Delete Project"
+              message={`Are you sure you want to Delete ${
+                this.state.selectProjectArr.length == 1
+                  ? " this project"
+                  : "these projects"
+                }?`}
+              onClick={this.deleteProjects}
+              closeModal={this.closeModal}
+              buttonText="Delete"
+              show={this.state.showConfirm}
+            />
+          </ErrorBoundary>
         ) : null}
         {this.state.show && this.state.projectId ? (
-          <AddProjectModal
-            state={this.state}
-            handleClose={this.handleEditClose}
-            btnText={"Save"}
-            headText={this.state.projectName}
-            ownerClassName={""}
-            handleChangeInput={this.handleChangeInput}
-            handleDateFrom={this.handleDateFrom}
-            handleDateTo={this.handleDateTo}
-            handleUndefinedToDate={this.handleUndefinedToDate}
-            workspaceId={this.state.workspaceId}
-            handleChangeColor={this.handleChangeColor}
-            handleChangeComplete={this.handleChangeComplete}
-            colors={this.colors}
-            handleChangeMember={this.handleChangeMember}
-            emailOptions={this.state.isLogedInUserEmailArr}
-            addProject={this.editProject}
-            handleContactChangeInput={this.handleContactChangeInput}
-            addContactsRow={this.addContactsRow}
-            removeContactsRow={this.removeContactsRow}
-            deleteContact={this.deleteContact}
-            updateContact={this.updateContact}
-            makeEditContact={this.makeEditContact}
-            backToList={this.backToList}
-            removeEditNewContactsRow={this.removeEditNewContactsRow}
-            addNewContact={this.addNewContact}
-          />
+          <ErrorBoundary>
+            <AddProjectModal
+              state={this.state}
+              handleClose={this.handleEditClose}
+              btnText={"Save"}
+              headText={this.state.projectName}
+              ownerClassName={""}
+              handleChangeInput={this.handleChangeInput}
+              handleDateFrom={this.handleDateFrom}
+              handleDateTo={this.handleDateTo}
+              handleUndefinedToDate={this.handleUndefinedToDate}
+              workspaceId={this.state.workspaceId}
+              handleChangeColor={this.handleChangeColor}
+              handleChangeComplete={this.handleChangeComplete}
+              colors={this.colors}
+              handleChangeMember={this.handleChangeMember}
+              emailOptions={this.state.isLogedInUserEmailArr}
+              addProject={this.editProject}
+              handleContactChangeInput={this.handleContactChangeInput}
+              addContactsRow={this.addContactsRow}
+              removeContactsRow={this.removeContactsRow}
+              deleteContact={this.deleteContact}
+              updateContact={this.updateContact}
+              makeEditContact={this.makeEditContact}
+              backToList={this.backToList}
+              removeEditNewContactsRow={this.removeEditNewContactsRow}
+              addNewContact={this.addNewContact}
+            />
+          </ErrorBoundary>
         ) : null}
       </>
     );

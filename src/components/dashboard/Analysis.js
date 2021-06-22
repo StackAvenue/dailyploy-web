@@ -9,6 +9,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import MemberAnalysis from "./Analysis/MemberAnalysis";
 import ProjectAnalysis from "./Analysis/ProjectAnalysis";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class Analysis extends Component {
   constructor(props) {
@@ -119,12 +120,14 @@ class Analysis extends Component {
     const { workspaceId } = this.props.match.params;
     return (
       <>
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={workspaceId}
-          classNameRoute={this.classNameRoute}
-          state={this.state}
-        />
+        <ErrorBoundary>
+          <MenuBar
+            onSelectSort={this.onSelectSort}
+            workspaceId={workspaceId}
+            classNameRoute={this.classNameRoute}
+            state={this.state}
+          />
+        </ErrorBoundary>
         <div className="analysis-box row no-margin padding-top-60px">
           <div className="col-md-12 no-padding analysis-top">
             {/* <Tabs>

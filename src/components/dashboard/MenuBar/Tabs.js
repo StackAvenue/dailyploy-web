@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import EditMemberModal from "../Member/EditMemberModal";
 import PropTypes from 'prop-types';
 import { propTypes } from "react-bootstrap/esm/Image";
+import ErrorBoundary from '../../../ErrorBoundary';
 
 const Tabs = (props) => {
   let classNameRoute;
@@ -11,38 +12,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 active">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>     
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis2">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
-          </Link>
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -59,38 +76,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 active">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+        <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+        </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis2">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
-          </Link>
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -110,38 +143,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
+        <ErrorBoundary>
           <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+        </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>\
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 active">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis2">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
-            Roadmaps
-          </Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+              Roadmaps
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -161,38 +210,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 active">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>       
         </div>
         <div className="col-md-1 analysis2">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
-            Roadmaps
-          </Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+              Roadmaps
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -212,38 +277,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+            </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 active">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
-            Roadmaps
-          </Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+              Roadmaps
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -260,38 +341,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis2">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
-            Roadmaps
-          </Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+              Roadmaps
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 active">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -308,38 +405,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
-            Roadmaps
-          </Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+              Roadmaps
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 active">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -356,38 +469,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
-            Roadmaps
-          </Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+              Roadmaps
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
-              Milestone
-          </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
+                Milestone
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 active">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">
@@ -404,38 +533,54 @@ const Tabs = (props) => {
     classNameRoute = (
       <>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/dashboard`}>Home</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/reports`}>Reports</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/projects`}>Projects</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/members`}>Members</Link>
+          </ErrorBoundary>
         </div>
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/TaskProjectList`}>
             Roadmaps
-          </Link>
+            </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/milestone`}>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/milestone`}>
               Milestone
-          </Link>
+              </Link>
+            </ErrorBoundary>
           </div>}
         <div className="col-md-1 analysis">
-          <Link to={`/workspace/${props.workspaceId}/allocation`}>
+          <ErrorBoundary>
+            <Link to={`/workspace/${props.workspaceId}/allocation`}>
             Allocation
             </Link>
+          </ErrorBoundary>
         </div>
         {props.userRole && props.userRole == "admin" &&
           <div className="col-md-1 analysis">
-            <Link to={`/workspace/${props.workspaceId}/analysis`}>
-              Analysis
-            </Link>
+            <ErrorBoundary>
+              <Link to={`/workspace/${props.workspaceId}/analysis`}>
+                Analysis
+              </Link>
+            </ErrorBoundary>
           </div>
         }
         {/* <div className="col-md-1 analysis">

@@ -29,6 +29,7 @@ import CommentUpload from "./../../components/dashboard/CommentUpload";
 import ConfirmModal from "./../ConfirmModal";
 import Loader from "react-loader-spinner";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -562,613 +563,627 @@ class TaskInfoModal extends Component {
 
     return (
       <>
-        <Modal
-          className="task-info-modal"
-          show={this.props.state.showInfo}
-          onHide={props.closeTaskModal}
-          style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
-        >
-          <div className="row no-margin">
-            <div className="col-md-12 d-inline-block header text-titlize">
-              <div className="d-inline-block" style={{ width: "60%" }}>
-                <span>{"Task Details"}</span>
-              </div>
-              <div className="action-btn d-inline-block">
-                {this.props.state.taskEvent.status !== "completed" ? (
-                  <>
+        <ErrorBoundary>
+          <Modal
+            className="task-info-modal"
+            show={this.props.state.showInfo}
+            onHide={props.closeTaskModal}
+            style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
+          >
+            <div className="row no-margin">
+              <div className="col-md-12 d-inline-block header text-titlize">
+                <div className="d-inline-block" style={{ width: "60%" }}>
+                  <span>{"Task Details"}</span>
+                </div>
+                <div className="action-btn d-inline-block">
+                  {this.props.state.taskEvent.status !== "completed" ? (
+                    <>
+                      <button
+                        className="d-inline-block btn btn-link"
+                        onClick={() => props.confirmModal("delete")}
+                      >
+                        {" "}
+                        Delete
+                      </button>
+                      <button
+                        className="d-inline-block btn btn-link"
+                        onClick={props.taskInfoEdit}
+                      >
+                        Edit
+                      </button>
+                    </>
+                  ) : (
                     <button
+                      onClick={() => props.confirmModal("resume")}
                       className="d-inline-block btn btn-link"
-                      onClick={() => props.confirmModal("delete")}
                     >
-                      {" "}
-                      Delete
+                      Resume
                     </button>
-                    <button
-                      className="d-inline-block btn btn-link"
-                      onClick={props.taskInfoEdit}
-                    >
-                      Edit
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => props.confirmModal("resume")}
-                    className="d-inline-block btn btn-link"
-                  >
-                    Resume
-                  </button>
-                )}
+                  )}
+                </div>
+                <button
+                  className="d-inline-block btn btn-link float-right"
+                  onClick={props.closeTaskModal}
+                >
+                  <img src={Close} alt="close" />
+                </button>
               </div>
-              <button
-                className="d-inline-block btn btn-link float-right"
-                onClick={props.closeTaskModal}
-              >
-                <img src={Close} alt="close" />
-              </button>
-            </div>
 
-            <div className="col-md-12 body">
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <table className="tc">
-                  <tbody>
+              <div className="col-md-12 body">
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <table className="tc">
+                    <tbody>
+                      <tr>
+                        <td className="label1">
+                          <div>Name</div>
+                        </td>
+                        <td className="tabledata">
+                          <div className="col-md-10 d-inline-block">
+                            {props.state.taskName}
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <table className="tc">
                     <tr>
                       <td className="label1">
-                        <div>Name</div>
+                        <div>Estimate</div>
                       </td>
                       <td className="tabledata">
                         <div className="col-md-10 d-inline-block">
-                          {props.state.taskName}
+                          <span>
+                            {props.state.estimate ? props.state.estimate : "-"}
+                          </span>
                         </div>
                       </td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
+                  </table>
+                </div>
 
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <table className="tc">
-                  <tr>
-                    <td className="label1">
-                      <div>Estimate</div>
-                    </td>
-                    <td className="tabledata">
-                      <div className="col-md-10 d-inline-block">
-                        <span>
-                          {props.state.estimate ? props.state.estimate : "-"}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Project
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(props.state.project, "block", "name")}
-                </div>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Category
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">
-                    {props.state.taskCategorie
-                      ? props.state.taskCategorie.name
-                      : "---"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Status
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">
-                    {props.state.taskStatus
-                      ? props.state.taskStatus.name
-                      : "---"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Priority
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  {this.renderTaskInfo(
-                    this.props.state.taskPrioritie,
-                    "circle",
-                    "label"
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Member
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  {this.renderMemberInfo(this.props.state.selectedMembers)}
-                </div>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Date
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <div className="col-md-12 d-inline-block">
-                    <div className="col-md-4 d-inline-block no-padding">
-                      {moment(props.state.dateFrom).format(DATE_FORMAT2)}
-                    </div>
-                    <div className="col-md-4 d-inline-block no-padding">
-                      {moment(props.state.dateTo).format(DATE_FORMAT2)}
-                    </div>
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Project
+                  </div>
+                  <div className="col-md-10 d-inline-block">
+                    {this.renderTaskInfo(props.state.project, "block", "name")}
                   </div>
                 </div>
-              </div>
 
-              <div className="col-md-12 no-padding input-row ">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Time
-                </div>
-                {true && (
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Category
+                  </div>
                   <div className="col-md-10 d-inline-block">
-                    {this.props.state.taskEvent &&
-                    this.props.state.taskEvent.dateFormattedTimeTrack &&
-                    this.props.state.taskEvent.dateFormattedTimeTrack.length >
-                      0 ? (
-                      !this.state.editLog ? (
-                        <>
-                          <div className="col-md-8 d-inline-block">
-                            <select
-                              style={{
-                                color: "#000 !important",
-                                background: "#fff",
-                              }}
-                              onChange={(e) => this.makeLogEditable(e)}
-                            >
-                              <option value="" key={"0"}>
-                                Select time to edit/delete
-                              </option>
-                              {this.props.state.taskEvent.dateFormattedTimeTrack.map(
-                                (date, index) => {
-                                  return (
-                                    <optgroup
-                                      key={index}
-                                      label={moment(date.date).format(
-                                        "MMM Do YYYY"
-                                      )}
-                                    >
-                                      {date.time_tracks.map((tt, idx) => (
-                                        <option value={tt.id} key={tt.id}>
-                                          {this.returnTime(tt)}
-                                        </option>
-                                      ))}
-                                    </optgroup>
-                                  );
-                                }
-                              )}
-                            </select>
-                          </div>
-                          {
-                            <>
-                              <div
-                                className="col-md-1 d-inline-block"
-                                onClick={this.toggleEditableBox}
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <i
-                                  className="fa fa-pencil"
-                                  aria-hidden="true"
-                                ></i>
-                              </div>
-                              <div
-                                className="col-md-1 d-inline-block"
-                                style={{
-                                  padding: "0px 10px",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => this.handleDeleteLog()}
-                              >
-                                <i class="fas fa-trash-alt"></i>
-                              </div>
-                            </>
-                          }
-                        </>
-                      ) : (
-                        <>
-                          {!this.props.isTimetrackMode && (
-                            <>
-                              <div className="col-md-6 d-inline-block">
-                                <input
-                                  type="number"
-                                  value={this.state.timeDiff}
-                                  onChange={this.editInputChange}
-                                  placeholder="Logged time(hour)"
-                                  className="form-control"
-                                />
-                              </div>
-                              <div
-                                className="col-md-1 d-inline-block"
-                                onClick={this.toggleEditableBox}
-                                title={"Back"}
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <i className="far fa-arrow-alt-circle-left"></i>
-                              </div>
-                              <div
-                                className={`col-md-1 d-inline-block ${
-                                  this.state.timeTrackEditLoader
-                                    ? "disabled"
-                                    : ""
-                                }`}
-                                onClick={this.editTimeTrack}
-                                title={"Edit"}
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <i
-                                  className="fa fa-check"
-                                  aria-hidden="true"
-                                ></i>
-                                {this.state.timeTrackEditLoader ? (
-                                  <Loader
-                                    type="Oval"
-                                    color="#33a1ff"
-                                    height={20}
-                                    width={20}
-                                    style={{ paddingLeft: "25px", top: "0px" }}
-                                    className="d-inline-block login-signup-loader"
-                                  />
-                                ) : null}
-                              </div>
-                            </>
-                          )}
-                          {this.props.isTimetrackMode && (
-                            <>
-                              <div className="col-md-10 d-inline-block">
-                                <span className="col-md-1 no-padding d-inline-block">
-                                  From
-                                </span>
-                                <div
-                                  className="col-md-4 no-padding d-inline-block track-time-edit"
-                                  style={{
-                                    marginLeft: "20px",
-                                  }}
-                                >
-                                  {/* <TimePicker
-                                placeholder="Time"
-                                value={this.state.fromDateTime}
-                                showSecond={false}
-                                onChange={this.handleTimeFrom}
-                              /> */}
-                                  <DatePicker
-                                    selected={new Date(this.state.fromDateTime)}
-                                    onChange={(date) =>
-                                      this.handleTimeFrom(date)
-                                    }
-                                    showTimeSelect
-                                    timeFormat="HH:mm"
-                                    timeIntervals={1}
-                                    excludeTimes={
-                                      [
-                                        // setHours(setMinutes(new Date(), 0), 17),
-                                        // setHours(setMinutes(new Date(), 30), 18),
-                                        // setHours(setMinutes(new Date(), 30), 19),
-                                        // setHours(setMinutes(new Date(), 30), 17)
-                                      ]
-                                    }
-                                    dateFormat="d MMM, HH:mm"
-                                  />
-                                </div>
-                                <span className="col-md-1 no-padding d-inline-block">
-                                  To
-                                </span>
-                                <div className="col-md-4 no-padding d-inline-block track-time-edit">
-                                  {/* <TimePicker
-                                placeholder="Time"
-                                value={this.state.toDateTime}
-                                showSecond={false}
-                                disabledMinutes={this.disabledMinutes}
-                                disabledHours={this.disabledHours}
-                                onChange={this.handleTimeTo}
-                              /> */}
-                                  <DatePicker
-                                    selected={new Date(this.state.toDateTime)}
-                                    onChange={(date) => this.handleTimeTo(date)}
-                                    showTimeSelect
-                                    timeFormat="HH:mm"
-                                    timeIntervals={1}
-                                    // minTime={new Date(this.state.fromDateTime)}
-                                    dateFormat="d MMM, HH:mm"
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                className="col-md-1 d-inline-block"
-                                onClick={this.toggleEditableBox}
-                                title={"Back"}
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <i className="far fa-arrow-alt-circle-left"></i>
-                              </div>
-                              <div
-                                className={`col-md-1 d-inline-block ${
-                                  this.state.timeTrackEditLoader
-                                    ? "disabled"
-                                    : ""
-                                }`}
-                                onClick={this.editTimeTrack}
-                                title={"Edit"}
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <i
-                                  className="fa fa-check"
-                                  aria-hidden="true"
-                                ></i>
-                                {this.state.timeTrackEditLoader ? (
-                                  <Loader
-                                    type="Oval"
-                                    color="#33a1ff"
-                                    height={20}
-                                    width={20}
-                                    style={{ paddingLeft: "25px", top: "0px" }}
-                                    className="d-inline-block login-signup-loader"
-                                  />
-                                ) : null}
-                              </div>
-                            </>
-                          )}
-                        </>
-                      )
-                    ) : this.props.isTimetrackMode ? (
-                      <div className="left-padding-17px">No tracked time</div>
-                    ) : (
-                      <div className="left-padding-17px">No logged time</div>
+                    <span className="left-padding-20px">
+                      {props.state.taskCategorie
+                        ? props.state.taskCategorie.name
+                        : "---"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Status
+                  </div>
+                  <div className="col-md-10 d-inline-block">
+                    <span className="left-padding-20px">
+                      {props.state.taskStatus
+                        ? props.state.taskStatus.name
+                        : "---"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Priority
+                  </div>
+                  <div className="col-md-10 d-inline-block">
+                    {this.renderTaskInfo(
+                      this.props.state.taskPrioritie,
+                      "circle",
+                      "label"
                     )}
                   </div>
-                )}
-              </div>
+                </div>
 
-              {this.state.trackTimeError && this.state.editLog ? (
-                <div className="col-md-12 no-padding">
-                  <div
-                    className="col-md-10 d-inline-block error"
-                    style={{ textAlign: "center" }}
-                  >
-                    {this.state.trackTimeError}
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Member
+                  </div>
+                  <div className="col-md-10 d-inline-block">
+                    {this.renderMemberInfo(this.props.state.selectedMembers)}
                   </div>
                 </div>
-              ) : null}
 
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div
-                  className="col-md-1 d-inline-block no-padding label"
-                  style={{ verticalAlign: "top" }}
-                >
-                  {/* Comments */}
-                  <div className="comment-owner-dot">
-                    {firstTwoLetter(this.props.state.user.name)}
-
-                    {/* {firstTwoLetter(this.props.loggedInUserName)}
-                    {firstTwoLetter(this.state.userName)} */}
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Date
+                  </div>
+                  <div className="col-md-10 d-inline-block">
+                    <div className="col-md-12 d-inline-block">
+                      <div className="col-md-4 d-inline-block no-padding">
+                        {moment(props.state.dateFrom).format(DATE_FORMAT2)}
+                      </div>
+                      <div className="col-md-4 d-inline-block no-padding">
+                        {moment(props.state.dateTo).format(DATE_FORMAT2)}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="col-md-11 d-inline-block">
-                  <CommentUpload
-                    save={this.saveComments}
-                    comments={this.state.comments}
-                    state={this.state}
-                    showSave={true}
-                    showBox={this.state.showAddBox}
-                    showAttachIcon={true}
-                    commentName="comments"
-                    onClickOutside={this.onClickOutsideAddCommnetBox}
-                    updateUploadedState={this.updateUploadedState}
-                    removeUploadedImage={this.removeUploadedImage}
-                    handleInputChange={this.handleInputChange}
-                    showCommentBox={this.onClickAddCommnetBox}
-                  />
-                </div>
-              </div>
-              {props.state.taskComments ? (
-                <>
-                  <div className="col-md-12 no-padding input-row task-comments">
-                    {props.state.taskComments.map((comment) => {
-                      return this.state.editableComment &&
-                        comment.id === this.state.commentId ? (
-                        <div
-                          className="col-md-12 no-padding"
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "flex-start",
-                          }}
-                        >
-                          <div
-                            className="col-md-2 d-inline-block no-padding label"
-                            // style={{
-                            // verticalAlign: "text-top",
-                            // marginTop: "20px"
-                            // }}
-                          >
-                            <div className="comment-owner-dot">
-                              {firstTwoLetter(comment.user.name)}
+
+                <div className="col-md-12 no-padding input-row ">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Time
+                  </div>
+                  {true && (
+                    <div className="col-md-10 d-inline-block">
+                      {this.props.state.taskEvent &&
+                      this.props.state.taskEvent.dateFormattedTimeTrack &&
+                      this.props.state.taskEvent.dateFormattedTimeTrack.length >
+                        0 ? (
+                        !this.state.editLog ? (
+                          <>
+                            <div className="col-md-8 d-inline-block">
+                              <select
+                                style={{
+                                  color: "#000 !important",
+                                  background: "#fff",
+                                }}
+                                onChange={(e) => this.makeLogEditable(e)}
+                              >
+                                <option value="" key={"0"}>
+                                  Select time to edit/delete
+                                </option>
+                                {this.props.state.taskEvent.dateFormattedTimeTrack.map(
+                                  (date, index) => {
+                                    return (
+                                      <optgroup
+                                        key={index}
+                                        label={moment(date.date).format(
+                                          "MMM Do YYYY"
+                                        )}
+                                      >
+                                        {date.time_tracks.map((tt, idx) => (
+                                          <option value={tt.id} key={tt.id}>
+                                            {this.returnTime(tt)}
+                                          </option>
+                                        ))}
+                                      </optgroup>
+                                    );
+                                  }
+                                )}
+                              </select>
                             </div>
-                          </div>
-                          <div className="col-md-10 d-inline-block">
-                            <CommentUpload
-                              save={this.handleUpdateComments}
-                              comments={this.state.editedComments}
-                              state={this.state}
-                              showSave={true}
-                              showAttachIcon={true}
-                              showBox={true}
-                              commentName="editedComments"
-                              onClickOutside={this.onClickOutside}
-                              updateUploadedState={this.updateUploadedState}
-                              removeUploadedImage={this.removeUploadedImage}
-                              handleInputChange={this.handleInputChange}
-                              showCommentBox={this.showCommentBox}
-                            />
-                          </div>
-                        </div>
+                            {
+                              <>
+                                <div
+                                  className="col-md-1 d-inline-block"
+                                  onClick={this.toggleEditableBox}
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i
+                                    className="fa fa-pencil"
+                                    aria-hidden="true"
+                                  ></i>
+                                </div>
+                                <div
+                                  className="col-md-1 d-inline-block"
+                                  style={{
+                                    padding: "0px 10px",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => this.handleDeleteLog()}
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </>
+                            }
+                          </>
+                        ) : (
+                          <>
+                            {!this.props.isTimetrackMode && (
+                              <>
+                                <div className="col-md-6 d-inline-block">
+                                  <input
+                                    type="number"
+                                    value={this.state.timeDiff}
+                                    onChange={this.editInputChange}
+                                    placeholder="Logged time(hour)"
+                                    className="form-control"
+                                  />
+                                </div>
+                                <div
+                                  className="col-md-1 d-inline-block"
+                                  onClick={this.toggleEditableBox}
+                                  title={"Back"}
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i className="far fa-arrow-alt-circle-left"></i>
+                                </div>
+                                <div
+                                  className={`col-md-1 d-inline-block ${
+                                    this.state.timeTrackEditLoader
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                  onClick={this.editTimeTrack}
+                                  title={"Edit"}
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i
+                                    className="fa fa-check"
+                                    aria-hidden="true"
+                                  ></i>
+                                  {this.state.timeTrackEditLoader ? (
+                                    <Loader
+                                      type="Oval"
+                                      color="#33a1ff"
+                                      height={20}
+                                      width={20}
+                                      style={{ paddingLeft: "25px", top: "0px" }}
+                                      className="d-inline-block login-signup-loader"
+                                    />
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
+                            {this.props.isTimetrackMode && (
+                              <>
+                                <div className="col-md-10 d-inline-block">
+                                  <span className="col-md-1 no-padding d-inline-block">
+                                    From
+                                  </span>
+                                  <div
+                                    className="col-md-4 no-padding d-inline-block track-time-edit"
+                                    style={{
+                                      marginLeft: "20px",
+                                    }}
+                                  >
+                                    {/* <TimePicker
+                                  placeholder="Time"
+                                  value={this.state.fromDateTime}
+                                  showSecond={false}
+                                  onChange={this.handleTimeFrom}
+                                /> */}
+                                    <ErrorBoundary>
+                                      <DatePicker
+                                        selected={new Date(this.state.fromDateTime)}
+                                        onChange={(date) =>
+                                          this.handleTimeFrom(date)
+                                        }
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={1}
+                                        excludeTimes={
+                                          [
+                                            // setHours(setMinutes(new Date(), 0), 17),
+                                            // setHours(setMinutes(new Date(), 30), 18),
+                                            // setHours(setMinutes(new Date(), 30), 19),
+                                            // setHours(setMinutes(new Date(), 30), 17)
+                                          ]
+                                        }
+                                        dateFormat="d MMM, HH:mm"
+                                      />
+                                    </ErrorBoundary>
+                                  </div>
+                                  <span className="col-md-1 no-padding d-inline-block">
+                                    To
+                                  </span>
+                                  <div className="col-md-4 no-padding d-inline-block track-time-edit">
+                                    {/* <TimePicker
+                                  placeholder="Time"
+                                  value={this.state.toDateTime}
+                                  showSecond={false}
+                                  disabledMinutes={this.disabledMinutes}
+                                  disabledHours={this.disabledHours}
+                                  onChange={this.handleTimeTo}
+                                /> */}
+                                    <ErrorBoundary>
+                                      <DatePicker
+                                        selected={new Date(this.state.toDateTime)}
+                                        onChange={(date) => this.handleTimeTo(date)}
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={1}
+                                        // minTime={new Date(this.state.fromDateTime)}
+                                        dateFormat="d MMM, HH:mm"
+                                      />
+                                    </ErrorBoundary>
+                                  </div>
+                                </div>
+                                <div
+                                  className="col-md-1 d-inline-block"
+                                  onClick={this.toggleEditableBox}
+                                  title={"Back"}
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i className="far fa-arrow-alt-circle-left"></i>
+                                </div>
+                                <div
+                                  className={`col-md-1 d-inline-block ${
+                                    this.state.timeTrackEditLoader
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                  onClick={this.editTimeTrack}
+                                  title={"Edit"}
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i
+                                    className="fa fa-check"
+                                    aria-hidden="true"
+                                  ></i>
+                                  {this.state.timeTrackEditLoader ? (
+                                    <Loader
+                                      type="Oval"
+                                      color="#33a1ff"
+                                      height={20}
+                                      width={20}
+                                      style={{ paddingLeft: "25px", top: "0px" }}
+                                      className="d-inline-block login-signup-loader"
+                                    />
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
+                          </>
+                        )
+                      ) : this.props.isTimetrackMode ? (
+                        <div className="left-padding-17px">No tracked time</div>
                       ) : (
-                        <div
-                          className="col-md-12 no-padding"
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "flex-start",
-                            margin: "8px 0px",
-                          }}
-                        >
+                        <div className="left-padding-17px">No logged time</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {this.state.trackTimeError && this.state.editLog ? (
+                  <div className="col-md-12 no-padding">
+                    <div
+                      className="col-md-10 d-inline-block error"
+                      style={{ textAlign: "center" }}
+                    >
+                      {this.state.trackTimeError}
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className="col-md-12 no-padding input-row text-titlize">
+                  <div
+                    className="col-md-1 d-inline-block no-padding label"
+                    style={{ verticalAlign: "top" }}
+                  >
+                    {/* Comments */}
+                    <div className="comment-owner-dot">
+                      {firstTwoLetter(this.props.state.user.name)}
+
+                      {/* {firstTwoLetter(this.props.loggedInUserName)}
+                      {firstTwoLetter(this.state.userName)} */}
+                    </div>
+                  </div>
+                  <div className="col-md-11 d-inline-block">
+                    <ErrorBoundary>
+                      <CommentUpload
+                        save={this.saveComments}
+                        comments={this.state.comments}
+                        state={this.state}
+                        showSave={true}
+                        showBox={this.state.showAddBox}
+                        showAttachIcon={true}
+                        commentName="comments"
+                        onClickOutside={this.onClickOutsideAddCommnetBox}
+                        updateUploadedState={this.updateUploadedState}
+                        removeUploadedImage={this.removeUploadedImage}
+                        handleInputChange={this.handleInputChange}
+                        showCommentBox={this.onClickAddCommnetBox}
+                      />
+                    </ErrorBoundary>
+                  </div>
+                </div>
+                {props.state.taskComments ? (
+                  <>
+                    <div className="col-md-12 no-padding input-row task-comments">
+                      {props.state.taskComments.map((comment) => {
+                        return this.state.editableComment &&
+                          comment.id === this.state.commentId ? (
                           <div
-                            className="col-md-1 d-inline-block no-padding label"
+                            className="col-md-12 no-padding"
                             style={{
-                              marginTop: "8px",
+                              display: "inline-flex",
+                              alignItems: "flex-start",
                             }}
                           >
-                            <div className="comment-owner-dot">
-                              {firstTwoLetter(comment.user.name)}
+                            <div
+                              className="col-md-2 d-inline-block no-padding label"
+                              // style={{
+                              // verticalAlign: "text-top",
+                              // marginTop: "20px"
+                              // }}
+                            >
+                              <div className="comment-owner-dot">
+                                {firstTwoLetter(comment.user.name)}
+                              </div>
+                            </div>
+                            <div className="col-md-10 d-inline-block">
+                              <ErrorBoundary>
+                                <CommentUpload
+                                  save={this.handleUpdateComments}
+                                  comments={this.state.editedComments}
+                                  state={this.state}
+                                  showSave={true}
+                                  showAttachIcon={true}
+                                  showBox={true}
+                                  commentName="editedComments"
+                                  onClickOutside={this.onClickOutside}
+                                  updateUploadedState={this.updateUploadedState}
+                                  removeUploadedImage={this.removeUploadedImage}
+                                  handleInputChange={this.handleInputChange}
+                                  showCommentBox={this.showCommentBox}
+                                />
+                              </ErrorBoundary>
                             </div>
                           </div>
-                          <div className="col-md-11 d-inline-block ">
-                            <div className="commnet-card comment-bg-color">
-                              <div
-                                className=""
-                                // style={{
-                                //   display: "flex",
-                                //   justifyContent: "space-between",
-                                // }}
-                              >
-                                <div className="owner-name text-titlize">
-                                  {comment.user.name}
-                                </div>
+                        ) : (
+                          <div
+                            className="col-md-12 no-padding"
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "flex-start",
+                              margin: "8px 0px",
+                            }}
+                          >
+                            <div
+                              className="col-md-1 d-inline-block no-padding label"
+                              style={{
+                                marginTop: "8px",
+                              }}
+                            >
+                              <div className="comment-owner-dot">
+                                {firstTwoLetter(comment.user.name)}
                               </div>
-                              <div className="comments">{comment.comments}</div>
-                              {/* </div> */}
-                              <div className="col-md-12 no-padding">
-                                {comment.attachments.map((attachment) => {
-                                  return (
-                                    <>
-                                      {this.isImage(attachment.imge_url) ? (
-                                        <div style={{ display: "grid" }}>
-                                          <img
-                                            src={`${attachment.imge_url}`}
-                                            onClick={() =>
-                                              this.openViewImage(
+                            </div>
+                            <div className="col-md-11 d-inline-block ">
+                              <div className="commnet-card comment-bg-color">
+                                <div
+                                  className=""
+                                  // style={{
+                                  //   display: "flex",
+                                  //   justifyContent: "space-between",
+                                  // }}
+                                >
+                                  <div className="owner-name text-titlize">
+                                    {comment.user.name}
+                                  </div>
+                                </div>
+                                <div className="comments">{comment.comments}</div>
+                                {/* </div> */}
+                                <div className="col-md-12 no-padding">
+                                  {comment.attachments.map((attachment) => {
+                                    return (
+                                      <>
+                                        {this.isImage(attachment.imge_url) ? (
+                                          <div style={{ display: "grid" }}>
+                                            <img
+                                              src={`${attachment.imge_url}`}
+                                              onClick={() =>
+                                                this.openViewImage(
+                                                  attachment.imge_url
+                                                )
+                                              }
+                                              alt={this.returnAlt(
                                                 attachment.imge_url
-                                              )
-                                            }
-                                            alt={this.returnAlt(
-                                              attachment.imge_url
-                                            )}
-                                            height="42"
-                                            width="42"
-                                            style={{
-                                              cursor: "pointer",
-                                              marginRight: "10px",
-                                            }}
-                                          ></img>
+                                              )}
+                                              height="42"
+                                              width="42"
+                                              style={{
+                                                cursor: "pointer",
+                                                marginRight: "10px",
+                                              }}
+                                            ></img>
+                                            <a
+                                              href={`${attachment.imge_url}`}
+                                              download
+                                              style={{
+                                                fontSize: "12px",
+                                                padding: "5px",
+                                              }}
+                                            >
+                                              {this.returnAlt(
+                                                attachment.imge_url
+                                              )}
+                                            </a>
+                                          </div>
+                                        ) : (
                                           <a
                                             href={`${attachment.imge_url}`}
                                             download
-                                            style={{
-                                              fontSize: "12px",
-                                              padding: "5px",
-                                            }}
+                                            style={{ fontSize: "12px" }}
                                           >
-                                            {this.returnAlt(
-                                              attachment.imge_url
-                                            )}
+                                            {this.returnAlt(attachment.imge_url)}
                                           </a>
-                                        </div>
-                                      ) : (
-                                        <a
-                                          href={`${attachment.imge_url}`}
-                                          download
-                                          style={{ fontSize: "12px" }}
-                                        >
-                                          {this.returnAlt(attachment.imge_url)}
-                                        </a>
-                                      )}
-                                    </>
-                                  );
-                                })}
+                                        )}
+                                      </>
+                                    );
+                                  })}
+                                </div>
+                                {this.state.viewerIsOpen ? (
+                                  <ErrorBoundary>
+                                    <ImgsViewer
+                                      imgs={[{ src: `${this.state.imge_url}` }]}
+                                      isOpen={this.state.viewerIsOpen}
+                                      onClose={this.closeViewer}
+                                    />
+                                  </ErrorBoundary>
+                                ) : null}
                               </div>
-                              {this.state.viewerIsOpen ? (
-                                <ImgsViewer
-                                  imgs={[{ src: `${this.state.imge_url}` }]}
-                                  isOpen={this.state.viewerIsOpen}
-                                  onClose={this.closeViewer}
-                                />
-                              ) : null}
-                            </div>
 
-                            <div
-                              className="col-md-12"
-                              style={{ paddingLeft: "20px" }}
-                            >
-                              <span onClick={() => this.editComments(comment)}>
-                                Edit
-                              </span>
-                              <span
-                                onClick={() =>
-                                  this.props.deleteComments(comment)
-                                }
-                              >
-                                Delete
-                              </span>
                               <div
-                                className=""
-                                style={{
-                                  display: "inline",
-                                  fontSize: "11px",
-                                  padding: "3px 0px 0px 25px",
-                                }}
-                                title={this.titleDateTime(comment)}
+                                className="col-md-12"
+                                style={{ paddingLeft: "20px" }}
                               >
-                                {this.commentsTime(comment)}
+                                <span onClick={() => this.editComments(comment)}>
+                                  Edit
+                                </span>
+                                <span
+                                  onClick={() =>
+                                    this.props.deleteComments(comment)
+                                  }
+                                >
+                                  Delete
+                                </span>
+                                <div
+                                  className=""
+                                  style={{
+                                    display: "inline",
+                                    fontSize: "11px",
+                                    padding: "3px 0px 0px 25px",
+                                  }}
+                                  title={this.titleDateTime(comment)}
+                                >
+                                  {this.commentsTime(comment)}
+                                </div>
                               </div>
+                              {/* </div> */}
                             </div>
-                            {/* </div> */}
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              ) : null}
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : null}
+              </div>
             </div>
-          </div>
-        </Modal>
+          </Modal>
+        </ErrorBoundary>
         {this.state.showConfirm ? (
-          <ConfirmModal
-            show={this.state.showConfirm}
-            message="Do you want to delete the Tracked Time?"
-            buttonText="delete"
-            onClick={this.deleteTimeTrack}
-            closeModal={this.handleDeleteLog}
-            style={{
-              padding: "9% 0 30px 4%",
-            }}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              show={this.state.showConfirm}
+              message="Do you want to delete the Tracked Time?"
+              buttonText="delete"
+              onClick={this.deleteTimeTrack}
+              closeModal={this.handleDeleteLog}
+              style={{
+                padding: "9% 0 30px 4%",
+              }}
+            />
+          </ErrorBoundary>
         ) : null}
       </>
     );

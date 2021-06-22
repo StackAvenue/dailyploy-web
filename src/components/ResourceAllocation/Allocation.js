@@ -9,6 +9,7 @@ import { firstTwoLetter, textTitlize } from "../../utils/function";
 import { debounce } from "../../utils/function";
 import VideoLoader from "../../components/dashboard/VideoLoader";
 import Spinner from 'react-bootstrap/Spinner';
+import ErrorBoundary from '../../ErrorBoundary';
 
 const Allocation = (props) => {
   const [workspaceId, setWorkspaceId] = useState(null);
@@ -329,11 +330,13 @@ const Allocation = (props) => {
   return (
     <>
       <div className="allocation">
-        <MenuBar
-          workspaceId={workspaceId}
-          classNameRoute={classNameRoute}
-          state={isDeleteShow}
-        />
+        <ErrorBoundary>
+          <MenuBar
+            workspaceId={workspaceId}
+            classNameRoute={classNameRoute}
+            state={isDeleteShow}
+          />
+        </ErrorBoundary>
 
         <div className="allocation-container">
           {isDataLoading ? 
@@ -418,8 +421,8 @@ const Allocation = (props) => {
                             handleOnClick(project.id, member.id);
                           }}
                         >
-                          {isMemberAddedRemoved==true && selectedMember == member.id 
-                          && selectedProject == project.id
+                          {isMemberAddedRemoved===true && selectedMember === member.id 
+                          && selectedProject === project.id
                           ? <Spinner animation="grow" variant="success" /> :
                           member.id > 0 &&
                           project.id > 0 &&
@@ -454,11 +457,13 @@ const Allocation = (props) => {
                   </tr>
                 );
               })}
-              <InfinitScroll
-                dataLength={members.length}
-                next={getNextMembers}
-                hasMore={true}
-              ></InfinitScroll>
+              <ErrorBoundary>
+                <InfinitScroll
+                  dataLength={members.length}
+                  next={getNextMembers}
+                  hasMore={true}
+                ></InfinitScroll>
+              </ErrorBoundary>
               {projectMemberloaded ? null : 
               <>
               <Spinner animation="border" variant="success" />

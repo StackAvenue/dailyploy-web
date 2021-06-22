@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import { DATE_FORMAT1 } from "./../../../utils/Constants";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class ReportTable extends Component {
   constructor(props) {
@@ -59,14 +60,16 @@ class ReportTable extends Component {
             ? this.props.taskDetails[date]
             : [];
         return (
-          <ReportTableRow
-            key={index}
-            tasks={tasks}
-            date={date}
-            frequency={this.props.frequency}
-            timeTrackUpdate={this.props.timeTrackUpdate}
-            isTimetrackMode={this.props.isTimetrackMode}
-          />
+          <ErrorBoundary>
+            <ReportTableRow
+              key={index}
+              tasks={tasks}
+              date={date}
+              frequency={this.props.frequency}
+              timeTrackUpdate={this.props.timeTrackUpdate}
+              isTimetrackMode={this.props.isTimetrackMode}
+            />
+          </ErrorBoundary>
         );
       });
     } else {
@@ -83,13 +86,15 @@ class ReportTable extends Component {
             ? this.props.taskDetails[date]
             : [];
         ReportTableArr.push(
-          <ReportTableRow
-            key={index - 1}
-            tasks={tasks}
-            date={date}
-            frequency={this.props.frequency}
-            timeTrackUpdate={this.props.timeTrackUpdate}
-          />
+          <ErrorBoundary>
+            <ReportTableRow
+              key={index - 1}
+              tasks={tasks}
+              date={date}
+              frequency={this.props.frequency}
+              timeTrackUpdate={this.props.timeTrackUpdate}
+            />
+          </ErrorBoundary>
         );
       }
       return ReportTableArr;
@@ -104,14 +109,16 @@ class ReportTable extends Component {
           ? this.props.taskDetails[date]
           : [];
       return (
-        <ReportTable2Row
-          key={index}
-          tasks={tasks}
-          date={date}
-          userRole={this.props.state.userRole}
-          frequency={this.props.frequency}
-          isTimetrackMode={this.state.isTimetrackMode}
-        />
+        <ErrorBoundary>
+          <ReportTable2Row
+            key={index}
+            tasks={tasks}
+            date={date}
+            userRole={this.props.state.userRole}
+            frequency={this.props.frequency}
+            isTimetrackMode={this.state.isTimetrackMode}
+          />
+        </ErrorBoundary>
       );
     });
   };

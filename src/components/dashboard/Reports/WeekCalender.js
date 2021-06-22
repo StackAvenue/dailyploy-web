@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 function getWeekDays(weekStart) {
     const days = [weekStart];
@@ -76,16 +77,18 @@ export default class WeekCalender extends React.Component {
 
         return (
             <div className="SelectedWeekExample">
-                <DayPicker
-                    selectedDays={selectedDays}
-                    showWeekNumbers
-                    showOutsideDays
-                    modifiers={modifiers}
-                    onDayClick={this.handleDayChange}
-                    onDayMouseEnter={this.handleDayEnter}
-                    onDayMouseLeave={this.handleDayLeave}
-                    onWeekClick={this.handleWeekClick}
-                />
+                <ErrorBoundary>
+                    <DayPicker
+                        selectedDays={selectedDays}
+                        showWeekNumbers
+                        showOutsideDays
+                        modifiers={modifiers}
+                        onDayClick={this.handleDayChange}
+                        onDayMouseEnter={this.handleDayEnter}
+                        onDayMouseLeave={this.handleDayLeave}
+                        onWeekClick={this.handleWeekClick}
+                    />
+                </ErrorBoundary>
                 {selectedDays.length === 7 && (
                     <div>
                         {moment(selectedDays[0]).format('LL')} –{' '}

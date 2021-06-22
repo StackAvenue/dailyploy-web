@@ -19,6 +19,7 @@ import moment from "moment";
 import RecurringTaskModal from "./RecurringTaskModal";
 import SelectStatus from "./SelectStatus";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class AddTaskModal extends React.Component {
   constructor(props) {
@@ -153,6 +154,7 @@ class AddTaskModal extends React.Component {
     const { props } = this;
     return (
       <>
+      <ErrorBoundary>
         <Modal
           className="task-modal"
           show={props.show}
@@ -248,15 +250,17 @@ class AddTaskModal extends React.Component {
                           : ""
                         }`}
                     >
-                      <DailyPloySelect
-                        options={this.props.state.memberProjects}
-                        placeholder="Select Project"
-                        label="name"
-                        className="suggestion-z-index-100"
-                        default={this.props.state.project}
-                        iconType="block"
-                        onChange={this.props.handleProjectSelect}
-                      />
+                      <ErrorBoundary>
+                        <DailyPloySelect
+                          options={this.props.state.memberProjects}
+                          placeholder="Select Project"
+                          label="name"
+                          className="suggestion-z-index-100"
+                          default={this.props.state.project}
+                          iconType="block"
+                          onChange={this.props.handleProjectSelect}
+                        />
+                      </ErrorBoundary>
                     </div>
                     {this.props.state.errors.projectError ? (
                       <div className="col-md-12">
@@ -275,16 +279,18 @@ class AddTaskModal extends React.Component {
                       Category
                     </div>
                     <div className="col-md-10 d-inline-block">
-                      <DailyPloySelect
-                        options={this.props.state.taskCategories}
-                        placeholder="Select Category"
-                        className="suggestion-z-index-50"
-                        default={this.props.state.taskCategorie ? this.props.state.taskCategorie : this.props.state.taskCategories[0]}
-                        selected={this.props.state.taskCategories[0]}
-                        onChange={this.props.handleCategoryChange}
-                        canAdd={true}
-                        addNew={this.props.addCategory}
-                      />
+                      <ErrorBoundary>
+                        <DailyPloySelect
+                          options={this.props.state.taskCategories}
+                          placeholder="Select Category"
+                          className="suggestion-z-index-50"
+                          default={this.props.state.taskCategorie ? this.props.state.taskCategorie : this.props.state.taskCategories[0]}
+                          selected={this.props.state.taskCategories[0]}
+                          onChange={this.props.handleCategoryChange}
+                          canAdd={true}
+                          addNew={this.props.addCategory}
+                        />
+                      </ErrorBoundary>
                     </div>
                     {/* {this.props.state.errors.categoryError ? (
                       <div className="col-md-12">
@@ -303,16 +309,18 @@ class AddTaskModal extends React.Component {
                         Status
                     </div>
                       <div className="col-md-10 d-inline-block">
-                        <SelectStatus
-                          options={this.props.state.taskStatuss}
-                          placeholder="Select Status"
-                          className="suggestion-z-index-50"
-                          default={this.props.state.taskStatus ? this.props.state.taskStatus : this.props.state.taskStatuss[0]}
-                          selected={this.props.state.taskStatus}
-                          onChange={this.props.handleaddStatusChange}
-                          canAdd={true}
-                          addNew={this.props.addStatus}
-                        />
+                        <ErrorBoundary>
+                          <SelectStatus
+                            options={this.props.state.taskStatuss}
+                            placeholder="Select Status"
+                            className="suggestion-z-index-50"
+                            default={this.props.state.taskStatus ? this.props.state.taskStatus : this.props.state.taskStatuss[0]}
+                            selected={this.props.state.taskStatus}
+                            onChange={this.props.handleaddStatusChange}
+                            canAdd={true}
+                            addNew={this.props.addStatus}
+                          />
+                        </ErrorBoundary>
                       </div>
                     </div> : null}
 
@@ -321,16 +329,18 @@ class AddTaskModal extends React.Component {
                       Priority
                     </div>
                     <div className="col-md-10 d-inline-block">
-                      <DailyPloySelect
-                        options={PRIORITIES.slice(0, 3)}
-                        placeholder="Select priority"
-                        iconType="circle"
-                        default={this.props.state.taskPrioritie}
-                        name="priorityName"
-                        label="label"
-                        suggesionBy="label"
-                        onChange={this.props.handlePrioritiesChange}
-                      />
+                      <ErrorBoundary>
+                        <DailyPloySelect
+                          options={PRIORITIES.slice(0, 3)}
+                          placeholder="Select priority"
+                          iconType="circle"
+                          default={this.props.state.taskPrioritie}
+                          name="priorityName"
+                          label="label"
+                          suggesionBy="label"
+                          onChange={this.props.handlePrioritiesChange}
+                        />
+                      </ErrorBoundary>
                     </div>
                   </div>
 
@@ -339,13 +349,15 @@ class AddTaskModal extends React.Component {
                       Member
                     </div>
                     <div className="col-md-10 d-inline-block">
-                      <DailyPloySelect
-                        options={this.props.modalMemberSearchOptions}
-                        placeholder="Select Member"
-                        default={this.props.state.selectedMembers[0]}
-                        icon="fa fa-user"
-                        onChange={this.props.handleMemberSelect}
-                      />
+                      <ErrorBoundary>
+                        <DailyPloySelect
+                          options={this.props.modalMemberSearchOptions}
+                          placeholder="Select Member"
+                          default={this.props.state.selectedMembers[0]}
+                          icon="fa fa-user"
+                          onChange={this.props.handleMemberSelect}
+                        />
+                      </ErrorBoundary>
                     </div>
                     {this.props.state.errors.memberError ? (
                       <div className="col-md-12">
@@ -370,14 +382,16 @@ class AddTaskModal extends React.Component {
                             <span>From:</span>
                           </div>
                           <div className="d-inline-block picker">
-                            <DatePicker
-                              ref={this.calendarFromRef}
-                              selected={props.state.dateFrom}
-                              onChange={props.handleDateFrom}
-                              maxDate={props.state.dateTo}
-                              placeholderText="Select Date"
-                              onChangeRaw={this.handleDateChangeRaw}
-                            />
+                            <ErrorBoundary>
+                              <DatePicker
+                                ref={this.calendarFromRef}
+                                selected={props.state.dateFrom}
+                                onChange={props.handleDateFrom}
+                                maxDate={props.state.dateTo}
+                                placeholderText="Select Date"
+                                onChangeRaw={this.handleDateChangeRaw}
+                              />
+                            </ErrorBoundary>
                             <span className="task-date-picker-icon">
                               <i
                                 onClick={this.openFromCalender}
@@ -392,16 +406,18 @@ class AddTaskModal extends React.Component {
                             <span className="width-to">To:</span>
                           </div>
                           <div className="d-inline-block picker">
-                            <DatePicker
-                              className="width-to"
-                              ref={this.calendarToRef}
-                              minDate={props.state.dateFrom}
-                              selected={props.state.dateTo}
-                              onChange={props.handleDateTo}
-                              placeholderText="Select Date"
-                              disabled={props.state.disabledDateTo}
-                              onChangeRaw={this.handleDateChangeRaw}
-                            />
+                            <ErrorBoundary>
+                              <DatePicker
+                                className="width-to"
+                                ref={this.calendarToRef}
+                                minDate={props.state.dateFrom}
+                                selected={props.state.dateTo}
+                                onChange={props.handleDateTo}
+                                placeholderText="Select Date"
+                                disabled={props.state.disabledDateTo}
+                                onChangeRaw={this.handleDateChangeRaw}
+                              />
+                            </ErrorBoundary>
                             <span
                               className="task-date-picker-icon"
                               style={{ right: "51px" }}
@@ -454,13 +470,15 @@ class AddTaskModal extends React.Component {
                             className="col-md-7 d-inline-block time-picker-container"
                             style={{ paddingRight: "0" }}
                           >
-                            <TimePicker
-                              placeholder="Select"
-                              value={this.props.state.timeDateFrom}
-                              showSecond={false}
-                              onChange={props.handleTimeFrom}
-                              format={props.format}
-                            />
+                            <ErrorBoundary>
+                              <TimePicker
+                                placeholder="Select"
+                                value={this.props.state.timeDateFrom}
+                                showSecond={false}
+                                onChange={props.handleTimeFrom}
+                                format={props.format}
+                              />
+                            </ErrorBoundary>
                           </div>
                           {/* <span style={{ paddingLeft: "18px" }}> - </span> */}
                         </div>
@@ -476,15 +494,17 @@ class AddTaskModal extends React.Component {
                             className="col-md-7 d-inline-block time-picker-container"
                             style={{ paddingRight: "0" }}
                           >
-                            <TimePicker
-                              value={this.props.state.timeDateTo}
-                              placeholder="Select"
-                              showSecond={false}
-                              onChange={props.handleTimeTo}
-                              disabledMinutes={this.disabledMinutes}
-                              disabledHours={this.disabledHours}
-                              format={props.format}
-                            />
+                            <ErrorBoundary>
+                              <TimePicker
+                                value={this.props.state.timeDateTo}
+                                placeholder="Select"
+                                showSecond={false}
+                                onChange={props.handleTimeTo}
+                                disabledMinutes={this.disabledMinutes}
+                                disabledHours={this.disabledHours}
+                                format={props.format}
+                              />
+                            </ErrorBoundary>
                           </div>
                         </div>
                       </div>
@@ -579,14 +599,16 @@ class AddTaskModal extends React.Component {
                       >
                         {props.state.taskButton}
                         {this.props.state.taskloader? (
-                          <Loader
-                            type="Oval"
-                            color="#FFFFFF"
-                            height={20}
-                            width={20}
-                            style={{ paddingLeft: "5px" }}
-                            className="d-inline-block login-signup-loader"
-                          />
+                          <ErrorBoundary>
+                            <Loader
+                              type="Oval"
+                              color="#FFFFFF"
+                              height={20}
+                              width={20}
+                              style={{ paddingLeft: "5px" }}
+                              className="d-inline-block login-signup-loader"
+                            />
+                          </ErrorBoundary>
                         ) : null}
                       </button>
                       {this.props.state.fromInfoEdit ? (
@@ -603,38 +625,41 @@ class AddTaskModal extends React.Component {
                 </div>
               </TabPanel>
               <TabPanel>
-                <RecurringTaskModal
-                  show={this.props.state.show}
-                  state={this.props.state}
-                  closeTaskModal={this.props.closeTaskModal}
-                  handleInputChange={this.props.handleInputChange}
-                  projects={this.props.state.memberProjects}
-                  handleDateFrom={this.props.handleDateFrom}
-                  handleDateTo={this.props.handleDateTo}
-                  handleTimeFrom={this.props.handleTimeFrom}
-                  handleTimeTo={this.props.handleTimeTo}
-                  users={this.props.state.users}
-                  addTask={this.props.addTask}
-                  editTask={this.props.editTask}
-                  handleMemberSelect={this.props.handleMemberSelect}
-                  handleProjectSelect={this.props.handleProjectSelect}
-                  modalMemberSearchOptions={
-                    this.props.state.modalMemberSearchOptions
-                  }
-                  backToTaskInfoModal={this.props.backToTaskInfoModal}
-                  confirmModal={this.props.confirmModal}
-                  handleCategoryChange={this.props.handleCategoryChange}
-                  handlePrioritiesChange={this.props.handlePrioritiesChange}
-                  addCategory={this.props.addCategory}
-                  handleTaskNameChange={this.props.handleTaskNameChange}
-                  saveComments={this.props.saveComments}
-                  toggleTaskStartState={this.props.toggleTaskStartState}
-                />
+                <ErrorBoundary>
+                  <RecurringTaskModal
+                    show={this.props.state.show}
+                    state={this.props.state}
+                    closeTaskModal={this.props.closeTaskModal}
+                    handleInputChange={this.props.handleInputChange}
+                    projects={this.props.state.memberProjects}
+                    handleDateFrom={this.props.handleDateFrom}
+                    handleDateTo={this.props.handleDateTo}
+                    handleTimeFrom={this.props.handleTimeFrom}
+                    handleTimeTo={this.props.handleTimeTo}
+                    users={this.props.state.users}
+                    addTask={this.props.addTask}
+                    editTask={this.props.editTask}
+                    handleMemberSelect={this.props.handleMemberSelect}
+                    handleProjectSelect={this.props.handleProjectSelect}
+                    modalMemberSearchOptions={
+                      this.props.state.modalMemberSearchOptions
+                    }
+                    backToTaskInfoModal={this.props.backToTaskInfoModal}
+                    confirmModal={this.props.confirmModal}
+                    handleCategoryChange={this.props.handleCategoryChange}
+                    handlePrioritiesChange={this.props.handlePrioritiesChange}
+                    addCategory={this.props.addCategory}
+                    handleTaskNameChange={this.props.handleTaskNameChange}
+                    saveComments={this.props.saveComments}
+                    toggleTaskStartState={this.props.toggleTaskStartState}
+                  />
+                </ErrorBoundary>
               </TabPanel>
             </Tabs>
           </div>
         </Modal>
-      </>
+      </ErrorBoundary>
+    </>
     );
   }
 }

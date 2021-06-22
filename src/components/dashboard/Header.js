@@ -21,6 +21,8 @@ import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
+import ErrorBoundary from '../../ErrorBoundary';
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -257,13 +259,15 @@ class Header extends Component {
                 ) : null}
               </div>
               <div className="col-md-7 search-bar-container">
-                <SearchFilter
-                  searchOptions={this.props.searchOptions}
-                  state={this.state}
-                  isReports={this.isReports()}
-                  toggleSearchBy={this.toggleSearchBy}
-                  handleSearchFilterResult={this.props.handleSearchFilterResult}
-                />
+                <ErrorBoundary>
+                  <SearchFilter
+                    searchOptions={this.props.searchOptions}
+                    state={this.state}
+                    isReports={this.isReports()}
+                    toggleSearchBy={this.toggleSearchBy}
+                    handleSearchFilterResult={this.props.handleSearchFilterResult}
+                  />
+                </ErrorBoundary>
               </div>
               <div
                 className="collapse navbar-collapse"

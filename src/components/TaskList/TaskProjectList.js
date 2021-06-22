@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import DailyPloyToast from "./../DailyPloyToast";
 import VideoLoader from "../dashboard/VideoLoader";
 import Loader from 'react-loader-spinner'
+import ErrorBoundary from '../../ErrorBoundary';
 
 class TaskProjectList extends Component {
   constructor(props) {
@@ -1494,13 +1495,15 @@ class TaskProjectList extends Component {
   render() {
     return (
       <>
-        <MenuBar
-          onSelectSort={this.onSelectSort}
-          workspaceId={this.state.workspaceId}
-          classNameRoute={this.classNameRoute}
-          handleLoad={this.handleLoad}
-          state={this.state}
-        />
+        <ErrorBoundary>
+          <MenuBar
+            onSelectSort={this.onSelectSort}
+            workspaceId={this.state.workspaceId}
+            classNameRoute={this.classNameRoute}
+            handleLoad={this.handleLoad}
+            state={this.state}
+          />
+        </ErrorBoundary>
         <div className="task-body-box">
           {this.state.isTaskListLoading ? null :
           <div className="search-project-list">
@@ -1508,15 +1511,17 @@ class TaskProjectList extends Component {
             <div className="container1">
               {this.state.projects.map((project, index) => {
                 return (
-                  <ProjectList
-                    id={project.id}
-                    name={project.name}
-                    handleOpenTaskData={this.handleOpenTaskData}
-                    bgcolor={project.color_code}
-                    showbutton={
-                      project.id === this.state.projectId ? true : false
-                    }
-                  />
+                  <ErrorBoundary>
+                    <ProjectList
+                      id={project.id}
+                      name={project.name}
+                      handleOpenTaskData={this.handleOpenTaskData}
+                      bgcolor={project.color_code}
+                      showbutton={
+                        project.id === this.state.projectId ? true : false
+                      }
+                    />
+                  </ErrorBoundary>
                 );
               })}
             </div>
@@ -1552,104 +1557,108 @@ class TaskProjectList extends Component {
                   </Button>
                   </div>
                 ) : null}
-                <AddProjectTaskModel
-                  show={this.state.show}
-                  state={this.state}
-                  closeTaskModal={this.closeOnlyTaskModal}
-                  handleDateFrom={this.handleDateFrom}
-                  handleDateTo={this.handleDateTo}
-                  handleInputChange={this.handleInputChange}
-                  handleTaskNameChange={this.handleTaskNameChange}
-                  handleSaveTaskData={this.handleSaveTaskData}
-                />
+                <ErrorBoundary>
+                  <AddProjectTaskModel
+                    show={this.state.show}
+                    state={this.state}
+                    closeTaskModal={this.closeOnlyTaskModal}
+                    handleDateFrom={this.handleDateFrom}
+                    handleDateTo={this.handleDateTo}
+                    handleInputChange={this.handleInputChange}
+                    handleTaskNameChange={this.handleTaskNameChange}
+                    handleSaveTaskData={this.handleSaveTaskData}
+                  />
+                </ErrorBoundary>
               </div>
               <div className="container3">
                 {this.state.project_task_lists.taskName !== ""
                   ? this.state.project_task_lists.map((project, index) => {
                     if (this.state.projectId === project.projectId) {
                       return (
-                        <DisplayTaskList
-                          showChecklist={this.state.showChecklist}
-                          checklistID={this.state.checklistID}
-                          state={this.state}
-                          showFilter={this.state.showFilter}
-                          showSummary={this.state.showSummary}
-                          id={project.id}
-                          state={this.state}
-                          projectMembers={this.state.projectMembers}
-                          ProjectTask={project}
-                          //Userstories={project.userStories}
-                          Userstories={this.state.userStories}
-                          projects={this.state.projects}
-                          task_lists={this.state.task_lists}
-                          taskEdit={this.taskEdit}
-                          handleSaveTask={this.handleSaveTask}
-                          getRoadmapStatus={this.getRoadmapStatus}
-                          displayAddTask={this.displayAddTask}
-                          closeAddTask={this.closeAddTask}
-                          displayList={this.displayList}
-                          displayFiteredList={this.displayFiteredList}
-                          setUserStoryDetails={this.setUserStoryDetails}
-                          isChecklistOpen={this.isChecklistOpen}
-                          isFilterOpen={this.isFilterOpen}
-                          isSummaryOpen={this.isSummaryOpen}
-                          closeFilter={this.closeFilter}
-                          closeSummary={this.closeSummary}
-                          addUserStory={this.addUserStory}
-                          deleteUserStory={this.deleteUserStory}
-                          saveUserstoryTask={this.saveUserstoryTask}
-                          closeChecklist={this.closeChecklist}
-                          TaskShow={this.state.TaskShow}
-                          list_id={this.state.list_id}
-                          deleteTaskList={this.deleteTaskList}
-                          editTaskList={this.editTaskList}
-                          deleteTlt={this.deleteTlt}
-                          projectTaskList={this.state.project_task_lists}
-                          switchTask={this.switchTask}
-                          switchTask2={this.switchTask2}
-                          userTaskDetails={this.userTaskDetails}
-                          EditTlt={this.editTlt}
-                          editTltId={this.state.editTltId}
-                          moveToDashBoard={this.moveToDashBoard}
-                          loadFilteredData={this.loadFilteredData}
-                          isFilterLoading={this.state.isFilterLoading}
-                          loadTaskListTaskData={this.loadTaskListTaskData}
-                          isTaskListTasksLoading={this.state.isTaskListTasksLoading}
-                          worksapceMembers={this.state.worksapceUsers}
-                          taskStatus={this.state.taskStatus}
-                          categories={this.state.categories}
-                          memeberSelected={this.memeberSelected}
-                          handleDescription={this.handleDescription}
-                          editUserstory={this.editUserstory}
-                          setConjuction={this.setConjuction}
-                          editDescription={this.editDescription}
-                          addTaskChecklist={this.addTaskChecklist}
-                          updateTaskChecklist={this.updateTaskChecklist}
-                          deleteTaskChecklist={this.deleteTaskChecklist}
-                          deleteUserstoryTask={this.deleteUserstoryTask}
-                          fetchUserstory={this.fetchUserstory}
-                          isUserStoryLoading={this.state.isUserStoryLoading}
-                          selectedUserStoryId={this.state.selectedUserStoryId}
-                          showDetailsModal={this.showDetailsModal}
-                          currentUserstory={this.state.currentUserstory}
-                          userStory_checklists={this.state.userStory_checklists}
-                          detailsModal={this.state.detailsModal}
-                          updatedData={this.state.updatedData}
-                          userstoryUpdateTask={this.state.userstoryUpdateTask}
-                          addUserstoryChecklist={this.addUserstoryChecklist}
-                          updateUserstoryChecklist={this.updateUserstoryChecklist}
-                          deleteUserstoryChecklist={this.deleteUserstoryChecklist}
-                          handleUpdatedTask={this.handleUpdatedTask}
-                          showUserstoryTasks={this.showUserstoryTasks}
-                          currentUserstoryTask={this.state.currentUserstoryTask}
-                          handleUpdatedData={this.handleUpdatedData}
-                          checklistItem={this.state.checklistItem}
-                          handleTaskC={this.handleTaskC}
-                          newChecklist={this.state.newChecklist}
-                          action={this.state.action}
-                          usestoryMoveToDashboard={this.usestoryMoveToDashboard}
-                          addTaskLoading={this.addTaskLoading}
-                        />
+                        <ErrorBoundary>
+                          <DisplayTaskList
+                            showChecklist={this.state.showChecklist}
+                            checklistID={this.state.checklistID}
+                            state={this.state}
+                            showFilter={this.state.showFilter}
+                            showSummary={this.state.showSummary}
+                            id={project.id}
+                            state={this.state}
+                            projectMembers={this.state.projectMembers}
+                            ProjectTask={project}
+                            //Userstories={project.userStories}
+                            Userstories={this.state.userStories}
+                            projects={this.state.projects}
+                            task_lists={this.state.task_lists}
+                            taskEdit={this.taskEdit}
+                            handleSaveTask={this.handleSaveTask}
+                            getRoadmapStatus={this.getRoadmapStatus}
+                            displayAddTask={this.displayAddTask}
+                            closeAddTask={this.closeAddTask}
+                            displayList={this.displayList}
+                            displayFiteredList={this.displayFiteredList}
+                            setUserStoryDetails={this.setUserStoryDetails}
+                            isChecklistOpen={this.isChecklistOpen}
+                            isFilterOpen={this.isFilterOpen}
+                            isSummaryOpen={this.isSummaryOpen}
+                            closeFilter={this.closeFilter}
+                            closeSummary={this.closeSummary}
+                            addUserStory={this.addUserStory}
+                            deleteUserStory={this.deleteUserStory}
+                            saveUserstoryTask={this.saveUserstoryTask}
+                            closeChecklist={this.closeChecklist}
+                            TaskShow={this.state.TaskShow}
+                            list_id={this.state.list_id}
+                            deleteTaskList={this.deleteTaskList}
+                            editTaskList={this.editTaskList}
+                            deleteTlt={this.deleteTlt}
+                            projectTaskList={this.state.project_task_lists}
+                            switchTask={this.switchTask}
+                            switchTask2={this.switchTask2}
+                            userTaskDetails={this.userTaskDetails}
+                            EditTlt={this.editTlt}
+                            editTltId={this.state.editTltId}
+                            moveToDashBoard={this.moveToDashBoard}
+                            loadFilteredData={this.loadFilteredData}
+                            isFilterLoading={this.state.isFilterLoading}
+                            loadTaskListTaskData={this.loadTaskListTaskData}
+                            isTaskListTasksLoading={this.state.isTaskListTasksLoading}
+                            worksapceMembers={this.state.worksapceUsers}
+                            taskStatus={this.state.taskStatus}
+                            categories={this.state.categories}
+                            memeberSelected={this.memeberSelected}
+                            handleDescription={this.handleDescription}
+                            editUserstory={this.editUserstory}
+                            setConjuction={this.setConjuction}
+                            editDescription={this.editDescription}
+                            addTaskChecklist={this.addTaskChecklist}
+                            updateTaskChecklist={this.updateTaskChecklist}
+                            deleteTaskChecklist={this.deleteTaskChecklist}
+                            deleteUserstoryTask={this.deleteUserstoryTask}
+                            fetchUserstory={this.fetchUserstory}
+                            isUserStoryLoading={this.state.isUserStoryLoading}
+                            selectedUserStoryId={this.state.selectedUserStoryId}
+                            showDetailsModal={this.showDetailsModal}
+                            currentUserstory={this.state.currentUserstory}
+                            userStory_checklists={this.state.userStory_checklists}
+                            detailsModal={this.state.detailsModal}
+                            updatedData={this.state.updatedData}
+                            userstoryUpdateTask={this.state.userstoryUpdateTask}
+                            addUserstoryChecklist={this.addUserstoryChecklist}
+                            updateUserstoryChecklist={this.updateUserstoryChecklist}
+                            deleteUserstoryChecklist={this.deleteUserstoryChecklist}
+                            handleUpdatedTask={this.handleUpdatedTask}
+                            showUserstoryTasks={this.showUserstoryTasks}
+                            currentUserstoryTask={this.state.currentUserstoryTask}
+                            handleUpdatedData={this.handleUpdatedData}
+                            checklistItem={this.state.checklistItem}
+                            handleTaskC={this.handleTaskC}
+                            newChecklist={this.state.newChecklist}
+                            action={this.state.action}
+                            usestoryMoveToDashboard={this.usestoryMoveToDashboard}
+                            addTaskLoading={this.addTaskLoading}
+                          />
+                        </ErrorBoundary>
                       );
                     } else {
                       return null;
@@ -1663,17 +1672,19 @@ class TaskProjectList extends Component {
                   ? this.state.project_task_lists.map((project, index) => {
                     if (this.state.projectId === project.projectId) {
                       return (
-                        <AddProjectTaskModel
-                          show={this.state.show}
-                          state={this.state}
-                          closeTaskModal={this.closeOnlyTaskModal}
-                          handleDateFrom={this.handleDateFrom}
-                          handleDateTo={this.handleDateTo}
-                          handleInputChange={this.handleInputChange}
-                          handleTaskNameChange={this.handleTaskNameChange}
-                          handleSaveTaskData={this.handleSaveTaskData}
-                          isEdit={this.state.isEdit}
-                        />
+                        <ErrorBoundary>
+                          <AddProjectTaskModel
+                            show={this.state.show}
+                            state={this.state}
+                            closeTaskModal={this.closeOnlyTaskModal}
+                            handleDateFrom={this.handleDateFrom}
+                            handleDateTo={this.handleDateTo}
+                            handleInputChange={this.handleInputChange}
+                            handleTaskNameChange={this.handleTaskNameChange}
+                            handleSaveTaskData={this.handleSaveTaskData}
+                            isEdit={this.state.isEdit}
+                          />
+                        </ErrorBoundary>
                       );
                     } else {
                       return null;
@@ -1684,17 +1695,19 @@ class TaskProjectList extends Component {
 
 
               {/* ) : null} */}
-              <AddProjectTaskModel
-                show={this.state.show}
-                state={this.state}
-                closeTaskModal={this.closeOnlyTaskModal}
-                handleDateFrom={this.handleDateFrom}
-                handleDateTo={this.handleDateTo}
-                handleInputChange={this.handleInputChange}
-                handleTaskNameChange={this.handleTaskNameChange}
-                handleSaveTaskData={this.handleSaveTaskData}
-                isEdit={this.state.isEdit}
-              />
+              <ErrorBoundary>
+                <AddProjectTaskModel
+                  show={this.state.show}
+                  state={this.state}
+                  closeTaskModal={this.closeOnlyTaskModal}
+                  handleDateFrom={this.handleDateFrom}
+                  handleDateTo={this.handleDateTo}
+                  handleInputChange={this.handleInputChange}
+                  handleTaskNameChange={this.handleTaskNameChange}
+                  handleSaveTaskData={this.handleSaveTaskData}
+                  isEdit={this.state.isEdit}
+                />
+              </ErrorBoundary>
             </div>)}
         </div>
       </>

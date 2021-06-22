@@ -11,6 +11,7 @@ import {
 } from "./../utils/Constants";
 import moment from "moment";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../ErrorBoundary';
 
 class DailyPloyDatePicker extends Component {
   constructor(props) {
@@ -301,14 +302,16 @@ class DailyPloyDatePicker extends Component {
       return (
         <>
           {this.previous()}
-          <DatePicker
-            ref={this.dashboardCalender}
-            selected={this.state.dateFrom}
-            onChange={this.handleDateFrom}
-            startDate={this.state.dateFrom}
-            // dateFormat={this.dayFormat}
-            value={this.state.displayWeek}
-          />
+          <ErrorBoundary>
+            <DatePicker
+              ref={this.dashboardCalender}
+              selected={this.state.dateFrom}
+              onChange={this.handleDateFrom}
+              startDate={this.state.dateFrom}
+              // dateFormat={this.dayFormat}
+              value={this.state.displayWeek}
+            />
+          </ErrorBoundary>
           {this.next()}
         </>
       );
@@ -317,16 +320,18 @@ class DailyPloyDatePicker extends Component {
         <>
           {this.previous()}
           <div className="week-hover-bg d-inline-block">
-            <DatePicker
-              ref={this.dashboardCalender}
-              showWeekNumbers
-              onChange={this.handleWeekDayChange}
-              startDate={this.state.selectedDays[0]}
-              endDate={this.state.selectedDays[6]}
-              onWeekSelect={this.handleWeekClick}
-              value={this.state.displayWeek}
-              selected={this.state.dateFrom}
-            />
+            <ErrorBoundary>
+              <DatePicker
+                ref={this.dashboardCalender}
+                showWeekNumbers
+                onChange={this.handleWeekDayChange}
+                startDate={this.state.selectedDays[0]}
+                endDate={this.state.selectedDays[6]}
+                onWeekSelect={this.handleWeekClick}
+                value={this.state.displayWeek}
+                selected={this.state.dateFrom}
+              />
+            </ErrorBoundary>
           </div>
           {this.next()}
         </>
@@ -335,14 +340,15 @@ class DailyPloyDatePicker extends Component {
       return (
         <>
           {this.previous()}
-          <DatePicker
-            ref={this.dashboardCalender}
-            selected={this.state.dateFrom}
-            onChange={this.handleMonthlyDateFrom}
-            dateFormat={this.monthlyFormat}
-            selected={this.state.dateFrom}
-            showMonthYearPicker
-          />
+          <ErrorBoundary>
+            <DatePicker
+              ref={this.dashboardCalender}
+              selected={this.state.dateFrom}
+              onChange={this.handleMonthlyDateFrom}
+              dateFormat={this.monthlyFormat}
+              showMonthYearPicker
+            />
+          </ErrorBoundary>
           {this.next()}
         </>
       );

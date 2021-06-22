@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import DailyPloyToast from "../DailyPloyToast";
 import RecurringTaskModal from "./RecurringTaskModal";
 import "./../../../src/assets/css/taskList.scss";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class TaskList extends Component {
   constructor(props) {
@@ -696,59 +697,65 @@ class TaskList extends Component {
         </div>
 
         {this.state.showConfirm ? (
-          <ConfirmModal
-            title="Delete Task"
-            message={`Are you sure you want to Delete ?${
-              this.state.selectTaskArr.length == 1
-                ? " this task"
-                : "these tasks"
-              }?`}
-            onClick={this.deleteTasks}
-            closeModal={this.closeModal}
-            buttonText="Delete"
-            show={this.state.showConfirm}
-          />
+          <ErrorBoundary>
+            <ConfirmModal
+              title="Delete Task"
+              message={`Are you sure you want to Delete ?${
+                this.state.selectTaskArr.length == 1
+                  ? " this task"
+                  : "these tasks"
+                }?`}
+              onClick={this.deleteTasks}
+              closeModal={this.closeModal}
+              buttonText="Delete"
+              show={this.state.showConfirm}
+            />
+          </ErrorBoundary>
         ) : null}
         {this.state.editableTask ? (
-          <Modal
-            className="task-modal"
-            show={this.state.show}
-            onHide={this.closeTaskModal}
-          >
-            <div className="row no-margin">
-              <div className="col-md-12 d-inline-block header text-titlize">
-                <div className="d-inline-block" style={{ width: "60%" }}>
-                  <span>{"Edit Recurring Task"}</span>
+          <ErrorBoundary>
+            <Modal
+              className="task-modal"
+              show={this.state.show}
+              onHide={this.closeTaskModal}
+            >
+              <div className="row no-margin">
+                <div className="col-md-12 d-inline-block header text-titlize">
+                  <div className="d-inline-block" style={{ width: "60%" }}>
+                    <span>{"Edit Recurring Task"}</span>
+                  </div>
+                  <button
+                    className="d-inline-block btn btn-link float-right"
+                    onClick={this.closeTaskModal}
+                  >
+                    <i className="fa fa-close"></i>
+                  </button>
                 </div>
-                <button
-                  className="d-inline-block btn btn-link float-right"
-                  onClick={this.closeTaskModal}
-                >
-                  <i className="fa fa-close"></i>
-                </button>
+                <ErrorBoundary>
+                  <RecurringTaskModal
+                    show={this.state.show}
+                    loadTask={this.loadTask}
+                    state={this.state}
+                    backToTaskInfoModal={this.closeTaskModal}
+                    handleInputChange={this.handleInputChange}
+                    projects={this.state.projects}
+                    users={this.state.users}
+                    handleMemberSelect={this.handleMemberSelect}
+                    handleProjectSelect={this.handleProjectSelect}
+                    modalMemberSearchOptions={this.state.memberSearchOptions}
+                    confirmModal={this.confirmModal}
+                    handleCategoryChange={this.handleCategoryChange}
+                    handlePrioritiesChange={this.handlePrioritiesChange}
+                    handleTaskNameChange={this.handleTaskNameChange}
+                    saveComments={this.saveComments}
+                    toggleTaskStartState={this.toggleTaskStartState}
+                    confirm={true}
+                    editableTask={this.state.editableTask}
+                  />
+                </ErrorBoundary>
               </div>
-              <RecurringTaskModal
-                show={this.state.show}
-                loadTask={this.loadTask}
-                state={this.state}
-                backToTaskInfoModal={this.closeTaskModal}
-                handleInputChange={this.handleInputChange}
-                projects={this.state.projects}
-                users={this.state.users}
-                handleMemberSelect={this.handleMemberSelect}
-                handleProjectSelect={this.handleProjectSelect}
-                modalMemberSearchOptions={this.state.memberSearchOptions}
-                confirmModal={this.confirmModal}
-                handleCategoryChange={this.handleCategoryChange}
-                handlePrioritiesChange={this.handlePrioritiesChange}
-                handleTaskNameChange={this.handleTaskNameChange}
-                saveComments={this.saveComments}
-                toggleTaskStartState={this.toggleTaskStartState}
-                confirm={true}
-                editableTask={this.state.editableTask}
-              />
-            </div>
-          </Modal>
+            </Modal>
+          </ErrorBoundary>
         ) : null}
       </>
     );

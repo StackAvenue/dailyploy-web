@@ -4,6 +4,7 @@ import Header from "./Header";
 import AddProjectModal from "./AddProjectModal";
 import { get, post, logout, mockPost } from "../../utils/API";
 import UpdateProjectModal from "./UpdateProjectModal";
+import ErrorBoundary from '../../ErrorBoundary';
 
 class ProjectsSettings extends Component {
   constructor(props) {
@@ -78,11 +79,13 @@ class ProjectsSettings extends Component {
   render() {
     return (
       <div>
-        <Header
-          logout={this.logout}
-          workspaces={this.state.workspaces}
-          workspaceId={this.state.workspaceId}
-        />
+        <ErrorBoundary>
+          <Header
+            logout={this.logout}
+            workspaces={this.state.workspaces}
+            workspaceId={this.state.workspaceId}
+          />
+        </ErrorBoundary>
         <table class="table">
           <thead>
             <tr>
@@ -114,12 +117,14 @@ class ProjectsSettings extends Component {
                 </tr>
               );
             })}
-            <UpdateProjectModal
-              state={this.state}
-              handleClose={this.handleClose}
-              projectId={this.state.projectId}
-              workspaceId={this.state.workspaceId}
-            />
+            <ErrorBoundary>
+              <UpdateProjectModal
+                state={this.state}
+                handleClose={this.handleClose}
+                projectId={this.state.projectId}
+                workspaceId={this.state.workspaceId}
+              />
+            </ErrorBoundary>
           </tbody>
         </table>
       </div>

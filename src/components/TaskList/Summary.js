@@ -6,7 +6,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import PropTypes from 'prop-types';
 
 const Summary = props => {
-    console.log("summary", props);
     const[totalTasks, setTotalTasks]=useState(null)
     const[taskCompleted, setTaskCompleted]=useState(null)
     const[estTime, setEst]=useState(null)

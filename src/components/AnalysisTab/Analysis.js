@@ -15,6 +15,7 @@ import CountUp from 'react-countup';
 import DatePicker from "react-datepicker";
 import Barchartdata from "./Barchartdata";
 import Piechardata from "./Piechardata";
+import ErrorBoundary from '../../ErrorBoundary';
 
 const Analysis = (props) => {
     const [workspaceId, setWorkspaceId] = useState(null)
@@ -169,11 +170,13 @@ const Analysis = (props) => {
 
     return (
         <>
-            <MenuBar
-                workspaceId={workspaceId}
-                classNameRoute={classNameRoute}
-                state={isDeleteShow}
-            />
+            <ErrorBoundary>
+                <MenuBar
+                    workspaceId={workspaceId}
+                    classNameRoute={classNameRoute}
+                    state={isDeleteShow}
+                />
+            </ErrorBoundary>
             <div className="analysis-container">
                 <div className="content">
                     <div className="container-fluid">
@@ -198,6 +201,7 @@ const Analysis = (props) => {
                                     </div>
                                     <div className="month-dropdown">
                                         <div className="position-relative d-inline-block  AB ">
+                                        <ErrorBoundary>
                                             <DatePicker
                                                 ref={calendarMonthRef}
                                                 selected={currentMonth}
@@ -218,6 +222,7 @@ const Analysis = (props) => {
                                                     }
                                                 }}
                                             />
+                                        </ErrorBoundary>
                                             <span style={{ position: "absolute", right: "9px", bottom: "0px" }}>
                                                 <i
                                                     onClick={openMonthCalender}
@@ -241,13 +246,15 @@ const Analysis = (props) => {
                                     </div>
                                     <div className="right-side-text">
                                         <div className="bold-text">
-                                            <CountUp
-                                                className="total-revenue"
-                                                start={0}
-                                                end={totalTasks}
-                                                delay={0}
-                                                duration={1}
-                                            />
+                                            <ErrorBoundary>
+                                                <CountUp
+                                                    className="total-revenue"
+                                                    start={0}
+                                                    end={totalTasks}
+                                                    delay={0}
+                                                    duration={1}
+                                                />
+                                            </ErrorBoundary>
                                         </div>
                                         <div className="box-main-text">
                                             <div className="">Total Tasks</div>
@@ -265,13 +272,15 @@ const Analysis = (props) => {
                                     </div>
                                     <div className="right-side-text">
                                         <div className="bold-text">
-                                            <CountUp
-                                                className="total-sales"
-                                                start={0}
-                                                end={completedTasks}
-                                                delay={0}
-                                                duration={1}
-                                            />
+                                            <ErrorBoundary>
+                                                <CountUp
+                                                    className="total-sales"
+                                                    start={0}
+                                                    end={completedTasks}
+                                                    delay={0}
+                                                    duration={1}
+                                                />
+                                            </ErrorBoundary>
                                         </div>
                                         <div className="box-main-text">
                                             <div className="">Completed Tasks</div>
@@ -289,13 +298,15 @@ const Analysis = (props) => {
                                     </div>
                                     <div className="right-side-text">
                                         <div className="bold-text">
-                                            <CountUp
-                                                className="Conversion"
-                                                start={0}
-                                                end={memberCount}
-                                                delay={0}
-                                                duration={1}
-                                            />
+                                            <ErrorBoundary>
+                                                <CountUp
+                                                    className="Conversion"
+                                                    start={0}
+                                                    end={memberCount}
+                                                    delay={0}
+                                                    duration={1}
+                                                />
+                                            </ErrorBoundary>
                                         </div>
                                         <div className="box-main-text">
                                             <div className="">Members</div>
@@ -313,13 +324,15 @@ const Analysis = (props) => {
                                     </div>
                                     <div className="right-side-text">
                                         <div className="bold-text">
-                                            <CountUp
-                                                className="today-visit"
-                                                start={0}
-                                                end={totalTimeSpent}
-                                                delay={0}
-                                                duration={1}
-                                            />
+                                            <ErrorBoundary>
+                                                <CountUp
+                                                    className="today-visit"
+                                                    start={0}
+                                                    end={totalTimeSpent}
+                                                    delay={0}
+                                                    duration={1}
+                                                />
+                                            </ErrorBoundary>
                                             {" "}{totalTimeSpent > 1 ? "Hours" : "Hour"}
                                         </div>
                                         <div className="box-main-text">
@@ -336,12 +349,14 @@ const Analysis = (props) => {
                                         <div className="card-heading">Financial Health</div>
                                     </div>
                                     <div className="widget-chart-details">
-                                        <Piechardata
-                                            id="analysisPieChart"
-                                            type="Categories"
-                                            financialHealth={financialHealth > 0 ? financialHealth : []}
-                                            pieChartColor={pieChartColor}
-                                        />
+                                        <ErrorBoundary>
+                                            <Piechardata
+                                                id="analysisPieChart"
+                                                type="Categories"
+                                                financialHealth={financialHealth > 0 ? financialHealth : []}
+                                                pieChartColor={pieChartColor}
+                                            />
+                                        </ErrorBoundary>
 
                                         <div className="total-stats">
                                             <h5 className="text-muted mt-0 align font-small">Financial Health</h5>
@@ -357,7 +372,9 @@ const Analysis = (props) => {
                                     </div>
                                     <div className="bar-graph-box">
                                         <div className="apex-chart-canvas" >
-                                            <Barchartdata barChartData={barChartData} />
+                                            <ErrorBoundary>
+                                                <Barchartdata barChartData={barChartData} />
+                                            </ErrorBoundary>
                                         </div>
                                     </div>
                                 </div>

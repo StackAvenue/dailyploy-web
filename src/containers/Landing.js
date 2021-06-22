@@ -4,6 +4,7 @@ import Header from "../components/Landing/Header";
 import "../assets/css/landing.scss";
 import landing from "../assets/images/landing.jpg";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../ErrorBoundary';
 
 class Landing extends Component {
   render() {
@@ -11,7 +12,9 @@ class Landing extends Component {
       <>
         <div className="container-fluid">
           <div className="main-container">
-            <Header />
+            <ErrorBoundary>
+              <Header />
+            </ErrorBoundary>
             <div className="row no-margin landing">
               <div className="col-md-12 no-padding lcontainer">
                 <div

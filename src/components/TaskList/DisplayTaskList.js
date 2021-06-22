@@ -21,6 +21,7 @@ import userstoryImg from '../../assets/images/userstory.png';
 import roadmapGoals from '../../assets/images/roadmapGoals.png';
 import { ROADMAP_STATUS } from '../../utils/Constants';
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 const DisplayTaskList = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
@@ -179,12 +180,14 @@ const DisplayTaskList = (props) => {
               {props.ProjectTask ? props.ProjectTask.end_date ? moment(props.ProjectTask.end_date).format("DD MMM, YY") : null : null}
               {props.ProjectTask ? !props.ProjectTask.start_date && !props.ProjectTask.end_date ? "No timeline" : null : null}
               &nbsp;&nbsp;&nbsp;
-              <Button variant="outline-dark"
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.isSummaryOpen(props.ProjectTask.id);
-                  //props.closeFilter();
-                }}>Summary</Button>
+              <ErrorBoundary>
+                <Button variant="outline-dark"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    props.isSummaryOpen(props.ProjectTask.id);
+                    //props.closeFilter();
+                  }}>Summary</Button>
+              </ErrorBoundary>
             </div>
           </div>
           <div className="roadmap-status-box">
@@ -300,39 +303,46 @@ const DisplayTaskList = (props) => {
       </div>
       {props.showChecklist && props.ProjectTask.id == props.checklistID ? (
         <div ref={ref} className="checklistModal">
-          <Checklist
-            state={props.state}
-            id={props.ProjectTask.id}
-            closeChecklist={props.closeChecklist}
-          >
-          </Checklist>
+          <ErrorBoundary>
+            <Checklist
+              state={props.state}
+              id={props.ProjectTask.id}
+              closeChecklist={props.closeChecklist}
+            >
+            </Checklist>
+          </ErrorBoundary>
         </div>
       ) : null}
 
       {props.showSummary && props.ProjectTask.id == props.state.summaryID ? (
         <div className="statusModal">
-          <Summary
-            id={props.ProjectTask.id}
-            state={props.state}
-            closeSummary={props.closeSummary}
-            setConjuction={props.setConjuction}
-          ></Summary>
+          <ErrorBoundary>
+            <Summary
+              id={props.ProjectTask.id}
+              state={props.state}
+              closeSummary={props.closeSummary}
+              setConjuction={props.setConjuction}
+              
+            ></Summary>
+          </ErrorBoundary>
         </div>
       ) : null}
 
       {props.showFilter && props.list_id == props.id ? (
         <div className="filter-modal">
-          <Filter
-            state={props.state}
-            setConjuction={props.setConjuction}
-            projectMembers={props.projectMembers}
-            taskStatus={props.taskStatus}
-            displayList={props.displayList}
-            displayFiteredList={props.displayFiteredList}
-            list_id={props.list_id}
-            closeFilter={props.closeFilter}
-            loadFilteredData={props.loadFilteredData}
-          />
+          <ErrorBoundary>
+            <Filter
+              state={props.state}
+              setConjuction={props.setConjuction}
+              projectMembers={props.projectMembers}
+              taskStatus={props.taskStatus}
+              displayList={props.displayList}
+              displayFiteredList={props.displayFiteredList}
+              list_id={props.list_id}
+              closeFilter={props.closeFilter}
+              loadFilteredData={props.loadFilteredData}
+            />
+          </ErrorBoundary>
         </div>) : null}
 
         {props.isFilterLoading && props.list_id == props.id ? 
@@ -344,39 +354,41 @@ const DisplayTaskList = (props) => {
             && props.Userstories.length > 0
             ? props.Userstories.map((userstory) => {
               return (
-                <UserstoryCard
-                  state={props.state}
-                  userstory={userstory}
-                  taskEdit={props.taskEdit}
-                  handleUserstoryModal={handleUserstoryModal}
-                  isUserStoryLoading={props.isUserStoryLoading}
-                  selectedUserStoryId={props.selectedUserStoryId}
-                  projectMembers={props.projectMembers}
-                  list_id={props.list_id}
-                  saveUserstoryTask={props.saveUserstoryTask}
-                  showTask={false}
-                  taskStatus={props.taskStatus}
-                  projectTaskList={props.projectTaskList}
-                  switchTask2={props.switchTask2}
-                  EditTlt={props.EditTlt}
-                  editTltId={props.editTltId}
-                  deleteTlt={props.deleteTlt}
-                  isFilterLoading={props.isFilterLoading}
-                  deleteUserstoryTask={props.deleteUserstoryTask}
-                  handleTaskDetails={handleTaskDetails}
-                  modalDetails={modalDetails}
-                  currentTask={props.state.userStroyTaskDetails}
-                  userTaskDetails={props.userTaskDetails}
-                  // moveToDashBoard={props.moveToDashBoard}
-                  usestoryMoveToDashboard={props.usestoryMoveToDashboard}
-                  fetchUserstory={props.fetchUserstory}
-                  currentUserstory={props.currentUserstory}
-                  updatedTask={props.updatedTask}
-                  userstoryUpdateTask={props.userstoryUpdateTask}
-                  handleUpdatedTask={props.handleUpdatedTask}
-                  showUserstoryTasks={props.showUserstoryTasks}
-                  currentUserstoryTask={props.currentUserstoryTask}
-                />)
+                <ErrorBoundary>
+                  <UserstoryCard
+                    state={props.state}
+                    userstory={userstory}
+                    taskEdit={props.taskEdit}
+                    handleUserstoryModal={handleUserstoryModal}
+                    isUserStoryLoading={props.isUserStoryLoading}
+                    selectedUserStoryId={props.selectedUserStoryId}
+                    projectMembers={props.projectMembers}
+                    list_id={props.list_id}
+                    saveUserstoryTask={props.saveUserstoryTask}
+                    showTask={false}
+                    taskStatus={props.taskStatus}
+                    projectTaskList={props.projectTaskList}
+                    switchTask2={props.switchTask2}
+                    EditTlt={props.EditTlt}
+                    editTltId={props.editTltId}
+                    deleteTlt={props.deleteTlt}
+                    isFilterLoading={props.isFilterLoading}
+                    deleteUserstoryTask={props.deleteUserstoryTask}
+                    handleTaskDetails={handleTaskDetails}
+                    modalDetails={modalDetails}
+                    currentTask={props.state.userStroyTaskDetails}
+                    userTaskDetails={props.userTaskDetails}
+                    // moveToDashBoard={props.moveToDashBoard}
+                    usestoryMoveToDashboard={props.usestoryMoveToDashboard}
+                    fetchUserstory={props.fetchUserstory}
+                    currentUserstory={props.currentUserstory}
+                    updatedTask={props.updatedTask}
+                    userstoryUpdateTask={props.userstoryUpdateTask}
+                    handleUpdatedTask={props.handleUpdatedTask}
+                    showUserstoryTasks={props.showUserstoryTasks}
+                    currentUserstoryTask={props.currentUserstoryTask}
+                  />
+                </ErrorBoundary>)
             })
             : null}
             {props.state.loadingNewUserStory ? <Spinner animation="grow" variant="success" style={{marginTop: "1%",
@@ -394,29 +406,31 @@ const DisplayTaskList = (props) => {
             {props.task_lists && props.task_lists.length > 0
               ? props.task_lists.map((task_lists_task) => {
                 return (
-                  <AddTask
-                    taskEdit={props.taskEdit}
-                    state={props.state}
-                    closeAddTask={props.closeAddTask}
-                    addTaskLoading={props.addTaskLoading}
-                    list_id={props.list_id}
-                    projectMembers={props.projectMembers}
-                    task_lists_task={task_lists_task}
-                    showTask={
-                      props.editTltId != task_lists_task.id ? true : false
-                    }
-                    deleteTlt={props.deleteTlt}
-                    moveToDashBoard={props.moveToDashBoard}
-                    projectTaskList={props.projectTaskList}
-                    switchTask={props.switchTask}
-                    EditTlt={props.EditTlt}
-                    handleSaveTask={props.handleSaveTask}
-                    taskStatus={props.taskStatus}
-                    categories={props.categories}
-                    isFilterLoading={props.isFilterLoading}
-                    handleTaskDetails={handleTaskDetails}
-                    userTaskDetails={props.userTaskDetails}
-                  />
+                  <ErrorBoundary>
+                    <AddTask
+                      taskEdit={props.taskEdit}
+                      state={props.state}
+                      closeAddTask={props.closeAddTask}
+                      addTaskLoading={props.addTaskLoading}
+                      list_id={props.list_id}
+                      projectMembers={props.projectMembers}
+                      task_lists_task={task_lists_task}
+                      showTask={
+                        props.editTltId != task_lists_task.id ? true : false
+                      }
+                      deleteTlt={props.deleteTlt}
+                      moveToDashBoard={props.moveToDashBoard}
+                      projectTaskList={props.projectTaskList}
+                      switchTask={props.switchTask}
+                      EditTlt={props.EditTlt}
+                      handleSaveTask={props.handleSaveTask}
+                      taskStatus={props.taskStatus}
+                      categories={props.categories}
+                      isFilterLoading={props.isFilterLoading}
+                      handleTaskDetails={handleTaskDetails}
+                      userTaskDetails={props.userTaskDetails}
+                    />
+                  </ErrorBoundary>
                 );
               })
               : ""}
@@ -475,109 +489,119 @@ const DisplayTaskList = (props) => {
           {props.TaskShow ? (
             <>
               <div className="showCardDetails">
-                <AddTask
-                  taskEdit={props.taskEdit}
-                  state={props.state}
-                  projectMembers={props.projectMembers}
-                  list_id={props.list_id}
-                  handleSaveTask={props.handleSaveTask}
-                  showTask={false}
-                  taskStatus={props.taskStatus}
-                  displayAddTask={props.displayAddTask}
-                  closeAddTask={props.closeAddTask}
-                  addTaskLoading={props.addTaskLoading}
-                  userTaskDetails={props.userTaskDetails}
-                />
+                <ErrorBoundary>
+                  <AddTask
+                    taskEdit={props.taskEdit}
+                    state={props.state}
+                    projectMembers={props.projectMembers}
+                    list_id={props.list_id}
+                    handleSaveTask={props.handleSaveTask}
+                    showTask={false}
+                    taskStatus={props.taskStatus}
+                    displayAddTask={props.displayAddTask}
+                    closeAddTask={props.closeAddTask}
+                    addTaskLoading={props.addTaskLoading}
+                    userTaskDetails={props.userTaskDetails}
+                  />
+                </ErrorBoundary>
               </div>
             </>
           ) : null}
           <div className="container2OpenModal1">
-            <Button
-              variant="primary"
-              className="add-task-btn"
-              onClick={props.displayAddTask}
-            >
-              <i class="fa fa-plus add-icon" /> Add Task{" "}
-            </Button>
-            <Button
-              variant="primary"
-              className="add-task-btn"
-              onClick={displayAddUserStory}
-            >
-              <i class="fa fa-plus add-icon" /> Add User Story{" "}
-            </Button>
+            <ErrorBoundary>
+              <Button
+                variant="primary"
+                className="add-task-btn"
+                onClick={props.displayAddTask}
+              >
+                <i class="fa fa-plus add-icon" /> Add Task{" "}
+              </Button>
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <Button
+                variant="primary"
+                className="add-task-btn"
+                onClick={displayAddUserStory}
+              >
+                <i class="fa fa-plus add-icon" /> Add User Story{" "}
+              </Button>
+            </ErrorBoundary>
           </div>
         </>
       ) : null}
 
       {props.list_id == props.id && props.detailsModal
-        ? <UserstoryModal
-          state={props.state}
-          userStory_checklists={props.userStory_checklists}
-          userTaskDetails={props.userTaskDetails}
-          taskEdit={props.taskEdit}
-          userstoryDetails={userstoryDetails}
-          handleDescription={props.handleDescription}
-          editUserstory={props.editUserstory}
-          editDescription={props.editDescription}
-          currentTask={props.state.userStroyTaskDetails}
-          setUserStoryDetails={props.setUserStoryDetails}
-          handleTaskDetails={handleTaskDetails}
-          handleUserstoryModal={handleUserstoryModal}
-          addTaskChecklist={props.addTaskChecklist}
-          updateTaskChecklist={props.updateTaskChecklist}
-          deleteTaskChecklist={props.deleteTaskChecklist}
-          modalDetails={modalDetails}
-          currentUserstory={props.currentUserstory}
-          projectMembers={props.projectMembers}
-          handleMemberChange={handleMemberChange}
-          list_id={props.list_id}
-          deleteUserStory={props.deleteUserStory}
-          taskStatus={props.taskStatus}
-          categories={props.categories}
-          saveUserstoryTask={props.saveUserstoryTask}
-          editUserstory={props.editUserstory}
-          handleDetailsClose={handleDetailsClose}
-          addUserstoryChecklist={props.addUserstoryChecklist}
-          updateUserstoryChecklist={props.updateUserstoryChecklist}
-          deleteUserstoryChecklist={props.deleteUserstoryChecklist}
-          editTltId={props.editTltId}
-          updatedData={props.updatedData}
-          handleSaveTask={props.handleSaveTask}
-          EditTlt={props.EditTlt}
-          handleUpdatedData={props.handleUpdatedData}
-          checklistItem={props.checklistItem}
-          newChecklist={props.newChecklist}
-          handleTaskC={props.handleTaskC}
-          action={props.action}
-          saveUserstoryTask={props.saveUserstoryTask}
-        />
+        ? <ErrorBoundary>
+            <UserstoryModal
+            state={props.state}
+            userStory_checklists={props.userStory_checklists}
+            userTaskDetails={props.userTaskDetails}
+            taskEdit={props.taskEdit}
+            userstoryDetails={userstoryDetails}
+            handleDescription={props.handleDescription}
+            editUserstory={props.editUserstory}
+            editDescription={props.editDescription}
+            currentTask={props.state.userStroyTaskDetails}
+            setUserStoryDetails={props.setUserStoryDetails}
+            handleTaskDetails={handleTaskDetails}
+            handleUserstoryModal={handleUserstoryModal}
+            addTaskChecklist={props.addTaskChecklist}
+            updateTaskChecklist={props.updateTaskChecklist}
+            deleteTaskChecklist={props.deleteTaskChecklist}
+            modalDetails={modalDetails}
+            currentUserstory={props.currentUserstory}
+            projectMembers={props.projectMembers}
+            handleMemberChange={handleMemberChange}
+            list_id={props.list_id}
+            deleteUserStory={props.deleteUserStory}
+            taskStatus={props.taskStatus}
+            categories={props.categories}
+            saveUserstoryTask={props.saveUserstoryTask}
+            editUserstory={props.editUserstory}
+            handleDetailsClose={handleDetailsClose}
+            addUserstoryChecklist={props.addUserstoryChecklist}
+            updateUserstoryChecklist={props.updateUserstoryChecklist}
+            deleteUserstoryChecklist={props.deleteUserstoryChecklist}
+            editTltId={props.editTltId}
+            updatedData={props.updatedData}
+            handleSaveTask={props.handleSaveTask}
+            EditTlt={props.EditTlt}
+            handleUpdatedData={props.handleUpdatedData}
+            checklistItem={props.checklistItem}
+            newChecklist={props.newChecklist}
+            handleTaskC={props.handleTaskC}
+            action={props.action}
+            saveUserstoryTask={props.saveUserstoryTask}
+          />
+        </ErrorBoundary>
         : null}
 
-      <Modal
-        className="task-delete-confirm-modal "
-        show={deleteModal}
-        onHide={(e) => {
-          changeDeleteModal(false);
-        }}
-        style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
-      >
-        <div className="delete-tag">Are you sure you want to delete ?</div>
-        <div className="button-delcancel">
-          <button className="del-button" onClick={deleteTask}>
-            Delete
-          </button>
-          <button
-            className="cancel-button"
-            onClick={(e) => {
-              e.preventDefault();
-              changeDeleteModal(false);
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </Modal>
+      <ErrorBoundary>  
+        <Modal
+          className="task-delete-confirm-modal "
+          show={deleteModal}
+          onHide={(e) => {
+            changeDeleteModal(false);
+          }}
+          style={{ paddingTop: "1.5%", paddingBottom: "30px" }}
+        >
+          <div className="delete-tag">Are you sure you want to delete ?</div>
+          <div className="button-delcancel">
+            <button className="del-button" onClick={deleteTask}>
+              Delete
+            </button>
+            <button
+              className="cancel-button"
+              onClick={(e) => {
+                e.preventDefault();
+                changeDeleteModal(false);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </Modal>
+      </ErrorBoundary>
     </div>
   );
 };

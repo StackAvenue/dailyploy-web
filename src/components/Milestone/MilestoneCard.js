@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { MONTH_FORMAT } from "../../utils/Constants";
 import moment from "moment";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 function MilestoneCard(props) {
     const [nameHover, setNameHover] = useState(false);
@@ -169,15 +170,17 @@ function MilestoneCard(props) {
                             <div className="due-date-input"
                                 onMouseEnter={handleDateHover}
                                 onMouseLeave={handleDateHover}>
-                                <DatePicker
-                                    onSelect={props.setDate}
-                                    placeholderText="Select Due Date"
-                                    selected={props.dueDate}
-                                    className={`${dateHover
-                                        ? props.errorDueDate
-                                            ? "form-control show-error"
-                                            : "form-control"
-                                        : " form-control off-hover"}`} />
+                                <ErrorBoundary>
+                                    <DatePicker
+                                        onSelect={props.setDate}
+                                        placeholderText="Select Due Date"
+                                        selected={props.dueDate}
+                                        className={`${dateHover
+                                            ? props.errorDueDate
+                                                ? "form-control show-error"
+                                                : "form-control"
+                                            : " form-control off-hover"}`} />
+                                </ErrorBoundary>
                             </div>
                             {editStatusTags()}
                         </div>

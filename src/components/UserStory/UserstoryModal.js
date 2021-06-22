@@ -21,6 +21,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { debounce } from '../../utils/function';
 import Loader from "react-loader-spinner";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 // import { Button } from "react-bootstrap";
 
 function UserstoryModal(props) {
@@ -673,12 +674,14 @@ function UserstoryModal(props) {
                         "Task not started"
                       )
                     ) : (
-                      <DatePicker
-                        onSelect={handleDate}
-                        placeholderText="Select Due Date"
-                        selected={startDate}
-                        className={`form-control datepicker`}
-                      />
+                      <ErrorBoundary>
+                        <DatePicker
+                          onSelect={handleDate}
+                          placeholderText="Select Due Date"
+                          selected={startDate}
+                          className={`form-control datepicker`}
+                        />
+                      </ErrorBoundary>
                     )}
                   </div>
                 </div>
@@ -694,12 +697,14 @@ function UserstoryModal(props) {
                         "Task not started"
                       )
                     ) : (
-                      <DatePicker
-                        onSelect={handleDate}
-                        placeholderText="Select Due Date"
-                        selected={endDate}
-                        className={`form-control datepicker`}
-                      />
+                      <ErrorBoundary>
+                        <DatePicker
+                          onSelect={handleDate}
+                          placeholderText="Select Due Date"
+                          selected={endDate}
+                          className={`form-control datepicker`}
+                        />
+                      </ErrorBoundary>
                     )}
                   </div>
                 </div>
@@ -1056,22 +1061,24 @@ function UserstoryModal(props) {
                     </div>
                   </div>
                   <div className="col-md-11 d-inline-block">
-                    <CommentUpload
-                      save={saveComments}
-                      comments={comments}
-                      showAttachIcon={true}
-                      commentName="comments"
-                      handleInputChange={handleInputChange}
-                      showSave={true}
-                      pictures={pictures}
-                      state={state}
-                      showBox={showBox}
-                      // onClickOutside={this.onClickOutsideAddCommnetBox}
-                      updateUploadedState={updateUploadedState}
-                      removeUploadedImage={removeUploadedImage}
+                    <ErrorBoundary>
+                  `   <CommentUpload
+                        save={saveComments}
+                        comments={comments}
+                        showAttachIcon={true}
+                        commentName="comments"
+                        handleInputChange={handleInputChange}
+                        showSave={true}
+                        pictures={pictures}
+                        state={state}
+                        showBox={showBox}
+                        // onClickOutside={this.onClickOutsideAddCommnetBox}
+                        updateUploadedState={updateUploadedState}
+                        removeUploadedImage={removeUploadedImage}
 
-                      // showCommentBox={this.onClickAddCommnetBox}
-                    />
+                        // showCommentBox={this.onClickAddCommnetBox}
+                      />`
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
@@ -1099,16 +1106,18 @@ function UserstoryModal(props) {
                           </div>
                         </div>
                         <div className="col-md-10 d-inline-block mt-2">
-                          <CommentUpload
-                            save={saveUpdatedComments}
-                            comments={editCommentValue}
-                            handleInputChange={handleCommentInput}
-                            showSave={true}
-                            showAttachIcon={true}
-                            showBox={false}
-                            commentName="editedComments"
-                            updateUploadedState={updateUploadedState}
-                          />
+                          <ErrorBoundary>
+                            <CommentUpload
+                              save={saveUpdatedComments}
+                              comments={editCommentValue}
+                              handleInputChange={handleCommentInput}
+                              showSave={true}
+                              showAttachIcon={true}
+                              showBox={false}
+                              commentName="editedComments"
+                              updateUploadedState={updateUploadedState}
+                            />
+                          </ErrorBoundary>
                         </div>
                       </div>
                     ) : (
@@ -1187,11 +1196,13 @@ function UserstoryModal(props) {
                               })}
                             </div>
                             {viewerIsOpen ? (
-                                <ImgsViewer
-                                  imgs={[{ src: `${imge_url}` }]}
-                                  isOpen={viewerIsOpen}
-                                  onClose={closeViewer}
-                                />
+                                <ErrorBoundary>
+                                  <ImgsViewer
+                                    imgs={[{ src: `${imge_url}` }]}
+                                    isOpen={viewerIsOpen}
+                                    onClose={closeViewer}
+                                  />
+                                </ErrorBoundary>
                               ) : null}
                             <div
                               className="col-md-12"
@@ -1390,12 +1401,14 @@ function UserstoryModal(props) {
                         "No due date"
                       )
                     ) : (
-                      <DatePicker
-                        onSelect={handleDate}
-                        placeholderText="Select Due Date"
-                        selected={dueDate}
-                        className={`form-control datepicker`}
-                      />
+                      <ErrorBoundary>
+                        <DatePicker
+                          onSelect={handleDate}
+                          placeholderText="Select Due Date"
+                          selected={dueDate}
+                          className={`form-control datepicker`}
+                        />
+                      </ErrorBoundary>
                     )}
                   </div>
                 </div>
@@ -1585,37 +1598,39 @@ function UserstoryModal(props) {
                       return (
                         <div className="checklist-item">
                           <div className="showCardDetails4">
-                                    <AddTask
-                                        showTask={
-                                            props.editTltId != item.id ? true : false
-                                        }
-                                        userTaskDetails={props.userTaskDetails}
-                                        // showTask={false}
-                                        // deleteTask={deleteTask}
-                                        // moveToDashBoard={props.moveToDashBoard}
-                                        // moveToDashboardUTask={moveToDashboardUTask}
+                                    <ErrorBoundary>
+                                      <AddTask
+                                          showTask={
+                                              props.editTltId != item.id ? true : false
+                                          }
+                                          userTaskDetails={props.userTaskDetails}
+                                          // showTask={false}
+                                          // deleteTask={deleteTask}
+                                          // moveToDashBoard={props.moveToDashBoard}
+                                          // moveToDashboardUTask={moveToDashboardUTask}
 
-                                        // projectTaskList={props.projectTaskList}
-                                        // switchTask={props.switchTask}
-                                        EditTlt={props.EditTlt}
-                                        // handleSaveTask={props.handleSaveTask}
-                                        taskStatus={props.taskStatus}
-                                        categories={props.categories}
-                                        // isFilterLoading={props.isFilterLoading}
-                                        // handleTaskDetails={handleTaskDetails}
-                                        // handleTaskDetails={props.handleTaskDetails}
-                                        modalDetails={props.modalDetails}
-                                        currentTask={item}
-                                        projectMembers={props.projectMembers}
-                                        list_id={props.list_id}
-                                        task_lists_task={item}
-                                        isUserstory={true}
-                                        state={props.state}
-                                        taskEdit={props.taskEdit}
-                                        isUserDetailOpen={isUserDetailOpen}
-                                        handleUserstoryTask={handleUserstoryTask}
-                                        // taskStatus={props.taskStatus}
-                                         />
+                                          // projectTaskList={props.projectTaskList}
+                                          // switchTask={props.switchTask}
+                                          EditTlt={props.EditTlt}
+                                          // handleSaveTask={props.handleSaveTask}
+                                          taskStatus={props.taskStatus}
+                                          categories={props.categories}
+                                          // isFilterLoading={props.isFilterLoading}
+                                          // handleTaskDetails={handleTaskDetails}
+                                          // handleTaskDetails={props.handleTaskDetails}
+                                          modalDetails={props.modalDetails}
+                                          currentTask={item}
+                                          projectMembers={props.projectMembers}
+                                          list_id={props.list_id}
+                                          task_lists_task={item}
+                                          isUserstory={true}
+                                          state={props.state}
+                                          taskEdit={props.taskEdit}
+                                          isUserDetailOpen={isUserDetailOpen}
+                                          handleUserstoryTask={handleUserstoryTask}
+                                          // taskStatus={props.taskStatus}
+                                          />
+                                        </ErrorBoundary>
                                 </div>
                           {/* <input type="checkbox" className="checklist-tick" /> */}
                           {/* <span className="checklist-name">
@@ -1629,18 +1644,20 @@ function UserstoryModal(props) {
                   {addTaskList ? (
                     <>
                       <div className="showCardDetails3">
-                        <AddTask
-                          projectMembers={props.projectMembers}
-                          list_id={props.list_id}
-                          userTaskDetails={props.userTaskDetails}
-                          isUserstory={true}
-                          handleUserstoryTask={handleUserstoryTask}
-                          closeAddTask={closeAddTask}
-                          showTask={false}
-                          state={props.state}
-                          isUserDetailOpen={isUserDetailOpen}
-                          taskStatus={props.taskStatus}
-                        />
+                        <ErrorBoundary>
+                          <AddTask
+                            projectMembers={props.projectMembers}
+                            list_id={props.list_id}
+                            userTaskDetails={props.userTaskDetails}
+                            isUserstory={true}
+                            handleUserstoryTask={handleUserstoryTask}
+                            closeAddTask={closeAddTask}
+                            showTask={false}
+                            state={props.state}
+                            isUserDetailOpen={isUserDetailOpen}
+                            taskStatus={props.taskStatus}
+                          />
+                        </ErrorBoundary>
                         <div className="container2OpenModal1">
                         <Button
                           variant="primary"
@@ -1684,22 +1701,24 @@ function UserstoryModal(props) {
                     </div>
                   </div>
                   <div className="col-md-11 d-inline-block">
-                    <CommentUpload
-                      save={saveComments}
-                      comments={comments}
-                      showAttachIcon={true}
-                      commentName="comments"
-                      handleInputChange={handleInputChange}
-                      showSave={true}
-                      pictures={pictures}
-                      showBox={showBox}
-                      // showBox={this.state.showAddBox}
-                      // onClickOutside={this.onClickOutsideAddCommnetBox}
-                      updateUploadedState={updateUploadedState}
-                      removeUploadedImage={removeUploadedImage}
+                    <ErrorBoundary>
+                      <CommentUpload
+                        save={saveComments}
+                        comments={comments}
+                        showAttachIcon={true}
+                        commentName="comments"
+                        handleInputChange={handleInputChange}
+                        showSave={true}
+                        pictures={pictures}
+                        showBox={showBox}
+                        // showBox={this.state.showAddBox}
+                        // onClickOutside={this.onClickOutsideAddCommnetBox}
+                        updateUploadedState={updateUploadedState}
+                        removeUploadedImage={removeUploadedImage}
 
-                      // showCommentBox={this.onClickAddCommnetBox}
-                    />
+                        // showCommentBox={this.onClickAddCommnetBox}
+                      />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
@@ -1727,17 +1746,19 @@ function UserstoryModal(props) {
                           </div>
                         </div>
                         <div className="col-md-10 d-inline-block mt-2">
-                          <CommentUpload
-                            save={saveUpdatedComments}
-                            comments={editCommentValue}
-                            handleInputChange={handleCommentInput}
-                            showSave={true}
-                            showAttachIcon={true}
-                            showBox={false}
-                            pictures={pictures}
-                            commentName="editedComments"
-                            updateUploadedState={updateUploadedState}
-                          />
+                          <ErrorBoundary>
+                            <CommentUpload
+                              save={saveUpdatedComments}
+                              comments={editCommentValue}
+                              handleInputChange={handleCommentInput}
+                              showSave={true}
+                              showAttachIcon={true}
+                              showBox={false}
+                              pictures={pictures}
+                              commentName="editedComments"
+                              updateUploadedState={updateUploadedState}
+                            />
+                          </ErrorBoundary>
                         </div>
                       </div>
                     ) : (
@@ -1817,11 +1838,13 @@ function UserstoryModal(props) {
                               })}
                             </div>
                             {viewerIsOpen ? (
-                                <ImgsViewer
-                                  imgs={[{ src: `${imge_url}` }]}
-                                  isOpen={viewerIsOpen}
-                                  onClose={closeViewer}
-                                />
+                                <ErrorBoundary>
+                                  <ImgsViewer
+                                    imgs={[{ src: `${imge_url}` }]}
+                                    isOpen={viewerIsOpen}
+                                    onClose={closeViewer}
+                                  />
+                                </ErrorBoundary>
                               ) : null}
                             <div
                               className="col-md-12"

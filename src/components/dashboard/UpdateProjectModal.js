@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { get } from "../../utils/API";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class UpdateProjectModal extends Component {
   constructor(props) {
@@ -84,117 +85,127 @@ class UpdateProjectModal extends Component {
   render() {
     return (
       <>
-        <Modal
-          className="project-modal"
-          show={this.props.state.show}
-          onHide={this.props.handleClose}
-        >
-          <div className="row no-margin">
-            <div className="col-md-12 header">
-              <span>Update Project</span>
-              <button
-                className="btn btn-link float-right"
-                onClick={this.props.handleClose}
-              >
-                <img src={Close} alt="close" />
-              </button>
-            </div>
-            <div className="col-md-12 body">
-              <div className="col-md-12 no-padding input-row">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Name
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <input
-                    type="text"
-                    name="projectName"
-                    value={this.state.projectName}
-                    onChange={this.handleChangeInput}
-                    placeholder="Write Project Name here"
-                    className="form-control"
-                  />
-                </div>
+        <ErrorBoundary>
+          <Modal
+            className="project-modal"
+            show={this.props.state.show}
+            onHide={this.props.handleClose}
+          >
+            <div className="row no-margin">
+              <div className="col-md-12 header">
+                <span>Update Project</span>
+                <button
+                  className="btn btn-link float-right"
+                  onClick={this.props.handleClose}
+                >
+                  <img src={Close} alt="close" />
+                </button>
               </div>
-              <div className="col-md-12 no-padding input-row">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Duration
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <div
-                    className="col-md-6 d-inline-block"
-                    style={{ "padding-left": "0" }}
-                  >
-                    <DatePicker
-                      selected={this.state.dateFrom}
-                      onChange={this.handleDateFrom}
-                    />
+              <div className="col-md-12 body">
+                <div className="col-md-12 no-padding input-row">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Name
                   </div>
-                  <div
-                    className="col-md-6 d-inline-block"
-                    style={{ "padding-right": "0" }}
-                  >
-                    <DatePicker
-                      selected={this.state.dateTo}
-                      onChange={this.handleDateTo}
+                  <div className="col-md-10 d-inline-block">
+                    <input
+                      type="text"
+                      name="projectName"
+                      value={this.state.projectName}
+                      onChange={this.handleChangeInput}
+                      placeholder="Write Project Name here"
+                      className="form-control"
                     />
                   </div>
                 </div>
-              </div>
-              <div className="col-md-12 row no-margin no-padding input-row">
-                <div className="col-md-2 no-padding label">Members</div>
-                <div className="col-md-10">
-                  <Typeahead
-                    id="projectMembers"
-                    onChange={selected => this.handleChangeMember(selected)}
-                    multiple={this.state.multiEmail}
-                    options={this.state.emailOptions}
-                    placeholder="Write Here"
-                  />
-                </div>
-              </div>
-              <div className="col-md-12 row no-margin no-padding input-row">
-                <div className="col-md-2 no-padding label">Select Color</div>
-                <div className="col-md-10">
-                  <button
-                    className="btn btn-default btn-color-picker"
-                    style={{
-                      backgroundColor: `${this.state.background}`,
-                    }}
-                    onClick={this.handleChangeColor}
-                  />
-                  {this.state.displayColorPicker ? (
-                    <div onClick={this.handleColorPickerClose}>
-                      <TwitterPicker
-                        color={this.state.background}
-                        onChangeComplete={this.handleChangeComplete}
-                      >
-                        <Twitter colors={this.colors} />
-                      </TwitterPicker>
+                <div className="col-md-12 no-padding input-row">
+                  <div className="col-md-2 d-inline-block no-padding label">
+                    Duration
+                  </div>
+                  <div className="col-md-10 d-inline-block">
+                    <div
+                      className="col-md-6 d-inline-block"
+                      style={{ "padding-left": "0" }}
+                    >
+                      <ErrorBoundary>
+                        <DatePicker
+                          selected={this.state.dateFrom}
+                          onChange={this.handleDateFrom}
+                        />
+                      </ErrorBoundary>
                     </div>
-                  ) : null}
+                    <div
+                      className="col-md-6 d-inline-block"
+                      style={{ "padding-right": "0" }}
+                    >
+                      <ErrorBoundary>
+                        <DatePicker
+                          selected={this.state.dateTo}
+                          onChange={this.handleDateTo}
+                        />
+                      </ErrorBoundary>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-12 no-padding input-row">
-                <div className="col-md-5 ml-auto">
-                  <button
-                    type="button"
-                    className="btn col-md-5 button1 btn-primary"
-                    onClick={this.addProject}
-                  >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    className="btn col-md-6 button2 btn-primary"
-                    onClick={this.props.handleClose}
-                  >
-                    Cancel
-                  </button>
+                <div className="col-md-12 row no-margin no-padding input-row">
+                  <div className="col-md-2 no-padding label">Members</div>
+                  <div className="col-md-10">
+                  <ErrorBoundary>
+                    <Typeahead
+                      id="projectMembers"
+                      onChange={selected => this.handleChangeMember(selected)}
+                      multiple={this.state.multiEmail}
+                      options={this.state.emailOptions}
+                      placeholder="Write Here"
+                    />
+                  </ErrorBoundary>
+                  </div>
+                </div>
+                <div className="col-md-12 row no-margin no-padding input-row">
+                  <div className="col-md-2 no-padding label">Select Color</div>
+                  <div className="col-md-10">
+                    <button
+                      className="btn btn-default btn-color-picker"
+                      style={{
+                        backgroundColor: `${this.state.background}`,
+                      }}
+                      onClick={this.handleChangeColor}
+                    />
+                    {this.state.displayColorPicker ? (
+                      <div onClick={this.handleColorPickerClose}>
+                        <ErrorBoundary>
+                        <TwitterPicker
+                          color={this.state.background}
+                          onChangeComplete={this.handleChangeComplete}
+                        >
+                          <Twitter colors={this.colors} />
+                        </TwitterPicker>
+                        </ErrorBoundary>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="col-md-12 no-padding input-row">
+                  <div className="col-md-5 ml-auto">
+                    <button
+                      type="button"
+                      className="btn col-md-5 button1 btn-primary"
+                      onClick={this.addProject}
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="btn col-md-6 button2 btn-primary"
+                      onClick={this.props.handleClose}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Modal>
+          </Modal>
+        </ErrorBoundary>
       </>
     );
   }

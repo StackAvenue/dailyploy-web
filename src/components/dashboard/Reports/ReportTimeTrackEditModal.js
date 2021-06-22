@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 class ReportTimeTrackEditModal extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class ReportTimeTrackEditModal extends Component {
     const { props } = this;
     return (
       <>
+      <ErrorBoundary>
         <Modal
           className="confirm-modal report-edit-timetrack"
           show={props.state.editable}
@@ -41,14 +43,16 @@ class ReportTimeTrackEditModal extends Component {
               <div className="col-md-12 time-edit no-padding d-inline-block">
                 <div className="col-md-4 d-inline-block">Start DateTime</div>
                 <div className="col-md-6 d-inline-block track-time-edit">
-                  <DatePicker
-                    selected={new Date(props.state.fromDateTime)}
-                    onChange={date => props.handleTimeFrom(date)}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={1}
-                    dateFormat="d MMM, HH:mm"
-                  />
+                  <ErrorBoundary>
+                    <DatePicker
+                      selected={new Date(props.state.fromDateTime)}
+                      onChange={date => props.handleTimeFrom(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={1}
+                      dateFormat="d MMM, HH:mm"
+                    />
+                  </ErrorBoundary>
                 </div>
               </div>
               <div
@@ -57,14 +61,16 @@ class ReportTimeTrackEditModal extends Component {
               >
                 <div className="col-md-4 d-inline-block">End DateTime</div>
                 <div className="col-md-6 d-inline-block track-time-edit">
-                  <DatePicker
-                    selected={new Date(props.state.toDateTime)}
-                    onChange={date => props.handleTimeTo(date)}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={1}
-                    dateFormat="d MMM, HH:mm"
-                  />
+                  <ErrorBoundary>
+                    <DatePicker
+                      selected={new Date(props.state.toDateTime)}
+                      onChange={date => props.handleTimeTo(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={1}
+                      dateFormat="d MMM, HH:mm"
+                    />
+                  </ErrorBoundary>
                 </div>
                 {props.state.trackTimeError ? (
                   <>
@@ -99,6 +105,7 @@ class ReportTimeTrackEditModal extends Component {
             </div>
           </div>
         </Modal>
+      </ErrorBoundary>
       </>
     );
   }

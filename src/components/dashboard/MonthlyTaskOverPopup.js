@@ -5,6 +5,7 @@ import { post, mockGet, mockPost } from "../../utils/API";
 import { DATE_FORMAT1, MONTH_FORMAT } from "./../../utils/Constants";
 import moment from "moment";
 import { Alert, UncontrolledAlert } from 'reactstrap';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class MonthlyTaskOverPopup extends Component {
   constructor(props) {
@@ -183,10 +184,12 @@ class MonthlyTaskOverPopup extends Component {
               className={`d-inline-block task-ongoing`}
             ></div>
             <div className="d-inline-block task-timer">
-              <Timer
-                startOn={this.state.startOn}
-                isStart={this.state.status}
-              />
+              <ErrorBoundary>
+                <Timer
+                  startOn={this.state.startOn}
+                  isStart={this.state.status}
+                />
+              </ErrorBoundary>
             </div>
 
             {this.state.icon === 'pause' ?
