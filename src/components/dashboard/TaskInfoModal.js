@@ -30,6 +30,8 @@ import ConfirmModal from "./../ConfirmModal";
 import Loader from "react-loader-spinner";
 import PropTypes from 'prop-types';
 
+const DEBOUNCE_TIME = 500;
+
 class TaskInfoModal extends Component {
   constructor(props) {
     super(props);
@@ -1163,7 +1165,7 @@ class TaskInfoModal extends Component {
             show={this.state.showConfirm}
             message="Do you want to delete the Tracked Time?"
             buttonText="delete"
-            onClick={debounce(() => this.deleteTimeTrack, 500)}
+            onClick={debounce(() => this.deleteTimeTrack, DEBOUNCE_TIME)}
             closeModal={this.handleDeleteLog}
             style={{
               padding: "9% 0 30px 4%",

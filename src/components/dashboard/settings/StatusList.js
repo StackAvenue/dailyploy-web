@@ -12,6 +12,7 @@ import Loader from 'react-loader-spinner'
 import "../../../assets/css/TaskProjectList.scss";
 import PropTypes from 'prop-types';
 
+const  DEBOUNCE_TIME = 500;
 
 const StatusList = (props) => {
     const [statusList, setStatusList] = useState([]);
@@ -92,7 +93,7 @@ const StatusList = (props) => {
                 }
             }
         }
-    }, 500)
+    }, DEBOUNCE_TIME)
 
     const editCategory = async (item) => {
         if (editStatus && editStatus.id) {
@@ -290,7 +291,7 @@ const StatusList = (props) => {
                             show={toggleDel}
                             message="Are you sure to Delete The Status?"
                             buttonText="delete"
-                            onClick={debounce(() => deleteCategory, 500)}
+                            onClick={debounce(() => deleteCategory, DEBOUNCE_TIME)}
                             closeModal={handleCloseDeleteStatus}
                         />
                     ) : null

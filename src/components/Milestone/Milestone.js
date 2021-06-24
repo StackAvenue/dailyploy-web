@@ -15,6 +15,8 @@ import { debounce } from "../../utils/function";
 import VideoLoader from "../dashboard/VideoLoader";
 import { MONTH_FORMAT, FULL_DATE } from "../../utils/Constants";
 
+const DEBOUNCE_TIME = 500;
+
 function Milestone(props) {
     const [workspaceId, setWorkspaceId] = useState(null)
     const [projectId, setProjectId] = useState(null)
@@ -223,7 +225,7 @@ function Milestone(props) {
                 showToast("Something went wrong. Please contact support");
             }
         }
-    }, 500)
+    }, DEBOUNCE_TIME)
 
     const updateMilestone = debounce(async () => {
         if (edit) {
@@ -263,7 +265,7 @@ function Milestone(props) {
                 }
             }
         }
-    }, 500)
+    },  DEBOUNCE_TIME)
 
     const deleteMilestone = debounce(async () => {
         setIsLoading(true)

@@ -23,6 +23,8 @@ import Loader from "react-loader-spinner";
 import PropTypes from 'prop-types';
 // import { Button } from "react-bootstrap";
 
+const DEBOUNCE_TIME = 500;
+
 function UserstoryModal(props) {
   const [comments, setComment] = useState(null);
   // const [checklist, setChecklist] = useState([]);
@@ -1200,7 +1202,7 @@ function UserstoryModal(props) {
                               <span onClick={() => editComments(item)}>
                                 Edit
                               </span>
-                              <span onClick={() => debounce(() => deleteComment(item), 500)}>
+                              <span onClick={() => debounce(() => deleteComment(item), DEBOUNCE_TIME)}>
                                 Delete
                               </span>
                               <div
@@ -1830,7 +1832,7 @@ function UserstoryModal(props) {
                               <span onClick={() => editComments(item)}>
                                 Edit
                               </span>
-                              <span onClick={() => debounce(() => deleteComment(item), 500)}>
+                              <span onClick={() => debounce(() => deleteComment(item), DEBOUNCE_TIME)}>
                                 Delete
                               </span>
                               <div

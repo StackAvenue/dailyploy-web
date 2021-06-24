@@ -15,6 +15,8 @@ import ConfirmModal from "./../ConfirmModal";
 import { toast } from "react-toastify";
 import { debounce } from '../../utils/function';
 
+const  DEBOUNCE_TIME = 500;
+
 class RecurringTaskModal extends React.Component {
   constructor(props) {
     super(props);
@@ -570,7 +572,7 @@ class RecurringTaskModal extends React.Component {
         taskloader: false
       });
     }
-  }, 500);
+  },  DEBOUNCE_TIME);
 
   updateTask = debounce( async () => {
     this.setState({ taskloader: true });
@@ -597,7 +599,7 @@ class RecurringTaskModal extends React.Component {
         showConfirm: false
       });
     }
-  }, 500);
+  },  DEBOUNCE_TIME);
 
   closeConfirmModal = () => {
     this.setState({

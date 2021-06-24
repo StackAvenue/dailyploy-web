@@ -15,6 +15,8 @@ import RecurringTaskModal from "./RecurringTaskModal";
 import "./../../../src/assets/css/taskList.scss";
 import { debounce } from '../../utils/function';
 
+const DEBOUNCE_TIME = 500;
+
 class TaskList extends Component {
   constructor(props) {
     super(props);
@@ -704,7 +706,7 @@ class TaskList extends Component {
                 ? " this task"
                 : "these tasks"
               }?`}
-            onClick={debounce(() => this.deleteTasks, 500)}
+            onClick={debounce(() => this.deleteTasks, DEBOUNCE_TIME)}
             closeModal={this.closeModal}
             buttonText="Delete"
             show={this.state.showConfirm}
