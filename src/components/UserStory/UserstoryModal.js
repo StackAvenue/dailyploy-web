@@ -1200,7 +1200,7 @@ function UserstoryModal(props) {
                               <span onClick={() => editComments(item)}>
                                 Edit
                               </span>
-                              <span onClick={() => deleteComment(item)}>
+                              <span onClick={() => debounce(() => deleteComment(item), 500)}>
                                 Delete
                               </span>
                               <div
@@ -1830,7 +1830,7 @@ function UserstoryModal(props) {
                               <span onClick={() => editComments(item)}>
                                 Edit
                               </span>
-                              <span onClick={() => deleteComment(item)}>
+                              <span onClick={() => debounce(() => deleteComment(item), 500)}>
                                 Delete
                               </span>
                               <div

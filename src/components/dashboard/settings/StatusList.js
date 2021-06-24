@@ -290,7 +290,7 @@ const StatusList = (props) => {
                             show={toggleDel}
                             message="Are you sure to Delete The Status?"
                             buttonText="delete"
-                            onClick={deleteCategory}
+                            onClick={debounce(() => deleteCategory, 500)}
                             closeModal={handleCloseDeleteStatus}
                         />
                     ) : null

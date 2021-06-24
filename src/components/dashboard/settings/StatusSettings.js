@@ -8,6 +8,8 @@ import ConfirmModal from "../../ConfirmModal";
 import pencil from "../../../assets/images/pencil.png";
 import delete1 from "../../../assets/images/delete.png";
 import UpdateStatusModal from "./UpdateStatusModal";
+import { debounce } from '../../../utils/function';
+
 class StatusSettings extends Component {
   constructor(props) {
     super(props);
@@ -456,7 +458,7 @@ class StatusSettings extends Component {
                               </button>
                               <button
                                 className="btn btn-link"
-                                onClick={this.addCategory}
+                                onClick={debounce(() => this.addCategory, 500)}
                               >
                                 <span>
                                   <i class="fa fa-check" aria-hidden="true"></i>
@@ -585,7 +587,7 @@ class StatusSettings extends Component {
                                 </button>
                                 <button
                                   className="btn btn-link"
-                                  onClick={this.addCategory}
+                                  onClick={debounce(() => this.addCategory, 500)}
                                 >
                                   <span>
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -604,7 +606,7 @@ class StatusSettings extends Component {
                 show={this.state.showConfirm}
                 message="Are you sure to Delete The Status?"
                 buttonText="delete"
-                onClick={this.deleteCategory}
+                onClick={debounce(() => this.deleteCategory, 500)}
                 closeModal={this.handleCloseDeleteStatus}
               />
             ) : null}

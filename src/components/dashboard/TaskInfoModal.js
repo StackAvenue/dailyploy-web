@@ -1163,7 +1163,7 @@ class TaskInfoModal extends Component {
             show={this.state.showConfirm}
             message="Do you want to delete the Tracked Time?"
             buttonText="delete"
-            onClick={this.deleteTimeTrack}
+            onClick={debounce(() => this.deleteTimeTrack, 500)}
             closeModal={this.handleDeleteLog}
             style={{
               padding: "9% 0 30px 4%",

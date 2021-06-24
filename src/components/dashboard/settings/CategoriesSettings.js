@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ConfirmModal from "../../ConfirmModal";
 import Loader from 'react-loader-spinner';
 import PropTypes from 'prop-types';
+import { debounce } from '../../../utils/function';
 
 class CategoriesSettings extends Component {
   constructor(props) {
@@ -270,7 +271,7 @@ class CategoriesSettings extends Component {
                             </button>
                             <button
                               className="btn btn-link"
-                              onClick={this.addCategory}
+                              onClick={debounce(() => this.addCategory, 500)}
                             >
                               <span>
                                 <i class="fa fa-check" aria-hidden="true"></i>
@@ -315,7 +316,7 @@ class CategoriesSettings extends Component {
                                   </button>
                                   <button
                                     className="btn btn-link"
-                                    onClick={this.editCategory}
+                                    onClick={debounce(() => this.editCategory, 500)}
                                   >
                                     <span>
                                       <i class="fa fa-check" aria-hidden="true"></i>
