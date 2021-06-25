@@ -5,6 +5,8 @@ import cookie from "react-cookies";
 import DailyPloyToast from "./../../components/DailyPloyToast";
 import { toast } from "react-toastify";
 import { post } from "./../../utils/API";
+import PropTypes from 'prop-types';
+import { debounce } from '../../utils/function';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -48,7 +50,7 @@ class Sidebar extends Component {
     this.setState({ [name]: value, nameError: value ? "" : "cannot be empty" });
   };
 
-  createWorkspace = async () => {
+  createWorkspace =  async () => {
     if (this.state.workspaceName != "") {
       let workspaceDate = {
         user_id: this.props.userInfo.id,
@@ -127,6 +129,15 @@ class Sidebar extends Component {
       </>
     );
   }
+}
+
+Sidebar.propTypes = {
+workspaces: PropTypes.array.isRequired,
+workspaceId: PropTypes.string,
+workspaceName: PropTypes.string.isRequired,
+callWorkspace: PropTypes.func,
+userInfo: PropTypes.object.isRequired,
+updateWorkspaces: PropTypes.func.isRequired
 }
 
 export default Sidebar;

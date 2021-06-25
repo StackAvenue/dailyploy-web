@@ -6,6 +6,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import DailyPloySelect from "./../DailyPloySelect";
 import cookie from "react-cookies";
+import PropTypes from 'prop-types';
 
 const RadioOptions = ({ options, selected, onChange }) => {
   return (
@@ -274,6 +275,18 @@ class AddMemberModal extends Component {
       </>
     );
   }
+}
+
+AddMemberModal.propTypes = {
+  state: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  handleChangeMemberInput: PropTypes.func.isRequired,
+  handleChangeMemberRadio: PropTypes.func.isRequired,
+  addMember: PropTypes.func.isRequired,
+  projects: PropTypes.array.isRequired,
+  selectAutoSuggestion: PropTypes.func.isRequired,
+  handleChangeProjectSelect: PropTypes.func.isRequired,
+  handleExpense: PropTypes.func.isRequired,
 }
 
 export default AddMemberModal;

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import "../../assets/css/TaskProjectList.scss";
 import { debounce } from "../../utils/function";
+import PropTypes from 'prop-types';
+
 class ProjectList extends Component {
   constructor(props) {
     super(props);
@@ -51,5 +53,12 @@ class ProjectList extends Component {
       </div>
     );
   }
+}
+ProjectList.propTypes = {
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  handleOpenTaskData: PropTypes.func.isRequired,
+  bgcolor: PropTypes.string.isRequired,
+  
 }
 export default ProjectList;

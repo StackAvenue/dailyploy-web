@@ -23,6 +23,7 @@ import ClockIcon from "../../assets/images/hourglasss.gif";
 
 import PauseIcon from "../../assets/images/hourglasss.gif";
 import PlayIcon from "../../assets/images/hourglass1.png";
+import PropTypes from 'prop-types';
 
 class DashboardEvent extends Component {
   constructor(props) {
@@ -919,6 +920,37 @@ class DashboardEvent extends Component {
       </>
     );
   }
+}
+DashboardEvent.propTypes = {
+  countData: PropTypes.array.isRequired,
+  eventItemClick: PropTypes.func.isRequired,
+  schedulerData: PropTypes.object.isRequired,
+  event: PropTypes.object.isRequired,
+  bgColor: PropTypes.string.isRequired,
+  isStart: PropTypes.bool.isRequired,
+  isEnd: PropTypes.bool.isRequired,
+  mustAddCssClass: PropTypes.string.isRequired,
+  agendaMaxEventWidth: PropTypes.string,
+  titleText: PropTypes.string.isRequired,
+  start: PropTypes.object.isRequired,
+  end: PropTypes.object.isRequired,
+  divStyle: PropTypes.object.isRequired,
+  scheduler: PropTypes.object.isRequired,
+  hideOverPopup: PropTypes.func,
+  workspaceId: PropTypes.string.isRequired,
+  handleTaskBottomPopup: PropTypes.func.isRequired,
+  onGoingTask: PropTypes.bool.isRequired,
+  eventItemPopoverTemplateResolver: PropTypes.func.isRequired,
+  handleHoverId: PropTypes.func.isRequired,
+  hoverId: PropTypes.number.isRequired,
+  userId: PropTypes.number.isRequired,
+  taskEventResumeConfirm: PropTypes.func.isRequired,
+  handleTaskTracking: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
+  handleTaskStartTop: PropTypes.string,
+  handleTaskStart: PropTypes.func.isRequired,
+  handleTaskStop: PropTypes.func.isRequired,
+  isTimetrackMode: PropTypes.bool.isRequired,
 }
 
 export default withRouter(DashboardEvent);

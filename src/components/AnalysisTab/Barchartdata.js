@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts/highstock";
 import { CHART_COLOR } from "../../utils/Constants";
+import PropTypes from 'prop-types';
 window.Highcharts = Highcharts;
+
 
 const Barchartdata = (props) => {
   useEffect(() => {
@@ -120,6 +122,9 @@ const Barchartdata = (props) => {
       <div id="analysisbarchart"></div>
     </>
   )
+}
+Barchartdata.propTypes = {
+  barChartData: PropTypes.number
 }
 
 export default Barchartdata;

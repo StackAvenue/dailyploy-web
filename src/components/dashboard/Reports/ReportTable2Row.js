@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import { DATE_FORMAT2 } from "./../../../utils/Constants"
+import PropTypes from 'prop-types';
 
 class ReportTable2Row extends Component {
   constructor(props) {
     super(props);
     this.state = {
     }
+    console.log("table", props);
   }
 
   calculateTime = (startDateTime, endDateTime) => {
@@ -149,6 +151,16 @@ class ReportTable2Row extends Component {
       </>
     )
   }
+}
+
+ReportTable2Row.propTypes = {
+  key: PropTypes.number.isRequired,
+  tasks: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  date: PropTypes.string.isRequired
+  // userRole={this.props.state.userRole}
+  // frequency={this.props.frequency}.isRequired
+  // isTimetrackMode={this.state.isTimetrackMode}
+  // timeTrackUpdate={this.props.timeTrackUpdate}
 }
 
 export default withRouter(ReportTable2Row)

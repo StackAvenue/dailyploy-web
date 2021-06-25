@@ -4,6 +4,7 @@ import ReportTable2Row from "./../Reports/ReportTable2Row";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import { DATE_FORMAT1 } from "./../../../utils/Constants";
+import PropTypes from 'prop-types';
 
 class ReportTable extends Component {
   constructor(props) {
@@ -208,6 +209,14 @@ class ReportTable extends Component {
       </>
     );
   }
+}
+
+
+ReportTable.propTypes = {
+  taskDetails: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  searchProjectIds: PropTypes.array.isRequired,
+  searchUserDetails: PropTypes.array.isRequired,
 }
 
 export default withRouter(ReportTable);

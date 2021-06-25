@@ -67,7 +67,6 @@ class ProjectsSettings extends Component {
   };
 
   handleShow = projectId => {
-    // console.log("project", project);
     this.setState({
       setShow: true,
       show: true,

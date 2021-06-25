@@ -17,6 +17,8 @@ import DailyPloyToast from "./../DailyPloyToast";
 import cookie from "react-cookies";
 import { USER_ROLE } from "../../utils/Constants";
 import AOS from "aos";
+import PropTypes from 'prop-types';
+import { debounce } from '../../utils/function';
 
 export default class MenuBar extends Component {
   constructor(props) {
@@ -213,7 +215,7 @@ export default class MenuBar extends Component {
     return flag;
   };
 
-  addProject = async () => {
+  addProject = debounce(async () => {
     let addOwner = [];
     addOwner.push(this.props.state.userId);
     var self = this;
@@ -323,7 +325,7 @@ export default class MenuBar extends Component {
         self.setState({ saveDisable: false });
       }, 2000);
     }
-  };
+  }, 500);
 
   addMember = async () => {
     var memberData = {
@@ -693,4 +695,13 @@ export default class MenuBar extends Component {
       </>
     );
   }
+}
+
+MenuBar.propTypes = {
+  workspaceId: PropTypes.string,
+  classNameRoute: PropTypes.func,
+  state: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
+  onSelectSort: PropTypes.func,
+  manageProjectListing: PropTypes.func,
+  handleLoad: PropTypes.func,
 }

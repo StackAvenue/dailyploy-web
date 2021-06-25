@@ -9,8 +9,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import VideoLoader from "../dashboard/VideoLoader";
 import taskImg from '../../assets/images/tasklist.png';
 import Spinner from 'react-bootstrap/Spinner';
+import PropTypes from 'prop-types';
 
 const AddTask = (props) => {
+  console.log("task", props);
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [estimation, setEstimation] = useState(0);
@@ -908,4 +910,28 @@ const AddTask = (props) => {
     </>
   );
 };
+
+AddTask.propTypes = {
+  state: PropTypes.object.isRequired,
+  showTask: PropTypes.bool.isRequired,
+  taskEdit: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func,
+  isFilterLoading: PropTypes.bool,
+  moveToDashboardUTask: PropTypes.func,
+  task_lists_task: PropTypes.object,
+  EditTlt: PropTypes.func,
+  taskStatus: PropTypes.array.isRequired,
+  categories: PropTypes.array,
+  handleTaskDetails: PropTypes.func,
+  // currentTask={task_lists_task},
+  projectTaskList: PropTypes.array,
+  // switchTask2={props.switchTask2}
+  userTaskDetails: PropTypes.func,
+  projectMembers: PropTypes.array.isRequired,
+  list_id: PropTypes.number.isRequired,
+  // task_lists_task={task_lists_task}
+  isUserstory: PropTypes.bool,
+  handleUserstoryTask: PropTypes.func, 
+  closeAddTask: PropTypes.func,  
+}
 export default AddTask;

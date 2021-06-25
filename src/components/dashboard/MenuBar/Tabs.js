@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import EditMemberModal from "../Member/EditMemberModal";
+import PropTypes from 'prop-types';
+import { propTypes } from "react-bootstrap/esm/Image";
 
 const Tabs = (props) => {
   let classNameRoute;
@@ -451,5 +454,11 @@ const Tabs = (props) => {
   }
   return classNameRoute;
 };
+
+Tabs.propTypes = {
+  classNameRoute: PropTypes.func.isRequired,
+  workspaceId: PropTypes.string
+}
+
 
 export default Tabs;

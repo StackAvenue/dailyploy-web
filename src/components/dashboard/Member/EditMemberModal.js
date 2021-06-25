@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import Close from "../../../assets/images/close.svg";
 import cookie from "react-cookies";
 
+
 const hours = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const EditMemberModal = props => {
@@ -127,5 +128,7 @@ const EditMemberModal = props => {
 const MemberProject = props => {
   return props.projects.map(project => project.name).join(", ");
 };
+
+
 
 export default EditMemberModal;

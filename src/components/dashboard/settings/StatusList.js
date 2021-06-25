@@ -10,7 +10,9 @@ import { Button } from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import Loader from 'react-loader-spinner'
 import "../../../assets/css/TaskProjectList.scss";
+import PropTypes from 'prop-types';
 
+const  DEBOUNCE_TIME = 500;
 
 const StatusList = (props) => {
     const [statusList, setStatusList] = useState([]);
@@ -91,7 +93,7 @@ const StatusList = (props) => {
                 }
             }
         }
-    }, 500)
+    }, DEBOUNCE_TIME)
 
     const editCategory = async (item) => {
         if (editStatus && editStatus.id) {
@@ -289,7 +291,7 @@ const StatusList = (props) => {
                             show={toggleDel}
                             message="Are you sure to Delete The Status?"
                             buttonText="delete"
-                            onClick={deleteCategory}
+                            onClick={debounce(() => deleteCategory, DEBOUNCE_TIME)}
                             closeModal={handleCloseDeleteStatus}
                         />
                     ) : null
@@ -311,5 +313,14 @@ const StatusList = (props) => {
             </div>
     );
 
+}
+
+StatusList.propTypes = {
+    workspaceId: PropTypes.number.isRequired,
+    projectId: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    // searchUserDetails: PropTypes.string.isRequired,
+    // searchProjectIds: PropTypes.number.isRequired,
+    // projectName: PropTypes.string.isRequired
 }
 export default StatusList;

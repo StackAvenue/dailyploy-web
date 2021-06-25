@@ -25,6 +25,7 @@ import DailyPloyToast from "./../DailyPloyToast";
 import SummuryReportCharts from "./Reports/SummuryReportCharts";
 import Loader from "react-loader-spinner";
 import VideoLoader from "./VideoLoader";
+import { debounce } from '../../utils/function';
 
 class Reports extends Component {
   constructor(props) {
@@ -1238,7 +1239,8 @@ class Reports extends Component {
                   <button
                     className={`btn btn-sm btn-default ${this.state.isLoading ? "disabled" : ""
                       }`}
-                    onClick={() => this.downloadReportsCsv()}
+                    // eslint-disable-next-line no-sequences
+                    onClick={debounce(() =>  this.downloadReportsCsv()) , 500}
                   >
                     {this.state.isLoading ? (
                       <Loader

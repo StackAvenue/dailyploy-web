@@ -16,6 +16,7 @@ import { getWorkspaceId } from "./../../utils/function";
 import SearchFilter from "./../dashboard/SearchFilter";
 import moment from "moment";
 import { base } from "../../../src/base";
+import PropTypes from 'prop-types';
 import {
   NotificationContainer,
   NotificationManager,
@@ -38,7 +39,7 @@ class Header extends Component {
     };
   }
 
-  async componentDidMount() {
+  async componentDidMount() {  
     var loggedInData = cookie.load("loggedInUser");
     if (!loggedInData) {
       try {
@@ -455,6 +456,20 @@ class Header extends Component {
       </>
     );
   }
+}
+
+Header.propTypes = {
+notification: PropTypes.string,
+logout: PropTypes.func,
+workspaces: PropTypes.array,
+workspaceId: PropTypes.string,
+userData: PropTypes.object,
+searchOptions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+pathname: PropTypes.string,
+readAllNotification: PropTypes.func,
+workspaceName: PropTypes.string,
+loggedInUserName: PropTypes.string,
+handleSearchFilterResult: PropTypes.func
 }
 
 export default Header;

@@ -13,6 +13,9 @@ import moment from "moment";
 import DailyPloyToast from "./../../components/DailyPloyToast";
 import ConfirmModal from "./../ConfirmModal";
 import { toast } from "react-toastify";
+import { debounce } from '../../utils/function';
+
+const  DEBOUNCE_TIME = 500;
 
 class RecurringTaskModal extends React.Component {
   constructor(props) {
@@ -546,7 +549,7 @@ class RecurringTaskModal extends React.Component {
     }
   };
 
-  addTask = async () => {
+  addTask = debounce( async () => {
     this.setState({ taskloader: true });
     const taskData = this.taskDetails();
     try {
@@ -569,9 +572,9 @@ class RecurringTaskModal extends React.Component {
         taskloader: false
       });
     }
-  };
+  },  DEBOUNCE_TIME);
 
-  updateTask = async () => {
+  updateTask = debounce( async () => {
     this.setState({ taskloader: true });
     const taskData = this.taskDetails();
     try {
@@ -596,7 +599,7 @@ class RecurringTaskModal extends React.Component {
         showConfirm: false
       });
     }
-  };
+  },  DEBOUNCE_TIME);
 
   closeConfirmModal = () => {
     this.setState({

@@ -18,6 +18,8 @@ import CommentUpload from "./../../components/dashboard/CommentUpload";
 import moment from "moment";
 import RecurringTaskModal from "./RecurringTaskModal";
 import SelectStatus from "./SelectStatus";
+import PropTypes from 'prop-types';
+
 class AddTaskModal extends React.Component {
   constructor(props) {
     super(props);
@@ -635,6 +637,35 @@ class AddTaskModal extends React.Component {
       </>
     );
   }
+}
+
+AddTaskModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
+  closeTaskModal: PropTypes.func.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  projects: PropTypes.array.isRequired,
+  handleDateFrom: PropTypes.func.isRequired,
+  handleDateTo: PropTypes.func.isRequired,
+  handleTimeFrom: PropTypes.func.isRequired,
+  handleTimeTo: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired,
+  addTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired,
+  handleMemberSelect: PropTypes.func.isRequired,
+  handleProjectSelect: PropTypes.func.isRequired,
+  modalMemberSearchOptions: PropTypes.array.isRequired,
+  backToTaskInfoModal: PropTypes.func.isRequired,
+  confirmModal: PropTypes.func.isRequired,
+  handleCategoryChange: PropTypes.func.isRequired,
+  handlePrioritiesChange: PropTypes.func.isRequired,
+  addCategory: PropTypes.func.isRequired,
+  handleTaskNameChange: PropTypes.func.isRequired,
+  saveComments: PropTypes.func,
+  toggleTaskStartState: PropTypes.func.isRequired,
+  handleaddStatusChange: PropTypes.func.isRequired,
+  addStatus: PropTypes.func.isRequired,
+  loadStatus: PropTypes.bool.isRequired,
 }
 
 export default AddTaskModal;

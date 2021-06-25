@@ -17,9 +17,6 @@ class UpdateStatusModal extends Component {
     };
   }
 
-
-
-
   render() {
 
     return (

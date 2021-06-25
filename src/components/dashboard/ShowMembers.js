@@ -8,6 +8,9 @@ import cookie from "react-cookies";
 import EditMemberModal from "./Member/EditMemberModal";
 import { toast } from "react-toastify";
 import DailyPloyToast from "../DailyPloyToast";
+import { debounce } from '../../utils/function';
+
+const  DEBOUNCE_TIME = 500;
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -649,7 +652,7 @@ class ShowMembers extends Component {
                 ? " this member"
                 : "these members"
               }?`}
-            onClick={this.deleteMembers}
+            onClick={debounce(() => this.deleteMembers, DEBOUNCE_TIME)}
             closeModal={this.closeModal}
             buttonText="Delete"
             show={this.state.showConfirm}
