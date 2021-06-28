@@ -58,6 +58,14 @@ export const PRIORITIES = [
     label: "no priority",
   },
 ];
+
+export const NEWPRIORITIES = {
+  'low': {'label':'low', 'color_code':'#00A031'},
+  'medium': {'label': 'medium', 'color_code': '#FFFF00' },
+  'high': {'label': 'high', 'color_code': '#FF0000' },
+  'no_priority': {'label': 'no priority', 'color_code': '#FF0000' },
+  
+} 
 export const ROADMAP_STATUS = ["Planned", "Running", "Completed"];
 export const DEFAULT_PRIORITIE = {
   name: "low",

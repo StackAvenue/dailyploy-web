@@ -23,6 +23,7 @@ import ClockIcon from "../../assets/images/hourglasss.gif";
 
 import PauseIcon from "../../assets/images/hourglasss.gif";
 import PlayIcon from "../../assets/images/hourglass1.png";
+import { NEWPRIORITIES } from '../../utils/Constants';
 
 class DashboardEvent extends Component {
   constructor(props) {
@@ -595,7 +596,12 @@ class DashboardEvent extends Component {
               </div>
 
               <div className="col-md-4 align-center no-padding">
-                {event.priority}{console.log('event', event)}
+                {event.priority==="low" ?
+                  <div class="d-inline-block color-dot" style={{backgroundColor:'green'}}></div>:
+                  event.priority==="high"?
+                  <div class="d-inline-block color-dot" style={{backgroundColor:'red'}}></div>:
+                  <div class="d-inline-block color-dot" style={{backgroundColor:'yellow'}}></div>
+  }
                 {event.trackingStatus === "pause" &&
                   !event.is_complete &&
                   this.props.isTimetrackMode ? (
