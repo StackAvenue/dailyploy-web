@@ -595,6 +595,7 @@ class DashboardEvent extends Component {
               </div>
 
               <div className="col-md-4 align-center no-padding">
+                {event.priority}{console.log('event', event)}
                 {event.trackingStatus === "pause" &&
                   !event.is_complete &&
                   this.props.isTimetrackMode ? (
