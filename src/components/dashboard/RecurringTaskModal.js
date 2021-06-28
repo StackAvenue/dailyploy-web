@@ -313,6 +313,11 @@ class RecurringTaskModal extends React.Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
+  
+  handleDescription = async e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
   onBlurInput = () => {
     this.props.handleTaskNameChange("taskName", this.state.taskName);

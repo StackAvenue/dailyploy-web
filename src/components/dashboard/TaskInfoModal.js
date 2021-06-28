@@ -557,7 +557,7 @@ class TaskInfoModal extends Component {
   render() {
     const { props } = this;
     console.log("TaskInfo Modal" + props);
-    console.log(this.state);
+    console.log('props', props);
 
     return (
       <>
@@ -647,6 +647,15 @@ class TaskInfoModal extends Component {
                 </div>
                 <div className="col-md-10 d-inline-block">
                   {this.renderTaskInfo(props.state.project, "block", "name")}
+                </div>
+              </div>
+              
+              <div className="col-md-12 no-padding input-row text-titlize">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Description
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  {/* {this.renderTaskInfo(props.state.description, "block", "name")} */}
                 </div>
               </div>
 

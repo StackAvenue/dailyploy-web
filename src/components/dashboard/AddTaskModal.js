@@ -39,6 +39,7 @@ class AddTaskModal extends React.Component {
       memberNotFound: "hide",
       taskName: "",
       comments: "",
+      description: "",
       pictures: [],
     };
   }
@@ -98,6 +99,15 @@ class AddTaskModal extends React.Component {
   };
 
   handleInputChange = async (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+  handleDescription = async e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  handleDescription = async e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -267,6 +277,20 @@ class AddTaskModal extends React.Component {
                       </div>
                     ) : null}
                   </div>
+                      
+                  <div className="col-md-12 row no-margin no-padding input-row">
+                    <div className="col-md-2 no-padding label" style={{ verticalAlign: "top" }}>Description</div>
+                    <div className="col-md-10">
+                      <textarea
+                        name={`description`}
+                        value={props.state.description ? props.state.description : ""}
+                        onChange={(e) => this.props.handleInputChange(e)}
+                        className="form-control"
+                        rows="2"
+                        placeholder="Write Here..."
+                      />
+                      </div>
+                      </div>
 
                   <div className="col-md-12 no-padding input-row">
                     <div className="col-md-2 d-inline-block no-padding label">
@@ -606,6 +630,7 @@ class AddTaskModal extends React.Component {
                   state={this.props.state}
                   closeTaskModal={this.props.closeTaskModal}
                   handleInputChange={this.props.handleInputChange}
+                  handleDescription={this.props.handleDescription}
                   projects={this.props.state.memberProjects}
                   handleDateFrom={this.props.handleDateFrom}
                   handleDateTo={this.props.handleDateTo}

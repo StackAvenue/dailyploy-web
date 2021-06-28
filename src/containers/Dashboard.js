@@ -3029,6 +3029,7 @@ class Dashboard extends PureComponent {
             <NotificationContainer />
             {this.state.showInfo && this.state.backFromTaskEvent && (
               <TaskInfoModal
+                description={this.state.description}
                 showInfo={this.state.showInfo && this.state.backFromTaskEvent}
                 state={this.state}
                 closeTaskModal={this.closeTaskModal}
