@@ -28,6 +28,7 @@ import {
 import CommentUpload from "./../../components/dashboard/CommentUpload";
 import ConfirmModal from "./../ConfirmModal";
 import Loader from "react-loader-spinner";
+import { Tooltip } from 'react-bootstrap';
 
 class TaskInfoModal extends Component {
   constructor(props) {
@@ -654,8 +655,8 @@ class TaskInfoModal extends Component {
                 <div className="col-md-2 d-inline-block no-padding label">
                   Description
                 </div>
-                <div className="col-md-10 d-inline-block">
-                  {/* {this.renderTaskInfo(props.state.description, "block", "name")} */}
+                <div className="col-md-10 d-inline-block text-wrapper" style={{paddingLeft:'32px',whiteSpace: 'nowrap',overflow: 'hidden',textOverflow: 'ellipsis'}}>
+                 { props.state.description }
                 </div>
               </div>
 
