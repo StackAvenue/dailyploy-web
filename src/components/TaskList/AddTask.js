@@ -868,7 +868,7 @@ const AddTask = (props) => {
               changeToDashboard();
             }}
           >
-            
+            save
             
           </Button>
         </Modal.Footer>
