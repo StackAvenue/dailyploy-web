@@ -254,7 +254,6 @@ const AddTask = (props) => {
         );
       }
     }
-    console.log("filtered tasks", props.task_lists_task)
     if (props.projectTaskList) {
       let taskLists = [];
       taskLists = props.projectTaskList.filter((eachTask) => {
@@ -870,6 +869,7 @@ const AddTask = (props) => {
             }}
           >
             Save
+            
           </Button>
         </Modal.Footer>
       </Modal>
