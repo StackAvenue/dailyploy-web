@@ -1366,8 +1366,7 @@ class Dashboard extends PureComponent {
 
         priority:
           this.state.taskPrioritie && this.state.taskPrioritie.name
-            ? this.state.taskPrioritie.name && this.state.taskPrioritie.color_code
-            : "no_priority",
+            ? this.state.taskPrioritie.name : "no_priority",
         task_status_id: this.state.taskStatus
           ? this.state.taskStatus.id
           : this.state.taskStatuss[0].id,

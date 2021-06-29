@@ -260,6 +260,7 @@ class DashboardEvent extends Component {
   };
 
   render() {
+   
     const {
       eventItemClick,
       start,
@@ -596,12 +597,8 @@ class DashboardEvent extends Component {
               </div>
 
               <div className="col-md-4 align-center no-padding">
-                {event.priority==="low" ?
-                  <div class="d-inline-block color-dot" style={{backgroundColor:'green'}}></div>:
-                  event.priority==="high"?
-                  <div class="d-inline-block color-dot" style={{backgroundColor:'red'}}></div>:
-                  <div class="d-inline-block color-dot" style={{backgroundColor:'yellow'}}></div>
-  }
+              {<div class="d-inline-block color-dot" style={{backgroundColor: NEWPRIORITIES[event.priority.toString()].color_code}}></div>}
+             
                 {event.trackingStatus === "pause" &&
                   !event.is_complete &&
                   this.props.isTimetrackMode ? (
