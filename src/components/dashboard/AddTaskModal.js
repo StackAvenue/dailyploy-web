@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component }from "react";
 import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
