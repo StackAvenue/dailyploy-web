@@ -44,6 +44,7 @@ class Dashboard extends PureComponent {
       monthly: "month",
     };
     this.state = {
+      desciption: "",
       loadFireBase: false,
       taskName: "",
       estimate: "",
@@ -57,6 +58,7 @@ class Dashboard extends PureComponent {
       timeFrom: "",
       timeTo: null,
       comments: "",
+      description: "",
       userId: "",
       userName: "",
       workspaces: [],
@@ -1371,6 +1373,7 @@ class Dashboard extends PureComponent {
         task_status_id: this.state.taskStatus
           ? this.state.taskStatus.id
           : this.state.taskStatuss[0].id,
+        description: this.state.description, 
       },
     };
     return taskData;
