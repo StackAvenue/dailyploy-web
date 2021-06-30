@@ -1988,7 +1988,7 @@ class Dashboard extends PureComponent {
           taskPrioritie: taskPrioritie,
           taskComments: taskComments,
           taskStatus: data.status,
-          description: data.desciption
+          description: data.description
         });
       }
     } catch (e) { }
