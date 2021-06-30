@@ -192,8 +192,8 @@ class Dashboard extends PureComponent {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-            ? 1
-            : 0;
+              ? 1
+              : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -273,8 +273,8 @@ class Dashboard extends PureComponent {
         return x.id === this.state.userId
           ? -1
           : y.id === this.state.userId
-          ? 1
-          : 0;
+            ? 1
+            : 0;
       });
       var taskRunningObj = {
         status: false,
@@ -350,8 +350,8 @@ class Dashboard extends PureComponent {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-            ? 1
-            : 0;
+              ? 1
+              : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -518,7 +518,7 @@ class Dashboard extends PureComponent {
       );
 
       var user = data;
-    } catch (e) {}
+    } catch (e) { }
 
     // workspace Member Listing
     try {
@@ -536,7 +536,7 @@ class Dashboard extends PureComponent {
     try {
       const { data } = await get(`workspaces/${workspaceId}/task_category`);
       var taskCategories = data.task_categories;
-    } catch (e) {}
+    } catch (e) { }
 
     // workspace Tasks Listing
     try {
@@ -674,8 +674,8 @@ class Dashboard extends PureComponent {
     let newTaskId = task.id + "-" + dateWiseTasksDate;
     let dateFormattedTimeTracks = task.date_formatted_time_tracks
       ? task.date_formatted_time_tracks.find(
-          (dateLog) => dateLog.date == dateWiseTasksDate
-        )
+        (dateLog) => dateLog.date == dateWiseTasksDate
+      )
       : null;
     return {
       date: dateWiseTasksDate,
@@ -767,9 +767,9 @@ class Dashboard extends PureComponent {
           task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-              (dateLog) =>
-                dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
-            )
+            (dateLog) =>
+              dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
+          )
           : null;
         return {
           date: moment(taks.start_datetime).format(DATE_FORMAT1),
@@ -822,8 +822,8 @@ class Dashboard extends PureComponent {
         let newTaskId = task.id + "-" + dateWiseTasksDate;
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-              (dateLog) => dateLog.date == dateWiseTasksDate
-            )
+            (dateLog) => dateLog.date == dateWiseTasksDate
+          )
           : null;
         return {
           date: dateWiseTasksDate,
@@ -938,9 +938,9 @@ class Dashboard extends PureComponent {
           task.id + "-" + moment(taks.start_datetime).format(DATE_FORMAT1);
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-              (dateLog) =>
-                dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
-            )
+            (dateLog) =>
+              dateLog.date == moment(taks.start_datetime).format(DATE_FORMAT1)
+          )
           : null;
         return {
           date: moment(taks.start_datetime).format(DATE_FORMAT1),
@@ -993,8 +993,8 @@ class Dashboard extends PureComponent {
         let newTaskId = task.id + "-" + dateWiseTasksDate;
         let dateFormattedTimeTracks = task.date_formatted_time_tracks
           ? task.date_formatted_time_tracks.find(
-              (dateLog) => dateLog.date == dateWiseTasksDate
-            )
+            (dateLog) => dateLog.date == dateWiseTasksDate
+          )
           : null;
         return {
           date: dateWiseTasksDate,
@@ -1402,8 +1402,8 @@ class Dashboard extends PureComponent {
         modalMemberSearchOptions: this.state.newAddedProject
           ? this.state.newAddedProject.members
           : this.state.project
-          ? this.state.project.members
-          : members,
+            ? this.state.project.members
+            : members,
         project: this.state.newAddedProject
           ? this.state.newAddedProject
           : this.state.project,
@@ -1573,7 +1573,7 @@ class Dashboard extends PureComponent {
           taskEvent: taskEvent,
           taskStatus: data.status,
         });
-      } catch (e) {}
+      } catch (e) { }
       this.loadUserTask(this.state.workspaceId);
     }
   };
@@ -1614,7 +1614,7 @@ class Dashboard extends PureComponent {
         (c) => c.id !== data.id
       );
       this.setState({ taskComments: taskComments });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   handleInputChange = (e) => {
@@ -1675,7 +1675,7 @@ class Dashboard extends PureComponent {
           defaultStatus: defaultStatus,
           loadStatus: false,
         });
-      } catch (e) {}
+      } catch (e) { }
     } else {
       this.setState({
         projectId: null,
@@ -1702,8 +1702,8 @@ class Dashboard extends PureComponent {
       project.id === projectId
         ? projectId
         : this.state.newAddedProject
-        ? this.state.newAddedProject.id
-        : null
+          ? this.state.newAddedProject.id
+          : null
     );
     var members = projects.length > 0 ? projects[0].members : [];
     if (this.state.user.role === "member") {
@@ -1742,15 +1742,15 @@ class Dashboard extends PureComponent {
           : this.state.project &&
             this.state.taskUser &&
             this.state.taskUser[0] == memberId
-          ? this.state.project
-          : null,
+            ? this.state.project
+            : null,
         projectId: this.state.newAddedProject
           ? this.state.newAddedProject.id
           : this.state.project &&
             this.state.taskUser &&
             this.state.taskUser[0] == memberId
-          ? this.state.project.id
-          : null,
+            ? this.state.project.id
+            : null,
         taskId: "",
         modalMemberSearchOptions: this.addTaskMembers(members, selecteMember),
         dateFrom: new Date(startDate),
@@ -1835,14 +1835,14 @@ class Dashboard extends PureComponent {
       this.state.timeFrom &&
       !this.state.timeTo &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) !==
-        moment().format(DATE_FORMAT1)
+      moment().format(DATE_FORMAT1)
     ) {
       errors["timeToError"] = "please select time to";
     } else if (
       this.state.timeFrom &&
       !this.state.timeTo &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) ===
-        moment().format(DATE_FORMAT1)
+      moment().format(DATE_FORMAT1)
     ) {
       errors["timeToError"] = "";
     } else if (
@@ -1882,7 +1882,7 @@ class Dashboard extends PureComponent {
       this.state.timeFrom != null &&
       this.state.timeTo == null &&
       moment(this.state.dateFrom).format(DATE_FORMAT1) ===
-        moment().format(DATE_FORMAT1)
+      moment().format(DATE_FORMAT1)
     ) {
       return true;
     } else if (this.state.timeFrom == null && this.state.timeTo != null) {
@@ -1915,7 +1915,7 @@ class Dashboard extends PureComponent {
         defaultStatus: defaultStatus,
         isDisable: false,
       });
-    } catch (e) {}
+    } catch (e) { }
     let members = this.memberSearchOptions(event.resourceId, event.projectId);
     var memberProjects = this.state.projects.filter((project) =>
       project.members.map((member) => member.id).includes(event.resourceId)
@@ -1988,9 +1988,10 @@ class Dashboard extends PureComponent {
           taskPrioritie: taskPrioritie,
           taskComments: taskComments,
           taskStatus: data.status,
+          description: data.desciption
         });
       }
-    } catch (e) {}
+    } catch (e) { }
     this.loadTaskContackts(event.projectId);
   };
 
@@ -2000,7 +2001,7 @@ class Dashboard extends PureComponent {
         `workspaces/${this.state.workspaceId}/projects/${projectId}/contact`
       );
       this.setState({ taskContacts: data.contacts });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   taskInfoEdit = () => {
@@ -2105,7 +2106,7 @@ class Dashboard extends PureComponent {
               position: toast.POSITION.TOP_CENTER,
             }
           );
-        } catch (e) {}
+        } catch (e) { }
       } else {
         this.setState({
           logTimeFromError: this.state.logTimeFrom
@@ -2204,7 +2205,7 @@ class Dashboard extends PureComponent {
         autoClose: 2000,
         position: toast.POSITION.TOP_CENTER,
       });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   taskDelete = async (event) => {
@@ -2339,7 +2340,7 @@ class Dashboard extends PureComponent {
             trackingEvent: event,
             events: events,
           });
-        } catch (e) {}
+        } catch (e) { }
       } else if (taskType === "stop") {
         // let d = moment(eventTask.start).format(DATE_FORMAT1);
         // let t = moment(dateTime).format(HHMMSS);
@@ -2366,7 +2367,7 @@ class Dashboard extends PureComponent {
             timeTracked: infoTimeTrackLog,
             trackingEvent: null,
           });
-        } catch (e) {}
+        } catch (e) { }
       }
     }
   };
@@ -2404,7 +2405,7 @@ class Dashboard extends PureComponent {
           events: events,
           isPlayPause: false,
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -2435,7 +2436,7 @@ class Dashboard extends PureComponent {
           timeTracked: infoTimeTrackLog,
           trackingEvent: null,
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -2680,8 +2681,8 @@ class Dashboard extends PureComponent {
           return x.id === this.state.userId
             ? -1
             : y.id === this.state.userId
-            ? 1
-            : 0;
+              ? 1
+              : 0;
         });
         var taskRunningObj = {
           status: false,
@@ -2716,7 +2717,7 @@ class Dashboard extends PureComponent {
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent,
         });
-      } catch (e) {}
+      } catch (e) { }
     }
   };
 
@@ -2941,7 +2942,7 @@ class Dashboard extends PureComponent {
       this.setState({ hoverID: 0 });
     }
   };
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   render() {
     return (
