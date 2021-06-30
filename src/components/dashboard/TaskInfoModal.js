@@ -71,7 +71,7 @@ class TaskInfoModal extends Component {
   isToday = () => {
     return this.props.state.dateTo
       ? moment(this.props.state.dateTo).format(DATE_FORMAT1) ==
-          moment(new Date()).format(DATE_FORMAT1)
+      moment(new Date()).format(DATE_FORMAT1)
       : false;
   };
   async componentDidMount() {
@@ -129,9 +129,8 @@ class TaskInfoModal extends Component {
           <div
             className={`d-inline-block ${klass}`}
             style={{
-              backgroundColor: `${
-                option.color_code ? option.color_code : this.state.color
-              }`,
+              backgroundColor: `${option.color_code ? option.color_code : this.state.color
+                }`,
             }}
           ></div>
           <div className="right-left-space-5 d-inline-block">{`${option[name]}`}</div>
@@ -346,10 +345,10 @@ class TaskInfoModal extends Component {
     return h > 0
       ? `${h} hours ago`
       : m > 0 && h == 0
-      ? `${m} minutes ago`
-      : s > 30 && h == 0 && m == 0
-      ? "few seconds ago"
-      : "just now";
+        ? `${m} minutes ago`
+        : s > 30 && h == 0 && m == 0
+          ? "few seconds ago"
+          : "just now";
   };
 
   commentsTime = (comment) => {
@@ -624,7 +623,7 @@ class TaskInfoModal extends Component {
                 </table>
               </div>
 
-              <div className="col-md-12 no-padding input-row text-titlize task-info-descriprion">
+              <div className="col-md-12 no-padding input-row text-titlize task-info-description">
                 <table className="tc">
                   <tr>
                     <td className="label1">
@@ -740,8 +739,8 @@ class TaskInfoModal extends Component {
                 {true && (
                   <div className="col-md-10 d-inline-block">
                     {this.props.state.taskEvent &&
-                    this.props.state.taskEvent.dateFormattedTimeTrack &&
-                    this.props.state.taskEvent.dateFormattedTimeTrack.length >
+                      this.props.state.taskEvent.dateFormattedTimeTrack &&
+                      this.props.state.taskEvent.dateFormattedTimeTrack.length >
                       0 ? (
                       !this.state.editLog ? (
                         <>
@@ -827,11 +826,10 @@ class TaskInfoModal extends Component {
                                 <i className="far fa-arrow-alt-circle-left"></i>
                               </div>
                               <div
-                                className={`col-md-1 d-inline-block ${
-                                  this.state.timeTrackEditLoader
-                                    ? "disabled"
-                                    : ""
-                                }`}
+                                className={`col-md-1 d-inline-block ${this.state.timeTrackEditLoader
+                                  ? "disabled"
+                                  : ""
+                                  }`}
                                 onClick={this.editTimeTrack}
                                 title={"Edit"}
                                 style={{
@@ -926,11 +924,10 @@ class TaskInfoModal extends Component {
                                 <i className="far fa-arrow-alt-circle-left"></i>
                               </div>
                               <div
-                                className={`col-md-1 d-inline-block ${
-                                  this.state.timeTrackEditLoader
-                                    ? "disabled"
-                                    : ""
-                                }`}
+                                className={`col-md-1 d-inline-block ${this.state.timeTrackEditLoader
+                                  ? "disabled"
+                                  : ""
+                                  }`}
                                 onClick={this.editTimeTrack}
                                 title={"Edit"}
                                 style={{
@@ -1021,10 +1018,10 @@ class TaskInfoModal extends Component {
                         >
                           <div
                             className="col-md-2 d-inline-block no-padding label"
-                            // style={{
-                            // verticalAlign: "text-top",
-                            // marginTop: "20px"
-                            // }}
+                          // style={{
+                          // verticalAlign: "text-top",
+                          // marginTop: "20px"
+                          // }}
                           >
                             <div className="comment-owner-dot">
                               {firstTwoLetter(comment.user.name)}
@@ -1070,10 +1067,10 @@ class TaskInfoModal extends Component {
                             <div className="commnet-card comment-bg-color">
                               <div
                                 className=""
-                                // style={{
-                                //   display: "flex",
-                                //   justifyContent: "space-between",
-                                // }}
+                              // style={{
+                              //   display: "flex",
+                              //   justifyContent: "space-between",
+                              // }}
                               >
                                 <div className="owner-name text-titlize">
                                   {comment.user.name}
