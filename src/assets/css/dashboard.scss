@@ -5078,7 +5078,7 @@ table.scheduler-table tr:last-child td {
 .color-dot {
   width: 10px;
   height: 10px;
-  margin-left: 0.75rem;
+  // margin-left: 0.75rem;
   vertical-align: sub;
   border-radius: 20px;
   border: solid 1px#9b9b9b;
@@ -6529,10 +6529,13 @@ font-family: 'Roboto' !important;
 
 }
 .project-name-text{
+  
+  justify-content: space-around;
+
     font-size: 16px;
     font-weight: 600;
     text-align: left;
-    padding-left: 8px !important;
+    // padding-left: 8px !important;
     text-transform: capitalize;
     width: 100%;
     // width: 16%;
@@ -6746,4 +6749,19 @@ font-family: 'Roboto' !important;
   height:100px;
   overflow-y: scroll;
   display: block
+}
+
+.priority-color{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:17px;
+}
+
+.project-priority-div{
+
+justify-content: space-around;
+
+
 }
