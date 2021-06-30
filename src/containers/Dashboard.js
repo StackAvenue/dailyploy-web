@@ -1368,8 +1368,7 @@ class Dashboard extends PureComponent {
 
         priority:
           this.state.taskPrioritie && this.state.taskPrioritie.name
-            ? this.state.taskPrioritie.name
-            : "no_priority",
+            ? this.state.taskPrioritie.name : "no_priority",
         task_status_id: this.state.taskStatus
           ? this.state.taskStatus.id
           : this.state.taskStatuss[0].id,
@@ -3031,6 +3030,7 @@ class Dashboard extends PureComponent {
             <NotificationContainer />
             {this.state.showInfo && this.state.backFromTaskEvent && (
               <TaskInfoModal
+                description={this.state.description}
                 showInfo={this.state.showInfo && this.state.backFromTaskEvent}
                 state={this.state}
                 closeTaskModal={this.closeTaskModal}

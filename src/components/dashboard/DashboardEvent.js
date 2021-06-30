@@ -23,6 +23,7 @@ import ClockIcon from "../../assets/images/hourglasss.gif";
 
 import PauseIcon from "../../assets/images/hourglasss.gif";
 import PlayIcon from "../../assets/images/hourglass1.png";
+import { NEWPRIORITIES } from '../../utils/Constants';
 
 class DashboardEvent extends Component {
   constructor(props) {
@@ -259,6 +260,7 @@ class DashboardEvent extends Component {
   };
 
   render() {
+
     const {
       eventItemClick,
       start,
@@ -313,27 +315,36 @@ class DashboardEvent extends Component {
       });
     }
 
+    const showPriorityColor = () => (
+      <div
+        className="d-inline-block color-dot"
+        style={{ backgroundColor: NEWPRIORITIES[event.priority.toString()].color_code }}
+      />);
+
+
     return (
       <>
-        {schedulerData.viewType === 0 ? (
-          <div key={event.id} className={mustAddCssClass}>
-            <div className="row item dashboard-event-box height-22 ">
-              <div className="col-md-7 no-padding">
-                <div
-                  className="project-name-text cursor pad-left-0"
-                  style={divStyle}
-                  onClick={() => {
-                    if (!!eventItemClick) eventItemClick(schedulerData, event);
-                  }}
-                >
-                  <span className="name-text-dot ">{event.projectName}</span>
+        {
+          schedulerData.viewType === 0 ? (
+            <div key={event.id} className={mustAddCssClass}>
+              <div className="row item dashboard-event-box height-22 ">
+                <div className="col-md-7 no-padding">
+                  <div
+                    className="project-name-text cursor pad-left-0 d-flex align-items-center"
+                    style={divStyle}
+                    onClick={() => {
+                      if (!!eventItemClick) eventItemClick(schedulerData, event);
+                    }}
+                  >
+                    <span className="name-text-dot ">{event.projectName}</span>
+                    {showPriorityColor()}
+                  </div>
                 </div>
-              </div>
 
-              <div className="col-md-4 align-center no-padding">
-                {event.trackingStatus === "pause" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
+                <div className="col-md-4 align-center no-padding">
+                  {event.trackingStatus === "pause" &&
+                    !event.is_complete &&
+                    this.props.isTimetrackMode ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -364,13 +375,13 @@ class DashboardEvent extends Component {
 
                       <ReactTooltip id="registerTip1" place="top" effect="solid">
                         Stop the task
-                    </ReactTooltip>
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
-                {event.trackingStatus === "play" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
+                  {event.trackingStatus === "play" &&
+                    !event.is_complete &&
+                    this.props.isTimetrackMode ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -402,202 +413,205 @@ class DashboardEvent extends Component {
                       </span>
                       <ReactTooltip id="registerTip" place="top" effect="solid">
                         Start the task
-                    </ReactTooltip>
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
-                {event && event.is_complete ? (
-                  <div className=" no-padding d-inline-block">
-                    <span className="task-play-btn">
-                      <i className="fa fa-check"></i>
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-              <div className="col-md-1 align-center no-padding">
-                <div className="no-padding d-inline-block three-dot">
-                  <span
-                    className="task-event-action pointer"
-                    onClick={() => this.ToggleActionDropDown(event.id)}
-                  >
-                    ...
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="row item dashboard-event-box height-20">
-              <OverlayTrigger
-                placement="auto"
-                trigger={["hover", "focus"]}
-                overlay={this.props.eventItemPopoverTemplateResolver(
-                  schedulerData,
-                  event,
-                  titleText,
-                  start,
-                  end,
-                  this.props.bgColor
-                )}
-              >
-                <div className="col-md-9 no-padding flex-center">
-                  <div className="col-md-2 no-padding flex-center">
-                    {/* <div className={`${this.props.event.priority}`}></div> */}
-                    <div className="clock-img-div1">
-                      <svg
-                        id="Capa_1"
-                        enableBackground="new 0 0 512 512"
-                        height="100%"
-                        viewBox="0 0 512 512"
-                        width="100%"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g>
-                          <path
-                            d="m256 0-128 256 128 256c141.385 0 256-114.615 256-256s-114.615-256-256-256z"
-                            fill="#28abfa"
-                          />
-                          <path
-                            d="m0 256c0 141.385 114.615 256 256 256v-512c-141.385 0-256 114.615-256 256z"
-                            fill="#14cfff"
-                          />
-                          <path
-                            d="m256 60-98 196 98 196c108.248 0 196-87.752 196-196s-87.752-196-196-196z"
-                            fill="#c4f3ff"
-                          />
-                          <path
-                            d="m60 256c0 108.248 87.752 196 196 196v-392c-108.248 0-196 87.752-196 196z"
-                            fill="#fff"
-                          />
-                          <path
-                            d="m298.426 277.213-42.426-42.426h-20l20 42.426 21.213 21.213z"
-                            fill="#340d66"
-                          />
-                          <path
-                            d="m170.794 149.581-21.213 21.213 106.419 106.419v-42.426z"
-                            fill="#373e9f"
-                          />
-                          <path
-                            d="m341.561 149.227-85.561 85.56-20 42.426h20l106.773-106.774z"
-                            fill="#373e9f"
-                          />
-                          <path
-                            d="m213.574 277.213 21.213 21.213 21.213-21.213v-42.426z"
-                            fill="#3857bc"
-                          />
-                          <path
-                            d="m271 90h-15l-10 15 10 15h15z"
-                            fill="#340d66"
-                          />
-                          <path d="m241 90h15v30h-15z" fill="#373e9f" />
-                          <path
-                            d="m271 392h-15l-10 15 10 15h15z"
-                            fill="#340d66"
-                          />
-                          <path d="m241 392h15v30h-15z" fill="#373e9f" />
-                          <path
-                            d="m90 241h30v30h-30z"
-                            fill="#373e9f"
-                            transform="matrix(0 -1 1 0 -151 361)"
-                          />
-                          <path
-                            d="m392 241h30v30h-30z"
-                            fill="#340d66"
-                            transform="matrix(0 -1 1 0 151 663)"
-                          />
-                        </g>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="col-md-3 no-padding d-inline-block ">
-                    <span className="task-timer">
-                      <TimerCardTask
-                        totalDuration={totalTrackTime}
-                        startOn={this.props.event.startOn}
-                        isStart={this.props.event.startOn ? true : false}
-                        calculateTime={this.calculateTime}
-                        event={event}
-                      />
-                      {/* {this.state.middelText} {this.calculateTime(event)} */}
-                    </span>
-                  </div>
-                  {event && event.identifier
-                    ? <div className="col-md-3 no-padding d-inline-block ml-4">
-                        <span className="task-identifier">
-                        [{event.identifier}]
-                        </span> 
-                      </div> 
-                    : null}
-                </div>
-               
-              </OverlayTrigger>
-            </div>
-            <div className="row item dashboard-event-box">
-              <OverlayTrigger
-                placement="auto"
-                trigger={["hover", "focus"]}
-                overlay={this.props.eventItemPopoverTemplateResolver(
-                  schedulerData,
-                  event,
-                  titleText,
-                  start,
-                  end,
-                  this.props.bgColor
-                )}
-              >
-                <div className="row item dashboard-event-box">
-                  <div
-                    className="col-md-12 no-padding"
-                  // style={{ color: contColor }}
-                  >
-                    <div
-                      className="col-md-12 no-padding pointer text-wraper "
-                      style={{
-                        paddingTop: "6px",
-                        paddingLeft: "8px",
-                        // color: getContrastColor(this.props.bgColor)
-                      }}
-                      onClick={() => {
-                        if (!!eventItemClick)
-                          eventItemClick(schedulerData, event);
-                      }}
-                    >
-                      <span className="project-task-name day-task-name-padd">
-                        {titleText}
+                  {event && event.is_complete ? (
+                    <div className=" no-padding d-inline-block">
+                      <span className="task-play-btn">
+                        <i className="fa fa-check"></i>
                       </span>
                     </div>
-                  </div>
+                  ) : null}
                 </div>
-              </OverlayTrigger>
-            </div>
-          </div>
-        ) : null}
-
-        {schedulerData.viewType === 1 ? (
-          <div
-            key={event.id}
-            className={`${mustAddCssClass}
-             `}
-            id={event.taskId}
-            // style={divStyle}
-            style={borderLeft}
-          >
-            <div className="row item dashboard-event-box height-24">
-              <div className="col-md-7 no-padding">
-                <div
-                  className="project-name-text cursor"
-                  style={divStyle}
-                  onClick={() => {
-                    if (!!eventItemClick) eventItemClick(schedulerData, event);
-                  }}
-                >
-                  <span className="name-text-dot">{event.projectName}</span>
+                <div className="col-md-1 align-center no-padding">
+                  <div className="no-padding d-inline-block three-dot">
+                    <span
+                      className="task-event-action pointer"
+                      onClick={() => this.ToggleActionDropDown(event.id)}
+                    >
+                      ...
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="col-md-4 align-center no-padding">
-                {event.trackingStatus === "pause" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
+              <div className="row item dashboard-event-box height-20">
+                <OverlayTrigger
+                  placement="auto"
+                  trigger={["hover", "focus"]}
+                  overlay={this.props.eventItemPopoverTemplateResolver(
+                    schedulerData,
+                    event,
+                    titleText,
+                    start,
+                    end,
+                    this.props.bgColor
+                  )}
+                >
+                  <div className="col-md-9 no-padding flex-center">
+                    <div className="col-md-2 no-padding flex-center">
+                      {/* <div className={`${this.props.event.priority}`}></div> */}
+                      <div className="clock-img-div1">
+                        <svg
+                          id="Capa_1"
+                          enableBackground="new 0 0 512 512"
+                          height="100%"
+                          viewBox="0 0 512 512"
+                          width="100%"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g>
+                            <path
+                              d="m256 0-128 256 128 256c141.385 0 256-114.615 256-256s-114.615-256-256-256z"
+                              fill="#28abfa"
+                            />
+                            <path
+                              d="m0 256c0 141.385 114.615 256 256 256v-512c-141.385 0-256 114.615-256 256z"
+                              fill="#14cfff"
+                            />
+                            <path
+                              d="m256 60-98 196 98 196c108.248 0 196-87.752 196-196s-87.752-196-196-196z"
+                              fill="#c4f3ff"
+                            />
+                            <path
+                              d="m60 256c0 108.248 87.752 196 196 196v-392c-108.248 0-196 87.752-196 196z"
+                              fill="#fff"
+                            />
+                            <path
+                              d="m298.426 277.213-42.426-42.426h-20l20 42.426 21.213 21.213z"
+                              fill="#340d66"
+                            />
+                            <path
+                              d="m170.794 149.581-21.213 21.213 106.419 106.419v-42.426z"
+                              fill="#373e9f"
+                            />
+                            <path
+                              d="m341.561 149.227-85.561 85.56-20 42.426h20l106.773-106.774z"
+                              fill="#373e9f"
+                            />
+                            <path
+                              d="m213.574 277.213 21.213 21.213 21.213-21.213v-42.426z"
+                              fill="#3857bc"
+                            />
+                            <path
+                              d="m271 90h-15l-10 15 10 15h15z"
+                              fill="#340d66"
+                            />
+                            <path d="m241 90h15v30h-15z" fill="#373e9f" />
+                            <path
+                              d="m271 392h-15l-10 15 10 15h15z"
+                              fill="#340d66"
+                            />
+                            <path d="m241 392h15v30h-15z" fill="#373e9f" />
+                            <path
+                              d="m90 241h30v30h-30z"
+                              fill="#373e9f"
+                              transform="matrix(0 -1 1 0 -151 361)"
+                            />
+                            <path
+                              d="m392 241h30v30h-30z"
+                              fill="#340d66"
+                              transform="matrix(0 -1 1 0 151 663)"
+                            />
+                          </g>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="col-md-3 no-padding d-inline-block ">
+                      <span className="task-timer">
+                        <TimerCardTask
+                          totalDuration={totalTrackTime}
+                          startOn={this.props.event.startOn}
+                          isStart={this.props.event.startOn ? true : false}
+                          calculateTime={this.calculateTime}
+                          event={event}
+                        />
+                        {/* {this.state.middelText} {this.calculateTime(event)} */}
+                      </span>
+                    </div>
+                    {event && event.identifier
+                      ? <div className="col-md-3 no-padding d-inline-block ml-4">
+                        <span className="task-identifier">
+                          [{event.identifier}]
+                        </span>
+                      </div>
+                      : null}
+                  </div>
+
+                </OverlayTrigger>
+              </div>
+              <div className="row item dashboard-event-box">
+                <OverlayTrigger
+                  placement="auto"
+                  trigger={["hover", "focus"]}
+                  overlay={this.props.eventItemPopoverTemplateResolver(
+                    schedulerData,
+                    event,
+                    titleText,
+                    start,
+                    end,
+                    this.props.bgColor
+                  )}
+                >
+                  <div className="row item dashboard-event-box">
+                    <div
+                      className="col-md-12 no-padding"
+                    // style={{ color: contColor }}
+                    >
+                      <div
+                        className="col-md-12 no-padding pointer text-wraper "
+                        style={{
+                          paddingTop: "6px",
+                          paddingLeft: "8px",
+                          // color: getContrastColor(this.props.bgColor)
+                        }}
+                        onClick={() => {
+                          if (!!eventItemClick)
+                            eventItemClick(schedulerData, event);
+                        }}
+                      >
+                        <span className="project-task-name day-task-name-padd">
+                          {titleText}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </OverlayTrigger>
+              </div>
+            </div>
+          ) : null
+        }
+
+        {
+          schedulerData.viewType === 1 ? (
+            <div
+              key={event.id}
+              className={`${mustAddCssClass}
+             `}
+              id={event.taskId}
+              // style={divStyle}
+              style={borderLeft}
+            >
+              <div className="row item dashboard-event-box height-24">
+                <div className="col-md-7 no-padding">
+                  <div
+                    className="project-name-text cursor d-flex align-items-center"
+                    style={divStyle}
+                    onClick={() => {
+                      if (!!eventItemClick) eventItemClick(schedulerData, event);
+                    }}
+                  >
+                    <span className="name-text-dot">{event.projectName}</span>
+                    {showPriorityColor()}
+                  </div>
+                </div>
+
+                <div className="col-md-4 align-center no-padding">
+                  {event.trackingStatus === "pause" &&
+                    !event.is_complete &&
+                    this.props.isTimetrackMode ? (
                     <div className=" no-padding d-inline-block">
                       <span
                         style={{
@@ -628,15 +642,15 @@ class DashboardEvent extends Component {
 
                       <ReactTooltip id="registerTip1" place="top" effect="solid">
                         Stop the task
-                    </ReactTooltip>
+                      </ReactTooltip>
                     </div>
                   ) : null}
 
-                {event.resourceId == this.props.userId
-                  ? <>
-                    {event.trackingStatus === "play" &&
-                      !event.is_complete &&
-                      this.props.isTimetrackMode ? (
+                  {event.resourceId == this.props.userId
+                    ? <>
+                      {event.trackingStatus === "play" &&
+                        !event.is_complete &&
+                        this.props.isTimetrackMode ? (
                         <div className=" no-padding d-inline-block">
                           <span
                             style={{
@@ -668,32 +682,32 @@ class DashboardEvent extends Component {
                           </span>
                           <ReactTooltip id="registerTip" place="top" effect="solid">
                             Start the task
-                    </ReactTooltip>
+                          </ReactTooltip>
                         </div>
                       ) : null}
-                  </> : null}
+                    </> : null}
 
-                {event && event.is_complete ? (
-                  <div className=" no-padding d-inline-block">
-                    <span className="task-play-btn">
-                      <i className="fa fa-check"></i>
+                  {event && event.is_complete ? (
+                    <div className=" no-padding d-inline-block">
+                      <span className="task-play-btn">
+                        <i className="fa fa-check"></i>
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+                <div className="col-md-1 align-center no-padding">
+                  <div className="no-padding d-inline-block three-dot">
+                    <span
+                      className="task-event-action pointer"
+                      onClick={() => this.ToggleActionDropDown(event.id)}
+                    >
+                      ...
                     </span>
                   </div>
-                ) : null}
-              </div>
-              <div className="col-md-1 align-center no-padding">
-                <div className="no-padding d-inline-block three-dot">
-                  <span
-                    className="task-event-action pointer"
-                    onClick={() => this.ToggleActionDropDown(event.id)}
-                  >
-                    ...
-                  </span>
                 </div>
               </div>
-            </div>
 
-            {/* <div className="row date-div-card">
+              {/* <div className="row date-div-card">
               <span>
                 {moment(convertUTCToLocalDate(event.taskStartDateTime)).format(
                   COMMENT_DATETIME
@@ -708,24 +722,24 @@ class DashboardEvent extends Component {
               </span>
             </div> */}
 
-            <div className="row item dashboard-event-box height-14">
-              <OverlayTrigger
-                placement="auto"
-                trigger={["hover", "focus"]}
-                overlay={this.props.eventItemPopoverTemplateResolver(
-                  schedulerData,
-                  event,
-                  titleText,
-                  start,
-                  end,
-                  this.props.bgColor
-                )}
-              >
-                <div className="col-md-9 no-padding flex-center">
-                  <div className="col-md-2 no-padding flex-center clock-margin">
-                    {/* <div className={`${this.props.event.priority}`}></div> */}
-                    <div className="clock-img-div">
-                      {/* <img
+              <div className="row item dashboard-event-box height-14">
+                <OverlayTrigger
+                  placement="auto"
+                  trigger={["hover", "focus"]}
+                  overlay={this.props.eventItemPopoverTemplateResolver(
+                    schedulerData,
+                    event,
+                    titleText,
+                    start,
+                    end,
+                    this.props.bgColor
+                  )}
+                >
+                  <div className="col-md-9 no-padding flex-center">
+                    <div className="col-md-2 no-padding flex-center clock-margin">
+                      {/* <div className={`${this.props.event.priority}`}></div> */}
+                      <div className="clock-img-div">
+                        {/* <img
                         src={ClockIcon}
                         alt=""
                         title=""
@@ -733,135 +747,136 @@ class DashboardEvent extends Component {
                         height="100%"
                         width="100%"
                       /> */}
-                      <svg
-                        id="Capa_1"
-                        enableBackground="new 0 0 512 512"
-                        height="100%"
-                        viewBox="0 0 512 512"
-                        width="100%"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g>
-                          <path
-                            d="m256 0-128 256 128 256c141.385 0 256-114.615 256-256s-114.615-256-256-256z"
-                            fill="#28abfa"
-                          />
-                          <path
-                            d="m0 256c0 141.385 114.615 256 256 256v-512c-141.385 0-256 114.615-256 256z"
-                            fill="#14cfff"
-                          />
-                          <path
-                            d="m256 60-98 196 98 196c108.248 0 196-87.752 196-196s-87.752-196-196-196z"
-                            fill="#c4f3ff"
-                          />
-                          <path
-                            d="m60 256c0 108.248 87.752 196 196 196v-392c-108.248 0-196 87.752-196 196z"
-                            fill="#fff"
-                          />
-                          <path
-                            d="m298.426 277.213-42.426-42.426h-20l20 42.426 21.213 21.213z"
-                            fill="#340d66"
-                          />
-                          <path
-                            d="m170.794 149.581-21.213 21.213 106.419 106.419v-42.426z"
-                            fill="#373e9f"
-                          />
-                          <path
-                            d="m341.561 149.227-85.561 85.56-20 42.426h20l106.773-106.774z"
-                            fill="#373e9f"
-                          />
-                          <path
-                            d="m213.574 277.213 21.213 21.213 21.213-21.213v-42.426z"
-                            fill="#3857bc"
-                          />
-                          <path
-                            d="m271 90h-15l-10 15 10 15h15z"
-                            fill="#340d66"
-                          />
-                          <path d="m241 90h15v30h-15z" fill="#373e9f" />
-                          <path
-                            d="m271 392h-15l-10 15 10 15h15z"
-                            fill="#340d66"
-                          />
-                          <path d="m241 392h15v30h-15z" fill="#373e9f" />
-                          <path
-                            d="m90 241h30v30h-30z"
-                            fill="#373e9f"
-                            transform="matrix(0 -1 1 0 -151 361)"
-                          />
-                          <path
-                            d="m392 241h30v30h-30z"
-                            fill="#340d66"
-                            transform="matrix(0 -1 1 0 151 663)"
-                          />
-                        </g>
-                      </svg>
+                        <svg
+                          id="Capa_1"
+                          enableBackground="new 0 0 512 512"
+                          height="100%"
+                          viewBox="0 0 512 512"
+                          width="100%"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g>
+                            <path
+                              d="m256 0-128 256 128 256c141.385 0 256-114.615 256-256s-114.615-256-256-256z"
+                              fill="#28abfa"
+                            />
+                            <path
+                              d="m0 256c0 141.385 114.615 256 256 256v-512c-141.385 0-256 114.615-256 256z"
+                              fill="#14cfff"
+                            />
+                            <path
+                              d="m256 60-98 196 98 196c108.248 0 196-87.752 196-196s-87.752-196-196-196z"
+                              fill="#c4f3ff"
+                            />
+                            <path
+                              d="m60 256c0 108.248 87.752 196 196 196v-392c-108.248 0-196 87.752-196 196z"
+                              fill="#fff"
+                            />
+                            <path
+                              d="m298.426 277.213-42.426-42.426h-20l20 42.426 21.213 21.213z"
+                              fill="#340d66"
+                            />
+                            <path
+                              d="m170.794 149.581-21.213 21.213 106.419 106.419v-42.426z"
+                              fill="#373e9f"
+                            />
+                            <path
+                              d="m341.561 149.227-85.561 85.56-20 42.426h20l106.773-106.774z"
+                              fill="#373e9f"
+                            />
+                            <path
+                              d="m213.574 277.213 21.213 21.213 21.213-21.213v-42.426z"
+                              fill="#3857bc"
+                            />
+                            <path
+                              d="m271 90h-15l-10 15 10 15h15z"
+                              fill="#340d66"
+                            />
+                            <path d="m241 90h15v30h-15z" fill="#373e9f" />
+                            <path
+                              d="m271 392h-15l-10 15 10 15h15z"
+                              fill="#340d66"
+                            />
+                            <path d="m241 392h15v30h-15z" fill="#373e9f" />
+                            <path
+                              d="m90 241h30v30h-30z"
+                              fill="#373e9f"
+                              transform="matrix(0 -1 1 0 -151 361)"
+                            />
+                            <path
+                              d="m392 241h30v30h-30z"
+                              fill="#340d66"
+                              transform="matrix(0 -1 1 0 151 663)"
+                            />
+                          </g>
+                        </svg>
+                      </div>
                     </div>
-                  </div>
-                  {true && (
-                    <div className="col-md-3 no-padding d-inline-block ">
-                      <span className="task-timer">
-                        <TimerCardTask
-                          totalDuration={totalTrackTime}
-                          startOn={this.props.event.startOn}
-                          isStart={this.props.event.startOn ? true : false}
-                          calculateTime={this.calculateTime}
-                          event={event}
-                        />
-                      </span>
-                    </div>
-                  )}
-                  {event && event.identifier
-                    ? <div className="col-md-3 no-padding d-inline-block ml-4">
+                    {true && (
+                      <div className="col-md-3 no-padding d-inline-block ">
+                        <span className="task-timer">
+                          <TimerCardTask
+                            totalDuration={totalTrackTime}
+                            startOn={this.props.event.startOn}
+                            isStart={this.props.event.startOn ? true : false}
+                            calculateTime={this.calculateTime}
+                            event={event}
+                          />
+                        </span>
+                      </div>
+                    )}
+                    {event && event.identifier
+                      ? <div className="col-md-3 no-padding d-inline-block ml-4">
                         <span className="task-identifier">
-                        [{event.identifier}]
-                        </span> 
-                      </div> 
-                    : null}
-                </div>
-              </OverlayTrigger>
-            </div>
+                          [{event.identifier}]
+                        </span>
+                      </div>
+                      : null}
+                  </div>
+                </OverlayTrigger>
+              </div>
 
-            <div className="row item dashboard-event-box">
-              <OverlayTrigger
-                placement="auto"
-                trigger={["hover", "focus"]}
-                overlay={this.props.eventItemPopoverTemplateResolver(
-                  schedulerData,
-                  event,
-                  titleText,
-                  start,
-                  end,
-                  this.props.bgColor
-                )}
-              >
-                <div className="row item dashboard-event-box">
-                  <div
-                    className="col-md-12 no-padding"
-                  // style={{ color: contColor }}
-                  >
+              <div className="row item dashboard-event-box">
+                <OverlayTrigger
+                  placement="auto"
+                  trigger={["hover", "focus"]}
+                  overlay={this.props.eventItemPopoverTemplateResolver(
+                    schedulerData,
+                    event,
+                    titleText,
+                    start,
+                    end,
+                    this.props.bgColor
+                  )}
+                >
+                  <div className="row item dashboard-event-box">
                     <div
-                      className="col-md-12  pointer  text-wraper"
-                      style={{
-                        padding: "5px 5px 0px 5px",
-                        // color: getContrastColor(this.props.bgColor)
-                      }}
-                      onClick={() => {
-                        if (!!eventItemClick)
-                          eventItemClick(schedulerData, event);
-                      }}
+                      className="col-md-12 no-padding"
+                    // style={{ color: contColor }}
                     >
-                      {/* // <div className="lside" style={{color:event.bgColor}}>{side.lSide?<i class="fas fa-arrow-left"></i>:null}</div> */}
-                      <div className="project-task-name">{titleText}</div>
-                      {/* <div className="rside" style={{color:event.bgColor}}>{side.rSide?<i class="fas fa-arrow-right"></i>:null}</div> */}
+                      <div
+                        className="col-md-12  pointer  text-wraper"
+                        style={{
+                          padding: "5px 5px 0px 5px",
+                          // color: getContrastColor(this.props.bgColor)
+                        }}
+                        onClick={() => {
+                          if (!!eventItemClick)
+                            eventItemClick(schedulerData, event);
+                        }}
+                      >
+                        {/* // <div className="lside" style={{color:event.bgColor}}>{side.lSide?<i class="fas fa-arrow-left"></i>:null}</div> */}
+                        <div className="project-task-name">{titleText}</div>
+                        {/* <div className="rside" style={{color:event.bgColor}}>{side.rSide?<i class="fas fa-arrow-right"></i>:null}</div> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </OverlayTrigger>
+                </OverlayTrigger>
+              </div>
             </div>
-          </div>
-        ) : // </div>
-          null}
+          ) : // </div>
+            null
+        }
 
         {/* Code for monthly below start logic not needed right now  */}
         {/* {schedulerData.viewType === 2 ? (
@@ -873,30 +888,34 @@ class DashboardEvent extends Component {
         ) : null} */}
         {/* Code for monthly below end logic not needed right now  */}
 
-        {this.state.showTimerMenu && this.state.clickEventId === event.id ? (
-          <div className={`dropdown-div `}>
-            {todaysLog.time_tracks.map((time, idx) => {
-              if (idx !== 0) {
-                return (
-                  <div className="hover-border" key={time.id}>
-                    {this.returnTime(time)}
-                  </div>
-                );
-              }
-            })}
-          </div>
-        ) : null}
+        {
+          this.state.showTimerMenu && this.state.clickEventId === event.id ? (
+            <div className={`dropdown-div `}>
+              {todaysLog.time_tracks.map((time, idx) => {
+                if (idx !== 0) {
+                  return (
+                    <div className="hover-border" key={time.id}>
+                      {this.returnTime(time)}
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          ) : null
+        }
 
-        {this.state.showAction && this.state.clickEventId === event.id ? (
-          <TaskAction
-            event={event}
-            parentState={state}
-            activeUserId={event.resourceId}
-            actionOnClickOutside={this.actionOnClickOutside}
-            taskEventResumeConfirm={this.props.taskEventResumeConfirm}
-            isTimetrackMode={this.props.isTimetrackMode}
-          />
-        ) : null}
+        {
+          this.state.showAction && this.state.clickEventId === event.id ? (
+            <TaskAction
+              event={event}
+              parentState={state}
+              activeUserId={event.resourceId}
+              actionOnClickOutside={this.actionOnClickOutside}
+              taskEventResumeConfirm={this.props.taskEventResumeConfirm}
+              isTimetrackMode={this.props.isTimetrackMode}
+            />
+          ) : null
+        }
 
         <div className="custom-event-popup">
           {this.state.showPopup
@@ -911,11 +930,13 @@ class DashboardEvent extends Component {
             : null}
         </div>
 
-        {state.showAlert && state.showEventAlertId == event.id ? (
-          <UncontrolledAlert className="task-war-alert" color="warning">
-            one task already ongoing !
-          </UncontrolledAlert>
-        ) : null}
+        {
+          state.showAlert && state.showEventAlertId == event.id ? (
+            <UncontrolledAlert className="task-war-alert" color="warning">
+              one task already ongoing !
+            </UncontrolledAlert>
+          ) : null
+        }
       </>
     );
   }
