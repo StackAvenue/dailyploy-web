@@ -5076,10 +5076,9 @@ table.scheduler-table tr:last-child td {
   border: solid 1px#9b9b9b;
 }
 .color-dot {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   margin-left: 0.75rem;
-  margin-right: 10px;
   vertical-align: sub;
   border-radius: 20px;
   border: solid 1px#9b9b9b;
@@ -6543,7 +6542,7 @@ font-family: 'Roboto' !important;
     font-family: 'Roboto' !important;
 }
 .name-text-dot{
-  max-width: 16% !important;
+  max-width: 70% !important;
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
