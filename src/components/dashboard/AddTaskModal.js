@@ -1,4 +1,4 @@
-import React, { Component }from "react";
+import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
@@ -61,7 +61,13 @@ class AddTaskModal extends React.Component {
 
   disabledHours = () => {
     var time = this.props.state.timeFrom;
-    if (time) {
+    let fromDate = this.props.state.dateFrom.toString();
+    let toDate = this.props.state.dateTo.toString();
+    fromDate = fromDate.split(" ");
+    toDate = toDate.split(" ");
+    let fdate = fromDate[1] + fromDate[2];
+    let tdate = toDate[1] + toDate[2];
+    if (time && fdate === tdate) {
       var hr = time.split(":")[0];
       hr = Number(hr);
       var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
@@ -73,16 +79,28 @@ class AddTaskModal extends React.Component {
   disabledMinutes = () => {
     var fTime = this.props.state.timeFrom;
     var tTime = this.props.state.timeTo;
-    if (fTime && !tTime) {
-      var min = fTime.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
-    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
-      var min = fTime.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
+    let fromDate = this.props.state.dateFrom.toString();
+    let toDate = this.props.state.dateTo.toString();
+    fromDate = fromDate.split(" ");
+    toDate = toDate.split(" ");
+    let fdate = fromDate[1] + fromDate[2];
+    let tdate = toDate[1] + toDate[2];
+    if (fTime && fdate === tdate) {
+      if (fTime && !tTime) {
+        var min = fTime.split(":")[1];
+        min = Number(min) + 1;
+        var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+        return minArr;
+      } else if (
+        fTime &&
+        tTime &&
+        fTime.split(":")[0] === tTime.split(":")[0]
+      ) {
+        var min = fTime.split(":")[1];
+        min = Number(min) + 1;
+        var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+        return minArr;
+      }
     }
     return [];
   };
@@ -137,7 +155,10 @@ class AddTaskModal extends React.Component {
     if (characterCode === "Backspace") return;
 
     const characterNumber = Number(characterCode);
-    if (characterNumber >= 0 && characterNumber <= 9) {
+    if (
+      (characterNumber >= 0 && characterNumber <= 9) ||
+      characterCode === "."
+    ) {
       if (e.currentTarget.value && e.currentTarget.value.length) {
         return;
       } else if (characterNumber === 0) {
@@ -537,7 +558,7 @@ class AddTaskModal extends React.Component {
                     ) : null}
                   </div>
 
-                  <div className="col-md-12 row no-margin no-padding input-row">
+                  {/* <div className="col-md-12 row no-margin no-padding input-row">
                     <div
                       className="col-md-2 no-padding label"
                       style={{ verticalAlign: "top" }}
@@ -553,7 +574,7 @@ class AddTaskModal extends React.Component {
                         rows="1"
                         placeholder="Write Here..."
                       />
-                      {/* <CommentUpload
+                      <CommentUpload
                         state={this.state}
                         showSave={
                           props.state.taskButton === "Add" ? false : true
@@ -566,9 +587,9 @@ class AddTaskModal extends React.Component {
                         handleInputChange={this.props.handleInputChange}
                         showSave={false}
                         showAttachIcon={false}
-                      /> */}
+                      />
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="no-padding input-row">
                     <div className="action-btn">
