@@ -125,7 +125,7 @@ class TaskInfoModal extends Component {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
-        <div className="left-padding-20px">
+        <div className="left-padding-20px select-bar-color-taskbar">
           <div
             className={`d-inline-block ${klass}`}
             style={{
@@ -608,56 +608,36 @@ class TaskInfoModal extends Component {
 
             <div className="col-md-12 body">
               <div className="col-md-12 no-padding input-row text-titlize">
-                <table className="tc">
-                  <tbody>
-                    <tr>
-                      <td className="label1">
-                        <div>Name</div>
-                      </td>
-                      <td className="tabledata">
-                        <div className="col-md-10 d-inline-block">
-                          {props.state.taskName}
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="col-md-12 no-padding input-row text-titlize task-info-description">
-                <table className="tc">
-                  <tr>
-                    <td className="label1">
-                      <div>Description</div>
-                    </td>
-                    <td className="tabledata">
-                      <div className="col-md-10 d-inline-block">
-                        <span>
-                          {props.state.description
-                            ? props.state.description
-                            : "NA"}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Name
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">
+                    {props.state.taskName}
+                  </span>
+                </div>
               </div>
 
               <div className="col-md-12 no-padding input-row text-titlize">
-                <table className="tc">
-                  <tr>
-                    <td className="label1">
-                      <div>Estimate</div>
-                    </td>
-                    <td className="tabledata">
-                      <div className="col-md-10 d-inline-block">
-                        <span>
-                          {props.state.estimate ? props.state.estimate : "-"}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Description
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">
+                    {props.state.description ? props.state.description : "NA"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="col-md-12 no-padding input-row text-titlize">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Estimate
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">
+                    {props.state.estimate ? props.state.estimate : "-"}
+                  </span>
+                </div>
               </div>
 
               <div className="col-md-12 no-padding input-row text-titlize">
