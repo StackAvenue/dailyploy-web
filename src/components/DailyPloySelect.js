@@ -13,14 +13,14 @@ class DailyPloySelect extends Component {
       canBack: false,
       border: "solid 1px #d1d1d1",
       color: "#d1d1d1",
-      notFound: "hide"
+      notFound: "hide",
     };
   }
 
   componentDidMount = () => {
     this.setState({
       suggestions: this.props.options ? this.props.options : [],
-      selected: this.props.default ? this.props.default : ""
+      selected: this.props.default ? this.props.default : "",
     });
   };
 
@@ -29,7 +29,7 @@ class DailyPloySelect extends Component {
       this.setState({
         suggestions: this.props.options ? this.props.options : [],
         selected: this.props.default ? this.props.default : "",
-        searchText: ""
+        searchText: "",
       });
     }
   };
@@ -38,13 +38,13 @@ class DailyPloySelect extends Component {
     this.setState({ show: !this.state.show, suggestions: this.props.options });
   };
 
-  onSearchTextChange = e => {
+  onSearchTextChange = (e) => {
     const value = e.target.value;
     const searchBy = this.props.searchBy ? this.props.searchBy : "name";
     let suggestions = [];
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
-      suggestions = this.props.options.filter(s =>
+      suggestions = this.props.options.filter((s) =>
         regex.test(`${s[searchBy]}`)
       );
     } else {
@@ -54,7 +54,7 @@ class DailyPloySelect extends Component {
       suggestions: suggestions,
       searchText: value,
       show: true,
-      notFound: suggestions.length > 0 ? "hide" : "show"
+      notFound: suggestions.length > 0 ? "hide" : "show",
     });
   };
 
@@ -78,11 +78,11 @@ class DailyPloySelect extends Component {
                     {icon !== "" && klass === "" ? (
                       <i className={`left-padding-10px ${icon}`}></i>
                     ) : (
-                        <div
-                          className={`d-inline-block ${klass}`}
-                          style={{ backgroundColor: `${option.color_code}` }}
-                        ></div>
-                      )}
+                      <div
+                        className={`d-inline-block ${klass}`}
+                        style={{ backgroundColor: `${option.color_code}` }}
+                      ></div>
+                    )}
                     <span className="d-inline-block right-left-space-5 text-titlize">{`${option[name]}`}</span>
                   </li>
                 );
@@ -99,40 +99,40 @@ class DailyPloySelect extends Component {
               })}
           </ul>
         ) : (
-            <>
-              {this.props.noOptionMessage && this.state.searchText == "" ? (
+          <>
+            {this.props.noOptionMessage && this.state.searchText == "" ? (
+              <span
+                className={`text-titlize left-padding-10px`}
+                style={{ padding: "10px" }}
+              >
+                {this.props.noOptionMessage}
+              </span>
+            ) : (
+              <span
+                className={`text-titlize left-padding-10px ${this.state.notFound}`}
+                style={{ padding: "5px" }}
+              >
+                No Match Found
+              </span>
+            )}
+            {this.props.canAdd ? (
+              <span className="d-inline-block task-add-category left-padding-10px">
+                <span>
+                  <i className="fa fa-bars d-inline-block"></i>
+                </span>
+                <span className="left-padding-20px d-inline-block text-titlize">
+                  {this.state.searchText}
+                </span>
                 <span
-                  className={`text-titlize left-padding-10px`}
-                  style={{ padding: "10px" }}
+                  className="add-category d-inline-block"
+                  onClick={() => this.props.addNew(this.state.searchText)}
                 >
-                  {this.props.noOptionMessage}
+                  (+ Add New)
                 </span>
-              ) : (
-                  <span
-                    className={`text-titlize left-padding-10px ${this.state.notFound}`}
-                    style={{ padding: "5px" }}
-                  >
-                    No Match Found
-                  </span>
-                )}
-              {this.props.canAdd ? (
-                <span className="d-inline-block task-add-category left-padding-10px">
-                  <span>
-                    <i className="fa fa-bars d-inline-block"></i>
-                  </span>
-                  <span className="left-padding-20px d-inline-block text-titlize">
-                    {this.state.searchText}
-                  </span>
-                  <span
-                    className="add-category d-inline-block"
-                    onClick={() => this.props.addNew(this.state.searchText)}
-                  >
-                    (+ Add New)
-                </span>
-                </span>
-              ) : null}
-            </>
-          )}
+              </span>
+            ) : null}
+          </>
+        )}
       </>
     );
   };
@@ -154,7 +154,7 @@ class DailyPloySelect extends Component {
       return (
         <>
           {selected != "" ? (
-            <div className="">
+            <div className="select-bar-color">
               <div className="l-padding-12px d-inline-block">{`${selected[label]}`}</div>
             </div>
           ) : null}
@@ -181,12 +181,12 @@ class DailyPloySelect extends Component {
       return (
         <>
           {selected != "" ? (
-            <div className="">
+            <div className="select-bar-color l-padding-12px">
               <div
                 className={`d-inline-block ${klass}`}
                 style={{
                   backgroundColor: `${selected.color_code ? selected.color_code : this.state.color
-                    }`
+                    }`,
                 }}
               ></div>
               <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
@@ -198,7 +198,7 @@ class DailyPloySelect extends Component {
       return (
         <>
           {selected != "" ? (
-            <div className="">
+            <div className="select-bar-color">
               <div className="right-left-space-5 d-inline-block">{`${selected[label]}`}</div>
             </div>
           ) : null}
@@ -207,17 +207,17 @@ class DailyPloySelect extends Component {
     }
   };
 
-  selectSuggestion = option => {
+  selectSuggestion = (option) => {
     this.setState({ selected: option, show: false, searchText: "" });
     this.props.onChange(option);
   };
 
-  handleKeyPress = event => {
+  handleKeyPress = (event) => {
     if (event.keyCode === 8 && this.state.searchText.length === 0) {
       this.setState({
         canBack: true,
         selected: "",
-        suggestions: this.props.options
+        suggestions: this.props.options,
       });
       this.props.onChange(null);
     }
@@ -257,15 +257,15 @@ class DailyPloySelect extends Component {
                       style={{
                         paddingLeft: "5px",
                         color: "#9b9b9b",
-                        font: "16px"
+                        font: "16px",
                       }}
                     >
                       {props.placeholder}
                     </div>
                   </div>
                 ) : (
-                    this.renderSelectedSuggestion()
-                  )}
+                  this.renderSelectedSuggestion()
+                )}
               </div>
               <input
                 className="d-inline-block"

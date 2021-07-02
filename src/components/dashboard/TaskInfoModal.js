@@ -71,7 +71,7 @@ class TaskInfoModal extends Component {
   isToday = () => {
     return this.props.state.dateTo
       ? moment(this.props.state.dateTo).format(DATE_FORMAT1) ==
-          moment(new Date()).format(DATE_FORMAT1)
+      moment(new Date()).format(DATE_FORMAT1)
       : false;
   };
   async componentDidMount() {
@@ -125,13 +125,12 @@ class TaskInfoModal extends Component {
       const klass =
         type == "block" ? "color-block" : type == "circle" ? "color-dot" : "";
       return (
-        <div className="left-padding-20px">
+        <div className="left-padding-20px select-bar-color-taskbar">
           <div
             className={`d-inline-block ${klass}`}
             style={{
-              backgroundColor: `${
-                option.color_code ? option.color_code : this.state.color
-              }`,
+              backgroundColor: `${option.color_code ? option.color_code : this.state.color
+                }`,
             }}
           ></div>
           <div className="right-left-space-5 d-inline-block">{`${option[name]}`}</div>
@@ -346,10 +345,10 @@ class TaskInfoModal extends Component {
     return h > 0
       ? `${h} hours ago`
       : m > 0 && h == 0
-      ? `${m} minutes ago`
-      : s > 30 && h == 0 && m == 0
-      ? "few seconds ago"
-      : "just now";
+        ? `${m} minutes ago`
+        : s > 30 && h == 0 && m == 0
+          ? "few seconds ago"
+          : "just now";
   };
 
   commentsTime = (comment) => {
@@ -608,37 +607,38 @@ class TaskInfoModal extends Component {
 
             <div className="col-md-12 body">
               <div className="col-md-12 no-padding input-row text-titlize">
-                <table className="tc">
-                  <tbody>
-                    <tr>
-                      <td className="label1">
-                        <div>Name</div>
-                      </td>
-                      <td className="tabledata">
-                        <div className="col-md-10 d-inline-block">
-                          {props.state.taskName}
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Name
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">
+                    {props.state.taskName}
+                  </span>
+                </div>
               </div>
 
+            <div className="col-md-12 no-padding input-row text-titlize d-flex">
+              <div className="col-md-2 d-inline-block no-padding label ">
+                Description
+              </div>
+              <div className="col-md-10 d-inline-block">
+                <div className="left-padding-20px">
+                  <span className="task-info-description-textarea">
+                    {props.state.description ? props.state.description : "NA"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
               <div className="col-md-12 no-padding input-row text-titlize">
-                <table className="tc">
-                  <tr>
-                    <td className="label1">
-                      <div>Estimate</div>
-                    </td>
-                    <td className="tabledata">
-                      <div className="col-md-10 d-inline-block">
-                        <span>
-                          {props.state.estimate ? props.state.estimate : "-"}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Estimate
+                </div>
+                <div className="col-md-10 d-inline-block">
+                  <span className="left-padding-20px">
+                    {props.state.estimate ? props.state.estimate : "-"}
+                  </span>
+                </div>
               </div>
 
               <div className="col-md-12 no-padding input-row text-titlize">
@@ -721,8 +721,8 @@ class TaskInfoModal extends Component {
                 {true && (
                   <div className="col-md-10 d-inline-block">
                     {this.props.state.taskEvent &&
-                    this.props.state.taskEvent.dateFormattedTimeTrack &&
-                    this.props.state.taskEvent.dateFormattedTimeTrack.length >
+                      this.props.state.taskEvent.dateFormattedTimeTrack &&
+                      this.props.state.taskEvent.dateFormattedTimeTrack.length >
                       0 ? (
                       !this.state.editLog ? (
                         <>
@@ -808,11 +808,10 @@ class TaskInfoModal extends Component {
                                 <i className="far fa-arrow-alt-circle-left"></i>
                               </div>
                               <div
-                                className={`col-md-1 d-inline-block ${
-                                  this.state.timeTrackEditLoader
-                                    ? "disabled"
-                                    : ""
-                                }`}
+                                className={`col-md-1 d-inline-block ${this.state.timeTrackEditLoader
+                                  ? "disabled"
+                                  : ""
+                                  }`}
                                 onClick={this.editTimeTrack}
                                 title={"Edit"}
                                 style={{
@@ -907,11 +906,10 @@ class TaskInfoModal extends Component {
                                 <i className="far fa-arrow-alt-circle-left"></i>
                               </div>
                               <div
-                                className={`col-md-1 d-inline-block ${
-                                  this.state.timeTrackEditLoader
-                                    ? "disabled"
-                                    : ""
-                                }`}
+                                className={`col-md-1 d-inline-block ${this.state.timeTrackEditLoader
+                                  ? "disabled"
+                                  : ""
+                                  }`}
                                 onClick={this.editTimeTrack}
                                 title={"Edit"}
                                 style={{
@@ -957,17 +955,17 @@ class TaskInfoModal extends Component {
                 </div>
               ) : null}
 
-              <div className="col-md-12 no-padding input-row text-titlize">
+              {/* <div className="col-md-12 no-padding input-row text-titlize">
                 <div
                   className="col-md-1 d-inline-block no-padding label"
                   style={{ verticalAlign: "top" }}
                 >
-                  {/* Comments */}
+                  Comments
                   <div className="comment-owner-dot">
                     {firstTwoLetter(this.props.state.user.name)}
 
-                    {/* {firstTwoLetter(this.props.loggedInUserName)}
-                    {firstTwoLetter(this.state.userName)} */}
+                    {firstTwoLetter(this.props.loggedInUserName)}
+                    {firstTwoLetter(this.state.userName)}
                   </div>
                 </div>
                 <div className="col-md-11 d-inline-block">
@@ -986,7 +984,7 @@ class TaskInfoModal extends Component {
                     showCommentBox={this.onClickAddCommnetBox}
                   />
                 </div>
-              </div>
+              </div> */}
               {props.state.taskComments ? (
                 <>
                   <div className="col-md-12 no-padding input-row task-comments">
@@ -1002,10 +1000,10 @@ class TaskInfoModal extends Component {
                         >
                           <div
                             className="col-md-2 d-inline-block no-padding label"
-                            // style={{
-                            // verticalAlign: "text-top",
-                            // marginTop: "20px"
-                            // }}
+                          // style={{
+                          // verticalAlign: "text-top",
+                          // marginTop: "20px"
+                          // }}
                           >
                             <div className="comment-owner-dot">
                               {firstTwoLetter(comment.user.name)}
@@ -1051,10 +1049,10 @@ class TaskInfoModal extends Component {
                             <div className="commnet-card comment-bg-color">
                               <div
                                 className=""
-                                // style={{
-                                //   display: "flex",
-                                //   justifyContent: "space-between",
-                                // }}
+                              // style={{
+                              //   display: "flex",
+                              //   justifyContent: "space-between",
+                              // }}
                               >
                                 <div className="owner-name text-titlize">
                                   {comment.user.name}

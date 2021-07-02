@@ -44,6 +44,7 @@ class Dashboard extends PureComponent {
       monthly: "month",
     };
     this.state = {
+      desciption: "",
       loadFireBase: false,
       taskName: "",
       estimate: "",
@@ -57,6 +58,7 @@ class Dashboard extends PureComponent {
       timeFrom: "",
       timeTo: null,
       comments: "",
+      description: "",
       userId: "",
       userName: "",
       workspaces: [],
@@ -135,7 +137,7 @@ class Dashboard extends PureComponent {
       hoverID: 0,
       isTimetrackMode: this.props.state.timetrack_enabled,
       isDisable: false,
-      loadStatus: false
+      loadStatus: false,
     };
   }
 
@@ -227,7 +229,7 @@ class Dashboard extends PureComponent {
           startOn: taskRunningObj.startOn,
           trackingEvent: trackingEvent,
           allData: data,
-          allData1: data
+          allData1: data,
         });
         let projects = [];
         this.state.projects.forEach((project) => {
@@ -706,7 +708,7 @@ class Dashboard extends PureComponent {
       trackingStatus: task.status == "completed" ? "completed" : "play",
       startOn: null,
       is_complete: task.is_complete,
-      identifier: task.identifier
+      identifier: task.identifier,
     };
   };
 
@@ -1105,6 +1107,7 @@ class Dashboard extends PureComponent {
           events: events,
           border: "solid 1px #ffffff",
           taskName: "",
+          description: "",
           estimate: "",
           project: null,
           taskCategorie: "",
@@ -1366,10 +1369,12 @@ class Dashboard extends PureComponent {
 
         priority:
           this.state.taskPrioritie && this.state.taskPrioritie.name
-            ? this.state.taskPrioritie.name : "no_priority",
+            ? this.state.taskPrioritie.name
+            : "no_priority",
         task_status_id: this.state.taskStatus
           ? this.state.taskStatus.id
           : this.state.taskStatuss[0].id,
+        description: this.state.description,
       },
     };
     return taskData;
@@ -1495,7 +1500,7 @@ class Dashboard extends PureComponent {
       taskStatus: "",
       taskStatuss: [],
       showStatus: false,
-
+      description: "",
       errors: {
         taskNameError: "",
         projectError: "",
@@ -1657,7 +1662,7 @@ class Dashboard extends PureComponent {
         border: "solid 1px #9b9b9b",
         isBorder: false,
         errors: errors,
-        loadStatus: true
+        loadStatus: true,
       });
       try {
         const { data } = await get(
@@ -1670,7 +1675,7 @@ class Dashboard extends PureComponent {
           taskStatuss: taskStatus,
           showStatus: true,
           defaultStatus: defaultStatus,
-          loadStatus: false
+          loadStatus: false,
         });
       } catch (e) { }
     } else {
@@ -1899,7 +1904,7 @@ class Dashboard extends PureComponent {
   };
 
   editAddTaskDetails = async (taskId, event) => {
-    this.setState({ isDisable: true })
+    this.setState({ isDisable: true });
     try {
       const { data } = await get(
         `workspaces/${this.state.workspaceId}/projects/${event.projectId}/task_status?page_number=1&page_size=5`
@@ -1910,7 +1915,7 @@ class Dashboard extends PureComponent {
         taskStatuss: taskStatu,
         showStatus: true,
         defaultStatus: defaultStatus,
-        isDisable: false
+        isDisable: false,
       });
     } catch (e) { }
     let members = this.memberSearchOptions(event.resourceId, event.projectId);
@@ -1985,6 +1990,7 @@ class Dashboard extends PureComponent {
           taskPrioritie: taskPrioritie,
           taskComments: taskComments,
           taskStatus: data.status,
+          description: data.description,
         });
       }
     } catch (e) { }
@@ -2068,7 +2074,7 @@ class Dashboard extends PureComponent {
         let taskId = event.id.split("-")[0];
         try {
           this.setState({ taskloader: true });
-          // mark complete flag 
+          // mark complete flag
           event.is_complete = true;
           const { data } = await put(
             { task: event },
@@ -2151,10 +2157,10 @@ class Dashboard extends PureComponent {
     const taskId = event.id.split("-")[0];
     const taskObj = {
       logged_time: timeLogged,
-      start_date: event.date
+      start_date: event.date,
     };
     if (event.allTimeTracked && event.allTimeTracked.length > 0) {
-      this.editTimeTrack(taskId, event.allTimeTracked[0], timeLogged)
+      this.editTimeTrack(taskId, event.allTimeTracked[0], timeLogged);
     } else {
       try {
         const { data } = await post(taskObj, `tasks/${taskId}/logg_time`);
@@ -2163,7 +2169,7 @@ class Dashboard extends PureComponent {
           position: toast.POSITION.TOP_CENTER,
         });
         if (data) {
-          this.timeTrackUpdate(data)
+          this.timeTrackUpdate(data);
           this.closeTaskModal();
         }
       } catch (err) {
@@ -2184,7 +2190,9 @@ class Dashboard extends PureComponent {
   editTimeTrack = async (taskId, event, timeLogged) => {
     let newTrack = {
       start_time: event.start_time,
-      end_time: new Date(moment(event.start_time).add(timeLogged, "hours").format(FULL_DATE)),
+      end_time: new Date(
+        moment(event.start_time).add(timeLogged, "hours").format(FULL_DATE)
+      ),
     };
     try {
       const { data } = await put(
@@ -2192,18 +2200,15 @@ class Dashboard extends PureComponent {
         `tasks/${taskId}/edit_tracked_time/${event.id}`
       );
       if (data) {
-        this.timeTrackUpdate(data)
+        this.timeTrackUpdate(data);
         this.closeTaskModal();
       }
-      toast(
-        <DailyPloyToast message={"log time updated"} status="success" />,
-        {
-          autoClose: 2000,
-          position: toast.POSITION.TOP_CENTER,
-        }
-      );
+      toast(<DailyPloyToast message={"log time updated"} status="success" />, {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (e) { }
-  }
+  };
 
   taskDelete = async (event) => {
     if (event) {
@@ -2997,34 +3002,34 @@ class Dashboard extends PureComponent {
             >
               <i className="fas fa-plus" />
             </button>
-              <AddTaskModal
-                show={this.state.show}
-                state={this.state}
-                closeTaskModal={this.closeOnlyTaskModal}
-                handleInputChange={this.handleInputChange}
-                projects={this.state.memberProjects}
-                handleDateFrom={this.handleDateFrom}
-                handleDateTo={this.handleDateTo}
-                handleTimeFrom={this.handleTimeFrom}
-                handleTimeTo={this.handleTimeTo}
-                users={this.state.users}
-                addTask={this.addTask}
-                editTask={this.editTask}
-                handleMemberSelect={this.handleMemberSelect}
-                handleProjectSelect={this.handleProjectSelect}
-                modalMemberSearchOptions={this.state.modalMemberSearchOptions}
-                backToTaskInfoModal={this.backToTaskInfoModal}
-                confirmModal={this.confirmModal}
-                handleCategoryChange={this.handleCategoryChange}
-                handlePrioritiesChange={this.handlePrioritiesChange}
-                addCategory={this.addCategory}
-                handleTaskNameChange={this.handleTaskNameChange}
-                saveComments={this.saveComments}
-                toggleTaskStartState={this.toggleTaskStartState}
-                handleaddStatusChange={this.handleaddStatusChange}
-                addStatus={this.addStatus}
-                loadStatus={this.state.loadStatus}
-              />
+            <AddTaskModal
+              show={this.state.show}
+              state={this.state}
+              closeTaskModal={this.closeOnlyTaskModal}
+              handleInputChange={this.handleInputChange}
+              projects={this.state.memberProjects}
+              handleDateFrom={this.handleDateFrom}
+              handleDateTo={this.handleDateTo}
+              handleTimeFrom={this.handleTimeFrom}
+              handleTimeTo={this.handleTimeTo}
+              users={this.state.users}
+              addTask={this.addTask}
+              editTask={this.editTask}
+              handleMemberSelect={this.handleMemberSelect}
+              handleProjectSelect={this.handleProjectSelect}
+              modalMemberSearchOptions={this.state.modalMemberSearchOptions}
+              backToTaskInfoModal={this.backToTaskInfoModal}
+              confirmModal={this.confirmModal}
+              handleCategoryChange={this.handleCategoryChange}
+              handlePrioritiesChange={this.handlePrioritiesChange}
+              addCategory={this.addCategory}
+              handleTaskNameChange={this.handleTaskNameChange}
+              saveComments={this.saveComments}
+              toggleTaskStartState={this.toggleTaskStartState}
+              handleaddStatusChange={this.handleaddStatusChange}
+              addStatus={this.addStatus}
+              loadStatus={this.state.loadStatus}
+            />
             <NotificationContainer />
             {this.state.showInfo && this.state.backFromTaskEvent && (
               <TaskInfoModal

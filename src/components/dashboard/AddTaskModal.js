@@ -1,4 +1,4 @@
-import React, { Component }from "react";
+import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import TimePicker from "rc-time-picker";
@@ -40,6 +40,7 @@ class AddTaskModal extends React.Component {
       taskName: "",
       comments: "",
       pictures: [],
+      description: "",
     };
   }
 
@@ -60,7 +61,13 @@ class AddTaskModal extends React.Component {
 
   disabledHours = () => {
     var time = this.props.state.timeFrom;
-    if (time) {
+    let fromDate = this.props.state.dateFrom.toString();
+    let toDate = this.props.state.dateTo.toString();
+    fromDate = fromDate.split(" ");
+    toDate = toDate.split(" ");
+    let fdate = fromDate[1] + fromDate[2];
+    let tdate = toDate[1] + toDate[2];
+    if (time && fdate === tdate) {
       var hr = time.split(":")[0];
       hr = Number(hr);
       var hoursArr = Array.from({ length: `${hr}` }, (v, k) => k);
@@ -72,16 +79,28 @@ class AddTaskModal extends React.Component {
   disabledMinutes = () => {
     var fTime = this.props.state.timeFrom;
     var tTime = this.props.state.timeTo;
-    if (fTime && !tTime) {
-      var min = fTime.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
-    } else if (fTime && tTime && fTime.split(":")[0] === tTime.split(":")[0]) {
-      var min = fTime.split(":")[1];
-      min = Number(min) + 1;
-      var minArr = Array.from({ length: `${min}` }, (v, k) => k);
-      return minArr;
+    let fromDate = this.props.state.dateFrom.toString();
+    let toDate = this.props.state.dateTo.toString();
+    fromDate = fromDate.split(" ");
+    toDate = toDate.split(" ");
+    let fdate = fromDate[1] + fromDate[2];
+    let tdate = toDate[1] + toDate[2];
+    if (fTime && fdate === tdate) {
+      if (fTime && !tTime) {
+        var min = fTime.split(":")[1];
+        min = Number(min) + 1;
+        var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+        return minArr;
+      } else if (
+        fTime &&
+        tTime &&
+        fTime.split(":")[0] === tTime.split(":")[0]
+      ) {
+        var min = fTime.split(":")[1];
+        min = Number(min) + 1;
+        var minArr = Array.from({ length: `${min}` }, (v, k) => k);
+        return minArr;
+      }
     }
     return [];
   };
@@ -128,22 +147,25 @@ class AddTaskModal extends React.Component {
   };
 
   handleBlur(e) {
-    if (e.currentTarget.value === '0') e.currentTarget.value = '1'
+    if (e.currentTarget.value === "0") e.currentTarget.value = "1";
   }
 
   handleKeypress(e) {
-    const characterCode = e.key
-    if (characterCode === 'Backspace') return
+    const characterCode = e.key;
+    if (characterCode === "Backspace") return;
 
-    const characterNumber = Number(characterCode)
-    if (characterNumber >= 0 && characterNumber <= 9) {
+    const characterNumber = Number(characterCode);
+    if (
+      (characterNumber >= 0 && characterNumber <= 9) ||
+      characterCode === "."
+    ) {
       if (e.currentTarget.value && e.currentTarget.value.length) {
-        return
+        return;
       } else if (characterNumber === 0) {
-        e.preventDefault()
+        e.preventDefault();
       }
     } else {
-      e.preventDefault()
+      e.preventDefault();
     }
   }
 
@@ -194,11 +216,11 @@ class AddTaskModal extends React.Component {
                         // onBlur={this.onBlurInput}
                         placeholder="Task Name"
                         className="form-control"
-                      // ref={input => {
-                      //   this.nameInput = input;
-                      // }}
-                      // defaultValue=""
-                      // ref={input => input && input.focus()}
+                        // ref={input => {
+                        //   this.nameInput = input;
+                        // }}
+                        // defaultValue=""
+                        // ref={input => input && input.focus()}
                       />
                     </div>
 
@@ -214,6 +236,27 @@ class AddTaskModal extends React.Component {
                     ) : null}
                   </div>
 
+                  <div className="col-md-12 row no-margin no-padding input-row">
+                    <div
+                      className="col-md-2 no-padding label"
+                      style={{ verticalAlign: "top" }}
+                    >
+                      Description
+                    </div>
+                    <div className="col-md-10">
+                      <textarea
+                        name={`description`}
+                        value={
+                          props.state.description ? props.state.description : ""
+                        }
+                        onChange={(e) => this.props.handleInputChange(e)}
+                        className="form-control"
+                        rows="2"
+                        placeholder="Write Here..."
+                      />
+                    </div>
+                  </div>
+
                   <div className="col-md-12 no-padding input-row">
                     <div className="col-md-2 d-inline-block no-padding label">
                       Estimate
@@ -225,8 +268,8 @@ class AddTaskModal extends React.Component {
                         name="estimate"
                         onKeyDown={this.handleKeypress}
                         onBlur={this.handleBlur}
-                        min='1'
-                        step='1'
+                        min="1"
+                        step="1"
                         value={props.state.estimate}
                         onChange={props.handleInputChange}
                         placeholder="Estimated time(hour)"
@@ -244,7 +287,7 @@ class AddTaskModal extends React.Component {
                         props.state.taskButton !== "Add"
                           ? "disable-project-select"
                           : ""
-                        }`}
+                      }`}
                     >
                       <DailyPloySelect
                         options={this.props.state.memberProjects}
@@ -277,7 +320,11 @@ class AddTaskModal extends React.Component {
                         options={this.props.state.taskCategories}
                         placeholder="Select Category"
                         className="suggestion-z-index-50"
-                        default={this.props.state.taskCategorie ? this.props.state.taskCategorie : this.props.state.taskCategories[0]}
+                        default={
+                          this.props.state.taskCategorie
+                            ? this.props.state.taskCategorie
+                            : this.props.state.taskCategories[0]
+                        }
                         selected={this.props.state.taskCategories[0]}
                         onChange={this.props.handleCategoryChange}
                         canAdd={true}
@@ -294,25 +341,30 @@ class AddTaskModal extends React.Component {
                         </div>
                       </div>
                     ) : null} */}
-                  </div> 
-                  {this.props.state.showStatus ?
+                  </div>
+                  {this.props.state.showStatus ? (
                     <div className="col-md-12 no-padding input-row">
                       <div className="col-md-2 d-inline-block no-padding label">
                         Status
-                    </div>
+                      </div>
                       <div className="col-md-10 d-inline-block">
                         <SelectStatus
                           options={this.props.state.taskStatuss}
                           placeholder="Select Status"
                           className="suggestion-z-index-50"
-                          default={this.props.state.taskStatus ? this.props.state.taskStatus : this.props.state.taskStatuss[0]}
+                          default={
+                            this.props.state.taskStatus
+                              ? this.props.state.taskStatus
+                              : this.props.state.taskStatuss[0]
+                          }
                           selected={this.props.state.taskStatus}
                           onChange={this.props.handleaddStatusChange}
                           canAdd={true}
                           addNew={this.props.addStatus}
                         />
                       </div>
-                    </div> : null}
+                    </div>
+                  ) : null}
 
                   <div className="col-md-12 no-padding input-row">
                     <div className="col-md-2 d-inline-block no-padding label">
@@ -415,21 +467,21 @@ class AddTaskModal extends React.Component {
                       </div>
                     </div>
                     {this.props.state.errors.dateFromError ||
-                      this.props.state.errors.dateToError ? (
-                        <div className="col-md-12">
-                          <div className="col-md-2 d-inline-block no-padding"></div>
-                          <div className="col-md-5 d-inline-block no-padding">
-                            <span className="error-warning">
-                              {this.props.state.errors.dateFromError}
-                            </span>
-                          </div>
-                          <div className="col-md-5 d-inline-block no-padding">
-                            <span className="error-warning">
-                              {this.props.state.errors.dateToError}
-                            </span>
-                          </div>
+                    this.props.state.errors.dateToError ? (
+                      <div className="col-md-12">
+                        <div className="col-md-2 d-inline-block no-padding"></div>
+                        <div className="col-md-5 d-inline-block no-padding">
+                          <span className="error-warning">
+                            {this.props.state.errors.dateFromError}
+                          </span>
                         </div>
-                      ) : null}
+                        <div className="col-md-5 d-inline-block no-padding">
+                          <span className="error-warning">
+                            {this.props.state.errors.dateToError}
+                          </span>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
 
                   <div className="col-md-12 no-padding input-row">
@@ -443,7 +495,7 @@ class AddTaskModal extends React.Component {
                       <div className="col-md-12 d-inline-block no-padding">
                         <div
                           className="col-md-6 d-inline-block no-padding "
-                        // style={{ maxWidth: "219px" }}
+                          // style={{ maxWidth: "219px" }}
                         >
                           <div className="col-md-3 no-padding d-inline-block date-text-light">
                             <span>From:</span>
@@ -465,7 +517,7 @@ class AddTaskModal extends React.Component {
                         {/* <div className="col-md-1 d-inline-block no-padding">-</div> */}
                         <div
                           className="col-md-6 d-inline-block no-padding "
-                        // style={{ marginLeft: "22px" }}
+                          // style={{ marginLeft: "22px" }}
                         >
                           <div className="col-md-2 no-padding d-inline-block date-text-light">
                             <span>To:</span>
@@ -489,25 +541,30 @@ class AddTaskModal extends React.Component {
                     </div>
 
                     {this.props.state.errors.timeFromError ||
-                      this.props.state.errors.timeToError ? (
-                        <div className="col-md-12 d-inline-block no-padding">
-                          <div className="col-md-2 d-inline-block no-padding"></div>
-                          <div className="col-md-4 d-inline-block no-padding">
-                            <span className="error-warning">
-                              {this.props.state.errors.timeFromError}
-                            </span>
-                          </div>
-                          <div className="col-md-4 d-inline-block no-padding">
-                            <span className="error-warning">
-                              {this.props.state.errors.timeToError}
-                            </span>
-                          </div>
+                    this.props.state.errors.timeToError ? (
+                      <div className="col-md-12 d-inline-block no-padding">
+                        <div className="col-md-2 d-inline-block no-padding"></div>
+                        <div className="col-md-4 d-inline-block no-padding">
+                          <span className="error-warning">
+                            {this.props.state.errors.timeFromError}
+                          </span>
                         </div>
-                      ) : null}
+                        <div className="col-md-4 d-inline-block no-padding">
+                          <span className="error-warning">
+                            {this.props.state.errors.timeToError}
+                          </span>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
 
-                  <div className="col-md-12 row no-margin no-padding input-row">
-                    <div className="col-md-2 no-padding label" style={{ verticalAlign: "top" }}>Comments</div>
+                  {/* <div className="col-md-12 row no-margin no-padding input-row">
+                    <div
+                      className="col-md-2 no-padding label"
+                      style={{ verticalAlign: "top" }}
+                    >
+                      Comments
+                    </div>
                     <div className="col-md-10">
                       <textarea
                         name={`comments`}
@@ -517,7 +574,7 @@ class AddTaskModal extends React.Component {
                         rows="1"
                         placeholder="Write Here..."
                       />
-                      {/* <CommentUpload
+                      <CommentUpload
                         state={this.state}
                         showSave={
                           props.state.taskButton === "Add" ? false : true
@@ -530,9 +587,9 @@ class AddTaskModal extends React.Component {
                         handleInputChange={this.props.handleInputChange}
                         showSave={false}
                         showAttachIcon={false}
-                      /> */}
+                      />
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="no-padding input-row">
                     <div className="action-btn">
@@ -566,8 +623,10 @@ class AddTaskModal extends React.Component {
                         type="button"
                         disabled={this.props.loadStatus}
                         className={`button1 btn-primary pull-right ${
-                          props.state.taskloader && this.props.loadStatus ? "disabled" : ""
-                          }`}
+                          props.state.taskloader && this.props.loadStatus
+                            ? "disabled"
+                            : ""
+                        }`}
                         onClick={() =>
                           props.state.taskButton === "Add"
                             ? props.addTask()
@@ -576,7 +635,7 @@ class AddTaskModal extends React.Component {
                         disabled={this.props.state.isDisable}
                       >
                         {props.state.taskButton}
-                        {this.props.state.taskloader? (
+                        {this.props.state.taskloader ? (
                           <Loader
                             type="Oval"
                             color="#FFFFFF"
@@ -627,6 +686,7 @@ class AddTaskModal extends React.Component {
                   handleTaskNameChange={this.props.handleTaskNameChange}
                   saveComments={this.props.saveComments}
                   toggleTaskStartState={this.props.toggleTaskStartState}
+                  saveDescription={this.props.saveDescription}
                 />
               </TabPanel>
             </Tabs>
