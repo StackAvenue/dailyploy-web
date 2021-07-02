@@ -617,16 +617,18 @@ class TaskInfoModal extends Component {
                 </div>
               </div>
 
-              <div className="col-md-12 no-padding input-row text-titlize">
-                <div className="col-md-2 d-inline-block no-padding label">
-                  Description
-                </div>
-                <div className="col-md-10 d-inline-block">
-                  <span className="left-padding-20px">
+            <div className="col-md-12 no-padding input-row text-titlize d-flex">
+              <div className="col-md-2 d-inline-block no-padding label ">
+                Description
+              </div>
+              <div className="col-md-10 d-inline-block">
+                <div className="left-padding-20px">
+                  <span className="task-info-description-textarea">
                     {props.state.description ? props.state.description : "NA"}
                   </span>
                 </div>
               </div>
+            </div>
 
               <div className="col-md-12 no-padding input-row text-titlize">
                 <div className="col-md-2 d-inline-block no-padding label">

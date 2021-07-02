@@ -6681,3 +6681,13 @@ table.scheduler-table tr:last-child td {
   display: flex;
   align-items: center;
 }
+
+.task-info-description-textarea {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  max-height: 75px;
+  line-height: 1.2;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
