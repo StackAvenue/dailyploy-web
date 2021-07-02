@@ -602,6 +602,8 @@ class TaskProjectList extends Component {
         name: saveTaskParams.name,
         estimation: saveTaskParams.estimation,
         description: saveTaskParams.description,
+        start_datetime: saveTaskParams.start_datetime,
+        end_datetime: saveTaskParams.end_datetime,
         priority: saveTaskParams.priority,
         owner_id: saveTaskParams.assigne_id,
         task_status_id: saveTaskParams.status ? saveTaskParams.status.id : "",
@@ -649,7 +651,7 @@ class TaskProjectList extends Component {
           // assigne_name: saveTaskParams.assigne_name
         });
       }
-      console.log("tasks", tasks);
+      // console.log("tasks", tasks);
       this.addTaskLoading(false)
       this.setState({
         show: false,
@@ -891,7 +893,7 @@ class TaskProjectList extends Component {
           return { id: status.id, isDefault: status.is_default, statusName: name, color: "#53a4f0" };
         });
       }
-      console.log("data", taskStatusArray);
+      // console.log("data", taskStatusArray);
     } catch (e) {
       this.handleErroMsg(e);
     }

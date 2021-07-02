@@ -23,6 +23,7 @@ import Loader from "react-loader-spinner";
 // import { Button } from "react-bootstrap";
 
 function UserstoryModal(props) {
+  // console.log(props)
   const [comments, setComment] = useState(null);
   // const [checklist, setChecklist] = useState([]);
   const [edit, setEdit] = useState(false);
@@ -158,13 +159,13 @@ function UserstoryModal(props) {
         setTrackedTime(props.currentTask.tracked_time);
         setStatus(props.currentTask.task_status);
         setStartDate(
-          props.currentTask.task && props.currentTask.task.start_datetime
-            ? new Date(props.currentTask.task.start_datetime)
+          props.currentTask.start_datetime
+            ? new Date(props.currentTask.start_datetime)
             : null
         );
         setEndDate(
-          props.currentTask.task && props.currentTask.task.end_datetime
-            ? new Date(props.currentTask.task.end_datetime)
+          props.currentTask.end_datetime
+            ? new Date(props.currentTask.end_datetime)
             : null
         );
         setIsComplete(props.currentTask.is_complete);
@@ -311,7 +312,11 @@ function UserstoryModal(props) {
       estimation: estimation,
       list_id: props.list_id,
       tracked_time: trackedTime,
-      start_date: startDate,
+      start_date: moment(startDate).format('YYYY-MM-DD'),
+      start_datetime:startDate,
+      end_datetime: endDate,
+      dateFrom:startDate,
+      toDate:endDate,
       end_date: endDate,
       priority: priority.label,
       status: status ? status : defaultStatus,
@@ -349,7 +354,7 @@ function UserstoryModal(props) {
         setA(true);
         setPictures([]);
         setCommentList([comment, ...commentList]);
-        console.log(comment, "aa");
+        // console.log(comment, "aa");
         // var taskComments = [comment, ...this.props.state.taskComments];
         // this.props.updateTaskComments(taskComments);
         // this.setState({
@@ -673,7 +678,7 @@ function UserstoryModal(props) {
                       )
                     ) : (
                       <DatePicker
-                        onSelect={handleDate}
+                        onSelect={handleStartDate}
                         placeholderText="Select Due Date"
                         selected={startDate}
                         className={`form-control datepicker`}
@@ -694,7 +699,7 @@ function UserstoryModal(props) {
                       )
                     ) : (
                       <DatePicker
-                        onSelect={handleDate}
+                        onSelect={handleEndDate}
                         placeholderText="Select Due Date"
                         selected={endDate}
                         className={`form-control datepicker`}
