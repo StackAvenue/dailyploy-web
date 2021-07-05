@@ -424,7 +424,7 @@ class AddTaskModal extends React.Component {
                               ref={this.calendarFromRef}
                               selected={props.state.dateFrom}
                               onChange={props.handleDateFrom}
-                              maxDate={props.state.dateTo}
+                              minDate={props.state.dateTo}
                               placeholderText="Select Date"
                               onChangeRaw={this.handleDateChangeRaw}
                             />
