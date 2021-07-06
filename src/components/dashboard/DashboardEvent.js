@@ -452,7 +452,7 @@ class DashboardEvent extends Component {
                   titleText,
                   start,
                   end,
-                  this.props.bgColor
+                  NEWPRIORITIES[event.priority.toString()].color_code
                 )}
               >
                 <div className="col-md-9 no-padding flex-center">
@@ -556,7 +556,7 @@ class DashboardEvent extends Component {
                   titleText,
                   start,
                   end,
-                  this.props.bgColor
+                  NEWPRIORITIES[event.priority.toString()].color_code
                 )}
               >
                 <div className="row item dashboard-event-box">
