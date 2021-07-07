@@ -99,7 +99,7 @@ class DashboardEvent extends Component {
       try {
         const { data } = await mockGet("mark-complete");
         var isComplete = data[0].complete;
-      } catch (e) { }
+      } catch (e) {}
       if (isComplete) {
       }
     }
@@ -346,8 +346,8 @@ class DashboardEvent extends Component {
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
+                !event.is_complete &&
+                this.props.isTimetrackMode ? (
                   <div className=" no-padding d-inline-block">
                     <span
                       style={{
@@ -355,8 +355,9 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none",
                       }}
-                      className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
-                        }`}
+                      className={`task-play-btn pointer ${
+                        state.isPlayPause ? "disabled" : ""
+                      }`}
                       onClick={() =>
                         this.props.handleTaskStop(event, Date.now())
                       }
@@ -383,8 +384,8 @@ class DashboardEvent extends Component {
                 ) : null}
 
                 {event.trackingStatus === "play" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
+                !event.is_complete &&
+                this.props.isTimetrackMode ? (
                   <div className=" no-padding d-inline-block">
                     <span
                       style={{
@@ -392,8 +393,9 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none",
                       }}
-                      className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
-                        }`}
+                      className={`task-play-btn pointer ${
+                        state.isPlayPause ? "disabled" : ""
+                      }`}
                       onClick={() =>
                         this.props.handleTaskStart(event, Date.now())
                       }
@@ -450,7 +452,7 @@ class DashboardEvent extends Component {
                   titleText,
                   start,
                   end,
-                  this.props.bgColor
+                  NEWPRIORITIES[event.priority.toString()].color_code
                 )}
               >
                 <div className="col-md-9 no-padding flex-center">
@@ -554,13 +556,13 @@ class DashboardEvent extends Component {
                   titleText,
                   start,
                   end,
-                  this.props.bgColor
+                  NEWPRIORITIES[event.priority.toString()].color_code
                 )}
               >
                 <div className="row item dashboard-event-box">
                   <div
                     className="col-md-12 no-padding"
-                  // style={{ color: contColor }}
+                    // style={{ color: contColor }}
                   >
                     <div
                       className="col-md-12 no-padding pointer text-wraper "
@@ -610,8 +612,8 @@ class DashboardEvent extends Component {
 
               <div className="col-md-4 align-center no-padding">
                 {event.trackingStatus === "pause" &&
-                  !event.is_complete &&
-                  this.props.isTimetrackMode ? (
+                !event.is_complete &&
+                this.props.isTimetrackMode ? (
                   <div className=" no-padding d-inline-block">
                     <span
                       style={{
@@ -619,8 +621,9 @@ class DashboardEvent extends Component {
                           ? ""
                           : "none",
                       }}
-                      className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
-                        }`}
+                      className={`task-play-btn pointer ${
+                        state.isPlayPause ? "disabled" : ""
+                      }`}
                       onClick={() =>
                         this.props.handleTaskStop(event, Date.now())
                       }
@@ -649,8 +652,8 @@ class DashboardEvent extends Component {
                 {event.resourceId == this.props.userId ? (
                   <>
                     {event.trackingStatus === "play" &&
-                      !event.is_complete &&
-                      this.props.isTimetrackMode ? (
+                    !event.is_complete &&
+                    this.props.isTimetrackMode ? (
                       <div className=" no-padding d-inline-block">
                         <span
                           style={{
@@ -660,8 +663,9 @@ class DashboardEvent extends Component {
                               ? ""
                               : "none",
                           }}
-                          className={`task-play-btn pointer ${state.isPlayPause ? "disabled" : ""
-                            }`}
+                          className={`task-play-btn pointer ${
+                            state.isPlayPause ? "disabled" : ""
+                          }`}
                           onClick={() =>
                             this.props.handleTaskStart(event, Date.now())
                           }
@@ -739,7 +743,7 @@ class DashboardEvent extends Component {
                   titleText,
                   start,
                   end,
-                  this.props.bgColor
+                  NEWPRIORITIES[event.priority.toString()].color_code
                 )}
               >
                 <div className="col-md-9 no-padding flex-center">
@@ -853,13 +857,13 @@ class DashboardEvent extends Component {
                   titleText,
                   start,
                   end,
-                  this.props.bgColor
+                  NEWPRIORITIES[event.priority.toString()].color_code
                 )}
               >
                 <div className="row item dashboard-event-box">
                   <div
                     className="col-md-12 no-padding"
-                  // style={{ color: contColor }}
+                    // style={{ color: contColor }}
                   >
                     <div
                       className="col-md-12  pointer  text-wraper"
@@ -882,7 +886,7 @@ class DashboardEvent extends Component {
             </div>
           </div>
         ) : // </div>
-          null}
+        null}
 
         {/* Code for monthly below start logic not needed right now  */}
         {/* {schedulerData.viewType === 2 ? (
@@ -922,13 +926,13 @@ class DashboardEvent extends Component {
         <div className="custom-event-popup">
           {this.state.showPopup
             ? this.props.eventItemPopoverTemplateResolver(
-              schedulerData,
-              event,
-              titleText,
-              start,
-              end,
-              this.props.bgColor
-            )
+                schedulerData,
+                event,
+                titleText,
+                start,
+                end,
+                this.props.bgColor
+              )
             : null}
         </div>
 

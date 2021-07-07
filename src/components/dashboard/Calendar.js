@@ -331,14 +331,14 @@ class Calendar extends Component {
     end,
     statusColor
   ) => {
-    // var start = new Date(
-    //   moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
-    // );
-    // var end = new Date(
-    //   moment(convertUTCToLocalDate(eventItem.taskEndDateTime))
-    //     .format(`${DATE_FORMAT1} HH:mm:ss`)
-    //     .replace(/-/g, "/")
-    // );
+    var start = new Date(
+      moment(convertUTCToLocalDate(eventItem.taskStartDateTime))
+    );
+    var end = new Date(
+      moment(convertUTCToLocalDate(eventItem.taskEndDateTime))
+        .format(`${DATE_FORMAT1} HH:mm:ss`)
+        .replace(/-/g, "/")
+    );
 
     // var timeDiff = "00h 00m";
     // if (
@@ -360,13 +360,43 @@ class Calendar extends Component {
     // }
     if (schedulerData.viewType !== 2) {
       return (
-        <div className="custom-event-popup">
+        <div
+          className="custom-event-popup"
+          style={{ border: `1px solid ${statusColor}` }}
+        >
           <div className="event-task-hover">
             <div className="title task-text-hover">
               <span className="" title={title}>
                 {title.length > 110 ? title.substr(0, 110) + "...." : title}
               </span>
             </div>
+            {eventItem.taskStartDateTime && (
+              <div className="text-est">
+                <span className="text-est">
+                  Date :
+                  <span className="text-est hover-span">
+                    {moment(eventItem.taskStartDateTime).format("DD MMM")}
+                  </span>
+                  <span className="text-est hover-span">
+                    {moment(eventItem.taskEndDateTime).format("DD MMM")}
+                  </span>
+                </span>
+              </div>
+            )}
+            {moment(start).format("HH:mm") !== "00:00" && (
+              <div className="text-est">
+                <p className="text-est">
+                  Time :{" "}
+                  <span className="text-est hover-span-time">
+                    {moment(start).format("HH:mm")}
+                  </span>
+                  <span className="text-est hover-span">
+                    {moment(end).format("HH:mm")}
+                  </span>
+                </p>
+              </div>
+            )}
+            {moment(start).format("HH:mm") === "00:00" && <p></p>}
             {eventItem.est_time && (
               <div className="text-est">
                 <span className="text-est">

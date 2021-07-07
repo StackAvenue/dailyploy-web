@@ -6677,7 +6677,7 @@ table.scheduler-table tr:last-child td {
   align-items: center;
 }
 
-.select-bar-color-taskbar{
+.select-bar-color-taskbar {
   display: flex;
   align-items: center;
 }
@@ -6690,4 +6690,16 @@ table.scheduler-table tr:last-child td {
   line-height: 1.2;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.hover-span {
+  padding-left: 10px;
+}
+
+.hover-span-time {
+  padding-left: 7px;
+}
+
+.select-projectSuggestions {
+  margin-top: 10px;
 }
