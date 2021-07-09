@@ -729,15 +729,21 @@ class TaskInfoModal extends Component {
                     </div>
                     </>):
                      <div className="col-md-4 d-inline-block no-padding">
-                    No tracked time
+                    No time status
                      </div>}
                   </div>
                 </div>
-                {/* {true && (
+              </div>
+
+              <div className="col-md-12 no-padding input-row ">
+                <div className="col-md-2 d-inline-block no-padding label">
+                  Time Tracked
+                </div>
+                {true && (
                   <div className="col-md-10 d-inline-block">
                     {this.props.state.taskEvent &&
-                      this.props.state.taskEvent.dateFormattedTimeTrack &&
-                      this.props.state.taskEvent.dateFormattedTimeTrack.length >
+                    this.props.state.taskEvent.dateFormattedTimeTrack &&
+                    this.props.state.taskEvent.dateFormattedTimeTrack.length >
                       0 ? (
                       !this.state.editLog ? (
                         <>
@@ -823,10 +829,11 @@ class TaskInfoModal extends Component {
                                 <i className="far fa-arrow-alt-circle-left"></i>
                               </div>
                               <div
-                                className={`col-md-1 d-inline-block ${this.state.timeTrackEditLoader
-                                  ? "disabled"
-                                  : ""
-                                  }`}
+                                className={`col-md-1 d-inline-block ${
+                                  this.state.timeTrackEditLoader
+                                    ? "disabled"
+                                    : ""
+                                }`}
                                 onClick={this.editTimeTrack}
                                 title={"Edit"}
                                 style={{
@@ -862,12 +869,12 @@ class TaskInfoModal extends Component {
                                     marginLeft: "20px",
                                   }}
                                 >
-                                  <TimePicker
+                                  {/* <TimePicker
                                 placeholder="Time"
                                 value={this.state.fromDateTime}
                                 showSecond={false}
                                 onChange={this.handleTimeFrom}
-                              />
+                              /> */}
                                   <DatePicker
                                     selected={new Date(this.state.fromDateTime)}
                                     onChange={(date) =>
@@ -878,10 +885,10 @@ class TaskInfoModal extends Component {
                                     timeIntervals={1}
                                     excludeTimes={
                                       [
-                                        setHours(setMinutes(new Date(), 0), 17),
-                                        setHours(setMinutes(new Date(), 30), 18),
-                                        setHours(setMinutes(new Date(), 30), 19),
-                                        setHours(setMinutes(new Date(), 30), 17)
+                                        // setHours(setMinutes(new Date(), 0), 17),
+                                        // setHours(setMinutes(new Date(), 30), 18),
+                                        // setHours(setMinutes(new Date(), 30), 19),
+                                        // setHours(setMinutes(new Date(), 30), 17)
                                       ]
                                     }
                                     dateFormat="d MMM, HH:mm"
@@ -891,21 +898,21 @@ class TaskInfoModal extends Component {
                                   To
                                 </span>
                                 <div className="col-md-4 no-padding d-inline-block track-time-edit">
-                                  <TimePicker
+                                  {/* <TimePicker
                                 placeholder="Time"
                                 value={this.state.toDateTime}
                                 showSecond={false}
                                 disabledMinutes={this.disabledMinutes}
                                 disabledHours={this.disabledHours}
                                 onChange={this.handleTimeTo}
-                              />
+                              /> */}
                                   <DatePicker
                                     selected={new Date(this.state.toDateTime)}
                                     onChange={(date) => this.handleTimeTo(date)}
                                     showTimeSelect
                                     timeFormat="HH:mm"
                                     timeIntervals={1}
-                                    minTime={new Date(this.state.fromDateTime)}
+                                    // minTime={new Date(this.state.fromDateTime)}
                                     dateFormat="d MMM, HH:mm"
                                   />
                                 </div>
@@ -921,10 +928,11 @@ class TaskInfoModal extends Component {
                                 <i className="far fa-arrow-alt-circle-left"></i>
                               </div>
                               <div
-                                className={`col-md-1 d-inline-block ${this.state.timeTrackEditLoader
-                                  ? "disabled"
-                                  : ""
-                                  }`}
+                                className={`col-md-1 d-inline-block ${
+                                  this.state.timeTrackEditLoader
+                                    ? "disabled"
+                                    : ""
+                                }`}
                                 onClick={this.editTimeTrack}
                                 title={"Edit"}
                                 style={{
@@ -956,7 +964,7 @@ class TaskInfoModal extends Component {
                       <div className="left-padding-17px">No logged time</div>
                     )}
                   </div>
-                )} */}
+                )}
               </div>
 
               {this.state.trackTimeError && this.state.editLog ? (
