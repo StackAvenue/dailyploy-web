@@ -1623,7 +1623,17 @@ class Dashboard extends PureComponent {
     const { name, value } = e.target;
     var errors = this.state.errors;
     errors[`${name}Error`] = "";
-    this.setState({ [name]: value, errors: errors });
+    if (name === "estimate") {
+      if (value.split(".")[0] === "" &&  Number(value) > 0) {
+        let newValue = "0" + value
+        this.setState({ [name]: newValue, errors: errors });
+      } else if (value === "0") {
+        let newValue =""
+        this.setState({ [name]: newValue, errors: errors });
+      } else {
+        this.setState({ [name]: value, errors: errors });
+      }
+    } else this.setState({ [name]: value, errors: errors });
   };
 
   handleProjectSelect = async (option) => {
